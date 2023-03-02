@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/white"
+    >
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/rlvHeaderMainViewID"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        android:background="@color/blue_fb"
+        >
+
+        <LinearLayout
+            android:weightSum="3"
+            android:id="@+id/lvlBackIconViewID"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_weight="1.3"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_weight="0.4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="Scan bar code"
+                    android:layout_centerInParent="true"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:textSize="@dimen/_16ssp"
+
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_weight="1.3"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_centerHorizontal="true"
+        android:id="@+id/imgLogoID"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_below="@+id/rlvHeaderMainViewID"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_70sdp"
+        android:src="@drawable/logo_blue"
+        />
+
+    <SurfaceView
+
+        android:layout_below="@+id/imgLogoID"
+        android:id="@+id/surfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_150sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@android:color/transparent"
+
+        />
+
+
+    <RelativeLayout
+        android:id="@+id/rlvEdtContainerID"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_below="@+id/surfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        android:background="@drawable/rounded_edt_corner_white">
+
+
+        <EditText
+            android:id="@+id/edtBarcodeValueID"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:hint="@string/Set_edt_scan"
+            android:layout_centerVertical="true"
+            android:textColorHint="@color/colorGray"
+            android:digits="0123456789"
+            android:inputType="number"
+            android:textColor="@color/white"
+            android:background="@android:color/transparent"
+            android:textSize="@dimen/_14ssp"
+            />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rlvSubmitBarcodeDataID"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginStart="@dimen/_90sdp"
+        android:layout_marginEnd="@dimen/_90sdp"
+        android:layout_below="@+id/rlvEdtContainerID"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        android:background="@drawable/rounded_shape">
+
+        <TextView
+
+            android:id="@+id/txtBarcodeValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="@dimen/_14sdp"
+            android:layout_centerHorizontal="true"
+            android:text="Submit"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+   <!-- <TextView
+        android:layout_below="@+id/surfaceView"
+        android:id="@+id/txtBarcodeValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="@dimen/_14sdp"
+        android:layout_centerHorizontal="true"
+        android:text="No Barcode Detected"
+        android:textColor="@color/colorBlack"
+        android:textSize="20sp" />-->
+
+
+
+</RelativeLayout>
+
+<!--    <Button
+        android:id="@+id/btnAction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="ADD CONTENT IN THE MAIL" />-->
+</RelativeLayout>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/first_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/first_layout_inner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/space_mid10"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/edit_o"
+                style="@style/under_line_et"
+                android:inputType="text" />
+
+            <TextView
+                android:id="@+id/header"
+                style="@style/wrap_text_medatory"
+                android:drawableRight="@null"
+                android:text="1." />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/second_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/size_xlarge20"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/edit_t"
+                style="@style/under_line_et"
+                android:inputType="number" />
+
+            <TextView
+                style="@style/wrap_text_medatory"
+                android:drawableRight="@null"
+                android:text="2." />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_140sdp" >
+
+
+
+    <TextView
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:id="@+id/txtTitleID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+       android:text="Enter Sim Number"
+        android:textSize="@dimen/_14ssp"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:background="@android:color/transparent"
+        android:layout_below="@+id/txtTitleID"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:id="@+id/edtSimNumberIDID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:hint="Enter Sim Number"
+        android:maxLength="20"
+        android:textSize="@dimen/_14ssp"
+        android:digits="0123456789"
+        android:inputType="number"
+        />
+
+    <Button
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:id="@+id/dialogButtonOK"
+        android:layout_width="@dimen/_90sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:text=" Ok "
+        android:textColor="@color/white"
+        android:background="@drawable/rounded_shape"
+        android:layout_below="@+id/edtSimNumberIDID"
+        android:layout_marginBottom="@dimen/_5sdp"
+        />
+
+</RelativeLayout>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/space_mid10"
+        android:layout_marginRight="@dimen/space_mid10"
+        android:padding="10dp"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:id="@+id/lin1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/wrap_text_medatory"
+                android:text="State"
+                android:textColor="@color/colorAccent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                >
+
+                <Spinner
+                    android:id="@+id/spinner_state"
+                    android:layout_width="0dp"
+                    style="@style/spinner_style"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:spinnerMode="dialog" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lin2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lin1"
+            android:weightSum="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/wrap_text_medatory"
+                android:text="District"
+                android:textColor="@color/colorAccent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                >
+
+                <Spinner
+                    android:id="@+id/spinner_district"
+                    android:layout_width="0dp"
+                    style="@style/spinner_style"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:padding="5dp"
+                    android:spinnerMode="dialog" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/lin3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/lin2"
+            android:orientation="vertical"
+            >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_vendor_no"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:textColorHint="@color/colorAccent">
+
+                <EditText
+                    android:id="@+id/vendor_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_mendotry"
+                    android:drawablePadding="5dp"
+                    android:hint="Vendor No."
+                    android:shadowColor="@color/colorAccent"
+                    android:singleLine="true"
+                    android:textColorHighlight="@color/colorAccent"
+                    android:textColorHint="@color/colorAccent"
+                    android:textColorLink="@color/colorAccent"
+                    android:textIsSelectable="false"
+                    android:textSize="@dimen/size_small15" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/btn_submit"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@layout/rounded_corner_blue"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/space_large25"
+                android:layout_marginBottom="40dp"
+                android:padding="@dimen/space_mid10"
+                android:text="@string/submit"
+                android:textColor="@color/white"
+                android:textSize="19sp" />
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+</LinearLayout>

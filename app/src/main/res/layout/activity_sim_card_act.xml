@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <LinearLayout
+        android:id="@+id/personal_ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/wrap_text_medatory"
+                android:drawableRight="@null"
+                android:textColor="@color/colorAccent"
+                android:text="SIM Card Replaced Date" />
+
+            <EditText
+                android:id="@+id/doc_date"
+                android:editable="false"
+                android:focusable="false"
+                style="@style/under_line_et"
+                android:inputType="number" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_cust_name"
+                android:layout_width="match_parent"
+                android:paddingTop="5dp"
+
+                android:textColorHint="@color/colorAccent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/cust_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent"
+                    android:hint="Customer Name"
+                    android:inputType="text"
+                    android:textColorHint="@color/colorAccent"
+                    android:textSize="@dimen/size_small15"
+                    android:textIsSelectable="false"
+                    android:textColorLink="@color/colorAccent"
+                    android:textColorHighlight="@color/colorAccent"
+                    android:singleLine="true"
+                    android:shadowColor="@color/colorAccent"
+                    android:focusable="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_cust_mobile_no"
+                android:layout_width="match_parent"
+                android:paddingTop="5dp"
+
+                android:textColorHint="@color/colorAccent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/cust_mobile_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent"
+                    android:hint="Customer Mobile No."
+                    android:textColorHint="@color/colorAccent"
+                    android:textSize="@dimen/size_small15"
+                    android:inputType="phone"
+                    android:textIsSelectable="false"
+                    android:textColorLink="@color/colorAccent"
+                    android:textColorHighlight="@color/colorAccent"
+                    android:singleLine="true"
+                    android:shadowColor="@color/colorAccent"
+                    android:focusable="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_cust_address"
+                android:layout_width="match_parent"
+                android:paddingTop="5dp"
+                android:textColorHint="@color/colorAccent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/cust_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:textColor="@color/colorAccent"
+                    android:hint="Customer Address"
+                    android:textColorHint="@color/colorAccent"
+                    android:textSize="@dimen/size_small15"
+                    android:textIsSelectable="false"
+                    android:textColorLink="@color/colorAccent"
+                    android:textColorHighlight="@color/colorAccent"
+                    android:singleLine="true"
+                    android:shadowColor="@color/colorAccent"
+                    android:focusable="true"
+                    android:lines="3"
+                    android:minLines="1"
+                    android:gravity="top|start"
+                    android:maxLines="3"
+                    android:scrollbars="vertical"
+                />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="5dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_device_no"
+                    android:layout_width="0dp"
+
+                    android:layout_weight="1"
+                    android:textColorHint="@color/colorAccent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/device_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorAccent"
+                        android:hint="Device No."
+                        android:inputType="text"
+                        android:layout_gravity="center_vertical"
+                        android:textColorHint="@color/colorAccent"
+                        android:drawableStart="@drawable/ic_mendotry"
+                        android:textSize="@dimen/size_small15"
+                        android:textIsSelectable="false"
+                        android:textColorLink="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:singleLine="true"
+                        android:shadowColor="@color/colorAccent"
+                        android:focusable="true" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/view_img_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/space_tinny2"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/scan" />
+
+
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_sim_card_old"
+                android:layout_width="match_parent"
+                android:paddingTop="5dp"
+                android:visibility="gone"
+                android:textColorHint="@color/colorAccent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/sim_card_old"
+                    android:layout_width="match_parent"
+                    android:drawableStart="@drawable/ic_mendotry"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent"
+                    android:hint="Existing Sim Card Serial No."
+                    android:textColorHint="@color/colorAccent"
+                    android:textSize="@dimen/size_small15"
+                    android:inputType="text"
+                    android:textIsSelectable="false"
+                    android:textColorLink="@color/colorAccent"
+                    android:textColorHighlight="@color/colorAccent"
+                    android:singleLine="true"
+                    android:shadowColor="@color/colorAccent"
+                    android:focusable="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_sim_card_new"
+                android:layout_width="match_parent"
+                android:paddingTop="5dp"
+                android:textColorHint="@color/colorAccent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/sim_card_new"
+                    android:layout_width="match_parent"
+                    android:drawableStart="@drawable/ic_mendotry"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent"
+                    android:hint="New Sim Card Serial No."
+                    android:textColorHint="@color/colorAccent"
+                    android:textSize="@dimen/size_small15"
+                    android:inputType="text"
+                    android:textIsSelectable="false"
+                    android:textColorLink="@color/colorAccent"
+                    android:textColorHighlight="@color/colorAccent"
+                    android:singleLine="true"
+                    android:shadowColor="@color/colorAccent"
+                    android:focusable="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/sim_card_old_photo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_xxlarge50"
+                android:layout_marginBottom="@dimen/space_large20"
+                android:layout_marginLeft="@dimen/space_mid10"
+                android:layout_marginRight="@dimen/space_mid10"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/icn_box"
+                android:drawableRight="@drawable/red_icn"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_mid10"
+                android:singleLine="true"
+                android:text="Sim Card Old Photo"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/size_xlarge20" />
+
+            <TextView
+                android:id="@+id/sim_card_new_photo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_xxlarge50"
+                android:layout_marginBottom="@dimen/space_large20"
+                android:layout_marginLeft="@dimen/space_mid10"
+                android:layout_marginRight="@dimen/space_mid10"
+                android:layout_marginTop="@dimen/space_mid6"
+                android:background="@drawable/icn_box"
+                android:drawableRight="@drawable/red_icn"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_mid10"
+                android:singleLine="true"
+                android:text="Sim Card New Photo"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/size_xlarge20" />
+
+            <TextView
+                android:id="@+id/drive_photo"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_xxlarge50"
+                android:layout_marginBottom="@dimen/space_large20"
+                android:layout_marginLeft="@dimen/space_mid10"
+                android:layout_marginRight="@dimen/space_mid10"
+                android:layout_marginTop="@dimen/space_mid6"
+                android:background="@drawable/icn_box"
+                android:drawableRight="@drawable/red_icn"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_mid10"
+                android:singleLine="true"
+                android:text="Drive Photo"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/size_xlarge20" />
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/space_tinny4"
+            android:layout_weight="1"
+            android:background="@color/header_color"
+            android:gravity="center"
+            android:padding="@dimen/space_mid10"
+            android:text="Save and Back"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_xlarge20" />
+
+
+
+    </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

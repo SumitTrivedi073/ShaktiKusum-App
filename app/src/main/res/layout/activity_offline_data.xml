@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/space_mid10"
+        android:layout_marginEnd="@dimen/space_mid10"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <RelativeLayout
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_mid10"
+            android:layout_marginEnd="@dimen/space_mid10"
+            android:layout_marginBottom="@dimen/space_mid8">
+
+            <TextView
+                android:id="@+id/regis_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@layout/rounded_corner"
+                android:drawableEnd="@mipmap/registration"
+                android:gravity="center"
+                android:padding="@dimen/space_large20"
+                android:singleLine="true"
+                android:text=" Registration Offline Data"
+                android:textColor="@color/header_color"
+                android:textSize="@dimen/size_large17"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_mid10"
+            android:layout_marginTop="@dimen/space_large20"
+            android:layout_marginEnd="@dimen/space_mid10"
+            android:layout_marginBottom="@dimen/space_mid8">
+
+            <TextView
+                android:id="@+id/inst_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@layout/rounded_corner"
+                android:drawableEnd="@mipmap/installation"
+                android:gravity="center"
+                android:padding="@dimen/space_large20"
+                android:singleLine="true"
+                android:text=" Installation Offline Data "
+                android:textColor="@color/header_color"
+                android:textSize="@dimen/size_large17"
+                android:textStyle="bold"
+                android:visibility="gone"
+
+                />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+    <include layout="@layout/toolbar" />
+</RelativeLayout>

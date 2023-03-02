@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_350sdp" >
+
+
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:id="@+id/txtTitleHeadID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="I-base Update Form "
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:id="@+id/txtTitleID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Controller Serial Number"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:background="@android:color/transparent"
+
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:id="@+id/edtDriveSerialNoID"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_40sdp"
+            android:fontFamily="@font/open_sans_regular"
+            android:textColor="@color/black"
+            android:hint="Enter Controller Serial Number"
+            android:maxLength="20"
+            android:textSize="@dimen/_14ssp"
+            android:digits="0123456789-abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+            />
+
+
+
+        <!--Moter-->
+
+        <TextView
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:id="@+id/txtModerHeadID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Motor Serial Number"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:background="@android:color/transparent"
+
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:id="@+id/edtMotorSerialNoID"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_40sdp"
+            android:fontFamily="@font/open_sans_regular"
+            android:textColor="@color/black"
+            android:hint="Enter Motor Serial Number"
+            android:maxLength="20"
+            android:textSize="@dimen/_14ssp"
+            android:digits="0123456789"
+            android:inputType="number"
+            />
+
+
+        <!--Moter-->
+
+        <TextView
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:id="@+id/txtPumpHeadID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Pump Serial Number"
+            android:textSize="@dimen/_14ssp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:background="@android:color/transparent"
+
+            android:clickable="false"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:id="@+id/edtPumpSerialNoID"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_40sdp"
+            android:fontFamily="@font/open_sans_regular"
+            android:textColor="@color/black"
+
+            android:maxLength="20"
+            android:textSize="@dimen/_14ssp"
+            android:digits="0123456789"
+            android:inputType="number"
+            />
+
+        <Button
+            android:layout_gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:id="@+id/dialogButtonOK"
+            android:layout_width="@dimen/_90sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:text=" Update "
+            android:textColor="@color/white"
+            android:background="@drawable/rounded_shape"
+            android:layout_below="@+id/edtSimNumberIDID"
+            android:layout_marginBottom="@dimen/_5sdp"
+            />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

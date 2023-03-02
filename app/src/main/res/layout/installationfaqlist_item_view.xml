@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/space_mid10">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/space_mid10"
+        android:paddingRight="@dimen/space_mid10">
+
+        <TextView
+            android:id="@+id/case_id_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".3"
+            android:text="Case Id"
+            android:textColor="@color/header_color"
+            android:textSize="@dimen/size_small14" />
+
+        <TextView
+            android:id="@+id/case_id_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Case Id"
+            android:textSize="@dimen/size_small14" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/space_mid10"
+        android:paddingRight="@dimen/space_mid10">
+
+        <TextView
+            android:id="@+id/bill_no_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".3"
+            android:text="Bill No."
+            android:textColor="@color/header_color"
+            android:textSize="@dimen/size_small14" />
+
+        <TextView
+            android:id="@+id/bill_no_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Bill No."
+            android:textSize="@dimen/size_small14" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/space_mid10"
+        android:paddingRight="@dimen/space_mid10">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="14sp"
+            android:layout_height="14sp"
+            android:layout_gravity="right"
+            android:src="@drawable/red_icn"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/name_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".3"
+            android:text="Name"
+            android:textColor="@color/header_color"
+            android:textSize="@dimen/size_small14" />
+
+        <TextView
+            android:id="@+id/name_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Name"
+            android:textSize="@dimen/size_small14" />
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/space_mid10"
+        android:paddingRight="@dimen/space_mid10">
+
+        <TextView
+            android:id="@+id/loaction_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".3"
+            android:text="Location"
+            android:textColor="@color/header_color"
+            android:textSize="@dimen/size_small14" />
+
+        <TextView
+            android:id="@+id/loaction_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Location"
+            android:textSize="@dimen/size_small14" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
+
+
+
+
+

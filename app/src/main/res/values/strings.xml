@@ -1,0 +1,150 @@
+<resources>
+    <string name="app_name">Shakti Kusum App</string>
+
+    <string name="title_adhoc_order">Adhoc Order</string>
+    <string name="hint_activity">Activity</string>
+    <string name="hint_dsr">DSR Comment</string>
+    <string name="hint_password">Password</string>
+    <string name="btn_save_dsr"> Save</string>
+    <string name="action_cart">View Cart </string>
+    <string name="action_complaint_attachment">Attach PDF</string>
+    <string name="action_complaint_add">Add complaint</string>
+    <string name="create_pdf">Create PDF</string>
+
+    <string name="merge_pdf">Merge PDF</string>
+    <string name="merge_file_select">Select a file</string>
+    <string name="select_text_file">Select Text File</string>
+    <string name="select_pdf_file">Select PDF File</string>
+
+
+    <string name="err_msg_name">Enter User Name</string>
+    <string name="err_msg_mobile">Enter Mobile Number</string>
+    <string name="err_msg_mobile_invalid">Enter 10 digit Mobile Number</string>
+    <string name="err_msg_email">Enter valid email address</string>
+    <string name="err_msg_password">Enter the password</string>
+    <string name="crash_toast_text">Ooooops ! App crashed, a report will be sent to developer to fix the issue !</string>
+
+    <!-- material design-->
+    <string name="yes">Yes</string>
+
+    <string name="new1">New</string>
+    <string name="old">Old</string>
+    <string name="rcc">RCC</string>
+    <string name="good">Good</string>
+    <string name="moderate">Moderate</string>
+    <string name="poor">Poor</string>
+    <string name="gi">GI</string>
+    <string name="other">Other</string>
+    <string name="no">No</string>
+    <string name="one">1Φ</string>
+    <string name="three">3Φ</string>
+    <string name="action_search">Search</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+    <string name="nav_item_home">Home</string>
+    <string name="nav_item_offline_data">Offline Data</string>
+    <string name="nav_item_iv_curve">IV Curve Report </string>
+    <string name="nav_item_controller_datasheet">Controller Data sheet </string>
+    <string name="nav_item_lr_submit">LR Data Submission </string>
+    <string name="nav_item_invoice">Vendor Invoice Submission </string>
+
+
+    <!-- navigation drawer item labels  -->
+    <string name="action_signout">Sign Out</string>
+    <string name="action_sync_all">Sync All</string>
+    <string name="action_state">Sync State Data</string>
+    <string name="action_sync_offline">Sync Offline Data</string>
+    <string name="action_rejected">Rejected Data</string>
+    <string name="action_target_menu">Sync Data</string>
+
+    <string name="action_file_menu">Sync Data</string>
+    <string name="action_file_detail_menu">Sync Data</string>
+    <string name="action_route_map_menu">Show on Map</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    action_route_map_menu
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="title_activity_maps">Map</string>
+
+
+    <string name="customer_number_label">"customer number  : "</string>
+
+    <string name="customer_name_label">"customer name  : "</string>
+    <string name="customer_category_label">"customer category  : "</string>
+    <string name="customer_place_label">"customer place  : "</string>
+    <string name="customer_distance_label">"customer distance  : "</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Shakti Pumps</string>
+    <string name="nav_header_subtitle">Pumping Life</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_logout">Signout</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_offline">Offline Data</string>
+    <string name="menu_simrep">Sim Replacement</string>
+    <string name="menu_devicestatus">Device Status</string>
+    <string name="menu_rejectsites">Reject Sites</string>
+
+    <string name="menu_logout">Signout</string>
+    <string name="menu_audit">Site Audit</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">Send</string>
+    <string name="action_login">Login</string>
+    <string name="action_unsync_menu">Sync Offline Data</string>
+    <string name="action_unload">Unload List</string>
+    <string name="rationale_doc_picker" translatable="false">We need this pemission to read documents from device.</string>
+    <string name="file_thumbnail" translatable="false">File thumbnail</string>
+    <string name="path" translatable="false">Path : %1$s</string>
+
+
+    <string name="size" translatable="false">Size :  %1$d</string>
+    <string name="mime" translatable="false">Mime: %1$s</string>
+    <string name="type" translatable="false">Type : %1$d</string>
+    <string name="name" translatable="false">Name : %1$s</string>
+    <string name="bucketname" translatable="false">BucketName : %1$s</string>
+    <string name="beneficiary_id">Beneficiary Id</string>
+    <string name="registration_no">Registration No.</string>
+    <string name="address">Address</string>
+    <string name="aadhar_no">Aadhar No.</string>
+    <string name="dd_collection_image">DD Collection Image</string>
+    <string name="remark">Remark</string>
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
+    <string name="customer_name">Customer Name</string>
+    <string name="photo_of_water_source">Photo of Water Source</string>
+    <string name="document1">Document1</string>
+    <string name="document2">Document2</string>
+    <string name="length_and_diameter_of_discharge_pipe">Length and Diameter of Discharge Pipe</string>
+    <string name="length_of_power_cabel">Length of Power Cabel</string>
+    <string name="borewell_depth">Borewell Depth</string>
+    <string name="size_of_borewell">Size of Borewell</string>
+    <string name="contact_no">Contact No.</string>
+    <string-array name="nav_drawer_labels">
+        <item>@string/nav_item_home</item>
+        <item>@string/nav_item_offline_data</item>
+        <item>@string/nav_item_iv_curve</item>
+        <item>@string/nav_item_controller_datasheet</item>
+        <item>@string/nav_item_lr_submit</item>
+        <item>@string/nav_item_invoice</item>
+        <!--<item>@string/nav_item_attendance</item>
+        <item>@string/nav_item_emp_portal</item>-->
+
+    </string-array>
+    <string-array name="shakti_file">
+        <item>Price List</item>
+        <item>Leaflet</item>
+        <item>Policy</item>
+        <item>Catalog</item>
+        <item>Check List</item>
+        <item>JDs</item>
+    </string-array>
+
+
+    <string name="Get_text">Get</string>
+    <string name="Set_text">Set</string>
+    <string name="Set_edt_scan">Scan or Enter material number</string>
+    <string name="Scan_Device">Scan Device</string>
+</resources>

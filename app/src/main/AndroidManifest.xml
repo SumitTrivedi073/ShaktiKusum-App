@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.shaktipumplimited.shaktikusum">
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACROSS_USERS_FULL" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
+<!-- <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" android:maxSdkVersion="30" />-->
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera.front" />
+    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+
+    <application
+        android:name="com.shaktipumplimited.shaktikusum.BaseActivity"
+        android:allowBackup="true"
+        android:appComponentFactory="whateverString"
+        android:configChanges="orientation"
+        android:fullBackupContent="@xml/backup_descriptor"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/app_icon"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/app_icon"
+        android:supportsRtl="true"
+        android:theme="@style/MyMaterialTheme"
+        android:usesCleartextTraffic="true"
+        tools:ignore="GoogleAppIndexingWarning,RtlEnabled"
+        tools:replace="android:appComponentFactory"
+        tools:targetApi="q">
+        <activity android:name="com.shaktipumplimited.shaktikusum.AddDamage_MissingActivity"
+            android:label="Add Complain"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.MainActivity"
+            android:label="Shakti Kusum"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.SplashActivity"
+            android:exported="true"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.UpdateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="debugapp.BlueToothDebugNewActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="debugapp.NavigateOptionActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="debugapp.Add_Surway_Activity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="debugapp.ActivitySurveyList"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="debugapp.OTPGenerationActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.Login"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.CustomerRegistrationActivity"
+            android:label="Registration"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.RegReportImageActivity"
+            android:label="Registration Images"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.InstReportImageActivity"
+            android:label="Installation Images"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.UnloadInstReportImageActivity"
+            android:label="Installation Unload Images"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.ShowDocument"
+            android:label="Show Images"
+            android:screenOrientation="portrait" />
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.OfflineData"
+            android:label="Offline Data"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.OfflineDataReg"
+            android:label="Offline Registration Data"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.DDSubmissionActivity"
+            android:label="DD Collection"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.DeptDocSubActivity"
+            android:label="Depart. Doc. Submission"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.OffSubDocActivity"
+            android:label="Office Doc. Submission"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.InstallationList"
+            android:label="Installation List"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.InstallationListOfflineActivity"
+            android:label="Installation List"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.InstallationDetailOfflineActivity"
+            android:label="Installation List"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.InstallationInitial"
+            android:label="Installation Form"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.GovtOffVisitActivity"
+            android:label="Goverment Officer Visit"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.SiteAuditList"
+            android:label="Site Audit List"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.SiteAuditInitial"
+            android:label="Site Audit"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.SiteAuditImageActivity"
+            android:label="Site Audit"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.SimCardOptions"
+            android:label="Sim Card Options "
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.SimOfflineData"
+            android:label="Sim Offline Data"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.SIMActivationDetails"
+            android:label="Sim Activation Details"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.SurveyList"
+            android:label="Survey List"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.SurveyActivity"
+            android:label="Survey Details"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.DeviceStatusActivity"
+            android:label="Device Status"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.ActivityRejectSite"
+            android:label="Reject Sites"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.RejectInstRepImgActivity"
+            android:label="Reject Documents"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.ShowDocument1"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.ShowDocument2"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.CameraActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.shaktikusum.CameraActivitySurvey"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.SetParameter.DeviceSettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.SetParameter.PairedDeviceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.shaktipumplimited.SetParameter.ScannedBarcodeActivity"
+            android:screenOrientation="portrait" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.shaktipumplimited.shaktikusum.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+    </application>
+
+</manifest>

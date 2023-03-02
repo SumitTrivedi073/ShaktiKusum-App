@@ -1,0 +1,30 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+
+    tools:context="activity.MainActivity">
+
+
+
+    <!--<item-->
+        <!--android:id="@+id/action_sync_all"-->
+        <!--android:title="@string/action_sync_all"-->
+        <!--android:orderInCategory="100"-->
+        <!--app:showAsAction="never" />-->
+
+    <item
+        android:id="@+id/action_sync_state"
+        android:title="@string/action_state"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_signout"
+        android:title="@string/action_signout"
+        android:orderInCategory="100"
+        app:showAsAction="never"  />
+
+
+</menu>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/photo13"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_xxlarge45"
+                android:layout_marginStart="@dimen/space_mid10"
+                android:layout_marginTop="@dimen/space_mid6"
+                android:layout_marginEnd="@dimen/space_mid10"
+                android:layout_marginBottom="@dimen/space_large15"
+                android:background="@drawable/icn_box"
+                android:drawableEnd="@drawable/red_icn"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_mid10"
+                android:singleLine="true"
+                android:text="LR Photo"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_xlarge20" />
+
+            <TextView
+                android:id="@+id/photo14"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_xxlarge45"
+                android:layout_marginStart="@dimen/space_mid10"
+                android:layout_marginTop="@dimen/space_mid6"
+                android:layout_marginEnd="@dimen/space_mid10"
+                android:layout_marginBottom="@dimen/space_large15"
+                android:background="@drawable/icn_box"
+                android:drawableEnd="@drawable/red_icn"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_mid10"
+                android:singleLine="true"
+                android:text="Invoice Photo"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_xlarge20" />
+
+            <TextView
+                android:id="@+id/photo15"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_xxlarge45"
+                android:layout_marginStart="@dimen/space_mid10"
+                android:layout_marginTop="@dimen/space_mid6"
+                android:layout_marginEnd="@dimen/space_mid10"
+                android:layout_marginBottom="@dimen/space_large15"
+                android:background="@drawable/icn_box"
+                android:drawableEnd="@drawable/red_icn"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_mid10"
+                android:singleLine="true"
+                android:text="Customer Photo"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_xlarge20" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:text="* Remark"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_16ssp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtRemarkVKID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:background="@android:color/transparent"
+                android:hint="Enter Remark"
+                android:padding="@dimen/_10sdp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_16ssp"
+                android:textStyle="normal" />
+
+            <Button
+                android:id="@+id/btnSaveUnlodID"
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_50sdp"
+                android:background="@drawable/rounded_shape"
+                android:text="Save"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14ssp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/file_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_alignParentBottom="true"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tool:listitem="@layout/file_list_item" />
+
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+</LinearLayout>

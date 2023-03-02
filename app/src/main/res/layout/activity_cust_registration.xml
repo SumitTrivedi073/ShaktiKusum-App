@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <EditText
+                android:id="@+id/doc_date"
+                style="@style/under_line_et"
+                android:layout_below="@+id/reg_text"
+                android:editable="false"
+                android:focusable="false"
+                android:inputType="number" />
+
+            <LinearLayout
+                android:id="@+id/lin1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/doc_date"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_cust_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/cust_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:hint="Customer Name"
+                        android:inputType="text"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_father_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="0.5"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/father_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:hint="Father Name"
+                        android:inputType="text"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lin1"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <Spinner
+                    android:id="@+id/spinner_state"
+                    style="@style/spinner_style"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="0.5"
+                    android:spinnerMode="dialog" />
+
+
+                <Spinner
+                    android:id="@+id/spinner_district"
+                    style="@style/spinner_style"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="0.5"
+                    android:spinnerMode="dialog" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lin2"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_tehsil"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:paddingTop="10dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/tehsil"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:hint="Tehsil"
+                        android:inputType="text"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_village"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="0.5"
+                    android:paddingTop="10dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/village"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:hint="Village"
+                        android:inputType="text"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lin3"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_contact"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:paddingTop="10dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/contact"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:hint="Contact"
+                        android:inputType="number"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_aadhar_no"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="0.5"
+                    android:paddingTop="10dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/aadhar_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:hint="Aadhar Number"
+                        android:inputType="number"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lin4"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_bank_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.5"
+                    android:paddingTop="10dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/bank_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:hint="Bank Name"
+                        android:inputType="text"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_bank_acc"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="0.5"
+                    android:paddingTop="10dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/bank_acc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:hint="Bank Account No."
+                        android:inputType="number"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/lin5"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+
+                <Spinner
+                    android:id="@+id/spinner_acc_typ"
+                    style="@style/spinner_style"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="0.5"
+                    android:spinnerMode="dialog" />
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_bank_branch"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="0.5"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/branch_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:hint="Bank Branch "
+                        android:inputType="text"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lin6"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_ifsc_code"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:paddingTop="10dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/ifsc_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:hint="IFSC Code"
+                        android:inputType="text"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/input_amount"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="0.5"
+                    android:paddingTop="10dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:hint="Amount "
+                        android:inputType="numberDecimal"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/reg_text"
+                style="@style/wrap_text_medatory"
+                android:drawableRight="@null"
+                android:text="Registration Date"
+
+                android:textColor="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/btn_submit"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lin7"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/space_large25"
+                android:background="@layout/rounded_corner_blue"
+                android:gravity="center"
+                android:padding="@dimen/space_mid10"
+                android:text="Submit"
+                android:textColor="@color/white"
+                android:textSize="19sp" />
+        </RelativeLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

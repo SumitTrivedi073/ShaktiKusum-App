@@ -1,0 +1,1296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/space_mid10"
+        android:layout_marginRight="@dimen/space_mid10"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/size_xlarge20"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/wrap_text_medatory"
+                android:drawableRight="@null"
+                android:text="Installation Date"
+                android:textColor="@color/colorAccent" />
+
+            <EditText
+                android:id="@+id/Installation_date"
+                style="@style/under_line_et"
+                android:drawableLeft="@drawable/ic_mendotry"
+                android:drawablePadding="5dp"
+                android:editable="false"
+                android:focusable="false"
+                android:inputType="number" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_Customer_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/Customer_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Customer Name"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_fathers_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/fathers_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Father's Name"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_Installation_place"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/Installation_place"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_mendotry"
+                        android:focusable="true"
+                        android:hint="Installation Place"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_mobile_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/mobile_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Mobile Number"
+                        android:inputType="number"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/size_xlarge20"
+                android:layout_weight="1"
+
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Address"
+                        android:shadowColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/state"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="State"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_district"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/district"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="District"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_tehsil"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/tehsil"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Tehsil"
+                        android:inputType="number"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_village"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/village"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Village"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <!-- <LinearLayout
+                 android:layout_width="0dp"
+                 android:layout_height="wrap_content"
+                 android:layout_marginRight="@dimen/size_xlarge20"
+                 android:layout_weight="1"
+                 android:visibility="gone"
+                 android:orientation="vertical">
+
+                 <Spinner
+                     android:id="@+id/spinner_inst_type"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     android:layout_marginTop="10dp"
+                     android:layout_marginBottom="10dp"
+                     android:spinnerMode="dialog"/>
+
+             </LinearLayout>
+ -->
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <Spinner
+                    android:id="@+id/spinner_scheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:spinnerMode="dialog" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+
+                android:orientation="vertical">
+
+                <Spinner
+                    android:id="@+id/spinner_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:spinnerMode="dialog" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_lrnumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/lrnumber"
+                        android:layout_width="match_parent"
+
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:hint="LR Number"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/lrdate"
+                    style="@style/under_line_et"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:inputType="number" />
+
+                <TextView
+                    style="@style/wrap_text_medatory"
+                    android:drawableRight="@null"
+                    android:text="LR Date "
+                    android:textColor="@color/colorAccent" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_static_water_level_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/static_water_level_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Static water level"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_draw_down_leavel_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/draw_down_leavel_et"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Draw down level"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_billing_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/Billing_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_mendotry"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:drawablePadding="5dp"
+                        android:hint="Billing No"
+                        android:inputType="number"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15"
+
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_billing_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/bill_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_mendotry"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:drawablePadding="5dp"
+                        android:hint="Bill Date"
+                        android:inputType="number"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15"
+
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_solar_panel_wattage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/solar_panel_wattage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:focusable="true"
+                        android:hint="Solar Panel Wattage"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+
+                android:orientation="vertical">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_inst_hp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/inst_hp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:focusable="true"
+                        android:hint="HP"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/size_xlarge20"
+                android:layout_weight="1"
+
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_borewellstatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/borewellstatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_mendotry"
+                        android:drawablePadding="5dp"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:hint="Borewell Status"
+                        android:shadowColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_sanction_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/sanction_no"
+                        android:layout_width="match_parent"
+
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:hint="Sanction No"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/sanction_date"
+                    style="@style/under_line_et"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:inputType="number" />
+
+                <TextView
+                    style="@style/wrap_text_medatory"
+                    android:drawableRight="@null"
+                    android:text="Sanction Date"
+                    android:textColor="@color/colorAccent" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_sanction_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/sanction_amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:hint="Sanction Amount"
+                        android:inputType="number"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_beneficiary_share"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/sp_beneficiary_share"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:hint="Beneficiary Share"
+                        android:inputType="number"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_state_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/state_amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:hint="State Amount"
+                        android:inputType="number"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_central_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/central_amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:hint="Central Amount"
+                        android:inputType="number"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColor="@color/colorAccent"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <EditText
+
+                    android:id="@+id/no_of_module"
+                    style="@style/under_line_et"
+                    android:inputType="text" />
+
+                <TextView
+                    style="@style/wrap_text_medatory"
+                    android:drawableRight="@null"
+                    android:text="No of module" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/size_xlarge20"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <Spinner
+                    android:id="@+id/spinner_conntype"
+                    style="@style/spinner_style"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:spinnerMode="dialog"
+                    android:textAlignment="center" />
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_total_watts"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColorHint="@color/colorAccent">
+
+                    <EditText
+                        android:id="@+id/total_watts"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_mendotry"
+                        android:focusable="true"
+                        android:drawablePadding="5dp"
+                        android:hint="Total watts"
+                        android:shadowColor="@color/colorAccent"
+                        android:singleLine="true"
+                        android:textColorHighlight="@color/colorAccent"
+                        android:textColorHint="@color/colorAccent"
+                        android:textColorLink="@color/colorAccent"
+                        android:textIsSelectable="false"
+                        android:textSize="@dimen/size_small15" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/wrap_text_medatory"
+                android:drawableStart="@null"
+                android:text="Panel Module Qty"
+                android:textColor="@color/colorAccent" />
+
+            <EditText
+                android:id="@+id/module_serial_no"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:background="@drawable/black_border_text"
+                android:enabled="false"
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:inputType="number"
+                android:textSize="@dimen/size_mid16" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_make"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColorHint="@color/colorAccent">
+
+                <EditText
+                    android:id="@+id/make"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/ic_mendotry"
+                    android:focusable="true"
+                    android:drawablePadding="5dp"
+                    android:hint="Make"
+                    android:shadowColor="@color/colorAccent"
+                    android:singleLine="true"
+                    android:textColorHighlight="@color/colorAccent"
+                    android:textColorHint="@color/colorAccent"
+                    android:textColorLink="@color/colorAccent"
+                    android:textIsSelectable="false"
+                    android:textSize="@dimen/size_small15" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_one"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_mid6"
+                android:drawableEnd="@drawable/ic_mendotry"
+                android:drawablePadding="@dimen/space_mid6"
+                android:text="Total plates/watts"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/size_mid16"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/module_total_plate_watt"
+                style="@style/under_line_et"
+                android:background="@drawable/black_border_text"
+                android:textAlignment="center"
+                android:layout_marginStart="12dp" />
+
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/size_xlarge20"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/sm_Model_Details_one"
+                    style="@style/under_line_et"
+                    android:layout_marginTop="10dp"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:inputType="text" />
+
+                <TextView
+                    style="@style/wrap_text_medatory"
+                    android:drawableRight="@null"
+                    android:text="Motor Model Details"
+                    android:textColor="@color/colorAccent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5sp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/wrap_text_medatory"
+                    android:text="Motor Model Serial No."
+                    android:textColor="@color/colorAccent" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <EditText
+                        android:id="@+id/s_no_one"
+                        style="@style/under_line_et"
+                        android:layout_width="0dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="1dp"
+                        android:layout_weight="1"
+                        android:textAlignment="center"
+                        android:background="@drawable/black_border_text"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:inputType="text" />
+
+                    <ImageView
+                        android:id="@+id/img_scn_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/space_tinny2"
+                        android:src="@drawable/scan" />
+
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_sp_stand_install"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/colorAccent">
+
+            <EditText
+                android:id="@+id/sp_stand_install"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_mendotry"
+                android:focusable="true"
+                android:hint="Solar Panel Stand Install Quantity"
+                android:inputType="number"
+                android:shadowColor="@color/colorAccent"
+                android:singleLine="true"
+                android:textColorHighlight="@color/colorAccent"
+                android:textColorHint="@color/colorAccent"
+                android:textColorLink="@color/colorAccent"
+                android:textIsSelectable="false"
+                android:textSize="@dimen/size_small15" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

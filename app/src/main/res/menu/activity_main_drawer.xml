@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="@string/menu_home" />
+        <item
+            android:id="@+id/nav_offlinedata"
+            android:icon="@drawable/ic_signal_wifi_off_black_24dp"
+            android:title="@string/menu_offline" />
+
+        <item
+            android:id="@+id/nav_devicestatus"
+            android:icon="@drawable/ic_baseline_device_unknown_24"
+            android:title="@string/menu_devicestatus" />
+
+        <item
+            android:id="@+id/nav_rejectsite"
+            android:icon="@drawable/ic_baseline_cancel_24"
+            android:title="@string/menu_rejectsites" />
+
+        <item
+            android:id="@+id/nav_siteaudit"
+            android:icon="@drawable/ic_baseline_calendar_today_24"
+            android:title="@string/menu_audit" />
+
+        <item
+            android:id="@+id/nav_simreplace"
+            android:icon="@drawable/ic_baseline_sim_card_24"
+            android:title="@string/menu_simrep" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_logout_24dp"
+            android:title="@string/menu_logout" />
+
+    </group>
+
+
+</menu>

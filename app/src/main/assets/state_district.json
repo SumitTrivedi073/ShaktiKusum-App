@@ -1,0 +1,4696 @@
+﻿{
+  "state_data": [
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0101",
+      "cityc_txt": "Adilabad"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0102",
+      "cityc_txt": "Anantapur"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0103",
+      "cityc_txt": "Chittoor"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0104",
+      "cityc_txt": "Kadapa"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0105",
+      "cityc_txt": "East Godavari"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0106",
+      "cityc_txt": "Guntur"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0107",
+      "cityc_txt": "Hyderabad"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0108",
+      "cityc_txt": "Karimnagar"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0109",
+      "cityc_txt": "Khammam"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0110",
+      "cityc_txt": "Krishna"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0111",
+      "cityc_txt": "Kurnool"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0112",
+      "cityc_txt": "Mahbubnagar"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0113",
+      "cityc_txt": "Medak"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0114",
+      "cityc_txt": "Nalgonda"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0115",
+      "cityc_txt": "Nellore"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0116",
+      "cityc_txt": "Nizamabad"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0117",
+      "cityc_txt": "Prakasam"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0118",
+      "cityc_txt": "Rangareddi"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0119",
+      "cityc_txt": "Srikakulam"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0120",
+      "cityc_txt": "Visakhapatnam"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0121",
+      "cityc_txt": "Vizianagaram"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0122",
+      "cityc_txt": "Warangal"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0123",
+      "cityc_txt": "West Godavari"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "0124",
+      "cityc_txt": "Tirupati"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "101",
+      "cityc_txt": "Adilabad"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "102",
+      "cityc_txt": "Anantapur"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "103",
+      "cityc_txt": "Chittoor"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "104",
+      "cityc_txt": "Kadapa"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "105",
+      "cityc_txt": "East Godavari"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "106",
+      "cityc_txt": "Guntur"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "107",
+      "cityc_txt": "Hyderabad"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "108",
+      "cityc_txt": "Karimnagar"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "109",
+      "cityc_txt": "Khammam"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "110",
+      "cityc_txt": "Krishna"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "111",
+      "cityc_txt": "Kurnool"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "112",
+      "cityc_txt": "Mahbubnagar"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "113",
+      "cityc_txt": "Medak"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "114",
+      "cityc_txt": "Nalgonda"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "115",
+      "cityc_txt": "Nellore"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "116",
+      "cityc_txt": "Nizamabad"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "117",
+      "cityc_txt": "Prakasam"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "118",
+      "cityc_txt": "Rangareddi"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "119",
+      "cityc_txt": "Srikakulam"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "120",
+      "cityc_txt": "Visakhapatnam"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "121",
+      "cityc_txt": "Vizianagaram"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "122",
+      "cityc_txt": "Warangal"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "123",
+      "cityc_txt": "West Godavari"
+    },
+    {
+      "regio": "01",
+      "regio_txt": "Andhra Pradesh",
+      "cityc": "124",
+      "cityc_txt": "Tirupati"
+    },
+    {
+      "regio": "02",
+      "regio_txt": "Arunachal Pradesh",
+      "cityc": "201",
+      "cityc_txt": "Anjaw"
+    },
+    {
+      "regio": "02",
+      "regio_txt": "Arunachal Pradesh",
+      "cityc": "2010",
+      "cityc_txt": "Lower Subansiri"
+    },
+    {
+      "regio": "02",
+      "regio_txt": "Arunachal Pradesh",
+      "cityc": "2011",
+      "cityc_txt": "Papum Pare"
+    },
+    {
+      "regio": "02",
+      "regio_txt": "Arunachal Pradesh",
+      "cityc": "2012",
+      "cityc_txt": "Tawang"
+    },
+    {
+      "regio": "02",
+      "regio_txt": "Arunachal Pradesh",
+      "cityc": "2013",
+      "cityc_txt": "Tirap"
+    },
+    {
+      "regio": "02",
+      "regio_txt": "Arunachal Pradesh",
+      "cityc": "2014",
+      "cityc_txt": "Upper Siang"
+    },
+    {
+      "regio": "02",
+      "regio_txt": "Arunachal Pradesh",
+      "cityc": "2015",
+      "cityc_txt": "Upper Subansiri"
+    },
+    {
+      "regio": "02",
+      "regio_txt": "Arunachal Pradesh",
+      "cityc": "2016",
+      "cityc_txt": "West Kameng"
+    },
+    {
+      "regio": "02",
+      "regio_txt": "Arunachal Pradesh",
+      "cityc": "2017",
+      "cityc_txt": "West Siang"
+    },
+    {
+      "regio": "02",
+      "regio_txt": "Arunachal Pradesh",
+      "cityc": "202",
+      "cityc_txt": "Changlang"
+    },
+    {
+      "regio": "02",
+      "regio_txt": "Arunachal Pradesh",
+      "cityc": "203",
+      "cityc_txt": "Dibang Valley"
+    },
+    {
+      "regio": "02",
+      "regio_txt": "Arunachal Pradesh",
+      "cityc": "204",
+      "cityc_txt": "East Kameng"
+    },
+    {
+      "regio": "02",
+      "regio_txt": "Arunachal Pradesh",
+      "cityc": "205",
+      "cityc_txt": "East Siang"
+    },
+    {
+      "regio": "02",
+      "regio_txt": "Arunachal Pradesh",
+      "cityc": "206",
+      "cityc_txt": "Kurung Kumey"
+    },
+    {
+      "regio": "02",
+      "regio_txt": "Arunachal Pradesh",
+      "cityc": "207",
+      "cityc_txt": "Lohit"
+    },
+    {
+      "regio": "02",
+      "regio_txt": "Arunachal Pradesh",
+      "cityc": "208",
+      "cityc_txt": "Longding"
+    },
+    {
+      "regio": "02",
+      "regio_txt": "Arunachal Pradesh",
+      "cityc": "209",
+      "cityc_txt": "Lower Dibang Valley"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "0301",
+      "cityc_txt": "Guwahati"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "301",
+      "cityc_txt": "Guwahati"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "302",
+      "cityc_txt": "Barpeta"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "303",
+      "cityc_txt": "Bongaigaon"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "304",
+      "cityc_txt": "Baksa"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "305",
+      "cityc_txt": "Chirang"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "306",
+      "cityc_txt": "Cachar"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "307",
+      "cityc_txt": "Darrang"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "308",
+      "cityc_txt": "Dhemaji"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "309",
+      "cityc_txt": "Dima Hasao"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "310",
+      "cityc_txt": "Dhubri"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "311",
+      "cityc_txt": "Dibrugarh"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "312",
+      "cityc_txt": "Goalpara"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "313",
+      "cityc_txt": "Golaghat"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "314",
+      "cityc_txt": "Hailakandi"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "315",
+      "cityc_txt": "Jorhat"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "316",
+      "cityc_txt": "Karbi Anglong"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "317",
+      "cityc_txt": "Kamrup Metropolitan"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "318",
+      "cityc_txt": "Karimganj"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "319",
+      "cityc_txt": "Kamrup"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "320",
+      "cityc_txt": "Kokrajhar"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "321",
+      "cityc_txt": "Lakhimpur"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "322",
+      "cityc_txt": "Morigaon"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "323",
+      "cityc_txt": "Nagaon"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "324",
+      "cityc_txt": "Nalbari"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "325",
+      "cityc_txt": "Sivasagar"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "326",
+      "cityc_txt": "Sonitpur"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "327",
+      "cityc_txt": "Tinsukia"
+    },
+    {
+      "regio": "03",
+      "regio_txt": "Assam",
+      "cityc": "328",
+      "cityc_txt": "Udalguri"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "401",
+      "cityc_txt": "Araria"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "402",
+      "cityc_txt": "Arwal"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "403",
+      "cityc_txt": "Aurangabad"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "404",
+      "cityc_txt": "Banka"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "405",
+      "cityc_txt": "Begusarai"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "406",
+      "cityc_txt": "Bhagalpur"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "407",
+      "cityc_txt": "Bhojpur"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "408",
+      "cityc_txt": "Buxar"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "409",
+      "cityc_txt": "Darbhanga"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "410",
+      "cityc_txt": "East Champaran"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "411",
+      "cityc_txt": "Gaya"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "412",
+      "cityc_txt": "Gopalganj"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "413",
+      "cityc_txt": "Jamui"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "414",
+      "cityc_txt": "Jehanabad"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "415",
+      "cityc_txt": "Kaimur (Bhabua)"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "416",
+      "cityc_txt": "Katihar"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "417",
+      "cityc_txt": "Khagaria"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "418",
+      "cityc_txt": "Kishanganj"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "419",
+      "cityc_txt": "Lakhisarai"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "420",
+      "cityc_txt": "Madhepura"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "421",
+      "cityc_txt": "Madhubani"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "422",
+      "cityc_txt": "Munger"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "423",
+      "cityc_txt": "Muzaffarpur"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "424",
+      "cityc_txt": "Nalanda"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "425",
+      "cityc_txt": "Nawada"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "426",
+      "cityc_txt": "Patna"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "427",
+      "cityc_txt": "Purnia"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "428",
+      "cityc_txt": "Rohtas"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "429",
+      "cityc_txt": "Saharsa"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "430",
+      "cityc_txt": "Samastipur"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "431",
+      "cityc_txt": "Saran"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "432",
+      "cityc_txt": "Sheikhpura"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "433",
+      "cityc_txt": "Sheohar"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "434",
+      "cityc_txt": "Sitamarhi"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "435",
+      "cityc_txt": "Siwan"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "436",
+      "cityc_txt": "Supaul"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "437",
+      "cityc_txt": "Vaishali"
+    },
+    {
+      "regio": "04",
+      "regio_txt": "Bihar",
+      "cityc": "438",
+      "cityc_txt": "West Champaran"
+    },
+    {
+      "regio": "05",
+      "regio_txt": "Goa",
+      "cityc": "500",
+      "cityc_txt": "North Goa"
+    },
+    {
+      "regio": "05",
+      "regio_txt": "Goa",
+      "cityc": "501",
+      "cityc_txt": "MAPUSA"
+    },
+    {
+      "regio": "05",
+      "regio_txt": "Goa",
+      "cityc": "502",
+      "cityc_txt": "BICHOLIM"
+    },
+    {
+      "regio": "05",
+      "regio_txt": "Goa",
+      "cityc": "503",
+      "cityc_txt": "PANAJI"
+    },
+    {
+      "regio": "05",
+      "regio_txt": "Goa",
+      "cityc": "504",
+      "cityc_txt": "PONDA"
+    },
+    {
+      "regio": "05",
+      "regio_txt": "Goa",
+      "cityc": "505",
+      "cityc_txt": "South Goa"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0601",
+      "cityc_txt": "Amreli"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0602",
+      "cityc_txt": "Anand"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0603",
+      "cityc_txt": "Nadiad (Kheda)"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0604",
+      "cityc_txt": "Banaskatha (Palanpur"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0605",
+      "cityc_txt": "Bharuch"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0606",
+      "cityc_txt": "Bhavnagar"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0607",
+      "cityc_txt": "Dahod"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0608",
+      "cityc_txt": "Dang (Ahava)"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0609",
+      "cityc_txt": "Gandhinagar"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0610",
+      "cityc_txt": "Jamnagar"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0611",
+      "cityc_txt": "Junagadh"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0612",
+      "cityc_txt": "Kutchh"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0613",
+      "cityc_txt": "Mehsana"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0614",
+      "cityc_txt": "Navsari"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0615",
+      "cityc_txt": "Panchmahal(Godhara)"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0616",
+      "cityc_txt": "Patan"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0617",
+      "cityc_txt": "Porbandar"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0618",
+      "cityc_txt": "Rajkot"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0619",
+      "cityc_txt": "Narmada (Rajpipla)"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0620",
+      "cityc_txt": "Sabarkantha (Himmat"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0621",
+      "cityc_txt": "Surat"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0622",
+      "cityc_txt": "Surendra Nagar"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0623",
+      "cityc_txt": "Vadodara"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0624",
+      "cityc_txt": "Valsad"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0625",
+      "cityc_txt": "Ahamedabad"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "0626",
+      "cityc_txt": "Vapi"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "601",
+      "cityc_txt": "Amreli"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "602",
+      "cityc_txt": "Anand"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "603",
+      "cityc_txt": "Kheda"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "604",
+      "cityc_txt": "Banaskantha"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "605",
+      "cityc_txt": "Bharuch"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "606",
+      "cityc_txt": "Bhavnagar"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "607",
+      "cityc_txt": "Dahod"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "608",
+      "cityc_txt": "Dang"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "609",
+      "cityc_txt": "Gandhinagar"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "610",
+      "cityc_txt": "Jamnagar"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "611",
+      "cityc_txt": "Junagadh"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "612",
+      "cityc_txt": "Kutch"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "613",
+      "cityc_txt": "Mehsana"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "614",
+      "cityc_txt": "Navsari"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "615",
+      "cityc_txt": "Panchmahal"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "616",
+      "cityc_txt": "Patan"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "617",
+      "cityc_txt": "Porbandar"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "618",
+      "cityc_txt": "Rajkot"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "619",
+      "cityc_txt": "Narmada"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "620",
+      "cityc_txt": "Sabarkantha"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "621",
+      "cityc_txt": "Surat"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "622",
+      "cityc_txt": "Surendra nagar"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "623",
+      "cityc_txt": "Vadodara"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "624",
+      "cityc_txt": "Valsad"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "625",
+      "cityc_txt": "Ahmedabad"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "626",
+      "cityc_txt": "Vapi"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "627",
+      "cityc_txt": "Tapi"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "628",
+      "cityc_txt": "Daman"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "629",
+      "cityc_txt": "Devbhoomi Dwarka"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "630",
+      "cityc_txt": "Aravalli"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "631",
+      "cityc_txt": "Botad"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "632",
+      "cityc_txt": "Chhota Udaipur"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "633",
+      "cityc_txt": "Gir Somnath"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "634",
+      "cityc_txt": "Mahisagar"
+    },
+    {
+      "regio": "06",
+      "regio_txt": "Gujarat",
+      "cityc": "635",
+      "cityc_txt": "Morbi"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0701",
+      "cityc_txt": "Ambala"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0702",
+      "cityc_txt": "Bhiwani"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0703",
+      "cityc_txt": "Faridabad"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0704",
+      "cityc_txt": "Fatehabad"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0705",
+      "cityc_txt": "Gurgaon"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0706",
+      "cityc_txt": "Hisar"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0707",
+      "cityc_txt": "Jhajjar"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0708",
+      "cityc_txt": "Jind"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0709",
+      "cityc_txt": "Kaithal"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0710",
+      "cityc_txt": "Karnal"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0711",
+      "cityc_txt": "Kurukshetra"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0712",
+      "cityc_txt": "Mahendragarh"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0713",
+      "cityc_txt": "Mewat"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0714",
+      "cityc_txt": "Palwal"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0715",
+      "cityc_txt": "Panchkula"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0716",
+      "cityc_txt": "Panipat"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0717",
+      "cityc_txt": "Rewari"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0718",
+      "cityc_txt": "Rohtak"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0719",
+      "cityc_txt": "Sirsa"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0720",
+      "cityc_txt": "Sonipat"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "0721",
+      "cityc_txt": "Yamuna Nagar"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "701",
+      "cityc_txt": "Ambala"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "702",
+      "cityc_txt": "Bhiwani"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "703",
+      "cityc_txt": "Faridabad"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "704",
+      "cityc_txt": "Fatehabad"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "705",
+      "cityc_txt": "Gurgaon"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "706",
+      "cityc_txt": "Hisar"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "707",
+      "cityc_txt": "Jhajjar"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "708",
+      "cityc_txt": "Jind"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "709",
+      "cityc_txt": "Kaithal"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "710",
+      "cityc_txt": "Karnal"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "711",
+      "cityc_txt": "Kurukshetra"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "712",
+      "cityc_txt": "Mahendragarh"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "713",
+      "cityc_txt": "Mewat"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "714",
+      "cityc_txt": "Palwal"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "715",
+      "cityc_txt": "Panchkula"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "716",
+      "cityc_txt": "Panipat"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "717",
+      "cityc_txt": "Rewari"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "718",
+      "cityc_txt": "Rohtak"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "719",
+      "cityc_txt": "Sirsa"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "720",
+      "cityc_txt": "Sonipat"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "721",
+      "cityc_txt": "Yamuna Nagar"
+    },
+    {
+      "regio": "07",
+      "regio_txt": "Haryana",
+      "cityc": "722",
+      "cityc_txt": "Charkhi Dadri"
+    },
+    {
+      "regio": "08",
+      "regio_txt": "Himachal Pradesh",
+      "cityc": "801",
+      "cityc_txt": "Chamba"
+    },
+    {
+      "regio": "08",
+      "regio_txt": "Himachal Pradesh",
+      "cityc": "802",
+      "cityc_txt": "Bilaspur"
+    },
+    {
+      "regio": "08",
+      "regio_txt": "Himachal Pradesh",
+      "cityc": "803",
+      "cityc_txt": "Hamirpur"
+    },
+    {
+      "regio": "08",
+      "regio_txt": "Himachal Pradesh",
+      "cityc": "804",
+      "cityc_txt": "Kangra"
+    },
+    {
+      "regio": "08",
+      "regio_txt": "Himachal Pradesh",
+      "cityc": "805",
+      "cityc_txt": "Kinnaur"
+    },
+    {
+      "regio": "08",
+      "regio_txt": "Himachal Pradesh",
+      "cityc": "806",
+      "cityc_txt": "Kullu"
+    },
+    {
+      "regio": "08",
+      "regio_txt": "Himachal Pradesh",
+      "cityc": "807",
+      "cityc_txt": "Lahaul & Spiti"
+    },
+    {
+      "regio": "08",
+      "regio_txt": "Himachal Pradesh",
+      "cityc": "808",
+      "cityc_txt": "Mandi"
+    },
+    {
+      "regio": "08",
+      "regio_txt": "Himachal Pradesh",
+      "cityc": "809",
+      "cityc_txt": "Shimla"
+    },
+    {
+      "regio": "08",
+      "regio_txt": "Himachal Pradesh",
+      "cityc": "810",
+      "cityc_txt": "Sirmaur"
+    },
+    {
+      "regio": "08",
+      "regio_txt": "Himachal Pradesh",
+      "cityc": "811",
+      "cityc_txt": "Solan"
+    },
+    {
+      "regio": "08",
+      "regio_txt": "Himachal Pradesh",
+      "cityc": "812",
+      "cityc_txt": "Una"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "901",
+      "cityc_txt": "Srinagar"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "902",
+      "cityc_txt": "Anantnag"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "903",
+      "cityc_txt": "Bandipora"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "904",
+      "cityc_txt": "Baramulla"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "905",
+      "cityc_txt": "Budgam"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "906",
+      "cityc_txt": "Doda"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "907",
+      "cityc_txt": "Ganderbal"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "908",
+      "cityc_txt": "Jammu"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "909",
+      "cityc_txt": "Kargil"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "910",
+      "cityc_txt": "Kathua"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "911",
+      "cityc_txt": "Kishtwar"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "912",
+      "cityc_txt": "Kulgam"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "913",
+      "cityc_txt": "Kupwara"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "914",
+      "cityc_txt": "Leh"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "915",
+      "cityc_txt": "Poonch"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "916",
+      "cityc_txt": "Pulwama"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "917",
+      "cityc_txt": "Rajouri"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "918",
+      "cityc_txt": "Ramban"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "919",
+      "cityc_txt": "Reasi"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "920",
+      "cityc_txt": "Samba"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "921",
+      "cityc_txt": "Shopian"
+    },
+    {
+      "regio": "09",
+      "regio_txt": "Jammu And Kashmir",
+      "cityc": "922",
+      "cityc_txt": "Udhampur"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1001",
+      "cityc_txt": "Mysore"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1002",
+      "cityc_txt": "Gulbarga"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1003",
+      "cityc_txt": "Chitradurga"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1004",
+      "cityc_txt": "Kolar"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1005",
+      "cityc_txt": "Bijapur"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1006",
+      "cityc_txt": "Dakshina Kannada"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1007",
+      "cityc_txt": "Raichur"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1008",
+      "cityc_txt": "Bellary"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1009",
+      "cityc_txt": "Belgaum"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1010",
+      "cityc_txt": "Hassan"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1011",
+      "cityc_txt": "Dharwad"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1012",
+      "cityc_txt": "Bangalore Rural"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1013",
+      "cityc_txt": "Shimoga"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1014",
+      "cityc_txt": "Mandya"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1015",
+      "cityc_txt": "Chikmagalur"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1016",
+      "cityc_txt": "Bangalore"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1017",
+      "cityc_txt": "Madikeri"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1018",
+      "cityc_txt": "Tumkur"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1019",
+      "cityc_txt": "Bidar"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1020",
+      "cityc_txt": "Karwar"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1021",
+      "cityc_txt": "Udupi"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1022",
+      "cityc_txt": "Davangere"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1023",
+      "cityc_txt": "Chamarajanagar"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1024",
+      "cityc_txt": "Koppal"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1025",
+      "cityc_txt": "Haveri"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1026",
+      "cityc_txt": "Gadag"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1027",
+      "cityc_txt": "Yadgir"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1028",
+      "cityc_txt": "Bagalkot"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1029",
+      "cityc_txt": "Kodagu"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1030",
+      "cityc_txt": "Uttara Kannada"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1031",
+      "cityc_txt": "Mangalore"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1032",
+      "cityc_txt": "Chikkaballapur"
+    },
+    {
+      "regio": "10",
+      "regio_txt": "Karnataka",
+      "cityc": "1033",
+      "cityc_txt": "Ramanagara"
+    },
+    {
+      "regio": "11",
+      "regio_txt": "Kerala",
+      "cityc": "1101",
+      "cityc_txt": "Clickable"
+    },
+    {
+      "regio": "11",
+      "regio_txt": "Kerala",
+      "cityc": "1102",
+      "cityc_txt": "Alappuzha"
+    },
+    {
+      "regio": "11",
+      "regio_txt": "Kerala",
+      "cityc": "1103",
+      "cityc_txt": "Ernakulam"
+    },
+    {
+      "regio": "11",
+      "regio_txt": "Kerala",
+      "cityc": "1104",
+      "cityc_txt": "Idukki"
+    },
+    {
+      "regio": "11",
+      "regio_txt": "Kerala",
+      "cityc": "1105",
+      "cityc_txt": "Kannur"
+    },
+    {
+      "regio": "11",
+      "regio_txt": "Kerala",
+      "cityc": "1106",
+      "cityc_txt": "Gurdaspur"
+    },
+    {
+      "regio": "11",
+      "regio_txt": "Kerala",
+      "cityc": "1107",
+      "cityc_txt": "Kasaragod"
+    },
+    {
+      "regio": "11",
+      "regio_txt": "Kerala",
+      "cityc": "1108",
+      "cityc_txt": "Kollam"
+    },
+    {
+      "regio": "11",
+      "regio_txt": "Kerala",
+      "cityc": "1109",
+      "cityc_txt": "Kottayam"
+    },
+    {
+      "regio": "11",
+      "regio_txt": "Kerala",
+      "cityc": "1110",
+      "cityc_txt": "Kozhikode"
+    },
+    {
+      "regio": "11",
+      "regio_txt": "Kerala",
+      "cityc": "1111",
+      "cityc_txt": "Malappuram"
+    },
+    {
+      "regio": "11",
+      "regio_txt": "Kerala",
+      "cityc": "1112",
+      "cityc_txt": "Moga"
+    },
+    {
+      "regio": "11",
+      "regio_txt": "Kerala",
+      "cityc": "1113",
+      "cityc_txt": "Palakkad"
+    },
+    {
+      "regio": "11",
+      "regio_txt": "Kerala",
+      "cityc": "1114",
+      "cityc_txt": "Pathanamthitta"
+    },
+    {
+      "regio": "11",
+      "regio_txt": "Kerala",
+      "cityc": "1115",
+      "cityc_txt": "Thiruvananthapuram"
+    },
+    {
+      "regio": "11",
+      "regio_txt": "Kerala",
+      "cityc": "1116",
+      "cityc_txt": "Kochi"
+    },
+    {
+      "regio": "11",
+      "regio_txt": "Kerala",
+      "cityc": "1117",
+      "cityc_txt": "Thrissur"
+    },
+    {
+      "regio": "11",
+      "regio_txt": "Kerala",
+      "cityc": "1118",
+      "cityc_txt": "Wayanad"
+    },
+    {
+      "regio": "11",
+      "regio_txt": "Kerala",
+      "cityc": "1119",
+      "cityc_txt": "Mahe"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1200",
+      "cityc_txt": "AliRajpur"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1201",
+      "cityc_txt": "Balaghat"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1202",
+      "cityc_txt": "Bandhavgarh"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1203",
+      "cityc_txt": "Barwani"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1204",
+      "cityc_txt": "Betul"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1205",
+      "cityc_txt": "Bhind"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1206",
+      "cityc_txt": "Bhopal"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1207",
+      "cityc_txt": "Chhatarpur"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1208",
+      "cityc_txt": "Chhindwara"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1209",
+      "cityc_txt": "Damoh"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1210",
+      "cityc_txt": "Datia"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1211",
+      "cityc_txt": "Dewas"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1212",
+      "cityc_txt": "Dhar"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1213",
+      "cityc_txt": "Dindori"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1214",
+      "cityc_txt": "East Nimad"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1215",
+      "cityc_txt": "Guna"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1216",
+      "cityc_txt": "Gwalior"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1217",
+      "cityc_txt": "Harda"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1218",
+      "cityc_txt": "Hoshangabad"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1219",
+      "cityc_txt": "Indore"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1220",
+      "cityc_txt": "Jabalpur"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1221",
+      "cityc_txt": "Jhabua"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1222",
+      "cityc_txt": "Katni"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1223",
+      "cityc_txt": "Mandla"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1224",
+      "cityc_txt": "Mandsaur"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1225",
+      "cityc_txt": "Morena"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1226",
+      "cityc_txt": "Narsimhapur"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1227",
+      "cityc_txt": "Neemuch"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1228",
+      "cityc_txt": "Panna"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1229",
+      "cityc_txt": "Raisen"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1230",
+      "cityc_txt": "Rajgarh"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1231",
+      "cityc_txt": "Ratlam"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1232",
+      "cityc_txt": "Rewa"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1233",
+      "cityc_txt": "Sagar"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1234",
+      "cityc_txt": "Satna"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1235",
+      "cityc_txt": "Sehore"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1236",
+      "cityc_txt": "Seoni"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1237",
+      "cityc_txt": "Shahdol"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1238",
+      "cityc_txt": "Shajapur"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1239",
+      "cityc_txt": "Sheopur"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1240",
+      "cityc_txt": "Shivpuri"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1241",
+      "cityc_txt": "Sidhi"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1242",
+      "cityc_txt": "Tikamgarh"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1243",
+      "cityc_txt": "Ujjain"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1244",
+      "cityc_txt": "Vidisha"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1245",
+      "cityc_txt": "West Nimad"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1246",
+      "cityc_txt": "Khandwa"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1247",
+      "cityc_txt": "Khargone"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1248",
+      "cityc_txt": "Ashok Nagar"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1249",
+      "cityc_txt": "Burhanpur"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1250",
+      "cityc_txt": "Umriya"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1251",
+      "cityc_txt": "Singrauli"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1252",
+      "cityc_txt": "Anuppur"
+    },
+    {
+      "regio": "12",
+      "regio_txt": "Madhya Pradesh",
+      "cityc": "1253",
+      "cityc_txt": "Agar Malwa"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1301",
+      "cityc_txt": "Surat"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1302",
+      "cityc_txt": "Akola"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1303",
+      "cityc_txt": "Amravati"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1304",
+      "cityc_txt": "Aurangabad"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1305",
+      "cityc_txt": "Bhandara"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1306",
+      "cityc_txt": "Beed"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1307",
+      "cityc_txt": "Mumbai City"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1308",
+      "cityc_txt": "Mumbai (Sub)"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1309",
+      "cityc_txt": "Buldhana"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1310",
+      "cityc_txt": "Chandrapur"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1311",
+      "cityc_txt": "Dhule"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1312",
+      "cityc_txt": "Gadchiroli"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1313",
+      "cityc_txt": "Jalgaon"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1314",
+      "cityc_txt": "Jalna"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1315",
+      "cityc_txt": "Kolhapur"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1316",
+      "cityc_txt": "Latur"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1317",
+      "cityc_txt": "Nagpur"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1318",
+      "cityc_txt": "Nanded"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1319",
+      "cityc_txt": "Nashik"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1320",
+      "cityc_txt": "Osmanabad"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1321",
+      "cityc_txt": "Parbhani"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1322",
+      "cityc_txt": "Pune"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1323",
+      "cityc_txt": "Raigad"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1324",
+      "cityc_txt": "Ratnagiri"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1325",
+      "cityc_txt": "Sangli"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1326",
+      "cityc_txt": "Satara"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1327",
+      "cityc_txt": "Sindhudurg"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1328",
+      "cityc_txt": "Solapur"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1329",
+      "cityc_txt": "Thane"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1330",
+      "cityc_txt": "Wardha"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1331",
+      "cityc_txt": "Yavatmal"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1332",
+      "cityc_txt": "Nandurbar"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1333",
+      "cityc_txt": "Washim"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1334",
+      "cityc_txt": "Gondia"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1335",
+      "cityc_txt": "Hingoli"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1336",
+      "cityc_txt": "Ahemadnagar"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1337",
+      "cityc_txt": "Raigad"
+    },
+    {
+      "regio": "13",
+      "regio_txt": "Maharashtra",
+      "cityc": "1338",
+      "cityc_txt": "Palghar"
+    },
+    {
+      "regio": "14",
+      "regio_txt": "Manipur",
+      "cityc": "1401",
+      "cityc_txt": "Bishnupur"
+    },
+    {
+      "regio": "14",
+      "regio_txt": "Manipur",
+      "cityc": "1402",
+      "cityc_txt": "Chandel"
+    },
+    {
+      "regio": "14",
+      "regio_txt": "Manipur",
+      "cityc": "1403",
+      "cityc_txt": "Churachandpur"
+    },
+    {
+      "regio": "14",
+      "regio_txt": "Manipur",
+      "cityc": "1404",
+      "cityc_txt": "Imphal-East"
+    },
+    {
+      "regio": "14",
+      "regio_txt": "Manipur",
+      "cityc": "1405",
+      "cityc_txt": "Imphal-West"
+    },
+    {
+      "regio": "14",
+      "regio_txt": "Manipur",
+      "cityc": "1406",
+      "cityc_txt": "Senapati"
+    },
+    {
+      "regio": "14",
+      "regio_txt": "Manipur",
+      "cityc": "1407",
+      "cityc_txt": "Tamenglong"
+    },
+    {
+      "regio": "14",
+      "regio_txt": "Manipur",
+      "cityc": "1408",
+      "cityc_txt": "Thoubal"
+    },
+    {
+      "regio": "14",
+      "regio_txt": "Manipur",
+      "cityc": "1409",
+      "cityc_txt": "Ukhrul"
+    },
+    {
+      "regio": "15",
+      "regio_txt": "Meghalaya",
+      "cityc": "1501",
+      "cityc_txt": "East Garo Hills"
+    },
+    {
+      "regio": "15",
+      "regio_txt": "Meghalaya",
+      "cityc": "1502",
+      "cityc_txt": "East Khasi Hills"
+    },
+    {
+      "regio": "15",
+      "regio_txt": "Meghalaya",
+      "cityc": "1503",
+      "cityc_txt": "Jaintia Hills"
+    },
+    {
+      "regio": "15",
+      "regio_txt": "Meghalaya",
+      "cityc": "1504",
+      "cityc_txt": "Ri Bhoi"
+    },
+    {
+      "regio": "15",
+      "regio_txt": "Meghalaya",
+      "cityc": "1506",
+      "cityc_txt": "South Garo Hills"
+    },
+    {
+      "regio": "15",
+      "regio_txt": "Meghalaya",
+      "cityc": "1507",
+      "cityc_txt": "West Garo Hils"
+    },
+    {
+      "regio": "15",
+      "regio_txt": "Meghalaya",
+      "cityc": "1508",
+      "cityc_txt": "West Khasi Hills"
+    },
+    {
+      "regio": "16",
+      "regio_txt": "Mizoram",
+      "cityc": "1601",
+      "cityc_txt": "AIZAWL"
+    },
+    {
+      "regio": "17",
+      "regio_txt": "Nagaland",
+      "cityc": "1701",
+      "cityc_txt": "Dimapur"
+    },
+    {
+      "regio": "17",
+      "regio_txt": "Nagaland",
+      "cityc": "1702",
+      "cityc_txt": "Kiphire"
+    },
+    {
+      "regio": "17",
+      "regio_txt": "Nagaland",
+      "cityc": "1703",
+      "cityc_txt": "Kohima"
+    },
+    {
+      "regio": "17",
+      "regio_txt": "Nagaland",
+      "cityc": "1704",
+      "cityc_txt": "Longleng"
+    },
+    {
+      "regio": "17",
+      "regio_txt": "Nagaland",
+      "cityc": "1705",
+      "cityc_txt": "Mokokchung"
+    },
+    {
+      "regio": "17",
+      "regio_txt": "Nagaland",
+      "cityc": "1706",
+      "cityc_txt": "Mon"
+    },
+    {
+      "regio": "17",
+      "regio_txt": "Nagaland",
+      "cityc": "1707",
+      "cityc_txt": "Peren"
+    },
+    {
+      "regio": "17",
+      "regio_txt": "Nagaland",
+      "cityc": "1708",
+      "cityc_txt": "Phek"
+    },
+    {
+      "regio": "17",
+      "regio_txt": "Nagaland",
+      "cityc": "1709",
+      "cityc_txt": "Tuensang"
+    },
+    {
+      "regio": "17",
+      "regio_txt": "Nagaland",
+      "cityc": "1710",
+      "cityc_txt": "Wokha"
+    },
+    {
+      "regio": "17",
+      "regio_txt": "Nagaland",
+      "cityc": "1711",
+      "cityc_txt": "Zunheboto"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1801",
+      "cityc_txt": "Bhubneshwar"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1802",
+      "cityc_txt": "Anugul"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1803",
+      "cityc_txt": "Balangir"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1804",
+      "cityc_txt": "Baleshwar"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1805",
+      "cityc_txt": "Bargarh"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1806",
+      "cityc_txt": "Bhadrak"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1807",
+      "cityc_txt": "Baudh"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1808",
+      "cityc_txt": "Cuttack"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1809",
+      "cityc_txt": "Debagarh"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1810",
+      "cityc_txt": "Dhenkanal"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1811",
+      "cityc_txt": "Gajapati"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1812",
+      "cityc_txt": "Ganjam"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1813",
+      "cityc_txt": "Jagatsinghapur"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1814",
+      "cityc_txt": "Jajpur"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1815",
+      "cityc_txt": "Jharsuguda"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1816",
+      "cityc_txt": "Kalahandi"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1817",
+      "cityc_txt": "Kendrapara"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1818",
+      "cityc_txt": "Kendujhar"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1819",
+      "cityc_txt": "Khordha"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1820",
+      "cityc_txt": "Koraput"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1821",
+      "cityc_txt": "Malkangiri"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1822",
+      "cityc_txt": "Mayurbhanj"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1823",
+      "cityc_txt": "Nuapada"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1824",
+      "cityc_txt": "Nabarangapur"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1825",
+      "cityc_txt": "Nayagarh"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1826",
+      "cityc_txt": "Kandhamal"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1827",
+      "cityc_txt": "Puri"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1828",
+      "cityc_txt": "Rayagada"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1829",
+      "cityc_txt": "Sambalpur"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1830",
+      "cityc_txt": "Subarnapur"
+    },
+    {
+      "regio": "18",
+      "regio_txt": "Orissa",
+      "cityc": "1831",
+      "cityc_txt": "Sundargarh"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1901",
+      "cityc_txt": "Amritsar"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1902",
+      "cityc_txt": "Bathinda"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1903",
+      "cityc_txt": "Faridkot"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1904",
+      "cityc_txt": "Fatehgarh Sahib"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1905",
+      "cityc_txt": "Firozpur"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1906",
+      "cityc_txt": "Gurdaspur"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1907",
+      "cityc_txt": "Hoshiarpur"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1908",
+      "cityc_txt": "Jalandhar"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1909",
+      "cityc_txt": "Kapurthala"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1910",
+      "cityc_txt": "Ludhiana"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1911",
+      "cityc_txt": "Mansa"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1912",
+      "cityc_txt": "Moga"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1913",
+      "cityc_txt": "Muktsar"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1914",
+      "cityc_txt": "Nawashahr"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1915",
+      "cityc_txt": "Patiala"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1916",
+      "cityc_txt": "Rupnagar"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1917",
+      "cityc_txt": "Sangrur"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1918",
+      "cityc_txt": "Ropar"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1919",
+      "cityc_txt": "Mohali"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1920",
+      "cityc_txt": "Barnala"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1921",
+      "cityc_txt": "Tarn Taran"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1922",
+      "cityc_txt": "Fazilka"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1923",
+      "cityc_txt": "Pathankot"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1924",
+      "cityc_txt": "S.A.S Nagar"
+    },
+    {
+      "regio": "19",
+      "regio_txt": "Punjab",
+      "cityc": "1925",
+      "cityc_txt": "S.B.S. NAGAR"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2001",
+      "cityc_txt": "Ajmer"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2002",
+      "cityc_txt": "Alwar"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2003",
+      "cityc_txt": "Banswara"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2004",
+      "cityc_txt": "Baran"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2005",
+      "cityc_txt": "Barmer"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2006",
+      "cityc_txt": "Bharatpur"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2007",
+      "cityc_txt": "Bhilwara"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2008",
+      "cityc_txt": "Bikaner"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2009",
+      "cityc_txt": "Bundi"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2010",
+      "cityc_txt": "Chittorgarh"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2011",
+      "cityc_txt": "Churu"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2012",
+      "cityc_txt": "Dungarpur"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2013",
+      "cityc_txt": "Dholpur"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2014",
+      "cityc_txt": "Dausa"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2015",
+      "cityc_txt": "Sri Ganganagar"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2016",
+      "cityc_txt": "Hanumangarh"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2017",
+      "cityc_txt": "Jaipur"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2018",
+      "cityc_txt": "Jaisalmer"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2019",
+      "cityc_txt": "Jalor"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2020",
+      "cityc_txt": "Jhalawar"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2021",
+      "cityc_txt": "JhunJhunun"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2022",
+      "cityc_txt": "Jodhpur"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2023",
+      "cityc_txt": "Kota"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2024",
+      "cityc_txt": "Nagaur"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2025",
+      "cityc_txt": "Pali"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2026",
+      "cityc_txt": "Rajsamand"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2027",
+      "cityc_txt": "Sawai Madhopur"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2028",
+      "cityc_txt": "Karauli"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2029",
+      "cityc_txt": "Sikar"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2030",
+      "cityc_txt": "Sirohi"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2031",
+      "cityc_txt": "Tonk"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2032",
+      "cityc_txt": "Udaipur"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2033",
+      "cityc_txt": "Pratapgarh"
+    },
+    {
+      "regio": "20",
+      "regio_txt": "Rajasthan",
+      "cityc": "2034",
+      "cityc_txt": "Ganga Nagar"
+    },
+    {
+      "regio": "21",
+      "regio_txt": "Sikkim",
+      "cityc": "2101",
+      "cityc_txt": "East Sikkim"
+    },
+    {
+      "regio": "21",
+      "regio_txt": "Sikkim",
+      "cityc": "2102",
+      "cityc_txt": "North Sikkim"
+    },
+    {
+      "regio": "21",
+      "regio_txt": "Sikkim",
+      "cityc": "2103",
+      "cityc_txt": "South Sikkim"
+    },
+    {
+      "regio": "21",
+      "regio_txt": "Sikkim",
+      "cityc": "2104",
+      "cityc_txt": "West Sikkim"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "0220",
+      "cityc_txt": "Chennai"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "220",
+      "cityc_txt": "Chennai"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2202",
+      "cityc_txt": "Cuddalore"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2203",
+      "cityc_txt": "Erode"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2204",
+      "cityc_txt": "Kanyakumari"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2205",
+      "cityc_txt": "Madurai"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2206",
+      "cityc_txt": "Namakkal"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2207",
+      "cityc_txt": "The Nilgiris"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2208",
+      "cityc_txt": "Pudukkottai"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2209",
+      "cityc_txt": "Salem"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2210",
+      "cityc_txt": "Theni"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2211",
+      "cityc_txt": "Thiruvallur"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2212",
+      "cityc_txt": "Tirunelveli"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2213",
+      "cityc_txt": "Tiruvannamalai"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2214",
+      "cityc_txt": "Vellore"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2215",
+      "cityc_txt": "Virudhunagar"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2216",
+      "cityc_txt": "Coimbatore"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2217",
+      "cityc_txt": "Dharmapuri"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2218",
+      "cityc_txt": "Kanchipuram"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2219",
+      "cityc_txt": "Karur"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2220",
+      "cityc_txt": "Nagapattinam"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2221",
+      "cityc_txt": "Dindigul"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2222",
+      "cityc_txt": "Perambalur"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2223",
+      "cityc_txt": "Ramanathapuram"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2224",
+      "cityc_txt": "Sivaganga"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2225",
+      "cityc_txt": "Thanjavur"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2226",
+      "cityc_txt": "Tiruchirappalli"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2227",
+      "cityc_txt": "Thiruvarur"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2228",
+      "cityc_txt": "Thoothukudi"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2229",
+      "cityc_txt": "Viluppuram"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2230",
+      "cityc_txt": "Ariyalur"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2231",
+      "cityc_txt": "Tirupur"
+    },
+    {
+      "regio": "22",
+      "regio_txt": "Tamil Nadu",
+      "cityc": "2232",
+      "cityc_txt": "Krishnagiri"
+    },
+    {
+      "regio": "23",
+      "regio_txt": "Tripura",
+      "cityc": "2301",
+      "cityc_txt": "Agartala"
+    },
+    {
+      "regio": "23",
+      "regio_txt": "Tripura",
+      "cityc": "2302",
+      "cityc_txt": "Unakoti"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2401",
+      "cityc_txt": "Agra"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2402",
+      "cityc_txt": "Aligarh"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2403",
+      "cityc_txt": "Allahabad"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2404",
+      "cityc_txt": "Ambedkar Nagar"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2405",
+      "cityc_txt": "Ouraiya"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2406",
+      "cityc_txt": "Azamgarh"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2407",
+      "cityc_txt": "Baghpat"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2408",
+      "cityc_txt": "Bahraich"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2409",
+      "cityc_txt": "Ballia"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2410",
+      "cityc_txt": "Balrampur"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2411",
+      "cityc_txt": "Banda"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2412",
+      "cityc_txt": "Barabanki"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2413",
+      "cityc_txt": "Bareilly"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2414",
+      "cityc_txt": "Basti"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2415",
+      "cityc_txt": "Bijnor"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2416",
+      "cityc_txt": "Budaun"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2417",
+      "cityc_txt": "Bulandshahar"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2418",
+      "cityc_txt": "Chandauli"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2419",
+      "cityc_txt": "Chitrakoot"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2420",
+      "cityc_txt": "Deoria"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2421",
+      "cityc_txt": "Etah"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2422",
+      "cityc_txt": "Etawah"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2423",
+      "cityc_txt": "Faizabad"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2424",
+      "cityc_txt": "Farukkhabad"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2425",
+      "cityc_txt": "Fatehpur"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2426",
+      "cityc_txt": "Firozabad"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2427",
+      "cityc_txt": "Gautam Buddha Nagar"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2428",
+      "cityc_txt": "Ghaziabad"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2429",
+      "cityc_txt": "Ghazipur"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2430",
+      "cityc_txt": "Gonda"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2431",
+      "cityc_txt": "Gorakhpur"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2432",
+      "cityc_txt": "Hamirpur"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2433",
+      "cityc_txt": "Hardoi"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2434",
+      "cityc_txt": "Jalaun"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2435",
+      "cityc_txt": "Jaunpur"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2436",
+      "cityc_txt": "Jhansi"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2437",
+      "cityc_txt": "Jyotiba Phoole Nagar"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2438",
+      "cityc_txt": "Kannauj"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2439",
+      "cityc_txt": "Kanpur (Dehat)"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2440",
+      "cityc_txt": "Kanpur (Nagar)"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2441",
+      "cityc_txt": "Kaushambi"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2442",
+      "cityc_txt": "Kushinagar"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2443",
+      "cityc_txt": "Lakhimpur Kheri"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2444",
+      "cityc_txt": "Lalitpur"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2445",
+      "cityc_txt": "Lucknow"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2446",
+      "cityc_txt": "Mahamaya Nagar"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2447",
+      "cityc_txt": "Maharajganj"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2448",
+      "cityc_txt": "Mahoba"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2449",
+      "cityc_txt": "Mainpuri"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2450",
+      "cityc_txt": "Mathura"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2451",
+      "cityc_txt": "Mau"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2452",
+      "cityc_txt": "Meerut"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2453",
+      "cityc_txt": "Mirzapur"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2454",
+      "cityc_txt": "Muzaffar Nagar"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2455",
+      "cityc_txt": "Moradabad"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2456",
+      "cityc_txt": "Pilibhit"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2457",
+      "cityc_txt": "Pratapgarh"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2458",
+      "cityc_txt": "Raebareli"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2460",
+      "cityc_txt": "Saharanpur"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2461",
+      "cityc_txt": "Sant Kabir Nagar"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2462",
+      "cityc_txt": "Sant Ravidas Nagar"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2463",
+      "cityc_txt": "Shahjahanpur"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2464",
+      "cityc_txt": "Siddharth Nagar"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2466",
+      "cityc_txt": "Sonbhadra"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2467",
+      "cityc_txt": "Shravasti"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2468",
+      "cityc_txt": "Sultanpur"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2469",
+      "cityc_txt": "Unnao"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2470",
+      "cityc_txt": "Varanasi"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2471",
+      "cityc_txt": "Noida"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2472",
+      "cityc_txt": "Rampur"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2473",
+      "cityc_txt": "Auraiya"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2474",
+      "cityc_txt": "Hathras"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2475",
+      "cityc_txt": "Sitapur"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2476",
+      "cityc_txt": "Bhadohi"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2477",
+      "cityc_txt": "Kanshiram Nagar"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2478",
+      "cityc_txt": "Hapur"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2479",
+      "cityc_txt": "Sambhal"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2480",
+      "cityc_txt": "Amethi"
+    },
+    {
+      "regio": "24",
+      "regio_txt": "Uttar Pradesh",
+      "cityc": "2481",
+      "cityc_txt": "Shamli"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2501",
+      "cityc_txt": "Kolkata"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2502",
+      "cityc_txt": "Darjeeling"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2503",
+      "cityc_txt": "Jalpaiguri"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2504",
+      "cityc_txt": "Cooch Behar"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2505",
+      "cityc_txt": "Uttar Dinajpur"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2506",
+      "cityc_txt": "Dakshin Dinajpur"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2507",
+      "cityc_txt": "Maldah"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2508",
+      "cityc_txt": "Murshidabad"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2509",
+      "cityc_txt": "Birbhum"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2510",
+      "cityc_txt": "Bardhaman"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2511",
+      "cityc_txt": "Nadia"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2512",
+      "cityc_txt": "North 24 Parganas"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2513",
+      "cityc_txt": "Hugli"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2514",
+      "cityc_txt": "Bankura"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2515",
+      "cityc_txt": "Puruliya"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2516",
+      "cityc_txt": "Paschim Mednipur"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2517",
+      "cityc_txt": "Purba Mednipur"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2518",
+      "cityc_txt": "Howrah"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2519",
+      "cityc_txt": "South 24 Parganas"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2520",
+      "cityc_txt": "Burdwan"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2521",
+      "cityc_txt": "Alipurduar"
+    },
+    {
+      "regio": "25",
+      "regio_txt": "West Bengal",
+      "cityc": "2522",
+      "cityc_txt": "Jhargram"
+    },
+    {
+      "regio": "26",
+      "regio_txt": "Andaman and Nicobar",
+      "cityc": "2601",
+      "cityc_txt": "South Andaman"
+    },
+    {
+      "regio": "27",
+      "regio_txt": "Chandigarh",
+      "cityc": "0270",
+      "cityc_txt": "Chandigarh"
+    },
+    {
+      "regio": "27",
+      "regio_txt": "Chandigarh",
+      "cityc": "270",
+      "cityc_txt": "Chandigarh"
+    },
+    {
+      "regio": "28",
+      "regio_txt": "Dadra & Nagar Haveli",
+      "cityc": "2801",
+      "cityc_txt": "Silvassa"
+    },
+    {
+      "regio": "29",
+      "regio_txt": "Daman and Diu",
+      "cityc": "2901",
+      "cityc_txt": "Daman"
+    },
+    {
+      "regio": "29",
+      "regio_txt": "Daman and Diu",
+      "cityc": "2902",
+      "cityc_txt": "Diu"
+    },
+    {
+      "regio": "30",
+      "regio_txt": "Delhi",
+      "cityc": "0301",
+      "cityc_txt": "Gauthambudh Nagar"
+    },
+    {
+      "regio": "30",
+      "regio_txt": "Delhi",
+      "cityc": "300",
+      "cityc_txt": "New Delhi"
+    },
+    {
+      "regio": "30",
+      "regio_txt": "Delhi",
+      "cityc": "3001",
+      "cityc_txt": "Central Delhi"
+    },
+    {
+      "regio": "30",
+      "regio_txt": "Delhi",
+      "cityc": "3002",
+      "cityc_txt": "East Delhi"
+    },
+    {
+      "regio": "30",
+      "regio_txt": "Delhi",
+      "cityc": "3003",
+      "cityc_txt": "North Delhi"
+    },
+    {
+      "regio": "30",
+      "regio_txt": "Delhi",
+      "cityc": "3004",
+      "cityc_txt": "North East Delhi"
+    },
+    {
+      "regio": "30",
+      "regio_txt": "Delhi",
+      "cityc": "3005",
+      "cityc_txt": "North West Delhi"
+    },
+    {
+      "regio": "30",
+      "regio_txt": "Delhi",
+      "cityc": "3006",
+      "cityc_txt": "Shahdara"
+    },
+    {
+      "regio": "30",
+      "regio_txt": "Delhi",
+      "cityc": "3007",
+      "cityc_txt": "South Delhi"
+    },
+    {
+      "regio": "30",
+      "regio_txt": "Delhi",
+      "cityc": "3008",
+      "cityc_txt": "South East Delhi"
+    },
+    {
+      "regio": "30",
+      "regio_txt": "Delhi",
+      "cityc": "3009",
+      "cityc_txt": "South West Delhi"
+    },
+    {
+      "regio": "30",
+      "regio_txt": "Delhi",
+      "cityc": "3010",
+      "cityc_txt": "West Delhi"
+    },
+    {
+      "regio": "32",
+      "regio_txt": "Pondicherry",
+      "cityc": "3201",
+      "cityc_txt": "Pondicherry"
+    },
+    {
+      "regio": "32",
+      "regio_txt": "Pondicherry",
+      "cityc": "3202",
+      "cityc_txt": "Karaikal"
+    },
+    {
+      "regio": "32",
+      "regio_txt": "Pondicherry",
+      "cityc": "3203",
+      "cityc_txt": "Yanam"
+    },
+    {
+      "regio": "32",
+      "regio_txt": "Pondicherry",
+      "cityc": "3204",
+      "cityc_txt": "Mahe"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3301",
+      "cityc_txt": "Raipur"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3302",
+      "cityc_txt": "Baikunthpur"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3303",
+      "cityc_txt": "Ambikapur"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3304",
+      "cityc_txt": "Jashpur"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3305",
+      "cityc_txt": "Korba"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3306",
+      "cityc_txt": "Bilaspur"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3307",
+      "cityc_txt": "Raigarh"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3308",
+      "cityc_txt": "Janjgir-Champa"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3309",
+      "cityc_txt": "Kabirdham"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3310",
+      "cityc_txt": "Rajnandgaon"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3311",
+      "cityc_txt": "Durg"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3312",
+      "cityc_txt": "Mahasamund"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3313",
+      "cityc_txt": "Dhamtari"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3314",
+      "cityc_txt": "Kanker"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3315",
+      "cityc_txt": "Bastar"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3316",
+      "cityc_txt": "Dantewada"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3317",
+      "cityc_txt": "Narayanpur"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3318",
+      "cityc_txt": "Bijapur"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3319",
+      "cityc_txt": "Koriya"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3320",
+      "cityc_txt": "Surguja"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3321",
+      "cityc_txt": "Surajpur"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3322",
+      "cityc_txt": "Balrampur"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3323",
+      "cityc_txt": "Baloda Bazar"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3324",
+      "cityc_txt": "Kondagaon"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3325",
+      "cityc_txt": "Gariaband"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3326",
+      "cityc_txt": "Sukma"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3327",
+      "cityc_txt": "Bemetara"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3328",
+      "cityc_txt": "Balod"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3329",
+      "cityc_txt": "Mungeli"
+    },
+    {
+      "regio": "33",
+      "regio_txt": "Chhattisgarh",
+      "cityc": "3330",
+      "cityc_txt": "Narayanpur"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3402",
+      "cityc_txt": "Bokaro"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3403",
+      "cityc_txt": "Dumka"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3404",
+      "cityc_txt": "Hazaribagh"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3405",
+      "cityc_txt": "Khunti"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3406",
+      "cityc_txt": "Chaibasa"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3407",
+      "cityc_txt": "Chatra"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3408",
+      "cityc_txt": "Daltonganj"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3409",
+      "cityc_txt": "Deoghar"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3410",
+      "cityc_txt": "Dhanbad"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3411",
+      "cityc_txt": "East Singhbhum"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3412",
+      "cityc_txt": "Garhwa"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3413",
+      "cityc_txt": "Giridih"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3414",
+      "cityc_txt": "Godda"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3415",
+      "cityc_txt": "Gumla"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3416",
+      "cityc_txt": "Jamshedpur(Tata)"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3417",
+      "cityc_txt": "Jamtara"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3418",
+      "cityc_txt": "Kharsawan"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3419",
+      "cityc_txt": "Koderma"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3420",
+      "cityc_txt": "Latehar"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3421",
+      "cityc_txt": "Lohardaga"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3422",
+      "cityc_txt": "Pakur"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3423",
+      "cityc_txt": "Palamu"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3424",
+      "cityc_txt": "Ramgarh"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3425",
+      "cityc_txt": "Ranchi"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3426",
+      "cityc_txt": "Sahebganj"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3427",
+      "cityc_txt": "Saraikela Kharsawan"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3428",
+      "cityc_txt": "Simdega"
+    },
+    {
+      "regio": "34",
+      "regio_txt": "Jharkhand",
+      "cityc": "3429",
+      "cityc_txt": "West Singhbhum"
+    },
+    {
+      "regio": "35",
+      "regio_txt": "Uttarakhand",
+      "cityc": "3502",
+      "cityc_txt": "Almora"
+    },
+    {
+      "regio": "35",
+      "regio_txt": "Uttarakhand",
+      "cityc": "3503",
+      "cityc_txt": "Bageshwar"
+    },
+    {
+      "regio": "35",
+      "regio_txt": "Uttarakhand",
+      "cityc": "3504",
+      "cityc_txt": "Chamoli"
+    },
+    {
+      "regio": "35",
+      "regio_txt": "Uttarakhand",
+      "cityc": "3505",
+      "cityc_txt": "Champawat"
+    },
+    {
+      "regio": "35",
+      "regio_txt": "Uttarakhand",
+      "cityc": "3506",
+      "cityc_txt": "Dehradun"
+    },
+    {
+      "regio": "35",
+      "regio_txt": "Uttarakhand",
+      "cityc": "3507",
+      "cityc_txt": "Haridwar"
+    },
+    {
+      "regio": "35",
+      "regio_txt": "Uttarakhand",
+      "cityc": "3508",
+      "cityc_txt": "Nainital"
+    },
+    {
+      "regio": "35",
+      "regio_txt": "Uttarakhand",
+      "cityc": "3509",
+      "cityc_txt": "Pauri Garhwal"
+    },
+    {
+      "regio": "35",
+      "regio_txt": "Uttarakhand",
+      "cityc": "3510",
+      "cityc_txt": "Pithoragarh"
+    },
+    {
+      "regio": "35",
+      "regio_txt": "Uttarakhand",
+      "cityc": "3511",
+      "cityc_txt": "Rudraprayag"
+    },
+    {
+      "regio": "35",
+      "regio_txt": "Uttarakhand",
+      "cityc": "3512",
+      "cityc_txt": "Tehri Garhwal"
+    },
+    {
+      "regio": "35",
+      "regio_txt": "Uttarakhand",
+      "cityc": "3513",
+      "cityc_txt": "Udham Singh Nagar"
+    },
+    {
+      "regio": "35",
+      "regio_txt": "Uttarakhand",
+      "cityc": "3514",
+      "cityc_txt": "Uttarkashi"
+    },
+    {
+      "regio": "35",
+      "regio_txt": "Uttarakhand",
+      "cityc": "3515",
+      "cityc_txt": "Rudrapur"
+    },
+    {
+      "regio": "36",
+      "regio_txt": "Telangana",
+      "cityc": "3601",
+      "cityc_txt": "Adilabad"
+    },
+    {
+      "regio": "36",
+      "regio_txt": "Telangana",
+      "cityc": "3602",
+      "cityc_txt": "Hyderabad"
+    },
+    {
+      "regio": "36",
+      "regio_txt": "Telangana",
+      "cityc": "3603",
+      "cityc_txt": "Karimnagar"
+    },
+    {
+      "regio": "36",
+      "regio_txt": "Telangana",
+      "cityc": "3604",
+      "cityc_txt": "Khammam"
+    },
+    {
+      "regio": "36",
+      "regio_txt": "Telangana",
+      "cityc": "3605",
+      "cityc_txt": "Mahbubnagar"
+    },
+    {
+      "regio": "36",
+      "regio_txt": "Telangana",
+      "cityc": "3606",
+      "cityc_txt": "Medak"
+    },
+    {
+      "regio": "36",
+      "regio_txt": "Telangana",
+      "cityc": "3607",
+      "cityc_txt": "Nalgonda"
+    },
+    {
+      "regio": "36",
+      "regio_txt": "Telangana",
+      "cityc": "3608",
+      "cityc_txt": "Nizamabad"
+    },
+    {
+      "regio": "36",
+      "regio_txt": "Telangana",
+      "cityc": "3609",
+      "cityc_txt": "Ranga reddy"
+    },
+    {
+      "regio": "36",
+      "regio_txt": "Telangana",
+      "cityc": "3610",
+      "cityc_txt": "Warangal"
+    }
+  ]
+}

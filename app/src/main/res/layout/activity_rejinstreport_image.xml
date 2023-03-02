@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/photo1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_xxlarge45"
+                android:layout_marginStart="@dimen/space_mid10"
+                android:layout_marginEnd="@dimen/space_mid10"
+                android:background="@drawable/icn_box"
+                android:drawableEnd="@drawable/red_icn"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_mid10"
+                android:singleLine="true"
+                android:text="Panel Module Photo"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_xlarge20" />
+
+            <TextView
+                android:id="@+id/remark1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/photo2"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_xxlarge45"
+                android:layout_marginStart="@dimen/space_mid10"
+                android:layout_marginEnd="@dimen/space_mid10"
+                android:background="@drawable/icn_box"
+                android:drawableEnd="@drawable/red_icn"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_mid10"
+                android:singleLine="true"
+                android:text="Controller Photo"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_xlarge20" />
+
+            <TextView
+                android:id="@+id/remark2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+
+
+            <TextView
+                android:id="@+id/photo3"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_xxlarge45"
+                android:layout_marginStart="@dimen/space_mid10"
+
+                android:layout_marginEnd="@dimen/space_mid10"
+
+                android:background="@drawable/icn_box"
+                android:drawableEnd="@drawable/red_icn"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_mid10"
+                android:singleLine="true"
+                android:text="Motor Pump Photo"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_xlarge20" />
+
+            <TextView
+                android:id="@+id/remark3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+
+
+            <TextView
+                android:id="@+id/photo4"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_xxlarge45"
+                android:layout_marginStart="@dimen/space_mid10"
+                android:layout_marginEnd="@dimen/space_mid10"
+                android:background="@drawable/icn_box"
+                android:drawableEnd="@drawable/red_icn"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_mid10"
+                android:singleLine="true"
+                android:text="Discharge Photo"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_xlarge20" />
+
+            <TextView
+                android:id="@+id/remark4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+
+            <TextView
+                android:id="@+id/photo5"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_xxlarge45"
+                android:layout_marginStart="@dimen/space_mid10"
+                android:layout_marginEnd="@dimen/space_mid10"
+                android:background="@drawable/icn_box"
+                android:drawableEnd="@drawable/red_icn"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_mid10"
+                android:singleLine="true"
+                android:text="Document Photo 1"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_xlarge20" />
+
+            <TextView
+                android:id="@+id/remark5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+
+            <TextView
+                android:id="@+id/photo6"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_xxlarge45"
+                android:layout_marginStart="@dimen/space_mid10"
+
+                android:layout_marginEnd="@dimen/space_mid10"
+
+                android:background="@drawable/icn_box"
+                android:drawableEnd="@drawable/red_icn"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_mid10"
+                android:singleLine="true"
+                android:text="Document Photo 2"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_xlarge20" />
+
+
+            <TextView
+                android:id="@+id/remark6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+
+
+            <TextView
+                android:id="@+id/photo7"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_xxlarge45"
+                android:layout_marginStart="@dimen/space_mid10"
+
+                android:layout_marginEnd="@dimen/space_mid10"
+
+                android:background="@drawable/icn_box"
+                android:drawableEnd="@drawable/red_icn"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_mid10"
+                android:singleLine="true"
+                android:text="Document Photo 3"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_xlarge20" />
+
+
+            <TextView
+                android:id="@+id/remark7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+
+
+            <TextView
+                android:id="@+id/photo8"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_xxlarge45"
+                android:layout_marginStart="@dimen/space_mid10"
+
+                android:layout_marginEnd="@dimen/space_mid10"
+
+                android:background="@drawable/icn_box"
+                android:drawableEnd="@drawable/red_icn"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_mid10"
+                android:singleLine="true"
+                android:text="Document Photo 4"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_xlarge20" />
+
+            <TextView
+                android:id="@+id/remark8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+
+            <TextView
+                android:id="@+id/photo9"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_xxlarge45"
+                android:layout_marginStart="@dimen/space_mid10"
+                android:layout_marginEnd="@dimen/space_mid10"
+                android:background="@drawable/icn_box"
+                android:drawableEnd="@drawable/red_icn"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_mid10"
+                android:singleLine="true"
+                android:text="Document Photo 5"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_xlarge20" />
+
+            <TextView
+                android:id="@+id/remark9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+
+            <TextView
+                android:id="@+id/photo10"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_xxlarge45"
+                android:layout_marginStart="@dimen/space_mid10"
+                android:layout_marginEnd="@dimen/space_mid10"
+                android:background="@drawable/icn_box"
+                android:drawableEnd="@drawable/red_icn"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_mid10"
+                android:singleLine="true"
+                android:text="Document Photo 6"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_xlarge20" />
+
+            <TextView
+                android:id="@+id/remark10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+
+            <TextView
+                android:id="@+id/photo11"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_xxlarge45"
+                android:layout_marginStart="@dimen/space_mid10"
+                android:layout_marginEnd="@dimen/space_mid10"
+                android:background="@drawable/icn_box"
+                android:drawableEnd="@drawable/red_icn"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_mid10"
+                android:singleLine="true"
+                android:text="Document Photo 7"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_xlarge20" />
+
+            <TextView
+                android:id="@+id/remark11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+
+            <TextView
+                android:id="@+id/photo12"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/space_xxlarge45"
+                android:layout_marginStart="@dimen/space_mid10"
+                android:layout_marginEnd="@dimen/space_mid10"
+                android:background="@drawable/icn_box"
+                android:drawableEnd="@drawable/red_icn"
+                android:gravity="center_vertical"
+                android:padding="@dimen/space_mid10"
+                android:singleLine="true"
+                android:text="Document Photo 8"
+                android:textColor="@color/black"
+                android:textSize="@dimen/size_xlarge20" />
+
+            <TextView
+                android:id="@+id/remark12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center_vertical"
+                android:padding="3dp"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/space_tinny4"
+            android:layout_weight="1"
+            android:background="@color/header_color"
+            android:gravity="center"
+            android:padding="@dimen/space_mid10"
+            android:text="Save"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_xlarge20" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

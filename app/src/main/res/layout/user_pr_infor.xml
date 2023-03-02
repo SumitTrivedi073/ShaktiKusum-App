@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_190sdp" >
+
+
+
+    <TextView
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:id="@+id/txtTitleID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="Enter your Name and Mobile number"
+        android:textSize="@dimen/_14ssp"
+        android:textStyle="bold"/>
+
+    <EditText
+    android:background="@android:color/transparent"
+    android:layout_below="@+id/txtTitleID"
+    android:layout_marginTop="@dimen/_20sdp"
+    android:layout_marginStart="@dimen/_10sdp"
+    android:id="@+id/edtNameInstallerID"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/_35sdp"
+    android:textColor="@color/black"
+    android:hint="Enter your name"
+    android:maxLength="19"
+    android:textSize="@dimen/_14ssp"
+        />
+
+
+    <EditText
+        android:background="@android:color/transparent"
+        android:layout_below="@+id/edtNameInstallerID"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:id="@+id/edtMobileInstallerID"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_35sdp"
+        android:textColor="@color/black"
+        android:hint="Enter your mobile number"
+        android:maxLength="19"
+        android:textSize="@dimen/_14ssp"
+        />
+
+    <Button
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:id="@+id/dialogButtonOK"
+        android:layout_width="@dimen/_90sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:text=" Ok "
+        android:textColor="@color/white"
+        android:background="@drawable/rounded_shape"
+        android:layout_below="@+id/edtMobileInstallerID"
+        android:layout_marginBottom="@dimen/_5sdp"
+        />
+
+</RelativeLayout>

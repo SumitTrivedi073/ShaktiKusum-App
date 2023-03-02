@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cream">
+
+    <LinearLayout
+
+        android:id="@+id/lvlHeaderViewID"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        android:background="@color/blue_fb"
+        android:weightSum="3">
+
+        <RelativeLayout
+            android:id="@+id/rlvBackViewID"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:background="@android:color/transparent">
+
+            <ImageView
+
+                android:layout_margin="@dimen/_2sdp"
+                android:padding="@dimen/_4sdp"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:src="@drawable/ic_back_wt"
+                android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6"
+            android:background="@android:color/transparent">
+
+            <TextView
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="Surwey List"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_18sdp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+
+            android:id="@+id/rlvAddDEviceViewID"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:visibility="visible"
+            android:background="@android:color/transparent">
+
+            <ImageView
+                android:padding="@dimen/_3sdp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/imgaddDeviceIconID"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+               android:layout_marginEnd="@dimen/_6sdp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/icn_refresh"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_below="@+id/lvlHeaderViewID"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/_1sdp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:background="@color/cream"
+            android:id="@+id/rclyTranportListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>
