@@ -17,7 +17,7 @@ import java.util.List;
 
 import database.DatabaseHelper;
 import com.shaktipumplimited.shaktikusum.R;
-import com.shaktipumplimited.shaktikusum.SiteAuditList;
+import activity.SiteAuditList;
 
 public class dialog5 extends Dialog {
 

@@ -22,7 +22,7 @@ import java.util.Locale;
 import bean.InstallationBean;
 import bean.InstallationListBean;
 import database.DatabaseHelper;
-import com.shaktipumplimited.shaktikusum.InstallationInitial;
+import activity.InstallationInitial;
 import com.shaktipumplimited.shaktikusum.R;
 import utility.CustomUtility;
 import webservice.WebURL;

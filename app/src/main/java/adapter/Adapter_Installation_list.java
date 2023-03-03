@@ -24,9 +24,9 @@ import bean.InstallationBean;
 import bean.InstallationListBean;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.NewSolarVFD;
-import com.shaktipumplimited.shaktikusum.InstallationInitial;
+import activity.InstallationInitial;
 import com.shaktipumplimited.shaktikusum.R;
-import com.shaktipumplimited.shaktikusum.UnloadInstReportImageActivity;
+import activity.UnloadInstReportImageActivity;
 import utility.CustomUtility;
 import webservice.WebURL;
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/white"
-    tools:context=".AddDamage_MissingActivity">
+    tools:context="activity.AddDamage_MissingActivity">
 
     <TextView
         android:id="@+id/txtLatID"

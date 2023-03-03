@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import bean.SimCardBean;
 import database.DatabaseHelper;
 import com.shaktipumplimited.shaktikusum.R;
-import com.shaktipumplimited.shaktikusum.SIMActivationDetails;
+import activity.SIMActivationDetails;
 import utility.CustomUtility;
 
 

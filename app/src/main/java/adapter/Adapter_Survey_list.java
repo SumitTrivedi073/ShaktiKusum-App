@@ -22,7 +22,7 @@ import bean.SurveyListBean;
 import database.DatabaseHelper;
 
 import com.shaktipumplimited.shaktikusum.R;
-import com.shaktipumplimited.shaktikusum.SurveyActivity;
+import activity.SurveyActivity;
 
 
 public class Adapter_Survey_list extends RecyclerView.Adapter<Adapter_Survey_list.HomeCategoryViewHolder> {

@@ -56,12 +56,12 @@ import java.util.List;
 import database.DatabaseHelper;
 
 import com.shaktipumplimited.DamageMissBean.DamageMissResponse;
-import com.shaktipumplimited.shaktikusum.CameraActivity;
-import com.shaktipumplimited.shaktikusum.CameraActivitySurvey;
-import com.shaktipumplimited.shaktikusum.GPSTracker;
-import com.shaktipumplimited.shaktikusum.ImageManager;
+import activity.CameraActivity;
+import activity.CameraActivitySurvey;
+import activity.GPSTracker;
+import activity.ImageManager;
 import com.shaktipumplimited.shaktikusum.R;
-import com.shaktipumplimited.shaktikusum.ShowDocument;
+import activity.ShowDocument;
 import utility.CameraUtils;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;

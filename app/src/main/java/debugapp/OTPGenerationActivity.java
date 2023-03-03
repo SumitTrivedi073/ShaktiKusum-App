@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -16,7 +15,7 @@ import java.util.Map;
 import java.util.Random;
 import com.shaktipumplimited.retrofit.BaseRequest;
 import com.shaktipumplimited.retrofit.RequestReciever;
-import com.shaktipumplimited.shaktikusum.MainActivity;
+import activity.MainActivity;
 import com.shaktipumplimited.shaktikusum.R;
 
 import utility.CustomUtility;

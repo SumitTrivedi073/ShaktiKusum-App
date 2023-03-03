@@ -19,7 +19,7 @@ import java.util.Random;
 
 import com.shaktipumplimited.retrofit.BaseRequest;
 import com.shaktipumplimited.retrofit.RequestReciever;
-import com.shaktipumplimited.shaktikusum.MainActivity;
+import activity.MainActivity;
 import com.shaktipumplimited.shaktikusum.R;
 import utility.CustomUtility;
 

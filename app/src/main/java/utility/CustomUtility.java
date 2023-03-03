@@ -26,7 +26,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import com.shaktipumplimited.shaktikusum.BaseActivity;
+import activity.BaseActivity;
 import com.shaktipumplimited.shaktikusum.R;
 
 /**

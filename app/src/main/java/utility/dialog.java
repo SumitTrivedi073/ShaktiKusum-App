@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.shaktipumplimited.shaktikusum.DDSubmissionActivity;
+import activity.DDSubmissionActivity;
 import com.shaktipumplimited.shaktikusum.R;
 
 public class dialog extends Dialog {

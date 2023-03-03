@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Locale;
 import bean.InstallationOfflineBean;
 import database.DatabaseHelper;
-import com.shaktipumplimited.shaktikusum.InstallationDetailOfflineActivity;
+import activity.InstallationDetailOfflineActivity;
 import com.shaktipumplimited.shaktikusum.R;
 import utility.CustomUtility;
 

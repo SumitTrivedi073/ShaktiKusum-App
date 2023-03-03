@@ -19,7 +19,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
 import android.telephony.TelephonyManager;
-import android.text.BoringLayout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -42,9 +41,7 @@ import com.google.gson.JsonObject;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -90,7 +87,7 @@ import com.shaktipumplimited.retrofit.ApiInterface;
 import com.shaktipumplimited.retrofit.BaseRequest;
 import com.shaktipumplimited.retrofit.RequestReciever;
 
-import com.shaktipumplimited.shaktikusum.GPSTracker;
+import activity.GPSTracker;
 import com.shaktipumplimited.shaktikusum.R;
 
 import utility.CustomUtility;

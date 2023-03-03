@@ -22,7 +22,7 @@ import java.util.Locale;
 import bean.SiteAuditListBean;
 import database.DatabaseHelper;
 import com.shaktipumplimited.shaktikusum.R;
-import com.shaktipumplimited.shaktikusum.SiteAuditInitial;
+import activity.SiteAuditInitial;
 import utility.CustomUtility;
 
 

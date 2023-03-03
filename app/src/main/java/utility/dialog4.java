@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.shaktipumplimited.shaktikusum.DeviceStatusActivity;
+import activity.DeviceStatusActivity;
 import com.shaktipumplimited.shaktikusum.R;
 import webservice.WebURL;
 

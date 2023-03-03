@@ -15,15 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import bean.ItemNameBean;
 import database.DatabaseHelper;
-import com.shaktipumplimited.shaktikusum.CustomerRegistrationActivity;
-import com.shaktipumplimited.shaktikusum.DDSubmissionActivity;
-import com.shaktipumplimited.shaktikusum.DeptDocSubActivity;
-import com.shaktipumplimited.shaktikusum.GovtOffVisitActivity;
-import com.shaktipumplimited.shaktikusum.InstallationList;
-import com.shaktipumplimited.shaktikusum.InstallationListOfflineActivity;
-import com.shaktipumplimited.shaktikusum.OffSubDocActivity;
+import activity.CustomerRegistrationActivity;
+import activity.DDSubmissionActivity;
+import activity.DeptDocSubActivity;
+import activity.GovtOffVisitActivity;
+import activity.InstallationList;
+import activity.InstallationListOfflineActivity;
+import activity.OffSubDocActivity;
 import com.shaktipumplimited.shaktikusum.R;
-import com.shaktipumplimited.shaktikusum.SurveyList;
+import activity.SurveyList;
 import utility.CustomUtility;
 
 public class Adapter_item_list extends RecyclerView.Adapter<Adapter_item_list.HomeCategoryViewHolder> {

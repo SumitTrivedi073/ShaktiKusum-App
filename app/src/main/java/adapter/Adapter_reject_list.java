@@ -20,7 +20,7 @@ import java.util.Locale;
 import bean.RejectListBean;
 import database.DatabaseHelper;
 import com.shaktipumplimited.shaktikusum.R;
-import com.shaktipumplimited.shaktikusum.RejectInstRepImgActivity;
+import activity.RejectInstRepImgActivity;
 import utility.CustomUtility;
 
 

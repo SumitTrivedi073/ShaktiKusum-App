@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.shaktipumplimited.shaktikusum.DeptDocSubActivity;
+import activity.DeptDocSubActivity;
 import com.shaktipumplimited.shaktikusum.R;
 
 public class dialog1 extends Dialog {

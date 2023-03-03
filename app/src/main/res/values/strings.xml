@@ -147,4 +147,7 @@
     <string name="Set_text">Set</string>
     <string name="Set_edt_scan">Scan or Enter material number</string>
     <string name="Scan_Device">Scan Device</string>
+    <string name="pendingFeedback">Pending Feedback</string>
+    <string name="Loading">loading...</string>
+
 </resources>

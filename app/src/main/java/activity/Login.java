@@ -1,0 +1,651 @@
+package activity;
+
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.StrictMode;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.textfield.TextInputLayout;
+import com.shaktipumplimited.shaktikusum.R;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import bean.LoginBean;
+import ch.acra.acra.BuildConfig;
+import database.DatabaseHelper;
+import debugapp.OTPGenerationActivity;
+import utility.CustomUtility;
+import webservice.CustomHttpClient;
+import webservice.WebURL;
+
+public class Login extends AppCompatActivity {
+
+    protected static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
+    Spinner spinner_login_type, spinner_project_type;
+    ProgressDialog progressBar;
+    int index, index1;
+    String username, password, login, userid, usertype, spinner_login_type_text, spinner_project_type_text, spinner_proj_id, spinner_login_id;
+    List<String> list = null;
+    List<String> projectlist = null;
+    List<String> loginlist = null;
+    Context context;
+    DatabaseHelper dataHelper;
+    String country, country_text, state, scheme_state, state_text, district, district_text, tehsil, tehsil_text;
+    android.os.Handler mHandler = new android.os.Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            String mString = (String) msg.obj;
+            Toast.makeText(Login.this, mString, Toast.LENGTH_LONG).show();
+        }
+    };
+    private int progressBarStatus = 0;
+    private Handler progressBarHandler = new Handler();
+    private ProgressDialog progressDialog;
+    private EditText inputName, inputPassword;
+    private TextInputLayout inputLayoutName, inputLayoutPassword;
+    private TextView btnSignUp;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        context = this;
+
+        dataHelper = new DatabaseHelper(context);
+
+
+        list = new ArrayList<String>();
+        projectlist = new ArrayList<String>();
+        loginlist = new ArrayList<String>();
+
+        // getUserTypeValue();
+
+
+        inputLayoutName = (TextInputLayout) findViewById(R.id.input_layout_name);
+        inputLayoutPassword = (TextInputLayout) findViewById(R.id.input_layout_password);
+
+        inputName = (EditText) findViewById(R.id.login_Et);
+        inputPassword = (EditText) findViewById(R.id.password);
+
+        btnSignUp = (TextView) findViewById(R.id.btn_signup);
+
+        inputName.addTextChangedListener(new MyTextWatcher(inputName));
+        inputPassword.addTextChangedListener(new MyTextWatcher(inputPassword));
+
+        spinner_login_type = (Spinner) findViewById(R.id.spinner_login_type);
+        spinner_project_type = (Spinner) findViewById(R.id.spinner_project_type);
+
+        spinner_project_type.setPrompt("Select Project");
+        spinner_login_type.setPrompt("Select Login");
+
+      /*  if (CustomUtility.isInternetOn()) {
+            // Write Your Code What you want to do
+            new obj_list().execute();
+        } else {
+            Toast.makeText(context, "Please Connect to Internet...", Toast.LENGTH_SHORT).show();
+        }*/
+
+
+        projectlist.clear();
+        projectlist = dataHelper.getList(DatabaseHelper.KEY_PROJ_TXT, null);
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<String>(context, R.layout.spinner_item_center, projectlist);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter1.setDropDownViewResource(R.layout.spinner_item_center);
+
+        // attaching data adapter to spinner
+        spinner_project_type.setAdapter(dataAdapter1);
+
+
+        spinner_project_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                index = arg0.getSelectedItemPosition();
+                spinner_project_type_text = spinner_project_type.getSelectedItem().toString();
+
+
+                if (!spinner_project_type_text.equalsIgnoreCase("Select project type") && !TextUtils.isEmpty(spinner_project_type_text)) {
+                    loginlist.clear();
+                    loginlist = dataHelper.getList(DatabaseHelper.KEY_LOGIN_TXT, spinner_project_type_text);
+
+                    // Creating adapter for spinner
+                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, R.layout.spinner_item_center, loginlist);
+
+                    // Drop down layout style - list view with radio button
+                    dataAdapter.setDropDownViewResource(R.layout.spinner_item_center);
+
+                    // attaching data adapter to spinner
+                    spinner_login_type.setAdapter(dataAdapter);
+
+                    spinner_proj_id = dataHelper.getProjLoginValue(DatabaseHelper.KEY_PROJ_ID, spinner_project_type_text);
+
+                    CustomUtility.setSharedPreference(context, "projectid", spinner_proj_id);
+
+                    System.out.println("spinner_proj_id==>>"+spinner_proj_id);
+
+                    String projnametxt = spinner_project_type.getSelectedItem().toString();
+
+                    CustomUtility.setSharedPreference(context, "projectname", projnametxt);
+
+                    Log.e("ID", "&&&" + spinner_proj_id);
+
+                    spinner_login_type.setSelection(0);
+
+                    spinner_login_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                        @Override
+                        public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+
+                            index1 = arg0.getSelectedItemPosition();
+                            spinner_login_type_text = spinner_login_type.getSelectedItem().toString();
+                            if (!spinner_login_type_text.equalsIgnoreCase("Select login type") && !TextUtils.isEmpty(spinner_login_type_text)) {
+
+                                spinner_login_id = dataHelper.getProjLoginValue(DatabaseHelper.KEY_LOGIN_ID, spinner_login_type_text);
+
+                                CustomUtility.setSharedPreference(context, "loginid", spinner_login_id);
+
+                                Log.e("ID1", "&&&" + spinner_login_id);
+
+                                if(spinner_login_id.equalsIgnoreCase("02"))
+                                {
+                                    if (CustomUtility.isInternetOn()) {
+                                        // Write Your Code What you want to do
+                                        syncState();
+                                    } else {
+                                        Toast.makeText(context, "Please Connect to Internet...", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> arg0) {
+                        }
+                    });
+
+                } else {
+                    Toast.makeText(context, "Please Select Project Type.", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+            }
+        });
+
+
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                if (validateType()) {
+                    if (validateType1()) {
+
+                            if (CustomUtility.isInternetOn()) {
+                                // Write Your Code What you want to do
+                                submitForm();
+                            } else {
+                                Toast.makeText(context, "Please Connect to Internet...", Toast.LENGTH_SHORT).show();
+                            }
+
+
+                        }
+                    }
+
+            }
+        });
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    public String getJson() {
+        String json = null;
+        try {
+            // Opening cities.json file
+            InputStream is = getAssets().open("state_district.json");
+            // is there any content in the file
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            // read values in the byte array
+            is.read(buffer);
+            // close the stream --- very important
+            is.close();
+            // convert byte to string
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return json;
+        }
+        return json;
+    }
+
+    /**********************************************************************************************
+     *                Server Login
+     *********************************************************************************************/
+
+    private void serverLogin() {
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
+        StrictMode.setThreadPolicy(policy);
+
+        username = inputName.getText().toString();
+        password = inputPassword.getText().toString();
+
+        final ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
+        param.clear();
+        param.add(new BasicNameValuePair("USERID", username));
+        param.add(new BasicNameValuePair("PASSWORD", password));
+        param.add(new BasicNameValuePair("project_no", CustomUtility.getSharedPreferences(context, "projectid")));
+        param.add(new BasicNameValuePair("project_login_no", CustomUtility.getSharedPreferences(context, "loginid")));
+        param.add(new BasicNameValuePair("DEVICE_NAME", CustomUtility.getDeviceName()));
+        param.add(new BasicNameValuePair("APP_VERSION", BuildConfig.VERSION_NAME));
+        param.add(new BasicNameValuePair("API", String.valueOf(Build.VERSION.SDK_INT)));
+        param.add(new BasicNameValuePair("API_VERSION", Build.VERSION.RELEASE));
+
+/******************************************************************************************/
+/*                   server connection
+/******************************************************************************************/
+        progressDialog = ProgressDialog.show(Login.this, "", "Connecting to server..please wait !");
+
+        new Thread() {
+
+            public void run() {
+
+                try {
+
+                    String obj = CustomHttpClient.executeHttpPost1(WebURL.LOGIN_PAGE, param);
+                    Log.d("check_error", obj);
+                    Log.e("check_error", obj);
+
+/******************************************************************************************/
+/*                       get JSONwebservice Data
+/******************************************************************************************/
+                    JSONObject object = new JSONObject(obj);
+                    String obj1 = object.getString("login_msg");
+
+
+                    JSONArray ja = new JSONArray(obj1);
+
+                    for (int i = 0; i < ja.length(); i++) {
+                        JSONObject jo = ja.getJSONObject(i);
+
+                        login = jo.getString("login");
+                        userid = jo.getString("user");
+                        username = jo.getString("name");
+                        usertype = jo.getString("type");
+
+                    }
+/******************************************************************************************/
+/*                       Call DashBoard
+/******************************************************************************************/
+
+
+                    if ("Y".equals(login)) {
+
+                        DatabaseHelper dataHelper = new DatabaseHelper(Login.this);
+
+                        LoginBean loginBean = new LoginBean(userid, username, usertype);
+
+                        dataHelper.insertLoginData(context, loginBean);
+
+                        // dismiss the progress dialog
+                        progressDialog.dismiss();
+                        // close login activity when going to next activity
+                       // Login.this.finish();
+                        //finish();
+
+                        CustomUtility.setSharedPreference(context, "userid", userid);
+                        CustomUtility.setSharedPreference(context, "username", username);
+                        CustomUtility.setSharedPreference(context, "usertype", usertype);
+                       // CustomUtility.setSharedPreference(context, "usertype", usertype);
+
+
+
+                       /* Intent intent = new Intent(Login.this, MainActivity.class);
+                        startActivity(intent);*/
+
+                        String OTP_CHECK = CustomUtility.getSharedPreferences(context, "CHECK_OTP_VARIFED");
+                        if(OTP_CHECK.equalsIgnoreCase("Y"))
+                        {
+                            Intent intent = new Intent(context, MainActivity.class);
+                            startActivity(intent);
+                        }
+                        else
+                        {
+                            Intent intent = new Intent(Login.this, OTPGenerationActivity.class);
+                            startActivity(intent);
+                        }
+
+
+
+                        finish();
+
+
+                    } else {
+
+                        progressDialog.dismiss();
+
+/*********************create message in thread*******************************/
+                        Message msg = new Message();
+                        msg.obj = "Invalid username or password";
+                        mHandler.sendMessage(msg);
+
+                        // dismiss the progress dialog
+
+                    }
+
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+                    progressDialog.dismiss();
+
+                }
+
+            }
+
+        }.start();
+    }
+
+    /**********************************************************************************************
+     *                Validating form
+     *********************************************************************************************/
+    private void submitForm() {
+
+        if (!validateName()) {
+            return;
+        }
+
+        if (!validatePassword()) {
+            return;
+        }
+
+/********************   Server Login    *******************************************************/
+        serverLogin();
+
+    }
+
+    private boolean validateName() {
+        if (inputName.getText().toString().trim().isEmpty()) {
+            inputLayoutName.setError(getString(R.string.err_msg_name));
+            requestFocus(inputName);
+            return false;
+        } else {
+            inputLayoutName.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+
+    private boolean validatePassword() {
+        if (inputPassword.getText().toString().trim().isEmpty()) {
+            inputLayoutPassword.setError(getString(R.string.err_msg_password));
+            requestFocus(inputPassword);
+            return false;
+        } else {
+            inputLayoutPassword.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
+
+    public void getUserTypeValue() {
+        list.add("Select Type");
+        list.add("Shakti Employee");
+        list.add("Shakti Partner");
+        list.add("Other");
+    }
+
+    private boolean validateType() {
+
+        boolean value;
+        if (index == 0) {
+            Toast.makeText(this, "Please Select Project Type", Toast.LENGTH_LONG).show();
+            value = false;
+        } else {
+            value = true;
+        }
+
+        return value;
+    }
+
+    private boolean validateType1() {
+
+        boolean value;
+        if (index1 == 0) {
+            Toast.makeText(this, "Please Select Login Type", Toast.LENGTH_LONG).show();
+            value = false;
+        } else {
+            value = true;
+        }
+
+        return value;
+    }
+
+
+    public void syncState() {
+
+        progressBar = new ProgressDialog(this);
+        progressBar.setCancelable(false);
+        progressBar.setMessage("Downloading State Data...");
+        progressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressBar.setProgress(0);
+        progressBar.setMax(100);
+        progressBar.show();
+        progressBarStatus = 0;
+
+
+        new Thread(new Runnable() {
+            public void run() {
+
+                while (progressBarStatus < 100) {
+                    // performing operation
+
+                    try {
+
+                        if (CustomUtility.isInternetOn()) {
+
+
+                            progressBarStatus = 30;
+
+                            // Updating the progress bar
+                            progressBarHandler.post(new Runnable() {
+                                public void run() {
+                                    progressBar.setProgress(progressBarStatus);
+                                }
+                            });
+
+                            // Get State search help Data
+                            progressBarStatus = getStateData(Login.this);
+                            progressBarStatus = 100;
+
+                            // Updating the progress bar
+                            progressBarHandler.post(new Runnable() {
+                                public void run() {
+                                    progressBar.setProgress(progressBarStatus);
+                                }
+                            });
+                        } else {
+                            Toast.makeText(getApplicationContext(), "No internet Connection ", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+
+                if (progressBarStatus >= 100) {
+                    // sleeping for 1 second after operation completed
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    // close the progress bar dialog
+                    progressBar.dismiss();
+
+                }
+            }
+        }).start();
+
+    }
+
+    public int getStateData(Context context) {
+
+        int progressBarStatus = 0;
+
+        DatabaseHelper dataHelper = new DatabaseHelper(context);
+
+        final ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
+
+        try {
+
+            String obj = CustomHttpClient.executeHttpPost1(WebURL.STATE_DATA, param);
+
+            JSONArray ja_state = new JSONArray(obj);
+
+            dataHelper.deleteStateSearchHelpData();
+
+            for (int i = 0; i < ja_state.length(); i++) {
+
+                JSONObject jo_state = ja_state.getJSONObject(i);
+
+                country = jo_state.optString("country");
+                country_text = jo_state.optString("countrytext");
+                state = jo_state.optString("state");
+                state_text = jo_state.optString("statetext");
+                district = jo_state.optString("district");
+                district_text = jo_state.optString("districttext");
+                tehsil = jo_state.optString("tehsil");
+                tehsil_text = jo_state.optString("tehsiltext");
+
+                dataHelper.insertStateData(country, country_text, state, state_text, district, district_text, tehsil, tehsil_text);
+            }
+
+        } catch (Exception e) {
+            Log.d("msg", "" + e);
+        }
+        return progressBarStatus;
+    }
+
+    private class obj_list extends AsyncTask<String, String, String> {
+
+
+        @Override
+        protected void onPreExecute() {
+
+            progressDialog = ProgressDialog.show(context, "", "Please Wait...");
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+
+                dataHelper.deleteStateDistrictData();
+                // Convert the string returned to a JSON object
+                JSONObject jsonObject = new JSONObject(getJson());
+                // Get Json array
+                JSONArray array = jsonObject.getJSONArray("state_data");
+
+
+                for (int i = 0; i < array.length(); i++) {
+                    // select the particular JSON data
+                    JSONObject object = array.getJSONObject(i);
+                    String cityid = object.getString("cityc");
+                    String citytxt = object.getString("cityc_txt");
+                    String stateid = object.getString("regio");
+                    String statetxt = object.getString("regio_txt");
+
+                    dataHelper.insertStateDistrictData(stateid, statetxt, cityid, citytxt);
+
+                }
+                progressDialog.dismiss();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                progressDialog.dismiss();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            // write display tracks logic here
+            onResume();
+            progressDialog.dismiss();
+        }
+    }
+
+    private class MyTextWatcher implements TextWatcher {
+
+        private View view;
+
+        private MyTextWatcher(View view) {
+            this.view = view;
+        }
+
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        public void afterTextChanged(Editable editable) {
+            if (view.getId() == R.id.login_Et) {
+                validateName();
+            }
+        }
+
+    }
+
+
+}
