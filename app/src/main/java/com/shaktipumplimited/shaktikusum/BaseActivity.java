@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import androidx.multidex.MultiDex;
+
 import org.acra.ReportField;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
@@ -37,13 +39,16 @@ public class BaseActivity extends Application {
         BaseActivity.instance = instance;
     }
 
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        MultiDex.install(this);
         setInstance(this);
         // The following line triggers the initialization of ACRA
        // ACRA.init(this);
 
+        MultiDex.install(this);
         Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
 
             @Override

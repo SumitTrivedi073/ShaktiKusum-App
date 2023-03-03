@@ -1,12 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-   // compileSdkVersion 29
     compileSdkVersion 33
-   // buildToolsVersion "30.0.2"
     defaultConfig {
         applicationId "com.shaktipumplimted.shaktikusum"
-        minSdkVersion 24
+        minSdkVersion 26
        // targetSdkVersion 29
         targetSdkVersion 33
         vectorDrawables.useSupportLibrary = true
@@ -20,8 +18,8 @@ android {
 
     compileOptions {
 
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
 
     }
 
@@ -45,35 +43,17 @@ android {
         exclude 'META-INF/dependencies.txt'
         exclude 'META-INF/LGPL2.1'
     }
+
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
-            //Other parameters
-            debuggable false
-            jniDebuggable false
-            renderscriptDebuggable false
-            pseudoLocalesEnabled false
-            zipAlignEnabled true
-
             shrinkResources true
 
         }
     }
 
-    lintOptions
-            {
-                // Returns whether lint should be quiet (for example, not write informational messages such as paths to report files written)
-                quiet true
-                // Whether lint should set the exit code of the process if errors are found
-                abortOnError false
-                // Returns whether lint will only check for errors (ignoring warnings)
-                ignoreWarnings true
-                // Returns whether lint should check for fatal errors during release builds. Default is true.
-                // If issues with severity "fatal" are found, the release build is aborted.
-                checkReleaseBuilds false
-            }
+
 }
 
 configurations {
@@ -92,9 +72,7 @@ dependencies {
 
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'ch.acra:acra:4.11.1'
-//    implementation('org.apache.httpcomponents:httpmime:4.5.14') {
-//        exclude module: 'httpclient'
-//    }
+
     implementation 'com.android.support:appcompat-v7:33.0.0'
     implementation 'com.android.support:cardview-v7:33.0.0'
     implementation 'com.android.support:design:33.0.0'
@@ -124,5 +102,6 @@ dependencies {
 
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.25'
     implementation 'org.apache.poi:poi-ooxml:5.2.3'
+    implementation 'com.android.support:multidex:1.0.0'
 
 }
