@@ -3,18 +3,15 @@ package adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.shaktipumplimited.shaktikusum.R;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -24,7 +21,7 @@ import debugapp.PendingFeedback;
 public class PendingFeedbackAdapter extends RecyclerView.Adapter<PendingFeedbackAdapter.ViewHolder> {
     Context mContext;
     private List<PendingFeedback.Response> pendingFeedbackList;
-
+    private SendOTPListner sendOTPListener;
 
     public PendingFeedbackAdapter(Context context, List<PendingFeedback.Response> listdata) {
         pendingFeedbackList = listdata;
@@ -53,19 +50,25 @@ public class PendingFeedbackAdapter extends RecyclerView.Adapter<PendingFeedback
           @Override
            public void onClick(View view) {
               Random random = new Random();
+              String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
+              sendOTPListener.sendOtpListener(response,generatedVerificationCode);
 
-              String generatedPassword = String.format("%04d", random.nextInt(10000));
-
-              Log.d("MyApp", "Generated Password : " + generatedPassword);
-             Intent intent = new Intent(mContext, PendingFeedBackOTPVerification.class);
-             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-              mContext.startActivity(intent);
            }
        });
 
-     
-    }
 
+    }
+    public void SendOTP(SendOTPListner response) {
+        try {
+            sendOTPListener = response;
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
+    }
+    public interface SendOTPListner {
+        void sendOtpListener(PendingFeedback.Response response, String generatedVerificationCode);
+
+    }
 
 
     @Override
