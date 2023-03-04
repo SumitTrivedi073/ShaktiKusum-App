@@ -110,10 +110,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Site Survey"
-                             android:layout_gravity="center"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="@dimen/_16sdp"
-                            android:textStyle="bold" />
+                             android:layout_gravity="start|center"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="@dimen/_14sdp"
+                            android:layout_marginLeft="@dimen/_10sdp"
+                             android:fontFamily="@font/open_sans_bold" />
 
                 </androidx.cardview.widget.CardView>
 
@@ -131,10 +132,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Pending Feedback "
-                        android:layout_gravity="center"
-                        android:textColor="@color/colorAccent"
-                        android:textSize="@dimen/_16sdp"
-                        android:textStyle="bold" />
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_gravity="start|center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_14sdp"
+                        android:fontFamily="@font/open_sans_bold" />
 
                 </androidx.cardview.widget.CardView>
 

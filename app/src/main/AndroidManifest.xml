@@ -46,6 +46,9 @@
         tools:replace="android:appComponentFactory"
         tools:targetApi="q">
         <activity
+            android:name="activity.PendingFeedBackOTPVerification"
+            android:exported="false" />
+        <activity
             android:name="activity.PendingFeedbackActivity"
             android:exported="false" />
         <activity

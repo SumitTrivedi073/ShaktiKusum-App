@@ -27,6 +27,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import activity.BaseActivity;
+import activity.CustomProgressDialog;
+
 import com.shaktipumplimited.shaktikusum.R;
 
 /**
@@ -41,7 +43,7 @@ public class CustomUtility {
     String current_date, current_time;
     Calendar calander = null;
     SimpleDateFormat simpleDateFormat = null;
-
+    public static CustomProgressDialog progressDialog;
 
 
     public static void ShowToast(String text, Context context) {
@@ -270,6 +272,17 @@ public class CustomUtility {
         simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
         current_time = simpleDateFormat.format(calander.getTime());
         return current_time.trim();
+    }
+    public static void showProgressDialogue(Context context) {
+        progressDialog = new CustomProgressDialog(context);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    public static void hideProgressDialog(Context context) {
+        if(progressDialog!=null && progressDialog.isShowing()){
+            progressDialog.dismiss();
+        }
     }
 
 

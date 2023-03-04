@@ -29,9 +29,9 @@
             android:ellipsize="end"
             android:text=""
             android:layout_centerInParent="true"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorPrimary"
             android:textSize="@dimen/_14sdp"
-            android:textStyle="bold"
+            android:fontFamily="@font/open_sans_bold"
             android:layout_toEndOf="@id/icon_img"
             android:layout_margin="@dimen/_5sdp"/>
 

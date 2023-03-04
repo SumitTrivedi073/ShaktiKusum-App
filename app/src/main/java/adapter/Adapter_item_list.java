@@ -1,5 +1,6 @@
 package adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
@@ -39,7 +40,6 @@ public class Adapter_item_list extends RecyclerView.Adapter<Adapter_item_list.Ho
         this.context = context;
         this.responseList = responseList;
         this.onclick_listener = onclick_listener;
-        Log.e("RESPONSE", "&&&&&" + responseList.toString());
         db = new DatabaseHelper(context);
     }
 
@@ -56,10 +56,10 @@ public class Adapter_item_list extends RecyclerView.Adapter<Adapter_item_list.Ho
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final HomeCategoryViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final HomeCategoryViewHolder holder, @SuppressLint("RecyclerView") int position) {
         try {
             if (!TextUtils.isEmpty(responseList.get(position).getItem_id())) {
-                Log.e("IDDDD", "&&&&&" + responseList.get(position).getItem_id());
+
                 if (responseList.get(position).getItem_id().equalsIgnoreCase("001")) {
                     holder.icon_img.setImageResource(R.mipmap.registration);
                 }else if (responseList.get(position).getItem_id().equalsIgnoreCase("004")) {

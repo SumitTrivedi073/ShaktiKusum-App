@@ -1,46 +1,37 @@
 package activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.shaktipumplimited.shaktikusum.R;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
+import adapter.PendingFeedbackAdapter;
 import debugapp.PendingFeedback;
+import utility.CustomUtility;
 import webservice.WebURL;
 
 public class PendingFeedbackActivity extends AppCompatActivity {
 
-    RecyclerView pendingFeedbackList;
-    Toolbar mToolbar;
+    private  RecyclerView pendingFeedbackList;
+    private Toolbar mToolbar;
     ArrayList<PendingFeedback> pendingFeedbacks;
-    CustomProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +48,6 @@ public class PendingFeedbackActivity extends AppCompatActivity {
     private void Init() {
         mToolbar =  findViewById(R.id.toolbar);
         pendingFeedbackList = findViewById(R.id.pendingfeedbacklist);
-        progressDialog = new CustomProgressDialog(this);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -78,21 +68,23 @@ public class PendingFeedbackActivity extends AppCompatActivity {
 
 
     private void getPendingFeedbackList() {
-         showProgressDialogue();
+        CustomUtility.showProgressDialogue(PendingFeedbackActivity.this);
         pendingFeedbacks = new ArrayList<>();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.PendingFeedback +"?project_no=1022&userid=0000700810&project_login_no=01", null, new Response.Listener<JSONObject >() {
+                WebURL.PendingFeedback +"?project_no="+CustomUtility.getSharedPreferences(getApplicationContext(), "projectid")+"&userid="+CustomUtility.getSharedPreferences(getApplicationContext(), "userid")+"&project_login_no=01", null, new Response.Listener<JSONObject >() {
             @Override
             public void onResponse(JSONObject  response) {
-                hideProgressDialog();
+                CustomUtility.hideProgressDialog(PendingFeedbackActivity.this);
 
 
                 if(response.toString()!=null && !response.toString().isEmpty()) {
                     PendingFeedback pendingFeedback = new Gson().fromJson(response.toString(), PendingFeedback.class);
                     if(pendingFeedback.getStatus().equals("true")) {
 
-
+                        PendingFeedbackAdapter pendingFeedbackAdapter = new PendingFeedbackAdapter(getApplicationContext(),pendingFeedback.getResponse());
+                        pendingFeedbackList.setHasFixedSize(true);
+                        pendingFeedbackList.setAdapter(pendingFeedbackAdapter);
                     }
 
                 }
@@ -101,7 +93,7 @@ public class PendingFeedbackActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                hideProgressDialog();
+                CustomUtility.hideProgressDialog(PendingFeedbackActivity.this);
                 Log.e("error", String.valueOf(error));
                 Toast.makeText(PendingFeedbackActivity.this, error.getMessage(),
                         Toast.LENGTH_LONG).show();
@@ -110,16 +102,6 @@ public class PendingFeedbackActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
-    private void showProgressDialogue() {
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-    }
-
-    private void hideProgressDialog() {
-        if(progressDialog!=null && progressDialog.isShowing()){
-            progressDialog.dismiss();
-        }
-    }
 
     @Override
     public void onBackPressed() {
