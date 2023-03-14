@@ -1,9 +1,10 @@
 package activity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.IntentSender;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
+import com.google.android.play.core.tasks.Task;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
@@ -34,6 +41,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,9 +53,12 @@ import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
+@SuppressWarnings({"ResultOfMethodCallIgnored", "resource"})
 public class Login extends AppCompatActivity {
 
-    protected static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
+    private AppUpdateManager appUpdateManager;
+    private static final int IMMEDIATE_APP_UPDATE_REQ_CODE = 100;
+
     Spinner spinner_login_type, spinner_project_type;
     ProgressDialog progressBar;
     int index, index1;
@@ -57,7 +68,8 @@ public class Login extends AppCompatActivity {
     List<String> loginlist = null;
     Context context;
     DatabaseHelper dataHelper;
-    String country, country_text, state, scheme_state, state_text, district, district_text, tehsil, tehsil_text;
+    String country, country_text, state, state_text, district, district_text, tehsil, tehsil_text;
+    @SuppressLint("HandlerLeak")
     android.os.Handler mHandler = new android.os.Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -66,11 +78,10 @@ public class Login extends AppCompatActivity {
         }
     };
     private int progressBarStatus = 0;
-    private Handler progressBarHandler = new Handler();
+    private final Handler progressBarHandler = new Handler();
     private ProgressDialog progressDialog;
     private EditText inputName, inputPassword;
     private TextInputLayout inputLayoutName, inputLayoutPassword;
-    private TextView btnSignUp;
 
 
     @Override
@@ -82,43 +93,32 @@ public class Login extends AppCompatActivity {
         dataHelper = new DatabaseHelper(context);
 
 
-        list = new ArrayList<String>();
-        projectlist = new ArrayList<String>();
-        loginlist = new ArrayList<String>();
+        list = new ArrayList<>();
+        projectlist = new ArrayList<>();
+        loginlist = new ArrayList<>();
 
-        // getUserTypeValue();
+        inputLayoutName =  findViewById(R.id.input_layout_name);
+        inputLayoutPassword =  findViewById(R.id.input_layout_password);
 
+        inputName =  findViewById(R.id.login_Et);
+        inputPassword =  findViewById(R.id.password);
 
-        inputLayoutName = (TextInputLayout) findViewById(R.id.input_layout_name);
-        inputLayoutPassword = (TextInputLayout) findViewById(R.id.input_layout_password);
-
-        inputName = (EditText) findViewById(R.id.login_Et);
-        inputPassword = (EditText) findViewById(R.id.password);
-
-        btnSignUp = (TextView) findViewById(R.id.btn_signup);
+        TextView btnSignUp =  findViewById(R.id.btn_signup);
 
         inputName.addTextChangedListener(new MyTextWatcher(inputName));
         inputPassword.addTextChangedListener(new MyTextWatcher(inputPassword));
 
-        spinner_login_type = (Spinner) findViewById(R.id.spinner_login_type);
-        spinner_project_type = (Spinner) findViewById(R.id.spinner_project_type);
+        spinner_login_type =  findViewById(R.id.spinner_login_type);
+        spinner_project_type =  findViewById(R.id.spinner_project_type);
 
         spinner_project_type.setPrompt("Select Project");
         spinner_login_type.setPrompt("Select Login");
-
-      /*  if (CustomUtility.isInternetOn()) {
-            // Write Your Code What you want to do
-            new obj_list().execute();
-        } else {
-            Toast.makeText(context, "Please Connect to Internet...", Toast.LENGTH_SHORT).show();
-        }*/
-
 
         projectlist.clear();
         projectlist = dataHelper.getList(DatabaseHelper.KEY_PROJ_TXT, null);
 
         // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<String>(context, R.layout.spinner_item_center, projectlist);
+        ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<>(context, R.layout.spinner_item_center, projectlist);
 
         // Drop down layout style - list view with radio button
         dataAdapter1.setDropDownViewResource(R.layout.spinner_item_center);
@@ -133,14 +133,15 @@ public class Login extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 index = arg0.getSelectedItemPosition();
                 spinner_project_type_text = spinner_project_type.getSelectedItem().toString();
-
+                Log.e("spinner_project_type_text","list"+ spinner_project_type_text);
 
                 if (!spinner_project_type_text.equalsIgnoreCase("Select project type") && !TextUtils.isEmpty(spinner_project_type_text)) {
                     loginlist.clear();
                     loginlist = dataHelper.getList(DatabaseHelper.KEY_LOGIN_TXT, spinner_project_type_text);
 
+                    Log.e("spinner_project_type_text1==","list"+ loginlist);
                     // Creating adapter for spinner
-                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(context, R.layout.spinner_item_center, loginlist);
+                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(context, R.layout.spinner_item_center, loginlist);
 
                     // Drop down layout style - list view with radio button
                     dataAdapter.setDropDownViewResource(R.layout.spinner_item_center);
@@ -206,29 +207,65 @@ public class Login extends AppCompatActivity {
         });
 
 
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        btnSignUp.setOnClickListener(view -> {
 
 
-                if (validateType()) {
-                    if (validateType1()) {
+            if (validateType()) {
+                if (validateType1()) {
 
-                            if (CustomUtility.isInternetOn()) {
-                                // Write Your Code What you want to do
-                                submitForm();
-                            } else {
-                                Toast.makeText(context, "Please Connect to Internet...", Toast.LENGTH_SHORT).show();
-                            }
-
-
+                        if (CustomUtility.isInternetOn()) {
+                            // Write Your Code What you want to do
+                            submitForm();
+                        } else {
+                            Toast.makeText(context, "Please Connect to Internet...", Toast.LENGTH_SHORT).show();
                         }
-                    }
 
+
+                    }
+                }
+
+        });
+        getUserTypeValue();
+        //InappUpdate
+        appUpdateManager = AppUpdateManagerFactory.create(getApplicationContext());
+        checkUpdate();
+    }
+
+    private void checkUpdate() {
+
+        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                startUpdateFlow(appUpdateInfo);
+            } else if  (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS){
+                startUpdateFlow(appUpdateInfo);
             }
         });
+    }
 
+    private void startUpdateFlow(AppUpdateInfo appUpdateInfo) {
+        try {
+            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, Login.IMMEDIATE_APP_UPDATE_REQ_CODE);
+        } catch (IntentSender.SendIntentException e) {
+            e.printStackTrace();
+        }
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == IMMEDIATE_APP_UPDATE_REQ_CODE) {
+            if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(getApplicationContext(), "Update canceled by user! Result Code: " + resultCode, Toast.LENGTH_LONG).show();
+            } else if (resultCode == RESULT_OK) {
+                Toast.makeText(getApplicationContext(), "Update success! Result Code: " + resultCode, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Update Failed! Result Code: " + resultCode, Toast.LENGTH_LONG).show();
+                checkUpdate();
+            }
+        }
     }
 
     @Override
@@ -250,10 +287,9 @@ public class Login extends AppCompatActivity {
             // close the stream --- very important
             is.close();
             // convert byte to string
-            json = new String(buffer, "UTF-8");
+            json = new String(buffer, StandardCharsets.UTF_8);
         } catch (IOException ex) {
             ex.printStackTrace();
-            return json;
         }
         return json;
     }
@@ -270,8 +306,7 @@ public class Login extends AppCompatActivity {
         username = inputName.getText().toString();
         password = inputPassword.getText().toString();
 
-        final ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
-        param.clear();
+        final ArrayList<NameValuePair> param = new ArrayList<>();
         param.add(new BasicNameValuePair("USERID", username));
         param.add(new BasicNameValuePair("PASSWORD", password));
         param.add(new BasicNameValuePair("project_no", CustomUtility.getSharedPreferences(context, "projectid")));
@@ -281,108 +316,97 @@ public class Login extends AppCompatActivity {
         param.add(new BasicNameValuePair("API", String.valueOf(Build.VERSION.SDK_INT)));
         param.add(new BasicNameValuePair("API_VERSION", Build.VERSION.RELEASE));
 
-/******************************************************************************************/
+//******************************************************************************************/
 /*                   server connection
 /******************************************************************************************/
         progressDialog = ProgressDialog.show(Login.this, "", "Connecting to server..please wait !");
 
-        new Thread() {
+        new Thread(() -> {
 
-            public void run() {
+            try {
 
-                try {
+                String obj = CustomHttpClient.executeHttpPost1(WebURL.LOGIN_PAGE, param);
+                Log.d("check_error", obj);
+                Log.e("check_error", obj);
 
-                    String obj = CustomHttpClient.executeHttpPost1(WebURL.LOGIN_PAGE, param);
-                    Log.d("check_error", obj);
-                    Log.e("check_error", obj);
-
-/******************************************************************************************/
+//******************************************************************************************/
 /*                       get JSONwebservice Data
 /******************************************************************************************/
-                    JSONObject object = new JSONObject(obj);
-                    String obj1 = object.getString("login_msg");
+                JSONObject object = new JSONObject(obj);
+                String obj1 = object.getString("login_msg");
 
 
-                    JSONArray ja = new JSONArray(obj1);
+                JSONArray ja = new JSONArray(obj1);
 
-                    for (int i = 0; i < ja.length(); i++) {
-                        JSONObject jo = ja.getJSONObject(i);
+                for (int i = 0; i < ja.length(); i++) {
+                    JSONObject jo = ja.getJSONObject(i);
 
-                        login = jo.getString("login");
-                        userid = jo.getString("user");
-                        username = jo.getString("name");
-                        usertype = jo.getString("type");
+                    login = jo.getString("login");
+                    userid = jo.getString("user");
+                    username = jo.getString("name");
+                    usertype = jo.getString("type");
 
-                    }
-/******************************************************************************************/
+                }
+//******************************************************************************************/
 /*                       Call DashBoard
 /******************************************************************************************/
 
 
-                    if ("Y".equals(login)) {
+                if ("Y".equals(login)) {
 
-                        DatabaseHelper dataHelper = new DatabaseHelper(Login.this);
+                    DatabaseHelper dataHelper = new DatabaseHelper(Login.this);
 
-                        LoginBean loginBean = new LoginBean(userid, username, usertype);
+                    LoginBean loginBean = new LoginBean(userid, username, usertype);
 
-                        dataHelper.insertLoginData(context, loginBean);
+                    dataHelper.insertLoginData(context, loginBean);
 
-                        // dismiss the progress dialog
-                        progressDialog.dismiss();
-                        // close login activity when going to next activity
-                       // Login.this.finish();
-                        //finish();
-
-                        CustomUtility.setSharedPreference(context, "userid", userid);
-                        CustomUtility.setSharedPreference(context, "username", username);
-                        CustomUtility.setSharedPreference(context, "usertype", usertype);
-                       // CustomUtility.setSharedPreference(context, "usertype", usertype);
-
-
-
-                       /* Intent intent = new Intent(Login.this, MainActivity.class);
-                        startActivity(intent);*/
-
-                        String OTP_CHECK = CustomUtility.getSharedPreferences(context, "CHECK_OTP_VARIFED");
-                        if(OTP_CHECK.equalsIgnoreCase("Y"))
-                        {
-                            Intent intent = new Intent(context, MainActivity.class);
-                            startActivity(intent);
-                        }
-                        else
-                        {
-                            Intent intent = new Intent(Login.this, OTPGenerationActivity.class);
-                            startActivity(intent);
-                        }
-
-
-
-                        finish();
-
-
-                    } else {
-
-                        progressDialog.dismiss();
-
-/*********************create message in thread*******************************/
-                        Message msg = new Message();
-                        msg.obj = "Invalid username or password";
-                        mHandler.sendMessage(msg);
-
-                        // dismiss the progress dialog
-
-                    }
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
+                    // dismiss the progress dialog
                     progressDialog.dismiss();
+
+
+                    CustomUtility.setSharedPreference(context, "userid", userid);
+                    CustomUtility.setSharedPreference(context, "username", username);
+                    CustomUtility.setSharedPreference(context, "usertype", usertype);
+
+
+
+                    String OTP_CHECK = CustomUtility.getSharedPreferences(context, "CHECK_OTP_VARIFED");
+                    Intent intent;
+                    if(OTP_CHECK.equalsIgnoreCase("Y"))
+                    {
+                        intent = new Intent(context, MainActivity.class);
+                    }
+                    else
+                    {
+                        intent = new Intent(Login.this, OTPGenerationActivity.class);
+                    }
+                    startActivity(intent);
+
+
+                    finish();
+
+
+                } else {
+
+                    progressDialog.dismiss();
+
+//*********************create message in thread*******************************/
+                    Message msg = new Message();
+                    msg.obj = "Invalid username or password";
+                    mHandler.sendMessage(msg);
+
+                    // dismiss the progress dialog
 
                 }
 
+            } catch (Exception e) {
+
+                e.printStackTrace();
+                progressDialog.dismiss();
+
             }
 
-        }.start();
+        }).start();
     }
 
     /**********************************************************************************************
@@ -398,7 +422,7 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-/********************   Server Login    *******************************************************/
+//********************   Server Login    *******************************************************/
         serverLogin();
 
     }
@@ -479,70 +503,58 @@ public class Login extends AppCompatActivity {
         progressBarStatus = 0;
 
 
-        new Thread(new Runnable() {
-            public void run() {
+        new Thread(() -> {
 
-                while (progressBarStatus < 100) {
-                    // performing operation
+            while (progressBarStatus < 100) {
+                // performing operation
 
-                    try {
+                try {
 
-                        if (CustomUtility.isInternetOn()) {
+                    if (CustomUtility.isInternetOn()) {
 
 
-                            progressBarStatus = 30;
+                        progressBarStatus = 30;
 
-                            // Updating the progress bar
-                            progressBarHandler.post(new Runnable() {
-                                public void run() {
-                                    progressBar.setProgress(progressBarStatus);
-                                }
-                            });
+                        // Updating the progress bar
+                        progressBarHandler.post(() -> progressBar.setProgress(progressBarStatus));
 
-                            // Get State search help Data
-                            progressBarStatus = getStateData(Login.this);
-                            progressBarStatus = 100;
+                        // Get State search help Data
+                        getStateData(Login.this);
+                        progressBarStatus = 100;
 
-                            // Updating the progress bar
-                            progressBarHandler.post(new Runnable() {
-                                public void run() {
-                                    progressBar.setProgress(progressBarStatus);
-                                }
-                            });
-                        } else {
-                            Toast.makeText(getApplicationContext(), "No internet Connection ", Toast.LENGTH_SHORT).show();
-                        }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        // Updating the progress bar
+                        progressBarHandler.post(() -> progressBar.setProgress(progressBarStatus));
+                    } else {
+                        Toast.makeText(getApplicationContext(), "No internet Connection ", Toast.LENGTH_SHORT).show();
                     }
 
-
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
-                if (progressBarStatus >= 100) {
-                    // sleeping for 1 second after operation completed
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    // close the progress bar dialog
-                    progressBar.dismiss();
 
+            }
+
+            if (progressBarStatus >= 100) {
+                // sleeping for 1 second after operation completed
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                // close the progress bar dialog
+                progressBar.dismiss();
+
             }
         }).start();
 
     }
 
-    public int getStateData(Context context) {
-
-        int progressBarStatus = 0;
+    public void getStateData(Context context) {
 
         DatabaseHelper dataHelper = new DatabaseHelper(context);
 
-        final ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
+        final ArrayList<NameValuePair> param = new ArrayList<>();
 
         try {
 
@@ -571,63 +583,13 @@ public class Login extends AppCompatActivity {
         } catch (Exception e) {
             Log.d("msg", "" + e);
         }
-        return progressBarStatus;
+
     }
 
-    private class obj_list extends AsyncTask<String, String, String> {
-
-
-        @Override
-        protected void onPreExecute() {
-
-            progressDialog = ProgressDialog.show(context, "", "Please Wait...");
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            try {
-
-                dataHelper.deleteStateDistrictData();
-                // Convert the string returned to a JSON object
-                JSONObject jsonObject = new JSONObject(getJson());
-                // Get Json array
-                JSONArray array = jsonObject.getJSONArray("state_data");
-
-
-                for (int i = 0; i < array.length(); i++) {
-                    // select the particular JSON data
-                    JSONObject object = array.getJSONObject(i);
-                    String cityid = object.getString("cityc");
-                    String citytxt = object.getString("cityc_txt");
-                    String stateid = object.getString("regio");
-                    String statetxt = object.getString("regio_txt");
-
-                    dataHelper.insertStateDistrictData(stateid, statetxt, cityid, citytxt);
-
-                }
-                progressDialog.dismiss();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                progressDialog.dismiss();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            // write display tracks logic here
-            onResume();
-            progressDialog.dismiss();
-        }
-    }
 
     private class MyTextWatcher implements TextWatcher {
 
-        private View view;
+        private final View view;
 
         private MyTextWatcher(View view) {
             this.view = view;

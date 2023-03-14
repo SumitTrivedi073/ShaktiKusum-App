@@ -4,8 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,8 +30,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
+import com.google.android.play.core.tasks.Task;
 import com.shaktipumplimited.shaktikusum.R;
-
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -50,27 +55,27 @@ import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
+@SuppressWarnings("resource")
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static DatabaseHelper dataHelper;
-    protected static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
+    private AppUpdateManager appUpdateManager;
+    private static final int IMMEDIATE_APP_UPDATE_REQ_CODE = 100;
     ViewFlipper flvViewFlipperID;
     View.OnClickListener onclick;
     RecyclerView recyclerView;
     Context context;
     String versionName = "0.0", emp_type;
 
-    String country, country_text, state, scheme_state, state_text, district, district_text, tehsil, tehsil_text;
+    String country, country_text, state, state_text, district, district_text, tehsil, tehsil_text;
 
     ArrayList<ItemNameBean> itemNameBeans = new ArrayList<>();
     LinearLayout lin1, lin2;
     Adapter_item_list adapter_item_list;
 
-    private LinearLayoutManager layoutManagerSubCategory;
-
     NavigationView navigationView;
     private int progressBarStatus = 0;
-    private Handler progressBarHandler = new Handler();
+    private final Handler progressBarHandler = new Handler();
     ProgressDialog progressBar;
 
     CardView cardSurveySiteID;
@@ -78,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView pendingFeedback;
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,9 +111,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         View headerView = navigationView.getHeaderView(0);
-        TextView username = (TextView) headerView.findViewById(R.id.user_name);
-        TextView appversion = (TextView) headerView.findViewById(R.id.app_version);
-        TextView projname = (TextView) headerView.findViewById(R.id.proj_name);
+        TextView username =  headerView.findViewById(R.id.user_name);
+        TextView appversion =  headerView.findViewById(R.id.app_version);
+        TextView projname =  headerView.findViewById(R.id.proj_name);
 
         username.setText(CustomUtility.getSharedPreferences(context, "username"));
         projname.setText(CustomUtility.getSharedPreferences(context, "projectname"));
@@ -116,10 +122,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cardSurveySiteID = findViewById(R.id.cardSurveySiteID);
         recyclerView = findViewById(R.id.item_list);
         pendingFeedback = findViewById(R.id.pendingFeedback);
-        lin1 = (LinearLayout) findViewById(R.id.lin1);
-        lin2 = (LinearLayout) findViewById(R.id.lin2);
+        lin1 =  findViewById(R.id.lin1);
+        lin2 =  findViewById(R.id.lin2);
 
-        flvViewFlipperID = (ViewFlipper) findViewById(R.id.flvViewFlipperID);
+        flvViewFlipperID =  findViewById(R.id.flvViewFlipperID);
 
         flvViewFlipperID.setFlipInterval(3000); //set 1 seconds for interval time
         flvViewFlipperID.startFlipping();
@@ -136,13 +142,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(mIntent);
         });
 
-        pendingFeedback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent mIntent = new Intent(context, PendingFeedbackActivity.class);
-                startActivity(mIntent);
+        pendingFeedback.setOnClickListener(view -> {
+            Intent mIntent = new Intent(context, PendingFeedbackActivity.class);
+            startActivity(mIntent);
+        });
+
+        appUpdateManager = AppUpdateManagerFactory.create(getApplicationContext());
+        checkUpdate();
+    }
+
+    private void checkUpdate() {
+
+        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                startUpdateFlow(appUpdateInfo);
+            } else if  (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS){
+                startUpdateFlow(appUpdateInfo);
             }
         });
+    }
+
+    private void startUpdateFlow(AppUpdateInfo appUpdateInfo) {
+        try {
+            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, MainActivity.IMMEDIATE_APP_UPDATE_REQ_CODE);
+        } catch (IntentSender.SendIntentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == IMMEDIATE_APP_UPDATE_REQ_CODE) {
+            if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(getApplicationContext(), "Update canceled by user! Result Code: " + resultCode, Toast.LENGTH_LONG).show();
+            } else if (resultCode == RESULT_OK) {
+                Toast.makeText(getApplicationContext(), "Update success! Result Code: " + resultCode, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "Update Failed! Result Code: " + resultCode, Toast.LENGTH_LONG).show();
+                checkUpdate();
+            }
+        }
     }
 
     @Override
@@ -171,16 +214,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(context, R.style.MyDialogTheme);
             alertDialog.setTitle("Confirmation");
             alertDialog.setMessage("Are you sure you wish to Sign Out ?");
-            alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    logout();
-                }
-            });
-            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
+            alertDialog.setPositiveButton("Yes", (dialog, which) -> logout());
+            alertDialog.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
             alertDialog.show();
             return true;
         }
@@ -216,16 +251,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(context, R.style.MyDialogTheme);
             alertDialog.setTitle("Confirmation");
             alertDialog.setMessage("Are you sure you wish to Sign Out ?");
-            alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    logout();
-                }
-            });
-            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
+            alertDialog.setPositiveButton("Yes", (dialog, which) -> logout());
+            alertDialog.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
             alertDialog.show();
         } else if (id == R.id.nav_simreplace) {
             Intent intent = new Intent(context, SimCardOptions.class);
@@ -287,6 +314,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
        // getListData();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void getListData() {
 
         if (dataHelper.getItemData() != null && dataHelper.getItemData().size() > 0) {
@@ -300,11 +328,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             adapter_item_list = new Adapter_item_list(context, itemNameBeans, onclick);
 
-            layoutManagerSubCategory = new LinearLayoutManager(context);
+            LinearLayoutManager layoutManagerSubCategory = new LinearLayoutManager(context);
             layoutManagerSubCategory.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManagerSubCategory);
             recyclerView.setAdapter(adapter_item_list);
             adapter_item_list.notifyDataSetChanged();
+
         } else {
             lin1.setVisibility(View.GONE);
             lin2.setVisibility(View.VISIBLE);
@@ -323,11 +352,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         protected String doInBackground(String... params) {
-            final ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
+            final ArrayList<NameValuePair> param = new ArrayList<>();
             param.add(new BasicNameValuePair("USERID", CustomUtility.getSharedPreferences(context, "userid")));
             param.add(new BasicNameValuePair("PROJECT_NO", CustomUtility.getSharedPreferences(context, "projectid")));
             param.add(new BasicNameValuePair("PROJECT_LOGIN_NO", CustomUtility.getSharedPreferences(context, "loginid")));
-            String login_selec = null, project_no = null, process_no = null, process_nm = null;
+            String login_selec = null, project_no, process_no , process_nm ;
             try {
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
                 StrictMode.setThreadPolicy(policy);
@@ -340,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     project_no = jo.optString("project_no");
                     process_no = jo.optString("process_no");
                     process_nm = jo.optString("process_nm");
-                    if (dataHelper.isRecordExist(dataHelper.TABLE_DASHBOARD, dataHelper.KEY_PROCESS_NO, process_no)) {
+                    if (dataHelper.isRecordExist(DatabaseHelper.TABLE_DASHBOARD, DatabaseHelper.KEY_PROCESS_NO, process_no)) {
                         dataHelper.updateDashboard(project_no, process_no, process_nm);
                     } else {
                         dataHelper.insertDashboardData(project_no, process_no, process_nm);
@@ -372,47 +401,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         progressBar.show();
         progressBarStatus = 0;
 
-        new Thread(new Runnable() {
-            public void run() {
-                while (progressBarStatus < 100) {
-                    try {
-                        if (CustomUtility.isInternetOn()) {
-                            progressBarStatus = 30;
-                            progressBarHandler.post(new Runnable() {
-                                public void run() {
-                                    progressBar.setProgress(progressBarStatus);
-                                }
-                            });
-                            progressBarStatus = getStateData(MainActivity.this);
-                            progressBarStatus = 100;
-                            progressBarHandler.post(new Runnable() {
-                                public void run() {
-                                    progressBar.setProgress(progressBarStatus);
-                                }
-                            });
-                        } else {
-                            Toast.makeText(getApplicationContext(), "No internet Connection ", Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+        new Thread(() -> {
+            while (progressBarStatus < 100) {
+                try {
+                    if (CustomUtility.isInternetOn()) {
+                        progressBarStatus = 30;
+                        progressBarHandler.post(() -> progressBar.setProgress(progressBarStatus));
+                        getStateData(MainActivity.this);
+                        progressBarStatus = 100;
+                        progressBarHandler.post(() -> progressBar.setProgress(progressBarStatus));
+                    } else {
+                        Toast.makeText(getApplicationContext(), "No internet Connection ", Toast.LENGTH_SHORT).show();
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                if (progressBarStatus >= 100) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    progressBar.dismiss();
+            }
+            if (progressBarStatus >= 100) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                progressBar.dismiss();
             }
         }).start();
     }
 
-    public int getStateData(Context context) {
-        int progressBarStatus = 0;
+    public void getStateData(Context context) {
+
         DatabaseHelper dataHelper = new DatabaseHelper(context);
-        final ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
+        final ArrayList<NameValuePair> param = new ArrayList<>();
         try {
             String obj = CustomHttpClient.executeHttpPost1(WebURL.STATE_DATA, param);
             JSONArray ja_state = new JSONArray(obj);
@@ -432,6 +451,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } catch (Exception e) {
             Log.d("msg", "" + e);
         }
-        return progressBarStatus;
+
     }
 }
