@@ -253,7 +253,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         try {
             if (CustomUtility.isInternetOn()) {
                 dataHelper.deleteLoginData();
-                dataHelper.deleteLoginSelecData();
                 dataHelper.deleteDashboardData();
                 dataHelper.deleteRegistrationData();
                 dataHelper.deleteInstallationListData();
@@ -266,7 +265,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 CustomUtility.setSharedPreference(context, "projectid", "");
                 CustomUtility.setSharedPreference(context, "loginid", "");
                 CustomUtility.setSharedPreference(context, "CHECK_OTP_VARIFED", "N");
-                OnBackPressed();
+                Intent intent = new Intent(context, Login.class);
+                startActivity(intent);
+                finish();
             } else {
                 Toast.makeText(getApplicationContext(), "No internet Connection ", Toast.LENGTH_SHORT).show();
             }
@@ -275,9 +276,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public void OnBackPressed() {
-        System.exit(0);
-    }
+
 
     @SuppressLint("WrongConstant")
     @Override

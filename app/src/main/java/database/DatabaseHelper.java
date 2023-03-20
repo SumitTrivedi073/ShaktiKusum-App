@@ -1,5 +1,6 @@
 package database;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -2491,6 +2492,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    @SuppressLint("Range")
     public String getProjLoginValue(String key, String text) {
         String result = null;
 

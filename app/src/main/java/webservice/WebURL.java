@@ -64,5 +64,8 @@ public class WebURL {
 
     public static final String SendOTP = "http://control.yourbulksms.com/api/sendhttp.php?authkey=393770756d707334373701";
 
+    public static final String SendOTPToServer =  BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/save_feedback.htm?feedback=";
+
+
     //https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/pending_feedback_list.htm?project_no=1022&userid=0000700810&project_login_no=01
 }

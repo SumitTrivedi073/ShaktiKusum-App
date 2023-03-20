@@ -10,12 +10,15 @@ import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -25,18 +28,39 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 
+import bean.LoginSelectionModel;
 import database.DatabaseHelper;
+import debugapp.VerificationCodeModel;
+import utility.CustomUtility;
+import webservice.CustomHttpClient;
+import webservice.WebURL;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.shaktipumplimited.shaktikusum.R;
+
+import org.apache.http.NameValuePair;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 
 public class SplashActivity extends Activity {
+
+    private static final int REQUEST_CODE_PERMISSION = 2;
     ImageView imageView;
     Context context;
     Context mContext;
     DatabaseHelper databaseHelper;
 
-    private static final int REQUEST_CODE_PERMISSION = 2;
+
+
 
 
     @Override
@@ -45,6 +69,7 @@ public class SplashActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         mContext = this;
+
         imageView = (ImageView) findViewById(R.id.imageSplash);
         databaseHelper = new DatabaseHelper(SplashActivity.this);
         if (!checkPermission()) {
@@ -65,8 +90,7 @@ public class SplashActivity extends Activity {
                     Intent intent = new Intent(mContext, MainActivity.class);
                     startActivity(intent);
                 } else {
-                    Intent i = new Intent(mContext, Login.class);
-                    startActivity(i);
+                    loginSelection();
 
                 }
             }
@@ -114,6 +138,7 @@ public class SplashActivity extends Activity {
                     if (FineLocationAccepted && CoarseLocationAccepted && Bluetooth && ReadPhoneState && Camera
                             && ReadExternalStorage && WriteExternalStorage) {
                         Toast.makeText(getApplicationContext(), "Permission Granted, Now you can access location data and camera.", Toast.LENGTH_LONG).show();
+                        CheckLoginStatus();
                     } else {
 
 
@@ -145,6 +170,53 @@ public class SplashActivity extends Activity {
                 .setNegativeButton("Cancel", null)
                 .create()
                 .show();
+    }
+
+
+    public void loginSelection(){
+
+        CustomUtility.showProgressDialogue(SplashActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                WebURL.LOGIN_SELEC_PAGE, null, new Response.Listener<JSONObject >() {
+            @Override
+            public void onResponse(JSONObject response) {
+                CustomUtility.hideProgressDialog(SplashActivity.this);
+
+
+                if(response.toString()!=null && !response.toString().isEmpty()) {
+                    LoginSelectionModel loginSelectionModel = new Gson().fromJson(response.toString(), LoginSelectionModel.class);
+                    if(loginSelectionModel.getLoginType().size()>0) {
+
+                        for (int i = 0; i <loginSelectionModel.getLoginType().size(); i++) {
+
+                            databaseHelper.insertLoginSelectionData(loginSelectionModel.getLoginType().get(i).getProjectNo(),
+                                    loginSelectionModel.getLoginType().get(i).getProjectNm(),
+                                    loginSelectionModel.getLoginType().get(i).getProjectLoginNo(),
+                                    loginSelectionModel.getLoginType().get(i).getProjectLoginNm());
+
+                        }
+                        Intent intent = new Intent(mContext, Login.class);
+                        startActivity(intent);
+                    }else {
+                        Toast.makeText(getApplicationContext(),"Login types are not available",Toast.LENGTH_LONG).show();
+                    }
+
+                }else {
+                    Toast.makeText(getApplicationContext(),"Something Went Wrong!",Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                CustomUtility.hideProgressDialog(SplashActivity.this);
+                Log.e("error", String.valueOf(error));
+                Toast.makeText(SplashActivity.this, error.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
     }
     @Override
     protected void onDestroy() {

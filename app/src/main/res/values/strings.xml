@@ -153,5 +153,6 @@
     <string name="verify">Verify</string>
     <string name="verificationCodeSend">Verification Code Send</string>
     <string name="otp_send_successfully">verification code sent to your registerd number successfully</string>
+    <string name="verificationCodeMatched">verification code verify successfully</string>
 
 </resources>

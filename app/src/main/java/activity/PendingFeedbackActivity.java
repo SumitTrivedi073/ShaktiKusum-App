@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import adapter.PendingFeedbackAdapter;
+import debugapp.GlobalValue.Constant;
 import debugapp.PendingFeedback;
 import debugapp.VerificationCodeModel;
 import utility.CustomUtility;
@@ -40,11 +41,12 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
     ArrayList<PendingFeedback> pendingFeedbacks;
     AlertDialog alertDialog;
 
+    TextView noDataFound;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending_feedbacck);
-
 
         Init();
         listner();
@@ -55,7 +57,7 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
     private void Init() {
         mToolbar =  findViewById(R.id.toolbar);
         pendingFeedbackList = findViewById(R.id.pendingfeedbacklist);
-
+        noDataFound = findViewById(R.id.noDataFound);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -93,8 +95,16 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
                         pendingFeedbackList.setHasFixedSize(true);
                         pendingFeedbackList.setAdapter(pendingFeedbackAdapter);
                         pendingFeedbackAdapter.SendOTP(PendingFeedbackActivity.this);
+                        noDataFound.setVisibility(View.GONE);
+                        pendingFeedbackList.setVisibility(View.VISIBLE);
+                    }else {
+                        noDataFound.setVisibility(View.VISIBLE);
+                        pendingFeedbackList.setVisibility(View.GONE);
                     }
 
+                }else {
+                    noDataFound.setVisibility(View.VISIBLE);
+                    pendingFeedbackList.setVisibility(View.GONE);
                 }
 
             }
@@ -102,6 +112,8 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
             @Override
             public void onErrorResponse(VolleyError error) {
                 CustomUtility.hideProgressDialog(PendingFeedbackActivity.this);
+                noDataFound.setVisibility(View.VISIBLE);
+                pendingFeedbackList.setVisibility(View.GONE);
                 Log.e("error", String.valueOf(error));
                 Toast.makeText(PendingFeedbackActivity.this, error.getMessage(),
                         Toast.LENGTH_LONG).show();
@@ -126,22 +138,23 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
         CustomUtility.showProgressDialogue(PendingFeedbackActivity.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.SendOTP +"&mobiles="+response.getContactNo()+
-                        "&message=प्रिय उपभोक्ता, शक्ति पम्प इंस्टालेशन टीम द्वारा सोलर पम्प सफलतापूर्वक इनस्टॉल कर दिया गया है यदि आप इंस्टालेशन से संतुष्ट है " +
-                        "तो इंस्टालेशन टीम को वेरिफिकेशन कोड बताये और यदि संतुष्ट नहीं है तो कृपया इंस्टालेशन टीम को मोबाइल एप्प में कारण दर्ज करवाये " +
-                        "Verification Code - "+generatedVerificationCode+" . शक्ति पम्प&sender=SHAKTl&unicode=1&route=2&unicode=1&country=91&DLT_TE_ID=1707165768934110550",
+                WebURL.SendOTP +"&mobiles=918770957105"+
+                        "&message=आप अपने खेत में शक्ति पम्प्स (इंडिया) लिमिटेड द्वारा स्थापित "+response.getHp()+" एचपी रेटिंग सोलर पंप सेट के लिए लाभार्थी आईडी "+response.getBeneficiary()+" के संदर्भ में यह संदेश प्राप्त कर रहे हैं।" +
+                        " यह संदेश केवल आपकी प्रतिक्रिया के उद्देश्य से है शक्ति पंप्स इंस्टालर को सत्यपान कोड साझा करके आप निम्नलिखित की पुष्टि कर रहे हैं 1) आप स्थापना की गुणवत्ता से संतुष्ट हैं" +
+                        " 2) आप सोलर पंप सेट के प्रदर्शन से संतुष्ट हैं 3) इंस्टॉलर ने किसी भी प्रकार की सामग्री या स्थापना कार्य के लिए कोई राशि नहीं ली हैं यदि उपरोक्त सभी तीन कथन सही हैं, " +
+                        "तो कृपया अपने सोलर पम्प सेट की 5 वर्ष की सेवा को सक्रिय करने के लिए इंस्टॉलर के साथ सत्यपान कोड "+generatedVerificationCode+" साझा करें।:&sender=SHAKTl&route=2&country=91&DLT_TE_ID=1707167928540679513&unicode=1",
 
                 null, new Response.Listener<JSONObject >() {
             @Override
-            public void onResponse(JSONObject  response) {
+            public void onResponse(JSONObject  res) {
                 CustomUtility.hideProgressDialog(PendingFeedbackActivity.this);
 
 
-                if(response.toString()!=null && !response.toString().isEmpty()) {
-                    VerificationCodeModel verificationCodeModel = new Gson().fromJson(response.toString(), VerificationCodeModel.class);
+                if(response.toString()!=null && !res.toString().isEmpty()) {
+                    VerificationCodeModel verificationCodeModel = new Gson().fromJson(res.toString(), VerificationCodeModel.class);
                     if(verificationCodeModel.getStatus().equals("Success")) {
 
-                        ShowAlertResponse();
+                        ShowAlertResponse(response,generatedVerificationCode);
                     }
 
                 }
@@ -160,7 +173,7 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
     }
 
 
-    private void ShowAlertResponse() {
+    private void ShowAlertResponse(PendingFeedback.Response response, String generatedVerificationCode) {
         LayoutInflater inflater = (LayoutInflater) PendingFeedbackActivity.this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.send_successfully_layout,
@@ -185,6 +198,8 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
             public void onClick(View v) {
                 alertDialog.dismiss();
                 Intent intent = new Intent(PendingFeedbackActivity.this, PendingFeedBackOTPVerification.class);
+                intent.putExtra(Constant.PendingFeedback,response);
+                intent.putExtra(Constant.VerificationCode,generatedVerificationCode);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
 
