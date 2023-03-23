@@ -1,5 +1,8 @@
 package activity;
 
+import static android.os.Environment.getExternalStoragePublicDirectory;
+import static debugapp.GlobalValue.Constant.InstallationImage;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -45,9 +48,15 @@ import androidx.appcompat.widget.Toolbar;
 import com.github.angads25.toggle.interfaces.OnToggledListener;
 import com.github.angads25.toggle.model.ToggleableView;
 import com.github.angads25.toggle.widget.LabeledSwitch;
-
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.shaktipumplimited.SetParameter.PairedDeviceActivity;
+import com.shaktipumplimited.SettingModel.AllPopupUtil;
+import com.shaktipumplimited.retrofit.BaseRequest;
+import com.shaktipumplimited.retrofit.RequestReciever;
+import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -55,6 +64,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -68,24 +78,18 @@ import java.util.Map;
 import java.util.Random;
 
 import bean.BTResonseData;
+import bean.ImageModel;
 import bean.InstallationBean;
 import database.DatabaseHelper;
 import debugapp.Bean.SimDetailsInfoResponse;
 import debugapp.GlobalValue.Constant;
 import debugapp.GlobalValue.NewSolarVFD;
 import debugapp.GlobalValue.UtilMethod;
+import debugapp.PendingFeedback;
 import debugapp.localDB.DatabaseHelperTeacher;
-import com.shaktipumplimited.SetParameter.PairedDeviceActivity;
-import com.shaktipumplimited.SettingModel.AllPopupUtil;
-import com.shaktipumplimited.retrofit.BaseRequest;
-import com.shaktipumplimited.retrofit.RequestReciever;
-import com.shaktipumplimited.shaktikusum.R;
-
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
-
-import static android.os.Environment.getExternalStoragePublicDirectory;
 
 public class InstallationInitial extends AppCompatActivity {
 
@@ -293,6 +297,8 @@ public class InstallationInitial extends AppCompatActivity {
         return path.exists() && path.delete();
     }
 
+    List<ImageModel> imageList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -318,6 +324,7 @@ public class InstallationInitial extends AppCompatActivity {
         mBTResonseDataList = new ArrayList<>();
         WebURL.BT_DEBUG_CHECK = 0;
         Constant.BILL_NUMBER_UNIC = "";
+
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
@@ -681,9 +688,14 @@ public class InstallationInitial extends AppCompatActivity {
                         RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
                         RMS_SERVER_DOWN = "Working Fine";
                         System.out.println("VikasVIHU==>>" + mBTResonseDataList.get(vkp).getDEVICENO());
-                        progressDialog = ProgressDialog.show(mContext, "", "Sending Data to server..please wait !");
-                        progressDialog.show();
-                        new SyncDebugDataFromLocal().execute();
+                        if (imageList.size() > 0) {
+                            progressDialog = ProgressDialog.show(mContext, "", "Sending Data to server..please wait !");
+                            progressDialog.show();
+                            new SyncDebugDataFromLocal().execute();
+                        } else {
+                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                        }
+
                     } else {
                         saveData();
                     }
@@ -880,9 +892,9 @@ public class InstallationInitial extends AppCompatActivity {
             });
 
             try {
-
-                edit.setText(arr[i]);
-
+                if (arr.length > 0) {
+                    edit.setText(arr[i]);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -973,9 +985,6 @@ public class InstallationInitial extends AppCompatActivity {
             txtLatIDD.setText(mLAt);
             txtLongIDD.setText(mLOng);
 
-            //   inst_latitude_double = gps.getLatitude();
-            //  inst_longitude_double = gps.getLongitude();
-
             inst_latitude_double = Double.parseDouble(txtLatIDD.getText().toString().trim());
             inst_longitude_double = Double.parseDouble(txtLongIDD.getText().toString().trim());
 
@@ -1015,43 +1024,10 @@ public class InstallationInitial extends AppCompatActivity {
             }
 
             InstallationBean installationBean = new InstallationBean(pernr,
-                    project_no,
-                    login_no,
-                    inst_latitude,
-                    inst_longitude,
-                    inst_bill_no,
-                    installation_date,
-                    inst_bill_date,
-                    inst_delay_reason,
-                    rmsdata_status,
-                    customer_name,
-                    fathname,
-                    mobileno,
-                    state,
-                    state_txt,
-                    city,
-                    city_txt,
-                    tehsil_ins,
-                    village_ins,
-                    address,
-                    make,
-                    solarpanel_wattage,
-                    solarpanel_stand_ins_quantity,
-                    total_watt,
-                    hp,
-                    no_of_module,
-                    no_of_module_value,
-                    module_total_plate_watt,
-                    solar_motor_model_details,
-                    smmd_sno,
-                    splar_pump_model_details,
-                    spmd_sno,
-                    solar_controller_model,
-                    scm_sno,
-                    simoprator_text,
-                    conntype_text,
-                    simcard_num,
-                    regisno
+                    project_no, login_no, inst_latitude, inst_longitude, inst_bill_no, installation_date, inst_bill_date, inst_delay_reason, rmsdata_status, customer_name,
+                    fathname, mobileno, state, state_txt, city, city_txt, tehsil_ins, village_ins, address, make, solarpanel_wattage, solarpanel_stand_ins_quantity, total_watt,
+                    hp, no_of_module, no_of_module_value, module_total_plate_watt, solar_motor_model_details, smmd_sno, splar_pump_model_details, spmd_sno, solar_controller_model,
+                    scm_sno, simoprator_text, conntype_text, simcard_num, regisno
             );
 
             if (db.isRecordExist(db.TABLE_INSTALLATION_PUMP_DATA, db.KEY_BILL_NO, inst_bill_no)) {
@@ -1077,83 +1053,78 @@ public class InstallationInitial extends AppCompatActivity {
                                         if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
                                             if (total_watt != null && !total_watt.equals("")) {
                                                 if (conntype_text != null && !conntype_text.equals("")) {
-                                                    if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
-                                                        //   if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
-                                                        if (module_total_plate_watt != null && !module_total_plate_watt.equals("")) {
-                                                            if (smmd_sno != null && !smmd_sno.equals("")) {
-                                                                if (spmd_sno != null && !spmd_sno.equals("")) {
-                                                                    if (scm_sno != null && !scm_sno.equals("")) {
-                                                                        if (arr.length == no_of_module_value1) {
-                                                                            for (int i = 0; i < arr.length - 1; i++) {
-                                                                                if (arr[i].equalsIgnoreCase("")) {
-                                                                                    Toast.makeText(mContext, "Please Enter all module serial no.", Toast.LENGTH_SHORT).show();
-                                                                                }
+                                                    //   if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
+                                                    if (module_total_plate_watt != null && !module_total_plate_watt.equals("")) {
+                                                        if (smmd_sno != null && !smmd_sno.equals("")) {
+                                                            if (spmd_sno != null && !spmd_sno.equals("")) {
+                                                                if (scm_sno != null && !scm_sno.equals("")) {
+                                                                    if (arr.length == no_of_module_value1) {
+                                                                        for (int i = 0; i < arr.length - 1; i++) {
+                                                                            if (arr[i].equalsIgnoreCase("")) {
+                                                                                Toast.makeText(mContext, "Please Enter all module serial no.", Toast.LENGTH_SHORT).show();
                                                                             }
-                                                                            if (inst_make != null && !inst_make.equals("")) {
-                                                                                if (!TextUtils.isEmpty(borewellstatus1)) {
-                                                                                    if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
-                                                                                        //  simha2
-                                                                                        if (project_no1.equalsIgnoreCase("0201") || project_no1.equalsIgnoreCase("201") || project_no1.equalsIgnoreCase("0202") || project_no1.equalsIgnoreCase("202") || project_no1.equalsIgnoreCase("0108") || project_no1.equalsIgnoreCase("108") || project_no1.equalsIgnoreCase("0203") || project_no1.equalsIgnoreCase("203")) {
-                                                                                            new SyncInstallationData().execute();
+                                                                        }
+                                                                        if (inst_make != null && !inst_make.equals("")) {
+                                                                            if (!TextUtils.isEmpty(borewellstatus1)) {
+                                                                                if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
+                                                                                    //  simha2
+                                                                                    if (project_no1.equalsIgnoreCase("0201") || project_no1.equalsIgnoreCase("201") || project_no1.equalsIgnoreCase("0202") || project_no1.equalsIgnoreCase("202") || project_no1.equalsIgnoreCase("0108") || project_no1.equalsIgnoreCase("108") || project_no1.equalsIgnoreCase("0203") || project_no1.equalsIgnoreCase("203")) {
+                                                                                         if(imageList.size()>0) {
+                                                                                             new SyncInstallationData().execute();
+                                                                                         }else {
+                                                                                             CustomUtility.showToast(InstallationInitial.this,getResources().getString(R.string.select_image));
+                                                                                         }
+                                                                                    } else {
 
-                                                                                          /*  if(otpPupupForCusomerApproval())
+                                                                                        if (WebURL.CHECK_FINAL_ALL_OK == 1) {
+                                                                                            if(imageList.size()>0) {
                                                                                                 new SyncInstallationData().execute();
-                                                                                            else
-                                                                                                Toast.makeText(mContext, "Please varify customer OTP", Toast.LENGTH_SHORT).show();*/
+                                                                                            }else {
+                                                                                                CustomUtility.showToast(InstallationInitial.this,getResources().getString(R.string.select_image));
+                                                                                            }
+                                                                                        } else if (mSimDetailsInfoResponse.size() >= 3) {
+                                                                                            if(imageList.size()>0) {
+                                                                                                new SyncInstallationData().execute();
+                                                                                            }else {
+                                                                                                CustomUtility.showToast(InstallationInitial.this,getResources().getString(R.string.select_image));
+                                                                                            }
                                                                                         } else {
-
-                                                                                            if (WebURL.CHECK_FINAL_ALL_OK == 1) {
-                                                                                                new SyncInstallationData().execute();
-                                                                                               /* if(otpPupupForCusomerApproval())
+                                                                                            if (WebURL.BT_DEBUG_CHECK == 1) {
+                                                                                                if(imageList.size()>0) {
                                                                                                     new SyncInstallationData().execute();
-                                                                                                else
-                                                                                                    Toast.makeText(mContext, "Please varify customer OTP", Toast.LENGTH_SHORT).show();*/
-                                                                                            } else if (mSimDetailsInfoResponse.size() >= 3) {
-                                                                                                new SyncInstallationData().execute();
-                                                                                              /*  if(otpPupupForCusomerApproval())
-                                                                                                    new SyncInstallationData().execute();
-                                                                                                else
-                                                                                                    Toast.makeText(mContext, "Please varify customer OTP", Toast.LENGTH_SHORT).show();*/
-                                                                                            } else {
-                                                                                                if (WebURL.BT_DEBUG_CHECK == 1) {
-                                                                                                    new SyncInstallationData().execute();
-                                                                                                  /*  if(otpPupupForCusomerApproval())
-                                                                                                        new SyncInstallationData().execute();
-                                                                                                    else
-                                                                                                        Toast.makeText(mContext, "Please varify customer OTP", Toast.LENGTH_SHORT).show();*/
-                                                                                                } else {
-                                                                                                    Toast.makeText(mContext, "Please debug first then submite", Toast.LENGTH_SHORT).show();
+                                                                                                }else {
+                                                                                                    CustomUtility.showToast(InstallationInitial.this,getResources().getString(R.string.select_image));
                                                                                                 }
+                                                                                            } else {
+                                                                                                Toast.makeText(mContext, "Please debug first then submite", Toast.LENGTH_SHORT).show();
                                                                                             }
                                                                                         }
-
-
-                                                                                    } else {
-                                                                                        Toast.makeText(mContext, "Please Select Photos", Toast.LENGTH_SHORT).show();
                                                                                     }
+
+
                                                                                 } else {
-                                                                                    Toast.makeText(mContext, "Please Select Borewell Status.", Toast.LENGTH_SHORT).show();
+                                                                                    Toast.makeText(mContext, "Please Select Photos", Toast.LENGTH_SHORT).show();
                                                                                 }
                                                                             } else {
-                                                                                Toast.makeText(mContext, "Please Enter Make", Toast.LENGTH_SHORT).show();
+                                                                                Toast.makeText(mContext, "Please Select Borewell Status.", Toast.LENGTH_SHORT).show();
                                                                             }
                                                                         } else {
-                                                                            Toast.makeText(mContext, "Please Enter all module serial no.", Toast.LENGTH_SHORT).show();
+                                                                            Toast.makeText(mContext, "Please Enter Make", Toast.LENGTH_SHORT).show();
                                                                         }
                                                                     } else {
-                                                                        Toast.makeText(mContext, "Please Enter Controller Serial No.", Toast.LENGTH_SHORT).show();
+                                                                        Toast.makeText(mContext, "Please Enter all module serial no.", Toast.LENGTH_SHORT).show();
                                                                     }
                                                                 } else {
-                                                                    Toast.makeText(mContext, "Please Enter Pump Serial No.", Toast.LENGTH_SHORT).show();
+                                                                    Toast.makeText(mContext, "Please Enter Controller Serial No.", Toast.LENGTH_SHORT).show();
                                                                 }
                                                             } else {
-                                                                Toast.makeText(mContext, "Please Enter Motor Serial No.", Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(mContext, "Please Enter Pump Serial No.", Toast.LENGTH_SHORT).show();
                                                             }
                                                         } else {
-                                                            Toast.makeText(mContext, "Please Enter Total Module Plate Watt", Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(mContext, "Please Enter Motor Serial No.", Toast.LENGTH_SHORT).show();
                                                         }
                                                     } else {
-                                                        Toast.makeText(mContext, "Please Enter Total Plate Watt", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(mContext, "Please Enter Total Module Plate Watt", Toast.LENGTH_SHORT).show();
                                                     }
                                                 } else {
                                                     Toast.makeText(mContext, "Please Select Connection Type", Toast.LENGTH_SHORT).show();
@@ -1305,7 +1276,11 @@ public class InstallationInitial extends AppCompatActivity {
                                                                                     if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
                                                                                         //  simha2
 
-                                                                                        new SyncInstallationData().execute();
+                                                                                        if(imageList.size()>0) {
+                                                                                            new SyncInstallationData().execute();
+                                                                                        }else {
+                                                                                            CustomUtility.showToast(InstallationInitial.this,getResources().getString(R.string.select_image));
+                                                                                        }
 
                                                                                      /*   if(otpPupupForCusomerApproval())
                                                                                             new SyncInstallationData().execute();
@@ -1480,44 +1455,10 @@ public class InstallationInitial extends AppCompatActivity {
             getData();
 
             InstallationBean installationBean = new InstallationBean(pernr,
-                    project_no,
-                    login_no,
-                    inst_latitude,
-                    inst_longitude,
-                    inst_bill_no,
-                    installation_date,
-                    inst_bill_date,
-                    inst_delay_reason,
-                    rmsdata_status,
-                    customer_name,
-                    fathname,
-                    mobileno,
-                    state,
-                    state_txt,
-                    city,
-                    city_txt,
-                    tehsil_ins,
-                    village_ins,
-                    address,
-                    make,
-                    solarpanel_wattage,
-                    solarpanel_stand_ins_quantity,
-                    total_watt,
-                    hp,
-                    no_of_module,
-                    no_of_module_value,
-                    module_total_plate_watt,
-                    solar_motor_model_details,
-                    smmd_sno,
-                    splar_pump_model_details,
-                    spmd_sno,
-                    solar_controller_model,
-                    scm_sno,
-                    simoprator_text,
-                    conntype_text,
-                    simcard_num,
-                    regisno
-
+                    project_no, login_no, inst_latitude, inst_longitude, inst_bill_no, installation_date, inst_bill_date, inst_delay_reason, rmsdata_status, customer_name,
+                    fathname, mobileno, state, state_txt, city, city_txt, tehsil_ins, village_ins, address, make, solarpanel_wattage, solarpanel_stand_ins_quantity,
+                    total_watt, hp, no_of_module, no_of_module_value, module_total_plate_watt, solar_motor_model_details, smmd_sno, splar_pump_model_details, spmd_sno,
+                    solar_controller_model, scm_sno, simoprator_text, conntype_text, simcard_num, regisno
             );
 
             if (db.isRecordExist(db.TABLE_INSTALLATION_PUMP_DATA, db.KEY_BILL_NO, inst_bill_no)) {
@@ -1537,43 +1478,10 @@ public class InstallationInitial extends AppCompatActivity {
         getData();
 
         InstallationBean installationBean = new InstallationBean(pernr,
-                project_no,
-                login_no,
-                inst_latitude,
-                inst_longitude,
-                inst_bill_no,
-                inst_delay_reason,
-                installation_date,
-                inst_bill_date,
-                rmsdata_status,
-                customer_name,
-                fathname,
-                mobileno,
-                state,
-                state_txt,
-                city,
-                city_txt,
-                tehsil_ins,
-                village_ins,
-                address,
-                make,
-                solarpanel_wattage,
-                solarpanel_stand_ins_quantity,
-                total_watt,
-                hp,
-                no_of_module,
-                no_of_module_value,
-                module_total_plate_watt,
-                solar_motor_model_details,
-                smmd_sno,
-                splar_pump_model_details,
-                spmd_sno,
-                solar_controller_model,
-                scm_sno,
-                simoprator_text,
-                conntype_text,
-                simcard_num,
-                regisno
+                project_no, login_no, inst_latitude, inst_longitude, inst_bill_no, inst_delay_reason, installation_date, inst_bill_date, rmsdata_status, customer_name, fathname,
+                mobileno, state, state_txt, city, city_txt, tehsil_ins, village_ins, address, make, solarpanel_wattage, solarpanel_stand_ins_quantity, total_watt, hp,
+                no_of_module, no_of_module_value, module_total_plate_watt, solar_motor_model_details, smmd_sno, splar_pump_model_details, spmd_sno, solar_controller_model,
+                scm_sno, simoprator_text, conntype_text, simcard_num, regisno
 
         );
 
@@ -1876,7 +1784,7 @@ public class InstallationInitial extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            onResume();
+
             progressDialog.dismiss();  // dismiss dialog
         }
     }
@@ -1968,28 +1876,41 @@ public class InstallationInitial extends AppCompatActivity {
                 jsonObj.put("dbug_mob_3 ", Constant.DBUG_MOB_3);
                 jsonObj.put("dbug_ofline", Constant.DBUG_PER_OFLINE);
                 jsonObj.put("app_version", WebURL.APP_VERSION_CODE);
-                jsonObj.put("PHOTO1", CustomUtility.getSharedPreferences(mContext, billno + "PHOTO_1"));
-                jsonObj.put("PHOTO2", CustomUtility.getSharedPreferences(mContext, billno + "PHOTO_2"));
-                jsonObj.put("PHOTO3", CustomUtility.getSharedPreferences(mContext, billno + "PHOTO_3"));
-                jsonObj.put("PHOTO4", CustomUtility.getSharedPreferences(mContext, billno + "PHOTO_4"));
-                jsonObj.put("PHOTO5", CustomUtility.getSharedPreferences(mContext, billno + "PHOTO_5"));
-                jsonObj.put("PHOTO6", CustomUtility.getSharedPreferences(mContext, billno + "PHOTO_6"));
-                jsonObj.put("PHOTO7", CustomUtility.getSharedPreferences(mContext, billno + "PHOTO_7"));
-                jsonObj.put("PHOTO8", CustomUtility.getSharedPreferences(mContext, billno + "PHOTO_8"));
-                jsonObj.put("PHOTO9", CustomUtility.getSharedPreferences(mContext, billno + "PHOTO_9"));
-                jsonObj.put("PHOTO10", CustomUtility.getSharedPreferences(mContext, billno + "PHOTO_10"));
-                jsonObj.put("PHOTO11", CustomUtility.getSharedPreferences(mContext, billno + "PHOTO_11"));
-                jsonObj.put("PHOTO12", CustomUtility.getSharedPreferences(mContext, billno + "PHOTO_12"));
 
-                ja_invc_data.put(jsonObj);
 
+                if (imageList.size() > 0) {
+                    if (imageList.get(0).isImageSelected()) {
+                        jsonObj.put("PHOTO1", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(0).getImagePath()));
+                    } else if (imageList.get(1).isImageSelected()) {
+                        jsonObj.put("PHOTO2", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(1).getImagePath()));
+                    } else if (imageList.get(2).isImageSelected()) {
+                        jsonObj.put("PHOTO3", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(2).getImagePath()));
+                    } else if (imageList.get(3).isImageSelected()) {
+                        jsonObj.put("PHOTO4", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(3).getImagePath()));
+                    } else if (imageList.get(4).isImageSelected()) {
+                        jsonObj.put("PHOTO5", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(4).getImagePath()));
+                    } else if (imageList.get(5).isImageSelected()) {
+                        jsonObj.put("PHOTO6", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(5).getImagePath()));
+                    } else if (imageList.get(6).isImageSelected()) {
+                        jsonObj.put("PHOTO7", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(6).getImagePath()));
+                    } else if (imageList.get(7).isImageSelected()) {
+                        jsonObj.put("PHOTO8", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(7).getImagePath()));
+                    } else if (imageList.get(8).isImageSelected()) {
+                        jsonObj.put("PHOTO9", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(8).getImagePath()));
+                    } else if (imageList.get(9).isImageSelected()) {
+                        jsonObj.put("PHOTO10", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(9).getImagePath()));
+                    } else if (imageList.get(10).isImageSelected()) {
+                        jsonObj.put("PHOTO11", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(10).getImagePath()));
+                    }
+
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
             param1_invc.add(new BasicNameValuePair("installation", String.valueOf(ja_invc_data)));
-            Log.e("DATA", "$$$$" + param1_invc.toString());
+            Log.e("DATA", "$$$$" + jsonObj.toString());
             System.out.println("param1_invc_vihu==>>" + param1_invc.toString());
             try {
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
@@ -2014,22 +1935,12 @@ public class InstallationInitial extends AppCompatActivity {
                             CustomUtility.setSharedPreference(mContext, "INSTSYNC" + billno, "");
                             CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, "");
                             CustomUtility.setSharedPreference(mContext, "borewellstatus", "");
-                            CustomUtility.setSharedPreference(mContext, billno + "PHOTO_1", "");
-                            CustomUtility.setSharedPreference(mContext, billno + "PHOTO_2", "");
-                            CustomUtility.setSharedPreference(mContext, billno + "PHOTO_3", "");
-                            CustomUtility.setSharedPreference(mContext, billno + "PHOTO_4", "");
-                            CustomUtility.setSharedPreference(mContext, billno + "PHOTO_5", "");
-                            CustomUtility.setSharedPreference(mContext, billno + "PHOTO_6", "");
-                            CustomUtility.setSharedPreference(mContext, billno + "PHOTO_7", "");
-                            CustomUtility.setSharedPreference(mContext, billno + "PHOTO_8", "");
-                            CustomUtility.setSharedPreference(mContext, billno + "PHOTO_9", "");
-                            CustomUtility.setSharedPreference(mContext, billno + "PHOTO_10", "");
-                            CustomUtility.setSharedPreference(mContext, billno + "PHOTO_11", "");
-                            CustomUtility.setSharedPreference(mContext, billno + "PHOTO_12", "");
                             CustomUtility.setSharedPreference(mContext, "SYNCLIST", "1");
                             mDatabaseHelperTeacher.deleteSimInfoData(billno);
                             progressDialog.dismiss();
-                            finish();
+                             Intent intent = new Intent(mContext, PendingFeedbackActivity.class);
+                             startActivity(intent);
+
                         } else if (invc_done.equalsIgnoreCase("N")) {
                             Message msg = new Message();
                             msg.obj = "Data Not Submitted, Please try After Sometime.";
@@ -2069,7 +1980,7 @@ public class InstallationInitial extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            onResume();
+
             progressDialog.dismiss();  // dismiss dialog
         }
     }
@@ -2200,7 +2111,7 @@ public class InstallationInitial extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            onResume();
+
             runOnUiThread(new Runnable() {
                 public void run() {
                     try {
@@ -2344,7 +2255,7 @@ public class InstallationInitial extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            onResume();
+
             try {
                 vkp++;
                 if (vkp < mBTResonseDataList.size()) {
@@ -2374,7 +2285,11 @@ public class InstallationInitial extends AppCompatActivity {
                     mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
                     RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
                     RMS_SERVER_DOWN = "Working Fine";
-                    new SyncDebugDataFromLocal().execute();
+                    if (imageList.size() > 0) {
+                        new SyncDebugDataFromLocal().execute();
+                    } else {
+                        CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                    }
                 } else {
                     mDatabaseHelperTeacher.deleteAllDataFromTable();
                     progressDialog.dismiss();  // dismiss dialog
@@ -2384,6 +2299,25 @@ public class InstallationInitial extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        retriveArrayList();
+    }
+
+    private void retriveArrayList() {
+        imageList = new ArrayList<>();
+        String json = CustomUtility.getSharedPreferences(InstallationInitial.this, InstallationImage);
+        // below line is to get the type of our array list.
+        Type type = new TypeToken<ArrayList<ImageModel>>() {
+        }.getType();
+
+        // in below line we are getting data from gson
+        // and saving it to our array list
+        imageList = new Gson().fromJson(json, type);
     }
 
     private boolean otpPupupForCusomerApproval() {
@@ -2525,7 +2459,7 @@ public class InstallationInitial extends AppCompatActivity {
         System.out.println("jsonObject==>>" + wordsByKey);
         //old baseRequest.callAPIGETDirectURL(1, "http://login.yourbulksms.com/api/sendhttp.php?authkey=8716AQbKpjEHR5b4479de&mobiles=" + mORG_CONTACT_NO + "&message=प्रिय उपभोक्ता, शक्ति पम्प इंस्टालेशन टीम द्वारा सोलर पम्प सफलतापूर्वक इनस्टॉल कर दिया गया है यदि आप इंस्टालेशन से संतुष्ट है तो इंस्टालेशन टीम को OTP बताये और यदि संतुष्ट नहीं है तो कृपया इंस्टालेशन टीम को मोबाइल एप्प में कारण दर्ज करवाये OTP NO - " + mORG_OTP_VALUE + " . शक्ति पम्प&sender=SHAKTl&unicode=1&route=4&country=91&DLT_TE_ID=1707165768934110550");/////
 
-        baseRequest.callAPIGETDirectURL(1, "http://control.yourbulksms.com/api/sendhttp.php?authkey=393770756d707334373701&mobiles="+ mORG_CONTACT_NO +"&message=प्रिय उपभोक्ता, शक्ति पम्प इंस्टालेशन टीम द्वारा सोलर पम्प सफलतापूर्वक इनस्टॉल कर दिया गया है यदि आप इंस्टालेशन से संतुष्ट है तो इंस्टालेशन टीम को OTP बताये और यदि संतुष्ट नहीं है तो कृपया इंस्टालेशन टीम को मोबाइल एप्प में कारण दर्ज करवाये OTP NO - "+mORG_OTP_VALUE+" . शक्ति पम्प&sender=SHAKTl&unicode=1&route=2&unicode=1&country=91&DLT_TE_ID=1707165768934110550");/////
+        baseRequest.callAPIGETDirectURL(1, "http://control.yourbulksms.com/api/sendhttp.php?authkey=393770756d707334373701&mobiles=" + mORG_CONTACT_NO + "&message=प्रिय उपभोक्ता, शक्ति पम्प इंस्टालेशन टीम द्वारा सोलर पम्प सफलतापूर्वक इनस्टॉल कर दिया गया है यदि आप इंस्टालेशन से संतुष्ट है तो इंस्टालेशन टीम को OTP बताये और यदि संतुष्ट नहीं है तो कृपया इंस्टालेशन टीम को मोबाइल एप्प में कारण दर्ज करवाये OTP NO - " + mORG_OTP_VALUE + " . शक्ति पम्प&sender=SHAKTl&unicode=1&route=2&unicode=1&country=91&DLT_TE_ID=1707165768934110550");/////
 
     }
 }

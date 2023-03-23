@@ -166,10 +166,10 @@ public class Adapter_Installation_list extends RecyclerView.Adapter<Adapter_Inst
 
             InstallationBean param_invc = new InstallationBean();
             param_invc = db.getInstallationData(pernr, billno);
-            if ((!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude())) && (!TextUtils.isEmpty(param_invc.getSolarpanel_wattage())) && (!TextUtils.isEmpty(param_invc.getNo_of_module_value()))) {
+            if (param_invc!=null &&(!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude())) && (!TextUtils.isEmpty(param_invc.getSolarpanel_wattage())) && (!TextUtils.isEmpty(param_invc.getNo_of_module_value()))) {
                 holder.status.setImageResource(R.drawable.icn_yellow);
             }
-            if (!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude()) && CustomUtility.getSharedPreferences(context, "INSTSYNC" + billno).equalsIgnoreCase("1") && !TextUtils.isEmpty(param_invc.getSolarpanel_wattage()) && !TextUtils.isEmpty(param_invc.getNo_of_module_value())) {
+            if (param_invc!=null && !TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude()) && CustomUtility.getSharedPreferences(context, "INSTSYNC" + billno).equalsIgnoreCase("1") && !TextUtils.isEmpty(param_invc.getSolarpanel_wattage()) && !TextUtils.isEmpty(param_invc.getNo_of_module_value())) {
                 holder.status.setImageResource(R.drawable.right_mark_icn_green);
             }
         } catch (Exception e) {

@@ -30,6 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import bean.ImageModel;
 import bean.RegistrationBean;
 import database.DatabaseHelper;
 import utility.CustomUtility;
@@ -46,6 +48,10 @@ import webservice.WebURL;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
+import static debugapp.GlobalValue.Constant.RegistrationImage;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.shaktipumplimited.shaktikusum.R;
 
 
@@ -81,6 +87,8 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
         }
     };
     private ProgressDialog progressDialog;
+    
+    List<ImageModel>imageList;
 
    /* public static void deleteFiles(String path) {
 
@@ -476,25 +484,8 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
 
 
                                                                         RegistrationBean registrationBean = new RegistrationBean(enq_docno, pernr, project_no,
-                                                                                login_no,
-                                                                                date,
-                                                                                latitude,
-                                                                                longitude,
-                                                                                customer_name,
-                                                                                fat_name,
-                                                                                state,
-                                                                                statetxt,
-                                                                                city,
-                                                                                citytxt,
-                                                                                teh,
-                                                                                vill,
-                                                                                contact_no,
-                                                                                aadhar,
-                                                                                bankname,
-                                                                                bank_acc_no,
-                                                                                acc_type,
-                                                                                branchname,
-                                                                                ifsccode,
+                                                                                login_no, date, latitude, longitude, customer_name, fat_name, state, statetxt, city,
+                                                                                citytxt, teh, vill, contact_no, aadhar, bankname, bank_acc_no, acc_type, branchname, ifsccode,
                                                                                 amt, pdf, "1"
                                                                         );
 
@@ -505,7 +496,12 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
                                                                         }
 
                                                                         if (CustomUtility.getSharedPreferences(context, "SYNC" + enq_docno).equalsIgnoreCase("1")) {
-                                                                            new RegistrationData().execute();
+                                                                          
+                                                                             if(imageList!=null && imageList.size()>0) {
+                                                                                 new RegistrationData().execute();
+                                                                             }else {
+                                                                                 CustomUtility.showToast(CustomerRegistrationActivity.this, getResources().getString(R.string.selectRegistrationImage));
+                                                                             }
                                                                         } else {
                                                                             if (progressDialog != null)
                                                                                 progressDialog.dismiss();
@@ -515,25 +511,8 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
                                                                     } else {
                                                                         if (CustomUtility.getSharedPreferences(context, "SYNC" + enq_docno).equalsIgnoreCase("1")) {
                                                                             RegistrationBean registrationBean = new RegistrationBean(enq_docno, pernr, project_no,
-                                                                                    login_no,
-                                                                                    date,
-                                                                                    latitude,
-                                                                                    longitude,
-                                                                                    customer_name,
-                                                                                    fat_name,
-                                                                                    state,
-                                                                                    statetxt,
-                                                                                    city,
-                                                                                    citytxt,
-                                                                                    teh,
-                                                                                    vill,
-                                                                                    contact_no,
-                                                                                    aadhar,
-                                                                                    bankname,
-                                                                                    bank_acc_no,
-                                                                                    acc_type,
-                                                                                    branchname,
-                                                                                    ifsccode,
+                                                                                    login_no, date, latitude, longitude, customer_name, fat_name, state, statetxt, city,
+                                                                                    citytxt, teh, vill, contact_no, aadhar, bankname, bank_acc_no, acc_type, branchname, ifsccode,
                                                                                     amt, pdf, "1"
                                                                             );
 
@@ -659,8 +638,22 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        enq_docno = CustomUtility.getSharedPreferences(context, "enqdocid");
         super.onResume();
+        enq_docno = CustomUtility.getSharedPreferences(context, "enqdocid");
+        retriveRegistrationImages();
+
+    }
+
+    private void retriveRegistrationImages() {
+        imageList = new ArrayList<>();
+        String json = CustomUtility.getSharedPreferences(CustomerRegistrationActivity.this, RegistrationImage);
+        // below line is to get the type of our array list.
+        Type type = new TypeToken<ArrayList<ImageModel>>() {
+        }.getType();
+
+        // in below line we are getting data from gson
+        // and saving it to our array list
+        imageList = new Gson().fromJson(json, type);
 
     }
 
@@ -733,18 +726,33 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
                 jsonObj.put("IFSC_CODE", param_invc.getIfsc_code());
                 jsonObj.put("AMOUNT", param_invc.getAmount());
                 jsonObj.put("PDF", param_invc.getPdf());
-                jsonObj.put("PHOTO1", CustomUtility.getSharedPreferences(context, enq_docno + "PHOTO_1"));
-                jsonObj.put("PHOTO2", CustomUtility.getSharedPreferences(context, enq_docno + "PHOTO_2"));
-                jsonObj.put("PHOTO3", CustomUtility.getSharedPreferences(context, enq_docno + "PHOTO_3"));
-                jsonObj.put("PHOTO4", CustomUtility.getSharedPreferences(context, enq_docno + "PHOTO_4"));
-                jsonObj.put("PHOTO5", CustomUtility.getSharedPreferences(context, enq_docno + "PHOTO_5"));
-                jsonObj.put("PHOTO6", CustomUtility.getSharedPreferences(context, enq_docno + "PHOTO_6"));
-                jsonObj.put("PHOTO7", CustomUtility.getSharedPreferences(context, enq_docno + "PHOTO_7"));
-                jsonObj.put("PHOTO8", CustomUtility.getSharedPreferences(context, enq_docno + "PHOTO_8"));
-                jsonObj.put("PHOTO9", CustomUtility.getSharedPreferences(context, enq_docno + "PHOTO_9"));
-                jsonObj.put("PHOTO10", CustomUtility.getSharedPreferences(context, enq_docno + "PHOTO_10"));
-                jsonObj.put("PHOTO11", CustomUtility.getSharedPreferences(context, enq_docno + "PHOTO_11"));
-                jsonObj.put("PHOTO12", CustomUtility.getSharedPreferences(context, enq_docno + "PHOTO_12"));
+
+                if(imageList!=null && imageList.size()>0) {
+                    if (imageList.get(1).isImageSelected()) {
+                        jsonObj.put("PHOTO1", CustomUtility.getBase64FromBitmap(CustomerRegistrationActivity.this, imageList.get(1).getImagePath()));
+                    } else if (imageList.get(2).isImageSelected()) {
+                        jsonObj.put("PHOTO2", CustomUtility.getBase64FromBitmap(CustomerRegistrationActivity.this, imageList.get(2).getImagePath()));
+                    } else if (imageList.get(3).isImageSelected()) {
+                        jsonObj.put("PHOTO3", CustomUtility.getBase64FromBitmap(CustomerRegistrationActivity.this, imageList.get(3).getImagePath()));
+                    } else if (imageList.get(4).isImageSelected()) {
+                        jsonObj.put("PHOTO4", CustomUtility.getBase64FromBitmap(CustomerRegistrationActivity.this, imageList.get(4).getImagePath()));
+                    } else if (imageList.get(5).isImageSelected()) {
+                        jsonObj.put("PHOTO5", CustomUtility.getBase64FromBitmap(CustomerRegistrationActivity.this, imageList.get(5).getImagePath()));
+                    } else if (imageList.get(6).isImageSelected()) {
+                        jsonObj.put("PHOTO6", CustomUtility.getBase64FromBitmap(CustomerRegistrationActivity.this, imageList.get(6).getImagePath()));
+                    } else if (imageList.get(7).isImageSelected()) {
+                        jsonObj.put("PHOTO7", CustomUtility.getBase64FromBitmap(CustomerRegistrationActivity.this, imageList.get(7).getImagePath()));
+                    } else if (imageList.get(8).isImageSelected()) {
+                        jsonObj.put("PHOTO8", CustomUtility.getBase64FromBitmap(CustomerRegistrationActivity.this, imageList.get(8).getImagePath()));
+                    } else if (imageList.get(9).isImageSelected()) {
+                        jsonObj.put("PHOTO9", CustomUtility.getBase64FromBitmap(CustomerRegistrationActivity.this, imageList.get(9).getImagePath()));
+                    } else if (imageList.get(10).isImageSelected()) {
+                        jsonObj.put("PHOTO10", CustomUtility.getBase64FromBitmap(CustomerRegistrationActivity.this, imageList.get(10).getImagePath()));
+                    } else if (imageList.get(11).isImageSelected()) {
+                        jsonObj.put("PHOTO11", CustomUtility.getBase64FromBitmap(CustomerRegistrationActivity.this, imageList.get(11).getImagePath()));
+                    }
+
+                }
 
                 ja_invc_data.put(jsonObj);
 
@@ -800,18 +808,7 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
                             db.deleteRegistrationData(enq_docno);
                             deleteDirectory(new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REG/" + enq_docno));
                             CustomUtility.setSharedPreference(context, "enqdocid", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_1", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_2", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_3", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_4", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_5", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_6", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_7", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_8", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_9", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_10", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_11", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_12", "");
+
                             progressDialog.dismiss();
                             finish();
 
@@ -820,21 +817,6 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
                             Message msg = new Message();
                             msg.obj = "Data Not Submitted, Please try After Sometime.";
                             mHandler.sendMessage(msg);
-                           /* db.deleteRegistrationData(enq_docno);
-                            deleteFiles(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REG/" + enq_docno);
-                            CustomUtility.setSharedPreference(context, "enqdocid", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_1", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_2", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_3", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_4", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_5", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_6", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_7", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_8", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_9", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_10", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_11", "");
-                            CustomUtility.setSharedPreference(context, enq_docno + "PHOTO_12", "");*/
                             progressDialog.dismiss();
                             finish();
                         }

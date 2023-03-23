@@ -154,5 +154,55 @@
     <string name="verificationCodeSend">Verification Code Send</string>
     <string name="otp_send_successfully">verification code sent to your registerd number successfully</string>
     <string name="verificationCodeMatched">verification code verify successfully</string>
+    <string name="check_internet_connection">Please Check your Internet Connection</string>
+    <string name="photoGallery">Photo Gallery</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="select_image">Please Select Image</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="display">Display</string>
+    <string name="change">Change</string>
+    <string name="want_to_perform">What operation do you want to perform?</string>
+    <string name="selectCustomerPhoto">Please Select Customer Photo.</string>
+    <string name="selectInvoicePhoto">Please Select Invoice Photo.</string>
+    <string name="selectLR_photo">LR Photo</string>
+    <string name="writeRemark">Please enter remark</string>
+    <string name="dataSubmittedSuccessfully">Data Submitted Successfully…</string>
+    <string name="dataNotSubmitted">Data Not Submitted, Please try After Sometime.</string>
+    <string name="somethingWentWrong">Something went wrong, please try again</string>
+    <string name="pannelModeuleFrontSide">PANEL MODULE FRONT SIDE WITH FORMER</string>
+    <string name="controllerWithFormer">CONTROLLER WITH FORMER PHOTO</string>
+    <string name="dischargeWithFormer">DISCHARGE WITH FORMER PHOTO</string>
+    <string name="foundationWithFormer">FOUNDATION WITH FORMER PHOTO</string>
+    <string name="earthingAndLighting">EARTHING AND LIGHTING ARRESTOR PHOTOS</string>
+    <string name="noDuesForm">NO-DUES FORM WITH CUSTOMER SIGNATURE PHOTO</string>
+    <string name="noNetworkNoc">No Network Noc</string>
+    <string name="jointInspection">JOINT INSPECTION PHOTO WITH SIGNATURE</string>
+    <string name="delayInstallation">IF DELAY INSTALLATION WITH REASON PHOTO</string>
+    <string name="insideCOntroller">INSIDE CONTROLLER ID NUMBER PHOTOS</string>
+    <string name="outsideController">OUTSIDE CONTROLLER ID STIKER PHOTOS</string>
+
+    <string name="material_unloading_img">Material Unloading Images</string>
+    <string name="installationImg">Installation Images</string>
+    <string name="registrationImg">Registration Images</string>
+    <string name="rejectedImg">Rejected Images</string>
+    <string name="select_pannel_photo">Please select panel module front side with former Photo.</string>
+    <string name="select_controller_photo">Please select controller with former Photo.</string>
+    <string name="select_discharge_photo">Please select discharge with former Photo.</string>
+    <string name="select_foundation_photo">Please select foundation with former Photo.</string>
+    <string name="select_ethr_light_photo">Please select earthing and lighting arrestor warranty Photo.</string>
+    <string name="select_nodues_signature">Please select no-dues form with customer signature photo.</string>
+    <string name="select_noNetworkNoc">Please select No Network Noc photo.</string>
+    <string name="select_joint_inspectionphoto">Please select joint inspection photo with signature.</string>
+    <string name="select_delay_installtion_photo">Please select delay installation with delay photo.</string>
+    <string name="select_inside_controllerID">Please select inside controller id number photo.</string>
+    <string name="select_outside_controllerID">Please select outside controller id number photo.</string>
+    <string name="selectPhoto1">Please Select photo 1.</string>
+    <string name="selectPhoto2">Please Select photo 2.</string>
+    <string name="selectPhoto3">Please Select photo 3.</string>
+    <string name="selectPhoto4">Please Select photo 4.</string>
+    <string name="selectRegistrationImage">Please select registration images</string>
+    <string name="selectAllImages">Please select all images</string>
+
 
 </resources>

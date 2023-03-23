@@ -8,6 +8,7 @@ import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.os.Build.VERSION.SDK_INT;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -15,14 +16,19 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -59,7 +65,7 @@ public class SplashActivity extends Activity {
     Context mContext;
     DatabaseHelper databaseHelper;
 
-
+    boolean FineLocationAccepted,CoarseLocationAccepted,Bluetooth,ReadPhoneState,Camera,ReadPhoneStorage,WritePhoneStorage;
 
 
 
@@ -83,18 +89,23 @@ public class SplashActivity extends Activity {
     }
 
     private void CheckLoginStatus() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (databaseHelper.getLogin()) {
-                    Intent intent = new Intent(mContext, MainActivity.class);
-                    startActivity(intent);
-                } else {
-                    loginSelection();
+        if(CustomUtility.isInternetOn()) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (databaseHelper.getLogin()) {
+                        Intent intent = new Intent(mContext, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        loginSelection();
 
+                    }
                 }
-            }
-        }, 3000);
+            }, 3000);
+        }else {
+            Toast.makeText(getApplicationContext(), R.string.check_internet_connection,Toast.LENGTH_LONG).show();
+        }
     }
 
     private boolean checkPermission() {
@@ -106,17 +117,44 @@ public class SplashActivity extends Activity {
         int ReadExternalStorage = ContextCompat.checkSelfPermission(getApplicationContext(), READ_EXTERNAL_STORAGE);
         int WriteExternalStorage = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
 
-        return FineLocation == PackageManager.PERMISSION_GRANTED && CoarseLocation == PackageManager.PERMISSION_GRANTED
-                && Bluetooth == PackageManager.PERMISSION_GRANTED && PhoneState == PackageManager.PERMISSION_GRANTED
-                && Camera == PackageManager.PERMISSION_GRANTED && ReadExternalStorage == PackageManager.PERMISSION_GRANTED
-                && WriteExternalStorage == PackageManager.PERMISSION_GRANTED;
+
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            return FineLocation == PackageManager.PERMISSION_GRANTED && CoarseLocation == PackageManager.PERMISSION_GRANTED
+                    && Bluetooth == PackageManager.PERMISSION_GRANTED && PhoneState == PackageManager.PERMISSION_GRANTED
+                    && Camera == PackageManager.PERMISSION_GRANTED && Environment.isExternalStorageManager();
+        } else {
+
+            return FineLocation == PackageManager.PERMISSION_GRANTED && CoarseLocation == PackageManager.PERMISSION_GRANTED
+                    && Bluetooth == PackageManager.PERMISSION_GRANTED && PhoneState == PackageManager.PERMISSION_GRANTED
+                    && Camera == PackageManager.PERMISSION_GRANTED && ReadExternalStorage == PackageManager.PERMISSION_GRANTED
+                    && WriteExternalStorage == PackageManager.PERMISSION_GRANTED;
+        }
     }
 
     private void requestPermission() {
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, BLUETOOTH, READ_PHONE_STATE,
+                    CAMERA}, REQUEST_CODE_PERMISSION);
+        }else {
+            ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, BLUETOOTH, READ_PHONE_STATE,
+                    CAMERA, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISSION);
+        }
 
-        ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION,ACCESS_COARSE_LOCATION,BLUETOOTH,READ_PHONE_STATE,
-                CAMERA,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISSION);
 
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2296) {
+            if (SDK_INT >= Build.VERSION_CODES.R) {
+                if (Environment.isExternalStorageManager()) {
+                    // perform action when allow permission success
+                    CheckLoginStatus();
+                } else {
+                    Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 
     @Override
@@ -125,41 +163,51 @@ public class SplashActivity extends Activity {
         switch (requestCode) {
             case REQUEST_CODE_PERMISSION:
                 if (grantResults.length > 0) {
-
-                    boolean FineLocationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    boolean CoarseLocationAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                    boolean Bluetooth = grantResults[2] == PackageManager.PERMISSION_GRANTED;
-                    boolean ReadPhoneState = grantResults[3] == PackageManager.PERMISSION_GRANTED;
-                    boolean Camera = grantResults[4] == PackageManager.PERMISSION_GRANTED;
-                    boolean ReadExternalStorage = grantResults[5] == PackageManager.PERMISSION_GRANTED;
-                    boolean WriteExternalStorage = grantResults[6] == PackageManager.PERMISSION_GRANTED;
-
-
-                    if (FineLocationAccepted && CoarseLocationAccepted && Bluetooth && ReadPhoneState && Camera
-                            && ReadExternalStorage && WriteExternalStorage) {
-                        Toast.makeText(getApplicationContext(), "Permission Granted, Now you can access location data and camera.", Toast.LENGTH_LONG).show();
-                        CheckLoginStatus();
-                    } else {
-
-
-                        showMessageOKCancel("You need to allow access to all the permissions",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        requestPermissions(new String[]{ACCESS_FINE_LOCATION,ACCESS_COARSE_LOCATION,BLUETOOTH,READ_PHONE_STATE,
-                                                        CAMERA,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE},
-                                                REQUEST_CODE_PERMISSION);
-                                    }
-                                });
-                        return;
-
-
+                     FineLocationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                     CoarseLocationAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                     Bluetooth = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                     ReadPhoneState = grantResults[3] == PackageManager.PERMISSION_GRANTED;
+                     Camera = grantResults[4] == PackageManager.PERMISSION_GRANTED;
+                    if (SDK_INT < Build.VERSION_CODES.R) {
+                         ReadPhoneStorage = grantResults[5] == PackageManager.PERMISSION_GRANTED;
+                         WritePhoneStorage = grantResults[6] == PackageManager.PERMISSION_GRANTED;
                     }
+                    if (SDK_INT >= Build.VERSION_CODES.R) {
+                           if (FineLocationAccepted && CoarseLocationAccepted && Bluetooth && ReadPhoneState && Camera) {
+                               // perform action when allow permission success
+                               try {
+                                   Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                                   intent.addCategory("android.intent.category.DEFAULT");
+                                   intent.setData(Uri.parse(String.format("package:%s", getApplicationContext().getPackageName())));
+                                   startActivityForResult(intent, 2296);
+                               } catch (Exception e) {
+                                   Intent intent = new Intent();
+                                   intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                                   startActivityForResult(intent, 2296);
+                               }
+                           }
+                    } else {
+                              if( FineLocationAccepted && CoarseLocationAccepted && Bluetooth && ReadPhoneState && Camera && ReadPhoneStorage && WritePhoneStorage ){
+                                  CheckLoginStatus();
+                              }else {
+                                  checkForAlertPopup();
+                              }
+                           }
                 }
-
-
                 break;
         }
+    }
+
+    private void checkForAlertPopup() {
+        showMessageOKCancel("You need to allow access to all the permissions",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        requestPermission();
+                    }
+                });
+
+
     }
 
 
@@ -198,6 +246,7 @@ public class SplashActivity extends Activity {
                         }
                         Intent intent = new Intent(mContext, Login.class);
                         startActivity(intent);
+                        finish();
                     }else {
                         Toast.makeText(getApplicationContext(),"Login types are not available",Toast.LENGTH_LONG).show();
                     }

@@ -341,7 +341,7 @@ public class Login extends AppCompatActivity {
                        /* Intent intent = new Intent(Login.this, MainActivity.class);
                         startActivity(intent);*/
 
-                        String OTP_CHECK = CustomUtility.getSharedPreferences(context, "CHECK_OTP_VARIFED");
+                       /* String OTP_CHECK = CustomUtility.getSharedPreferences(context, "CHECK_OTP_VARIFED");
                         if(OTP_CHECK.equalsIgnoreCase("Y")) {
                             Intent intent = new Intent(context, MainActivity.class);
                             startActivity(intent);
@@ -349,7 +349,9 @@ public class Login extends AppCompatActivity {
                         else {
                             Intent intent = new Intent(Login.this, OTPGenerationActivity.class);
                             startActivity(intent);
-                        }
+                        }*/
+                        Intent intent = new Intent(Login.this, OTPGenerationActivity.class);
+                        startActivity(intent);
 
                     } else {
 

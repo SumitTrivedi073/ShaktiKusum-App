@@ -427,7 +427,7 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         try {
             // Cursor cursor = db.rawQuery("SELECT * FROM " + DEVICE_PARAMETER_TABLE_NAME +" where "+DEVICE_PARA_DEVICE_TYPE+"=?", new String[]{ DeviceType });
-            Cursor cursor = db.rawQuery("SELECT * FROM " + DEVICE_DEVICE_INFO_NAME +" WHERE DEVICE_DEVICE_NO='" + mDeviceNo + "'", null);
+            Cursor cursor = db.rawQuery("SELECT * FROM " + DEVICE_DEVICE_INFO_NAME +" WHERE deviceinfotable='" + mDeviceNo + "'", null);
             int ccccc = cursor.getCount();
             int PU = 0;
             if (cursor.getCount() > 0) {

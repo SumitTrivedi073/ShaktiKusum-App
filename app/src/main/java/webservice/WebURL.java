@@ -25,8 +25,6 @@ public class WebURL {
 
     public static final String BASEURL ="https://spprdsrvr1.shaktipumps.com:8423";
 
-
-
     public static  String ProjectNo_Con,RegNo_Con, BenificiaryNo_Con;
 
     public static final String GET_SURVEY_API = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/get_survey.htm";
