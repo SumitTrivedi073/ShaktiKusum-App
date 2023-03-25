@@ -81,43 +81,6 @@ public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAd
                 Constant.BT_DEVICE_NAME = mDeviceNameList.get(position).toString();
                 Constant.BT_DEVICE_MAC_ADDRESS = mDeviceMACAddressList.get(position).toString();
 
-                String [] mDeviceNoAr = WebURL.mDEvice_Number_CHECK.split("-");
-
-              /*  if(mDeviceNoAr.length == 6)
-                {
-                    if(WebURL.mDEvice_Number_CHECK.equalsIgnoreCase(BT_NAME_ORG))
-                    {
-                        if(Constant.Bluetooth_Activity_Navigation == 1)
-                        {
-                            Intent intent = new Intent(mContext, BlueToothDebugNewActivity.class);
-                            intent.putExtra("BtNameHead",Constant.BT_DEVICE_NAME );
-                            intent.putExtra("BtMacAddressHead",Constant.BT_DEVICE_MAC_ADDRESS );
-                            mContext.startActivity(intent);
-                        }
-                        else
-                        {
-
-                            ((Activity)mContext).finish();
-                        }
-
-                    }
-                    else
-                    {
-                        Constant.BT_DEVICE_NAME = "";
-                        Constant.BT_DEVICE_MAC_ADDRESS = "";
-                        Toast.makeText(mContext, "You are connect with wrong device number! \n Please update I base details.", Toast.LENGTH_SHORT).show();
-                        ((Activity)mContext).finish();
-                    }
-                }
-                else
-                {
-                   // WebURL.mDEvice_Number_CHECK = WebURL.mDEvice_Number_CHECK +"-0";
-                    Constant.BT_DEVICE_NAME = "";
-                    Constant.BT_DEVICE_MAC_ADDRESS = "";
-                    Toast.makeText(mContext, "You are connect with wrong device number! \n Please update I base details.", Toast.LENGTH_SHORT).show();
-                    ((Activity)mContext).finish();
-                }
-*/
                 Intent intent = new Intent(mContext, BlueToothDebugNewActivity.class);
                 intent.putExtra("BtNameHead",Constant.BT_DEVICE_NAME );
                 intent.putExtra("BtMacAddressHead",Constant.BT_DEVICE_MAC_ADDRESS );
@@ -125,39 +88,6 @@ public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAd
 
                 ((Activity)mContext).finish();
 
-              /*  if(Constant.Bluetooth_Activity_Navigation == 1)
-                {
-                    Intent intent = new Intent(mContext, BlueToothDebugNewActivity.class);
-                    intent.putExtra("BtNameHead",Constant.BT_DEVICE_NAME );
-                    intent.putExtra("BtMacAddressHead",Constant.BT_DEVICE_MAC_ADDRESS );
-                    mContext.startActivity(intent);
-                    ((Activity)mContext).finish();
-                }
-                else
-                {
-
-                    ((Activity)mContext).finish();
-                }*/
-
-
-
-
-               // Intent intent = new Intent(mContext, GetBTDATAListActivity.class);
-                /*Intent intent = new Intent(mContext, BTDemoBigDataActivity.class);
-                intent.putExtra("BtNameHead",mDeviceNameList.get(position).toString());
-                intent.putExtra("BtMacAddressHead",mDeviceMACAddressList.get(position).toString());
-                mContext.startActivity(intent);*/
-
-
-
-            /*  Constant.BT_DEVICE_NAME_CONSTANT = mDeviceNameList.get(position).toString();
-              Constant.BT_DEVICE_ADDRESS_CONSTANT = mDeviceMACAddressList.get(position).toString();
-
-                ((Activity)mContext).finish();*/
-
-            //    mContext.startActivity(new Intent(mContext, GetBTDATAListActivity.class));
-
-              //  changeButtonVisibility(true,1.0f, holder);
             }
         });
 

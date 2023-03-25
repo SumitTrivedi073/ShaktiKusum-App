@@ -102,18 +102,6 @@ public class PairedDeviceActivity extends AppCompatActivity {
         pairedDeviceList();
 
 
-     /*   if(mSettingModelResponse != null && mSettingModelResponse.size() > 0)
-            mSettingModelResponse.clear();
-
-        mSettingModelResponse = mSettingModelView.getResponse();
-
-        if (recyclerViewAdapter != null)
-            recyclerViewAdapter = null;
-
-        // recyclerViewAdapter = new HomeOrderAdapter("sss",getActivity());
-        recyclerViewAdapter = new DeviceSettingAdapter(mContext, mSettingModelResponse);
-
-        rclSettingListViewID.setAdapter(recyclerViewAdapter);*/
     }
 
     private void pairedDeviceList() {
@@ -121,16 +109,6 @@ public class PairedDeviceActivity extends AppCompatActivity {
         if (bAdapter == null) {
             Toast.makeText(getApplicationContext(), "Bluetooth Not Supported", Toast.LENGTH_SHORT).show();
         } else {
-            if (ActivityCompat.checkSelfPermission(PairedDeviceActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
             Set<BluetoothDevice> pairedDevices = bAdapter.getBondedDevices();
             List mDeviceNameList = new ArrayList();
             List mDeviceMACAddressList = new ArrayList();

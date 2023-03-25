@@ -1,5 +1,7 @@
 package utility;
 
+import static debugapp.GlobalValue.Constant.CameraAppImage;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -10,23 +12,39 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
+import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import activity.BaseActivity;
+import activity.CustomProgressDialog;
+import bean.ImageModel;
+import debugapp.GlobalValue.Constant;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.shaktipumplimited.shaktikusum.R;
 
 /**
@@ -41,7 +59,7 @@ public class CustomUtility {
     String current_date, current_time;
     Calendar calander = null;
     SimpleDateFormat simpleDateFormat = null;
-
+    public static CustomProgressDialog progressDialog;
 
 
     public static void ShowToast(String text, Context context) {
@@ -215,7 +233,7 @@ public class CustomUtility {
 
     public static boolean checkPermission(final Context context) {
         int currentAPIVersion = Build.VERSION.SDK_INT;
-        if (currentAPIVersion > Build.VERSION_CODES.LOLLIPOP) {
+        if (currentAPIVersion < 29) {
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.READ_EXTERNAL_STORAGE)) {
                     AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context,R.style.MyDialogTheme);
@@ -258,6 +276,23 @@ public class CustomUtility {
         return settings.getString(name, "");
     }
 
+
+
+
+    public static void saveArrayList(Context context, List<ImageModel> imageArrayList,String name) {
+        SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(imageArrayList);
+        editor.putString(name, json);
+        editor.commit();
+    }
+
+    public static void showToast(Context context, String message) {
+
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+    }
+
     public String getCurrentDate() {
         simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         current_date = simpleDateFormat.format(new Date());
@@ -271,6 +306,59 @@ public class CustomUtility {
         current_time = simpleDateFormat.format(calander.getTime());
         return current_time.trim();
     }
+    public static void showProgressDialogue(Context context) {
+        progressDialog = new CustomProgressDialog(context);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    public static void hideProgressDialog(Context context) {
+        if(progressDialog!=null && progressDialog.isShowing()){
+            progressDialog.dismiss();
+        }
+    }
+    public static String getBase64FromBitmap(Context context,String Imagepath) {
+        String imageString="";
+        try {
+            Bitmap bitmap = BitmapFactory.decodeFile(Imagepath);
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+            byte[] imageBytes = byteArrayOutputStream.toByteArray();
+            imageString = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return imageString;
+
+    }
 
 
+    public static void deleteArrayList(Context context,String name){
+        SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.remove(name).apply();
+
+    }
+    public static Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage,
+                "Title", null);
+        return Uri.parse(path);
+    }
+
+    public static String getRealPathFromURI(Context context, Uri uri) {
+        String path = "";
+        if (context.getContentResolver() != null) {
+            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+            if (cursor != null) {
+                cursor.moveToFirst();
+                int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                path = cursor.getString(idx);
+                cursor.close();
+            }
+        }
+        return path;
+    }
 }

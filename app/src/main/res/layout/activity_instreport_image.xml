@@ -9,239 +9,247 @@
 
     <include layout="@layout/toolbar" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/toolbar">
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/photo1"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_xxlarge45"
-                android:layout_marginStart="@dimen/space_mid10"
-                android:layout_marginTop="@dimen/space_mid6"
-                android:layout_marginEnd="@dimen/space_mid10"
-                android:layout_marginBottom="@dimen/space_large15"
-                android:background="@drawable/icn_box"
-                android:drawableEnd="@drawable/red_icn"
-                android:gravity="center_vertical"
-                android:padding="@dimen/space_mid10"
-                android:singleLine="true"
-                android:text="PANEL MODULE FRONT SIDE WITH FORMER"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12ssp" />
-
-            <TextView
-                android:id="@+id/photo2"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_xxlarge45"
-                android:layout_marginStart="@dimen/space_mid10"
-                android:layout_marginTop="@dimen/space_mid6"
-                android:layout_marginEnd="@dimen/space_mid10"
-                android:layout_marginBottom="@dimen/space_large15"
-                android:background="@drawable/icn_box"
-                android:drawableEnd="@drawable/red_icn"
-                android:gravity="center_vertical"
-                android:padding="@dimen/space_mid10"
-                android:singleLine="true"
-                android:text="CONTROLLER WITH FORMER PHOTO"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12ssp" />
 
 
-            <TextView
-                android:id="@+id/photo3"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_xxlarge45"
-                android:layout_marginStart="@dimen/space_mid10"
-                android:layout_marginTop="@dimen/space_mid6"
-                android:layout_marginEnd="@dimen/space_mid10"
-                android:layout_marginBottom="@dimen/space_large15"
-                android:background="@drawable/icn_box"
-                android:drawableEnd="@drawable/red_icn"
-                android:gravity="center_vertical"
-                android:padding="@dimen/space_mid10"
-                android:singleLine="true"
-                android:text="MOTOR PUMPS WITH FORMER PHOTO"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12ssp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        <!--  <ScrollView
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_below="@+id/toolbar">
+
+              <LinearLayout
+                  android:layout_width="fill_parent"
+                  android:layout_height="fill_parent"
+                  android:orientation="vertical">
+
+                  <TextView
+                      android:id="@+id/photo1"
+                      android:layout_width="match_parent"
+                      android:layout_height="@dimen/space_xxlarge45"
+                      android:layout_marginStart="@dimen/space_mid10"
+                      android:layout_marginTop="@dimen/space_mid6"
+                      android:layout_marginEnd="@dimen/space_mid10"
+                      android:layout_marginBottom="@dimen/space_large15"
+                      android:background="@drawable/icn_box"
+                      android:drawableEnd="@drawable/red_icn"
+                      android:gravity="center_vertical"
+                      android:padding="@dimen/space_mid10"
+                      android:singleLine="true"
+                      android:text="PANEL MODULE FRONT SIDE WITH FORMER"
+                      android:textColor="@color/black"
+                      android:textSize="@dimen/_12ssp" />
+
+                  <TextView
+                      android:id="@+id/photo2"
+                      android:layout_width="match_parent"
+                      android:layout_height="@dimen/space_xxlarge45"
+                      android:layout_marginStart="@dimen/space_mid10"
+                      android:layout_marginTop="@dimen/space_mid6"
+                      android:layout_marginEnd="@dimen/space_mid10"
+                      android:layout_marginBottom="@dimen/space_large15"
+                      android:background="@drawable/icn_box"
+                      android:drawableEnd="@drawable/red_icn"
+                      android:gravity="center_vertical"
+                      android:padding="@dimen/space_mid10"
+                      android:singleLine="true"
+                      android:text="CONTROLLER WITH FORMER PHOTO"
+                      android:textColor="@color/black"
+                      android:textSize="@dimen/_12ssp" />
 
 
-            <TextView
-                android:id="@+id/photo4"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_xxlarge45"
-                android:layout_marginStart="@dimen/space_mid10"
-                android:layout_marginTop="@dimen/space_mid6"
-                android:layout_marginEnd="@dimen/space_mid10"
-                android:layout_marginBottom="@dimen/space_large15"
-                android:background="@drawable/icn_box"
-                android:drawableEnd="@drawable/red_icn"
-                android:gravity="center_vertical"
-                android:padding="@dimen/space_mid10"
-                android:singleLine="true"
-                android:text="DISCHARGE WITH FORMER PHOTO"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12ssp" />
-
-            <TextView
-                android:id="@+id/photo5"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_xxlarge45"
-                android:layout_marginStart="@dimen/space_mid10"
-                android:layout_marginTop="@dimen/space_mid6"
-                android:layout_marginEnd="@dimen/space_mid10"
-                android:layout_marginBottom="@dimen/space_large15"
-                android:background="@drawable/icn_box"
-                android:drawableEnd="@drawable/red_icn"
-                android:gravity="center_vertical"
-                android:padding="@dimen/space_mid10"
-                android:singleLine="true"
-                android:text="FOUNDATION WITH FORMER PHOTO"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12ssp" />
-
-            <TextView
-                android:id="@+id/photo6"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_xxlarge45"
-                android:layout_marginStart="@dimen/space_mid10"
-                android:layout_marginTop="@dimen/space_mid6"
-                android:layout_marginEnd="@dimen/space_mid10"
-                android:layout_marginBottom="@dimen/space_large15"
-                android:background="@drawable/icn_box"
-                android:drawableEnd="@drawable/red_icn"
-                android:gravity="center_vertical"
-                android:padding="@dimen/space_mid10"
-                android:singleLine="true"
-                android:text="EARTHING AND LIGHTING ARRESTOR PHOTOS "
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12ssp" />
+                  <TextView
+                      android:id="@+id/photo3"
+                      android:layout_width="match_parent"
+                      android:layout_height="@dimen/space_xxlarge45"
+                      android:layout_marginStart="@dimen/space_mid10"
+                      android:layout_marginTop="@dimen/space_mid6"
+                      android:layout_marginEnd="@dimen/space_mid10"
+                      android:layout_marginBottom="@dimen/space_large15"
+                      android:background="@drawable/icn_box"
+                      android:drawableEnd="@drawable/red_icn"
+                      android:gravity="center_vertical"
+                      android:padding="@dimen/space_mid10"
+                      android:singleLine="true"
+                      android:text="MOTOR PUMPS WITH FORMER PHOTO"
+                      android:textColor="@color/black"
+                      android:textSize="@dimen/_12ssp" />
 
 
-            <TextView
-                android:id="@+id/photo7"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_xxlarge45"
-                android:layout_marginStart="@dimen/space_mid10"
-                android:layout_marginTop="@dimen/space_mid6"
-                android:layout_marginEnd="@dimen/space_mid10"
-                android:layout_marginBottom="@dimen/space_large15"
-                android:background="@drawable/icn_box"
-                android:drawableEnd="@drawable/red_icn"
-                android:gravity="center_vertical"
-                android:padding="@dimen/space_mid10"
-                android:singleLine="true"
-                android:text="NO-DUES FORM WITH CUSTOMER SIGNATURE PHOTO"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12ssp" />
+                  <TextView
+                      android:id="@+id/photo4"
+                      android:layout_width="match_parent"
+                      android:layout_height="@dimen/space_xxlarge45"
+                      android:layout_marginStart="@dimen/space_mid10"
+                      android:layout_marginTop="@dimen/space_mid6"
+                      android:layout_marginEnd="@dimen/space_mid10"
+                      android:layout_marginBottom="@dimen/space_large15"
+                      android:background="@drawable/icn_box"
+                      android:drawableEnd="@drawable/red_icn"
+                      android:gravity="center_vertical"
+                      android:padding="@dimen/space_mid10"
+                      android:singleLine="true"
+                      android:text="DISCHARGE WITH FORMER PHOTO"
+                      android:textColor="@color/black"
+                      android:textSize="@dimen/_12ssp" />
+
+                  <TextView
+                      android:id="@+id/photo5"
+                      android:layout_width="match_parent"
+                      android:layout_height="@dimen/space_xxlarge45"
+                      android:layout_marginStart="@dimen/space_mid10"
+                      android:layout_marginTop="@dimen/space_mid6"
+                      android:layout_marginEnd="@dimen/space_mid10"
+                      android:layout_marginBottom="@dimen/space_large15"
+                      android:background="@drawable/icn_box"
+                      android:drawableEnd="@drawable/red_icn"
+                      android:gravity="center_vertical"
+                      android:padding="@dimen/space_mid10"
+                      android:singleLine="true"
+                      android:text="FOUNDATION WITH FORMER PHOTO"
+                      android:textColor="@color/black"
+                      android:textSize="@dimen/_12ssp" />
+
+                  <TextView
+                      android:id="@+id/photo6"
+                      android:layout_width="match_parent"
+                      android:layout_height="@dimen/space_xxlarge45"
+                      android:layout_marginStart="@dimen/space_mid10"
+                      android:layout_marginTop="@dimen/space_mid6"
+                      android:layout_marginEnd="@dimen/space_mid10"
+                      android:layout_marginBottom="@dimen/space_large15"
+                      android:background="@drawable/icn_box"
+                      android:drawableEnd="@drawable/red_icn"
+                      android:gravity="center_vertical"
+                      android:padding="@dimen/space_mid10"
+                      android:singleLine="true"
+                      android:text="EARTHING AND LIGHTING ARRESTOR PHOTOS "
+                      android:textColor="@color/black"
+                      android:textSize="@dimen/_12ssp" />
 
 
-            <TextView
-                android:id="@+id/photo8"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_xxlarge45"
-                android:layout_marginStart="@dimen/space_mid10"
-                android:layout_marginTop="@dimen/space_mid6"
-                android:layout_marginEnd="@dimen/space_mid10"
-                android:layout_marginBottom="@dimen/space_large15"
-                android:background="@drawable/icn_box"
-                android:drawableEnd="@drawable/red_icn"
-                android:gravity="center_vertical"
-                android:padding="@dimen/space_mid10"
-                android:singleLine="true"
-                android:text="JOINT INSPECTION PHOTO WITH SIGNATURE "
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12ssp" />
-
-            <TextView
-                android:id="@+id/photo9"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_xxlarge45"
-                android:layout_marginStart="@dimen/space_mid10"
-                android:layout_marginTop="@dimen/space_mid6"
-                android:layout_marginEnd="@dimen/space_mid10"
-                android:layout_marginBottom="@dimen/space_large15"
-                android:background="@drawable/icn_box"
-                android:drawableEnd="@drawable/red_icn"
-                android:gravity="center_vertical"
-                android:padding="@dimen/space_mid10"
-                android:singleLine="true"
-                android:text="IF DELAY INSTALLATION WITH REASON PHOTO "
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12ssp" />
-
-            <TextView
-                android:id="@+id/photo10"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_xxlarge45"
-                android:layout_marginStart="@dimen/space_mid10"
-                android:layout_marginTop="@dimen/space_mid6"
-                android:layout_marginEnd="@dimen/space_mid10"
-                android:layout_marginBottom="@dimen/space_large15"
-                android:background="@drawable/icn_box"
-                android:drawableEnd="@drawable/red_icn"
-                android:gravity="center_vertical"
-                android:padding="@dimen/space_mid10"
-                android:singleLine="true"
-                android:text="INSIDE CONTROLLER ID NUMBER PHOTOS"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12ssp" />
-
-            <TextView
-                android:id="@+id/photo11"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_xxlarge45"
-                android:layout_marginStart="@dimen/space_mid10"
-                android:layout_marginTop="@dimen/space_mid6"
-                android:layout_marginEnd="@dimen/space_mid10"
-                android:layout_marginBottom="@dimen/space_large15"
-                android:background="@drawable/icn_box"
-                android:drawableEnd="@drawable/red_icn"
-                android:gravity="center_vertical"
-                android:padding="@dimen/space_mid10"
-                android:singleLine="true"
-                android:text="OUTSIDE CONTROLLER ID STIKER PHOTOS"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12ssp" />
-
-            <TextView
-                android:id="@+id/photo12"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/space_xxlarge45"
-                android:layout_marginStart="@dimen/space_mid10"
-                android:layout_marginTop="@dimen/space_mid6"
-                android:layout_marginEnd="@dimen/space_mid10"
-                android:layout_marginBottom="@dimen/space_large15"
-                android:background="@drawable/icn_box"
-                android:drawableEnd="@drawable/red_icn"
-                android:gravity="center_vertical"
-                android:padding="@dimen/space_mid10"
-                android:singleLine="true"
-                android:text="Document Photo 1"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_12ssp" />
+                  <TextView
+                      android:id="@+id/photo7"
+                      android:layout_width="match_parent"
+                      android:layout_height="@dimen/space_xxlarge45"
+                      android:layout_marginStart="@dimen/space_mid10"
+                      android:layout_marginTop="@dimen/space_mid6"
+                      android:layout_marginEnd="@dimen/space_mid10"
+                      android:layout_marginBottom="@dimen/space_large15"
+                      android:background="@drawable/icn_box"
+                      android:drawableEnd="@drawable/red_icn"
+                      android:gravity="center_vertical"
+                      android:padding="@dimen/space_mid10"
+                      android:singleLine="true"
+                      android:text="NO-DUES FORM WITH CUSTOMER SIGNATURE PHOTO"
+                      android:textColor="@color/black"
+                      android:textSize="@dimen/_12ssp" />
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/file_list"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_alignParentBottom="true"
-                android:visibility="gone"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tool:listitem="@layout/file_list_item" />
+                  <TextView
+                      android:id="@+id/photo8"
+                      android:layout_width="match_parent"
+                      android:layout_height="@dimen/space_xxlarge45"
+                      android:layout_marginStart="@dimen/space_mid10"
+                      android:layout_marginTop="@dimen/space_mid6"
+                      android:layout_marginEnd="@dimen/space_mid10"
+                      android:layout_marginBottom="@dimen/space_large15"
+                      android:background="@drawable/icn_box"
+                      android:drawableEnd="@drawable/red_icn"
+                      android:gravity="center_vertical"
+                      android:padding="@dimen/space_mid10"
+                      android:singleLine="true"
+                      android:text="JOINT INSPECTION PHOTO WITH SIGNATURE "
+                      android:textColor="@color/black"
+                      android:textSize="@dimen/_12ssp" />
+
+                  <TextView
+                      android:id="@+id/photo9"
+                      android:layout_width="match_parent"
+                      android:layout_height="@dimen/space_xxlarge45"
+                      android:layout_marginStart="@dimen/space_mid10"
+                      android:layout_marginTop="@dimen/space_mid6"
+                      android:layout_marginEnd="@dimen/space_mid10"
+                      android:layout_marginBottom="@dimen/space_large15"
+                      android:background="@drawable/icn_box"
+                      android:drawableEnd="@drawable/red_icn"
+                      android:gravity="center_vertical"
+                      android:padding="@dimen/space_mid10"
+                      android:singleLine="true"
+                      android:text="IF DELAY INSTALLATION WITH REASON PHOTO "
+                      android:textColor="@color/black"
+                      android:textSize="@dimen/_12ssp" />
+
+                  <TextView
+                      android:id="@+id/photo10"
+                      android:layout_width="match_parent"
+                      android:layout_height="@dimen/space_xxlarge45"
+                      android:layout_marginStart="@dimen/space_mid10"
+                      android:layout_marginTop="@dimen/space_mid6"
+                      android:layout_marginEnd="@dimen/space_mid10"
+                      android:layout_marginBottom="@dimen/space_large15"
+                      android:background="@drawable/icn_box"
+                      android:drawableEnd="@drawable/red_icn"
+                      android:gravity="center_vertical"
+                      android:padding="@dimen/space_mid10"
+                      android:singleLine="true"
+                      android:text="INSIDE CONTROLLER ID NUMBER PHOTOS"
+                      android:textColor="@color/black"
+                      android:textSize="@dimen/_12ssp" />
+
+                  <TextView
+                      android:id="@+id/photo11"
+                      android:layout_width="match_parent"
+                      android:layout_height="@dimen/space_xxlarge45"
+                      android:layout_marginStart="@dimen/space_mid10"
+                      android:layout_marginTop="@dimen/space_mid6"
+                      android:layout_marginEnd="@dimen/space_mid10"
+                      android:layout_marginBottom="@dimen/space_large15"
+                      android:background="@drawable/icn_box"
+                      android:drawableEnd="@drawable/red_icn"
+                      android:gravity="center_vertical"
+                      android:padding="@dimen/space_mid10"
+                      android:singleLine="true"
+                      android:text="OUTSIDE CONTROLLER ID STIKER PHOTOS"
+                      android:textColor="@color/black"
+                      android:textSize="@dimen/_12ssp" />
+
+                  <TextView
+                      android:id="@+id/photo12"
+                      android:layout_width="match_parent"
+                      android:layout_height="@dimen/space_xxlarge45"
+                      android:layout_marginStart="@dimen/space_mid10"
+                      android:layout_marginTop="@dimen/space_mid6"
+                      android:layout_marginEnd="@dimen/space_mid10"
+                      android:layout_marginBottom="@dimen/space_large15"
+                      android:background="@drawable/icn_box"
+                      android:drawableEnd="@drawable/red_icn"
+                      android:gravity="center_vertical"
+                      android:padding="@dimen/space_mid10"
+                      android:singleLine="true"
+                      android:text="Document Photo 1"
+                      android:textColor="@color/black"
+                      android:textSize="@dimen/_12ssp" />
 
 
-        </LinearLayout>
+                  <androidx.recyclerview.widget.RecyclerView
+                      android:id="@+id/file_list"
+                      android:layout_width="match_parent"
+                      android:layout_height="0dp"
+                      android:layout_alignParentBottom="true"
+                      android:visibility="gone"
+                      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                      app:layout_constraintBottom_toBottomOf="parent"
+                      tool:listitem="@layout/file_list_item" />
 
 
-    </ScrollView>
+              </LinearLayout>
 
+
+          </ScrollView>
+      -->
 </LinearLayout>

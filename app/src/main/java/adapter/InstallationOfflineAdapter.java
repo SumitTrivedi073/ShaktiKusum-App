@@ -82,42 +82,12 @@ public class InstallationOfflineAdapter extends RecyclerView.Adapter<Installatio
                     Intent in = new Intent(context, InstallationDetailOfflineActivity.class);
                     Bundle extras = new Bundle();
                     extras.putString("bill_no", responseList.get(position).getVbeln());
-//                    extras.putString("set_matno", responseList.get(position).getSetMatno());
-//                    extras.putString("simha2", responseList.get(position).getSimha2());
-//                    extras.putString("kunnr", responseList.get(position).getKunnr());
-//                    extras.putString("gst_bill_no", responseList.get(position).getGstInvNo());
-//                    extras.putString("tehvillage", responseList.get(position).getRegio());
-//                    extras.putString("bill_date", responseList.get(position).getBilldate());
-//                    extras.putString("disp_date", responseList.get(position).getDispdate());
-//                    extras.putString("name", responseList.get(position).getCustomer_name());
-//                    extras.putString("state", responseList.get(position).getState());
-//                    extras.putString("city", responseList.get(position).getCity());
-//                    extras.putString("state_txt", responseList.get(position).getStatetxt());
-//                    extras.putString("city_txt", responseList.get(position).getCitytxt());
-//                    extras.putString("address", responseList.get(position).getAddress());
-//                    extras.putString("mobile", responseList.get(position).getContact_no());
-//                    extras.putString("controller", responseList.get(position).getController());
-//                    extras.putString("motor", responseList.get(position).getMotor());
-//                    extras.putString("pump", responseList.get(position).getPump());
-//                    extras.putString("simno", responseList.get(position).getSimno());
-//                    extras.putString("regisno", responseList.get(position).getRegisno());
-//                    extras.putString("projectno", responseList.get(position).getProjectno());
-//                    extras.putString("loginno", responseList.get(position).getLoginno());
-//                    extras.putString("moduleqty", responseList.get(position).getModuleqty());
-//                    extras.putString("CUS_CONTACT_NO", responseList.get(position).getCUS_CONTACT_NO());
                     in.putExtras(extras);
                     context.startActivity(in);
             });
 
-            InstallationOfflineBean param_invc = new InstallationOfflineBean();
-//            param_invc = db.getInstallationData(pernr, billno);
-//            if ((!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude())) &&
-//                    (!TextUtils.isEmpty(param_invc.getSolarpanel_wattage())) && (!TextUtils.isEmpty(param_invc.getNo_of_module_value()))) {
-//                holder.status.setImageResource(R.drawable.icn_yellow);
-//            }
-//            if (!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude()) && CustomUtility.getSharedPreferences(context, "INSTSYNC" + billno).equalsIgnoreCase("1") && !TextUtils.isEmpty(param_invc.getSolarpanel_wattage()) && !TextUtils.isEmpty(param_invc.getNo_of_module_value())) {
-//                holder.status.setImageResource(R.drawable.right_mark_icn_green);
-//            }
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }

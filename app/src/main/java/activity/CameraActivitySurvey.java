@@ -270,6 +270,7 @@ public class CameraActivitySurvey extends Activity {
 
             camera.takePicture(null, null, new Camera.PictureCallback() {
 
+                @SuppressLint("StaticFieldLeak")
                 @Override
                 public void onPictureTaken(byte[] data, Camera camera) {
                     new AsyncTask<byte[], Void, File>() {

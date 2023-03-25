@@ -1,40 +1,18 @@
 package bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 /**
  * Created by Administrator on 12/30/2016.
  */
-public class RejectListBean {
+public class RejectListBean implements Parcelable {
 
 
-    public String
-            billno,
-            benno,
-            regno,
-            custnm,
-            photo1,
-            photo2,
-            photo3,
-            photo4,
-            photo5,
-            photo6,
-            photo7,
-            photo8,
-            photo9,
-            photo10,
-            photo11,
-            photo12,
-            remark1,
-            remark2,
-            remark3,
-            remark4,
-            remark5,
-            remark6,
-            remark7,
-            remark8,
-            remark9,
-            remark10,
-            remark11,
-            remark12;
+    public String billno, benno, regno, custnm, photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9, photo10, photo11, photo12, remark1, remark2, remark3, remark4,
+            remark5, remark6, remark7, remark8, remark9, remark10, remark11, remark12;
 
 
     public RejectListBean() {
@@ -42,73 +20,81 @@ public class RejectListBean {
 
     }
 
-
-    public RejectListBean(String bill_no_text,
-                          String ben_no_text,
-                          String reg_no_text,
-                          String cust_nm_text,
-                          String photo_1_txt,
-                          String photo_2_txt,
-                          String photo_3_txt,
-                          String photo_4_txt,
-                          String photo_5_txt,
-                          String photo_6_txt,
-                          String photo_7_txt,
-                          String photo_8_txt,
-                          String photo_9_txt,
-                          String photo_10_txt,
-                          String photo_11_txt,
-                          String photo_12_txt,
-                          String remark_1_txt,
-                          String remark_2_txt,
-                          String remark_3_txt,
-                          String remark_4_txt,
-                          String remark_5_txt,
-                          String remark_6_txt,
-                          String remark_7_txt,
-                          String remark_8_txt,
-                          String remark_9_txt,
-                          String remark_10_txt,
-                          String remark_11_txt,
-                          String remark_12_txt
-
-
-    ) {
-
-
-        billno = bill_no_text;
-        benno = ben_no_text;
-        regno = reg_no_text;
-        custnm = cust_nm_text;
-         photo1      =  photo_1_txt;
-        photo2      = photo_2_txt;
-        photo3     = photo_3_txt;
-        photo4     = photo_4_txt;
-        photo5     = photo_5_txt;
-        photo6     = photo_6_txt;
-        photo7     = photo_7_txt;
-        photo8      = photo_8_txt;
-        photo9      = photo_9_txt;
-        photo10     = photo_10_txt;
-        photo11     = photo_11_txt;
-        photo12     = photo_12_txt;
-
-            remark1   = remark_1_txt;
-            remark2      = remark_2_txt;
-            remark3     = remark_3_txt;
-            remark4     = remark_4_txt;
-            remark5     = remark_5_txt;
-            remark6     = remark_6_txt;
-            remark7     = remark_7_txt;
-            remark8     = remark_8_txt;
-            remark9     = remark_9_txt;
-            remark10     = remark_10_txt;
-            remark11     = remark_11_txt;
-            remark12     = remark_12_txt;
-
-
+    public RejectListBean(String billno, String benno, String regno, String custnm, String photo1, String photo2, String photo3, String photo4, String photo5, String photo6,
+                          String photo7, String photo8, String photo9, String photo10, String photo11, String photo12, String remark1, String remark2, String remark3,
+                          String remark4, String remark5, String remark6, String remark7, String remark8, String remark9, String remark10, String remark11, String remark12) {
+        this.billno = billno;
+        this.benno = benno;
+        this.regno = regno;
+        this.custnm = custnm;
+        this.photo1 = photo1;
+        this.photo2 = photo2;
+        this.photo3 = photo3;
+        this.photo4 = photo4;
+        this.photo5 = photo5;
+        this.photo6 = photo6;
+        this.photo7 = photo7;
+        this.photo8 = photo8;
+        this.photo9 = photo9;
+        this.photo10 = photo10;
+        this.photo11 = photo11;
+        this.photo12 = photo12;
+        this.remark1 = remark1;
+        this.remark2 = remark2;
+        this.remark3 = remark3;
+        this.remark4 = remark4;
+        this.remark5 = remark5;
+        this.remark6 = remark6;
+        this.remark7 = remark7;
+        this.remark8 = remark8;
+        this.remark9 = remark9;
+        this.remark10 = remark10;
+        this.remark11 = remark11;
+        this.remark12 = remark12;
     }
 
+    protected RejectListBean(Parcel in) {
+        billno = in.readString();
+        benno = in.readString();
+        regno = in.readString();
+        custnm = in.readString();
+        photo1 = in.readString();
+        photo2 = in.readString();
+        photo3 = in.readString();
+        photo4 = in.readString();
+        photo5 = in.readString();
+        photo6 = in.readString();
+        photo7 = in.readString();
+        photo8 = in.readString();
+        photo9 = in.readString();
+        photo10 = in.readString();
+        photo11 = in.readString();
+        photo12 = in.readString();
+        remark1 = in.readString();
+        remark2 = in.readString();
+        remark3 = in.readString();
+        remark4 = in.readString();
+        remark5 = in.readString();
+        remark6 = in.readString();
+        remark7 = in.readString();
+        remark8 = in.readString();
+        remark9 = in.readString();
+        remark10 = in.readString();
+        remark11 = in.readString();
+        remark12 = in.readString();
+    }
+
+    public static final Creator<RejectListBean> CREATOR = new Creator<RejectListBean>() {
+        @Override
+        public RejectListBean createFromParcel(Parcel in) {
+            return new RejectListBean(in);
+        }
+
+        @Override
+        public RejectListBean[] newArray(int size) {
+            return new RejectListBean[size];
+        }
+    };
 
     public String getBillno() {
         return billno;
@@ -333,5 +319,42 @@ public class RejectListBean {
 
     public void setRemark12(String remark12) {
         this.remark12 = remark12;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeString(billno);
+        parcel.writeString(benno);
+        parcel.writeString(regno);
+        parcel.writeString(custnm);
+        parcel.writeString(photo1);
+        parcel.writeString(photo2);
+        parcel.writeString(photo3);
+        parcel.writeString(photo4);
+        parcel.writeString(photo5);
+        parcel.writeString(photo6);
+        parcel.writeString(photo7);
+        parcel.writeString(photo8);
+        parcel.writeString(photo9);
+        parcel.writeString(photo10);
+        parcel.writeString(photo11);
+        parcel.writeString(photo12);
+        parcel.writeString(remark1);
+        parcel.writeString(remark2);
+        parcel.writeString(remark3);
+        parcel.writeString(remark4);
+        parcel.writeString(remark5);
+        parcel.writeString(remark6);
+        parcel.writeString(remark7);
+        parcel.writeString(remark8);
+        parcel.writeString(remark9);
+        parcel.writeString(remark10);
+        parcel.writeString(remark11);
+        parcel.writeString(remark12);
     }
 }

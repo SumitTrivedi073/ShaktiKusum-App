@@ -264,12 +264,6 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-      /*  try {
-            db.execSQL("delete  from " + DEVICE_DEVICE_INFO_NAME + " where " + DEVICE_Nikola_DEVICE_TYPE + "='" + vDeviceType+"'");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }*/
-
         // Creating content values
         ContentValues values = new ContentValues();
         values.put(DEVICE_DEVICE_NO, mDEVICE_DEVICE_NO);
@@ -290,17 +284,6 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
         values.put(DEVICE_RMS_STATUS, RMS_STATUS);
 
 
-    /*    values.put(DEVICE_INS_NAME, mDEVICE_INS_NAME);
-        values.put(DEVICE_INS_MOBILE, mDEVICE_INS_MOBILE);
-
-        values.put(DEVICE_RMS_SERVER_DOWN, RMS_SERVER_DOWN);
-        values.put(DEVICE_RMS_DEBUG_EXTRN, RMS_DEBUG_EXTRN);
-
-
-        values.put(DEVICE_RMS_CURRENT_ONLINE_STATUS, RMS_CURRENT_ONLINE_STATUS);
-        values.put(DEVICE_RMS_LAST_ONLINE_DATE, RMS_LAST_ONLINE_DATE);*/
-
-        //values.put(DEVICE_RMS_ORG_D_F, RMS_ORG_D_F);
 
         //insert row in table
         long insert = db.insert(DEVICE_DEVICE_INFO_NAME, null, values);
@@ -415,10 +398,7 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
     public List<BTResonseData> getDeviceInfoDATABTFindDebug(String mDeviceNo) {
         List<BTResonseData> mBTResonseDataList = new ArrayList<>();
         BTResonseData mBTResonseData ;
-        //customer_gps = new Customer_GPS_Search();
-        String mAllUserInfo = null;
-        // int id=-1; //0
-        String id = ""; //0
+        String id = "";
 
         String mDEVICE_DEVICE_NO,  mDEVICE_SIGNL_STREN,  mDEVICE_SIM,  mDEVICE_NET_REG,  mDEVICE_SER_CONNECT,
                 mDEVICE_CAB_CONNECT,
@@ -427,16 +407,11 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         try {
             // Cursor cursor = db.rawQuery("SELECT * FROM " + DEVICE_PARAMETER_TABLE_NAME +" where "+DEVICE_PARA_DEVICE_TYPE+"=?", new String[]{ DeviceType });
-            Cursor cursor = db.rawQuery("SELECT * FROM " + DEVICE_DEVICE_INFO_NAME +" WHERE DEVICE_DEVICE_NO='" + mDeviceNo + "'", null);
-            int ccccc = cursor.getCount();
-            int PU = 0;
+            Cursor cursor = db.rawQuery("SELECT * FROM " + DEVICE_DEVICE_INFO_NAME +" WHERE DEVICE_NO ='" + mDeviceNo + "'", null);
+
             if (cursor.getCount() > 0) {
                 if (cursor.moveToFirst()) {
-                    //  for(PU = 0 ; PU < ccccc ; PU++)
                     while (!cursor.isAfterLast()) {
-                        //cursor.moveToFirst();
-                        // id=cursor.getInt(0);
-                        // mKLPTotEnergyResponse = new KLPTotEnergyResponse();
                         mBTResonseData = new BTResonseData();
                         id = cursor.getString(cursor.getColumnIndex(LOGIN_KEY_ID));
                         mDEVICE_DEVICE_NO = cursor.getString(cursor.getColumnIndex(DEVICE_DEVICE_NO));
@@ -453,17 +428,6 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
                         mDEVICE_MUserId = cursor.getString(cursor.getColumnIndex(DEVICE_MUserId));
                         RMS_STATUS = cursor.getString(cursor.getColumnIndex(DEVICE_RMS_STATUS));
 
-                        // RMS_CURRENT_ONLINE_STATUS = cursor.getString(cursor.getColumnIndex(DEVICE_RMS_CURRENT_ONLINE_STATUS));
-                        // RMS_LAST_ONLINE_DATE = cursor.getString(cursor.getColumnIndex(DEVICE_RMS_LAST_ONLINE_DATE));
-
-                        //     mDEVICE_INS_MOBILE = cursor.getString(cursor.getColumnIndex(DEVICE_INS_MOBILE));
-                        //     mDEVICE_INS_NAME = cursor.getString(cursor.getColumnIndex(DEVICE_INS_NAME));
-
-                        //   RMS_DEBUG_EXTRN = cursor.getString(cursor.getColumnIndex(DEVICE_RMS_DEBUG_EXTRN));
-                        //  RMS_SERVER_DOWN = cursor.getString(cursor.getColumnIndex(DEVICE_RMS_SERVER_DOWN));
-                        //  RMS_ORG_D_F = cursor.getString(cursor.getColumnIndex(DEVICE_RMS_ORG_D_F));
-
-
                         mBTResonseData.setID(id);
                         mBTResonseData.setDEVICENO(mDEVICE_DEVICE_NO);
                         mBTResonseData.setSIGNLSTREN(mDEVICE_SIGNL_STREN);
@@ -479,26 +443,12 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
                         mBTResonseData.setKUNNR(mDEVICE_MUserId);
                         mBTResonseData.setRMS_STATUS(RMS_STATUS);
 
-                        //  mBTResonseData.setRMS_CURRENT_ONLINE_STATUS(RMS_CURRENT_ONLINE_STATUS);
-                        //   mBTResonseData.setRMS_LAST_ONLINE_DATE(RMS_LAST_ONLINE_DATE);
-
-                        //   mBTResonseData.setDEVICE_INS_NAME(mDEVICE_INS_NAME);
-                        //   mBTResonseData.setDEVICE_INS_MOBILE(mDEVICE_INS_MOBILE);
-
-                        //   mBTResonseData.setRMS_DEBUG_EXTRN(RMS_DEBUG_EXTRN);
-                        //   mBTResonseData.setRMS_SERVER_DOWN(RMS_SERVER_DOWN);
-                        // mBTResonseData.setRMS_ORG_D_F(RMS_ORG_D_F);
-
-
-                        //TestOne;
-                        //   TestTwo;
-                        //  Three;
                         mBTResonseDataList.add(mBTResonseData);
                         cursor.moveToNext();
                     }
                 }
 
-            }////////////addd chaech
+            }
         } catch (SQLiteException e) {
             e.printStackTrace();
 
@@ -508,7 +458,6 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
             }
             // Close database
         }
-        //mAllUserInfo = id+"SAK000IVS"+mUserID+"SAK000IVS"+mParentID+"SAK000IVS"+mUserName+"SAK000IVS"+mUserPhone+"SAK000IVS"+mClientID+"SAK000IVS"+mISLogin+"SAK000IVS"+mLoginStatus+"SAK000IVS"+mLoginActive;
         return mBTResonseDataList;
     }
 

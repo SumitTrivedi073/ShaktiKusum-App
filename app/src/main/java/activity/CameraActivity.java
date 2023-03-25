@@ -1,5 +1,6 @@
 package activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -132,10 +133,10 @@ public class CameraActivity extends Activity {
             }
             preview = new CameraPreview(this, camera);
             preview.setKeepScreenOn(true);
-            ImageManager.adjustCameraParameters(this, camera, pictureSizeStr);
+           // ImageManager.adjustCameraParameters(this, camera, pictureSizeStr);
             DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
             FrameLayout.LayoutParams p = (FrameLayout.LayoutParams) layoutPreview.getLayoutParams();
-            p.height = displayMetrics.widthPixels / 1 * 2;
+            p.height = displayMetrics.widthPixels / 2;
             layoutPreview.setLayoutParams(p);
             layoutPreview.addView(preview);
             findViewById(R.id.txtDate).bringToFront();
@@ -232,6 +233,7 @@ public class CameraActivity extends Activity {
     public void onClickCapture(View v) {
 
         camera.takePicture(null, null, new Camera.PictureCallback() {
+            @SuppressLint("StaticFieldLeak")
             @Override
             public void onPictureTaken(byte[] data, Camera camera) {
                 new AsyncTask<byte[], Void, File>() {
@@ -260,7 +262,7 @@ public class CameraActivity extends Activity {
                     protected void onPostExecute(File file) {
                         progressDialog.dismiss();
                         Intent intent = new Intent();
-                        setResult(100, intent);
+                        setResult(RESULT_OK, intent);
                         finish();//finishing activity
                         super.onPostExecute(file);
                     }

@@ -1,85 +1,78 @@
 package activity;
 
-import android.annotation.SuppressLint;
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.os.Build.VERSION.SDK_INT;
+import static debugapp.GlobalValue.Constant.RejectedImage;
+import static utility.FileUtils.getPath;
+
+import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Message;
 import android.os.StrictMode;
-import android.provider.MediaStore;
-import android.provider.OpenableColumns;
+import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
-import android.view.MenuItem;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.OrientationHelper;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import adapter.ImageAdapter;
-import database.DatabaseHelper;
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.AppSettingsDialog;
+import adapter.ImageSelectionAdapter;
+import bean.ImageModel;
+import bean.RejectListBean;
 import pub.devrel.easypermissions.EasyPermissions;
-import utility.CameraUtils;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.os.Environment.getExternalStorageDirectory;
-import static android.os.Environment.getExternalStoragePublicDirectory;
 
-import com.shaktipumplimited.shaktikusum.R;
-
-
-public class RejectInstRepImgActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
-    public static final int RC_FILE_PICKER_PERM = 321;
+public class RejectInstRepImgActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks, ImageSelectionAdapter.ImageSelectionListener {
+  /*  public static final int RC_FILE_PICKER_PERM = 321;
     public static final int BITMAP_SAMPLE_SIZE = 6;
     public static final int MEDIA_TYPE_IMAGE = 1;
+    public static final int REQUEST_CODE_PERMISSION = 123;
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     private static final int GALLERY_IMAGE_REQUEST_CODE = 101;
     Context mContext;
     DatabaseHelper dataHelper;
     double inst_latitude_double,
             inst_longitude_double;
-    String sync_data = "0",lat,lng,type="REJINST/";
+    String sync_data = "0", lat, lng, type = "REJINST/";
     int PERMISSION_ALL = 1;
     Uri fileUri1;
     String[] PERMISSIONS = {
@@ -87,7 +80,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
     };
     public static final String GALLERY_DIRECTORY_NAME = "ShaktiKusum";
     String imageStoragePath, enq_docno, photo1_text, photo2_text, photo3_text, photo4_text, photo5_text, photo6_text, photo7_text, photo8_text, photo9_text, photo10_text, photo11_text, photo12_text;
-    TextView photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9, photo10, photo11, photo12,save;
+    TextView photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9, photo10, photo11, photo12, save;
     TextView remark1, remark2, remark3, remark4, remark5, remark6, remark7, remark8, remark9, remark10, remark11, remark12;
     String remrk1, remrk2, remrk3, remrk4, remrk5, remrk6, remrk7, remrk8, remrk9, remrk10, remrk11, remrk12;
     boolean photo1_flag = false,
@@ -102,10 +95,12 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
             photo10_flag = false,
             photo11_flag = false,
             photo12_flag = false;
-    private String mHomePath, PathHolder, Filename,cust_name,userid,benno,regno,projno,pht_1,pht_2,pht_3,pht_4,pht_5,pht_6,pht_7,pht_8,pht_9,pht_10,pht_11,pht_12;
+    private String mHomePath, PathHolder, Filename, cust_name, userid, benno, regno, projno, pht_1, pht_2, pht_3, pht_4, pht_5, pht_6, pht_7, pht_8, pht_9, pht_10, pht_11, pht_12;
     private ArrayList<String> photoPaths = new ArrayList<>();
     private ArrayList<String> docPaths = new ArrayList<>();
     private RecyclerView recyclerView;
+    
+    Re
 
     public static boolean hasPermissions(Context context, String... permissions) {
         if (context != null && permissions != null) {
@@ -128,7 +123,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
         }
     };
 
- /*   public static void deleteFiles(String path) {
+ *//*   public static void deleteFiles(String path) {
 
         File file = new File(path);
 
@@ -140,31 +135,620 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
             } catch (IOException e) {
             }
         }
-    }*/
+    }*//*
 
     private boolean deleteDirectory(File path) {
-        if( path.exists() ) {
+        if (path.exists()) {
             File[] files = path.listFiles();
             if (files == null) {
                 return false;
             }
-            for(File file : files) {
-                if(file.isDirectory()) {
+            for (File file : files) {
+                if (file.isDirectory()) {
                     deleteDirectory(file);
-                }
-                else {
+                } else {
                     file.delete();
                 }
             }
         }
         return path.exists() && path.delete();
     }
+*/
+
+    private static final int REQUEST_CODE_PERMISSION = 101;
+    private static final int PICK_FROM_FILE = 102;
+    List<ImageModel> imageArrayList = new ArrayList<>();
+    List<ImageModel> imageList = new ArrayList<>();
+    RecyclerView recyclerview;
+
+    AlertDialog alertDialog;
+    int selectedIndex;
+    ImageSelectionAdapter customAdapter;
+
+    List<String> itemNameList = new ArrayList<>();
+
+    String customerName, enqDocno, benificiaryNo, regNo, projNo, userID;
+
+    Toolbar mToolbar;
+
+    RejectListBean rejectList;
+
+    TextView saveBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rejinstreport_image);
-        mContext = this;
+
+        CheakPermissions();
+    }
+
+    private void CheakPermissions() {
+        if (checkPermission()) {
+            Init();
+        } else {
+            requestPermission();
+        }
+
+    }
+
+    private void requestPermission() {
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA,
+                            Manifest.permission.MANAGE_EXTERNAL_STORAGE},
+                    REQUEST_CODE_PERMISSION);
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA,
+                            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_CODE_PERMISSION);
+
+        }
+    }
+
+    private boolean checkPermission() {
+        int cameraPermission =
+                ContextCompat.checkSelfPermission(RejectInstRepImgActivity.this, CAMERA);
+        int writeExternalStorage =
+                ContextCompat.checkSelfPermission(RejectInstRepImgActivity.this, WRITE_EXTERNAL_STORAGE);
+        int ReadExternalStorage =
+                ContextCompat.checkSelfPermission(RejectInstRepImgActivity.this, WRITE_EXTERNAL_STORAGE);
+
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            return cameraPermission == PackageManager.PERMISSION_GRANTED;
+        } else {
+            return cameraPermission == PackageManager.PERMISSION_GRANTED && writeExternalStorage == PackageManager.PERMISSION_GRANTED
+                    && ReadExternalStorage == PackageManager.PERMISSION_GRANTED;
+
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+
+            case REQUEST_CODE_PERMISSION:
+
+                if (grantResults.length > 0) {
+                    if (SDK_INT >= Build.VERSION_CODES.R) {
+                        boolean ACCESSCAMERA = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+
+
+                        if (ACCESSCAMERA) {
+                            try {
+                                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                                intent.addCategory("android.intent.category.DEFAULT");
+                                intent.setData(Uri.parse(String.format("package:%s", RejectInstRepImgActivity.this.getPackageName())));
+                                startActivityForResult(intent, 2296);
+                            } catch (Exception e) {
+                                Intent intent = new Intent();
+                                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                                startActivityForResult(intent, 2296);
+                            }
+
+                        } else {
+                            Toast.makeText(RejectInstRepImgActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        boolean ACCESSCAMERA = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                        boolean writeExternalStorage =
+                                grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                        boolean ReadExternalStorage =
+                                grantResults[2] == PackageManager.PERMISSION_GRANTED;
+
+                        if (ACCESSCAMERA && writeExternalStorage && ReadExternalStorage) {
+                            Init();
+                        } else {
+                            Toast.makeText(RejectInstRepImgActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }
+
+                break;
+        }
+    }
+
+    private void Init() {
+        recyclerview = findViewById(R.id.recyclerview);
+        saveBtn = findViewById(R.id.saveBtn);
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbar.setTitle(getResources().getString(R.string.rejectedImg));
+        retrieveValue();
+        SetAdapter();
+        listner();
+        Bundle bundle = getIntent().getExtras();
+
+    }
+
+    private void retrieveValue() {
+        rejectList = getIntent().getParcelableExtra("RejectImagesList");
+        customerName = rejectList.getCustnm();
+        enqDocno = rejectList.getBillno();
+        benificiaryNo = rejectList.getBenno();
+        regNo = rejectList.getRegno();
+        projNo = CustomUtility.getSharedPreferences(RejectInstRepImgActivity.this, "projectid");
+        userID = CustomUtility.getSharedPreferences(RejectInstRepImgActivity.this, "userid");
+    }
+
+
+    private void listner() {
+        mToolbar.setNavigationOnClickListener(view -> onBackPressed());
+
+        saveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean validate = true;
+                if (imageArrayList.size() > 0) {
+                    for (int i = 0; i < imageArrayList.size(); i++) {
+                        if (!imageArrayList.get(i).isImageSelected()) {
+                            validate = true;
+                        } else {
+                            validate = false;
+                        }
+                    }
+                    if (validate) {
+                        CustomUtility.showToast(RejectInstRepImgActivity.this, getResources().getString(R.string.selectAllImages));
+                    } else {
+                        new SyncRejInstallationData().execute();
+                    }
+                }
+
+            }
+        });
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        super.onBackPressed();
+
+
+    }
+
+    private void SetAdapter() {
+        imageArrayList = new ArrayList<>();
+        itemNameList = new ArrayList<>();
+        if (rejectList.getPhoto1() != null && !rejectList.getPhoto1().isEmpty()) {
+            itemNameList.add("Panel Module Photo");
+        }
+        if (rejectList.getPhoto2() != null && !rejectList.getPhoto2().isEmpty()) {
+            itemNameList.add("Controller Photo");
+        }
+        if (rejectList.getPhoto3() != null && !rejectList.getPhoto3().isEmpty()) {
+            itemNameList.add("Motor Pump Photo");
+        }
+        if (rejectList.getPhoto4() != null && !rejectList.getPhoto4().isEmpty()) {
+            itemNameList.add("Discharge Photo");
+        }
+        if (rejectList.getPhoto5() != null && !rejectList.getPhoto5().isEmpty()) {
+            itemNameList.add("Document Photo 1");
+        }
+        if (rejectList.getPhoto6() != null && !rejectList.getPhoto6().isEmpty()) {
+            itemNameList.add("Document Photo 2");
+        }
+        if (rejectList.getPhoto7() != null && !rejectList.getPhoto7().isEmpty()) {
+            itemNameList.add("Document Photo 3");
+        }
+        if (rejectList.getPhoto8() != null && !rejectList.getPhoto8().isEmpty()) {
+            itemNameList.add("Document Photo 4");
+        }
+        if (rejectList.getPhoto9() != null && !rejectList.getPhoto9().isEmpty()) {
+            itemNameList.add("Document Photo 5");
+        }
+        if (rejectList.getPhoto10() != null && !rejectList.getPhoto10().isEmpty()) {
+            itemNameList.add("Document Photo 6");
+        }
+        if (rejectList.getPhoto11() != null && !rejectList.getPhoto11().isEmpty()) {
+            itemNameList.add("Document Photo 7");
+        }
+        if (rejectList.getPhoto12() != null && !rejectList.getPhoto12().isEmpty()) {
+            itemNameList.add("Document Photo 8");
+        }
+
+
+        for (int i = 0; i < itemNameList.size(); i++) {
+            ImageModel imageModel = new ImageModel();
+            imageModel.setName(itemNameList.get(i));
+            imageModel.setImagePath("");
+            imageModel.setImageSelected(false);
+            imageArrayList.add(imageModel);
+        }
+
+        imageList = new ArrayList<>();
+        String json = CustomUtility.getSharedPreferences(RejectInstRepImgActivity.this, RejectedImage);
+        // below line is to get the type of our array list.
+        Type type = new TypeToken<ArrayList<ImageModel>>() {
+        }.getType();
+
+        // in below line we are getting data from gson
+        // and saving it to our array list
+        imageList = new Gson().fromJson(json, type);
+
+        if (imageArrayList.size() > 0 && imageList != null && imageList.size() > 0) {
+
+            for (int j = 0; j < imageList.size(); j++) {
+                if (imageList.get(j).isImageSelected()) {
+                    ImageModel imageModel = new ImageModel();
+                    imageModel.setName(imageList.get(j).getName());
+                    imageModel.setImagePath(imageList.get(j).getImagePath());
+                    imageModel.setImageSelected(true);
+                    imageArrayList.set(j, imageModel);
+                }
+            }
+        }
+        customAdapter = new ImageSelectionAdapter(RejectInstRepImgActivity.this, imageArrayList);
+        recyclerview.setHasFixedSize(true);
+        recyclerview.setAdapter(customAdapter);
+        customAdapter.ImageSelection(this);
+
+    }
+
+    @Override
+    public void ImageSelectionListener(ImageModel imageModelList, int position) {
+        selectedIndex = position;
+
+        if (imageModelList.isImageSelected()) {
+            selectImage("1");
+        } else {
+            selectImage("0");
+        }
+    }
+
+    private void selectImage(String value) {
+        LayoutInflater inflater = (LayoutInflater) RejectInstRepImgActivity.this.getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.pick_img_layout, null);
+        final AlertDialog.Builder builder =
+                new AlertDialog.Builder(RejectInstRepImgActivity.this, R.style.MyDialogTheme);
+
+        builder.setView(layout);
+        builder.setCancelable(true);
+        alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        alertDialog.getWindow().setGravity(Gravity.BOTTOM);
+        alertDialog.show();
+
+        TextView title = layout.findViewById(R.id.titleTxt);
+        TextView gallery = layout.findViewById(R.id.gallery);
+        TextView gamera = layout.findViewById(R.id.camera);
+        TextView cancel = layout.findViewById(R.id.cancel);
+
+        if (value.equals("0")) {
+            title.setText(getResources().getString(R.string.select_image));
+            gallery.setText(getResources().getString(R.string.gallery));
+            gamera.setText(getResources().getString(R.string.camera));
+        } else {
+            title.setText(getResources().getString(R.string.want_to_perform));
+            gallery.setText(getResources().getString(R.string.display));
+            gamera.setText(getResources().getString(R.string.change));
+        }
+
+        gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                if (value.equals("0")) {
+                    galleryIntent();
+                } else {
+                    Intent i_display_image = new Intent(RejectInstRepImgActivity.this, PhotoViewerActivity.class);
+                    i_display_image.putExtra("image_path", imageArrayList.get(selectedIndex).getImagePath());
+                    startActivity(i_display_image);
+                }
+            }
+        });
+
+        gamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                if (value.equals("0")) {
+                    cameraIntent();
+                } else {
+                    selectImage("0");
+                }
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+    }
+
+    private void galleryIntent() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);//
+        startActivityForResult(Intent.createChooser(intent, "Select File"), PICK_FROM_FILE);
+    }
+
+    private void cameraIntent() {
+
+        camraLauncher.launch(new Intent(RejectInstRepImgActivity.this, CameraActivity2.class)
+                .putExtra("cust_name", customerName));
+
+    }
+
+    ActivityResultLauncher<Intent> camraLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        if (result.getData() != null && result.getData().getExtras() != null) {
+
+                            Bundle bundle = result.getData().getExtras();
+                            Log.e("bundle====>", bundle.get("data").toString());
+                            UpdateArrayList(bundle.get("data").toString());
+
+                        }
+
+                    }
+                }
+            });
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_CANCELED) {
+            return;
+        }
+        switch (requestCode) {
+
+            case PICK_FROM_FILE:
+                try {
+                    Uri mImageCaptureUri = data.getData();
+                    String path = getPath(RejectInstRepImgActivity.this, mImageCaptureUri); // From Gallery
+                    if (path == null) {
+                        path = mImageCaptureUri.getPath(); // From File Manager
+                    }
+                    Log.e("Activity", "PathHolder22= " + path);
+                    String filename = path.substring(path.lastIndexOf("/") + 1);
+                    String file;
+                    if (filename.indexOf(".") > 0) {
+                        file = filename.substring(0, filename.lastIndexOf("."));
+                    } else {
+                        file = "";
+                    }
+                    if (TextUtils.isEmpty(file)) {
+                        Toast.makeText(RejectInstRepImgActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
+                    } else {
+                        UpdateArrayList(path);
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+
+
+            case 2296:
+                if (SDK_INT >= Build.VERSION_CODES.R) {
+                    if (Environment.isExternalStorageManager()) {
+                        // perform action when allow permission success
+                        Init();
+                    } else {
+                        Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+        }
+
+    }
+
+    private void UpdateArrayList(String path) {
+
+        ImageModel imageModel = new ImageModel();
+        imageModel.setName(imageArrayList.get(selectedIndex).getName());
+        imageModel.setImagePath(path);
+        imageModel.setImageSelected(true);
+        imageArrayList.set(selectedIndex, imageModel);
+        CustomUtility.saveArrayList(RejectInstRepImgActivity.this, imageArrayList, RejectedImage);
+        customAdapter.notifyDataSetChanged();
+
+
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
+    }
+
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+
+    }
+
+
+    private class SyncRejInstallationData extends AsyncTask<String, String, String> {
+
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+
+            progressDialog = new ProgressDialog(RejectInstRepImgActivity.this);
+            progressDialog = ProgressDialog.show(RejectInstRepImgActivity.this, "", "Sending Data to server..please wait !");
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String docno_sap = null;
+            String invc_done = null;
+            String obj2 = null;
+
+            JSONArray ja_invc_data = new JSONArray();
+
+            JSONObject jsonObj = new JSONObject();
+
+            try {
+
+                jsonObj.put("userid", userID);
+                jsonObj.put("vbeln", enqDocno);
+                jsonObj.put("beneficiary", benificiaryNo);
+                jsonObj.put("regisno", regNo);
+                jsonObj.put("project_no", projNo);
+                jsonObj.put("customer_name", customerName);
+
+
+                if (0<imageArrayList.size() && imageArrayList.get(0).isImageSelected()) {
+                    jsonObj.put("PHOTO1", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(0).getImagePath()));
+                }
+                if (1<imageArrayList.size() && imageArrayList.get(1).isImageSelected()) {
+                    jsonObj.put("PHOTO2", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(1).getImagePath()));
+                }
+                if (2<imageArrayList.size() && imageArrayList.get(2).isImageSelected()) {
+                    jsonObj.put("PHOTO3", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(2).getImagePath()));
+                }
+                if (3<imageArrayList.size() &&imageArrayList.get(3).isImageSelected()) {
+                    jsonObj.put("PHOTO4", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(3).getImagePath()));
+                }
+                if (4<imageArrayList.size() && imageArrayList.get(4).isImageSelected()) {
+                    jsonObj.put("PHOTO5", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(4).getImagePath()));
+                }
+                if (5<imageArrayList.size() && imageArrayList.get(5).isImageSelected()) {
+                    jsonObj.put("PHOTO6", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(5).getImagePath()));
+                }
+                if (6<imageArrayList.size() && imageArrayList.get(6).isImageSelected()) {
+                    jsonObj.put("PHOTO7", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(6).getImagePath()));
+                }
+                if (7<imageArrayList.size() && imageArrayList.get(7).isImageSelected()) {
+                    jsonObj.put("PHOTO8", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(7).getImagePath()));
+                }
+                if (8<imageArrayList.size() && imageArrayList.get(8).isImageSelected()) {
+                    jsonObj.put("PHOTO9", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(8).getImagePath()));
+                }
+                if (9<imageArrayList.size() && imageArrayList.get(9).isImageSelected()) {
+                    jsonObj.put("PHOTO10", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(9).getImagePath()));
+                }
+                if (10<imageArrayList.size() && imageArrayList.get(10).isImageSelected()) {
+                    jsonObj.put("PHOTO11", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(10).getImagePath()));
+                }
+                if (11<imageArrayList.size() && imageArrayList.get(11).isImageSelected()) {
+                    jsonObj.put("PHOTO12", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(11).getImagePath()));
+                }
+
+                ja_invc_data.put(jsonObj);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
+            param1_invc.add(new BasicNameValuePair("reject_installation", String.valueOf(ja_invc_data)));
+            Log.e("DATA", "$$$$" + param1_invc.toString());
+
+            System.out.println(param1_invc.toString());
+
+            try {
+
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
+                StrictMode.setThreadPolicy(policy);
+
+                obj2 = CustomHttpClient.executeHttpPost1(WebURL.REJECT_INSTALLATION, param1_invc);
+
+                Log.e("OUTPUT1", "&&&&" + obj2);
+
+                if (!obj2.isEmpty()) {
+
+                    JSONObject object = new JSONObject(obj2);
+                    String obj1 = object.getString("data_return");
+
+
+                    JSONArray ja = new JSONArray(obj1);
+
+
+                    Log.e("OUTPUT2", "&&&&" + ja.toString());
+
+                    for (int i = 0; i < ja.length(); i++) {
+
+                        JSONObject jo = ja.getJSONObject(i);
+
+
+                        docno_sap = jo.getString("mdocno");
+                        invc_done = jo.getString("return");
+
+
+                        if (invc_done.equalsIgnoreCase("Y")) {
+                              CustomUtility.deleteArrayList(RejectInstRepImgActivity.this,RejectedImage);
+                            progressDialog.dismiss();
+                            finish();
+
+                        } else if (invc_done.equalsIgnoreCase("N")) {
+
+                            /*Message msg = new Message();
+                            msg.obj = "Data Not Submitted, Please try After Sometime.";*/
+
+
+                            progressDialog.dismiss();
+                            finish();
+                        }
+
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                progressDialog.dismiss();
+            }
+
+            return obj2;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            // write display tracks logic here
+            onResume();
+            progressDialog.dismiss();  // dismiss dialog
+
+
+        }
+    }
+}
+        /*mContext = this;
 
         dataHelper = new DatabaseHelper(mContext);
 
@@ -172,112 +756,45 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
-            if(extras == null) {
+          
+                   
+                cust_name = extras.getString("cust_name");
+                enq_docno = extras.getString("bill_no");
+                benno = extras.getString("beneficiary");
+                regno = extras.getString("regisno");
+                projno = extras.getString("projno");
+                userid = extras.getString("userid");
 
-                cust_name= null;
-                enq_docno= null;
-                benno= null;
-                regno= null;
-                projno= null;
-                userid= null;
+                pht_1 = extras.getString("photo1");
+                pht_2 = extras.getString("photo2");
+                pht_3 = extras.getString("photo3");
+                pht_4 = extras.getString("photo4");
+                pht_5 = extras.getString("photo5");
+                pht_6 = extras.getString("photo6");
+                pht_7 = extras.getString("photo7");
+                pht_8 = extras.getString("photo8");
+                pht_9 = extras.getString("photo9");
+                pht_10 = extras.getString("photo10");
+                pht_11 = extras.getString("photo11");
+                pht_12 = extras.getString("photo12");
 
-                pht_1= null;
-                pht_2= null;
-                pht_3= null;
-                pht_4= null;
-                pht_5= null;
-                pht_6= null;
-                pht_7= null;
-                pht_8= null;
-                pht_9= null;
-                pht_10= null;
-                pht_11= null;
-                pht_12= null;
-
-                remrk1= null;
-                remrk2= null;
-                remrk3= null;
-                remrk4= null;
-                remrk5= null;
-                remrk6= null;
-                remrk7= null;
-                remrk8= null;
-                remrk9= null;
-                remrk10= null;
-                remrk11= null;
-                remrk12= null;
-
-            } else {
-
-                cust_name= extras.getString("cust_name");
-                enq_docno= extras.getString("bill_no");
-                benno= extras.getString("beneficiary");
-                regno= extras.getString("regisno");
-                projno= extras.getString("projno");
-                userid= extras.getString("userid");
-
-                pht_1= extras.getString("photo1");
-                pht_2= extras.getString("photo2");
-                pht_3= extras.getString("photo3");
-                pht_4= extras.getString("photo4");
-                pht_5= extras.getString("photo5");
-                pht_6= extras.getString("photo6");
-                pht_7= extras.getString("photo7");
-                pht_8= extras.getString("photo8");
-                pht_9= extras.getString("photo9");
-                pht_10= extras.getString("photo10");
-                pht_11= extras.getString("photo11");
-                pht_12= extras.getString("photo12");
-
-                remrk1= extras.getString("remark1");
-                remrk2= extras.getString("remark2");
-                remrk3= extras.getString("remark3");
-                remrk4= extras.getString("remark4");
-                remrk5= extras.getString("remark5");
-                remrk6= extras.getString("remark6");
-                remrk7= extras.getString("remark7");
-                remrk8= extras.getString("remark8");
-                remrk9= extras.getString("remark9");
-                remrk10= extras.getString("remark10");
-                remrk11= extras.getString("remark11");
-                remrk12= extras.getString("remark12");
-            }
-        } else {
-            cust_name= (String) savedInstanceState.getSerializable("cust_name");
-            enq_docno= (String) savedInstanceState.getSerializable("bill_no");
-            benno= (String) savedInstanceState.getSerializable("beneficiary");
-            regno= (String) savedInstanceState.getSerializable("regisno");
-            projno= (String) savedInstanceState.getSerializable("projno");
-            userid= (String) savedInstanceState.getSerializable("userid");
-
-            pht_1= (String) savedInstanceState.getSerializable("photo1");
-            pht_2= (String) savedInstanceState.getSerializable("photo2");
-            pht_3= (String) savedInstanceState.getSerializable("photo3");
-            pht_4= (String) savedInstanceState.getSerializable("photo4");
-            pht_5= (String) savedInstanceState.getSerializable("photo5");
-            pht_6= (String) savedInstanceState.getSerializable("photo6");
-            pht_7= (String) savedInstanceState.getSerializable("photo7");
-            pht_8= (String) savedInstanceState.getSerializable("photo8");
-            pht_9= (String) savedInstanceState.getSerializable("photo9");
-            pht_10= (String) savedInstanceState.getSerializable("photo10");
-            pht_11= (String) savedInstanceState.getSerializable("photo11");
-            pht_12= (String) savedInstanceState.getSerializable("photo12");
-
-            remrk1= (String) savedInstanceState.getSerializable("remark1");
-            remrk2= (String) savedInstanceState.getSerializable("remark2");
-            remrk3= (String) savedInstanceState.getSerializable("remark3");
-            remrk4= (String) savedInstanceState.getSerializable("remark4");
-            remrk5= (String) savedInstanceState.getSerializable("remark5");
-            remrk6= (String) savedInstanceState.getSerializable("remark6");
-            remrk7= (String) savedInstanceState.getSerializable("remark7");
-            remrk8= (String) savedInstanceState.getSerializable("remark8");
-            remrk9= (String) savedInstanceState.getSerializable("remark9");
-            remrk10= (String) savedInstanceState.getSerializable("remark10");
-            remrk11= (String) savedInstanceState.getSerializable("remark11");
-            remrk12= (String) savedInstanceState.getSerializable("remark12");
+                remrk1 = extras.getString("remark1");
+                remrk2 = extras.getString("remark2");
+                remrk3 = extras.getString("remark3");
+                remrk4 = extras.getString("remark4");
+                remrk5 = extras.getString("remark5");
+                remrk6 = extras.getString("remark6");
+                remrk7 = extras.getString("remark7");
+                remrk8 = extras.getString("remark8");
+                remrk9 = extras.getString("remark9");
+                remrk10 = extras.getString("remark10");
+                remrk11 = extras.getString("remark11");
+                remrk12 = extras.getString("remark12");
+            
+        
         }
 
-        File root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),GALLERY_DIRECTORY_NAME);
+        File root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), GALLERY_DIRECTORY_NAME);
 
         File dir = new File(root.getAbsolutePath() + "/SKAPP/REJINST/"); //it is my root directory
 
@@ -337,8 +854,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
             photo1.setVisibility(View.GONE);
             remark1.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             remark1.setText(remrk1);
         }
 
@@ -346,8 +862,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
             photo2.setVisibility(View.GONE);
             remark2.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             remark2.setText(remrk2);
         }
 
@@ -355,80 +870,70 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
             photo3.setVisibility(View.GONE);
             remark3.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             remark3.setText(remrk3);
         }
         if (pht_4 == null || pht_4.isEmpty()) {
 
             photo4.setVisibility(View.GONE);
             remark4.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             remark4.setText(remrk4);
         }
         if (pht_5 == null || pht_5.isEmpty()) {
 
             photo5.setVisibility(View.GONE);
             remark5.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             remark5.setText(remrk5);
         }
         if (pht_6 == null || pht_6.isEmpty()) {
 
             photo6.setVisibility(View.GONE);
             remark6.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             remark6.setText(remrk6);
         }
         if (pht_7 == null || pht_7.isEmpty()) {
 
             photo7.setVisibility(View.GONE);
             remark7.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             remark7.setText(remrk7);
         }
         if (pht_8 == null || pht_8.isEmpty()) {
 
             photo8.setVisibility(View.GONE);
             remark8.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             remark8.setText(remrk8);
         }
         if (pht_9 == null || pht_9.isEmpty()) {
             photo9.setVisibility(View.GONE);
             remark9.setVisibility(View.GONE);
 
-        }
-        else{
+        } else {
             remark9.setText(remrk9);
         }
         if (pht_10 == null || pht_10.isEmpty()) {
 
             photo10.setVisibility(View.GONE);
             remark10.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             remark10.setText(remrk10);
         }
         if (pht_11 == null || pht_11.isEmpty()) {
 
             photo11.setVisibility(View.GONE);
             remark11.setVisibility(View.GONE);
-        }
-        else{
+        } else {
             remark11.setText(remrk11);
         }
         if (pht_12 == null || pht_12.isEmpty()) {
             photo12.setVisibility(View.GONE);
             remark12.setVisibility(View.GONE);
 
-        }
-        else{
+        } else {
             remark12.setText(remrk12);
         }
 
@@ -630,12 +1135,10 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(CustomUtility.isInternetOn())
-                {
+                if (CustomUtility.isInternetOn()) {
 
                     Save();
-                }
-                else{
+                } else {
                     Toast.makeText(mContext, "Please connect to internet...", Toast.LENGTH_SHORT).show();
                 }
 
@@ -648,47 +1151,123 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
     public void openCamera(String name) {
 
-        if (CameraUtils.checkPermissions(mContext)) {
-
-           /* Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-            String from = "INST/";
-
-            File file = CameraUtils.getOutputMediaFile(MEDIA_TYPE_IMAGE, enq_docno, name, from);
-
-            if (file != null) {
-                imageStoragePath = file.getAbsolutePath();
-                Log.e("PATH", "&&&" + imageStoragePath);
-            }
-
-            fileUri1 = CameraUtils.getOutputMediaFileUri(mContext, file);
-
-            Log.e("fileUri", "&&&" + fileUri1);
-
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri1);
-
-            // start the image capture Intent
-            startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
-*/
-
-            File file = new File(ImageManager.getMediaFilePath(type,name, enq_docno));
-
-            imageStoragePath = file.getAbsolutePath();
-            Log.e("PATH", "&&&" + imageStoragePath);
-
-            Intent i = new Intent(mContext, CameraActivity.class);
-            i.putExtra("lat", String.valueOf(inst_latitude_double));
-            i.putExtra("lng", String.valueOf(inst_longitude_double));
-            i.putExtra("cust_name", cust_name);
-            i.putExtra("inst_id", enq_docno);
-            i.putExtra("type", "REJINST/");
-            i.putExtra("name", name);
-
-            startActivityForResult(i, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
-        }
+        CheakPermissions();
 
 
     }
+
+    private void CheakPermissions() {
+        if (checkPermission()) {
+            cameraIntent();
+        } else {
+            requestPermission();
+        }
+
+    }
+
+    private void requestPermission() {
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA,
+                            Manifest.permission.MANAGE_EXTERNAL_STORAGE},
+                    REQUEST_CODE_PERMISSION);
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA,
+                            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_CODE_PERMISSION);
+
+        }
+    }
+
+    private boolean checkPermission() {
+        int cameraPermission =
+                ContextCompat.checkSelfPermission(RejectInstRepImgActivity.this, CAMERA);
+        int writeExternalStorage =
+                ContextCompat.checkSelfPermission(RejectInstRepImgActivity.this, WRITE_EXTERNAL_STORAGE);
+        int ReadExternalStorage =
+                ContextCompat.checkSelfPermission(RejectInstRepImgActivity.this, WRITE_EXTERNAL_STORAGE);
+
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            return cameraPermission == PackageManager.PERMISSION_GRANTED;
+        } else {
+            return cameraPermission == PackageManager.PERMISSION_GRANTED && writeExternalStorage == PackageManager.PERMISSION_GRANTED
+                    && ReadExternalStorage == PackageManager.PERMISSION_GRANTED;
+
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+
+            case REQUEST_CODE_PERMISSION:
+
+                if (grantResults.length > 0) {
+                    if (SDK_INT >= Build.VERSION_CODES.R) {
+                        boolean ACCESSCAMERA = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+
+
+                        if (ACCESSCAMERA) {
+                            try {
+                                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                                intent.addCategory("android.intent.category.DEFAULT");
+                                intent.setData(Uri.parse(String.format("package:%s", RejectInstRepImgActivity.this.getPackageName())));
+                                startActivityForResult(intent, 2296);
+                            } catch (Exception e) {
+                                Intent intent = new Intent();
+                                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                                startActivityForResult(intent, 2296);
+                            }
+
+                        } else {
+                            Toast.makeText(RejectInstRepImgActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        boolean ACCESSCAMERA = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                        boolean writeExternalStorage =
+                                grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                        boolean ReadExternalStorage =
+                                grantResults[2] == PackageManager.PERMISSION_GRANTED;
+
+                        if (ACCESSCAMERA && writeExternalStorage && ReadExternalStorage) {
+                            cameraIntent();
+                        } else {
+                            Toast.makeText(RejectInstRepImgActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }
+
+                break;
+        }
+    }
+
+    private void cameraIntent() {
+        camraLauncher.launch(new Intent(RejectInstRepImgActivity.this, CameraActivity2.class)
+                .putExtra("cust_name", cust_name));
+    }
+
+    ActivityResultLauncher<Intent> camraLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        if (result.getData() != null && result.getData().getExtras() != null) {
+
+                            Bundle bundle = result.getData().getExtras();
+                            Log.e("bundle====>", bundle.get("data").toString());
+                            UpdateArrayList(bundle.get("data").toString());
+
+                        }
+
+                    }
+                }
+            });
 
     @AfterPermissionGranted(RC_FILE_PICKER_PERM)
     public void pickDocClicked() {
@@ -767,62 +1346,62 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
     private void setData() {
 
 
-        File file = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_1.jpg");
+        File file = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_1.jpg");
         if (file.exists()) {
             photo1_text = file.getAbsolutePath();
         }
 
-        File file1 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_2.jpg");
+        File file1 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_2.jpg");
         if (file1.exists()) {
             photo2_text = file1.getAbsolutePath();
         }
 
-        File file2 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_3.jpg");
+        File file2 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_3.jpg");
         if (file2.exists()) {
             photo3_text = file2.getAbsolutePath();
         }
 
-        File file3 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_4.jpg");
+        File file3 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_4.jpg");
         if (file3.exists()) {
             photo4_text = file3.getAbsolutePath();
         }
 
-        File file4 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_5.jpg");
+        File file4 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_5.jpg");
         if (file4.exists()) {
             photo5_text = file4.getAbsolutePath();
         }
 
-        File file5 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_6.jpg");
+        File file5 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_6.jpg");
         if (file5.exists()) {
             photo6_text = file5.getAbsolutePath();
         }
 
-        File file6 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_7.jpg");
+        File file6 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_7.jpg");
         if (file6.exists()) {
             photo7_text = file6.getAbsolutePath();
         }
 
-        File file7 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_8.jpg");
+        File file7 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_8.jpg");
         if (file7.exists()) {
             photo8_text = file7.getAbsolutePath();
         }
 
-        File file8 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_9.jpg");
+        File file8 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_9.jpg");
         if (file8.exists()) {
             photo9_text = file8.getAbsolutePath();
         }
 
-        File file9 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_10.jpg");
+        File file9 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_10.jpg");
         if (file9.exists()) {
             photo10_text = file9.getAbsolutePath();
         }
 
-        File file10 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_11.jpg");
+        File file10 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_11.jpg");
         if (file10.exists()) {
             photo11_text = file10.getAbsolutePath();
         }
 
-        File file11 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_12.jpg");
+        File file11 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_12.jpg");
         if (file11.exists()) {
             photo12_text = file11.getAbsolutePath();
         }
@@ -865,165 +1444,164 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
         if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
 
-                try {
+            try {
 
-                    Bitmap bitmap = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, imageStoragePath);
+                Bitmap bitmap = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, imageStoragePath);
 
-                    int count = bitmap.getByteCount();
+                int count = bitmap.getByteCount();
 
-                    Log.e("Count", "&&&&&" + count);
+                Log.e("Count", "&&&&&" + count);
 
-                    Log.e("IMAGEURI", "&&&&" + imageStoragePath);
+                Log.e("IMAGEURI", "&&&&" + imageStoragePath);
 
-                    ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
+                ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
 
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayBitmapStream);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayBitmapStream);
 
-                    byte[] byteArray = byteArrayBitmapStream.toByteArray();
+                byte[] byteArray = byteArrayBitmapStream.toByteArray();
 
-                    long size = byteArray.length;
+                long size = byteArray.length;
 
-                    Log.e("SIZE1234", "&&&&" + size);
+                Log.e("SIZE1234", "&&&&" + size);
 
-                    Log.e("SIZE1234", "&&&&" + Arrays.toString(byteArray));
+                Log.e("SIZE1234", "&&&&" + Arrays.toString(byteArray));
 
 
-                    if (photo1_flag == true) {
-                        File file = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_1.jpg");
-                        if (file.exists()) {
-                            photo1_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                            setIcon(DatabaseHelper.KEY_PHOTO1);
-                            CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_1", photo1_text);
-                            Log.e("SIZE1", "&&&&" + CustomUtility.getSharedPreferences(mContext, enq_docno + "PHOTO_1"));
-
-                        }
+                if (photo1_flag == true) {
+                    File file = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_1.jpg");
+                    if (file.exists()) {
+                        photo1_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                        setIcon(DatabaseHelper.KEY_PHOTO1);
+                        CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_1", photo1_text);
+                        Log.e("SIZE1", "&&&&" + CustomUtility.getSharedPreferences(mContext, enq_docno + "PHOTO_1"));
 
                     }
 
-                    if (photo2_flag == true) {
-                        File file1 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_2.jpg");
-                        if (file1.exists()) {
-                            photo2_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                            setIcon(DatabaseHelper.KEY_PHOTO2);
-                            CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_2", photo2_text);
-                            Log.e("SIZE2", "&&&&" + photo2_text);
-
-                        }
-                    }
-                    if (photo3_flag == true) {
-                        File file2 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_3.jpg");
-                        if (file2.exists()) {
-                            photo3_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                            CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_3", photo3_text);
-                            Log.e("SIZE3", "&&&&" + photo3_text);
-                            setIcon(DatabaseHelper.KEY_PHOTO3);
-                        }
-                    }
-
-                    if (photo4_flag == true) {
-                        File file3 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_4.jpg");
-                        if (file3.exists()) {
-                            photo4_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                            CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_4", photo4_text);
-                            Log.e("SIZE4", "&&&&" + photo4_text);
-                            setIcon(DatabaseHelper.KEY_PHOTO4);
-                        }
-                    }
-
-                    if (photo5_flag == true) {
-                        File file4 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_5.jpg");
-                        if (file4.exists()) {
-                            photo5_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                            CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_5", photo5_text);
-                            Log.e("SIZE5", "&&&&" + photo5_text);
-                            setIcon(DatabaseHelper.KEY_PHOTO5);
-                        }
-                    }
-
-                    if (photo6_flag == true) {
-                        File file5 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_6.jpg");
-                        if (file5.exists()) {
-                            photo6_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                            CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_6", photo6_text);
-                            Log.e("SIZE6", "&&&&" + photo6_text);
-                            setIcon(DatabaseHelper.KEY_PHOTO6);
-                        }
-                    }
-
-                    if (photo7_flag == true) {
-                        File file6 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_7.jpg");
-                        if (file6.exists()) {
-                            photo7_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                            CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_7", photo7_text);
-                            Log.e("SIZE7", "&&&&" + photo7_text);
-                            setIcon(DatabaseHelper.KEY_PHOTO7);
-                        }
-                    }
-
-                    if (photo8_flag == true) {
-                        File file7 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_8.jpg");
-                        if (file7.exists()) {
-                            photo8_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                            CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_8", photo8_text);
-                            Log.e("SIZE8", "&&&&" + photo8_text);
-                            setIcon(DatabaseHelper.KEY_PHOTO8);
-                        }
-                    }
-
-                    if (photo9_flag == true) {
-                        File file8 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_9.jpg");
-                        if (file8.exists()) {
-                            photo9_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                            CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_9", photo9_text);
-                            Log.e("SIZE9", "&&&&" + photo9_text);
-                            setIcon(DatabaseHelper.KEY_PHOTO9);
-                        }
-
-                    }
-
-                    if (photo10_flag == true) {
-                        File file9 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_10.jpg");
-                        if (file9.exists()) {
-                            photo10_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                            CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_10", photo10_text);
-                            Log.e("SIZE10", "&&&&" + photo10_text);
-                            setIcon(DatabaseHelper.KEY_PHOTO10);
-                        }
-                    }
-
-                    if (photo11_flag == true) {
-                        File file10 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_11.jpg");
-                        if (file10.exists()) {
-                            photo11_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                            CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_11", photo11_text);
-                            Log.e("SIZE11", "&&&&" + photo11_text);
-                            setIcon(DatabaseHelper.KEY_PHOTO11);
-                        }
-                    }
-
-
-                    if (photo12_flag == true) {
-                        File file11 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_12.jpg");
-                        if (file11.exists()) {
-                            photo12_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                            CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_12", photo12_text);
-                            Log.e("SIZE11", "&&&&" + photo12_text);
-                            setIcon(DatabaseHelper.KEY_PHOTO12);
-                        }
-                    }
-
-
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
                 }
 
-             /*   File file = newworkorder File(imageStoragePath);
+                if (photo2_flag == true) {
+                    File file1 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_2.jpg");
+                    if (file1.exists()) {
+                        photo2_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                        setIcon(DatabaseHelper.KEY_PHOTO2);
+                        CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_2", photo2_text);
+                        Log.e("SIZE2", "&&&&" + photo2_text);
+
+                    }
+                }
+                if (photo3_flag == true) {
+                    File file2 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_3.jpg");
+                    if (file2.exists()) {
+                        photo3_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                        CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_3", photo3_text);
+                        Log.e("SIZE3", "&&&&" + photo3_text);
+                        setIcon(DatabaseHelper.KEY_PHOTO3);
+                    }
+                }
+
+                if (photo4_flag == true) {
+                    File file3 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_4.jpg");
+                    if (file3.exists()) {
+                        photo4_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                        CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_4", photo4_text);
+                        Log.e("SIZE4", "&&&&" + photo4_text);
+                        setIcon(DatabaseHelper.KEY_PHOTO4);
+                    }
+                }
+
+                if (photo5_flag == true) {
+                    File file4 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_5.jpg");
+                    if (file4.exists()) {
+                        photo5_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                        CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_5", photo5_text);
+                        Log.e("SIZE5", "&&&&" + photo5_text);
+                        setIcon(DatabaseHelper.KEY_PHOTO5);
+                    }
+                }
+
+                if (photo6_flag == true) {
+                    File file5 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_6.jpg");
+                    if (file5.exists()) {
+                        photo6_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                        CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_6", photo6_text);
+                        Log.e("SIZE6", "&&&&" + photo6_text);
+                        setIcon(DatabaseHelper.KEY_PHOTO6);
+                    }
+                }
+
+                if (photo7_flag == true) {
+                    File file6 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_7.jpg");
+                    if (file6.exists()) {
+                        photo7_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                        CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_7", photo7_text);
+                        Log.e("SIZE7", "&&&&" + photo7_text);
+                        setIcon(DatabaseHelper.KEY_PHOTO7);
+                    }
+                }
+
+                if (photo8_flag == true) {
+                    File file7 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_8.jpg");
+                    if (file7.exists()) {
+                        photo8_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                        CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_8", photo8_text);
+                        Log.e("SIZE8", "&&&&" + photo8_text);
+                        setIcon(DatabaseHelper.KEY_PHOTO8);
+                    }
+                }
+
+                if (photo9_flag == true) {
+                    File file8 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_9.jpg");
+                    if (file8.exists()) {
+                        photo9_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                        CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_9", photo9_text);
+                        Log.e("SIZE9", "&&&&" + photo9_text);
+                        setIcon(DatabaseHelper.KEY_PHOTO9);
+                    }
+
+                }
+
+                if (photo10_flag == true) {
+                    File file9 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_10.jpg");
+                    if (file9.exists()) {
+                        photo10_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                        CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_10", photo10_text);
+                        Log.e("SIZE10", "&&&&" + photo10_text);
+                        setIcon(DatabaseHelper.KEY_PHOTO10);
+                    }
+                }
+
+                if (photo11_flag == true) {
+                    File file10 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_11.jpg");
+                    if (file10.exists()) {
+                        photo11_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                        CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_11", photo11_text);
+                        Log.e("SIZE11", "&&&&" + photo11_text);
+                        setIcon(DatabaseHelper.KEY_PHOTO11);
+                    }
+                }
+
+
+                if (photo12_flag == true) {
+                    File file11 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_12.jpg");
+                    if (file11.exists()) {
+                        photo12_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                        CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_12", photo12_text);
+                        Log.e("SIZE11", "&&&&" + photo12_text);
+                        setIcon(DatabaseHelper.KEY_PHOTO12);
+                    }
+                }
+
+
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+
+                File file = newworkorder File(imageStoragePath);
                 if (file.exists()) {
                     file.delete();
-                }*/
+                }
 
-        }
-        else {
+        } else {
             if (requestCode == GALLERY_IMAGE_REQUEST_CODE) {
 
                 if (resultCode == RESULT_OK) {
@@ -1045,7 +1623,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                             Log.e("IMAGEURI", "&&&&" + selectedImageUri);
                             if (selectedImageUri != null) {
 
-                                Bitmap bitmap  = BitmapFactory.decodeFile(selectedImagePath, options);
+                                Bitmap bitmap = BitmapFactory.decodeFile(selectedImagePath, options);
 
                                 //Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImageUri));
 
@@ -1055,7 +1633,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                                 Log.e("Count", "&&&&&" + count);
                                 ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
 
-                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayBitmapStream);
+                                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayBitmapStream);
 
                                 byte[] byteArray = byteArrayBitmapStream.toByteArray();
 
@@ -1067,9 +1645,9 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                                 Log.e("SIZE1234", "&&&&" + Arrays.toString(byteArray));
 
                                 if (photo1_flag == true) {
-                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_1.jpg";
+                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_1.jpg";
                                     copyFile(selectedImagePath, destFile);
-                                    File file = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_1.jpg");
+                                    File file = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_1.jpg");
                                     if (file.exists()) {
                                         photo1_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
                                         CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_1", photo1_text);
@@ -1080,9 +1658,9 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                                 }
 
                                 if (photo2_flag == true) {
-                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_2.jpg";
+                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_2.jpg";
                                     copyFile(selectedImagePath, destFile);
-                                    File file1 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_2.jpg");
+                                    File file1 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_2.jpg");
                                     if (file1.exists()) {
                                         photo2_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
                                         CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_2", photo2_text);
@@ -1091,9 +1669,9 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                                     }
                                 }
                                 if (photo3_flag == true) {
-                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_3.jpg";
+                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_3.jpg";
                                     copyFile(selectedImagePath, destFile);
-                                    File file2 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_3.jpg");
+                                    File file2 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_3.jpg");
                                     if (file2.exists()) {
                                         photo3_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
                                         CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_3", photo3_text);
@@ -1103,9 +1681,9 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                                 }
 
                                 if (photo4_flag == true) {
-                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_4.jpg";
+                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_4.jpg";
                                     copyFile(selectedImagePath, destFile);
-                                    File file3 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_4.jpg");
+                                    File file3 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_4.jpg");
                                     if (file3.exists()) {
                                         photo4_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
                                         CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_4", photo4_text);
@@ -1115,9 +1693,9 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                                 }
 
                                 if (photo5_flag == true) {
-                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_5.jpg";
+                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_5.jpg";
                                     copyFile(selectedImagePath, destFile);
-                                    File file4 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_5.jpg");
+                                    File file4 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_5.jpg");
                                     if (file4.exists()) {
                                         photo5_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
                                         CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_5", photo5_text);
@@ -1127,9 +1705,9 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                                 }
 
                                 if (photo6_flag == true) {
-                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_6.jpg";
+                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_6.jpg";
                                     copyFile(selectedImagePath, destFile);
-                                    File file5 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_6.jpg");
+                                    File file5 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_6.jpg");
                                     if (file5.exists()) {
                                         photo6_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
                                         CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_6", photo6_text);
@@ -1139,9 +1717,9 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                                 }
 
                                 if (photo7_flag == true) {
-                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_7.jpg";
+                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_7.jpg";
                                     copyFile(selectedImagePath, destFile);
-                                    File file6 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_7.jpg");
+                                    File file6 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_7.jpg");
                                     if (file6.exists()) {
                                         photo7_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
                                         CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_7", photo7_text);
@@ -1151,9 +1729,9 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                                 }
 
                                 if (photo8_flag == true) {
-                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_8.jpg";
+                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_8.jpg";
                                     copyFile(selectedImagePath, destFile);
-                                    File file7 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_8.jpg");
+                                    File file7 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_8.jpg");
                                     if (file7.exists()) {
                                         photo8_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
                                         CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_8", photo8_text);
@@ -1163,9 +1741,9 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                                 }
 
                                 if (photo9_flag == true) {
-                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_9.jpg";
+                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_9.jpg";
                                     copyFile(selectedImagePath, destFile);
-                                    File file8 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_9.jpg");
+                                    File file8 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_9.jpg");
                                     if (file8.exists()) {
                                         photo9_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
                                         CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_9", photo9_text);
@@ -1176,9 +1754,9 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                                 }
 
                                 if (photo10_flag == true) {
-                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_10.jpg";
+                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_10.jpg";
                                     copyFile(selectedImagePath, destFile);
-                                    File file9 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_10.jpg");
+                                    File file9 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_10.jpg");
                                     if (file9.exists()) {
                                         photo10_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
                                         CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_10", photo10_text);
@@ -1188,9 +1766,9 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                                 }
 
                                 if (photo11_flag == true) {
-                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_11.jpg";
+                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_11.jpg";
                                     copyFile(selectedImagePath, destFile);
-                                    File file10 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_11.jpg");
+                                    File file10 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_11.jpg");
                                     if (file10.exists()) {
                                         photo11_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
                                         CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_11", photo11_text);
@@ -1201,9 +1779,9 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
 
                                 if (photo12_flag == true) {
-                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_12.jpg";
+                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno + "/IMG_PHOTO_12.jpg";
                                     copyFile(selectedImagePath, destFile);
-                                    File file11 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_12.jpg");
+                                    File file11 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_12.jpg");
                                     if (file11.exists()) {
                                         photo12_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
                                         CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_12", photo12_text);
@@ -1327,7 +1905,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
     public void showConfirmationAlert(final String keyimage, final String data, final String name) {
 
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext,R.style.MyDialogTheme);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext, R.style.MyDialogTheme);
         // Setting Dialog Title
         alertDialog.setTitle("Confirmation");
         // Setting Dialog Message
@@ -1429,7 +2007,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
         final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Cancel"};
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext,R.style.MyDialogTheme);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.MyDialogTheme);
         builder.setTitle("Add Photo!");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
@@ -1464,62 +2042,62 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
         String pht1 = null, pht2 = null, pht3 = null, pht4 = null, pht5 = null, pht6 = null, pht7 = null, pht8 = null, pht9 = null, pht10 = null, pht11 = null, pht12 = null;
 
 
-        File file = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_1.jpg");
+        File file = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_1.jpg");
         if (file.exists()) {
             pht1 = file.getAbsolutePath();
         }
 
-        File file1 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_2.jpg");
+        File file1 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_2.jpg");
         if (file1.exists()) {
             pht2 = file1.getAbsolutePath();
         }
 
-        File file2 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_3.jpg");
+        File file2 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_3.jpg");
         if (file2.exists()) {
             pht3 = file2.getAbsolutePath();
         }
 
-        File file3 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_4.jpg");
+        File file3 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_4.jpg");
         if (file3.exists()) {
             pht4 = file3.getAbsolutePath();
         }
 
-        File file4 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_5.jpg");
+        File file4 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_5.jpg");
         if (file4.exists()) {
             pht5 = file4.getAbsolutePath();
         }
 
-        File file5 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_6.jpg");
+        File file5 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_6.jpg");
         if (file5.exists()) {
             pht6 = file5.getAbsolutePath();
         }
 
-        File file6 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_7.jpg");
+        File file6 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_7.jpg");
         if (file6.exists()) {
             pht7 = file6.getAbsolutePath();
         }
 
-        File file7 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_8.jpg");
+        File file7 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_8.jpg");
         if (file7.exists()) {
             pht8 = file7.getAbsolutePath();
         }
 
-        File file8 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_9.jpg");
+        File file8 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_9.jpg");
         if (file8.exists()) {
             pht9 = file8.getAbsolutePath();
         }
 
-        File file9 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_10.jpg");
+        File file9 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_10.jpg");
         if (file9.exists()) {
             pht10 = file9.getAbsolutePath();
         }
 
-        File file10 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_11.jpg");
+        File file10 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_11.jpg");
         if (file10.exists()) {
             pht11 = file10.getAbsolutePath();
         }
 
-        File file11 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_12.jpg");
+        File file11 = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/REJINST/" + enq_docno, "/IMG_PHOTO_12.jpg");
         if (file11.exists()) {
             pht12 = file11.getAbsolutePath();
         }
@@ -1793,15 +2371,6 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
-
-
-    @Override
     public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
     }
 
@@ -1819,11 +2388,11 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
         if (gps.canGetLocation()) {
             inst_latitude_double = gps.getLatitude();
             inst_longitude_double = gps.getLongitude();
-          /*  if (inst_latitude_double == 0.0) {
+            if (inst_latitude_double == 0.0) {
                 CustomUtility.ShowToast("Lat Long not captured, Please try again.", mContext);
             } else {
                 //CustomUtility.ShowToast("Latitude:-" + inst_latitude_double + "     " + "Longitude:-" + inst_longitude_double, mContext);
-            }*/
+            }
         } else {
             gps.showSettingsAlert();
         }
@@ -1876,7 +2445,6 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                 jsonObj.put("PHOTO12", CustomUtility.getSharedPreferences(mContext, enq_docno + "PHOTO_12"));
 
 
-
                 ja_invc_data.put(jsonObj);
 
             } catch (Exception e) {
@@ -1895,7 +2463,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
                 StrictMode.setThreadPolicy(policy);
 
-                obj2 = CustomHttpClient.executeHttpPost1(WebURL.REJECT_INSTALLATION,param1_invc);
+                obj2 = CustomHttpClient.executeHttpPost1(WebURL.REJECT_INSTALLATION, param1_invc);
 
                 Log.e("OUTPUT1", "&&&&" + obj2);
 
@@ -1952,7 +2520,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                             msg.obj = "Data Not Submitted, Please try After Sometime.";
                             mHandler2.sendMessage(msg);
 
-                            /*deleteFiles(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno);
+                            deleteFiles(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME  + "/SKAPP/REJINST/" + enq_docno);
 
                             CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_1", "");
                             CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_2", "");
@@ -1965,7 +2533,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                             CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_9", "");
                             CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_10", "");
                             CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_11", "");
-                            CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_12", "");*/
+                            CustomUtility.setSharedPreference(mContext, enq_docno + "PHOTO_12", "");
                             progressDialog.dismiss();
                             finish();
                         }
@@ -1992,5 +2560,4 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
         }
     }
 
-
-}
+}*/
