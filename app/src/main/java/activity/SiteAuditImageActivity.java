@@ -73,7 +73,6 @@ public class SiteAuditImageActivity extends AppCompatActivity implements EasyPer
             photo3_flag = false,
             photo4_flag = false;
 
-    private RecyclerView recyclerView;
 
     public static boolean hasPermissions(Context context, String... permissions) {
         if (context != null && permissions != null) {
@@ -149,7 +148,6 @@ public class SiteAuditImageActivity extends AppCompatActivity implements EasyPer
         photo3 = (TextView) findViewById(R.id.photo3);
         photo4 = (TextView) findViewById(R.id.photo4);
 
-        recyclerView = (RecyclerView) findViewById(R.id.file_list);
 
         setData();
 

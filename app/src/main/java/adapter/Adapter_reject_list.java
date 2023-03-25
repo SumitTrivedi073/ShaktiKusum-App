@@ -60,29 +60,29 @@ public class Adapter_reject_list extends RecyclerView.Adapter<Adapter_reject_lis
     @Override
     public void onBindViewHolder(@NonNull final HomeCategoryViewHolder holder, final int position) {
 
-        try {
 
-            if (!TextUtils.isEmpty(responseList.get(position).getBillno())) {
+        RejectListBean rejectList = responseList.get(position);
+            if (!TextUtils.isEmpty(rejectList.getBillno())) {
 
-                holder.bill_no.setText(responseList.get(position).getBillno());
-
-            }
-
-            if (!TextUtils.isEmpty(responseList.get(position).getBenno())) {
-
-                holder.ben_no.setText(responseList.get(position).getBenno());
+                holder.bill_no.setText(rejectList.getBillno());
 
             }
 
-            if (!TextUtils.isEmpty(responseList.get(position).getRegno())) {
+            if (!TextUtils.isEmpty(rejectList.getBenno())) {
 
-                holder.reg_no.setText(responseList.get(position).getRegno());
+                holder.ben_no.setText(rejectList.getBenno());
 
             }
 
-            if (!TextUtils.isEmpty(responseList.get(position).getCustnm())) {
+            if (!TextUtils.isEmpty(rejectList.getRegno())) {
 
-                holder.cust_nm.setText(responseList.get(position).getCustnm());
+                holder.reg_no.setText(rejectList.getRegno());
+
+            }
+
+            if (!TextUtils.isEmpty(rejectList.getCustnm())) {
+
+                holder.cust_nm.setText(rejectList.getCustnm());
 
             }
 
@@ -92,54 +92,13 @@ public class Adapter_reject_list extends RecyclerView.Adapter<Adapter_reject_lis
                 public void onClick(View view) {
 
                         Intent in = new Intent(context, RejectInstRepImgActivity.class);
-
-
-                        Bundle extras = new Bundle();
-                        extras.putString("bill_no", responseList.get(position).getBillno());
-                        extras.putString("userid", CustomUtility.getSharedPreferences(context, "userid"));
-                        extras.putString("regisno", responseList.get(position).getRegno());
-                        extras.putString("beneficiary", responseList.get(position).getBenno());
-                        extras.putString("projno", CustomUtility.getSharedPreferences(context, "projectid"));
-                        extras.putString("cust_name", responseList.get(position).getCustnm());
-
-
-                        extras.putString("photo1", responseList.get(position).getPhoto1());
-                        extras.putString("photo2", responseList.get(position).getPhoto2());
-                        extras.putString("photo3", responseList.get(position).getPhoto3());
-                        extras.putString("photo4", responseList.get(position).getPhoto4());
-                        extras.putString("photo5", responseList.get(position).getPhoto5());
-                        extras.putString("photo6", responseList.get(position).getPhoto6());
-                        extras.putString("photo7", responseList.get(position).getPhoto7());
-                        extras.putString("photo8", responseList.get(position).getPhoto8());
-                        extras.putString("photo9", responseList.get(position).getPhoto9());
-                        extras.putString("photo10", responseList.get(position).getPhoto10());
-                        extras.putString("photo11", responseList.get(position).getPhoto11());
-                        extras.putString("photo12", responseList.get(position).getPhoto12());
-
-                    extras.putString("remark1", responseList.get(position).getRemark1());
-                    extras.putString("remark2", responseList.get(position).getRemark2());
-                    extras.putString("remark3", responseList.get(position).getRemark3());
-                    extras.putString("remark4", responseList.get(position).getRemark4());
-                    extras.putString("remark5", responseList.get(position).getRemark5());
-                    extras.putString("remark6", responseList.get(position).getRemark6());
-                    extras.putString("remark7", responseList.get(position).getRemark7());
-                    extras.putString("remark8", responseList.get(position).getRemark8());
-                    extras.putString("remark9", responseList.get(position).getRemark9());
-                    extras.putString("remark10", responseList.get(position).getRemark10());
-                    extras.putString("remark11", responseList.get(position).getRemark11());
-                    extras.putString("remark12", responseList.get(position).getRemark12());
-
-                        in.putExtras(extras);
-                        context.startActivity(in);
-
+                         in.putExtra("RejectImagesList",rejectList);
+                         context.startActivity(in);
 
                 }
             });
 
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

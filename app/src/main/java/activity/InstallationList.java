@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.os.BuildCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,7 +46,7 @@ import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-public class InstallationList extends AppCompatActivity {
+@BuildCompat.PrereleaseSdkCheck public class InstallationList extends AppCompatActivity {
     public String bill_no = "";
     public String gst_bill_no = "";
     public String bill_date = "";
@@ -229,10 +230,8 @@ public class InstallationList extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (adapterInstallationList != null) {
-            adapterInstallationList.notifyDataSetChanged();
-        }
-        if (CustomUtility.getSharedPreferences(context, "SYNCLIST").equalsIgnoreCase("1")) {
+
+       if (CustomUtility.getSharedPreferences(context, "SYNCLIST").equalsIgnoreCase("1")) {
             if (CustomUtility.isInternetOn()) {
                 recyclerView.setAdapter(null);
                 db.deleteInstallationListData();

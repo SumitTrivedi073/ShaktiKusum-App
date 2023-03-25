@@ -4,9 +4,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.os.Environment;
@@ -50,8 +52,7 @@ public class ImageManager {
         if (pictureSizeStr == null) {
             // 4:3 비율을 가진 해상도의 사진 사이즈만 추려 저장
             List<Camera.Size> pictureSizeList = parameters.getSupportedPictureSizes();
-            ArrayList<Camera.Size> validPictureSizeList = new ArrayList<>();
-
+            List<Camera.Size> validPictureSizeList = parameters.getSupportedPreviewSizes();
             for (Camera.Size size : pictureSizeList) {
                 if (size.height > MINIMUM_HEIGHT) {
                     if (size.width / 4 * 3 == size.height) {
@@ -108,7 +109,7 @@ public class ImageManager {
             }
         }
         Log.e("jisunLog", "target " + targetWidth + "x" + targetHeight);
-        parameters.setPreviewSize(targetWidth, targetHeight);
+        parameters.setPreviewSize(1600, 900);
 
         parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
 
@@ -127,6 +128,8 @@ public class ImageManager {
        // parameters.setRotation(270);
         // TODO jisun : 전면 카메라이면 parameter 설정시 죽음
         camera.setParameters(parameters);
+
+
     }
 
     public void changePictureSize(Context context,Camera camera, String newSizeStr) {
@@ -154,6 +157,8 @@ public class ImageManager {
             }
         }
     }
+
+
 
     public static String getSizeString(Camera.Size size) {
         return size.width + "x" + size.height;
@@ -184,7 +189,7 @@ public class ImageManager {
 
     public static Bitmap saveImageWithTimeStamp(Context context, byte data[], int offset, int length, float textSize,String lat,String lng,String cust_name) {
 
-        Bitmap src = BitmapFactory.decodeByteArray(data, offset, length);
+      /*  Bitmap src = BitmapFactory.decodeByteArray(data, offset, length);
 
         src = rotateBitmap(src, 90);
         Bitmap dest = Bitmap.createBitmap(src.getWidth(), src.getHeight(), Bitmap.Config.ARGB_8888);
@@ -227,7 +232,56 @@ public class ImageManager {
         cs.drawText(text2+" "+text3 , startXPosition - 1250, startYPosition - 300, paint);
         cs.drawText(text4, startXPosition - 1250, startYPosition - 150, paint);
 
-        return dest;
+        return dest;*/
+
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inMutable = true;
+        Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length, options);
+
+        bmp = rotateBitmap(bmp,90);
+        SimpleDateFormat sdf = new SimpleDateFormat(Config.TIME_STAMP_FORMAT_DATE, Locale.getDefault());
+        SimpleDateFormat sdf1 = new SimpleDateFormat(Config.TIME_STAMP_FORMAT_TIME, Locale.getDefault());
+        String date = sdf.format(new Date());
+        String time = sdf1.format(new Date());
+
+        float scale = context.getResources().getDisplayMetrics().density;
+        Canvas canvas = new Canvas(bmp);
+
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setTextSize(110);
+        paint.setColor(Color.BLUE);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setFakeBoldText(true);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+
+//        paint.setTextSize((int) (12 * scale));
+
+        // draw text to the Canvas center
+        Rect bounds = new Rect();
+
+        int x = (bmp.getWidth() - bounds.width())/6;
+        int y = (bmp.getHeight() + bounds.height())/5;
+
+        String text = "Latitude: "+lat;
+        String text1 = "Longitude: "+lng;
+        String text2 = "Date: "+date;
+        String text3 = "Time: "+time;
+        String text4 = "Customer Name: "+cust_name;
+
+        // Paint paintb = new Paint(Paint.ANTI_ALIAS_FLAG);
+        // paintb.setColor(Color.TRANSPARENT);
+        // paintb.setStyle(Paint.Style.FILL); //fill the background with blue color
+        // canvas.drawRect(x - 9000, y + 9000, x + 9000, y + 2400, paintb);
+
+        // canvas.drawColor(-1);
+        canvas.drawText(text, x * scale-1300,y * scale +950 , paint);
+        canvas.drawText(text1, x * scale-1300,y * scale +950 , paint);
+        canvas.drawText(text2, x * scale -1300,y * scale + 1050, paint);
+        canvas.drawText(text3, x * scale -1300,y * scale + 1150, paint);
+        canvas.drawText(text4, x * scale -1300,y * scale + 1250, paint);
+
+        return bmp;
     }
 
     public static File saveFile(Bitmap bitmap,String type,String name,String enq_doc) {

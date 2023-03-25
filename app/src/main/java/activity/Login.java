@@ -360,8 +360,8 @@ public class Login extends AppCompatActivity {
 
                     dataHelper.insertLoginData(context, loginBean);
 
-                    // dismiss the progress dialog
-                    progressDialog.dismiss();
+                        // dismiss the progress dialog
+                        progressDialog.dismiss();
 
 
                     CustomUtility.setSharedPreference(context, "userid", userid);
@@ -370,21 +370,17 @@ public class Login extends AppCompatActivity {
 
 
 
-                    String OTP_CHECK = CustomUtility.getSharedPreferences(context, "CHECK_OTP_VARIFED");
-                    Intent intent;
-                    if(OTP_CHECK.equalsIgnoreCase("Y"))
-                    {
-                        intent = new Intent(context, MainActivity.class);
-                    }
-                    else
-                    {
-                        intent = new Intent(Login.this, OTPGenerationActivity.class);
-                    }
-                    startActivity(intent);
-
-
-                    finish();
-
+                       /* String OTP_CHECK = CustomUtility.getSharedPreferences(context, "CHECK_OTP_VARIFED");
+                        if(OTP_CHECK.equalsIgnoreCase("Y")) {
+                            Intent intent = new Intent(context, MainActivity.class);
+                            startActivity(intent);
+                        }
+                        else {
+                            Intent intent = new Intent(Login.this, OTPGenerationActivity.class);
+                            startActivity(intent);
+                        }*/
+                        Intent intent = new Intent(Login.this, OTPGenerationActivity.class);
+                        startActivity(intent);
 
                 } else {
 
@@ -609,5 +605,9 @@ public class Login extends AppCompatActivity {
 
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        finish();
+    }
 }

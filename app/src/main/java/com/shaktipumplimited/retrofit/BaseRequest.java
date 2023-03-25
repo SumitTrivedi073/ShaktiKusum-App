@@ -258,12 +258,12 @@ public class BaseRequest extends BaseRequestParser {
 
         //  showLoader();
         String baseURL = NewSolarVFD.BASE_URL_VK + remainingURL;
-        // String baseURL = "http://solar10.shaktisolarrms.com:1992/Home/" + remainingURL;
+
         if (!baseURL.endsWith("?")) {
             baseURL = baseURL + "?";
         }
         for (Map.Entry<String, String> entry : map.entrySet()) {
-            baseURL = baseURL + entry.getKey() + "=" + entry.getValue() + "&";
+            baseURL = baseURL + entry.getKey() + "=" + entry.getValue() ;
         }
         System.out.println("BaseReq INPUT URL : " + baseURL);
 

@@ -1111,46 +1111,6 @@ Intent mIntent ;
 
     }
 
-    public void openCamera111(String name) {
-
-        if (CameraUtils.checkPermissions(context)) {
-
-           /* Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-          //  File file = CameraUtils.getOutputMediaFile(MEDIA_TYPE_IMAGE, WebURL.CUSTOMERID_ID,name);
-            File file = CameraUtils.getOutputMediaFileSurvey(MEDIA_TYPE_IMAGE, WebURL.CUSTOMERID_ID,name, mImageFolderName);
-
-            if (file != null) {
-                imageStoragePath = file.getAbsolutePath();
-            }
-          //  Uri fileUri = CameraUtils.getOutputMediaFileUri(getApplicationContext(), file);
-            Uri fileUri = CameraUtils.getOutputMediaFileUri(getApplicationContext(), file);
-
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-
-            // start the image capture Intent
-            startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);*/
-
-
-            File file = CameraUtils.getOutputMediaFileSurvey(MEDIA_TYPE_IMAGE, WebURL.CUSTOMERID_ID,name, mImageFolderName);
-          //  File  file = new File(ImageManager.getMediaFilePath(type,name, enq_docno));
-
-            imageStoragePath = file.getAbsolutePath();
-            Log.e("PATH", "&&&" + imageStoragePath);
-
-            Intent i = new Intent(context, CameraActivity.class);
-            i.putExtra("lat", String.valueOf(inst_latitude_double));
-            i.putExtra("lng", String.valueOf(inst_longitude_double));
-            i.putExtra("cust_name", cust_name);
-            i.putExtra("inst_id", enq_docno);
-            i.putExtra("type", "INST/");
-            i.putExtra("name", name);
-
-            startActivityForResult(i, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
-
-        }
-    }
-
     public void openGallery(String name) {
 
         if (ActivityCompat.checkSelfPermission(context, READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -1250,6 +1210,7 @@ Intent mIntent ;
                 ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
 
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayBitmapStream);
+
 
                 byte[] byteArray = byteArrayBitmapStream.toByteArray();
 

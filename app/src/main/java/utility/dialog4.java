@@ -57,6 +57,7 @@ public class dialog4 extends Dialog {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
+                thisDialog.cancel();
                 String textString = text.getText().toString();
                 activity.searchWord(textString);
             }

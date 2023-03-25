@@ -1,6 +1,7 @@
 package activity;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -14,8 +15,9 @@ import com.shaktipumplimited.shaktikusum.R;
 /**
  * Created by p90447 on 2015-11-18.
  */
-public class CustomProgressDialog extends Dialog {
+public class CustomProgressDialog extends ProgressDialog {
     private TextView progressMessage;
+    private  String mMessage;
     public CustomProgressDialog(Context context, String message) {
         super(context, R.style.CustomAlertDialogStyle);
         //	this.mMessage = message;
@@ -24,7 +26,7 @@ public class CustomProgressDialog extends Dialog {
 
     public CustomProgressDialog(Context context) {
         super(context, R.style.CustomAlertDialogStyle);
-        //    this.mMessage = context.getResources().getString(R.stringp-.Loading);
+          this.mMessage = context.getResources().getString(R.string.Loading);
         // TODO Auto-generated constructor stub
     }
 
@@ -34,9 +36,12 @@ public class CustomProgressDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_custom_progress_dialog);
 
-        setCancelable(false);
+
 
         progressMessage = findViewById(R.id.progressMessage);
-        //	progressMessage.setText(mMessage);
+        progressMessage.setText(mMessage);
+
+        setCancelable(false);
+        setCanceledOnTouchOutside(false);
     }
 }

@@ -13,7 +13,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
@@ -21,6 +20,10 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -44,7 +47,16 @@
         android:theme="@style/MyMaterialTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:appComponentFactory"
-        tools:targetApi="q">
+        tools:targetApi="tiramisu">
+        <activity
+            android:name="activity.PhotoViewerActivity"
+            android:exported="false" />
+        <activity
+            android:name="activity.CameraActivity2"
+            android:exported="false" />
+        <activity
+            android:name="activity.PendingFeedBackOTPVerification"
+            android:exported="false" />
         <activity
             android:name="activity.PendingFeedbackActivity"
             android:exported="false" />

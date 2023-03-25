@@ -1,16 +1,22 @@
 package activity;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.os.Build.VERSION.SDK_INT;
+import static android.os.Environment.getExternalStorageDirectory;
+import static android.os.Environment.getExternalStoragePublicDirectory;
+import static debugapp.GlobalValue.Constant.DDSubmissionImage;
+import static utility.FileUtils.getPath;
+
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -19,63 +25,64 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
-import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import bean.ImageModel;
+import bean.InstallationBean;
 import database.DatabaseHelper;
-import pub.devrel.easypermissions.AppSettingsDialog;
-import pub.devrel.easypermissions.EasyPermissions;
-import utility.CameraUtils;
 import utility.CustomUtility;
 import utility.dialog;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.os.Environment.getExternalStorageDirectory;
-import static android.os.Environment.getExternalStoragePublicDirectory;
 
-import com.shaktipumplimited.shaktikusum.R;
-
-
-public class DDSubmissionActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
+public class DDSubmissionActivity extends AppCompatActivity {
     public static final int RC_FILE_PICKER_PERM = 321;
     public static final int BITMAP_SAMPLE_SIZE = 6;
     public static final int MEDIA_TYPE_IMAGE = 1;
-    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
-    private static final int GALLERY_IMAGE_REQUEST_CODE = 101;
+    private static final int REQUEST_CODE_PERMISSION = 100;
+
+    private static final int PICK_FROM_FILE = 101;
+
     Context mContext;
     DatabaseHelper dataHelper;
     String sync_data = "0", current_date = "";
@@ -87,7 +94,7 @@ public class DDSubmissionActivity extends AppCompatActivity implements EasyPermi
     String[] PERMISSIONS = {
             android.Manifest.permission.READ_EXTERNAL_STORAGE,
     };
-    String imageStoragePath, photo1_text,type = "DDSUB/";
+    String imageStoragePath, photo1_text, type = "DDSUB/";
     String regisno = "", customer_name = "", beneficiary = "", regio_txt = "", city_txt = "", village = "", contact_no = "", aadhar_no = "", finaldate = "";
     TextView photo1, submit;
     SimpleDateFormat simpleDateFormat;
@@ -105,7 +112,20 @@ public class DDSubmissionActivity extends AppCompatActivity implements EasyPermi
     };
     private ProgressDialog progressDialog;
     private DDSubmissionActivity activity;
+
+    List<ImageModel> imageArrayList = new ArrayList<>();
+    List<ImageModel> imageList = new ArrayList<>();
+    AlertDialog alertDialog;
+
+    int selectedIndex = 0;
+    ImageView inst_location, geoIndigation;
+
+    InstallationBean installationBean;
+
+    DatabaseHelper db;
+
     private String mHomePath, PathHolder, Filename;
+
 
 /*    public static void deleteFiles(String path) {
 
@@ -122,16 +142,15 @@ public class DDSubmissionActivity extends AppCompatActivity implements EasyPermi
     }*/
 
     private boolean deleteDirectory(File path) {
-        if( path.exists() ) {
+        if (path.exists()) {
             File[] files = path.listFiles();
             if (files == null) {
                 return false;
             }
-            for(File file : files) {
-                if(file.isDirectory()) {
+            for (File file : files) {
+                if (file.isDirectory()) {
                     deleteDirectory(file);
-                }
-                else {
+                } else {
                     file.delete();
                 }
             }
@@ -160,7 +179,7 @@ public class DDSubmissionActivity extends AppCompatActivity implements EasyPermi
 
         dataHelper = new DatabaseHelper(mContext);
 
-        getGpsLocation();
+
         progressDialog = new ProgressDialog(mContext);
 
 
@@ -168,7 +187,7 @@ public class DDSubmissionActivity extends AppCompatActivity implements EasyPermi
         yourDialog.show();
 
 
-        File root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),GALLERY_DIRECTORY_NAME);
+        File root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), GALLERY_DIRECTORY_NAME);
 
         File dir = new File(root.getAbsolutePath() + "/SKAPP/DDSUB/"); //it is my root directory
 
@@ -185,6 +204,9 @@ public class DDSubmissionActivity extends AppCompatActivity implements EasyPermi
 
         simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         current_date = simpleDateFormat.format(new Date());
+        db = new DatabaseHelper(mContext);
+        installationBean = new InstallationBean();
+        installationBean = db.getInstallationData(CustomUtility.getSharedPreferences(mContext, "userid"), "");
 
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -202,6 +224,8 @@ public class DDSubmissionActivity extends AppCompatActivity implements EasyPermi
         address = (TextView) findViewById(R.id.address);
         contact = (TextView) findViewById(R.id.cnt_no);
         aadhar = (TextView) findViewById(R.id.aadhar_no);
+        inst_location = (ImageView) findViewById(R.id.loaction);
+        geoIndigation = findViewById(R.id.geoIndigation);
 
         setData();
 
@@ -210,10 +234,14 @@ public class DDSubmissionActivity extends AppCompatActivity implements EasyPermi
             public void onClick(View v) {
                 String remark_txt = remark.getText().toString();
                 if (!TextUtils.isEmpty(remark_txt)) {
-                new DDSubmissionData().execute(remark_txt);
-            } else {
-                Toast.makeText(mContext, "Please Enter Remark", Toast.LENGTH_SHORT).show();
-            }
+                    if(imageArrayList.size()>0 && imageArrayList.get(selectedIndex).isImageSelected()) {
+                        new DDSubmissionData().execute(remark_txt);
+                    }else {
+                        CustomUtility.showToast(DDSubmissionActivity.this,getResources().getString(R.string.select_image));
+                    }
+                } else {
+                    Toast.makeText(mContext, "Please Enter Remark", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -221,32 +249,388 @@ public class DDSubmissionActivity extends AppCompatActivity implements EasyPermi
             @Override
             public void onClick(View view) {
 
-
-                if (photo1_text == null || photo1_text.isEmpty()) {
-
-                    showConfirmationGallery(DatabaseHelper.KEY_PHOTO1, "PHOTO_1");
+                if (checkPermission()) {
+                    if (imageArrayList.get(selectedIndex).isImageSelected()) {
+                        selectImage("1");
+                    } else {
+                        selectImage("0");
+                    }
                 } else {
+                    requestPermission();
+                }
 
-
-                    showConfirmationAlert(DatabaseHelper.KEY_PHOTO1, photo1_text, "PHOTO_1");
-
+            }
+        });
+        inst_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(installationBean.getLatitude()) || installationBean.getLatitude().equals("0.0") || installationBean.getLatitude().equals("null")) {
+                    getGpsLocation();
+                } else {
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext, R.style.MyDialogTheme);
+                    alertDialog.setTitle("Confirmation");
+                    alertDialog.setMessage("Latitude, Longitude already saved, Do you want to change it?");
+                    alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            getGpsLocation();
+                        }
+                    });
+                    alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    alertDialog.show();
                 }
             }
         });
 
+    }
+
+    private void setData() {
+        imageArrayList = new ArrayList<>();
+
+        ImageModel imageModel = new ImageModel();
+        imageModel.setName("dd_collection_image");
+        imageModel.setImagePath("");
+        imageModel.setImageSelected(false);
+        imageArrayList.add(imageModel);
+
+        imageList = new ArrayList<>();
+        String json = CustomUtility.getSharedPreferences(DDSubmissionActivity.this, DDSubmissionImage);
+        // below line is to get the type of our array list.
+        Type type = new TypeToken<ArrayList<ImageModel>>() {
+        }.getType();
+
+        // in below line we are getting data from gson
+        // and saving it to our array list
+        imageList = new Gson().fromJson(json, type);
+
+        if (imageArrayList.size() > 0 && imageList != null && imageList.size() > 0) {
+
+            for (int j = 0; j < imageList.size(); j++) {
+                if (imageList.get(j).isImageSelected()) {
+                    ImageModel imageModel1 = new ImageModel();
+                    imageModel1.setName(imageList.get(j).getName());
+                    imageModel1.setImagePath(imageList.get(j).getImagePath());
+                    imageModel1.setImageSelected(true);
+                    imageArrayList.set(j, imageModel1);
+                }
+            }
+            setIcon();
+        }
+    }
+
+    private void requestPermission() {
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA,
+                            Manifest.permission.MANAGE_EXTERNAL_STORAGE},
+                    REQUEST_CODE_PERMISSION);
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA,
+                            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_CODE_PERMISSION);
+
+        }
+    }
+
+    private boolean checkPermission() {
+        int cameraPermission =
+                ContextCompat.checkSelfPermission(DDSubmissionActivity.this, CAMERA);
+        int writeExternalStorage =
+                ContextCompat.checkSelfPermission(DDSubmissionActivity.this, WRITE_EXTERNAL_STORAGE);
+        int ReadExternalStorage =
+                ContextCompat.checkSelfPermission(DDSubmissionActivity.this, WRITE_EXTERNAL_STORAGE);
+
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            return cameraPermission == PackageManager.PERMISSION_GRANTED;
+        } else {
+            return cameraPermission == PackageManager.PERMISSION_GRANTED && writeExternalStorage == PackageManager.PERMISSION_GRANTED
+                    && ReadExternalStorage == PackageManager.PERMISSION_GRANTED;
+
+        }
 
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+
+            case REQUEST_CODE_PERMISSION:
+
+                if (grantResults.length > 0) {
+                    if (SDK_INT >= Build.VERSION_CODES.R) {
+                        boolean ACCESSCAMERA = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                        if (ACCESSCAMERA) {
+                            try {
+                                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                                intent.addCategory("android.intent.category.DEFAULT");
+                                intent.setData(Uri.parse(String.format("package:%s", DDSubmissionActivity.this.getPackageName())));
+                                startActivityForResult(intent, 2296);
+                            } catch (Exception e) {
+                                Intent intent = new Intent();
+                                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                                startActivityForResult(intent, 2296);
+                            }
+
+                        } else {
+                            Toast.makeText(DDSubmissionActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        boolean ACCESSCAMERA = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                        boolean writeExternalStorage =
+                                grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                        boolean ReadExternalStorage =
+                                grantResults[2] == PackageManager.PERMISSION_GRANTED;
+
+                        if (ACCESSCAMERA && writeExternalStorage && ReadExternalStorage) {
+                            selectImage("0");
+                        } else {
+                            Toast.makeText(DDSubmissionActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }
+
+                break;
+        }
+    }
+
+
+    private void selectImage(String value) {
+        LayoutInflater inflater = (LayoutInflater) DDSubmissionActivity.this.getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.pick_img_layout, null);
+        final androidx.appcompat.app.AlertDialog.Builder builder =
+                new AlertDialog.Builder(DDSubmissionActivity.this, R.style.MyDialogTheme);
+
+        builder.setView(layout);
+        builder.setCancelable(true);
+        alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        alertDialog.getWindow().setGravity(Gravity.BOTTOM);
+        alertDialog.show();
+
+        TextView title = layout.findViewById(R.id.titleTxt);
+        TextView gallery = layout.findViewById(R.id.gallery);
+        TextView camera = layout.findViewById(R.id.camera);
+        TextView cancel = layout.findViewById(R.id.cancel);
+
+        if (value.equals("0")) {
+            title.setText(getResources().getString(R.string.select_image));
+            gallery.setText(getResources().getString(R.string.gallery));
+            camera.setText(getResources().getString(R.string.camera));
+        } else {
+            title.setText(getResources().getString(R.string.want_to_perform));
+            gallery.setText(getResources().getString(R.string.display));
+            camera.setText(getResources().getString(R.string.change));
+        }
+
+        gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                if (value.equals("0")) {
+                    galleryIntent();
+                } else {
+                    Intent i_display_image = new Intent(DDSubmissionActivity.this, PhotoViewerActivity.class);
+                    i_display_image.putExtra("image_path", imageArrayList.get(selectedIndex).getImagePath());
+                    startActivity(i_display_image);
+                }
+            }
+        });
+
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                if (value.equals("0")) {
+                    cameraIntent();
+                } else {
+                    selectImage("0");
+                }
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+    }
+
+    private void galleryIntent() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);//
+        startActivityForResult(Intent.createChooser(intent, "Select File"), PICK_FROM_FILE);
+    }
+
+    private void cameraIntent() {
+
+        camraLauncher.launch(new Intent(DDSubmissionActivity.this, CameraActivity2.class)
+                .putExtra("cust_name", ""));
+
+    }
+
+    ActivityResultLauncher<Intent> camraLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        if (result.getData() != null && result.getData().getExtras() != null) {
+
+                            Bundle bundle = result.getData().getExtras();
+                            Log.e("bundle====>", bundle.get("data").toString());
+                            UpdateArrayList(bundle.get("data").toString());
+
+                        }
+
+                    }
+                }
+            });
+
+
+    @SuppressLint("Range")
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_CANCELED) {
+            return;
+        }
+        switch (requestCode) {
+
+            case PICK_FROM_FILE:
+                try {
+                    Uri mImageCaptureUri = data.getData();
+                    String path = getPath(DDSubmissionActivity.this, mImageCaptureUri); // From Gallery
+                    if (path == null) {
+                        path = mImageCaptureUri.getPath(); // From File Manager
+                    }
+                    Log.e("Activity", "PathHolder22= " + path);
+                    String filename = path.substring(path.lastIndexOf("/") + 1);
+                    String file;
+                    if (filename.indexOf(".") > 0) {
+                        file = filename.substring(0, filename.lastIndexOf("."));
+                    } else {
+                        file = "";
+                    }
+                    if (TextUtils.isEmpty(file)) {
+                        Toast.makeText(DDSubmissionActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
+                    } else {
+                        UpdateArrayList(path);
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+
+
+            case 2296:
+                if (SDK_INT >= Build.VERSION_CODES.R) {
+                    if (Environment.isExternalStorageManager()) {
+                        // perform action when allow permission success
+                        selectImage("0");
+                    } else {
+                        Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    // Get the Uri of the selected file
+                    Uri uri = data.getData();
+                    String uriString = null;
+                    if (uri != null) {
+                        uriString = uri.toString();
+                    }
+                    File myFile = new File(uriString);
+                    //PathHolder = myFile.getPath();
+                    Filename = null;
+
+
+                    if (uriString.startsWith("content://")) {
+                        Cursor cursor = null;
+                        try {
+                            cursor = getContentResolver().query(uri, null, null, null, null);
+                            if (cursor != null && cursor.moveToFirst()) {
+
+                                Filename = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                                PathHolder = getExternalStorageDirectory() + "/Download/" + Filename;
+                                Log.e("&&&&", "DDDDD" + Filename);
+
+                                if (PathHolder != null && !PathHolder.equals("")) {
+
+                                } else {
+
+                                }
+                            }
+                        } finally {
+                            if (cursor != null) {
+                                cursor.close();
+                            }
+                        }
+                    } else if (uriString.startsWith("file://")) {
+                        Filename = myFile.getName();
+                        PathHolder = getExternalStorageDirectory() + "/Download/" + Filename;
+                        Log.e("&&&&", "DDDDD" + Filename);
+                        if (PathHolder != null && !PathHolder.equals("")) {
+
+                        } else {
+
+                        }
+                    }
+                }
+                break;
+
+            case 301:
+                String year = data.getStringExtra("year");
+                String month = data.getStringExtra("month");
+                String date = data.getStringExtra("date");
+                finaldate = year + "-" + month + "-" + date;
+                finaldate = CustomUtility.formateDate1(finaldate);
+                break;
+        }
+    }
+
+    private void UpdateArrayList(String path) {
+
+        ImageModel imageModel = new ImageModel();
+        imageModel.setName(imageArrayList.get(selectedIndex).getName());
+        imageModel.setImagePath(path);
+        imageModel.setImageSelected(true);
+        imageArrayList.set(selectedIndex, imageModel);
+        CustomUtility.saveArrayList(DDSubmissionActivity.this, imageArrayList, DDSubmissionImage);
+        setIcon();
+
+    }
+
 
     public void getGpsLocation() {
         GPSTracker gps = new GPSTracker(mContext);
 
         if (gps.canGetLocation()) {
-            inst_latitude_double = gps.getLatitude();
-            inst_longitude_double = gps.getLongitude();
+
+            String mLAt = "" + gps.getLatitude();
+            String mLOng = "" + gps.getLongitude();
+
+            inst_latitude_double = Double.parseDouble(mLAt);
+            inst_longitude_double = Double.parseDouble(mLOng);
+
             if (inst_latitude_double == 0.0) {
                 CustomUtility.ShowToast("Lat Long not captured, Please try again.", mContext);
             } else {
 
+
+                geoIndigation.setImageResource(R.drawable.right_mark_icn_green);
                 CustomUtility.ShowToast("Latitude:-" + inst_latitude_double + "     " + "Longitude:-" + inst_longitude_double, mContext);
 
             }
@@ -255,91 +639,6 @@ public class DDSubmissionActivity extends AppCompatActivity implements EasyPermi
         }
     }
 
-    public void openCamera(String name) {
-
-        if (CameraUtils.checkPermissions(mContext)) {
-
-         /*   Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-            String from = "DDSUB/";
-
-            File file = CameraUtils.getOutputMediaFile1(MEDIA_TYPE_IMAGE, name, from);
-
-            if (file != null) {
-                imageStoragePath = file.getAbsolutePath();
-                Log.e("PATH", "&&&" + imageStoragePath);
-            }
-
-            Uri fileUri1 = CameraUtils.getOutputMediaFileUri(mContext, file);
-
-            Log.e("fileUri", "&&&" + fileUri1);
-
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri1);
-
-            // start the image capture Intent
-            startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);*/
-
-            File file = new File(ImageManager.getMediaFilePath(type,name, beneficiary));
-
-            imageStoragePath = file.getAbsolutePath();
-            Log.e("PATH", "&&&" + imageStoragePath);
-
-            Intent i = new Intent(mContext, CameraActivity.class);
-            i.putExtra("lat", String.valueOf(inst_latitude_double));
-            i.putExtra("lng", String.valueOf(inst_longitude_double));
-            i.putExtra("cust_name", cust_nm.getText().toString());
-            i.putExtra("inst_id", beneficiary);
-            i.putExtra("type", "DDSUB/");
-            i.putExtra("name", name);
-
-            startActivityForResult(i, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
-
-        }
-
-
-    }
-
-    public void openGallery(String name) {
-
-        if (ActivityCompat.checkSelfPermission(mContext, READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT <= 19) {
-                Intent i = new Intent();
-                i.setType("image/*");
-                i.setAction(Intent.ACTION_GET_CONTENT);
-                i.addCategory(Intent.CATEGORY_OPENABLE);
-
-                ((Activity) mContext).startActivityForResult(Intent.createChooser(i, "Select Photo"), GALLERY_IMAGE_REQUEST_CODE);
-
-
-            } else {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                ((Activity) mContext).startActivityForResult(Intent.createChooser(intent, "Select Photo"), GALLERY_IMAGE_REQUEST_CODE);
-
-
-            }
-
-        } else {
-            if (!hasPermissions(mContext, PERMISSIONS)) {
-                ActivityCompat.requestPermissions((Activity) mContext, PERMISSIONS, PERMISSION_ALL);
-            }
-        }
-
-    }
-
-    private void setData() {
-
-
-        File file = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME + "/SKAPP/DDSUB/", "/IMG_PHOTO_1.jpg");
-        if (file.exists()) {
-            photo1_text = file.getAbsolutePath();
-        }
-
-
-        setIcon(DatabaseHelper.KEY_PHOTO1);
-
-
-    }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -354,7 +653,7 @@ public class DDSubmissionActivity extends AppCompatActivity implements EasyPermi
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressLint("Range")
+  /*  @SuppressLint("Range")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // if the result is capturing Image
@@ -401,10 +700,10 @@ public class DDSubmissionActivity extends AppCompatActivity implements EasyPermi
                     e.printStackTrace();
                 }
 
-             /*   File file = newworkorder File(imageStoragePath);
+             *//*   File file = newworkorder File(imageStoragePath);
                 if (file.exists()) {
                     file.delete();
-                }*/
+                }*//*
 
         }
         else {
@@ -536,192 +835,13 @@ public class DDSubmissionActivity extends AppCompatActivity implements EasyPermi
         }
     }
 
-
-    private void copyFile(String sourceFilePath, String destinationFilePath) {
-
-        Log.e("Source", "&&&&" + sourceFilePath);
-        Log.e("Destination", "&&&&" + destinationFilePath);
-
-        File sourceLocation = new File(sourceFilePath);
-        File targetLocation = new File(destinationFilePath);
-        Log.e("&&&&&", "sourceLocation: " + sourceLocation);
-        Log.e("&&&&&", "targetLocation: " + targetLocation);
-        try {
-            int actionChoice = 2;
-            if (actionChoice == 1) {
-                if (sourceLocation.renameTo(targetLocation)) {
-                    Log.e("&&&&&", "Move file successful.");
-                } else {
-                    Log.e("&&&&&", "Move file failed.");
-                }
-            } else {
-                if (sourceLocation.exists()) {
-                    InputStream in = new FileInputStream(sourceLocation);
-                    OutputStream out = new FileOutputStream(targetLocation);
-                    byte[] buf = new byte[1024];
-                    int len;
-                    while ((len = in.read(buf)) > 0) {
-                        out.write(buf, 0, len);
-                    }
-                    in.close();
-                    out.close();
-                    Log.e("&&&&&", "Copy file successful.");
-                } else {
-                    Log.e("&&&&&", "Copy file failed. Source file missing.");
-                }
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void showConfirmationAlert(final String keyimage, final String data, final String name) {
-
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext,R.style.MyDialogTheme);
-        // Setting Dialog Title
-        alertDialog.setTitle("Confirmation");
-        // Setting Dialog Message
-        alertDialog.setMessage("Image already saved, Do you want to change it or display?");
-        // On pressing Settings button
-        alertDialog.setPositiveButton("Display", new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int which) {
-
-                Log.e("KEY", "&&&&" + keyimage);
-                Log.e("DATA", "&&&&" + data);
-
-                displayImage(keyimage, data);
-
-
-            }
-        });
-
-        alertDialog.setNegativeButton("Change", new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int which) {
-                showConfirmationGallery(keyimage, name);
-
-
-            }
-        });
-
-        // Showing Alert Message
-        alertDialog.show();
-    }
-
-    public String getImagePath(Uri uri) {
-
-        String s = null;
-
-        File file = new File(uri.getPath());
-        String[] filePath = file.getPath().split(":");
-        String image_id = filePath[filePath.length - 1];
-
-        if (uri == null) {
-            // TODO perform some logging or show user feedback
-            return null;
-        } else {
-            String[] projection = {String.valueOf(MediaStore.Images.Media.DATA)};
-
-            Cursor cursor1 = ((Activity) mContext).getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{image_id}, null);
-            Cursor cursor2 = ((Activity) mContext).getContentResolver().query(uri, projection, null, null, null);
-
-            Log.e("CUR1", "&&&&" + cursor1);
-            Log.e("CUR2", "&&&&" + cursor2);
-
-            if (cursor1 == null && cursor2 == null) {
-                return null;
-            } else {
-
-                int column_index = 0;
-                if (cursor1 != null) {
-                    column_index = cursor1.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                    cursor1.moveToFirst();
-
-                    if (cursor1.moveToFirst()) {
-                        s = cursor1.getString(column_index);
-                    }
-                    cursor1.close();
-                }
-                int column_index1 = 0;
-                if (cursor2 != null) {
-                    column_index1 = cursor2.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                    cursor2.moveToFirst();
-
-                    if (cursor2.moveToFirst()) {
-                        s = cursor2.getString(column_index1);
-                    }
-                    cursor2.close();
-                }
-
-                return s;
-            }
-        }
-    }
-
-    private void displayImage(String key, String data) {
-        Intent i_display_image = new Intent(mContext, ShowDocument.class);
-        Bundle extras = new Bundle();
-        //saveData();
-        extras.putString("key", key);
-        extras.putString("data", "DDSUB");
-
-        CustomUtility.setSharedPreference(mContext, "data", data);
-
-        i_display_image.putExtras(extras);
-        startActivity(i_display_image);
-    }
-
-    public void showConfirmationGallery(final String keyimage, final String name) {
-
-        final CustomUtility customUtility = new CustomUtility();
-
-        final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Cancel"};
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext,R.style.MyDialogTheme);
-        builder.setTitle("Add Photo!");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                boolean result = customUtility.checkPermission(mContext);
-                if (items[item].equals("Take Photo")) {
-
-                    if (result) {
-                        openCamera(name);
-                        setFlag(keyimage);
-                    }
-
-                } else if (items[item].equals("Choose from Gallery")) {
-                    if (result) {
-                        openGallery(name);
-                        setFlag(keyimage);
-
-
-                    }
-
-                } else if (items[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
-    }
+*/
 
     public void Save() {
 
 
-        String pht1 = null;
 
-
-        File file = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME+ "/SKAPP/DDSUB/", "/IMG_PHOTO_1.jpg");
-        if (file.exists()) {
-            pht1 = file.getAbsolutePath();
-        }
-
-        if (!TextUtils.isEmpty(pht1)) {
+        if (imageArrayList.get(selectedIndex).isImageSelected()) {
 
             CustomUtility.setSharedPreference(mContext, "SYNC", "1");
 
@@ -734,27 +854,15 @@ public class DDSubmissionActivity extends AppCompatActivity implements EasyPermi
     }
 
 
-    public void setFlag(String key) {
-
-        Log.e("FLAG", "&&&" + key);
-        photo1_flag = false;
-
-        if (DatabaseHelper.KEY_PHOTO1.equals(key)) {
-            photo1_flag = true;
+    public void setIcon() {
+          if(imageArrayList.size()>0){
+        if (imageArrayList.get(selectedIndex).isImageSelected()) {
+            photo1.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_mendotry, 0, R.drawable.right_mark_icn_green, 0);
+        } else {
+            photo1.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_mendotry, 0, R.drawable.red_icn, 0);
         }
+          }
 
-    }
-
-    public void setIcon(String key) {
-
-
-        if (DatabaseHelper.KEY_PHOTO1.equals(key)) {
-            if (photo1_text == null || photo1_text.isEmpty()) {
-                photo1.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_mendotry, 0, R.drawable.red_icn, 0);
-            } else {
-                photo1.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_mendotry, 0, R.drawable.right_mark_icn_green, 0);
-            }
-        }
     }
 
     @Override
@@ -763,27 +871,6 @@ public class DDSubmissionActivity extends AppCompatActivity implements EasyPermi
         super.onBackPressed();
     }
 
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-    }
-
-
-    @Override
-    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
-    }
-
-    @Override
-    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-
-        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
-            new AppSettingsDialog.Builder(this).build().show();
-        }
-    }
 
     public void searchWord(String textString) {
 
@@ -837,6 +924,7 @@ public class DDSubmissionActivity extends AppCompatActivity implements EasyPermi
 
                 JSONArray ja = new JSONArray(obj1);
 
+                CustomUtility.deleteArrayList(DDSubmissionActivity.this,DDSubmissionImage);
                 if (ja.length() > 0) {
                     for (int j = 0; j < ja.length(); j++) {
                         JSONObject jo = ja.getJSONObject(j);
@@ -854,8 +942,6 @@ public class DDSubmissionActivity extends AppCompatActivity implements EasyPermi
                             aadhar_no = jo.getString("aadhar_no");
 
                             yourDialog.dismiss();
-
-
 
 
                         } else {
@@ -945,7 +1031,7 @@ public class DDSubmissionActivity extends AppCompatActivity implements EasyPermi
                 Date date = dt.parse(date_s);
                 SimpleDateFormat dt1 = new SimpleDateFormat("yyyyMMdd");
 
-                jsonObj.put("PROCESS_NO",  CustomUtility.getSharedPreferences(mContext, "process_no"));
+                jsonObj.put("PROCESS_NO", CustomUtility.getSharedPreferences(mContext, "process_no"));
                 jsonObj.put("REGISNO", regisno);
                 jsonObj.put("PROJECT_NO", CustomUtility.getSharedPreferences(mContext, "projectid"));
                 jsonObj.put("project_login_no", CustomUtility.getSharedPreferences(mContext, "loginid"));
@@ -956,7 +1042,7 @@ public class DDSubmissionActivity extends AppCompatActivity implements EasyPermi
                 jsonObj.put("lng", inst_longitude_double);
                 jsonObj.put("remark", remark_txt);
 
-                jsonObj.put("PHOTO1", CustomUtility.getSharedPreferences(mContext, "PHOTO_1"));
+                jsonObj.put("PHOTO1",CustomUtility.getBase64FromBitmap(DDSubmissionActivity.this,imageArrayList.get(selectedIndex).getImagePath()));
 
                 ja_invc_data.put(jsonObj);
 

@@ -1,11 +1,16 @@
 package debugapp;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class PendingFeedback {
+public class PendingFeedback implements Parcelable {
     @SerializedName("status")
     @Expose
     private String status;
@@ -15,6 +20,23 @@ public class PendingFeedback {
     @SerializedName("response")
     @Expose
     private List<Response> response;
+
+    protected PendingFeedback(Parcel in) {
+        status = in.readString();
+        message = in.readString();
+    }
+
+    public static final Creator<PendingFeedback> CREATOR = new Creator<PendingFeedback>() {
+        @Override
+        public PendingFeedback createFromParcel(Parcel in) {
+            return new PendingFeedback(in);
+        }
+
+        @Override
+        public PendingFeedback[] newArray(int size) {
+            return new PendingFeedback[size];
+        }
+    };
 
     public String getStatus() {
         return status;
@@ -40,7 +62,18 @@ public class PendingFeedback {
         this.response = response;
     }
 
-    public class Response {
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel parcel, int i) {
+        parcel.writeString(status);
+        parcel.writeString(message);
+    }
+
+    public static class Response implements Parcelable{
 
         @SerializedName("mandt")
         @Expose
@@ -189,6 +222,70 @@ public class PendingFeedback {
         @SerializedName("ver_otp_dats")
         @Expose
         private String verOtpDats;
+
+        protected Response(Parcel in) {
+            mandt = in.readString();
+            vbeln = in.readString();
+            projectNo = in.readString();
+            regisno = in.readString();
+            processNo = in.readString();
+            beneficiary = in.readString();
+            userid = in.readString();
+            projectLoginNo = in.readString();
+            instdate = in.readString();
+            customerName = in.readString();
+            fatherName = in.readString();
+            state = in.readString();
+            city = in.readString();
+            tehsilCode = in.readString();
+            tehsil = in.readString();
+            village = in.readString();
+            contactNo = in.readString();
+            address = in.readString();
+            make = in.readString();
+            rmsStatus = in.readString();
+            lat = in.readString();
+            lng = in.readString();
+            erdat = in.readString();
+            ertim = in.readString();
+            solarPannelWatt = in.readString();
+            hp = in.readString();
+            panelInstallQty = in.readString();
+            totalWatt = in.readString();
+            panelModuleQty = in.readString();
+            motorSernr = in.readString();
+            pumpSernr = in.readString();
+            controllerSernr = in.readString();
+            simOpretor = in.readString();
+            simno = in.readString();
+            connectionType = in.readString();
+            borewellstatus = in.readString();
+            totalPlateWatt = in.readString();
+            delayReason = in.readString();
+            settingCheck = in.readString();
+            dbugMob1 = in.readString();
+            dbugMob2 = in.readString();
+            dbugMob3 = in.readString();
+            dbugOfline = in.readString();
+            appVersion = in.readString();
+            otpStatus = in.readString();
+            otpRemark = in.readString();
+            offlinephoto = in.readString();
+            verOtp = in.readString();
+            verOtpDats = in.readString();
+        }
+
+        public static  final Creator<Response> CREATOR = new Creator<Response>() {
+            @Override
+            public Response createFromParcel(Parcel in) {
+                return new Response(in);
+            }
+
+            @Override
+            public Response[] newArray(int size) {
+                return new Response[size];
+            }
+        };
 
         public String getMandt() {
             return mandt;
@@ -582,5 +679,62 @@ public class PendingFeedback {
             this.verOtpDats = verOtpDats;
         }
 
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(@NonNull Parcel parcel, int i) {
+            parcel.writeString(mandt);
+            parcel.writeString(vbeln);
+            parcel.writeString(projectNo);
+            parcel.writeString(regisno);
+            parcel.writeString(processNo);
+            parcel.writeString(beneficiary);
+            parcel.writeString(userid);
+            parcel.writeString(projectLoginNo);
+            parcel.writeString(instdate);
+            parcel.writeString(customerName);
+            parcel.writeString(fatherName);
+            parcel.writeString(state);
+            parcel.writeString(city);
+            parcel.writeString(tehsilCode);
+            parcel.writeString(tehsil);
+            parcel.writeString(village);
+            parcel.writeString(contactNo);
+            parcel.writeString(address);
+            parcel.writeString(make);
+            parcel.writeString(rmsStatus);
+            parcel.writeString(lat);
+            parcel.writeString(lng);
+            parcel.writeString(erdat);
+            parcel.writeString(ertim);
+            parcel.writeString(solarPannelWatt);
+            parcel.writeString(hp);
+            parcel.writeString(panelInstallQty);
+            parcel.writeString(totalWatt);
+            parcel.writeString(panelModuleQty);
+            parcel.writeString(motorSernr);
+            parcel.writeString(pumpSernr);
+            parcel.writeString(controllerSernr);
+            parcel.writeString(simOpretor);
+            parcel.writeString(simno);
+            parcel.writeString(connectionType);
+            parcel.writeString(borewellstatus);
+            parcel.writeString(totalPlateWatt);
+            parcel.writeString(delayReason);
+            parcel.writeString(settingCheck);
+            parcel.writeString(dbugMob1);
+            parcel.writeString(dbugMob2);
+            parcel.writeString(dbugMob3);
+            parcel.writeString(dbugOfline);
+            parcel.writeString(appVersion);
+            parcel.writeString(otpStatus);
+            parcel.writeString(otpRemark);
+            parcel.writeString(offlinephoto);
+            parcel.writeString(verOtp);
+            parcel.writeString(verOtpDats);
+        }
     }
 }
