@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.os.BuildCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import activity.UnloadInstReportImageActivity;
 import utility.CustomUtility;
 import webservice.WebURL;
 
-public class Adapter_Installation_list extends RecyclerView.Adapter<Adapter_Installation_list.HomeCategoryViewHolder> {
+@BuildCompat.PrereleaseSdkCheck public class Adapter_Installation_list extends RecyclerView.Adapter<Adapter_Installation_list.HomeCategoryViewHolder> {
     View.OnClickListener onclick_listener;
     DatabaseHelper db;
     InstallationBean installationBean;

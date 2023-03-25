@@ -1,16 +1,14 @@
 package activity;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,12 +16,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.json.JSONObject;
 
+import bean.DeviceDetailModel;
+import debugapp.PendingFeedback;
+import utility.CustomUtility;
 import utility.dialog4;
-import webservice.CustomHttpClient;
 import webservice.WebURL;
 
 
@@ -54,7 +61,7 @@ public class DeviceStatusActivity extends AppCompatActivity  {
     TextView deviceno,cust_nam,custphno,operatornam,deviceonline,motorstatus;
     String deviceno_txt,cust_nam_txt,custphno_txt,operatornam_txt,msg_txt;
     String controller = "";
-    boolean deviceonline_txt,motorstatus_txt;
+    boolean isDeviceOnline,isMotorStatus;
 
 
     @Override
@@ -69,22 +76,22 @@ public class DeviceStatusActivity extends AppCompatActivity  {
         yourDialog = new dialog4(activity);
         yourDialog.show();
 
+       Init();
+
+    }
+
+    private void Init() {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         deviceno = (TextView) findViewById(R.id.device_no);
         cust_nam = (TextView) findViewById(R.id.cust_nam);
         custphno = (TextView) findViewById(R.id.cust_mb);
         operatornam = (TextView) findViewById(R.id.operator);
         deviceonline = (TextView) findViewById(R.id.dev_status);
         motorstatus = (TextView) findViewById(R.id.motr_stats);
-
-
     }
-
-
 
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -99,7 +106,6 @@ public class DeviceStatusActivity extends AppCompatActivity  {
         return super.onOptionsItemSelected(item);
     }
 
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -109,120 +115,73 @@ public class DeviceStatusActivity extends AppCompatActivity  {
     public void searchWord(String textString) {
 
         if (!textString.equals("")) {
-            new GetDeviceDeails_Task().execute(textString);
+           getDeviceDetail(textString);
         } else {
             Toast.makeText(mContext, "Please Enter Controller Id.", Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    private class GetDeviceDeails_Task extends AsyncTask<String, String, String> {
+    public void getDeviceDetail(String textString){
+        CustomUtility.showProgressDialogue(DeviceStatusActivity.this);
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                WebURL.DEVICE_DETAILS +"?DeviceNo="+textString, null, new Response.Listener<JSONObject >() {
+            @Override
+            public void onResponse(JSONObject  response) {
+                CustomUtility.hideProgressDialog(DeviceStatusActivity.this);
 
 
-        @Override
-        protected void onPreExecute() {
 
-            //progress = newworkorder ProgressDialog(context);
-            progressDialog = ProgressDialog.show(mContext, "", "Please Wait...");
+                if(!response.toString().isEmpty()) {
 
-        }
+                    DeviceDetailModel deviceDetailModel = new Gson().fromJson(response.toString(),DeviceDetailModel.class);
+                            if(deviceDetailModel!=null && deviceDetailModel.getResponse()!=null && String.valueOf(deviceDetailModel.getStatus()).equals("true")) {
 
-        @Override
-        protected String doInBackground(String... params) {
+                                if(deviceDetailModel.getResponse().getDeviceNo()!=null && !deviceDetailModel.getResponse().getDeviceNo().isEmpty()) {
+                                    deviceno.setText(deviceDetailModel.getResponse().getDeviceNo());
+                                }
+                                if(deviceDetailModel.getResponse().getCustomerName()!=null && !deviceDetailModel.getResponse().getCustomerName().isEmpty()) {
+                                    cust_nam.setText(deviceDetailModel.getResponse().getCustomerName());
+                                }
+                                if(deviceDetailModel.getResponse().getCustomerPhoneNo()!=null && !deviceDetailModel.getResponse().getCustomerPhoneNo().isEmpty()) {
+                                    custphno.setText(deviceDetailModel.getResponse().getCustomerPhoneNo());
+                                }
+                                if(deviceDetailModel.getResponse().getOperatorName()!=null && !deviceDetailModel.getResponse().getOperatorName().isEmpty()) {
+                                    operatornam.setText(deviceDetailModel.getResponse().getOperatorName().toString());
+                                }
 
+                                if(deviceDetailModel.getResponse().getIsLogin()) {
+                                    deviceonline.setText(getResources().getString(R.string.online));
+                                    deviceonline.setTextColor(Color.parseColor("#00FF00"));
+                                } else {
+                                    deviceonline.setText(getResources().getString(R.string.offline));
+                                    deviceonline.setTextColor(Color.parseColor("#FF0000"));
+                                }
 
-            String obj2 = null;
-            String contollerid = params[0]+"-0";
-
-            try {
-
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
-                StrictMode.setThreadPolicy(policy);
-
-                obj2 = CustomHttpClient.executeHttpPost(WebURL.DEVICE_DETAILS+"?DeviceNo="+contollerid);
-
-                Log.e("OUTPUT1", "&&&&" + obj2);
-
-                if (obj2 != "") {
-
-                    JSONObject object = new JSONObject(obj2);
-                    String status = object.getString("status");
-
-                    if (status.equalsIgnoreCase("true")) {
-
-                        JSONObject objet = new JSONObject(object.getString("response"));
-
-                                 msg_txt = object.getString("message");
-                                 deviceno_txt = objet.getString("DeviceNo");
-                                 cust_nam_txt = objet.getString("CustomerName");
-                                 custphno_txt = objet.getString("CustomerPhoneNo");
-                                 operatornam_txt = objet.getString("OperatorName");
-                                 deviceonline_txt = Boolean.parseBoolean(objet.getString("IsLogin"));
-                                 motorstatus_txt = Boolean.parseBoolean(objet.getString("PumpStatus"));
+                                if(deviceDetailModel.getResponse().getPumpStatus()) {
+                                    motorstatus.setText(getResources().getString(R.string.online));
+                                    motorstatus.setTextColor(Color.parseColor("#00FF00"));
+                                } else {
+                                    motorstatus.setText(getResources().getString(R.string.offline));
+                                    motorstatus.setTextColor(Color.parseColor("#FF0000"));
+                                }
 
 
-                        Message msg = new Message();
-                        msg.obj = msg_txt;
-                        mHandler.sendMessage(msg);
-
-                        yourDialog.dismiss();
-
-                    } else {
-                        msg_txt = object.getString("message");
-                        Message msg = new Message();
-                        msg.obj = msg_txt;
-                        mHandler1.sendMessage(msg);
-
-
-                    }
-                    progressDialog.dismiss();
-
+                            }
                 }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                progressDialog.dismiss();
             }
-
-            return obj2;
-
-        }
-
-        @SuppressLint("WrongConstant")
-        @Override
-        protected void onPostExecute(String result) {
-
-            // write display tracks logic here
-
-            deviceno .setText(deviceno_txt);
-            cust_nam.setText(cust_nam_txt);
-            custphno.setText(custphno_txt);
-            operatornam.setText(operatornam_txt);
-
-            if(deviceonline_txt)
-            {
-                deviceonline.setText("Online");
-                deviceonline.setTextColor(Color.parseColor("#00FF00"));
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                CustomUtility.hideProgressDialog(DeviceStatusActivity.this);
+                Log.e("error", String.valueOf(error));
+                Toast.makeText(DeviceStatusActivity.this, error.getMessage(),
+                        Toast.LENGTH_LONG).show();
             }
-            else
-            {
-                deviceonline.setText("Offline");
-                deviceonline.setTextColor(Color.parseColor("#FF0000"));
-            }
-
-            if(motorstatus_txt)
-            {
-                motorstatus.setText("Online");
-                motorstatus.setTextColor(Color.parseColor("#00FF00"));
-            }
-            else
-            {
-                motorstatus.setText("Offline");
-                motorstatus.setTextColor(Color.parseColor("#FF0000"));
-            }
-
-            progressDialog.dismiss();  // dismiss dialog
-        }
+        });
+        requestQueue.add(jsonObjectRequest);
     }
 
 }

@@ -40,10 +40,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.OptIn;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.os.BuildCompat;
 
 import com.github.angads25.toggle.interfaces.OnToggledListener;
 import com.github.angads25.toggle.model.ToggleableView;
@@ -85,13 +87,12 @@ import debugapp.Bean.SimDetailsInfoResponse;
 import debugapp.GlobalValue.Constant;
 import debugapp.GlobalValue.NewSolarVFD;
 import debugapp.GlobalValue.UtilMethod;
-import debugapp.PendingFeedback;
 import debugapp.localDB.DatabaseHelperTeacher;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-public class InstallationInitial extends AppCompatActivity {
+@BuildCompat.PrereleaseSdkCheck public class InstallationInitial extends AppCompatActivity {
 
     private DatabaseHelperTeacher mDatabaseHelperTeacher;
     List<SimDetailsInfoResponse> mSimDetailsInfoResponse;
@@ -298,6 +299,7 @@ public class InstallationInitial extends AppCompatActivity {
     }
 
     List<ImageModel> imageList;
+    boolean isBaseUpdate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -688,13 +690,7 @@ public class InstallationInitial extends AppCompatActivity {
                         RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
                         RMS_SERVER_DOWN = "Working Fine";
                         System.out.println("VikasVIHU==>>" + mBTResonseDataList.get(vkp).getDEVICENO());
-                        if (imageList.size() > 0) {
-                            progressDialog = ProgressDialog.show(mContext, "", "Sending Data to server..please wait !");
-                            progressDialog.show();
-                            new SyncDebugDataFromLocal().execute();
-                        } else {
-                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
-                        }
+                        callAPIMethod();
 
                     } else {
                         saveData();
@@ -844,7 +840,7 @@ public class InstallationInitial extends AppCompatActivity {
                 borewellstatus1 = CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno);
 
                 if (!TextUtils.isEmpty(borewellstatus1)) {
-                    Intent intent = new Intent(getApplicationContext(), InstReportImageActivity.class);
+                    Intent intent = new Intent(InstallationInitial.this, InstReportImageActivity.class);
                     intent.putExtra("inst_id", billno);
                     intent.putExtra("cust_name", custname);
                     intent.putExtra("delay_status", delay);
@@ -1069,32 +1065,16 @@ public class InstallationInitial extends AppCompatActivity {
                                                                                 if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
                                                                                     //  simha2
                                                                                     if (project_no1.equalsIgnoreCase("0201") || project_no1.equalsIgnoreCase("201") || project_no1.equalsIgnoreCase("0202") || project_no1.equalsIgnoreCase("202") || project_no1.equalsIgnoreCase("0108") || project_no1.equalsIgnoreCase("108") || project_no1.equalsIgnoreCase("0203") || project_no1.equalsIgnoreCase("203")) {
-                                                                                         if(imageList.size()>0) {
-                                                                                             new SyncInstallationData().execute();
-                                                                                         }else {
-                                                                                             CustomUtility.showToast(InstallationInitial.this,getResources().getString(R.string.select_image));
-                                                                                         }
+                                                                                       callAPIMethod();
                                                                                     } else {
 
                                                                                         if (WebURL.CHECK_FINAL_ALL_OK == 1) {
-                                                                                            if(imageList.size()>0) {
-                                                                                                new SyncInstallationData().execute();
-                                                                                            }else {
-                                                                                                CustomUtility.showToast(InstallationInitial.this,getResources().getString(R.string.select_image));
-                                                                                            }
+                                                                                            callAPIMethod();
                                                                                         } else if (mSimDetailsInfoResponse.size() >= 3) {
-                                                                                            if(imageList.size()>0) {
-                                                                                                new SyncInstallationData().execute();
-                                                                                            }else {
-                                                                                                CustomUtility.showToast(InstallationInitial.this,getResources().getString(R.string.select_image));
-                                                                                            }
+                                                                                            callAPIMethod();
                                                                                         } else {
                                                                                             if (WebURL.BT_DEBUG_CHECK == 1) {
-                                                                                                if(imageList.size()>0) {
-                                                                                                    new SyncInstallationData().execute();
-                                                                                                }else {
-                                                                                                    CustomUtility.showToast(InstallationInitial.this,getResources().getString(R.string.select_image));
-                                                                                                }
+                                                                                                callAPIMethod();
                                                                                             } else {
                                                                                                 Toast.makeText(mContext, "Please debug first then submite", Toast.LENGTH_SHORT).show();
                                                                                             }
@@ -1176,17 +1156,17 @@ public class InstallationInitial extends AppCompatActivity {
                                                                         if (inst_make != null && !inst_make.equals("")) {
                                                                             if (!TextUtils.isEmpty(borewellstatus1)) {
                                                                                 if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
-                                                                                    //   new SyncInstallationData().execute();
+
 
 
                                                                                     if (project_no1.equalsIgnoreCase("0201") || project_no1.equalsIgnoreCase("201") || project_no1.equalsIgnoreCase("0202") || project_no1.equalsIgnoreCase("202") || project_no1.equalsIgnoreCase("0108") || project_no1.equalsIgnoreCase("108") || project_no1.equalsIgnoreCase("0203") || project_no1.equalsIgnoreCase("203")) {
-                                                                                        new SyncInstallationData().execute();
+                                                                                        callAPIMethod();
                                                                                     } else {
 
                                                                                         if (WebURL.CHECK_FINAL_ALL_OK == 1) {
-                                                                                            new SyncInstallationData().execute();
+                                                                                            callAPIMethod();
                                                                                         } else if (mSimDetailsInfoResponse.size() >= 3) {
-                                                                                            new SyncInstallationData().execute();
+                                                                                            callAPIMethod();
                                                                                         } else {
                                                                                             Toast.makeText(mContext, "Please insert new sim and try again!", Toast.LENGTH_SHORT).show();
                                                                                         }
@@ -1274,18 +1254,8 @@ public class InstallationInitial extends AppCompatActivity {
                                                                             if (inst_make != null && !inst_make.equals("")) {
                                                                                 if (!TextUtils.isEmpty(borewellstatus1)) {
                                                                                     if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
-                                                                                        //  simha2
 
-                                                                                        if(imageList.size()>0) {
-                                                                                            new SyncInstallationData().execute();
-                                                                                        }else {
-                                                                                            CustomUtility.showToast(InstallationInitial.this,getResources().getString(R.string.select_image));
-                                                                                        }
-
-                                                                                     /*   if(otpPupupForCusomerApproval())
-                                                                                            new SyncInstallationData().execute();
-                                                                                        else
-                                                                                            Toast.makeText(mContext, "Please varify customer OTP", Toast.LENGTH_SHORT).show();*/
+                                                                                        callAPIMethod();
 
                                                                                     } else {
                                                                                         Toast.makeText(mContext, "Please Select Photos", Toast.LENGTH_SHORT).show();
@@ -1364,34 +1334,11 @@ public class InstallationInitial extends AppCompatActivity {
                                                                         if (inst_make != null && !inst_make.equals("")) {
                                                                             if (!TextUtils.isEmpty(borewellstatus1)) {
                                                                                 if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
-                                                                                    //   new SyncInstallationData().execute();
 
                                                                                     if (project_no1.equalsIgnoreCase("0201") || project_no1.equalsIgnoreCase("201") || project_no1.equalsIgnoreCase("0202") || project_no1.equalsIgnoreCase("202") || project_no1.equalsIgnoreCase("0108") || project_no1.equalsIgnoreCase("108") || project_no1.equalsIgnoreCase("0203") || project_no1.equalsIgnoreCase("203")) {
-                                                                                        new SyncInstallationData().execute();
-                                                                                        /*if(otpPupupForCusomerApproval())
-                                                                                            new SyncInstallationData().execute();
-                                                                                        else
-                                                                                            Toast.makeText(mContext, "Please varify customer OTP", Toast.LENGTH_SHORT).show();*/
+                                                                                        callAPIMethod();
                                                                                     } else {
-                                                                                        /*if(WebURL.CHECK_FINAL_ALL_OK == 1)
-                                                                                        {
-                                                                                            new SyncInstallationData().execute();
-                                                                                           *//* if(otpPupupForCusomerApproval())
-                                                                                                new SyncInstallationData().execute();
-                                                                                            else
-                                                                                                Toast.makeText(mContext, "Please varify customer OTP", Toast.LENGTH_SHORT).show();*//*
-                                                                                        }
-                                                                                       else
-                                                                                        {
-                                                                                            new SyncInstallationData().execute();
-                                                                                           // Toast.makeText(mContext, "Please varify customer OTP", Toast.LENGTH_SHORT).show();
-                                                                                           *//* if(otpPupupForCusomerApproval())
-                                                                                                 new SyncInstallationData().execute();
-                                                                                            else
-                                                                                                Toast.makeText(mContext, "Please varify customer OTP", Toast.LENGTH_SHORT).show();*//*
-                                                                                        }*/
-
-                                                                                        new SyncInstallationData().execute();
+                                                                                        callAPIMethod();
                                                                                     }
                                                                                 } else {
                                                                                     Toast.makeText(mContext, "Please Select Photos", Toast.LENGTH_SHORT).show();
@@ -1469,6 +1416,18 @@ public class InstallationInitial extends AppCompatActivity {
 
         }
 
+    }
+
+    private void callAPIMethod() {
+        if (imageList.size() > 0) {
+            if(isBaseUpdate) {
+                new SyncDebugDataFromLocal().execute();
+            }else {
+                CustomUtility.showToast(InstallationInitial.this, "Please Update I Base First!");
+            }
+        } else {
+            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+        }
     }
 
     public void saveData1() {
@@ -1907,7 +1866,7 @@ public class InstallationInitial extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            ja_invc_data.put(jsonObj);
             final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
             param1_invc.add(new BasicNameValuePair("installation", String.valueOf(ja_invc_data)));
             Log.e("DATA", "$$$$" + jsonObj.toString());
@@ -1938,8 +1897,8 @@ public class InstallationInitial extends AppCompatActivity {
                             CustomUtility.setSharedPreference(mContext, "SYNCLIST", "1");
                             mDatabaseHelperTeacher.deleteSimInfoData(billno);
                             progressDialog.dismiss();
-                             Intent intent = new Intent(mContext, PendingFeedbackActivity.class);
-                             startActivity(intent);
+                            Intent intent = new Intent(mContext, PendingFeedbackActivity.class);
+                            startActivity(intent);
 
                         } else if (invc_done.equalsIgnoreCase("N")) {
                             Message msg = new Message();
@@ -2147,17 +2106,16 @@ public class InstallationInitial extends AppCompatActivity {
                     String mStatus = object.getString("status");
                     final String mMessage = object.getString("message");
                     if (mStatus.equalsIgnoreCase("true")) {
-                        Message msg = new Message();
-                        msg.obj = "I-base Update Successfully!";
-                        mHandler.sendMessage(msg);
+                        isBaseUpdate = true;
+                        CustomUtility.showToast(getApplicationContext(), "I-base Update Successfully!");
                         dialog.dismiss();
                     } else {
-                        Message msg = new Message();
-                        msg.obj = "I-base Not Update Successfully!";
-                        mHandler.sendMessage(msg);
+                        isBaseUpdate = false;
+                        CustomUtility.showToast(getApplicationContext(), "I-base Not Update Successfully!");
                     }
                     progressDialog.dismiss();
                 } catch (Exception e) {
+                    isBaseUpdate = false;
                     e.printStackTrace();
                     progressDialog.dismiss();
                 }
@@ -2285,11 +2243,7 @@ public class InstallationInitial extends AppCompatActivity {
                     mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
                     RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
                     RMS_SERVER_DOWN = "Working Fine";
-                    if (imageList.size() > 0) {
-                        new SyncDebugDataFromLocal().execute();
-                    } else {
-                        CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
-                    }
+                    callAPIMethod();
                 } else {
                     mDatabaseHelperTeacher.deleteAllDataFromTable();
                     progressDialog.dismiss();  // dismiss dialog

@@ -203,6 +203,8 @@
     <string name="selectPhoto4">Please Select photo 4.</string>
     <string name="selectRegistrationImage">Please select registration images</string>
     <string name="selectAllImages">Please select all images</string>
+    <string name="online">Online</string>
+    <string name="offline">Offline</string>
 
 
 </resources>
