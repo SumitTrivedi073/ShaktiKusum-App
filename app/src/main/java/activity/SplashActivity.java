@@ -10,6 +10,7 @@ import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION.SDK_INT;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -57,11 +58,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
+
+@SuppressLint("CustomSplashScreen")
 public class SplashActivity extends Activity {
 
     private static final int REQUEST_CODE_PERMISSION = 2;
     ImageView imageView;
-    Context context;
     Context mContext;
     DatabaseHelper databaseHelper;
 
@@ -70,7 +72,7 @@ public class SplashActivity extends Activity {
 
 
     @Override
-    /** Called when the activity is first created. */
+    //** Called when the activity is first created. */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
@@ -84,6 +86,7 @@ public class SplashActivity extends Activity {
 
         } else {
             CheckLoginStatus();
+
         }
 
     }
@@ -158,7 +161,7 @@ public class SplashActivity extends Activity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case REQUEST_CODE_PERMISSION:
@@ -273,4 +276,51 @@ public class SplashActivity extends Activity {
         finish();
     }
 
+    private class LoginSelction extends AsyncTask<String, String, String> {
+
+
+        @Override
+        protected String doInBackground(String... params) {
+            final ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
+
+            String login_selec = null, project_no = null, project_nm = null, project_login_no = null, project_login_nm = null;
+
+
+            try {
+
+                login_selec = CustomHttpClient.executeHttpPost1(WebURL.LOGIN_SELEC_PAGE, param);
+
+                JSONObject object = new JSONObject(login_selec);
+                String obj1 = object.getString("login_type");
+
+                Log.e("DATA","&&&&"+obj1);
+
+
+                JSONArray ja = new JSONArray(obj1);
+
+
+                for (int i = 0; i < ja.length(); i++) {
+                    JSONObject jo = ja.getJSONObject(i);
+
+                    project_no = jo.optString("project_no");
+                    project_nm = jo.optString("project_nm");
+                    project_login_no = jo.optString("project_login_no");
+                    project_login_nm = jo.optString("project_login_nm");
+
+                    databaseHelper.insertLoginSelectionData(project_no, project_nm, project_login_no, project_login_nm);
+
+                }
+                Intent i = new Intent(SplashActivity.this, Login.class);
+                startActivity(i);
+                SplashActivity.this.finish();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return login_selec;
+
+        }
+
+    }
 }
