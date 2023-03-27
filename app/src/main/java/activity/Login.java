@@ -15,9 +15,11 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -229,6 +231,8 @@ public class Login extends AppCompatActivity {
         //InappUpdate
         appUpdateManager = AppUpdateManagerFactory.create(getApplicationContext());
         checkUpdate();
+
+
     }
 
     private void checkUpdate() {
