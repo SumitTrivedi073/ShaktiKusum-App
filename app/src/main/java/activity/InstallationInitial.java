@@ -1,6 +1,5 @@
 package activity;
 
-import static android.os.Environment.getExternalStoragePublicDirectory;
 import static debugapp.GlobalValue.Constant.InstallationImage;
 
 import android.annotation.SuppressLint;
@@ -15,7 +14,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Environment;
 import android.os.Message;
 import android.os.StrictMode;
 import android.provider.Settings;
@@ -40,7 +38,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.OptIn;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -92,7 +89,8 @@ import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-@BuildCompat.PrereleaseSdkCheck public class InstallationInitial extends AppCompatActivity {
+@BuildCompat.PrereleaseSdkCheck
+public class InstallationInitial extends AppCompatActivity {
 
     private DatabaseHelperTeacher mDatabaseHelperTeacher;
     List<SimDetailsInfoResponse> mSimDetailsInfoResponse;
@@ -227,31 +225,6 @@ import webservice.WebURL;
     String mMotorSerialNo = "";
     String mPumpSerialNo = "";
 
-    android.os.Handler mHandler = new android.os.Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            String mString = (String) msg.obj;
-            Toast.makeText(InstallationInitial.this, mString, Toast.LENGTH_LONG).show();
-            labeledSwitch.setOn(true);
-
-        }
-    };
-    android.os.Handler mHandler1 = new android.os.Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            String mString = (String) msg.obj;
-            Toast.makeText(InstallationInitial.this, mString, Toast.LENGTH_LONG).show();
-            labeledSwitch.setOn(false);
-        }
-    };
-    android.os.Handler mHandler2 = new android.os.Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            String mString = (String) msg.obj;
-            Toast.makeText(InstallationInitial.this, mString, Toast.LENGTH_LONG).show();
-        }
-    };
-
     private Toolbar mToolbar;
     private int value;
     private LinearLayout moduleOneLL, moduleTwoLL;
@@ -280,6 +253,14 @@ import webservice.WebURL;
     List<BTResonseData> mBTResonseDataList;
     BaseRequest baseRequest;
     private Dialog dialog;
+
+    android.os.Handler mHandler2 = new android.os.Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            String mString = (String) msg.obj;
+            Toast.makeText(InstallationInitial.this, mString, Toast.LENGTH_LONG).show();
+        }
+    };
 
     private boolean deleteDirectory(File path) {
         if (path.exists()) {
@@ -690,7 +671,10 @@ import webservice.WebURL;
                         RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
                         RMS_SERVER_DOWN = "Working Fine";
                         System.out.println("VikasVIHU==>>" + mBTResonseDataList.get(vkp).getDEVICENO());
-                        callAPIMethod();
+                        progressDialog = ProgressDialog.show(mContext, "", "Sending Data to server..please wait !");
+
+                        progressDialog.show();
+                        new SyncDebugDataFromLocal().execute();
 
                     } else {
                         saveData();
@@ -698,6 +682,8 @@ import webservice.WebURL;
                 } else {
                     saveData();
                 }
+
+
             }
         });
 
@@ -841,7 +827,7 @@ import webservice.WebURL;
 
                 if (!TextUtils.isEmpty(borewellstatus1)) {
                     Intent intent = new Intent(InstallationInitial.this, InstReportImageActivity.class);
-                    intent.putExtra("inst_id", billno);
+                    intent.putExtra("inst_id", bill_no.getText().toString().trim());
                     intent.putExtra("cust_name", custname);
                     intent.putExtra("delay_status", delay);
                     startActivity(intent);
@@ -1020,10 +1006,43 @@ import webservice.WebURL;
             }
 
             InstallationBean installationBean = new InstallationBean(pernr,
-                    project_no, login_no, inst_latitude, inst_longitude, inst_bill_no, installation_date, inst_bill_date, inst_delay_reason, rmsdata_status, customer_name,
-                    fathname, mobileno, state, state_txt, city, city_txt, tehsil_ins, village_ins, address, make, solarpanel_wattage, solarpanel_stand_ins_quantity, total_watt,
-                    hp, no_of_module, no_of_module_value, module_total_plate_watt, solar_motor_model_details, smmd_sno, splar_pump_model_details, spmd_sno, solar_controller_model,
-                    scm_sno, simoprator_text, conntype_text, simcard_num, regisno
+                    project_no,
+                    login_no,
+                    inst_latitude,
+                    inst_longitude,
+                    inst_bill_no,
+                    installation_date,
+                    inst_bill_date,
+                    inst_delay_reason,
+                    rmsdata_status,
+                    customer_name,
+                    fathname,
+                    mobileno,
+                    state,
+                    state_txt,
+                    city,
+                    city_txt,
+                    tehsil_ins,
+                    village_ins,
+                    address,
+                    make,
+                    solarpanel_wattage,
+                    solarpanel_stand_ins_quantity,
+                    total_watt,
+                    hp,
+                    no_of_module,
+                    no_of_module_value,
+                    module_total_plate_watt,
+                    solar_motor_model_details,
+                    smmd_sno,
+                    splar_pump_model_details,
+                    spmd_sno,
+                    solar_controller_model,
+                    scm_sno,
+                    simoprator_text,
+                    conntype_text,
+                    simcard_num,
+                    regisno
             );
 
             if (db.isRecordExist(db.TABLE_INSTALLATION_PUMP_DATA, db.KEY_BILL_NO, inst_bill_no)) {
@@ -1035,7 +1054,7 @@ import webservice.WebURL;
             String arr[] = no_of_module_value.split(",");
             int no_of_module_value1 = Integer.parseInt(no_of_module);
 
-            borewellstatus1 = CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno);
+            borewellstatus1 = CustomUtility.getSharedPreferences(this, "borewellstatus" + billno);
 
 
             if (WebURL.DEBUG_CHECK_IN_KUSUM.equalsIgnoreCase("ON")) {
@@ -1049,62 +1068,82 @@ import webservice.WebURL;
                                         if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
                                             if (total_watt != null && !total_watt.equals("")) {
                                                 if (conntype_text != null && !conntype_text.equals("")) {
-                                                    //   if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
-                                                    if (module_total_plate_watt != null && !module_total_plate_watt.equals("")) {
-                                                        if (smmd_sno != null && !smmd_sno.equals("")) {
-                                                            if (spmd_sno != null && !spmd_sno.equals("")) {
-                                                                if (scm_sno != null && !scm_sno.equals("")) {
-                                                                    if (arr.length == no_of_module_value1) {
-                                                                        for (int i = 0; i < arr.length - 1; i++) {
-                                                                            if (arr[i].equalsIgnoreCase("")) {
-                                                                                Toast.makeText(mContext, "Please Enter all module serial no.", Toast.LENGTH_SHORT).show();
+                                                    if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
+                                                        //   if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
+                                                        if (module_total_plate_watt != null && !module_total_plate_watt.equals("")) {
+                                                            if (smmd_sno != null && !smmd_sno.equals("")) {
+                                                                if (spmd_sno != null && !spmd_sno.equals("")) {
+                                                                    if (scm_sno != null && !scm_sno.equals("")) {
+                                                                        if (arr.length == no_of_module_value1) {
+                                                                            for (int i = 0; i < arr.length - 1; i++) {
+                                                                                if (arr[i].equalsIgnoreCase("")) {
+                                                                                    Toast.makeText(mContext, "Please Enter all module serial no.", Toast.LENGTH_SHORT).show();
+                                                                                }
                                                                             }
-                                                                        }
-                                                                        if (inst_make != null && !inst_make.equals("")) {
-                                                                            if (!TextUtils.isEmpty(borewellstatus1)) {
-                                                                                if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
-                                                                                    //  simha2
-                                                                                    if (project_no1.equalsIgnoreCase("0201") || project_no1.equalsIgnoreCase("201") || project_no1.equalsIgnoreCase("0202") || project_no1.equalsIgnoreCase("202") || project_no1.equalsIgnoreCase("0108") || project_no1.equalsIgnoreCase("108") || project_no1.equalsIgnoreCase("0203") || project_no1.equalsIgnoreCase("203")) {
-                                                                                       callAPIMethod();
-                                                                                    } else {
-
-                                                                                        if (WebURL.CHECK_FINAL_ALL_OK == 1) {
-                                                                                            callAPIMethod();
-                                                                                        } else if (mSimDetailsInfoResponse.size() >= 3) {
-                                                                                            callAPIMethod();
-                                                                                        } else {
-                                                                                            if (WebURL.BT_DEBUG_CHECK == 1) {
-                                                                                                callAPIMethod();
+                                                                            if (inst_make != null && !inst_make.equals("")) {
+                                                                                if (!TextUtils.isEmpty(borewellstatus1)) {
+                                                                                    if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
+                                                                                        //  simha2
+                                                                                        if (project_no1.equalsIgnoreCase("0201") || project_no1.equalsIgnoreCase("201") || project_no1.equalsIgnoreCase("0202") || project_no1.equalsIgnoreCase("202") || project_no1.equalsIgnoreCase("0108") || project_no1.equalsIgnoreCase("108") || project_no1.equalsIgnoreCase("0203") || project_no1.equalsIgnoreCase("203")) {
+                                                                                            if (imageList.size() > 0 ) {
+                                                                                                new SyncInstallationData().execute();
                                                                                             } else {
-                                                                                                Toast.makeText(mContext, "Please debug first then submite", Toast.LENGTH_SHORT).show();
+                                                                                                CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                                                                                            }
+                                                                                        } else {
+
+                                                                                            if (WebURL.CHECK_FINAL_ALL_OK == 1) {
+                                                                                                if (imageList.size() > 0 ) {
+                                                                                                    new SyncInstallationData().execute();
+                                                                                                } else {
+                                                                                                    CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                                                                                                }
+                                                                                            } else if (mSimDetailsInfoResponse.size() >= 3) {
+                                                                                                if (imageList.size() > 0 ) {
+                                                                                                    new SyncInstallationData().execute();
+                                                                                                } else {
+                                                                                                    CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                                                                                                }
+                                                                                            } else {
+                                                                                                if (WebURL.BT_DEBUG_CHECK == 1) {
+                                                                                                    if (imageList.size() > 0 ) {
+                                                                                                        new SyncInstallationData().execute();
+                                                                                                    } else {
+                                                                                                        CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                                                                                                    }
+                                                                                                } else {
+                                                                                                    Toast.makeText(mContext, "Please debug first then submite", Toast.LENGTH_SHORT).show();
+                                                                                                }
                                                                                             }
                                                                                         }
+
+
+                                                                                    } else {
+                                                                                        Toast.makeText(mContext, "Please Select Photos", Toast.LENGTH_SHORT).show();
                                                                                     }
-
-
                                                                                 } else {
-                                                                                    Toast.makeText(mContext, "Please Select Photos", Toast.LENGTH_SHORT).show();
+                                                                                    Toast.makeText(mContext, "Please Select Borewell Status.", Toast.LENGTH_SHORT).show();
                                                                                 }
                                                                             } else {
-                                                                                Toast.makeText(mContext, "Please Select Borewell Status.", Toast.LENGTH_SHORT).show();
+                                                                                Toast.makeText(mContext, "Please Enter Make", Toast.LENGTH_SHORT).show();
                                                                             }
                                                                         } else {
-                                                                            Toast.makeText(mContext, "Please Enter Make", Toast.LENGTH_SHORT).show();
+                                                                            Toast.makeText(mContext, "Please Enter all module serial no.", Toast.LENGTH_SHORT).show();
                                                                         }
                                                                     } else {
-                                                                        Toast.makeText(mContext, "Please Enter all module serial no.", Toast.LENGTH_SHORT).show();
+                                                                        Toast.makeText(mContext, "Please Enter Controller Serial No.", Toast.LENGTH_SHORT).show();
                                                                     }
                                                                 } else {
-                                                                    Toast.makeText(mContext, "Please Enter Controller Serial No.", Toast.LENGTH_SHORT).show();
+                                                                    Toast.makeText(mContext, "Please Enter Pump Serial No.", Toast.LENGTH_SHORT).show();
                                                                 }
                                                             } else {
-                                                                Toast.makeText(mContext, "Please Enter Pump Serial No.", Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(mContext, "Please Enter Motor Serial No.", Toast.LENGTH_SHORT).show();
                                                             }
                                                         } else {
-                                                            Toast.makeText(mContext, "Please Enter Motor Serial No.", Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(mContext, "Please Enter Total Module Plate Watt", Toast.LENGTH_SHORT).show();
                                                         }
                                                     } else {
-                                                        Toast.makeText(mContext, "Please Enter Total Module Plate Watt", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(mContext, "Please Enter Total Plate Watt", Toast.LENGTH_SHORT).show();
                                                     }
                                                 } else {
                                                     Toast.makeText(mContext, "Please Select Connection Type", Toast.LENGTH_SHORT).show();
@@ -1156,17 +1195,29 @@ import webservice.WebURL;
                                                                         if (inst_make != null && !inst_make.equals("")) {
                                                                             if (!TextUtils.isEmpty(borewellstatus1)) {
                                                                                 if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
-
+                                                                                    //   new SyncInstallationData().execute();
 
 
                                                                                     if (project_no1.equalsIgnoreCase("0201") || project_no1.equalsIgnoreCase("201") || project_no1.equalsIgnoreCase("0202") || project_no1.equalsIgnoreCase("202") || project_no1.equalsIgnoreCase("0108") || project_no1.equalsIgnoreCase("108") || project_no1.equalsIgnoreCase("0203") || project_no1.equalsIgnoreCase("203")) {
-                                                                                        callAPIMethod();
+                                                                                        if (imageList.size() > 0 ) {
+                                                                                            new SyncInstallationData().execute();
+                                                                                        } else {
+                                                                                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                                                                                        }
                                                                                     } else {
 
                                                                                         if (WebURL.CHECK_FINAL_ALL_OK == 1) {
-                                                                                            callAPIMethod();
+                                                                                            if (imageList.size() > 0 ) {
+                                                                                                new SyncInstallationData().execute();
+                                                                                            } else {
+                                                                                                CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                                                                                            }
                                                                                         } else if (mSimDetailsInfoResponse.size() >= 3) {
-                                                                                            callAPIMethod();
+                                                                                            if (imageList.size() > 0 ) {
+                                                                                                new SyncInstallationData().execute();
+                                                                                            } else {
+                                                                                                CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                                                                                            }
                                                                                         } else {
                                                                                             Toast.makeText(mContext, "Please insert new sim and try again!", Toast.LENGTH_SHORT).show();
                                                                                         }
@@ -1254,8 +1305,13 @@ import webservice.WebURL;
                                                                             if (inst_make != null && !inst_make.equals("")) {
                                                                                 if (!TextUtils.isEmpty(borewellstatus1)) {
                                                                                     if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
+                                                                                        //  simha2
 
-                                                                                        callAPIMethod();
+                                                                                        if (imageList.size() > 0 ) {
+                                                                                            new SyncInstallationData().execute();
+                                                                                        } else {
+                                                                                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                                                                                        }
 
                                                                                     } else {
                                                                                         Toast.makeText(mContext, "Please Select Photos", Toast.LENGTH_SHORT).show();
@@ -1336,9 +1392,20 @@ import webservice.WebURL;
                                                                                 if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
 
                                                                                     if (project_no1.equalsIgnoreCase("0201") || project_no1.equalsIgnoreCase("201") || project_no1.equalsIgnoreCase("0202") || project_no1.equalsIgnoreCase("202") || project_no1.equalsIgnoreCase("0108") || project_no1.equalsIgnoreCase("108") || project_no1.equalsIgnoreCase("0203") || project_no1.equalsIgnoreCase("203")) {
-                                                                                        callAPIMethod();
+                                                                                        if (imageList.size() > 0 ) {
+                                                                                            new SyncInstallationData().execute();
+                                                                                        } else {
+                                                                                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                                                                                        }
                                                                                     } else {
-                                                                                        callAPIMethod();
+
+
+                                                                                        if (imageList.size() > 0 ) {
+                                                                                            new SyncInstallationData().execute();
+                                                                                        } else {
+                                                                                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                                                                                        }
+
                                                                                     }
                                                                                 } else {
                                                                                     Toast.makeText(mContext, "Please Select Photos", Toast.LENGTH_SHORT).show();
@@ -1382,9 +1449,6 @@ import webservice.WebURL;
                             } else {
                                 Toast.makeText(mContext, "Please Solar Panel Wattage.", Toast.LENGTH_SHORT).show();
                             }
-                   /* } else {
-                        Toast.makeText(mContext, "Please Get RMS DATA STATUS.", Toast.LENGTH_SHORT).show();
-                    }*/
                         } else {
                             Toast.makeText(mContext, "Please Enter Bill No.", Toast.LENGTH_SHORT).show();
                         }
@@ -1402,10 +1466,44 @@ import webservice.WebURL;
             getData();
 
             InstallationBean installationBean = new InstallationBean(pernr,
-                    project_no, login_no, inst_latitude, inst_longitude, inst_bill_no, installation_date, inst_bill_date, inst_delay_reason, rmsdata_status, customer_name,
-                    fathname, mobileno, state, state_txt, city, city_txt, tehsil_ins, village_ins, address, make, solarpanel_wattage, solarpanel_stand_ins_quantity,
-                    total_watt, hp, no_of_module, no_of_module_value, module_total_plate_watt, solar_motor_model_details, smmd_sno, splar_pump_model_details, spmd_sno,
-                    solar_controller_model, scm_sno, simoprator_text, conntype_text, simcard_num, regisno
+                    project_no,
+                    login_no,
+                    inst_latitude,
+                    inst_longitude,
+                    inst_bill_no,
+                    installation_date,
+                    inst_bill_date,
+                    inst_delay_reason,
+                    rmsdata_status,
+                    customer_name,
+                    fathname,
+                    mobileno,
+                    state,
+                    state_txt,
+                    city,
+                    city_txt,
+                    tehsil_ins,
+                    village_ins,
+                    address,
+                    make,
+                    solarpanel_wattage,
+                    solarpanel_stand_ins_quantity,
+                    total_watt,
+                    hp,
+                    no_of_module,
+                    no_of_module_value,
+                    module_total_plate_watt,
+                    solar_motor_model_details,
+                    smmd_sno,
+                    splar_pump_model_details,
+                    spmd_sno,
+                    solar_controller_model,
+                    scm_sno,
+                    simoprator_text,
+                    conntype_text,
+                    simcard_num,
+                    regisno
+
             );
 
             if (db.isRecordExist(db.TABLE_INSTALLATION_PUMP_DATA, db.KEY_BILL_NO, inst_bill_no)) {
@@ -1418,17 +1516,6 @@ import webservice.WebURL;
 
     }
 
-    private void callAPIMethod() {
-        if (imageList.size() > 0) {
-            if(isBaseUpdate) {
-                new SyncDebugDataFromLocal().execute();
-            }else {
-                CustomUtility.showToast(InstallationInitial.this, "Please Update I Base First!");
-            }
-        } else {
-            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
-        }
-    }
 
     public void saveData1() {
 
@@ -1437,7 +1524,7 @@ import webservice.WebURL;
         getData();
 
         InstallationBean installationBean = new InstallationBean(pernr,
-                project_no, login_no, inst_latitude, inst_longitude, inst_bill_no, inst_delay_reason, installation_date, inst_bill_date, rmsdata_status, customer_name, fathname,
+                project_no, login_no, inst_latitude, inst_longitude, inst_bill_no, inst_delay_reason, installation_date, inst_bill_date, String.valueOf(labeledSwitch.isEnabled()), customer_name, fathname,
                 mobileno, state, state_txt, city, city_txt, tehsil_ins, village_ins, address, make, solarpanel_wattage, solarpanel_stand_ins_quantity, total_watt, hp,
                 no_of_module, no_of_module_value, module_total_plate_watt, solar_motor_model_details, smmd_sno, splar_pump_model_details, spmd_sno, solar_controller_model,
                 scm_sno, simoprator_text, conntype_text, simcard_num, regisno
@@ -1658,291 +1745,6 @@ import webservice.WebURL;
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class InstallationData extends AsyncTask<String, String, String> {
-
-        ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-
-            progressDialog = new ProgressDialog(mContext);
-            progressDialog = ProgressDialog.show(InstallationInitial.this, "", "Checking Data to server..please wait !");
-
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            String obj2 = null;
-
-
-            JSONArray ja_invc_data = new JSONArray();
-
-            JSONObject jsonObj = new JSONObject();
-
-            Log.e("Controller", "&&&&" + controller);
-
-            try {
-
-                jsonObj.put("DeviceNo", controller);
-
-                ja_invc_data.put(jsonObj);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
-            final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
-            param1_invc.add(new BasicNameValuePair("", String.valueOf(ja_invc_data)));
-            Log.e("DATA", "$$$$" + param1_invc.toString());
-
-            System.out.println(param1_invc.toString());
-
-            try {
-
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
-                StrictMode.setThreadPolicy(policy);
-
-                obj2 = CustomHttpClient.executeHttpPost(WebURL.RMSDATA + "?DeviceNo=" + controller);
-
-                Log.e("OUTPUT1", "&&&&" + obj2);
-
-                if (obj2 != "") {
-
-                    JSONObject object = new JSONObject(obj2);
-                    String status = object.getString("status");
-
-
-                    if (status.equalsIgnoreCase("true")) {
-
-                        rmsdata_status = "true";
-
-                        Message msg = new Message();
-                        msg.obj = "Data is Available on the RMS Server";
-                        mHandler.sendMessage(msg);
-
-                    } else {
-                        rmsdata_status = "false";
-
-                        Message msg = new Message();
-                        msg.obj = "Data is not Available on the RMS Server";
-                        mHandler1.sendMessage(msg);
-
-                    }
-
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                progressDialog.dismiss();
-            }
-
-            return obj2;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            progressDialog.dismiss();  // dismiss dialog
-        }
-    }
-
-    private class SyncInstallationData extends AsyncTask<String, String, String> {
-
-        ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog = new ProgressDialog(mContext);
-            progressDialog = ProgressDialog.show(mContext, "", "Sending Data to server..please wait !");
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
-        @Override
-        protected String doInBackground(String... params) {
-            String docno_sap = null;
-            String invc_done = null;
-            String obj2 = null;
-            DatabaseHelper db = new DatabaseHelper(mContext);
-            InstallationBean param_invc = new InstallationBean();
-            param_invc = db.getInstallationData(pernr, billno);
-            JSONArray ja_invc_data = new JSONArray();
-            JSONObject jsonObj = new JSONObject();
-            try {
-                if (!Constant.DBUG_MOB_1.equalsIgnoreCase("")) {
-                    if (mSimDetailsInfoResponse.size() > 0)
-                        mSimDetailsInfoResponse.clear();
-                    mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
-                }
-                try {
-                    for (int i = 0; i < mSimDetailsInfoResponse.size(); i++) {
-                        if (i == 0)
-                            mMOBNUM_1 = mSimDetailsInfoResponse.get(i).getDEVICENOSIMMOB();
-                        if (i == 1)
-                            mMOBNUM_2 = mSimDetailsInfoResponse.get(i).getDEVICENOSIMMOB();
-                        if (i == 2)
-                            mMOBNUM_3 = mSimDetailsInfoResponse.get(i).getDEVICENOSIMMOB();
-
-                        Constant.DBUG_MOB_1 = mMOBNUM_1;
-                        Constant.DBUG_MOB_2 = mMOBNUM_2;
-                        Constant.DBUG_MOB_3 = mMOBNUM_3;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                String date_s = param_invc.getInst_date();
-                SimpleDateFormat dt = new SimpleDateFormat("dd.MM.yyyy");
-                Date date = dt.parse(date_s);
-                SimpleDateFormat dt1 = new SimpleDateFormat("yyyyMMdd");
-
-                jsonObj.put("userid", param_invc.getPernr());
-                jsonObj.put("setting_check", "Para Setting Stop");
-                jsonObj.put("project_no", param_invc.getProject_no());
-                jsonObj.put("project_login_no", param_invc.getLogin_no());
-                jsonObj.put("instdate", dt1.format(date));
-                jsonObj.put("total_plate_watt", param_invc.getModule_total_plate_watt());
-                jsonObj.put("lat", param_invc.getLatitude());
-                jsonObj.put("lng", param_invc.getLongitude());
-                jsonObj.put("customer_name", param_invc.getCustomer_name());
-                jsonObj.put("father_name", param_invc.getFathers_name());
-                jsonObj.put("state", param_invc.getState_ins_id());
-                jsonObj.put("city", param_invc.getDistrict_ins_id());
-                jsonObj.put("tehsil", param_invc.getTehsil_ins());
-                jsonObj.put("village", param_invc.getVillage_ins());
-                jsonObj.put("contact_no", param_invc.getMobile_no());
-                jsonObj.put("address", param_invc.getAddress_ins());
-                jsonObj.put("make", param_invc.getMake_ins());
-                jsonObj.put("rms_status", param_invc.getRms_data_status());
-                jsonObj.put("SOLAR_PANNEL_WATT ", param_invc.getSolarpanel_wattage());
-                jsonObj.put("HP", param_invc.getInst_hp());
-                jsonObj.put("PANEL_INSTALL_QTY", param_invc.getSolarpanel_stand_ins_quantity());
-                jsonObj.put("TOTAL_WATT", param_invc.getTotal_watt());
-                jsonObj.put("PANEL_MODULE_QTY", param_invc.getNo_of_module_qty());
-                jsonObj.put("inst_no_of_module_value", param_invc.getNo_of_module_value());
-                jsonObj.put("MOTOR_SERNR", param_invc.getSmmd_sno());
-                jsonObj.put("PUMP_SERNR", param_invc.getSpmd_sno());
-                jsonObj.put("CONTROLLER_SERNR", param_invc.getScm_sno());
-                jsonObj.put("SIM_OPRETOR", param_invc.getSimoprator());
-                jsonObj.put("SIMNO", param_invc.getSimcard_num());
-                jsonObj.put("VBELN", param_invc.getInst_bill_no());
-                jsonObj.put("CONNECTION_TYPE", param_invc.getConntype());
-                jsonObj.put("REGISNO", param_invc.getRegis_no());
-                jsonObj.put("BOREWELLSTATUS", CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno));
-                jsonObj.put("DELAY_REASON", param_invc.getDelay_reason());
-                jsonObj.put("dbug_mob_1 ", Constant.DBUG_MOB_1);
-                jsonObj.put("dbug_mob_2 ", Constant.DBUG_MOB_2);
-                jsonObj.put("dbug_mob_3 ", Constant.DBUG_MOB_3);
-                jsonObj.put("dbug_ofline", Constant.DBUG_PER_OFLINE);
-                jsonObj.put("app_version", WebURL.APP_VERSION_CODE);
-
-
-                if (imageList.size() > 0) {
-                    if (imageList.get(0).isImageSelected()) {
-                        jsonObj.put("PHOTO1", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(0).getImagePath()));
-                    } else if (imageList.get(1).isImageSelected()) {
-                        jsonObj.put("PHOTO2", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(1).getImagePath()));
-                    } else if (imageList.get(2).isImageSelected()) {
-                        jsonObj.put("PHOTO3", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(2).getImagePath()));
-                    } else if (imageList.get(3).isImageSelected()) {
-                        jsonObj.put("PHOTO4", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(3).getImagePath()));
-                    } else if (imageList.get(4).isImageSelected()) {
-                        jsonObj.put("PHOTO5", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(4).getImagePath()));
-                    } else if (imageList.get(5).isImageSelected()) {
-                        jsonObj.put("PHOTO6", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(5).getImagePath()));
-                    } else if (imageList.get(6).isImageSelected()) {
-                        jsonObj.put("PHOTO7", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(6).getImagePath()));
-                    } else if (imageList.get(7).isImageSelected()) {
-                        jsonObj.put("PHOTO8", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(7).getImagePath()));
-                    } else if (imageList.get(8).isImageSelected()) {
-                        jsonObj.put("PHOTO9", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(8).getImagePath()));
-                    } else if (imageList.get(9).isImageSelected()) {
-                        jsonObj.put("PHOTO10", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(9).getImagePath()));
-                    } else if (imageList.get(10).isImageSelected()) {
-                        jsonObj.put("PHOTO11", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(10).getImagePath()));
-                    }
-
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            ja_invc_data.put(jsonObj);
-            final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
-            param1_invc.add(new BasicNameValuePair("installation", String.valueOf(ja_invc_data)));
-            Log.e("DATA", "$$$$" + jsonObj.toString());
-            System.out.println("param1_invc_vihu==>>" + param1_invc.toString());
-            try {
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
-                StrictMode.setThreadPolicy(policy);
-                obj2 = CustomHttpClient.executeHttpPost1(WebURL.INSTALLATION_DATA, param1_invc);
-                if (!obj2.equalsIgnoreCase("")) {
-                    JSONObject object = new JSONObject(obj2);
-                    String obj1 = object.getString("data_return");
-                    JSONArray ja = new JSONArray(obj1);
-                    for (int i = 0; i < ja.length(); i++) {
-                        JSONObject jo = ja.getJSONObject(i);
-                        docno_sap = jo.getString("mdocno");
-                        invc_done = jo.getString("return");
-                        if (invc_done.equalsIgnoreCase("Y")) {
-                            Message msg = new Message();
-                            msg.obj = "Data Submitted Successfully...";
-                            mHandler2.sendMessage(msg);
-                            db.deleteInstallationData(billno);
-                            db.deleteInstallationListData1(billno);
-                            deleteDirectory(new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/INST/" + billno));
-
-                            CustomUtility.setSharedPreference(mContext, "INSTSYNC" + billno, "");
-                            CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, "");
-                            CustomUtility.setSharedPreference(mContext, "borewellstatus", "");
-                            CustomUtility.setSharedPreference(mContext, "SYNCLIST", "1");
-                            mDatabaseHelperTeacher.deleteSimInfoData(billno);
-                            progressDialog.dismiss();
-                            Intent intent = new Intent(mContext, PendingFeedbackActivity.class);
-                            startActivity(intent);
-
-                        } else if (invc_done.equalsIgnoreCase("N")) {
-                            Message msg = new Message();
-                            msg.obj = "Data Not Submitted, Please try After Sometime.";
-                            mHandler2.sendMessage(msg);
-                            progressDialog.dismiss();
-                            finish();
-                        } else if (invc_done.equalsIgnoreCase("P")) {
-
-                            Message msg = new Message();
-                            msg.obj = "Controller number mismatch. Please update I-base.";
-                            mHandler2.sendMessage(msg);
-                            progressDialog.dismiss();
-                            finish();
-                        } else if (invc_done.equalsIgnoreCase("I")) {
-
-                            Message msg = new Message();
-                            msg.obj = "Camera image quility is very high Please remove it.";
-                            mHandler2.sendMessage(msg);
-                            progressDialog.dismiss();
-                            finish();
-                        } else if (invc_done.equalsIgnoreCase("A")) {
-                            Message msg = new Message();
-                            msg.obj = "Data Not Submitted, Please Install latest version of the app from the play store";
-                            mHandler2.sendMessage(msg);
-                            progressDialog.dismiss();
-                            finish();
-                        }
-                    }
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                progressDialog.dismiss();
-            }
-            return obj2;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            progressDialog.dismiss();  // dismiss dialog
-        }
-    }
 
     private void simUpdatePopup() {
         final Dialog dialog = new Dialog(mContext);
@@ -1987,6 +1789,7 @@ import webservice.WebURL;
                 mPumpSerialNo = edtPumpSerialNoID.getText().toString().trim();
 
                 if (CustomUtility.isInternetOn()) {
+                    dialog.dismiss();
                     serverIbaseUpdateFunctions();
                 } else {
                     Toast.makeText(mContext, "Please check Internet Connection.", Toast.LENGTH_SHORT).show();
@@ -1996,92 +1799,6 @@ import webservice.WebURL;
         dialog.show();
     }
 
-    private class CallUpdatedIbaseData extends AsyncTask<String, String, String> {
-
-        ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog = new ProgressDialog(mContext);
-            progressDialog = ProgressDialog.show(mContext, "", "Sending Data to server..please wait !");
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
-        @Override
-        protected String doInBackground(String... params) {
-            String docno_sap = null;
-            String invc_done = null;
-            String obj2 = null;
-
-            JSONArray ja_invc_data = new JSONArray();
-
-            JSONObject jsonObj = new JSONObject();
-
-            try {
-                String MOB_NAME = UtilMethod.getSharedPreferences(mContext, "MOBName");
-                String MOB_API_NAME = UtilMethod.getSharedPreferences(mContext, "MOBversionAPI");
-                String MOB_VERSION_NAME = UtilMethod.getSharedPreferences(mContext, "MOBversionRelease");
-                jsonObj.put("motor_serno", mMotorSerialNo);
-                jsonObj.put("con_serno", mDriveSerialNo);
-                jsonObj.put("set_serno", pump);
-                ja_invc_data.put(jsonObj);
-            } catch (Exception e) {
-                progressDialog.dismiss();
-                Toast.makeText(mContext, "No internet connection!!", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
-
-            final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
-            param1_invc.add(new BasicNameValuePair("action", String.valueOf(ja_invc_data)));///array name lr_save
-            Log.e("DATA", "$$$$" + param1_invc.toString());
-
-            System.out.println(param1_invc.toString());
-            try {
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
-                StrictMode.setThreadPolicy(policy);
-                obj2 = CustomHttpClient.executeHttpPost1(NewSolarVFD.UPDATE_IBASE_VK_PAGE, param1_invc);
-
-                if (!obj2.equalsIgnoreCase("")) {
-                    JSONObject object = new JSONObject(obj2);
-                    String mStatus = object.getString("status");
-                    final String mMessage = object.getString("message");
-                    if (mStatus.equalsIgnoreCase("true")) {
-                        Message msg = new Message();
-                        msg.obj = "I-base Update Successfully!";
-                        mHandler.sendMessage(msg);
-                        dialog.dismiss();
-                        progressDialog.dismiss();
-                    } else {
-                        Message msg = new Message();
-                        msg.obj = "I-base Not Update Successfully!";
-                        mHandler.sendMessage(msg);
-                        progressDialog.dismiss();
-                    }
-                    progressDialog.dismiss();
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                progressDialog.dismiss();
-                saveData();
-            }
-            return obj2;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    try {
-                        progressDialog.dismiss();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-    }
 
     private void serverIbaseUpdateFunctions() {
 
@@ -2102,13 +1819,14 @@ import webservice.WebURL;
                     Log.d("check_error", obj);
                     Log.e("check_error", obj);
 
+                    progressDialog.dismiss();
                     JSONObject object = new JSONObject(obj);
                     String mStatus = object.getString("status");
                     final String mMessage = object.getString("message");
                     if (mStatus.equalsIgnoreCase("true")) {
                         isBaseUpdate = true;
                         CustomUtility.showToast(getApplicationContext(), "I-base Update Successfully!");
-                        dialog.dismiss();
+
                     } else {
                         isBaseUpdate = false;
                         CustomUtility.showToast(getApplicationContext(), "I-base Not Update Successfully!");
@@ -2128,11 +1846,14 @@ import webservice.WebURL;
 
         @Override
         protected void onPreExecute() {
+            progressDialog = ProgressDialog.show(InstallationInitial.this, "", "Connecting to server..please wait !");
+
         }
 
         @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
         @Override
         protected String doInBackground(String... params) {
+
             String docno_sap = null;
             String invc_done = null;
             String obj2 = null;
@@ -2196,17 +1917,26 @@ import webservice.WebURL;
 
                 Log.e("OUTPUT1", "&&&&" + obj2);
 
-                if (obj2 != "") {
+                if (!obj2.isEmpty()) {
+                    progressDialog.dismiss();
                     JSONObject object = new JSONObject(obj2);
                     String mStatus = object.getString("status");
                     final String mMessage = object.getString("message");
                     String jo11 = object.getString("response");
                     System.out.println("jo11==>>" + jo11);
+                    if (mStatus.equals("true")) {
+                        Intent intent = new Intent(mContext, PendingFeedbackActivity.class);
+                        startActivity(intent);
+                        finish();
+
+                    }
+                } else {
+                    progressDialog.dismiss();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 progressDialog.dismiss();
-                saveData();
+
             }
             return obj2;
         }
@@ -2243,11 +1973,13 @@ import webservice.WebURL;
                     mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
                     RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
                     RMS_SERVER_DOWN = "Working Fine";
-                    callAPIMethod();
+                    new SyncDebugDataFromLocal().execute();
                 } else {
                     mDatabaseHelperTeacher.deleteAllDataFromTable();
-                    progressDialog.dismiss();  // dismiss dialog
-                    saveData();
+                    if (progressDialog != null && progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }// dismiss dialog
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -2260,6 +1992,8 @@ import webservice.WebURL;
         super.onResume();
 
         retriveArrayList();
+
+        Log.e("labeledSwitch", String.valueOf(labeledSwitch.isEnabled()));
     }
 
     private void retriveArrayList() {
@@ -2272,6 +2006,8 @@ import webservice.WebURL;
         // in below line we are getting data from gson
         // and saving it to our array list
         imageList = new Gson().fromJson(json, type);
+
+        Log.e("imageList", String.valueOf(imageList.size()));
     }
 
     private boolean otpPupupForCusomerApproval() {
@@ -2416,4 +2152,271 @@ import webservice.WebURL;
         baseRequest.callAPIGETDirectURL(1, "http://control.yourbulksms.com/api/sendhttp.php?authkey=393770756d707334373701&mobiles=" + mORG_CONTACT_NO + "&message=प्रिय उपभोक्ता, शक्ति पम्प इंस्टालेशन टीम द्वारा सोलर पम्प सफलतापूर्वक इनस्टॉल कर दिया गया है यदि आप इंस्टालेशन से संतुष्ट है तो इंस्टालेशन टीम को OTP बताये और यदि संतुष्ट नहीं है तो कृपया इंस्टालेशन टीम को मोबाइल एप्प में कारण दर्ज करवाये OTP NO - " + mORG_OTP_VALUE + " . शक्ति पम्प&sender=SHAKTl&unicode=1&route=2&unicode=1&country=91&DLT_TE_ID=1707165768934110550");/////
 
     }
+
+    private class SyncInstallationData extends AsyncTask<String, String, String> {
+
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+
+            progressDialog = new ProgressDialog(mContext);
+            progressDialog = ProgressDialog.show(mContext, "", "Sending Data to server..please wait !");
+
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
+        @Override
+        protected String doInBackground(String... params) {
+            String docno_sap = null;
+            String invc_done = null;
+            String obj2 = null;
+
+            DatabaseHelper db = new DatabaseHelper(mContext);
+
+            InstallationBean param_invc = new InstallationBean();
+
+            param_invc = db.getInstallationData(pernr, billno);
+
+            JSONArray ja_invc_data = new JSONArray();
+
+            JSONObject jsonObj = new JSONObject();
+
+            try {
+
+                if (!Constant.DBUG_MOB_1.equalsIgnoreCase("")) {
+
+                    if (mSimDetailsInfoResponse.size() > 0)
+                        mSimDetailsInfoResponse.clear();
+
+                    mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
+                }
+
+                try {
+
+                    for (int i = 0; i < mSimDetailsInfoResponse.size(); i++) {
+
+                        if (i == 0)
+                            mMOBNUM_1 = mSimDetailsInfoResponse.get(i).getDEVICENOSIMMOB();
+
+                        if (i == 1)
+                            mMOBNUM_2 = mSimDetailsInfoResponse.get(i).getDEVICENOSIMMOB();
+
+                        if (i == 2)
+                            mMOBNUM_3 = mSimDetailsInfoResponse.get(i).getDEVICENOSIMMOB();
+
+                        Constant.DBUG_MOB_1 = mMOBNUM_1;
+                        Constant.DBUG_MOB_2 = mMOBNUM_2;
+                        Constant.DBUG_MOB_3 = mMOBNUM_3;
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                String date_s = param_invc.getInst_date();
+
+                SimpleDateFormat dt = new SimpleDateFormat("dd.MM.yyyy");
+
+                Date date = dt.parse(date_s);
+                SimpleDateFormat dt1 = new SimpleDateFormat("yyyyMMdd");
+
+                jsonObj.put("userid", param_invc.getPernr());
+                // jsonObj.put("setting_check", WebURL.mSettingCheckValue);
+                jsonObj.put("setting_check", "Para Setting Stop");
+                // jsonObj.put("setting_check", "1");
+                jsonObj.put("project_no", param_invc.getProject_no());
+                jsonObj.put("project_login_no", param_invc.getLogin_no());
+                jsonObj.put("instdate", dt1.format(date));
+                jsonObj.put("total_plate_watt", param_invc.getModule_total_plate_watt());
+                jsonObj.put("lat", param_invc.getLatitude());
+                jsonObj.put("lng", param_invc.getLongitude());
+                jsonObj.put("customer_name", param_invc.getCustomer_name());
+                jsonObj.put("father_name", param_invc.getFathers_name());
+                jsonObj.put("state", param_invc.getState_ins_id());
+                jsonObj.put("city", param_invc.getDistrict_ins_id());
+                jsonObj.put("tehsil", param_invc.getTehsil_ins());
+                jsonObj.put("village", param_invc.getVillage_ins());
+                jsonObj.put("contact_no", param_invc.getMobile_no());
+                jsonObj.put("address", param_invc.getAddress_ins());
+                jsonObj.put("make", param_invc.getMake_ins());
+                jsonObj.put("rms_status", param_invc.getRms_data_status());
+                jsonObj.put("SOLAR_PANNEL_WATT ", param_invc.getSolarpanel_wattage());
+                jsonObj.put("HP", param_invc.getInst_hp());
+                jsonObj.put("PANEL_INSTALL_QTY", param_invc.getSolarpanel_stand_ins_quantity());
+                jsonObj.put("TOTAL_WATT", param_invc.getTotal_watt());
+                jsonObj.put("PANEL_MODULE_QTY", param_invc.getNo_of_module_qty());
+                jsonObj.put("inst_no_of_module_value", param_invc.getNo_of_module_value());
+                jsonObj.put("MOTOR_SERNR", param_invc.getSmmd_sno());
+                jsonObj.put("PUMP_SERNR", param_invc.getSpmd_sno());
+                jsonObj.put("CONTROLLER_SERNR", param_invc.getScm_sno());
+                jsonObj.put("SIM_OPRETOR", param_invc.getSimoprator());
+                jsonObj.put("SIMNO", param_invc.getSimcard_num());
+                jsonObj.put("VBELN", param_invc.getInst_bill_no());
+                jsonObj.put("CONNECTION_TYPE", param_invc.getConntype());
+                jsonObj.put("REGISNO", param_invc.getRegis_no());
+                jsonObj.put("BOREWELLSTATUS", CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno));
+                jsonObj.put("DELAY_REASON", param_invc.getDelay_reason());
+                jsonObj.put("dbug_mob_1 ", Constant.DBUG_MOB_1);
+                jsonObj.put("dbug_mob_2 ", Constant.DBUG_MOB_2);
+                jsonObj.put("dbug_mob_3 ", Constant.DBUG_MOB_3);
+                jsonObj.put("dbug_ofline", Constant.DBUG_PER_OFLINE);
+                jsonObj.put("dbug_ofline", Constant.DBUG_PER_OFLINE);
+                jsonObj.put("app_version", WebURL.APP_VERSION_CODE);
+
+                System.out.println("only_text_jsonObj==>>" + jsonObj);
+
+                if (imageList.size() > 0) {
+
+                    if (imageList.get(0).isImageSelected()) {
+                        jsonObj.put("PHOTO1", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(0).getImagePath()));
+                    }
+                    if (1 < imageList.size() && imageList.get(1).isImageSelected()) {
+                        jsonObj.put("PHOTO2", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(1).getImagePath()));
+                    }
+                    if (2 < imageList.size() && imageList.get(2).isImageSelected()) {
+                        jsonObj.put("PHOTO3", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(2).getImagePath()));
+                    }
+                    if (3 < imageList.size() && imageList.get(3).isImageSelected()) {
+                        jsonObj.put("PHOTO4", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(3).getImagePath()));
+                    }
+                    if (4 < imageList.size() && imageList.get(4).isImageSelected()) {
+                        jsonObj.put("PHOTO5", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(4).getImagePath()));
+                    }
+                    if (5 < imageList.size() && imageList.get(5).isImageSelected()) {
+                        jsonObj.put("PHOTO6", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(5).getImagePath()));
+                    }
+                    if (6 < imageList.size() && imageList.get(6).isImageSelected()) {
+                        jsonObj.put("PHOTO7", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(6).getImagePath()));
+                    }
+                    if (7 < imageList.size() && imageList.get(7).isImageSelected()) {
+                        jsonObj.put("PHOTO8", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(7).getImagePath()));
+                    }
+                    if (8 < imageList.size() && imageList.get(8).isImageSelected()) {
+                        jsonObj.put("PHOTO9", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(8).getImagePath()));
+                    }
+                    if (9 < imageList.size() && imageList.get(9).isImageSelected()) {
+                        jsonObj.put("PHOTO10", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(9).getImagePath()));
+                    }
+                    if (10 < imageList.size() && imageList.get(10).isImageSelected()) {
+                        jsonObj.put("PHOTO11", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(10).getImagePath()));
+                    }
+                    if (11 < imageList.size() && imageList.get(11).isImageSelected()) {
+                        jsonObj.put("PHOTO12", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(11).getImagePath()));
+                    }
+                }
+                ja_invc_data.put(jsonObj);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
+            param1_invc.add(new BasicNameValuePair("installation", String.valueOf(ja_invc_data)));
+            Log.e("DATA", "$$$$" + param1_invc.toString());
+
+            System.out.println("param1_invc_vihu==>>" + param1_invc.toString());
+            try {
+
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
+                StrictMode.setThreadPolicy(policy);
+
+                obj2 = CustomHttpClient.executeHttpPost1(WebURL.INSTALLATION_DATA, param1_invc);
+
+                Log.e("OUTPUT1", "&&&&" + obj2);
+
+                // if (obj2 != "")
+                if (!obj2.equalsIgnoreCase("")) {
+
+                    JSONObject object = new JSONObject(obj2);
+                    String obj1 = object.getString("data_return");
+
+                    JSONArray ja = new JSONArray(obj1);
+
+                    Log.e("OUTPUT2", "&&&&" + ja.toString());
+
+                    for (int i = 0; i < ja.length(); i++) {
+
+                        JSONObject jo = ja.getJSONObject(i);
+
+                        docno_sap = jo.getString("mdocno");
+                        invc_done = jo.getString("return");
+
+                        if (invc_done.equalsIgnoreCase("Y")) {
+
+                            Message msg = new Message();
+                            msg.obj = "Data Submitted Successfully...";
+                            mHandler2.sendMessage(msg);
+
+                            Log.e("DOCNO", "&&&&" + billno);
+                            db.deleteInstallationData(billno);
+                            db.deleteInstallationListData1(billno);
+                            CustomUtility.setSharedPreference(mContext, "INSTSYNC" + billno, "");
+                            CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, "");
+                            CustomUtility.setSharedPreference(mContext, "borewellstatus", "");
+
+                            CustomUtility.setSharedPreference(mContext, "SYNCLIST", "1");
+
+                            mDatabaseHelperTeacher.deleteSimInfoData(billno);
+                            CustomUtility.deleteArrayList(InstallationInitial.this, InstallationImage);
+                            progressDialog.dismiss();
+                            Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
+                            startActivity(intent);
+
+                            //    deleteDirectory(new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/INST/" + billno));
+                            finish();
+
+
+                        } else if (invc_done.equalsIgnoreCase("N")) {
+
+                            Message msg = new Message();
+                            msg.obj = "Data Not Submitted, Please try After Sometime.";
+                            mHandler2.sendMessage(msg);
+                            progressDialog.dismiss();
+
+                        } else if (invc_done.equalsIgnoreCase("P")) {
+
+                            Message msg = new Message();
+                            msg.obj = "Controller number mismatch. Please update I-base.";
+                            mHandler2.sendMessage(msg);
+                            progressDialog.dismiss();
+
+                        } else if (invc_done.equalsIgnoreCase("I")) {
+
+                            Message msg = new Message();
+                            msg.obj = "Camera image quility is very high Please remove it.";
+                            mHandler2.sendMessage(msg);
+                            progressDialog.dismiss();
+
+                        } else if (invc_done.equalsIgnoreCase("A")) {
+
+                            Message msg = new Message();
+                            msg.obj = "Data Not Submitted, Please Install latest version of the app from the play store";
+                            mHandler2.sendMessage(msg);
+                            progressDialog.dismiss();
+
+                        }
+
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                progressDialog.dismiss();
+            }
+
+            return obj2;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            // write display tracks logic here
+            onResume();
+            progressDialog.dismiss();  // dismiss dialog
+
+
+        }
+    }
+
 }

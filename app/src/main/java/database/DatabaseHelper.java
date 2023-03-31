@@ -676,6 +676,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_ADD6 + " TEXT," + KEY_ADD7 + " TEXT," + KEY_ADD8 + " TEXT," + KEY_ADD9 + " TEXT," + KEY_ADD10 + " TEXT,"
             + KEY_ADD11 + " TEXT," + KEY_ADD12 + " TEXT," + KEY_ADD13 + " TEXT," + KEY_ADD14 + " TEXT," + KEY_ADD15 + " TEXT," + KEY_ADD16 + " TEXT)";
 
+
+
     private static final String CREATE_TABLE_AUDIT_PUMP = "CREATE TABLE "
             + TABLE_AUDIT_PUMP_DATA + "("
             + KEY_BILL_NO + " TEXT,"
@@ -3341,6 +3343,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_REGISTRATION, where, null);
     }
 
+    @SuppressLint("Range")
     public InstallationBean getInstallationData(String user_id, String bill_no) {
         InstallationBean installationBean = new InstallationBean();
         SQLiteDatabase db = this.getReadableDatabase();

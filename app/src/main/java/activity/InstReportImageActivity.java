@@ -179,13 +179,14 @@ import utility.CustomUtility;
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setTitle(getResources().getString(R.string.installationImg));
-        SetAdapter();
-        listner();
+
         Bundle bundle = getIntent().getExtras();
         customerName = bundle.getString("cust_name");
         enqDocno = bundle.getString("inst_id");
         status = bundle.getString("delay_status");
 
+      SetAdapter();
+        listner();
     }
 
 
@@ -248,6 +249,7 @@ import utility.CustomUtility;
                     imageModel.setName(imageList.get(j).getName());
                     imageModel.setImagePath(imageList.get(j).getImagePath());
                     imageModel.setImageSelected(true);
+
                     imageArrayList.set(j, imageModel);
                 }
             }
@@ -423,6 +425,7 @@ import utility.CustomUtility;
         imageModel.setImagePath(path);
         imageModel.setImageSelected(true);
         imageArrayList.set(selectedIndex, imageModel);
+
         CustomUtility.saveArrayList(InstReportImageActivity.this, imageArrayList, InstallationImage);
         customAdapter.notifyDataSetChanged();
 
