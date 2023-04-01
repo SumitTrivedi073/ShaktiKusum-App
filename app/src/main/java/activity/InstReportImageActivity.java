@@ -19,12 +19,10 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.window.OnBackInvokedDispatcher;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -39,20 +37,19 @@ import androidx.core.content.ContextCompat;
 import androidx.core.os.BuildCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.shaktipumplimited.shaktikusum.R;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import adapter.ImageSelectionAdapter;
 import bean.ImageModel;
+import database.DatabaseHelper;
 import utility.CustomUtility;
 
 
-@BuildCompat.PrereleaseSdkCheck public class InstReportImageActivity extends AppCompatActivity implements ImageSelectionAdapter.ImageSelectionListener {
+@BuildCompat.PrereleaseSdkCheck
+public class InstReportImageActivity extends AppCompatActivity implements ImageSelectionAdapter.ImageSelectionListener {
 
 
     private static final int REQUEST_CODE_PERMISSION = 101;
@@ -71,7 +68,7 @@ import utility.CustomUtility;
 
     Toolbar mToolbar;
 
-    boolean isBackPressed = false;
+    boolean isBackPressed = false,isUpdate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,7 +182,7 @@ import utility.CustomUtility;
         enqDocno = bundle.getString("inst_id");
         status = bundle.getString("delay_status");
 
-      SetAdapter();
+        SetAdapter();
         listner();
     }
 
@@ -194,15 +191,16 @@ import utility.CustomUtility;
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Save()){
+                if (Save()) {
                     onBackPressed();
                 }
             }
         });
     }
+
     @Override
     public void onBackPressed() {
-        if(Save()){
+        if (Save()) {
             super.onBackPressed();
         }
     }
@@ -228,29 +226,29 @@ import utility.CustomUtility;
             imageModel.setName(itemNameList.get(i));
             imageModel.setImagePath("");
             imageModel.setImageSelected(false);
+            imageModel.setBillNo("");
             imageArrayList.add(imageModel);
         }
 
-        imageList = new ArrayList<>();
-        String json = CustomUtility.getSharedPreferences(InstReportImageActivity.this, InstallationImage);
-        // below line is to get the type of our array list.
-        Type type = new TypeToken<ArrayList<ImageModel>>() {
-        }.getType();
+        DatabaseHelper db = new DatabaseHelper(this);
 
-        // in below line we are getting data from gson
-        // and saving it to our array list
-        imageList = new Gson().fromJson(json, type);
+        imageList = db.getAllInstallationImages();
 
-        if (imageArrayList.size() > 0 && imageList != null && imageList.size() > 0) {
 
-            for (int j = 0; j < imageList.size(); j++) {
-                if (imageList.get(j).isImageSelected()) {
-                    ImageModel imageModel = new ImageModel();
-                    imageModel.setName(imageList.get(j).getName());
-                    imageModel.setImagePath(imageList.get(j).getImagePath());
-                    imageModel.setImageSelected(true);
+        if (itemNameList.size() > 0 && imageList != null && imageList.size() > 0) {
 
-                    imageArrayList.set(j, imageModel);
+            for (int i = 0; i < imageList.size(); i++) {
+                  for (int j = 0; j < itemNameList.size(); j++) {
+                    if (imageList.get(i).getBillNo().trim().equals(getIntent().getExtras().getString("inst_id").trim())) {
+                        if (imageList.get(i).getName().equals(itemNameList.get(j))) {
+                            ImageModel imageModel = new ImageModel();
+                            imageModel.setName(imageList.get(i).getName());
+                            imageModel.setImagePath(imageList.get(i).getImagePath());
+                            imageModel.setImageSelected(true);
+                            imageModel.setBillNo(imageList.get(i).getBillNo());
+                            imageArrayList.set(j, imageModel);
+                        }
+                    }
                 }
             }
         }
@@ -266,10 +264,13 @@ import utility.CustomUtility;
         selectedIndex = position;
 
         if (imageModelList.isImageSelected()) {
+            isUpdate = true;
             selectImage("1");
         } else {
+            isUpdate = false;
             selectImage("0");
         }
+
     }
 
     private void selectImage(String value) {
@@ -424,7 +425,18 @@ import utility.CustomUtility;
         imageModel.setName(imageArrayList.get(selectedIndex).getName());
         imageModel.setImagePath(path);
         imageModel.setImageSelected(true);
+        imageModel.setBillNo(enqDocno);
         imageArrayList.set(selectedIndex, imageModel);
+
+        DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+
+            if( isUpdate){
+                db.updateRecordAlternate(imageArrayList.get(selectedIndex).getName(), path,
+                      true,  enqDocno);
+            }else {
+                db.insertInstallationImage(imageArrayList.get(selectedIndex).getName(), path,
+                      true,  enqDocno);
+            }
 
         CustomUtility.saveArrayList(InstReportImageActivity.this, imageArrayList, InstallationImage);
         customAdapter.notifyDataSetChanged();
@@ -443,51 +455,51 @@ import utility.CustomUtility;
             if (!imageArrayList.get(0).isImageSelected()) {
                 Toast.makeText(this, getResources().getString(R.string.select_pannel_photo), Toast.LENGTH_SHORT).show();
             } else if (!imageArrayList.get(1).isImageSelected()) {
-                Toast.makeText(this,  getResources().getString(R.string.select_controller_photo), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.select_controller_photo), Toast.LENGTH_SHORT).show();
             } else if (!imageArrayList.get(2).isImageSelected()) {
-                Toast.makeText(this,  getResources().getString(R.string.select_discharge_photo), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.select_discharge_photo), Toast.LENGTH_SHORT).show();
             } else if (!imageArrayList.get(3).isImageSelected()) {
-                Toast.makeText(this,  getResources().getString(R.string.select_foundation_photo), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.select_foundation_photo), Toast.LENGTH_SHORT).show();
             } else if (!imageArrayList.get(4).isImageSelected()) {
-                Toast.makeText(this,  getResources().getString(R.string.select_ethr_light_photo), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.select_ethr_light_photo), Toast.LENGTH_SHORT).show();
             } else {
                 CustomUtility.setSharedPreference(InstReportImageActivity.this, "INSTSYNC" + enqDocno, "1");
                 isBackPressed = true;
             }
 
-        } else if (CustomUtility.getSharedPreferences(InstReportImageActivity.this,"borewellstatus").equalsIgnoreCase("1")) {
+        } else if (CustomUtility.getSharedPreferences(InstReportImageActivity.this, "borewellstatus").equalsIgnoreCase("1")) {
             if (!imageArrayList.get(0).isImageSelected()) {
                 Toast.makeText(this, getResources().getString(R.string.select_pannel_photo), Toast.LENGTH_SHORT).show();
             } else if (!imageArrayList.get(1).isImageSelected()) {
-                Toast.makeText(this,  getResources().getString(R.string.select_controller_photo), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.select_controller_photo), Toast.LENGTH_SHORT).show();
             } else if (!imageArrayList.get(2).isImageSelected()) {
-                Toast.makeText(this,  getResources().getString(R.string.select_discharge_photo), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.select_discharge_photo), Toast.LENGTH_SHORT).show();
             } else if (!imageArrayList.get(3).isImageSelected()) {
-                Toast.makeText(this,  getResources().getString(R.string.select_foundation_photo), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.select_foundation_photo), Toast.LENGTH_SHORT).show();
             } else if (!imageArrayList.get(4).isImageSelected()) {
-                Toast.makeText(this,  getResources().getString(R.string.select_ethr_light_photo), Toast.LENGTH_SHORT).show();
-            }  else if (!imageArrayList.get(5).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_ethr_light_photo), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(5).isImageSelected()) {
                 Toast.makeText(this, getResources().getString(R.string.select_nodues_signature), Toast.LENGTH_SHORT).show();
             } else {
                 CustomUtility.setSharedPreference(InstReportImageActivity.this, "INSTSYNC" + enqDocno, "1");
                 isBackPressed = true;
-               // finish();
+                // finish();
             }
 
-        }else  {
+        } else {
             if (!imageArrayList.get(0).isImageSelected()) {
                 Toast.makeText(this, getResources().getString(R.string.select_pannel_photo), Toast.LENGTH_SHORT).show();
             } else if (!imageArrayList.get(1).isImageSelected()) {
-                Toast.makeText(this,  getResources().getString(R.string.select_controller_photo), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.select_controller_photo), Toast.LENGTH_SHORT).show();
             } else if (!imageArrayList.get(2).isImageSelected()) {
-                Toast.makeText(this,  getResources().getString(R.string.select_discharge_photo), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.select_discharge_photo), Toast.LENGTH_SHORT).show();
             } else if (!imageArrayList.get(3).isImageSelected()) {
-                Toast.makeText(this,  getResources().getString(R.string.select_foundation_photo), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.select_foundation_photo), Toast.LENGTH_SHORT).show();
             } else if (!imageArrayList.get(4).isImageSelected()) {
-                Toast.makeText(this,  getResources().getString(R.string.select_ethr_light_photo), Toast.LENGTH_SHORT).show();
-            }  else if (!imageArrayList.get(5).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_ethr_light_photo), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(5).isImageSelected()) {
                 Toast.makeText(this, getResources().getString(R.string.select_nodues_signature), Toast.LENGTH_SHORT).show();
-            }else if (!imageArrayList.get(6).isImageSelected()) {
+            } else if (!imageArrayList.get(6).isImageSelected()) {
                 Toast.makeText(this, getResources().getString(R.string.select_noNetworkNoc), Toast.LENGTH_SHORT).show();
             } else if (!imageArrayList.get(7).isImageSelected()) {
                 Toast.makeText(this, getResources().getString(R.string.select_joint_inspectionphoto), Toast.LENGTH_SHORT).show();
@@ -497,15 +509,15 @@ import utility.CustomUtility;
                 Toast.makeText(this, getResources().getString(R.string.select_inside_controllerID), Toast.LENGTH_SHORT).show();
             } else if (!imageArrayList.get(10).isImageSelected()) {
                 Toast.makeText(this, getResources().getString(R.string.select_outside_controllerID), Toast.LENGTH_SHORT).show();
-            }  else {
+            } else {
                 CustomUtility.setSharedPreference(InstReportImageActivity.this, "INSTSYNC" + enqDocno, "1");
                 isBackPressed = true;
-              //  finish();
+                //  finish();
             }
 
         }
 
-          return isBackPressed;
+        return isBackPressed;
 
     }
 

@@ -47,8 +47,6 @@ import androidx.core.os.BuildCompat;
 import com.github.angads25.toggle.interfaces.OnToggledListener;
 import com.github.angads25.toggle.model.ToggleableView;
 import com.github.angads25.toggle.widget.LabeledSwitch;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.shaktipumplimited.SetParameter.PairedDeviceActivity;
@@ -63,7 +61,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -279,7 +276,7 @@ public class InstallationInitial extends AppCompatActivity {
         return path.exists() && path.delete();
     }
 
-    List<ImageModel> imageList;
+    List<ImageModel> imageList = new ArrayList<>();
     boolean isBaseUpdate = false;
 
     @Override
@@ -1085,7 +1082,7 @@ public class InstallationInitial extends AppCompatActivity {
                                                                                     if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
                                                                                         //  simha2
                                                                                         if (project_no1.equalsIgnoreCase("0201") || project_no1.equalsIgnoreCase("201") || project_no1.equalsIgnoreCase("0202") || project_no1.equalsIgnoreCase("202") || project_no1.equalsIgnoreCase("0108") || project_no1.equalsIgnoreCase("108") || project_no1.equalsIgnoreCase("0203") || project_no1.equalsIgnoreCase("203")) {
-                                                                                            if (imageList.size() > 0 ) {
+                                                                                            if (imageList.size() > 0) {
                                                                                                 new SyncInstallationData().execute();
                                                                                             } else {
                                                                                                 CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
@@ -1093,20 +1090,20 @@ public class InstallationInitial extends AppCompatActivity {
                                                                                         } else {
 
                                                                                             if (WebURL.CHECK_FINAL_ALL_OK == 1) {
-                                                                                                if (imageList.size() > 0 ) {
+                                                                                                if (imageList.size() > 0) {
                                                                                                     new SyncInstallationData().execute();
                                                                                                 } else {
                                                                                                     CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
                                                                                                 }
                                                                                             } else if (mSimDetailsInfoResponse.size() >= 3) {
-                                                                                                if (imageList.size() > 0 ) {
+                                                                                                if (imageList.size() > 0) {
                                                                                                     new SyncInstallationData().execute();
                                                                                                 } else {
                                                                                                     CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
                                                                                                 }
                                                                                             } else {
                                                                                                 if (WebURL.BT_DEBUG_CHECK == 1) {
-                                                                                                    if (imageList.size() > 0 ) {
+                                                                                                    if (imageList.size() > 0) {
                                                                                                         new SyncInstallationData().execute();
                                                                                                     } else {
                                                                                                         CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
@@ -1199,7 +1196,7 @@ public class InstallationInitial extends AppCompatActivity {
 
 
                                                                                     if (project_no1.equalsIgnoreCase("0201") || project_no1.equalsIgnoreCase("201") || project_no1.equalsIgnoreCase("0202") || project_no1.equalsIgnoreCase("202") || project_no1.equalsIgnoreCase("0108") || project_no1.equalsIgnoreCase("108") || project_no1.equalsIgnoreCase("0203") || project_no1.equalsIgnoreCase("203")) {
-                                                                                        if (imageList.size() > 0 ) {
+                                                                                        if (imageList.size() > 0) {
                                                                                             new SyncInstallationData().execute();
                                                                                         } else {
                                                                                             CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
@@ -1207,13 +1204,13 @@ public class InstallationInitial extends AppCompatActivity {
                                                                                     } else {
 
                                                                                         if (WebURL.CHECK_FINAL_ALL_OK == 1) {
-                                                                                            if (imageList.size() > 0 ) {
+                                                                                            if (imageList.size() > 0) {
                                                                                                 new SyncInstallationData().execute();
                                                                                             } else {
                                                                                                 CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
                                                                                             }
                                                                                         } else if (mSimDetailsInfoResponse.size() >= 3) {
-                                                                                            if (imageList.size() > 0 ) {
+                                                                                            if (imageList.size() > 0) {
                                                                                                 new SyncInstallationData().execute();
                                                                                             } else {
                                                                                                 CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
@@ -1307,7 +1304,7 @@ public class InstallationInitial extends AppCompatActivity {
                                                                                     if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
                                                                                         //  simha2
 
-                                                                                        if (imageList.size() > 0 ) {
+                                                                                        if (imageList.size() > 0) {
                                                                                             new SyncInstallationData().execute();
                                                                                         } else {
                                                                                             CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
@@ -1392,7 +1389,7 @@ public class InstallationInitial extends AppCompatActivity {
                                                                                 if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
 
                                                                                     if (project_no1.equalsIgnoreCase("0201") || project_no1.equalsIgnoreCase("201") || project_no1.equalsIgnoreCase("0202") || project_no1.equalsIgnoreCase("202") || project_no1.equalsIgnoreCase("0108") || project_no1.equalsIgnoreCase("108") || project_no1.equalsIgnoreCase("0203") || project_no1.equalsIgnoreCase("203")) {
-                                                                                        if (imageList.size() > 0 ) {
+                                                                                        if (imageList.size() > 0) {
                                                                                             new SyncInstallationData().execute();
                                                                                         } else {
                                                                                             CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
@@ -1400,7 +1397,7 @@ public class InstallationInitial extends AppCompatActivity {
                                                                                     } else {
 
 
-                                                                                        if (imageList.size() > 0 ) {
+                                                                                        if (imageList.size() > 0) {
                                                                                             new SyncInstallationData().execute();
                                                                                         } else {
                                                                                             CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
@@ -1997,7 +1994,7 @@ public class InstallationInitial extends AppCompatActivity {
     }
 
     private void retriveArrayList() {
-        imageList = new ArrayList<>();
+      /*  imageList = new ArrayList<>();
         String json = CustomUtility.getSharedPreferences(InstallationInitial.this, InstallationImage);
         // below line is to get the type of our array list.
         Type type = new TypeToken<ArrayList<ImageModel>>() {
@@ -2005,9 +2002,24 @@ public class InstallationInitial extends AppCompatActivity {
 
         // in below line we are getting data from gson
         // and saving it to our array list
-        imageList = new Gson().fromJson(json, type);
+        imageList = new Gson().fromJson(json, type);*/
+        imageList = new ArrayList<>();
+        DatabaseHelper db = new DatabaseHelper(this);
 
-        Log.e("imageList", String.valueOf(imageList.size()));
+        List<ImageModel> installationImages = db.getAllInstallationImages();
+
+        for (int i = 0; i < installationImages.size(); i++) {
+            if (installationImages.get(i).getBillNo().trim().equals(bill_no.getText().toString().trim())) {
+                ImageModel imageModel = new ImageModel();
+                imageModel.setName(installationImages.get(i).getName());
+                imageModel.setImagePath(installationImages.get(i).getImagePath());
+                imageModel.setImageSelected(true);
+                imageModel.setBillNo(installationImages.get(i).getBillNo());
+                imageList.add(imageModel);
+            }
+
+        }
+
     }
 
     private boolean otpPupupForCusomerApproval() {

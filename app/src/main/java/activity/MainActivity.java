@@ -291,6 +291,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void logout() {
         try {
             if (CustomUtility.isInternetOn()) {
+                dataHelper = new DatabaseHelper(context);
                 dataHelper.deleteLoginData();
                 dataHelper.deleteDashboardData();
                 dataHelper.deleteRegistrationData();
@@ -298,6 +299,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dataHelper.deleteSurveyListData();
                 dataHelper.deleteInstallationData();
                 dataHelper.deleteSurveyData();
+                dataHelper.deleteInstallationImages();
                 CustomUtility.setSharedPreference(context, "userid", "");
                 CustomUtility.setSharedPreference(context, "username", "");
                 CustomUtility.setSharedPreference(context, "usertype", "");

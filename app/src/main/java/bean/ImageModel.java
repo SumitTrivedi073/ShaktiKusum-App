@@ -2,7 +2,7 @@ package bean;
 
 public class ImageModel {
 
-    String name,ImagePath,billNo;
+    String ID,name,ImagePath,billNo;
     boolean isImageSelected;
 
     public String getName() {
@@ -35,6 +35,14 @@ public class ImageModel {
 
     public void setBillNo(String billNo) {
         this.billNo = billNo;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
     }
 }
 

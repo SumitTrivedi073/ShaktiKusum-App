@@ -231,12 +231,14 @@ public class CameraActivity2 extends AppCompatActivity implements SurfaceHolder.
     {
         super.onPause();
         if (camera != null) {
+            camera.setPreviewCallback(null);
             camera.stopPreview();
             camera.release();
         }
     }
     private void releaseCamera() {
         if (camera != null) {
+            camera.setPreviewCallback(null);
             camera.stopPreview();
             camera.release();
             camera = null;
