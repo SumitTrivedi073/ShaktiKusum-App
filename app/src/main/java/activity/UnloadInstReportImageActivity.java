@@ -3,7 +3,6 @@ package activity;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION.SDK_INT;
-import static debugapp.GlobalValue.Constant.CameraAppImage;
 import static utility.FileUtils.getPath;
 
 import android.Manifest;
@@ -58,6 +57,7 @@ import java.util.List;
 import adapter.ImageSelectionAdapter;
 import bean.ImageModel;
 import bean.InstallationBean;
+import database.DatabaseHelper;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
@@ -82,6 +82,8 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
     String customerName, beneficiary, regNO, projectNo, userID, billNo;
 
     Toolbar mToolbar;
+
+    boolean isUpdate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -240,20 +242,21 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
     private void SetAdapter() {
         imageArrayList = new ArrayList<>();
         itemNameList = new ArrayList<>();
-        itemNameList.add("LR Photo");
-        itemNameList.add("Invoice Photo");
-        itemNameList.add("Customer Photo");
+        itemNameList.add(getResources().getString(R.string.selectLR_photo));
+        itemNameList.add(getResources().getString(R.string.selectInvoicePhoto));
+        itemNameList.add(getResources().getString(R.string.selectCustomerPhoto));
 
         for (int i = 0; i < itemNameList.size(); i++) {
             ImageModel imageModel = new ImageModel();
             imageModel.setName(itemNameList.get(i));
             imageModel.setImagePath("");
             imageModel.setImageSelected(false);
+            imageModel.setBillNo("");
             imageArrayList.add(imageModel);
         }
 
         imageList = new ArrayList<>();
-        String json = CustomUtility.getSharedPreferences(UnloadInstReportImageActivity.this, CameraAppImage);
+       /* String json = CustomUtility.getSharedPreferences(UnloadInstReportImageActivity.this, CameraAppImage);
         // below line is to get the type of our array list.
         Type type = new TypeToken<ArrayList<ImageModel>>() {}.getType();
 
@@ -272,6 +275,30 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
                     imageArrayList.set(j, imageModel);
                 }
             }
+        }*/
+
+        DatabaseHelper db = new DatabaseHelper(this);
+
+        imageList = db.getAllUnloadingImages();
+
+
+        if (itemNameList.size() > 0 && imageList != null && imageList.size() > 0) {
+
+
+            for (int i = 0; i < imageList.size(); i++) {
+                for (int j = 0; j < itemNameList.size(); j++) {
+                    if (imageList.get(i).getBillNo().trim().equals(getIntent().getExtras().getString("vbeln").trim())) {
+                        if (imageList.get(i).getName().equals(itemNameList.get(j))) {
+                            ImageModel imageModel = new ImageModel();
+                            imageModel.setName(imageList.get(i).getName());
+                            imageModel.setImagePath(imageList.get(i).getImagePath());
+                            imageModel.setImageSelected(true);
+                            imageModel.setBillNo(imageList.get(i).getBillNo());
+                            imageArrayList.set(j, imageModel);
+                        }
+                    }
+                }
+            }
         }
         customAdapter = new ImageSelectionAdapter(UnloadInstReportImageActivity.this, imageArrayList);
         recyclerview.setHasFixedSize(true);
@@ -284,8 +311,10 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
     public void ImageSelectionListener(ImageModel imageModelList, int position) {
         selectedIndex = position;
         if (imageModelList.isImageSelected()) {
+            isUpdate = true;
             selectImage("1");
         } else {
+            isUpdate = false;
             selectImage("0");
         }
     }
@@ -442,8 +471,20 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
         imageModel.setName(imageArrayList.get(selectedIndex).getName());
         imageModel.setImagePath(path);
         imageModel.setImageSelected(true);
+        imageModel.setBillNo(billNo);
         imageArrayList.set(selectedIndex, imageModel);
-        CustomUtility.saveArrayList(UnloadInstReportImageActivity.this, imageArrayList, CameraAppImage);
+
+        DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+
+        if( isUpdate){
+            db.updateUnloadingAlternate(imageArrayList.get(selectedIndex).getName(), path,
+                    true,  billNo);
+        }else {
+            db.insertUnloadingImage(imageArrayList.get(selectedIndex).getName(), path,
+                    true,  billNo);
+        }
+
+
         customAdapter.notifyDataSetChanged();
 
 
@@ -548,7 +589,7 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
     private void showingMessage(String message) {
         runOnUiThread(new Runnable() {
             public void run() {
-                CustomUtility.deleteArrayList(UnloadInstReportImageActivity.this, CameraAppImage);
+
                 CustomUtility.showToast(UnloadInstReportImageActivity.this, message);
 
             }

@@ -1,6 +1,5 @@
 package utility;
 
-import static debugapp.GlobalValue.Constant.CameraAppImage;
 
 import android.Manifest;
 import android.annotation.SuppressLint;

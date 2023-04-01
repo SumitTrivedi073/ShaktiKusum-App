@@ -1,7 +1,5 @@
 package activity;
 
-import static debugapp.GlobalValue.Constant.InstallationImage;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -2370,7 +2368,6 @@ public class InstallationInitial extends AppCompatActivity {
                             CustomUtility.setSharedPreference(mContext, "SYNCLIST", "1");
 
                             mDatabaseHelperTeacher.deleteSimInfoData(billno);
-                            CustomUtility.deleteArrayList(InstallationInitial.this, InstallationImage);
                             progressDialog.dismiss();
                             Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
                             startActivity(intent);

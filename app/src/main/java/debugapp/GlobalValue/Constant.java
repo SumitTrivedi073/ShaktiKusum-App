@@ -20,8 +20,6 @@ public class Constant {
     public  static String BT_DEVICE_MAC_ADDRESS = "";
     public  static String PendingFeedback = "pending feedback";
     public static String VerificationCode = "VerificationCode";
-    public static String CameraAppImage ="CameraAppImage";
-    public static String InstallationImage ="InstallationImage";
 
     public static String RegistrationImage ="RegistrationImage";
 

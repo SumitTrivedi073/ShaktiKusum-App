@@ -55,6 +55,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_INSTALLATION_PUMP_DATA = "tbl_installation_pump_data";
 
     public static final String TABLE_INSTALLATION_IMAGE_DATA = "tbl_installation_image_data";
+
+    public static final String TABLE_UNLOADING_IMAGE_DATA = "tbl_unloading_image_data";
     public static final String TABLE_AUDIT_PUMP_DATA = "tbl_audit_pump_data";
     public static final String TABLE_SURVEY_PUMP_DATA = "tbl_survey_pump_data";
     public static final String TABLE_SIM_REPLACMENT_DATA = "tbl_sim_card_replacement";
@@ -239,6 +241,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String KEY_INSTALLATION_ID = "installationId",KEY_INSTALLATION_NAME = "installationImageName",KEY_INSTALLATION_PATH = "installtionPath",KEY_INSTALLATION_IMAGE_SELECTED = "installtionImageSelected",KEY_INSTALLATION_BILL_NO = "InstalltionBillNo";
 
+    public static final String KEY_UNLOADING_ID = "unloadingId",KEY_UNLOADING_NAME = "unloadingImageName",KEY_UNLOADING_PATH = "unloadingPath",KEY_UNLOADING_IMAGE_SELECTED = "unloadingImageSelected",KEY_UNLOADING_BILL_NO = "unloadingBillNo";
 
 
     //Sim card Installation field name
@@ -673,6 +676,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_INSTALLATION_IMAGES = "CREATE TABLE "
             + TABLE_INSTALLATION_IMAGE_DATA + "("  + KEY_INSTALLATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_INSTALLATION_NAME + " TEXT," + KEY_INSTALLATION_PATH + " TEXT," + KEY_INSTALLATION_IMAGE_SELECTED + " BOOLEAN," + KEY_INSTALLATION_BILL_NO + " TEXT)";
 
+    private static final String CREATE_TABLE_UNLOADING_IMAGES = "CREATE TABLE "
+            + TABLE_UNLOADING_IMAGE_DATA + "("  + KEY_UNLOADING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_UNLOADING_NAME + " TEXT," + KEY_UNLOADING_PATH + " TEXT," + KEY_UNLOADING_IMAGE_SELECTED + " TEXT," + KEY_UNLOADING_BILL_NO + " TEXT)";
 
 
 
@@ -1066,6 +1071,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_SIM_CARD_REPLACEMENT);
         db.execSQL(CREATE_TABLE_SURVEY_DATA);
         db.execSQL(CREATE_TABLE_INSTALLATION_IMAGES);
+        db.execSQL(CREATE_TABLE_UNLOADING_IMAGES);
     }
 
     @Override
@@ -1091,6 +1097,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_AUDITSITE_LIST);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_AUDIT_PUMP_DATA);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_INSTALLATION_IMAGE_DATA);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_UNLOADING_IMAGE_DATA);
             // create newworkorder tables
             onCreate(db);
         }
@@ -3393,6 +3400,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void deleteUnloadingImages() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(CustomUtility.doesTableExist(db,TABLE_UNLOADING_IMAGE_DATA)) {
+            db.delete(TABLE_UNLOADING_IMAGE_DATA, null, null);
+        }
+    }
+
     @SuppressLint("Range")
     public InstallationBean getInstallationData(String user_id, String bill_no) {
         InstallationBean installationBean = new InstallationBean();
@@ -3817,5 +3831,56 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return installationImages;
     }
 
+
+    public void insertUnloadingImage( String name ,String path,boolean isSelected,  String billNo ) {
+        SQLiteDatabase  database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_UNLOADING_NAME, name);
+        contentValues.put(KEY_UNLOADING_PATH, path);
+        contentValues.put(KEY_UNLOADING_IMAGE_SELECTED, isSelected);
+        contentValues.put(KEY_UNLOADING_BILL_NO, billNo);
+        database.insert(TABLE_UNLOADING_IMAGE_DATA, null, contentValues);
+        database.close();
+    }
+
+    public void updateUnloadingAlternate(String name ,String path,boolean isSelected,  String billNo ) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_UNLOADING_NAME, name);
+        values.put(KEY_UNLOADING_PATH, path);
+        values.put(KEY_UNLOADING_IMAGE_SELECTED, isSelected);
+        values.put(KEY_UNLOADING_BILL_NO, billNo);
+        // update Row
+        db.update(TABLE_UNLOADING_IMAGE_DATA,values,"unloadingImageName = '"+name+"'",null);
+        db.close();
+    }
+
+    public ArrayList<ImageModel> getAllUnloadingImages() {
+        ArrayList<ImageModel> UnloadingImages = new ArrayList<ImageModel>();
+        SQLiteDatabase  database = this.getWritableDatabase();
+        if(CustomUtility.doesTableExist(database,TABLE_UNLOADING_IMAGE_DATA)) {
+            Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_UNLOADING_IMAGE_DATA, null);
+
+            UnloadingImages.clear();
+            ImageModel imageModel;
+
+            if (mcursor.getCount() > 0) {
+                for (int i = 0; i < mcursor.getCount(); i++) {
+                    mcursor.moveToNext();
+
+                    imageModel = new ImageModel();
+                    imageModel.setID(mcursor.getString(0));
+                    imageModel.setName(mcursor.getString(1));
+                    imageModel.setImagePath(mcursor.getString(2));
+                    imageModel.setImageSelected(Boolean.parseBoolean(mcursor.getString(3)));
+                    imageModel.setBillNo(mcursor.getString(4));
+                    UnloadingImages.add(imageModel);
+                }
+            }
+            mcursor.close();
+            database.close();
+        }
+        return UnloadingImages;
+    }
 
 }
