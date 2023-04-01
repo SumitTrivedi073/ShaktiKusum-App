@@ -293,6 +293,14 @@ public class CustomUtility {
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
+    public static void clearSharedPrefrences(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCE, 0);
+            SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+            prefsEditor.clear();
+            prefsEditor.apply();
+
+    }
+
     public String getCurrentDate() {
         simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         current_date = simpleDateFormat.format(new Date());

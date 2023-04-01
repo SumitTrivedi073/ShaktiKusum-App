@@ -51,7 +51,6 @@ public class OTPGenerationActivity extends AppCompatActivity {
         baseRequest = new BaseRequest(this);
 
         lvlOTPMianID = findViewById(R.id.lvlOTPMianID);
-        lvlOTPMianID.setVisibility(View.GONE);
         txtOTPID = (TextView) findViewById(R.id.txtOTPID);
         txtPODID = (TextView) findViewById(R.id.txtPODID);
         txtSimNumberID = (TextView) findViewById(R.id.txtSimNumberID);
@@ -71,12 +70,14 @@ public class OTPGenerationActivity extends AppCompatActivity {
                 } else if (edtINSTNumberIDSTR.equalsIgnoreCase("")) {
                     Toast.makeText(mContext, "Please enter your mobile number.", Toast.LENGTH_SHORT).show();
                 } else {
+
                     CustomUtility.setSharedPreference(mContext, "InstallerName", edtINSTNmaeIDSTR);
                     CustomUtility.setSharedPreference(mContext, "InstallerMOB", edtINSTNumberIDSTR);
                     mORG_OTP_VALUE = getRandomNumberString();
-
                     lvlOTPMianID.setVisibility(View.VISIBLE);
+                    txtOTPID.setVisibility(View.VISIBLE);
                     callInsertAndUpdateDebugDataAPI();
+
                 }
             }
         });
@@ -86,8 +87,7 @@ public class OTPGenerationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 edtOTPIDSTR = edtOTPID.getText().toString().trim();
                 if (mORG_OTP_VALUE.equalsIgnoreCase(edtOTPIDSTR)) {
-                    CustomUtility.setSharedPreference(mContext, "CHECK_OTP_VERIFED", "Y");
-                    Intent intent = new Intent(mContext, MainActivity.class);
+                      Intent intent = new Intent(mContext, MainActivity.class);
                     startActivity(intent);
                 } else {
                     Toast.makeText(mContext, "Please enter valid OTP.", Toast.LENGTH_SHORT).show();
@@ -113,8 +113,13 @@ public class OTPGenerationActivity extends AppCompatActivity {
             public void onSuccess(int APINumber, String Json, Object obj) {
                 //  JSONArray arr = (JSONArray) obj;
                 try {
-                    if (!Json.equalsIgnoreCase("")) {
+                    if (!obj.toString().isEmpty()) {
                         Toast.makeText(mContext, "OTP send successfully", Toast.LENGTH_LONG).show();
+                        CustomUtility.setSharedPreference(mContext, "InstallerName", edtINSTNmaeIDSTR);
+                        CustomUtility.setSharedPreference(mContext, "InstallerMOB", edtINSTNumberIDSTR);
+                        mORG_OTP_VALUE = getRandomNumberString();
+                        lvlOTPMianID.setVisibility(View.VISIBLE);
+                        txtOTPID.setVisibility(View.VISIBLE);
                     } else {
                         Toast.makeText(mContext, "OTP send failed please try again.", Toast.LENGTH_LONG).show();
                     }
@@ -128,7 +133,7 @@ public class OTPGenerationActivity extends AppCompatActivity {
             @Override
             public void onFailure(int APINumber, String errorCode, String message) {
                 baseRequest.hideLoader();
-                Toast.makeText(mContext, "OTP send successfully.", Toast.LENGTH_LONG).show();
+             //   Toast.makeText(mContext, "OTP send successfully.", Toast.LENGTH_LONG).show();
             }
 
             @Override

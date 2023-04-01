@@ -130,6 +130,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         username.setText(CustomUtility.getSharedPreferences(context, "username"));
         projname.setText(CustomUtility.getSharedPreferences(context, "projectname"));
         appversion.setText("Version " + versionName);
+        CustomUtility.setSharedPreference(context, "CHECK_OTP_VERIFED", "Y");
+
 
         cardSurveySiteID = findViewById(R.id.cardSurveySiteID);
         recyclerView = findViewById(R.id.item_list);
@@ -301,12 +303,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dataHelper.deleteSurveyData();
                 dataHelper.deleteInstallationImages();
                 dataHelper.deleteUnloadingImages();
-                CustomUtility.setSharedPreference(context, "userid", "");
+                CustomUtility.clearSharedPrefrences(context);
+               /* CustomUtility.setSharedPreference(context, "userid", "");
                 CustomUtility.setSharedPreference(context, "username", "");
                 CustomUtility.setSharedPreference(context, "usertype", "");
                 CustomUtility.setSharedPreference(context, "projectid", "");
                 CustomUtility.setSharedPreference(context, "loginid", "");
-                CustomUtility.setSharedPreference(context, "CHECK_OTP_VARIFED", "N");
+                CustomUtility.setSharedPreference(context, "CHECK_OTP_VARIFED", "N");*/
                 Intent intent = new Intent(context, Login.class);
                 startActivity(intent);
                 finish();
