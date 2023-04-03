@@ -96,8 +96,7 @@ public class SplashActivity extends Activity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Log.e("CHECK_OTP_VERIFED====>",CustomUtility.getSharedPreferences(mContext, "CHECK_OTP_VERIFED"));
-                    if (databaseHelper.getLogin() &&  CustomUtility.getSharedPreferences(mContext, "CHECK_OTP_VERIFED").equals("Y")) {
+                     if (databaseHelper.getLogin() &&  CustomUtility.getSharedPreferences(mContext, "CHECK_OTP_VERIFED").equals("Y")) {
                         Intent intent = new Intent(mContext, MainActivity.class);
                         startActivity(intent);
                         finish();

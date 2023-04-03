@@ -58,6 +58,7 @@ import adapter.ImageSelectionAdapter;
 import bean.ImageModel;
 import bean.InstallationBean;
 import database.DatabaseHelper;
+import debugapp.GlobalValue.NewSolarVFD;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
@@ -560,12 +561,15 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
 
 
                             showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
-                              finish();
+                            NewSolarVFD.CHECK_DATA_UNOLAD = 0;
+                             Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                             startActivity(intent);
+                             finish();
 
                         } else if (invc_done.equalsIgnoreCase("N")) {
                             showingMessage(getResources().getString(R.string.dataNotSubmitted));
                             progressDialog.dismiss();
-                            finish();
+
 
                         }
                     }

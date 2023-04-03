@@ -169,6 +169,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_ADDRESS = "address";
     public static final String KEY_STREET = "street";
 
+    public static final String KEY_BENEFICIARY_NO = "street";
+
     public static final String TABLE_STATE_SEARCH = "tbl_state_detail";
     public static final String KEY_SIMMOB = "sim_mob";
     public static final String KEY_ADD1 = "add1";
@@ -671,7 +673,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_PHOTO8 + " BLOB," + KEY_PHOTO9 + " BLOB," + KEY_PHOTO10 + " BLOB," + KEY_PHOTO11 + " BLOB," + KEY_PHOTO12 + " BLOB,"
             + KEY_ADD1 + " TEXT," + KEY_ADD2 + " TEXT," + KEY_ADD3 + " TEXT," + KEY_ADD4 + " TEXT," + KEY_ADD5 + " TEXT,"
             + KEY_ADD6 + " TEXT," + KEY_ADD7 + " TEXT," + KEY_ADD8 + " TEXT," + KEY_ADD9 + " TEXT," + KEY_ADD10 + " TEXT,"
-            + KEY_ADD11 + " TEXT," + KEY_ADD12 + " TEXT," + KEY_ADD13 + " TEXT," + KEY_ADD14 + " TEXT," + KEY_ADD15 + " TEXT," + KEY_ADD16 + " TEXT)";
+            + KEY_ADD11 + " TEXT," + KEY_ADD12 + " TEXT," + KEY_ADD13 + " TEXT," + KEY_ADD14 + " TEXT," + KEY_ADD15 + " TEXT," + KEY_ADD16 + " TEXT," + KEY_BENEFICIARY_NO + " TEXT)";
 
     private static final String CREATE_TABLE_INSTALLATION_IMAGES = "CREATE TABLE "
             + TABLE_INSTALLATION_IMAGE_DATA + "("  + KEY_INSTALLATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_INSTALLATION_NAME + " TEXT," + KEY_INSTALLATION_PATH + " TEXT," + KEY_INSTALLATION_IMAGE_SELECTED + " BOOLEAN," + KEY_INSTALLATION_BILL_NO + " TEXT)";
@@ -2172,6 +2174,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_ADD1, installationBean.getRegis_no());
             values.put(KEY_ADD2, installationBean.getDelay_reason());
             values.put(KEY_ADD3, installationBean.getMake_ins());
+            values.put(KEY_BENEFICIARY_NO,installationBean.getBeneficiaryNo());
             // Insert Row
             long i = db.insert(TABLE_INSTALLATION_PUMP_DATA, null, values);
             // Insert into database successfully.
@@ -2232,6 +2235,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_ADD1, installationBean.getRegis_no());
             values.put(KEY_ADD2, installationBean.getDelay_reason());
             values.put(KEY_ADD3, installationBean.getMake_ins());
+            values.put(KEY_BENEFICIARY_NO,installationBean.getBeneficiaryNo());
             where = KEY_BILL_NO + "='" + billno + "'";
 
             i = db.update(TABLE_INSTALLATION_PUMP_DATA, values, where, null);
@@ -3421,6 +3425,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     while (!cursor.isAfterLast()) {
                         installationBean = new InstallationBean();
                         installationBean.setInst_bill_no(cursor.getString(cursor.getColumnIndex(KEY_BILL_NO)));
+
                         installationBean.setBill_date(cursor.getString(cursor.getColumnIndex(KEY_BILL_DATE)));
                         installationBean.setPernr(cursor.getString(cursor.getColumnIndex(KEY_PERNR)));
                         installationBean.setProject_no(cursor.getString(cursor.getColumnIndex(KEY_PROJ_NO)));
@@ -3458,6 +3463,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         installationBean.setRegis_no(cursor.getString(cursor.getColumnIndex(KEY_ADD1)));
                         installationBean.setDelay_reason(cursor.getString(cursor.getColumnIndex(KEY_ADD2)));
                         installationBean.setMake_ins(cursor.getString(cursor.getColumnIndex(KEY_ADD3)));
+                        installationBean.setBeneficiaryNo(cursor.getString(cursor.getColumnIndex(KEY_BENEFICIARY_NO)));
                         cursor.moveToNext();
                     }
                 }

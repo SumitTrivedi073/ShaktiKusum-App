@@ -42,9 +42,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.os.BuildCompat;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.github.angads25.toggle.interfaces.OnToggledListener;
 import com.github.angads25.toggle.model.ToggleableView;
 import com.github.angads25.toggle.widget.LabeledSwitch;
+import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.shaktipumplimited.SetParameter.PairedDeviceActivity;
@@ -79,6 +86,8 @@ import debugapp.Bean.SimDetailsInfoResponse;
 import debugapp.GlobalValue.Constant;
 import debugapp.GlobalValue.NewSolarVFD;
 import debugapp.GlobalValue.UtilMethod;
+import debugapp.PendingFeedback;
+import debugapp.VerificationCodeModel;
 import debugapp.localDB.DatabaseHelperTeacher;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
@@ -214,7 +223,7 @@ public class InstallationInitial extends AppCompatActivity {
     String mobileno = "";
     String tehvillage = "";
     String borewellstatus1 = "";
-    String CUS_CONTACT_NO = "";
+    String CUS_CONTACT_NO = "",BeneficiaryNo ="";
     int currentScannerFor = -1;
     String mDriveSerialNo = "";
     String mMotorSerialNo = "";
@@ -236,7 +245,7 @@ public class InstallationInitial extends AppCompatActivity {
 
     private String MEmpType = "null";
     String mAppName = "KUSUM";
-    ProgressDialog progressDialog;
+
     int vkp = 0;
     String mInstallerMOB = "";
     String mInstallerName = "";
@@ -302,87 +311,33 @@ public class InstallationInitial extends AppCompatActivity {
         mBTResonseDataList = new ArrayList<>();
         WebURL.BT_DEBUG_CHECK = 0;
         Constant.BILL_NUMBER_UNIC = "";
-
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if (extras == null) {
-                billno = null;
-                set_matno = null;
-                simha2 = null;
-                kunnr = null;
-                gstbillno = null;
-                billdate = null;
-                dispdate = null;
-                name = null;
-                state = null;
-                city = null;
-                state_txt = null;
-                city_txt = null;
-                address = null;
-                tehvillage = null;
-                mobileno = null;
-                controller = null;
-                motor = null;
-                pump = null;
-                simno = null;
-                regisno = null;
-                projectno = null;
-                loginno = null;
-                moduleqty = null;
-                CUS_CONTACT_NO = null;
-            } else {
-                billno = extras.getString("bill_no");
-                set_matno = extras.getString("set_matno");
-                simha2 = extras.getString("simha2");
-                kunnr = extras.getString("kunnr");
-                gstbillno = extras.getString("gst_bill_no");
-                billdate = extras.getString("bill_date");
-                dispdate = extras.getString("disp_date");
-                name = extras.getString("name");
-                state = extras.getString("state");
-                city = extras.getString("city");
-                state_txt = extras.getString("state_txt");
-                city_txt = extras.getString("city_txt");
-                address = extras.getString("address");
-                tehvillage = extras.getString("tehvillage");
-                mobileno = extras.getString("mobile");
-                //controller = extras.getString("controller") +"-0";
-                controller = extras.getString("controller");
-                motor = extras.getString("motor");
-                pump = extras.getString("pump");
-                simno = extras.getString("simno");
-                regisno = extras.getString("regisno");
-                projectno = extras.getString("projectno");
-                loginno = extras.getString("loginno");
-                moduleqty = extras.getString("moduleqty");
-                CUS_CONTACT_NO = extras.getString("CUS_CONTACT_NO");
-            }
-        } else {
-            billno = (String) savedInstanceState.getSerializable("bill_no");
-            set_matno = (String) savedInstanceState.getSerializable("set_matno");
-            simha2 = (String) savedInstanceState.getSerializable("simha2");
-            kunnr = (String) savedInstanceState.getSerializable("kunnr");
-            gstbillno = (String) savedInstanceState.getSerializable("gst_bill_no");
-            billdate = (String) savedInstanceState.getSerializable("bill_date");
-            dispdate = (String) savedInstanceState.getSerializable("disp_date");
-            name = (String) savedInstanceState.getSerializable("name");
-            state = (String) savedInstanceState.getSerializable("state");
-            city = (String) savedInstanceState.getSerializable("city");
-            state_txt = (String) savedInstanceState.getSerializable("state_txt");
-            city_txt = (String) savedInstanceState.getSerializable("city_txt");
-            address = (String) savedInstanceState.getSerializable("address");
-            tehvillage = (String) savedInstanceState.getSerializable("tehvillage");
-            mobileno = (String) savedInstanceState.getSerializable("mobile");
-            controller = (String) savedInstanceState.getSerializable("controller") + "-0";
-            motor = (String) savedInstanceState.getSerializable("motor");
-            pump = (String) savedInstanceState.getSerializable("pump");
-            simno = (String) savedInstanceState.getSerializable("simno");
-            regisno = (String) savedInstanceState.getSerializable("regisno");
-            projectno = (String) savedInstanceState.getSerializable("projectno");
-            loginno = (String) savedInstanceState.getSerializable("loginno");
-            moduleqty = (String) savedInstanceState.getSerializable("moduleqty");
-            CUS_CONTACT_NO = (String) savedInstanceState.getSerializable("CUS_CONTACT_NO");
-        }
+        Bundle extras = getIntent().getExtras();
+        billno = extras.getString("bill_no");
+        set_matno = extras.getString("set_matno");
+        simha2 = extras.getString("simha2");
+        kunnr = extras.getString("kunnr");
+        gstbillno = extras.getString("gst_bill_no");
+        billdate = extras.getString("bill_date");
+        dispdate = extras.getString("disp_date");
+        name = extras.getString("name");
+        state = extras.getString("state");
+        city = extras.getString("city");
+        state_txt = extras.getString("state_txt");
+        city_txt = extras.getString("city_txt");
+        address = extras.getString("address");
+        tehvillage = extras.getString("tehvillage");
+        mobileno = extras.getString("mobile");
+        //controller = extras.getString("controller") +"-0";
+        controller = extras.getString("controller");
+        motor = extras.getString("motor");
+        pump = extras.getString("pump");
+        simno = extras.getString("simno");
+        regisno = extras.getString("regisno");
+        projectno = extras.getString("projectno");
+        loginno = extras.getString("loginno");
+        moduleqty = extras.getString("moduleqty");
+        CUS_CONTACT_NO = extras.getString("CUS_CONTACT_NO");
+        BeneficiaryNo =  extras.getString("BeneficiaryNo");
         try {
             Constant.BILL_NUMBER_UNIC = billno;
             // WebURL.mSettingCheckValue = simha2;
@@ -666,9 +621,7 @@ public class InstallationInitial extends AppCompatActivity {
                         RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
                         RMS_SERVER_DOWN = "Working Fine";
                         System.out.println("VikasVIHU==>>" + mBTResonseDataList.get(vkp).getDEVICENO());
-                        progressDialog = ProgressDialog.show(mContext, "", "Sending Data to server..please wait !");
-
-                        progressDialog.show();
+                        CustomUtility.showProgressDialogue(InstallationInitial.this);
                         new SyncDebugDataFromLocal().execute();
 
                     } else {
@@ -1037,7 +990,8 @@ public class InstallationInitial extends AppCompatActivity {
                     simoprator_text,
                     conntype_text,
                     simcard_num,
-                    regisno
+                    regisno,
+                    BeneficiaryNo
             );
 
             if (db.isRecordExist(db.TABLE_INSTALLATION_PUMP_DATA, db.KEY_BILL_NO, inst_bill_no)) {
@@ -1497,7 +1451,7 @@ public class InstallationInitial extends AppCompatActivity {
                     simoprator_text,
                     conntype_text,
                     simcard_num,
-                    regisno
+                    regisno,BeneficiaryNo
 
             );
 
@@ -1522,7 +1476,7 @@ public class InstallationInitial extends AppCompatActivity {
                 project_no, login_no, inst_latitude, inst_longitude, inst_bill_no, inst_delay_reason, installation_date, inst_bill_date, String.valueOf(labeledSwitch.isEnabled()), customer_name, fathname,
                 mobileno, state, state_txt, city, city_txt, tehsil_ins, village_ins, address, make, solarpanel_wattage, solarpanel_stand_ins_quantity, total_watt, hp,
                 no_of_module, no_of_module_value, module_total_plate_watt, solar_motor_model_details, smmd_sno, splar_pump_model_details, spmd_sno, solar_controller_model,
-                scm_sno, simoprator_text, conntype_text, simcard_num, regisno
+                scm_sno, simoprator_text, conntype_text, simcard_num, regisno,BeneficiaryNo
 
         );
 
@@ -1805,8 +1759,7 @@ public class InstallationInitial extends AppCompatActivity {
         param.add(new BasicNameValuePair("con_serno", mDriveSerialNo));
         param.add(new BasicNameValuePair("set_serno", pump));
 
-        progressDialog = ProgressDialog.show(InstallationInitial.this, "", "Connecting to server..please wait !");
-
+          CustomUtility.showProgressDialogue(InstallationInitial.this);
         new Thread() {
             public void run() {
                 try {
@@ -1814,7 +1767,7 @@ public class InstallationInitial extends AppCompatActivity {
                     Log.d("check_error", obj);
                     Log.e("check_error", obj);
 
-                    progressDialog.dismiss();
+                    CustomUtility.hideProgressDialog(InstallationInitial.this);
                     JSONObject object = new JSONObject(obj);
                     String mStatus = object.getString("status");
                     final String mMessage = object.getString("message");
@@ -1826,11 +1779,11 @@ public class InstallationInitial extends AppCompatActivity {
                         isBaseUpdate = false;
                         CustomUtility.showToast(getApplicationContext(), "I-base Not Update Successfully!");
                     }
-                    progressDialog.dismiss();
+
                 } catch (Exception e) {
                     isBaseUpdate = false;
                     e.printStackTrace();
-                    progressDialog.dismiss();
+                    CustomUtility.hideProgressDialog(InstallationInitial.this);
                 }
             }
 
@@ -1841,8 +1794,8 @@ public class InstallationInitial extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-            progressDialog = ProgressDialog.show(InstallationInitial.this, "", "Connecting to server..please wait !");
 
+            CustomUtility.showProgressDialogue(InstallationInitial.this);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
@@ -1890,7 +1843,7 @@ public class InstallationInitial extends AppCompatActivity {
                 ja_invc_data.put(jsonObj);
 
             } catch (Exception e) {
-                progressDialog.dismiss();
+                CustomUtility.hideProgressDialog(InstallationInitial.this);
                 Toast.makeText(mContext, "No internet connection!!", Toast.LENGTH_SHORT).show();
                 // mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO,SIGNL_STREN,SIM,NET_REG,SER_CONNECT,CAB_CONNECT,LATITUDE,LANGITUDE,MOBILE,IMEI,DONGAL_ID,MUserId,true);
 
@@ -1913,24 +1866,33 @@ public class InstallationInitial extends AppCompatActivity {
                 Log.e("OUTPUT1", "&&&&" + obj2);
 
                 if (!obj2.isEmpty()) {
-                    progressDialog.dismiss();
+                    CustomUtility.hideProgressDialog(InstallationInitial.this);
                     JSONObject object = new JSONObject(obj2);
                     String mStatus = object.getString("status");
                     final String mMessage = object.getString("message");
                     String jo11 = object.getString("response");
                     System.out.println("jo11==>>" + jo11);
                     if (mStatus.equals("true")) {
-                        Intent intent = new Intent(mContext, PendingFeedbackActivity.class);
-                        startActivity(intent);
-                        finish();
+                        Random random = new Random();
+                        String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                sendVerificationCodeAPI(generatedVerificationCode,inst_mob_no.getText().toString().trim(),inst_hp.getText().toString().trim(),BeneficiaryNo,bill_no.getText().toString());
+
+                            }
+                        });
+
+
 
                     }
                 } else {
-                    progressDialog.dismiss();
+                    CustomUtility.hideProgressDialog(InstallationInitial.this);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                progressDialog.dismiss();
+                CustomUtility.hideProgressDialog(InstallationInitial.this);
 
             }
             return obj2;
@@ -1971,9 +1933,7 @@ public class InstallationInitial extends AppCompatActivity {
                     new SyncDebugDataFromLocal().execute();
                 } else {
                     mDatabaseHelperTeacher.deleteAllDataFromTable();
-                    if (progressDialog != null && progressDialog.isShowing()) {
-                        progressDialog.dismiss();
-                    }// dismiss dialog
+                    CustomUtility.hideProgressDialog(InstallationInitial.this);
 
                 }
             } catch (Exception e) {
@@ -2170,8 +2130,8 @@ public class InstallationInitial extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
 
-            progressDialog = new ProgressDialog(mContext);
-            progressDialog = ProgressDialog.show(mContext, "", "Sending Data to server..please wait !");
+
+            CustomUtility.showProgressDialogue(InstallationInitial.this);
 
         }
 
@@ -2232,9 +2192,12 @@ public class InstallationInitial extends AppCompatActivity {
                 SimpleDateFormat dt1 = new SimpleDateFormat("yyyyMMdd");
 
                 jsonObj.put("userid", param_invc.getPernr());
-                // jsonObj.put("setting_check", WebURL.mSettingCheckValue);
+                if(param_invc.getBeneficiaryNo()!=null && !param_invc.getBeneficiaryNo().isEmpty()) {
+                    jsonObj.put("beneficiary", param_invc.getBeneficiaryNo());
+                }else {
+                    jsonObj.put("beneficiary", BeneficiaryNo);
+                }
                 jsonObj.put("setting_check", "Para Setting Stop");
-                // jsonObj.put("setting_check", "1");
                 jsonObj.put("project_no", param_invc.getProject_no());
                 jsonObj.put("project_login_no", param_invc.getLogin_no());
                 jsonObj.put("instdate", dt1.format(date));
@@ -2337,7 +2300,7 @@ public class InstallationInitial extends AppCompatActivity {
 
                 // if (obj2 != "")
                 if (!obj2.equalsIgnoreCase("")) {
-
+                    CustomUtility.hideProgressDialog(InstallationInitial.this);
                     JSONObject object = new JSONObject(obj2);
                     String obj1 = object.getString("data_return");
 
@@ -2352,7 +2315,7 @@ public class InstallationInitial extends AppCompatActivity {
                         docno_sap = jo.getString("mdocno");
                         invc_done = jo.getString("return");
 
-                        if (invc_done.equalsIgnoreCase("Y")) {
+                        if (invc_done.equals("Y")) {
 
                             Message msg = new Message();
                             msg.obj = "Data Submitted Successfully...";
@@ -2368,41 +2331,44 @@ public class InstallationInitial extends AppCompatActivity {
                             CustomUtility.setSharedPreference(mContext, "SYNCLIST", "1");
 
                             mDatabaseHelperTeacher.deleteSimInfoData(billno);
-                            progressDialog.dismiss();
-                            Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
-                            startActivity(intent);
 
-                            //    deleteDirectory(new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/INST/" + billno));
-                            finish();
+                            Random random = new Random();
+                            String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    sendVerificationCodeAPI(generatedVerificationCode,inst_mob_no.getText().toString().trim(),inst_hp.getText().toString().trim(),BeneficiaryNo,bill_no.getText().toString());
+
+                                }
+                            });
 
 
-                        } else if (invc_done.equalsIgnoreCase("N")) {
+                        } else if (invc_done.equals("N")) {
 
                             Message msg = new Message();
                             msg.obj = "Data Not Submitted, Please try After Sometime.";
                             mHandler2.sendMessage(msg);
-                            progressDialog.dismiss();
-
-                        } else if (invc_done.equalsIgnoreCase("P")) {
+                        } else if (invc_done.equals("P")) {
 
                             Message msg = new Message();
                             msg.obj = "Controller number mismatch. Please update I-base.";
                             mHandler2.sendMessage(msg);
-                            progressDialog.dismiss();
 
-                        } else if (invc_done.equalsIgnoreCase("I")) {
+
+                        } else if (invc_done.equals("I")) {
 
                             Message msg = new Message();
                             msg.obj = "Camera image quility is very high Please remove it.";
                             mHandler2.sendMessage(msg);
-                            progressDialog.dismiss();
 
-                        } else if (invc_done.equalsIgnoreCase("A")) {
+
+                        } else if (invc_done.equals("A")) {
 
                             Message msg = new Message();
                             msg.obj = "Data Not Submitted, Please Install latest version of the app from the play store";
                             mHandler2.sendMessage(msg);
-                            progressDialog.dismiss();
+
 
                         }
 
@@ -2411,7 +2377,7 @@ public class InstallationInitial extends AppCompatActivity {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                progressDialog.dismiss();
+                CustomUtility.hideProgressDialog(InstallationInitial.this);
             }
 
             return obj2;
@@ -2420,12 +2386,86 @@ public class InstallationInitial extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
 
-            // write display tracks logic here
-            onResume();
-            progressDialog.dismiss();  // dismiss dialog
-
-
         }
     }
 
+    private void sendVerificationCodeAPI(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo,String billNo) {
+        CustomUtility.showProgressDialogue(InstallationInitial.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                WebURL.SendOTP +"&mobiles="+"918770957105"+
+                        "&message=आप अपने खेत में शक्ति पम्प्स (इंडिया) लिमिटेड द्वारा स्थापित "+Hp+" एचपी रेटिंग सोलर पंप सेट के लिए लाभार्थी आईडी "+beneficiaryNo+" के संदर्भ में यह संदेश प्राप्त कर रहे हैं।" +
+                        " यह संदेश केवल आपकी प्रतिक्रिया के उद्देश्य से है शक्ति पंप्स इंस्टालर को सत्यपान कोड साझा करके आप निम्नलिखित की पुष्टि कर रहे हैं 1) आप स्थापना की गुणवत्ता से संतुष्ट हैं" +
+                        " 2) आप सोलर पंप सेट के प्रदर्शन से संतुष्ट हैं 3) इंस्टॉलर ने किसी भी प्रकार की सामग्री या स्थापना कार्य के लिए कोई राशि नहीं ली हैं यदि उपरोक्त सभी तीन कथन सही हैं, " +
+                        "तो कृपया अपने सोलर पम्प सेट की 5 वर्ष की सेवा को सक्रिय करने के लिए इंस्टॉलर के साथ सत्यपान कोड "+generatedVerificationCode+" साझा करें।:&sender=SHAKTl&route=2&country=91&DLT_TE_ID=1707167928540679513&unicode=1",
+
+                null, new Response.Listener<JSONObject >() {
+            @Override
+            public void onResponse(JSONObject  res) {
+                CustomUtility.hideProgressDialog(InstallationInitial.this);
+
+
+                if(!res.toString().isEmpty()) {
+                    VerificationCodeModel verificationCodeModel = new Gson().fromJson(res.toString(), VerificationCodeModel.class);
+                    if(verificationCodeModel.getStatus().equals("Success")) {
+
+                        ShowAlertResponse(generatedVerificationCode,ContactNo,Hp,beneficiaryNo,billNo);
+                    }
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                CustomUtility.hideProgressDialog(InstallationInitial.this);
+                Log.e("error", String.valueOf(error));
+                Toast.makeText(InstallationInitial.this, error.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+    }
+    private void ShowAlertResponse(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo,String billNo) {
+        LayoutInflater inflater = (LayoutInflater) InstallationInitial.this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.send_successfully_layout,
+                null);
+        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(InstallationInitial.this, R.style.MyDialogTheme);
+
+        builder.setView(layout);
+        builder.setCancelable(false);
+       android.app.AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        alertDialog.show();
+
+
+        TextView OK_txt = layout.findViewById(R.id.OK_txt);
+        TextView title_txt = layout.findViewById(R.id.title_txt);
+
+        title_txt.setText(getResources().getString(R.string.otp_send_successfully));
+
+        OK_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                Intent intent = new Intent(InstallationInitial.this, PendingFeedBackOTPVerification.class);
+                intent.putExtra(Constant.PendingFeedbackContact,ContactNo);
+                intent.putExtra(Constant.PendingFeedbackVblen,billNo);
+                intent.putExtra(Constant.PendingFeedbackHp,Hp);
+                intent.putExtra(Constant.PendingFeedbackBeneficiary,beneficiaryNo);
+                intent.putExtra(Constant.VerificationCode,generatedVerificationCode);
+
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+
+                /* intent.putExtra(Constant.PendingFeedbackVblen,response.getVbeln());
+                intent.putExtra(Constant.PendingFeedbackHp,response.getHp());
+                intent.putExtra(Constant.PendingFeedbackBeneficiary,response.getBeneficiary());
+                intent.putExtra(Constant.VerificationCode,generatedVerificationCode);*/
+            }
+        });
+
+    }
 }

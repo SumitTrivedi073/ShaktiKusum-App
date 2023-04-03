@@ -231,35 +231,6 @@ import webservice.WebURL;
     protected void onResume() {
         super.onResume();
 
-       if (CustomUtility.getSharedPreferences(context, "SYNCLIST").equalsIgnoreCase("1")) {
-            if (CustomUtility.isInternetOn()) {
-                recyclerView.setAdapter(null);
-                db.deleteInstallationListData();
-                CustomUtility.setSharedPreference(context, "SYNCLIST", "0");
-                new GetInstallationDataList_Task().execute();
-            } else {
-                Toast.makeText(getApplicationContext(), "No internet Connection....", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            installationBeans = new ArrayList<InstallationListBean>();
-            installationBeans = db.getInstallationListData(user_id);
-            Log.e("SIZE", "&&&&" + installationBeans.size());
-            if (installationBeans != null && installationBeans.size() > 0) {
-                lin1.setVisibility(View.VISIBLE);
-                lin2.setVisibility(View.GONE);
-                recyclerView.setAdapter(null);
-                Log.e("SIZE", "&&&&" + installationBeans.size());
-                adapterInstallationList = new Adapter_Installation_list(context, installationBeans);
-                layoutManagerSubCategory = new LinearLayoutManager(context);
-                layoutManagerSubCategory.setOrientation(LinearLayoutManager.VERTICAL);
-                recyclerView.setLayoutManager(layoutManagerSubCategory);
-                recyclerView.setAdapter(adapterInstallationList);
-                adapterInstallationList.notifyDataSetChanged();
-            } else {
-                lin1.setVisibility(View.GONE);
-                lin2.setVisibility(View.VISIBLE);
-            }
-        }
     }
 
     @Override

@@ -18,7 +18,15 @@ public class Constant {
     public  static String BT_DEVICE_NAME = "";
 
     public  static String BT_DEVICE_MAC_ADDRESS = "";
-    public  static String PendingFeedback = "pending feedback";
+
+    public  static String PendingFeedback = "pendingFeedback";
+    public  static String PendingFeedbackContact = "pendingFeedbackContact";
+
+    public  static String PendingFeedbackVblen = "pendingFeedbackVblen";
+
+    public  static String PendingFeedbackHp = "pendingFeedbackHp";
+
+    public  static String PendingFeedbackBeneficiary = "pendingFeedbackBeneficiary";
     public static String VerificationCode = "VerificationCode";
 
     public static String RegistrationImage ="RegistrationImage";
