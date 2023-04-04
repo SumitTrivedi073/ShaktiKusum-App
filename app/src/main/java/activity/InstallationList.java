@@ -178,7 +178,7 @@ import webservice.WebURL;
                 // TODO Auto-generated method stub
             }
         });
-        if (CustomUtility.isInternetOn()) {
+        /*if (CustomUtility.isInternetOn()) {
             if (db.getcount(db.TABLE_INSTALLATION_LIST)) {
                 installationBeans = new ArrayList<InstallationListBean>();
                 installationBeans = db.getInstallationListData(user_id);
@@ -194,6 +194,7 @@ import webservice.WebURL;
                     recyclerView.setLayoutManager(layoutManagerSubCategory);
                     recyclerView.setAdapter(adapterInstallationList);
                     adapterInstallationList.notifyDataSetChanged();
+                    NewSolarVFD.CHECK_DATA_UNOLAD = 0;
                 } else {
                     lin1.setVisibility(View.GONE);
                     lin2.setVisibility(View.VISIBLE);
@@ -219,10 +220,37 @@ import webservice.WebURL;
                 recyclerView.setLayoutManager(layoutManagerSubCategory);
                 recyclerView.setAdapter(adapterInstallationList);
                 adapterInstallationList.notifyDataSetChanged();
+                NewSolarVFD.CHECK_DATA_UNOLAD = 0;
             } else {
                 lin1.setVisibility(View.GONE);
                 lin2.setVisibility(View.VISIBLE);
             }
+        }*/
+
+        if (db.getcount(db.TABLE_INSTALLATION_LIST)) {
+            installationBeans = new ArrayList<InstallationListBean>();
+            installationBeans = db.getInstallationListData(user_id);
+            Log.e("SIZE", "&&&&" + installationBeans.size());
+            if (installationBeans != null && installationBeans.size() > 0) {
+                lin1.setVisibility(View.VISIBLE);
+                lin2.setVisibility(View.GONE);
+                recyclerView.setAdapter(null);
+                Log.e("SIZE", "&&&&" + installationBeans.size());
+                adapterInstallationList = new Adapter_Installation_list(context, installationBeans);
+                layoutManagerSubCategory = new LinearLayoutManager(context);
+                layoutManagerSubCategory.setOrientation(LinearLayoutManager.VERTICAL);
+                recyclerView.setLayoutManager(layoutManagerSubCategory);
+                recyclerView.setAdapter(adapterInstallationList);
+                adapterInstallationList.notifyDataSetChanged();
+                NewSolarVFD.CHECK_DATA_UNOLAD = 0;
+            } else {
+                lin1.setVisibility(View.GONE);
+                lin2.setVisibility(View.VISIBLE);
+            }
+        } else {
+            recyclerView.setAdapter(null);
+            db.deleteInstallationListData();
+            new GetInstallationDataList_Task().execute();
         }
     }
 
@@ -264,7 +292,7 @@ import webservice.WebURL;
                 if (CustomUtility.isInternetOn()) {
                     recyclerView.setAdapter(null);
                     // db.deleteInstallationListData();
-                    NewSolarVFD.CHECK_DATA_UNOLAD = 1;
+
                     new GetInstallationDataList_Unload().execute();
                 } else {
                     Toast.makeText(getApplicationContext(), "No internet Connection....", Toast.LENGTH_SHORT).show();
@@ -402,6 +430,7 @@ import webservice.WebURL;
                 recyclerView.setLayoutManager(layoutManagerSubCategory);
                 recyclerView.setAdapter(adapterInstallationList);
                 adapterInstallationList.notifyDataSetChanged();
+                NewSolarVFD.CHECK_DATA_UNOLAD = 0;
             } else {
                 lin1.setVisibility(View.GONE);
                 lin2.setVisibility(View.VISIBLE);
@@ -552,6 +581,7 @@ import webservice.WebURL;
                             recyclerView.setLayoutManager(layoutManagerSubCategory);
                             recyclerView.setAdapter(adapterInstallationList);
                             adapterInstallationList.notifyDataSetChanged();
+                            NewSolarVFD.CHECK_DATA_UNOLAD = 1;
                         } else {
                             lin1.setVisibility(View.GONE);
                             lin2.setVisibility(View.VISIBLE);

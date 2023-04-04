@@ -774,11 +774,15 @@ public class InstallationInitial extends AppCompatActivity {
                 borewellstatus1 = CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno);
 
                 if (!TextUtils.isEmpty(borewellstatus1)) {
-                    Intent intent = new Intent(InstallationInitial.this, InstReportImageActivity.class);
-                    intent.putExtra("inst_id", bill_no.getText().toString().trim());
-                    intent.putExtra("cust_name", custname);
-                    intent.putExtra("delay_status", delay);
-                    startActivity(intent);
+                    if(!rmsdata_status.isEmpty()) {
+                        Intent intent = new Intent(InstallationInitial.this, InstReportImageActivity.class);
+                        intent.putExtra("inst_id", bill_no.getText().toString().trim());
+                        intent.putExtra("cust_name", custname);
+                        intent.putExtra("delay_status", delay);
+                        startActivity(intent);
+                    }else {
+                        CustomUtility.showToast(getApplicationContext(),"Please check RMS status!");
+                    }
                 } else {
                     Toast.makeText(mContext, "Please Select Borewell Status", Toast.LENGTH_SHORT).show();
                 }
@@ -1520,8 +1524,6 @@ public class InstallationInitial extends AppCompatActivity {
 
         no_of_module = inst_no_of_module.getText().toString();
         no_of_module_value = GetDataOne();
-        System.out.println("no_of_module_value===>>" + no_of_module_value);
-        Log.e("no_of_module_value", "&&&&" + no_of_module_value);
         solar_motor_model_details = inst_motor_model.getText().toString();
         smmd_sno = inst_motor_ser.getText().toString();
         splar_pump_model_details = inst_pump_model.getText().toString();
