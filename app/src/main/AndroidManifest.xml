@@ -43,8 +43,8 @@
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme"
         android:usesCleartextTraffic="true"
-        tools:replace="android:appComponentFactory"
-        tools:targetApi="tiramisu">
+        tools:ignore="GoogleAppIndexingWarning,RtlEnabled"
+        tools:targetApi="q">
 
         <activity
             android:name="activity.PhotoViewerActivity"
