@@ -386,6 +386,7 @@ public class Login extends AppCompatActivity {
                         }*/
                         Intent intent = new Intent(Login.this, OTPGenerationActivity.class);
                         startActivity(intent);
+                        finish();
 
                 } else {
 

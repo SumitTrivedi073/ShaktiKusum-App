@@ -125,6 +125,7 @@ import webservice.WebURL;
                             extras.putString("loginno", responseList.get(position).getLoginno());
                             extras.putString("moduleqty", responseList.get(position).getModuleqty());
                             extras.putString("CUS_CONTACT_NO", responseList.get(position).getCUS_CONTACT_NO());
+                            extras.putString("BeneficiaryNo", responseList.get(position).getBeneficiary());
                             in.putExtras(extras);
                             context.startActivity(in);
                         }

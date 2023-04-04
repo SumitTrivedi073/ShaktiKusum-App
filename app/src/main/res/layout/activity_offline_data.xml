@@ -61,7 +61,7 @@
                 android:textColor="@color/header_color"
                 android:textSize="@dimen/size_large17"
                 android:textStyle="bold"
-                android:visibility="gone"
+                android:visibility="visible"
 
                 />
 

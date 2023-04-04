@@ -109,7 +109,7 @@
                     android:background="#00ffffff"
                     android:digits="0123456789"
                     android:gravity="center_vertical"
-                    android:hint="Enter your mpbile number"
+                    android:hint="Enter your mobile number"
                     android:inputType="number"
                     android:maxLength="13"
                     android:textColor="@color/black"
@@ -144,7 +144,8 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@drawable/edt_shape_round_blue"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <EditText
                     android:id="@+id/edtOTPID"
@@ -161,7 +162,8 @@
                     android:textColor="@color/black"
                     android:textColorHint="@color/gray"
                     android:textSize="@dimen/_14sdp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    />
             </RelativeLayout>
 
             <TextView
@@ -178,7 +180,7 @@
                 android:text="Verify OTP"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12ssp"
-                android:visibility="visible" />
+                android:visibility="gone" />
         </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

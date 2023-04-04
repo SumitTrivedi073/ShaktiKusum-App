@@ -1,6 +1,5 @@
 package utility;
 
-import static debugapp.GlobalValue.Constant.CameraAppImage;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -13,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -293,6 +293,14 @@ public class CustomUtility {
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
+    public static void clearSharedPrefrences(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCE, 0);
+            SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+            prefsEditor.clear();
+            prefsEditor.apply();
+
+    }
+
     public String getCurrentDate() {
         simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         current_date = simpleDateFormat.format(new Date());
@@ -361,4 +369,18 @@ public class CustomUtility {
         }
         return path;
     }
+
+    public static boolean doesTableExist(SQLiteDatabase db, String tableName) {
+        Cursor cursor = db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '" + tableName + "'", null);
+
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                cursor.close();
+                return true;
+            }
+            cursor.close();
+        }
+        return false;
+    }
+
 }
