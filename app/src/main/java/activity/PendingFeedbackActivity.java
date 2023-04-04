@@ -223,7 +223,7 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
                 CustomUtility.hideProgressDialog(PendingFeedbackActivity.this);
 
 
-                if(response.toString()!=null && !res.toString().isEmpty()) {
+                if(res.toString()!=null && !res.toString().isEmpty()) {
                     VerificationCodeModel verificationCodeModel = new Gson().fromJson(res.toString(), VerificationCodeModel.class);
                     if(verificationCodeModel.getStatus().equals("Success")) {
 
