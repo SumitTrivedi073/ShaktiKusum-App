@@ -89,6 +89,7 @@ public class OTPGenerationActivity extends AppCompatActivity {
                 if (mORG_OTP_VALUE.equalsIgnoreCase(edtOTPIDSTR)) {
                       Intent intent = new Intent(mContext, MainActivity.class);
                     startActivity(intent);
+                    finish();
                 } else {
                     Toast.makeText(mContext, "Please enter valid OTP.", Toast.LENGTH_SHORT).show();
                 }
