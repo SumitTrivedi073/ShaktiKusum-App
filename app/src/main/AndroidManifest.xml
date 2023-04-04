@@ -31,7 +31,6 @@
     <application
         android:name="activity.BaseActivity"
         android:allowBackup="true"
-        android:appComponentFactory="whateverString"
         android:configChanges="orientation"
         android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_descriptor"
@@ -46,6 +45,7 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:appComponentFactory"
         tools:targetApi="tiramisu">
+
         <activity
             android:name="activity.PhotoViewerActivity"
             android:exported="false" />
