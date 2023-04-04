@@ -95,6 +95,7 @@ public class Login extends AppCompatActivity {
         dataHelper = new DatabaseHelper(context);
 
 
+
         list = new ArrayList<>();
         projectlist = new ArrayList<>();
         loginlist = new ArrayList<>();
