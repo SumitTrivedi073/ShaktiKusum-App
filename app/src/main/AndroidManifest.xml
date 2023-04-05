@@ -29,7 +29,7 @@
     <uses-feature android:name="android.hardware.location.gps" />
 
     <application
-        android:name="activity.BaseActivity"
+        android:name=".activity.BaseActivity"
         android:allowBackup="true"
         android:configChanges="orientation"
         android:enableOnBackInvokedCallback="true"
@@ -47,27 +47,27 @@
         tools:targetApi="q">
 
         <activity
-            android:name="activity.PhotoViewerActivity"
+            android:name=".activity.PhotoViewerActivity"
             android:exported="false" />
         <activity
-            android:name="activity.CameraActivity2"
+            android:name=".activity.CameraActivity2"
             android:exported="false" />
         <activity
-            android:name="activity.PendingFeedBackOTPVerification"
+            android:name=".activity.PendingFeedBackOTPVerification"
             android:exported="false" />
         <activity
-            android:name="activity.PendingFeedbackActivity"
+            android:name=".activity.PendingFeedbackActivity"
             android:exported="false" />
         <activity
-            android:name="activity.AddDamage_MissingActivity"
+            android:name=".activity.AddDamage_MissingActivity"
             android:label="Add Complain"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.MainActivity"
+            android:name=".activity.MainActivity"
             android:label="Shakti Kusum"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="activity.SplashActivity"
+            android:name=".activity.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -77,44 +77,44 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="activity.UpdateActivity"
+            android:name=".activity.UpdateActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="debugapp.BlueToothDebugNewActivity"
+            android:name=".debugapp.BlueToothDebugNewActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="debugapp.NavigateOptionActivity"
+            android:name=".debugapp.NavigateOptionActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="debugapp.Add_Surway_Activity"
+            android:name=".debugapp.Add_Surway_Activity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="debugapp.ActivitySurveyList"
+            android:name=".debugapp.ActivitySurveyList"
             android:screenOrientation="portrait" />
         <activity
-            android:name="debugapp.OTPGenerationActivity"
+            android:name=".debugapp.OTPGenerationActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.Login"
+            android:name=".activity.Login"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.CustomerRegistrationActivity"
+            android:name=".activity.CustomerRegistrationActivity"
             android:label="Registration"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.RegReportImageActivity"
+            android:name=".activity.RegReportImageActivity"
             android:label="Registration Images"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.InstReportImageActivity"
+            android:name=".activity.InstReportImageActivity"
             android:label="Installation Images"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.UnloadInstReportImageActivity"
+            android:name=".activity.UnloadInstReportImageActivity"
             android:label="Installation Unload Images"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.ShowDocument"
+            android:name=".activity.ShowDocument"
             android:label="Show Images"
             android:screenOrientation="portrait" />
 
@@ -123,112 +123,112 @@
             android:required="false" />
 
         <activity
-            android:name="activity.OfflineData"
+            android:name=".activity.OfflineData"
             android:label="Offline Data"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.OfflineDataReg"
+            android:name=".activity.OfflineDataReg"
             android:label="Offline Registration Data"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.DDSubmissionActivity"
+            android:name=".activity.DDSubmissionActivity"
             android:label="DD Collection"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="activity.DeptDocSubActivity"
+            android:name=".activity.DeptDocSubActivity"
             android:label="Depart. Doc. Submission"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="activity.OffSubDocActivity"
+            android:name=".activity.OffSubDocActivity"
             android:label="Office Doc. Submission"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="activity.InstallationList"
+            android:name=".activity.InstallationList"
             android:label="Installation List"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.InstallationListOfflineActivity"
+            android:name=".activity.InstallationListOfflineActivity"
             android:label="Installation List"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.InstallationDetailOfflineActivity"
+            android:name=".activity.InstallationDetailOfflineActivity"
             android:label="Installation List"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.InstallationInitial"
+            android:name=".activity.InstallationInitial"
             android:label="Installation Form"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.GovtOffVisitActivity"
+            android:name=".activity.GovtOffVisitActivity"
             android:label="Goverment Officer Visit"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.SiteAuditList"
+            android:name=".activity.SiteAuditList"
             android:label="Site Audit List"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.SiteAuditInitial"
+            android:name=".activity.SiteAuditInitial"
             android:label="Site Audit"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.SiteAuditImageActivity"
+            android:name=".activity.SiteAuditImageActivity"
             android:label="Site Audit"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.SimCardOptions"
+            android:name=".activity.SimCardOptions"
             android:label="Sim Card Options "
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.SimOfflineData"
+            android:name=".activity.SimOfflineData"
             android:label="Sim Offline Data"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.SIMActivationDetails"
+            android:name=".activity.SIMActivationDetails"
             android:label="Sim Activation Details"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.SurveyList"
+            android:name=".activity.SurveyList"
             android:label="Survey List"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.SurveyActivity"
+            android:name=".activity.SurveyActivity"
             android:label="Survey Details"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.DeviceStatusActivity"
+            android:name=".activity.DeviceStatusActivity"
             android:label="Device Status"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.ActivityRejectSite"
+            android:name=".activity.ActivityRejectSite"
             android:label="Reject Sites"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.RejectInstRepImgActivity"
+            android:name=".activity.RejectInstRepImgActivity"
             android:label="Reject Documents"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.ShowDocument1"
+            android:name=".activity.ShowDocument1"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.ShowDocument2"
+            android:name=".activity.ShowDocument2"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.CameraActivity"
+            android:name=".activity.CameraActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.CameraActivitySurvey"
+            android:name=".activity.CameraActivitySurvey"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.shaktipumplimited.SetParameter.DeviceSettingActivity"
+            android:name=".SetParameter.DeviceSettingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.shaktipumplimited.SetParameter.PairedDeviceActivity"
+            android:name=".SetParameter.PairedDeviceActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.shaktipumplimited.SetParameter.ScannedBarcodeActivity"
+            android:name=".SetParameter.ScannedBarcodeActivity"
             android:screenOrientation="portrait" />
 
         <provider

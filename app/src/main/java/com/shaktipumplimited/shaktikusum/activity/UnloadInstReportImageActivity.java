@@ -1,0 +1,602 @@
+package com.shaktipumplimited.shaktikusum.activity;
+
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.os.Build.VERSION.SDK_INT;
+import static com.shaktipumplimited.shaktikusum.utility.FileUtils.getPath;
+
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.StrictMode;
+import android.provider.Settings;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.shaktipumplimited.shaktikusum.R;
+import com.shaktipumplimited.shaktikusum.bean.ImageModel;
+import com.shaktipumplimited.shaktikusum.bean.InstallationBean;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.shaktipumplimited.shaktikusum.adapter.ImageSelectionAdapter;
+
+import com.shaktipumplimited.shaktikusum.database.DatabaseHelper;
+import com.shaktipumplimited.shaktikusum.debugapp.GlobalValue.NewSolarVFD;
+import com.shaktipumplimited.shaktikusum.utility.CustomUtility;
+import com.shaktipumplimited.shaktikusum.webservice.CustomHttpClient;
+import com.shaktipumplimited.shaktikusum.webservice.WebURL;
+
+
+public class UnloadInstReportImageActivity extends AppCompatActivity implements ImageSelectionAdapter.ImageSelectionListener {
+
+    private static final int REQUEST_CODE_PERMISSION = 101;
+    private static final int PICK_FROM_FILE = 102;
+    List<ImageModel> imageArrayList = new ArrayList<>();
+    List<ImageModel> imageList = new ArrayList<>();
+    RecyclerView recyclerview;
+    TextView remarkEdt;
+
+    Button btnSave;
+    AlertDialog alertDialog;
+    int selectedIndex;
+    ImageSelectionAdapter customAdapter;
+
+    List<String> itemNameList = new ArrayList<>();
+
+    String customerName, beneficiary, regNO, projectNo, userID, billNo;
+
+    Toolbar mToolbar;
+
+    boolean isUpdate = false;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_unload_instreport_image);
+        CheakPermissions();
+    }
+
+    private void CheakPermissions() {
+        if (checkPermission()) {
+            Init();
+        } else {
+            requestPermission();
+        }
+
+    }
+
+    private void requestPermission() {
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA,
+                            Manifest.permission.MANAGE_EXTERNAL_STORAGE},
+                    REQUEST_CODE_PERMISSION);
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA,
+                            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_CODE_PERMISSION);
+
+        }
+    }
+
+    private boolean checkPermission() {
+        int cameraPermission =
+                ContextCompat.checkSelfPermission(UnloadInstReportImageActivity.this, CAMERA);
+        int writeExternalStorage =
+                ContextCompat.checkSelfPermission(UnloadInstReportImageActivity.this, WRITE_EXTERNAL_STORAGE);
+        int ReadExternalStorage =
+                ContextCompat.checkSelfPermission(UnloadInstReportImageActivity.this, WRITE_EXTERNAL_STORAGE);
+
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            return cameraPermission == PackageManager.PERMISSION_GRANTED;
+        } else {
+            return cameraPermission == PackageManager.PERMISSION_GRANTED && writeExternalStorage == PackageManager.PERMISSION_GRANTED
+                    && ReadExternalStorage == PackageManager.PERMISSION_GRANTED;
+
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+
+            case REQUEST_CODE_PERMISSION:
+
+                if (grantResults.length > 0) {
+                    if (SDK_INT >= Build.VERSION_CODES.R) {
+                        boolean ACCESSCAMERA = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+
+
+                        if (ACCESSCAMERA) {
+                            try {
+                                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                                intent.addCategory("android.intent.category.DEFAULT");
+                                intent.setData(Uri.parse(String.format("package:%s", UnloadInstReportImageActivity.this.getPackageName())));
+                                startActivityForResult(intent, 2296);
+                            } catch (Exception e) {
+                                Intent intent = new Intent();
+                                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                                startActivityForResult(intent, 2296);
+                            }
+
+                        } else {
+                            Toast.makeText(UnloadInstReportImageActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        boolean ACCESSCAMERA = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                        boolean writeExternalStorage =
+                                grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                        boolean ReadExternalStorage =
+                                grantResults[2] == PackageManager.PERMISSION_GRANTED;
+
+                        if (ACCESSCAMERA && writeExternalStorage && ReadExternalStorage) {
+                            Init();
+                        } else {
+                            Toast.makeText(UnloadInstReportImageActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }
+
+                break;
+        }
+    }
+
+    private void Init() {
+        recyclerview = findViewById(R.id.recyclerview);
+        remarkEdt = findViewById(R.id.edtRemarkVKID);
+        btnSave = findViewById(R.id.btnSave);
+
+         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbar.setTitle(getResources().getString(R.string.material_unloading_img));
+
+        retriveValue();
+        SetAdapter();
+        listner();
+    }
+
+    private void retriveValue() {
+        Bundle bundle = getIntent().getExtras();
+        customerName = bundle.getString("cust_name");
+        userID = bundle.getString("userid");
+        billNo = bundle.getString("vbeln");
+
+        beneficiary = WebURL.BenificiaryNo_Con;
+        regNO = WebURL.RegNo_Con;
+        projectNo = WebURL.ProjectNo_Con;
+
+    }
+
+    private void listner() {
+        btnSave.setOnClickListener(view -> {
+            if (imageArrayList != null && imageArrayList.size() > 0) {
+                if (!imageArrayList.get(0).isImageSelected()) {
+                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectLR_photo));
+                } else if (!imageArrayList.get(1).isImageSelected()) {
+                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectInvoicePhoto));
+                } else if (!imageArrayList.get(2).isImageSelected()) {
+                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectCustomerPhoto));
+                } else if (remarkEdt.getText().toString().isEmpty()) {
+                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
+                } else {
+                    new SyncInstallationData().execute();
+                }
+            } else {
+                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.select_image));
+
+            }
+        });
+        mToolbar.setNavigationOnClickListener(v -> onBackPressed());
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    private void SetAdapter() {
+        imageArrayList = new ArrayList<>();
+        itemNameList = new ArrayList<>();
+        itemNameList.add(getResources().getString(R.string.selectLR_photo));
+        itemNameList.add(getResources().getString(R.string.selectInvoicePhoto));
+        itemNameList.add(getResources().getString(R.string.selectCustomerPhoto));
+
+        for (int i = 0; i < itemNameList.size(); i++) {
+            ImageModel imageModel = new ImageModel();
+            imageModel.setName(itemNameList.get(i));
+            imageModel.setImagePath("");
+            imageModel.setImageSelected(false);
+            imageModel.setBillNo("");
+            imageArrayList.add(imageModel);
+        }
+
+        imageList = new ArrayList<>();
+       /* String json = CustomUtility.getSharedPreferences(UnloadInstReportImageActivity.this, CameraAppImage);
+        // below line is to get the type of our array list.
+        Type type = new TypeToken<ArrayList<ImageModel>>() {}.getType();
+
+        // in below line we are getting data from gson
+        // and saving it to our array list
+        imageList = new Gson().fromJson(json, type);
+
+        if (imageArrayList.size() > 0 && imageList != null && imageList.size() > 0) {
+
+            for (int j = 0; j < imageList.size(); j++) {
+                if (imageList.get(j).isImageSelected()) {
+                    ImageModel imageModel = new ImageModel();
+                    imageModel.setName(imageList.get(j).getName());
+                    imageModel.setImagePath(imageList.get(j).getImagePath());
+                    imageModel.setImageSelected(true);
+                    imageArrayList.set(j, imageModel);
+                }
+            }
+        }*/
+
+        DatabaseHelper db = new DatabaseHelper(this);
+
+        imageList = db.getAllUnloadingImages();
+
+
+        if (itemNameList.size() > 0 && imageList != null && imageList.size() > 0) {
+
+
+            for (int i = 0; i < imageList.size(); i++) {
+                for (int j = 0; j < itemNameList.size(); j++) {
+                    if (imageList.get(i).getBillNo().trim().equals(getIntent().getExtras().getString("vbeln").trim())) {
+                        if (imageList.get(i).getName().equals(itemNameList.get(j))) {
+                            ImageModel imageModel = new ImageModel();
+                            imageModel.setName(imageList.get(i).getName());
+                            imageModel.setImagePath(imageList.get(i).getImagePath());
+                            imageModel.setImageSelected(true);
+                            imageModel.setBillNo(imageList.get(i).getBillNo());
+                            imageArrayList.set(j, imageModel);
+                        }
+                    }
+                }
+            }
+        }
+        customAdapter = new ImageSelectionAdapter(UnloadInstReportImageActivity.this, imageArrayList);
+        recyclerview.setHasFixedSize(true);
+        recyclerview.setAdapter(customAdapter);
+        customAdapter.ImageSelection(this);
+
+    }
+
+    @Override
+    public void ImageSelectionListener(ImageModel imageModelList, int position) {
+        selectedIndex = position;
+        if (imageModelList.isImageSelected()) {
+            isUpdate = true;
+            selectImage("1");
+        } else {
+            isUpdate = false;
+            selectImage("0");
+        }
+    }
+
+    private void selectImage(String value) {
+        LayoutInflater inflater = (LayoutInflater) UnloadInstReportImageActivity.this.getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.pick_img_layout, null);
+        final AlertDialog.Builder builder =
+                new AlertDialog.Builder(UnloadInstReportImageActivity.this, R.style.MyDialogTheme);
+
+        builder.setView(layout);
+        builder.setCancelable(true);
+        alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        alertDialog.getWindow().setGravity(Gravity.BOTTOM);
+        alertDialog.show();
+
+        TextView title = layout.findViewById(R.id.titleTxt);
+        TextView gallery = layout.findViewById(R.id.gallery);
+        TextView gamera = layout.findViewById(R.id.camera);
+        TextView cancel = layout.findViewById(R.id.cancel);
+
+        if (value.equals("0")) {
+            title.setText(getResources().getString(R.string.select_image));
+            gallery.setText(getResources().getString(R.string.gallery));
+            gamera.setText(getResources().getString(R.string.camera));
+        } else {
+            title.setText(getResources().getString(R.string.want_to_perform));
+            gallery.setText(getResources().getString(R.string.display));
+            gamera.setText(getResources().getString(R.string.change));
+        }
+
+        gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                if (value.equals("0")) {
+                    galleryIntent();
+                } else {
+                    Intent i_display_image = new Intent(UnloadInstReportImageActivity.this, PhotoViewerActivity.class);
+                    i_display_image.putExtra("image_path", imageArrayList.get(selectedIndex).getImagePath());
+                    startActivity(i_display_image);
+                }
+            }
+        });
+
+        gamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                if (value.equals("0")) {
+                    cameraIntent();
+                } else {
+                    selectImage("0");
+                }
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+    }
+
+    private void galleryIntent() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);//
+        startActivityForResult(Intent.createChooser(intent, "Select File"), PICK_FROM_FILE);
+    }
+
+    private void cameraIntent() {
+
+        camraLauncher.launch(new Intent(UnloadInstReportImageActivity.this, CameraActivity2.class)
+                .putExtra("cust_name", customerName));
+
+    }
+
+    ActivityResultLauncher<Intent> camraLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        if (result.getData() != null && result.getData().getExtras() != null) {
+
+                            Bundle bundle = result.getData().getExtras();
+                            Log.e("bundle====>", bundle.get("data").toString());
+                            UpdateArrayList(bundle.get("data").toString());
+
+                        }
+
+                    }
+                }
+            });
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_CANCELED) {
+            return;
+        }
+        switch (requestCode) {
+
+            case PICK_FROM_FILE:
+                try {
+                    Uri mImageCaptureUri = data.getData();
+                    String path = getPath(UnloadInstReportImageActivity.this, mImageCaptureUri); // From Gallery
+                    if (path == null) {
+                        path = mImageCaptureUri.getPath(); // From File Manager
+                    }
+                    Log.e("Activity", "PathHolder22= " + path);
+                    String filename = path.substring(path.lastIndexOf("/") + 1);
+                    String file;
+                    if (filename.indexOf(".") > 0) {
+                        file = filename.substring(0, filename.lastIndexOf("."));
+                    } else {
+                        file = "";
+                    }
+                    if (TextUtils.isEmpty(file)) {
+                        Toast.makeText(UnloadInstReportImageActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
+                    } else {
+                        UpdateArrayList(path);
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+
+
+            case 2296:
+                if (SDK_INT >= Build.VERSION_CODES.R) {
+                    if (Environment.isExternalStorageManager()) {
+                        // perform action when allow permission success
+                        Init();
+                    } else {
+                        Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
+        }
+
+    }
+
+    private void UpdateArrayList(String path) {
+
+        ImageModel imageModel = new ImageModel();
+        imageModel.setName(imageArrayList.get(selectedIndex).getName());
+        imageModel.setImagePath(path);
+        imageModel.setImageSelected(true);
+        imageModel.setBillNo(billNo);
+        imageArrayList.set(selectedIndex, imageModel);
+
+        DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+
+        if( isUpdate){
+            db.updateUnloadingAlternate(imageArrayList.get(selectedIndex).getName(), path,
+                    true,  billNo);
+        }else {
+            db.insertUnloadingImage(imageArrayList.get(selectedIndex).getName(), path,
+                    true,  billNo);
+        }
+
+
+        customAdapter.notifyDataSetChanged();
+
+
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class SyncInstallationData extends AsyncTask<String, String, String> {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(UnloadInstReportImageActivity.this);
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setMessage("Sending Data to server..please wait !");
+            progressDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String docno_sap = null;
+            String invc_done = null;
+            String obj2 = null;
+            InstallationBean param_invc = new InstallationBean();
+            JSONArray ja_invc_data = new JSONArray();
+            JSONObject jsonObj = new JSONObject();
+            try {
+                SimpleDateFormat dt = new SimpleDateFormat("dd.MM.yyyy");
+                jsonObj.put("userid", userID);
+                jsonObj.put("vbeln", billNo);
+                jsonObj.put("project_no", projectNo);
+                jsonObj.put("beneficiary", beneficiary);
+                jsonObj.put("regisno", regNO);
+                jsonObj.put("unload_remark", remarkEdt.getText().toString().trim());
+                jsonObj.put("customer_name ", customerName);
+                jsonObj.put("project_login_no ", CustomUtility.getSharedPreferences(UnloadInstReportImageActivity.this, "loginid"));
+                System.out.println("only_text_jsonObj==>>" + jsonObj);
+                jsonObj.put("unld_photo1", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this,imageArrayList.get(0).getImagePath()));
+                jsonObj.put("unld_photo2",CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this,imageArrayList.get(1).getImagePath()));
+                jsonObj.put("unld_photo3", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this,imageArrayList.get(2).getImagePath()));
+                ja_invc_data.put(jsonObj);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Log.e("Param====>", ja_invc_data.toString());
+            final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
+            param1_invc.add(new BasicNameValuePair("unloading", String.valueOf(ja_invc_data)));
+            Log.e("DATA", "$$$$" + param1_invc.toString());
+            System.out.println("param1_invc_vihu==>>" + param1_invc.toString());
+            try {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
+                StrictMode.setThreadPolicy(policy);
+                obj2 = CustomHttpClient.executeHttpPost1(WebURL.INSTALLATION_DATA_UNLOAD, param1_invc);
+                Log.e("OUTPUT1", "&&&&" + obj2);
+                System.out.println("OUTPUT1==>>" + obj2);
+                progressDialog.dismiss();
+                if (!obj2.equalsIgnoreCase("")) {
+                    JSONObject object = new JSONObject(obj2);
+                    String obj1 = object.getString("data_return");
+                    JSONArray ja = new JSONArray(obj1);
+                    Log.e("OUTPUT2", "&&&&" + ja.toString());
+                    for (int i = 0; i < ja.length(); i++) {
+                        JSONObject jo = ja.getJSONObject(i);
+                        docno_sap = jo.getString("mdocno");
+                        invc_done = jo.getString("return");
+                        if (invc_done.equalsIgnoreCase("Y")) {
+
+
+                            showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
+                            NewSolarVFD.CHECK_DATA_UNOLAD = 0;
+                             Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                             startActivity(intent);
+                             finish();
+
+                        } else if (invc_done.equalsIgnoreCase("N")) {
+                            showingMessage(getResources().getString(R.string.dataNotSubmitted));
+                            progressDialog.dismiss();
+
+
+                        }
+                    }
+                } else {
+                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.somethingWentWrong));
+                    progressDialog.dismiss();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                progressDialog.dismiss();
+            }
+            return obj2;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+        }
+    }
+
+    private void showingMessage(String message) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+
+                CustomUtility.showToast(UnloadInstReportImageActivity.this, message);
+
+            }
+        });
+    }
+
+}
+
