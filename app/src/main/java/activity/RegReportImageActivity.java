@@ -1,29 +1,26 @@
 package activity;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.os.Build.VERSION.SDK_INT;
+import static debugapp.GlobalValue.Constant.RegistrationImage;
+import static utility.FileUtils.getPath;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
-import android.provider.OpenableColumns;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,46 +34,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.OrientationHelper;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import adapter.ImageAdapter;
-import adapter.ImageSelectionAdapter;
-import bean.ImageModel;
-import database.DatabaseHelper;
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.AppSettingsDialog;
-import pub.devrel.easypermissions.EasyPermissions;
-import utility.CameraUtils;
-import utility.CustomUtility;
-
-import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Environment.getExternalStorageDirectory;
-import static android.os.Environment.getExternalStoragePublicDirectory;
-
-import static debugapp.GlobalValue.Constant.RegistrationImage;
-import static debugapp.GlobalValue.Constant.RegistrationImage;
-import static utility.FileUtils.getPath;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.shaktipumplimited.shaktikusum.R;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
+import adapter.ImageSelectionAdapter;
+import bean.ImageModel;
+import pub.devrel.easypermissions.EasyPermissions;
+import utility.CustomUtility;
 
 
 public class RegReportImageActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks, ImageSelectionAdapter.ImageSelectionListener {
@@ -299,17 +270,18 @@ public class RegReportImageActivity extends AppCompatActivity implements EasyPer
 
         TextView title = layout.findViewById(R.id.titleTxt);
         TextView gallery = layout.findViewById(R.id.gallery);
-        TextView gamera = layout.findViewById(R.id.camera);
+        TextView camera = layout.findViewById(R.id.camera);
         TextView cancel = layout.findViewById(R.id.cancel);
 
         if (value.equals("0")) {
             title.setText(getResources().getString(R.string.select_image));
             gallery.setText(getResources().getString(R.string.gallery));
-            gamera.setText(getResources().getString(R.string.camera));
+            camera.setText(getResources().getString(R.string.camera));
+            gallery.setVisibility(View.GONE);
         } else {
             title.setText(getResources().getString(R.string.want_to_perform));
             gallery.setText(getResources().getString(R.string.display));
-            gamera.setText(getResources().getString(R.string.change));
+            camera.setText(getResources().getString(R.string.change));
         }
 
         gallery.setOnClickListener(new View.OnClickListener() {
@@ -326,7 +298,7 @@ public class RegReportImageActivity extends AppCompatActivity implements EasyPer
             }
         });
 
-        gamera.setOnClickListener(new View.OnClickListener() {
+        camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
