@@ -486,7 +486,7 @@ public class InstallationInitial extends AppCompatActivity {
             }
         });
 
-
+        setData();
 
         inst_module_ser_no.addTextChangedListener(new TextWatcher() {
             @Override
@@ -773,15 +773,15 @@ public class InstallationInitial extends AppCompatActivity {
                 borewellstatus1 = CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno);
 
                 if (!TextUtils.isEmpty(borewellstatus1)) {
-                    if(!rmsdata_status.isEmpty()) {
+                  //  if(!rmsdata_status.isEmpty()) {
                         Intent intent = new Intent(InstallationInitial.this, InstReportImageActivity.class);
                         intent.putExtra("inst_id", bill_no.getText().toString().trim());
                         intent.putExtra("cust_name", custname);
                         intent.putExtra("delay_status", delay);
                         startActivity(intent);
-                    }else {
+                    /*}else {
                         CustomUtility.showToast(getApplicationContext(),"Please check RMS status!");
-                    }
+                    }*/
                 } else {
                     Toast.makeText(mContext, "Please Select Borewell Status", Toast.LENGTH_SHORT).show();
                 }
@@ -804,7 +804,7 @@ public class InstallationInitial extends AppCompatActivity {
 
         moduleOneLL.removeAllViews();
 
-        for (int i = 0; i < arr.length; i++) {
+        for (int i = 0; i < new_value; i++) {
             View child_grid = LayoutInflater.from(mContext).inflate(R.layout.view_for_normal, null);
             LinearLayout layout_s = (LinearLayout) child_grid.findViewById(R.id.sublayout_second);
             LinearLayout layout_f = (LinearLayout) child_grid.findViewById(R.id.sublayout_first);
@@ -1943,7 +1943,7 @@ public class InstallationInitial extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-          setData();
+
         retriveArrayList();
 
         Log.e("labeledSwitch", String.valueOf(labeledSwitch.isEnabled()));
