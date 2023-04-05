@@ -21,10 +21,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.shaktipumplimited.shaktikusum.R;
 import com.shaktipumplimited.shaktikusum.adapter.Adapter_Survey_list;
 import com.shaktipumplimited.shaktikusum.bean.SurveyListBean;
+import com.shaktipumplimited.shaktikusum.database.DatabaseHelper;
+import com.shaktipumplimited.shaktikusum.utility.CustomUtility;
+import com.shaktipumplimited.shaktikusum.webservice.CustomHttpClient;
+import com.shaktipumplimited.shaktikusum.webservice.WebURL;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -34,11 +37,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import com.shaktipumplimited.shaktikusum.database.DatabaseHelper;
-import com.shaktipumplimited.shaktikusum.utility.CustomUtility;
-import com.shaktipumplimited.shaktikusum.webservice.CustomHttpClient;
-import com.shaktipumplimited.shaktikusum.webservice.WebURL;
 
 
 public class SurveyList extends AppCompatActivity {
@@ -238,48 +236,48 @@ public class SurveyList extends AppCompatActivity {
                 login_selec = CustomHttpClient.executeHttpPost1(WebURL.SURVEY, param);
 
                 JSONObject object = new JSONObject(login_selec);
-                String obj1 = object.getString("survey_data");
+                if(object.getString("survey_data")!=null && !object.getString("survey_data").isEmpty()) {
+                    String obj1 = object.getString("survey_data");
 
 
-                JSONArray ja = new JSONArray(obj1);
+                    JSONArray ja = new JSONArray(obj1);
 
 
-                for (int j = 0; j < ja.length(); j++) {
-                    JSONObject jo = ja.getJSONObject(j);
+                    for (int j = 0; j < ja.length(); j++) {
+                        JSONObject jo = ja.getJSONObject(j);
 
-                    ben_id = jo.getString("beneficiary");
+                        ben_id = jo.getString("beneficiary");
 
-                    custnam = jo.getString("customer_name");
-                    contctno = jo.getString("mobile");
-
-
-
-                    state_txt = jo.getString("regio_txt");
-                    district_txt = jo.getString("cityc_txt");
-                    address_txt = jo.getString("address");
-                    regisno_txt = jo.getString("regisno");
+                        custnam = jo.getString("customer_name");
+                        contctno = jo.getString("mobile");
 
 
-                    surveyListBean = new SurveyListBean(ben_id,
-                            CustomUtility.getSharedPreferences(context, "userid"),
-                            regisno_txt,
-                            custnam,
-                            contctno,
-                            state_txt,
-                            district_txt,
-                            address_txt);
+                        state_txt = jo.getString("regio_txt");
+                        district_txt = jo.getString("cityc_txt");
+                        address_txt = jo.getString("address");
+                        regisno_txt = jo.getString("regisno");
 
 
-                    if (db.isRecordExist(db.TABLE_SURVEY_LIST, db.KEY_ENQ_DOC, ben_id)) {
-                        db.updateSurveyListData(ben_id, surveyListBean);
-                    } else {
-                        db.insertSurveyListData(ben_id, surveyListBean);
+                        surveyListBean = new SurveyListBean(ben_id,
+                                CustomUtility.getSharedPreferences(context, "userid"),
+                                regisno_txt,
+                                custnam,
+                                contctno,
+                                state_txt,
+                                district_txt,
+                                address_txt);
+
+
+                        if (db.isRecordExist(db.TABLE_SURVEY_LIST, db.KEY_ENQ_DOC, ben_id)) {
+                            db.updateSurveyListData(ben_id, surveyListBean);
+                        } else {
+                            db.insertSurveyListData(ben_id, surveyListBean);
+                        }
+
+                        progressDialog.dismiss();
+
                     }
-
-                    progressDialog.dismiss();
-
                 }
-
 
             } catch (Exception e) {
                 e.printStackTrace();

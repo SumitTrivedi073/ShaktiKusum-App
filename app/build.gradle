@@ -49,12 +49,12 @@ android {
     flavorDimensions 'server'
 
     productFlavors {
-        developement{
+        quality{
             dimension 'server'
-            buildConfigField 'String', 'baseUrl', '"https://spprdsrvr1.shaktipumps.com:8423"'
-            buildConfigField 'String', 'baseUrlVK', '"https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/"'
-            buildConfigField 'String', 'baseUrlVK1', '"https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/"'
-            buildConfigField 'String', 'baseUrlOptionVK', '"https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/"'
+            buildConfigField 'String', 'baseUrl', '"https://spquasrvr1.shaktipumps.com:8423/sap(bD1lbiZjPTkwMA==)"'
+            buildConfigField 'String', 'baseUrlVK', '"https://spquasrvr1.shaktipumps.com:8423/sap(bD1lbiZjPTkwMA==)/bc/bsp/sap/zmap_debugger/"'
+            buildConfigField 'String', 'baseUrlVK1', '"https://spquasrvr1.shaktipumps.com:8423/sap(bD1lbiZjPTkwMA==)/bc/bsp/sap/zmapp_solar_pro/"'
+            buildConfigField 'String', 'baseUrlOptionVK', '"https://spquasrvr1.shaktipumps.com:8423/sap(bD1lbiZjPTkwMA==)/bc/bsp/sap/zrms_validation/"'
             buildConfigField 'String', 'baseUrlVKCheckStatus', '"http://103.73.189.118:8888/api/GetDevicedetail?"'
 
             versionNameSuffix "-dev"
