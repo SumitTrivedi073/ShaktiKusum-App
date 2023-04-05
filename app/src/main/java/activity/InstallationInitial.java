@@ -86,7 +86,6 @@ import debugapp.Bean.SimDetailsInfoResponse;
 import debugapp.GlobalValue.Constant;
 import debugapp.GlobalValue.NewSolarVFD;
 import debugapp.GlobalValue.UtilMethod;
-import debugapp.PendingFeedback;
 import debugapp.VerificationCodeModel;
 import debugapp.localDB.DatabaseHelperTeacher;
 import utility.CustomUtility;
@@ -487,7 +486,7 @@ public class InstallationInitial extends AppCompatActivity {
             }
         });
 
-        setData();
+
 
         inst_module_ser_no.addTextChangedListener(new TextWatcher() {
             @Override
@@ -803,12 +802,9 @@ public class InstallationInitial extends AppCompatActivity {
 
         String arr[] = no_of_module_value.split(",");
 
-        Log.e("Array", "&&&" + arr.length);
-        System.out.println("arr.length==>>" + arr.length);
-
         moduleOneLL.removeAllViews();
 
-        for (int i = 0; i < new_value; i++) {
+        for (int i = 0; i < arr.length; i++) {
             View child_grid = LayoutInflater.from(mContext).inflate(R.layout.view_for_normal, null);
             LinearLayout layout_s = (LinearLayout) child_grid.findViewById(R.id.sublayout_second);
             LinearLayout layout_f = (LinearLayout) child_grid.findViewById(R.id.sublayout_first);
@@ -1947,7 +1943,7 @@ public class InstallationInitial extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+          setData();
         retriveArrayList();
 
         Log.e("labeledSwitch", String.valueOf(labeledSwitch.isEnabled()));
