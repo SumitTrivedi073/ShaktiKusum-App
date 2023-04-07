@@ -210,7 +210,7 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
         }else {
             CustomUtility.ShowToast(getResources().getString(R.string.mobile_number_not_valid), PendingFeedbackActivity.this);
         }
-        sendVerificationCodeAPI(pendingFeedbackList.get(position),generatedVerificationCode);
+
     }
 
     private void sendVerificationCodeAPI(PendingFeedback.Response response, String generatedVerificationCode) {
