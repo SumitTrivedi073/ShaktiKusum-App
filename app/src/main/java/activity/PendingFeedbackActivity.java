@@ -204,6 +204,12 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
 
     @Override
     public void sendOtpListener(List<PendingFeedback.Response> pendingFeedbackList,int position, String generatedVerificationCode) {
+
+        if(CustomUtility.isValidMobile(pendingFeedbackList.get(position).getContactNo())) {
+            sendVerificationCodeAPI(pendingFeedbackList.get(position),generatedVerificationCode);
+        }else {
+            CustomUtility.ShowToast(getResources().getString(R.string.mobile_number_not_valid), PendingFeedbackActivity.this);
+        }
         sendVerificationCodeAPI(pendingFeedbackList.get(position),generatedVerificationCode);
     }
 
