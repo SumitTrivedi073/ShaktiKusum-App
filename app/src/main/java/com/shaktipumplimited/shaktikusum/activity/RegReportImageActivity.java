@@ -272,17 +272,18 @@ public class RegReportImageActivity extends AppCompatActivity implements EasyPer
 
         TextView title = layout.findViewById(R.id.titleTxt);
         TextView gallery = layout.findViewById(R.id.gallery);
-        TextView gamera = layout.findViewById(R.id.camera);
+        TextView camera = layout.findViewById(R.id.camera);
         TextView cancel = layout.findViewById(R.id.cancel);
 
         if (value.equals("0")) {
             title.setText(getResources().getString(R.string.select_image));
             gallery.setText(getResources().getString(R.string.gallery));
-            gamera.setText(getResources().getString(R.string.camera));
+            camera.setText(getResources().getString(R.string.camera));
+            gallery.setVisibility(View.GONE);
         } else {
             title.setText(getResources().getString(R.string.want_to_perform));
             gallery.setText(getResources().getString(R.string.display));
-            gamera.setText(getResources().getString(R.string.change));
+            camera.setText(getResources().getString(R.string.change));
         }
 
         gallery.setOnClickListener(new View.OnClickListener() {
@@ -299,7 +300,7 @@ public class RegReportImageActivity extends AppCompatActivity implements EasyPer
             }
         });
 
-        gamera.setOnClickListener(new View.OnClickListener() {
+        camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
