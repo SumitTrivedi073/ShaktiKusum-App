@@ -773,15 +773,15 @@ public class InstallationInitial extends AppCompatActivity {
                 borewellstatus1 = CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno);
 
                 if (!TextUtils.isEmpty(borewellstatus1)) {
-                    if(!rmsdata_status.isEmpty()) {
+                  //  if(!rmsdata_status.isEmpty()) {
                         Intent intent = new Intent(InstallationInitial.this, InstReportImageActivity.class);
                         intent.putExtra("inst_id", bill_no.getText().toString().trim());
                         intent.putExtra("cust_name", custname);
                         intent.putExtra("delay_status", delay);
                         startActivity(intent);
-                    }else {
+                    /*}else {
                         CustomUtility.showToast(getApplicationContext(),"Please check RMS status!");
-                    }
+                    }*/
                 } else {
                     Toast.makeText(mContext, "Please Select Borewell Status", Toast.LENGTH_SHORT).show();
                 }
@@ -801,9 +801,6 @@ public class InstallationInitial extends AppCompatActivity {
     private void ViewInflate(int value, int new_value) {
 
         String arr[] = no_of_module_value.split(",");
-
-        Log.e("Array", "&&&" + arr.length);
-        System.out.println("arr.length==>>" + arr.length);
 
         moduleOneLL.removeAllViews();
 
