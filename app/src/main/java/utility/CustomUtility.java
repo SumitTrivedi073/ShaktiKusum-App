@@ -19,7 +19,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Base64;
@@ -29,10 +28,11 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.gson.Gson;
+import com.shaktipumplimited.shaktikusum.R;
+
 import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -41,11 +41,6 @@ import java.util.Locale;
 import activity.BaseActivity;
 import activity.CustomProgressDialog;
 import bean.ImageModel;
-import debugapp.GlobalValue.Constant;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.shaktipumplimited.shaktikusum.R;
 
 /**
  * Created by Administrator on 1/3/2017.
@@ -299,6 +294,10 @@ public class CustomUtility {
             prefsEditor.clear();
             prefsEditor.apply();
 
+    }
+
+    public static boolean isValidMobile(String phone) {
+        return android.util.Patterns.PHONE.matcher(phone).matches();
     }
 
     public String getCurrentDate() {

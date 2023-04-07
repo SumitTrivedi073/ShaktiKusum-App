@@ -205,6 +205,7 @@
     <string name="selectAllImages">Please select all images</string>
     <string name="online">Online</string>
     <string name="offline">Offline</string>
+    <string name="mobile_number_not_valid">Mobile Number is not valid!</string>
 
 
 </resources>
