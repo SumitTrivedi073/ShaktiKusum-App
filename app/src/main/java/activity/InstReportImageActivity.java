@@ -73,12 +73,13 @@ public class InstReportImageActivity extends AppCompatActivity implements ImageS
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_instreport_image);
+        Init();
         CheakPermissions();
     }
 
     private void CheakPermissions() {
         if (checkPermission()) {
-            Init();
+            SetAdapter();
         } else {
             requestPermission();
         }
@@ -154,7 +155,7 @@ public class InstReportImageActivity extends AppCompatActivity implements ImageS
                                 grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
                         if (ACCESSCAMERA && writeExternalStorage && ReadExternalStorage) {
-                            Init();
+                            SetAdapter();
                         } else {
                             Toast.makeText(InstReportImageActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
                         }
@@ -293,7 +294,7 @@ public class InstReportImageActivity extends AppCompatActivity implements ImageS
         TextView cancel = layout.findViewById(R.id.cancel);
 
         if (value.equals("0")) {
-           // gallery.setVisibility(View.GONE);
+            gallery.setVisibility(View.GONE);
             title.setText(getResources().getString(R.string.select_image));
             gallery.setText(getResources().getString(R.string.gallery));
             camera.setText(getResources().getString(R.string.camera));
@@ -410,7 +411,7 @@ public class InstReportImageActivity extends AppCompatActivity implements ImageS
                 if (SDK_INT >= Build.VERSION_CODES.R) {
                     if (Environment.isExternalStorageManager()) {
                         // perform action when allow permission success
-                        Init();
+                        SetAdapter();
                     } else {
                         Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
                     }
