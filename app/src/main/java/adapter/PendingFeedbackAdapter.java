@@ -2,31 +2,36 @@ package adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.shaktipumplimited.shaktikusum.R;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import activity.PendingFeedBackOTPVerification;
 import debugapp.PendingFeedback;
 
-public class PendingFeedbackAdapter extends RecyclerView.Adapter<PendingFeedbackAdapter.ViewHolder> {
+public class PendingFeedbackAdapter extends RecyclerView.Adapter<PendingFeedbackAdapter.ViewHolder> implements Filterable {
     Context mContext;
-    private List<PendingFeedback.Response> pendingFeedbackList;
+    private List<PendingFeedback.Response> pendingFeedbackList,arSearch;
     private SendOTPListner sendOTPListener;
 
-    public PendingFeedbackAdapter(Context context, List<PendingFeedback.Response> listdata) {
+    TextView noDataFound;
+
+    public PendingFeedbackAdapter(Context context, List<PendingFeedback.Response> listdata, TextView noDataFound) {
         pendingFeedbackList = listdata;
         mContext = context;
-
+        this.arSearch = new ArrayList<>();
+        this.arSearch.addAll(listdata);
+        this.noDataFound = noDataFound;
 
     }
 
@@ -39,7 +44,7 @@ public class PendingFeedbackAdapter extends RecyclerView.Adapter<PendingFeedback
     }
     @SuppressLint("DefaultLocale")
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         final PendingFeedback.Response response = pendingFeedbackList.get(position);
         holder.customerName.setText(response.getCustomerName());
         holder.mobileNumber.setText(response.getContactNo());
@@ -51,7 +56,7 @@ public class PendingFeedbackAdapter extends RecyclerView.Adapter<PendingFeedback
            public void onClick(View view) {
               Random random = new Random();
               String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
-              sendOTPListener.sendOtpListener(response,generatedVerificationCode);
+              sendOTPListener.sendOtpListener(pendingFeedbackList,position, generatedVerificationCode);
 
            }
        });
@@ -66,7 +71,7 @@ public class PendingFeedbackAdapter extends RecyclerView.Adapter<PendingFeedback
         }
     }
     public interface SendOTPListner {
-        void sendOtpListener(PendingFeedback.Response response, String generatedVerificationCode);
+        void sendOtpListener(List<PendingFeedback.Response> pendingFeedbackList, int position ,String generatedVerificationCode);
 
     }
 
@@ -89,5 +94,46 @@ public class PendingFeedbackAdapter extends RecyclerView.Adapter<PendingFeedback
             sendOTP = itemView.findViewById(R.id.sendOTP);
             billNo = itemView.findViewById(R.id.billNo);
         }
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    pendingFeedbackList = arSearch;
+                } else {
+                    List<PendingFeedback.Response> filteredList = new ArrayList<>();
+                    for (PendingFeedback.Response row : arSearch) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getCustomerName().toLowerCase().contains(charString.toLowerCase())||row.getContactNo().toLowerCase().contains(charString.toLowerCase())
+                        ||row.getBeneficiary().toLowerCase().contains(charString.toLowerCase())||row.getVbeln().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    pendingFeedbackList = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = pendingFeedbackList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                pendingFeedbackList = (ArrayList<PendingFeedback.Response>) filterResults.values;
+                if (pendingFeedbackList.size()>0){
+                    noDataFound.setVisibility(View.GONE);
+                }else {
+                    noDataFound.setVisibility(View.VISIBLE);
+                }
+                notifyDataSetChanged();
+            }
+        };
     }
 }

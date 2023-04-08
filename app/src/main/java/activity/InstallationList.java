@@ -178,7 +178,7 @@ import webservice.WebURL;
                 // TODO Auto-generated method stub
             }
         });
-        if (CustomUtility.isInternetOn()) {
+        /*if (CustomUtility.isInternetOn()) {
             if (db.getcount(db.TABLE_INSTALLATION_LIST)) {
                 installationBeans = new ArrayList<InstallationListBean>();
                 installationBeans = db.getInstallationListData(user_id);
@@ -194,6 +194,7 @@ import webservice.WebURL;
                     recyclerView.setLayoutManager(layoutManagerSubCategory);
                     recyclerView.setAdapter(adapterInstallationList);
                     adapterInstallationList.notifyDataSetChanged();
+                    NewSolarVFD.CHECK_DATA_UNOLAD = 0;
                 } else {
                     lin1.setVisibility(View.GONE);
                     lin2.setVisibility(View.VISIBLE);
@@ -219,28 +220,14 @@ import webservice.WebURL;
                 recyclerView.setLayoutManager(layoutManagerSubCategory);
                 recyclerView.setAdapter(adapterInstallationList);
                 adapterInstallationList.notifyDataSetChanged();
+                NewSolarVFD.CHECK_DATA_UNOLAD = 0;
             } else {
                 lin1.setVisibility(View.GONE);
                 lin2.setVisibility(View.VISIBLE);
             }
-        }
-    }
+        }*/
 
-    @SuppressLint("WrongConstant")
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-       if (CustomUtility.getSharedPreferences(context, "SYNCLIST").equalsIgnoreCase("1")) {
-            if (CustomUtility.isInternetOn()) {
-                recyclerView.setAdapter(null);
-                db.deleteInstallationListData();
-                CustomUtility.setSharedPreference(context, "SYNCLIST", "0");
-                new GetInstallationDataList_Task().execute();
-            } else {
-                Toast.makeText(getApplicationContext(), "No internet Connection....", Toast.LENGTH_SHORT).show();
-            }
-        } else {
+        if (db.getcount(db.TABLE_INSTALLATION_LIST)) {
             installationBeans = new ArrayList<InstallationListBean>();
             installationBeans = db.getInstallationListData(user_id);
             Log.e("SIZE", "&&&&" + installationBeans.size());
@@ -255,11 +242,23 @@ import webservice.WebURL;
                 recyclerView.setLayoutManager(layoutManagerSubCategory);
                 recyclerView.setAdapter(adapterInstallationList);
                 adapterInstallationList.notifyDataSetChanged();
+                NewSolarVFD.CHECK_DATA_UNOLAD = 0;
             } else {
                 lin1.setVisibility(View.GONE);
                 lin2.setVisibility(View.VISIBLE);
             }
+        } else {
+            recyclerView.setAdapter(null);
+            db.deleteInstallationListData();
+            new GetInstallationDataList_Task().execute();
         }
+    }
+
+    @SuppressLint("WrongConstant")
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     @Override
@@ -293,7 +292,7 @@ import webservice.WebURL;
                 if (CustomUtility.isInternetOn()) {
                     recyclerView.setAdapter(null);
                     // db.deleteInstallationListData();
-                    NewSolarVFD.CHECK_DATA_UNOLAD = 1;
+
                     new GetInstallationDataList_Unload().execute();
                 } else {
                     Toast.makeText(getApplicationContext(), "No internet Connection....", Toast.LENGTH_SHORT).show();
@@ -431,6 +430,7 @@ import webservice.WebURL;
                 recyclerView.setLayoutManager(layoutManagerSubCategory);
                 recyclerView.setAdapter(adapterInstallationList);
                 adapterInstallationList.notifyDataSetChanged();
+                NewSolarVFD.CHECK_DATA_UNOLAD = 0;
             } else {
                 lin1.setVisibility(View.GONE);
                 lin2.setVisibility(View.VISIBLE);
@@ -581,6 +581,7 @@ import webservice.WebURL;
                             recyclerView.setLayoutManager(layoutManagerSubCategory);
                             recyclerView.setAdapter(adapterInstallationList);
                             adapterInstallationList.notifyDataSetChanged();
+                            NewSolarVFD.CHECK_DATA_UNOLAD = 1;
                         } else {
                             lin1.setVisibility(View.GONE);
                             lin2.setVisibility(View.VISIBLE);

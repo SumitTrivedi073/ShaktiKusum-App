@@ -1,31 +1,52 @@
 package activity;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.BLUETOOTH;
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.os.Build.VERSION.SDK_INT;
+
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
@@ -61,6 +82,7 @@ public class Login extends AppCompatActivity {
     private AppUpdateManager appUpdateManager;
     private static final int IMMEDIATE_APP_UPDATE_REQ_CODE = 100;
 
+    private static final int REQUEST_CODE_PERMISSION = 2;
     Spinner spinner_login_type, spinner_project_type;
     ProgressDialog progressBar;
     int index, index1;
@@ -84,6 +106,9 @@ public class Login extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private EditText inputName, inputPassword;
     private TextInputLayout inputLayoutName, inputLayoutPassword;
+
+    boolean FineLocationAccepted,CoarseLocationAccepted,Bluetooth,ReadPhoneState,Camera,ReadPhoneStorage,WritePhoneStorage;
+
 
 
     @Override
@@ -271,6 +296,86 @@ public class Login extends AppCompatActivity {
                 checkUpdate();
             }
         }
+
+        if (requestCode == 2296) {
+            if (SDK_INT >= Build.VERSION_CODES.R) {
+                if (Environment.isExternalStorageManager()) {
+                    // perform action when allow permission success
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        askNotificationPermission();
+                    } else {
+                        serverLogin();
+                    }
+                } else {
+                    Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // FCM SDK (and your app) can post notifications.
+                    serverLogin();
+                } else {
+                    // TODO: Inform user that that your app will not show notifications.
+                    askNotificationPermission();
+                }
+            });
+    private void askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                    PackageManager.PERMISSION_GRANTED) {
+                serverLogin();
+                // FCM SDK (and your app) can post notifications.
+            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                // TODO: display an educational UI explaining to the user the features that will be enabled
+                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
+                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
+                //       If the user selects "No thanks," allow the user to continue without notifications.
+                showNotificationPopup();
+            } else {
+                // Directly ask for the permission
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
+        }
+    }
+
+    private void showNotificationPopup() {
+        LayoutInflater inflater = (LayoutInflater) Login.this.getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.notification_popup, null);
+        final AlertDialog.Builder builder =
+                new AlertDialog.Builder(Login.this, R.style.MyDialogTheme);
+
+        builder.setView(layout);
+        builder.setCancelable(true);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        alertDialog.getWindow().setGravity(Gravity.BOTTOM);
+        alertDialog.show();
+
+        LinearLayout okLinear = layout.findViewById(R.id.okLinear);
+        LinearLayout cancelLinear = layout.findViewById(R.id.cancelLinear);
+
+        okLinear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+                startActivity(new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS));
+            }
+        });
+
+        cancelLinear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+                askNotificationPermission();
+            }
+        });
+
     }
 
     @Override
@@ -386,6 +491,7 @@ public class Login extends AppCompatActivity {
                         }*/
                         Intent intent = new Intent(Login.this, OTPGenerationActivity.class);
                         startActivity(intent);
+                        finish();
 
                 } else {
 
@@ -424,8 +530,18 @@ public class Login extends AppCompatActivity {
         }
 
 //********************   Server Login    *******************************************************/
-        serverLogin();
 
+        if (!checkPermission()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                askNotificationPermission();
+            } else {
+                serverLogin();
+            }
+
+        } else {
+            serverLogin();
+
+        }
     }
 
     private boolean validateName() {
@@ -609,6 +725,83 @@ public class Login extends AppCompatActivity {
         }
 
     }
+
+    private boolean checkPermission() {
+        int FineLocation = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_FINE_LOCATION);
+        int CoarseLocation = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_COARSE_LOCATION);
+        int Bluetooth = ContextCompat.checkSelfPermission(getApplicationContext(), BLUETOOTH);
+        int PhoneState = ContextCompat.checkSelfPermission(getApplicationContext(), READ_PHONE_STATE);
+        int Camera = ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA);
+        int ReadExternalStorage = ContextCompat.checkSelfPermission(getApplicationContext(), READ_EXTERNAL_STORAGE);
+        int WriteExternalStorage = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
+
+
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            return FineLocation == PackageManager.PERMISSION_GRANTED && CoarseLocation == PackageManager.PERMISSION_GRANTED
+                    && Bluetooth == PackageManager.PERMISSION_GRANTED && PhoneState == PackageManager.PERMISSION_GRANTED
+                    && Camera == PackageManager.PERMISSION_GRANTED && Environment.isExternalStorageManager();
+        } else {
+
+            return FineLocation == PackageManager.PERMISSION_GRANTED && CoarseLocation == PackageManager.PERMISSION_GRANTED
+                    && Bluetooth == PackageManager.PERMISSION_GRANTED && PhoneState == PackageManager.PERMISSION_GRANTED
+                    && Camera == PackageManager.PERMISSION_GRANTED && ReadExternalStorage == PackageManager.PERMISSION_GRANTED
+                    && WriteExternalStorage == PackageManager.PERMISSION_GRANTED;
+        }
+    }
+
+    private void requestPermission() {
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, BLUETOOTH, READ_PHONE_STATE,
+                    CAMERA}, REQUEST_CODE_PERMISSION);
+        }else {
+            ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, BLUETOOTH, READ_PHONE_STATE,
+                    CAMERA, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISSION);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CODE_PERMISSION:
+                if (grantResults.length > 0) {
+                  boolean  FineLocationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean CoarseLocationAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    boolean Bluetooth = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                    boolean  ReadPhoneState = grantResults[3] == PackageManager.PERMISSION_GRANTED;
+                    boolean  Camera = grantResults[4] == PackageManager.PERMISSION_GRANTED;
+                    if (SDK_INT < Build.VERSION_CODES.R) {
+                        ReadPhoneStorage = grantResults[5] == PackageManager.PERMISSION_GRANTED;
+                        WritePhoneStorage = grantResults[6] == PackageManager.PERMISSION_GRANTED;
+                    }
+                    if (SDK_INT >= Build.VERSION_CODES.R) {
+                        if (FineLocationAccepted && CoarseLocationAccepted && Bluetooth && ReadPhoneState && Camera) {
+                            // perform action when allow permission success
+                            try {
+                                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                                intent.addCategory("android.intent.category.DEFAULT");
+                                intent.setData(Uri.parse(String.format("package:%s", getApplicationContext().getPackageName())));
+                                startActivityForResult(intent, 2296);
+                            } catch (Exception e) {
+                                Intent intent = new Intent();
+                                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                                startActivityForResult(intent, 2296);
+                            }
+                        }else {
+                            Toast.makeText(Login.this, R.string.all_permission, Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        if( FineLocationAccepted && CoarseLocationAccepted && Bluetooth && ReadPhoneState && Camera && ReadPhoneStorage && WritePhoneStorage ){
+                            serverLogin();
+                        }else {
+                            requestPermission();
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
 
     @Override
     protected void onDestroy() {

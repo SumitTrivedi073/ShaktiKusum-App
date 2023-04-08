@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bean.AuditSiteBean;
+import bean.ImageModel;
 import bean.InstallationBean;
 import bean.InstallationListBean;
 import bean.InstallationOfflineBean;
@@ -52,6 +53,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_REJECTION_LIST = "tbl_rejection_list";
     public static final String TABLE_SURVEY_LIST = "tbl_survey_list";
     public static final String TABLE_INSTALLATION_PUMP_DATA = "tbl_installation_pump_data";
+
+    public static final String TABLE_INSTALLATION_IMAGE_DATA = "tbl_installation_image_data";
+
+    public static final String TABLE_UNLOADING_IMAGE_DATA = "tbl_unloading_image_data";
     public static final String TABLE_AUDIT_PUMP_DATA = "tbl_audit_pump_data";
     public static final String TABLE_SURVEY_PUMP_DATA = "tbl_survey_pump_data";
     public static final String TABLE_SIM_REPLACMENT_DATA = "tbl_sim_card_replacement";
@@ -164,6 +169,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_ADDRESS = "address";
     public static final String KEY_STREET = "street";
 
+    public static final String KEY_BENEFICIARY_NO = "street";
+
     public static final String TABLE_STATE_SEARCH = "tbl_state_detail";
     public static final String KEY_SIMMOB = "sim_mob";
     public static final String KEY_ADD1 = "add1";
@@ -194,25 +201,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_PHOTO1_4 = "photo1_4";
     public static final String KEY_PHOTO1_5 = "photo1_5";
     public static final String KEY_PHOTO2 = "photo2";
-    public static final String KEY_PHOTO2_2 = "photo2_2";
-    public static final String KEY_PHOTO2_3 = "photo2_3";
-    public static final String KEY_PHOTO2_4 = "photo2_4";
-    public static final String KEY_PHOTO2_5 = "photo2_5";
+
     public static final String KEY_PHOTO3 = "photo3";
-    public static final String KEY_PHOTO3_2 = "photo3_2";
-    public static final String KEY_PHOTO3_3 = "photo3_3";
-    public static final String KEY_PHOTO3_4 = "photo3_4";
-    public static final String KEY_PHOTO3_5 = "photo3_5";
+
     public static final String KEY_PHOTO4 = "photo4";
-    public static final String KEY_PHOTO4_2 = "photo4_2";
-    public static final String KEY_PHOTO4_3 = "photo4_3";
-    public static final String KEY_PHOTO4_4 = "photo4_4";
-    public static final String KEY_PHOTO4_5 = "photo4_5";
+
     public static final String KEY_PHOTO5 = "photo5";
-    public static final String KEY_PHOTO5_2 = "photo5_2";
-    public static final String KEY_PHOTO5_3 = "photo5_3";
-    public static final String KEY_PHOTO5_4 = "photo5_4";
-    public static final String KEY_PHOTO5_5 = "photo5_5";
+
     public static final String KEY_PHOTO6 = "photo6";
     public static final String KEY_PHOTO7 = "photo7";
     public static final String KEY_PHOTO8 = "photo8";
@@ -245,7 +240,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String KEY_REMARK16 = "remark16";
     public static final String KEY_PMID = "pmId", KEY_PARAMETERS_NAME = "parametersName", KEY_MODBUS_ADDRESS = "modbusaddress", KEY_MOB_BT_ADDRESS = "mobBTAddress", KEY_FACTOR = "factor", KEY_PVALUE = "pValue", KEY_MATERIAL_CODE = "materialCode", KEY_UNIT = "unit", KEY_OFFSET = "app_offset";
-    ;
+
+    public static final String KEY_INSTALLATION_ID = "installationId",KEY_INSTALLATION_NAME = "installationImageName",KEY_INSTALLATION_PATH = "installtionPath",KEY_INSTALLATION_IMAGE_SELECTED = "installtionImageSelected",KEY_INSTALLATION_BILL_NO = "InstalltionBillNo";
+
+    public static final String KEY_UNLOADING_ID = "unloadingId",KEY_UNLOADING_NAME = "unloadingImageName",KEY_UNLOADING_PATH = "unloadingPath",KEY_UNLOADING_IMAGE_SELECTED = "unloadingImageSelected",KEY_UNLOADING_BILL_NO = "unloadingBillNo";
 
 
     //Sim card Installation field name
@@ -446,6 +444,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    @SuppressLint("Range")
     public DamageMissResponse getDamageMissData(String mBillNo) {
         DamageMissResponse mDamageMissResponse = new DamageMissResponse();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -674,7 +673,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_PHOTO8 + " BLOB," + KEY_PHOTO9 + " BLOB," + KEY_PHOTO10 + " BLOB," + KEY_PHOTO11 + " BLOB," + KEY_PHOTO12 + " BLOB,"
             + KEY_ADD1 + " TEXT," + KEY_ADD2 + " TEXT," + KEY_ADD3 + " TEXT," + KEY_ADD4 + " TEXT," + KEY_ADD5 + " TEXT,"
             + KEY_ADD6 + " TEXT," + KEY_ADD7 + " TEXT," + KEY_ADD8 + " TEXT," + KEY_ADD9 + " TEXT," + KEY_ADD10 + " TEXT,"
-            + KEY_ADD11 + " TEXT," + KEY_ADD12 + " TEXT," + KEY_ADD13 + " TEXT," + KEY_ADD14 + " TEXT," + KEY_ADD15 + " TEXT," + KEY_ADD16 + " TEXT)";
+            + KEY_ADD11 + " TEXT," + KEY_ADD12 + " TEXT," + KEY_ADD13 + " TEXT," + KEY_ADD14 + " TEXT," + KEY_ADD15 + " TEXT," + KEY_ADD16 + " TEXT," + KEY_BENEFICIARY_NO + " TEXT)";
+
+    private static final String CREATE_TABLE_INSTALLATION_IMAGES = "CREATE TABLE "
+            + TABLE_INSTALLATION_IMAGE_DATA + "("  + KEY_INSTALLATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_INSTALLATION_NAME + " TEXT," + KEY_INSTALLATION_PATH + " TEXT," + KEY_INSTALLATION_IMAGE_SELECTED + " BOOLEAN," + KEY_INSTALLATION_BILL_NO + " TEXT)";
+
+    private static final String CREATE_TABLE_UNLOADING_IMAGES = "CREATE TABLE "
+            + TABLE_UNLOADING_IMAGE_DATA + "("  + KEY_UNLOADING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_UNLOADING_NAME + " TEXT," + KEY_UNLOADING_PATH + " TEXT," + KEY_UNLOADING_IMAGE_SELECTED + " TEXT," + KEY_UNLOADING_BILL_NO + " TEXT)";
+
+
 
     private static final String CREATE_TABLE_AUDIT_PUMP = "CREATE TABLE "
             + TABLE_AUDIT_PUMP_DATA + "("
@@ -1065,6 +1072,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_INSTALLATION_PUMP);
         db.execSQL(CREATE_SIM_CARD_REPLACEMENT);
         db.execSQL(CREATE_TABLE_SURVEY_DATA);
+        db.execSQL(CREATE_TABLE_INSTALLATION_IMAGES);
+        db.execSQL(CREATE_TABLE_UNLOADING_IMAGES);
     }
 
     @Override
@@ -1089,6 +1098,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_STATE_SEARCH);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_AUDITSITE_LIST);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_AUDIT_PUMP_DATA);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_INSTALLATION_IMAGE_DATA);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_UNLOADING_IMAGE_DATA);
             // create newworkorder tables
             onCreate(db);
         }
@@ -1374,7 +1385,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Insert Setting perameter data
 
-
+    @SuppressLint("Range")
     public List<SettingParameterResponse> getSettingPerameterList(String userid) {
 
         SettingParameterResponse mSettingParameterResponse = new SettingParameterResponse();
@@ -2163,6 +2174,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_ADD1, installationBean.getRegis_no());
             values.put(KEY_ADD2, installationBean.getDelay_reason());
             values.put(KEY_ADD3, installationBean.getMake_ins());
+            values.put(KEY_BENEFICIARY_NO,installationBean.getBeneficiaryNo());
             // Insert Row
             long i = db.insert(TABLE_INSTALLATION_PUMP_DATA, null, values);
             // Insert into database successfully.
@@ -2223,6 +2235,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_ADD1, installationBean.getRegis_no());
             values.put(KEY_ADD2, installationBean.getDelay_reason());
             values.put(KEY_ADD3, installationBean.getMake_ins());
+            values.put(KEY_BENEFICIARY_NO,installationBean.getBeneficiaryNo());
             where = KEY_BILL_NO + "='" + billno + "'";
 
             i = db.update(TABLE_INSTALLATION_PUMP_DATA, values, where, null);
@@ -2318,7 +2331,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.close();
         }
     }
-
+    @SuppressLint("Range")
     public boolean getLogin() {
         LoginBean loginBean = new LoginBean();
         SQLiteDatabase db = null;
@@ -2348,7 +2361,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return false;
     }
-
+    @SuppressLint("Range")
     public ArrayList<String> getList(String key, String text) {
         ArrayList<String> list = new ArrayList<String>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -2415,7 +2428,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return list;
     }
 
-
+    @SuppressLint("Range")
     public ArrayList<String> getList1(String key, String text) {
 
         ArrayList<String> list = new ArrayList<String>();
@@ -2538,7 +2551,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return result;
     }
-
+    @SuppressLint("Range")
     public String getStateDistrictValue(String key, String text) {
         String result = null;
 
@@ -2584,8 +2597,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return result;
     }
-
-
+    @SuppressLint("Range")
     public ArrayList<ItemNameBean> getItemData() {
 
         ItemNameBean itemNameBean = new ItemNameBean();
@@ -2632,7 +2644,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return list_document;
     }
-
+    @SuppressLint("Range")
     public ArrayList<String> getStateDistrictList(String key, String text) {
 
         ArrayList<String> list = new ArrayList<String>();
@@ -2697,7 +2709,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return list;
     }
 
-
+    @SuppressLint("Range")
     public RegistrationBean getRegistrationData(String user_id, String enq_docno) {
 
         RegistrationBean registrationBean = new RegistrationBean();
@@ -2756,7 +2768,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return registrationBean;
     }
-
+    @SuppressLint("Range")
     public ArrayList<InstallationListBean> getInstallationListData(String userid) {
         InstallationListBean installationBean = new InstallationListBean();
         ArrayList<InstallationListBean> list_document = new ArrayList<>();
@@ -2814,7 +2826,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return list_document;
     }
-
+    @SuppressLint("Range")
     public ArrayList<InstallationOfflineBean> getInstallationOfflineListData(String userid) {
         InstallationOfflineBean installationOfflineBean = new InstallationOfflineBean();
         ArrayList<InstallationOfflineBean> list_document = new ArrayList<>();
@@ -2872,7 +2884,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return list_document;
     }
-
+    @SuppressLint("Range")
     public ArrayList<SubmitOfflineDataInput> getInstallationOfflineSubmittedListData() {
         SubmitOfflineDataInput submitOfflineDataInput = new SubmitOfflineDataInput();
         ArrayList<SubmitOfflineDataInput> submitOfflineDataInputArrayList = new ArrayList<>();
@@ -2907,7 +2919,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return submitOfflineDataInputArrayList;
     }
-
+    @SuppressLint("Range")
     public InstallationOfflineBean getInstallationOfflineData(String billno) {
         InstallationOfflineBean installationOfflineBean = null;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -2961,7 +2973,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return installationOfflineBean;
     }
-
+    @SuppressLint("Range")
     public SubmitOfflineDataInput getInstallationOfflineSubmittedData(String billNo) {
         SubmitOfflineDataInput submitOfflineDataInput = new SubmitOfflineDataInput();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -2991,7 +3003,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return submitOfflineDataInput;
     }
-
+    @SuppressLint("Range")
     public ArrayList<SiteAuditListBean> getAuditSiteListData(String userid) {
 
         SiteAuditListBean installationBean = new SiteAuditListBean();
@@ -3055,7 +3067,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return list_document;
     }
-
+    @SuppressLint("Range")
     public ArrayList<RejectListBean> getRejectionListData() {
         RejectListBean installationBean = new RejectListBean();
         ArrayList<RejectListBean> list_document = new ArrayList<>();
@@ -3121,7 +3133,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return list_document;
     }
-
+    @SuppressLint("Range")
     public ArrayList<SurveyListBean> getSurveyListData(String userid) {
         SurveyListBean installationBean = new SurveyListBean();
         ArrayList<SurveyListBean> list_document = new ArrayList<>();
@@ -3158,7 +3170,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return list_document;
     }
-
+    @SuppressLint("Range")
     public ArrayList<RegistrationBean> getRegistrationData() {
         RegistrationBean registrationBean = new RegistrationBean();
         ArrayList<RegistrationBean> list_document = new ArrayList<>();
@@ -3215,50 +3227,69 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void deleteLoginData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_LOGIN, null, null);
+       if(CustomUtility.doesTableExist(db,TABLE_LOGIN)) {
+            db.delete(TABLE_LOGIN, null, null);
+        }
     }
 
     public void deleteStateSearchHelpData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_STATE_SEARCH, null, null);
+        if(CustomUtility.doesTableExist(db,TABLE_STATE_SEARCH)) {
+            db.delete(TABLE_STATE_SEARCH, null, null);
+        }
     }
 
     public void deleteStateDistrictData() {
         SQLiteDatabase db = this.getWritableDatabase();
+        if(CustomUtility.doesTableExist(db,TABLE_STATE_DISTRICT)) {
         db.delete(TABLE_STATE_DISTRICT, null, null);
+    }
     }
 
     public void deleteLoginSelecData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_LOGIN_SELECTION, null, null);
+        if(CustomUtility.doesTableExist(db,TABLE_LOGIN_SELECTION)) {
+            db.delete(TABLE_LOGIN_SELECTION, null, null);
+        }
     }
 
     public void deleteDashboardData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_DASHBOARD, null, null);
+        if(CustomUtility.doesTableExist(db,TABLE_DASHBOARD)) {
+            db.delete(TABLE_DASHBOARD, null, null);
+        }
     }
 
     public void deleteRegistrationData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_REGISTRATION, null, null);
+        if(CustomUtility.doesTableExist(db,TABLE_REGISTRATION)) {
+            db.delete(TABLE_REGISTRATION, null, null);
+        }
     }
 
     public void deleteInstallationListData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_INSTALLATION_LIST, null, null);
+        if(CustomUtility.doesTableExist(db,TABLE_INSTALLATION_LIST)) {
+            db.delete(TABLE_INSTALLATION_LIST, null, null);
+        }
     }
 
     public void deleteInstallationOfflineListData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_INSTALLATION_OFFLINE_LIST, null, null);
+        if(CustomUtility.doesTableExist(db,TABLE_INSTALLATION_OFFLINE_LIST)) {
+            db.delete(TABLE_INSTALLATION_OFFLINE_LIST, null, null);
+        }
     }
 
     public void deleteOfflineSubmittedData(String billNo) {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_OFFLINE_BILL_NO + "='" + billNo + "'";
-        int value = db.delete(TABLE_OFFLINE_SUBMITTED_LIST, where, null);
-        Log.i("DeleteValue", value + "");
+        if(CustomUtility.doesTableExist(db,TABLE_OFFLINE_SUBMITTED_LIST)) {
+            int value = db.delete(TABLE_OFFLINE_SUBMITTED_LIST, where, null);
+            Log.i("DeleteValue", value + "");
+        }
+
         getInstallationOfflineSubmittedListData();
     }
 
@@ -3266,81 +3297,121 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_BILL_NO + "='" + value + "'";
-        db.delete(TABLE_INSTALLATION_LIST, where, null);
+        if(CustomUtility.doesTableExist(db,TABLE_INSTALLATION_LIST)) {
+            db.delete(TABLE_INSTALLATION_LIST, where, null);
+        }
     }
 
     public void deleteAuditSiteListData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_AUDITSITE_LIST, null, null);
+        if(CustomUtility.doesTableExist(db,TABLE_AUDITSITE_LIST)) {
+            db.delete(TABLE_AUDITSITE_LIST, null, null);
+        }
     }
 
     public void deleteAuditSiteListData1(String value) {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_BILL_NO + "='" + value + "'";
-        db.delete(TABLE_AUDITSITE_LIST, where, null);
+        if(CustomUtility.doesTableExist(db,TABLE_AUDITSITE_LIST)) {
+            db.delete(TABLE_AUDITSITE_LIST, where, null);
+        }
     }
 
     public void deleteRejectListData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_REJECTION_LIST, null, null);
+        if(CustomUtility.doesTableExist(db,TABLE_REJECTION_LIST)) {
+            db.delete(TABLE_REJECTION_LIST, null, null);
+        }
     }
 
     public void deleteSurveyListData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_SURVEY_LIST, null, null);
+        if(CustomUtility.doesTableExist(db,TABLE_SURVEY_LIST)) {
+            db.delete(TABLE_SURVEY_LIST, null, null);
+        }
     }
 
     public void deleteInstallationData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_INSTALLATION_PUMP_DATA, null, null);
+        if(CustomUtility.doesTableExist(db,TABLE_INSTALLATION_PUMP_DATA)) {
+            db.delete(TABLE_INSTALLATION_PUMP_DATA, null, null);
+        }
     }
 
     public void deleteAuditData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_AUDIT_PUMP_DATA, null, null);
+        if(CustomUtility.doesTableExist(db,TABLE_AUDIT_PUMP_DATA)) {
+            db.delete(TABLE_AUDIT_PUMP_DATA, null, null);
+        }
     }
 
     public void deleteSurveyData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_SURVEY_PUMP_DATA, null, null);
+        if(CustomUtility.doesTableExist(db,TABLE_SURVEY_PUMP_DATA)) {
+            db.delete(TABLE_SURVEY_PUMP_DATA, null, null);
+        }
     }
 
     public void deleteInstallationData(String value) {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_BILL_NO + "='" + value + "'";
-        db.delete(TABLE_INSTALLATION_PUMP_DATA, where, null);
+        if(CustomUtility.doesTableExist(db,TABLE_INSTALLATION_PUMP_DATA)) {
+            db.delete(TABLE_INSTALLATION_PUMP_DATA, where, null);
+        }
     }
 
     public void deleteDAMAGEMISSData(String value) {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_BILL_NO + "='" + value + "'";
-        db.delete(TABLE_DAMAGE_MISS_COMPLAIN, where, null);
+        if(CustomUtility.doesTableExist(db,TABLE_DAMAGE_MISS_COMPLAIN)) {
+            db.delete(TABLE_DAMAGE_MISS_COMPLAIN, where, null);
+        }
     }
 
     public void deleteAuditData(String value) {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_BILL_NO + "='" + value + "'";
-        db.delete(TABLE_AUDIT_PUMP_DATA, where, null);
+        if(CustomUtility.doesTableExist(db,TABLE_AUDIT_PUMP_DATA)) {
+            db.delete(TABLE_AUDIT_PUMP_DATA, where, null);
+        }
     }
 
     public void deleteSurveyData(String value) {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_BILL_NO + "='" + value + "'";
-        db.delete(TABLE_SURVEY_PUMP_DATA, where, null);
+        if(CustomUtility.doesTableExist(db,TABLE_SURVEY_PUMP_DATA)) {
+            db.delete(TABLE_SURVEY_PUMP_DATA, where, null);
+        }
     }
 
     public void deleteRegistrationData(String value) {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_ENQ_DOC + "='" + value + "'";
-        db.delete(TABLE_REGISTRATION, where, null);
+        if(CustomUtility.doesTableExist(db,TABLE_REGISTRATION)) {
+            db.delete(TABLE_REGISTRATION, where, null);
+        }
+    }
+    public void deleteInstallationImages() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(CustomUtility.doesTableExist(db,TABLE_INSTALLATION_IMAGE_DATA)) {
+            db.delete(TABLE_INSTALLATION_IMAGE_DATA, null, null);
+        }
     }
 
+    public void deleteUnloadingImages() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(CustomUtility.doesTableExist(db,TABLE_UNLOADING_IMAGE_DATA)) {
+            db.delete(TABLE_UNLOADING_IMAGE_DATA, null, null);
+        }
+    }
+
+    @SuppressLint("Range")
     public InstallationBean getInstallationData(String user_id, String bill_no) {
         InstallationBean installationBean = new InstallationBean();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -3354,6 +3425,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     while (!cursor.isAfterLast()) {
                         installationBean = new InstallationBean();
                         installationBean.setInst_bill_no(cursor.getString(cursor.getColumnIndex(KEY_BILL_NO)));
+
                         installationBean.setBill_date(cursor.getString(cursor.getColumnIndex(KEY_BILL_DATE)));
                         installationBean.setPernr(cursor.getString(cursor.getColumnIndex(KEY_PERNR)));
                         installationBean.setProject_no(cursor.getString(cursor.getColumnIndex(KEY_PROJ_NO)));
@@ -3391,6 +3463,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         installationBean.setRegis_no(cursor.getString(cursor.getColumnIndex(KEY_ADD1)));
                         installationBean.setDelay_reason(cursor.getString(cursor.getColumnIndex(KEY_ADD2)));
                         installationBean.setMake_ins(cursor.getString(cursor.getColumnIndex(KEY_ADD3)));
+                        installationBean.setBeneficiaryNo(cursor.getString(cursor.getColumnIndex(KEY_BENEFICIARY_NO)));
                         cursor.moveToNext();
                     }
                 }
@@ -3404,7 +3477,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return installationBean;
     }
-
+    @SuppressLint("Range")
     public AuditSiteBean getAuditData(String user_id, String bill_no) {
         AuditSiteBean auditSiteBean = new AuditSiteBean();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -3451,7 +3524,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return auditSiteBean;
     }
-
+    @SuppressLint("Range")
     public SurveyBean getSurveyData(String user_id, String bill_no) {
         SurveyBean surveyBean = new SurveyBean();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -3501,7 +3574,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return true;
     }
-
+    @SuppressLint("Range")
     public boolean isImageSaved(String tablename, String where, String docno, String field) {
         String result = null;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -3575,7 +3648,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return index;
     }
-
+    @SuppressLint("Range")
     public SimCardBean getSimDataformation(String user_id, String enq_docno) {
         SimCardBean simCardBean = new SimCardBean();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -3616,6 +3689,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return simCardBean;
     }
 
+    @SuppressLint("Range")
     public ArrayList<SimCardBean> getSimData() {
         SimCardBean simCardBean = new SimCardBean();
         ArrayList<SimCardBean> list_document = new ArrayList<>();
@@ -3659,6 +3733,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return list_document;
     }
 
+    @SuppressLint("Range")
     public ArrayList<SimCardBean> getSimData(String userid) {
         ArrayList<SimCardBean> simCardBeans = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -3710,4 +3785,108 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return false;
         }
     }
+
+    public void insertInstallationImage( String name,String path, boolean isSelected, String billNo ) {
+      SQLiteDatabase  database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_INSTALLATION_NAME, name);
+        contentValues.put(KEY_INSTALLATION_PATH, path);
+        contentValues.put(KEY_INSTALLATION_IMAGE_SELECTED, isSelected);
+        contentValues.put(KEY_INSTALLATION_BILL_NO, billNo);
+        database.insert(TABLE_INSTALLATION_IMAGE_DATA, null, contentValues);
+        database.close();
+    }
+
+    public void updateRecordAlternate( String name, String path, boolean isSelected, String billNo) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_INSTALLATION_NAME, name);
+        values.put(KEY_INSTALLATION_PATH, path);
+        values.put(KEY_INSTALLATION_IMAGE_SELECTED, isSelected);
+        values.put(KEY_INSTALLATION_BILL_NO, billNo);
+        // update Row
+        db.update(TABLE_INSTALLATION_IMAGE_DATA,values,"installationImageName = '"+name+"'",null);
+        db.close();
+    }
+
+    public ArrayList<ImageModel> getAllInstallationImages() {
+        ArrayList<ImageModel> installationImages = new ArrayList<ImageModel>();
+        SQLiteDatabase  database = this.getWritableDatabase();
+        if(CustomUtility.doesTableExist(database,TABLE_INSTALLATION_IMAGE_DATA)) {
+            Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_INSTALLATION_IMAGE_DATA, null);
+
+            installationImages.clear();
+            ImageModel imageModel;
+
+            if (mcursor.getCount() > 0) {
+                for (int i = 0; i < mcursor.getCount(); i++) {
+                    mcursor.moveToNext();
+
+                    imageModel = new ImageModel();
+                    imageModel.setID(mcursor.getString(0));
+                    imageModel.setName(mcursor.getString(1));
+                    imageModel.setImagePath(mcursor.getString(2));
+                    imageModel.setImageSelected(Boolean.parseBoolean(mcursor.getString(3)));
+                    imageModel.setBillNo(mcursor.getString(4));
+                    installationImages.add(imageModel);
+                }
+            }
+            mcursor.close();
+            database.close();
+        }
+        return installationImages;
+    }
+
+
+    public void insertUnloadingImage( String name ,String path,boolean isSelected,  String billNo ) {
+        SQLiteDatabase  database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_UNLOADING_NAME, name);
+        contentValues.put(KEY_UNLOADING_PATH, path);
+        contentValues.put(KEY_UNLOADING_IMAGE_SELECTED, isSelected);
+        contentValues.put(KEY_UNLOADING_BILL_NO, billNo);
+        database.insert(TABLE_UNLOADING_IMAGE_DATA, null, contentValues);
+        database.close();
+    }
+
+    public void updateUnloadingAlternate(String name ,String path,boolean isSelected,  String billNo ) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_UNLOADING_NAME, name);
+        values.put(KEY_UNLOADING_PATH, path);
+        values.put(KEY_UNLOADING_IMAGE_SELECTED, isSelected);
+        values.put(KEY_UNLOADING_BILL_NO, billNo);
+        // update Row
+        db.update(TABLE_UNLOADING_IMAGE_DATA,values,"unloadingImageName = '"+name+"'",null);
+        db.close();
+    }
+
+    public ArrayList<ImageModel> getAllUnloadingImages() {
+        ArrayList<ImageModel> UnloadingImages = new ArrayList<ImageModel>();
+        SQLiteDatabase  database = this.getWritableDatabase();
+        if(CustomUtility.doesTableExist(database,TABLE_UNLOADING_IMAGE_DATA)) {
+            Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_UNLOADING_IMAGE_DATA, null);
+
+            UnloadingImages.clear();
+            ImageModel imageModel;
+
+            if (mcursor.getCount() > 0) {
+                for (int i = 0; i < mcursor.getCount(); i++) {
+                    mcursor.moveToNext();
+
+                    imageModel = new ImageModel();
+                    imageModel.setID(mcursor.getString(0));
+                    imageModel.setName(mcursor.getString(1));
+                    imageModel.setImagePath(mcursor.getString(2));
+                    imageModel.setImageSelected(Boolean.parseBoolean(mcursor.getString(3)));
+                    imageModel.setBillNo(mcursor.getString(4));
+                    UnloadingImages.add(imageModel);
+                }
+            }
+            mcursor.close();
+            database.close();
+        }
+        return UnloadingImages;
+    }
+
 }

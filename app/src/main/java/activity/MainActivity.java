@@ -6,7 +6,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
@@ -93,7 +96,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         dataHelper = new DatabaseHelper(context);
-        versionName = BuildConfig.VERSION_NAME;
+
+        PackageManager pm = getApplicationContext().getPackageManager();
+        String pkgName = getApplicationContext().getPackageName();
+        PackageInfo pkgInfo = null;
+        try {
+            pkgInfo = pm.getPackageInfo(pkgName, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        versionName = String.valueOf(pkgInfo.versionName);
 
         LoginBean loginBean = new LoginBean();
 
@@ -118,6 +130,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         username.setText(CustomUtility.getSharedPreferences(context, "username"));
         projname.setText(CustomUtility.getSharedPreferences(context, "projectname"));
         appversion.setText("Version " + versionName);
+        CustomUtility.setSharedPreference(context, "CHECK_OTP_VERIFED", "Y");
+
 
         cardSurveySiteID = findViewById(R.id.cardSurveySiteID);
         recyclerView = findViewById(R.id.item_list);
@@ -279,6 +293,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void logout() {
         try {
             if (CustomUtility.isInternetOn()) {
+                dataHelper = new DatabaseHelper(context);
                 dataHelper.deleteLoginData();
                 dataHelper.deleteDashboardData();
                 dataHelper.deleteRegistrationData();
@@ -286,12 +301,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dataHelper.deleteSurveyListData();
                 dataHelper.deleteInstallationData();
                 dataHelper.deleteSurveyData();
-                CustomUtility.setSharedPreference(context, "userid", "");
+                dataHelper.deleteInstallationImages();
+                dataHelper.deleteUnloadingImages();
+                CustomUtility.clearSharedPrefrences(context);
+               /* CustomUtility.setSharedPreference(context, "userid", "");
                 CustomUtility.setSharedPreference(context, "username", "");
                 CustomUtility.setSharedPreference(context, "usertype", "");
                 CustomUtility.setSharedPreference(context, "projectid", "");
                 CustomUtility.setSharedPreference(context, "loginid", "");
-                CustomUtility.setSharedPreference(context, "CHECK_OTP_VARIFED", "N");
+                CustomUtility.setSharedPreference(context, "CHECK_OTP_VARIFED", "N");*/
                 Intent intent = new Intent(context, Login.class);
                 startActivity(intent);
                 finish();

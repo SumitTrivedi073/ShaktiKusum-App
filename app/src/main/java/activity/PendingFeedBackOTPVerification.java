@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -45,8 +46,7 @@ public class PendingFeedBackOTPVerification extends AppCompatActivity {
     TextView countdownTxt, resend_btn, verifyOTP;
     EditText et_verification_code;
 
-    PendingFeedback.Response response;
-    String verificationCode;
+    String verificationCode,contactNumber,vblen,Hp,beneficiary;
     AlertDialog alertDialog;
 
     @Override
@@ -71,7 +71,11 @@ public class PendingFeedBackOTPVerification extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getResources().getString(R.string.otpVerification));
 
-        response = getIntent().getParcelableExtra(Constant.PendingFeedback);
+      //  response = getIntent().getParcelableExtra(Constant.PendingFeedback);
+        contactNumber =   getIntent().getStringExtra(Constant.PendingFeedbackContact);
+        vblen =   getIntent().getStringExtra(Constant.PendingFeedbackVblen);
+        Hp =    getIntent().getStringExtra(Constant.PendingFeedbackHp);
+        beneficiary =   getIntent().getStringExtra(Constant.PendingFeedbackBeneficiary);
         verificationCode = getIntent().getStringExtra(Constant.VerificationCode);
         countDownTimer();
     }
@@ -89,7 +93,7 @@ public class PendingFeedBackOTPVerification extends AppCompatActivity {
             public void onClick(View view) {
                 Random random = new Random();
                 verificationCode = String.format("%04d", random.nextInt(10000));
-                sendVerificationCodeAPI(response, verificationCode);
+                sendVerificationCodeAPI(verificationCode);
             }
         });
 
@@ -101,7 +105,7 @@ public class PendingFeedBackOTPVerification extends AppCompatActivity {
                 } else if (!verificationCode.equals(et_verification_code.getText().toString())){
                     Toast.makeText(getApplicationContext(), "Please Enter Correct Verification Code", Toast.LENGTH_LONG).show();
                 }else {
-                         saveOtpToServer(response.getVbeln(),et_verification_code.getText().toString());
+                         saveOtpToServer(vblen,et_verification_code.getText().toString());
                 }
             }
         });
@@ -127,7 +131,7 @@ public class PendingFeedBackOTPVerification extends AppCompatActivity {
                 CustomUtility.hideProgressDialog(PendingFeedBackOTPVerification.this);
 
 
-                if (response.toString() != null && !res.toString().isEmpty()) {
+                if (!res.toString().isEmpty()) {
 
                         ShowAlertResponse("1");
 
@@ -143,15 +147,19 @@ public class PendingFeedBackOTPVerification extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
             }
         });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,  // maxNumRetries = 0 means no retry
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(jsonObjectRequest);
     }
 
-    private void sendVerificationCodeAPI(PendingFeedback.Response response, String generatedVerificationCode) {
+    private void sendVerificationCodeAPI( String generatedVerificationCode) {
         CustomUtility.showProgressDialogue(PendingFeedBackOTPVerification.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.SendOTP + "&mobiles=" +response.getContactNo()+
-                        "&message=आप अपने खेत में शक्ति पम्प्स (इंडिया) लिमिटेड द्वारा स्थापित " + response.getHp() + " एचपी रेटिंग सोलर पंप सेट के लिए लाभार्थी आईडी " + response.getBeneficiary() + " के संदर्भ में यह संदेश प्राप्त कर रहे हैं।" +
+                WebURL.SendOTP + "&mobiles=" +contactNumber+
+                        "&message=आप अपने खेत में शक्ति पम्प्स (इंडिया) लिमिटेड द्वारा स्थापित " + Hp + " एचपी रेटिंग सोलर पंप सेट के लिए लाभार्थी आईडी " + beneficiary + " के संदर्भ में यह संदेश प्राप्त कर रहे हैं।" +
                         " यह संदेश केवल आपकी प्रतिक्रिया के उद्देश्य से है शक्ति पंप्स इंस्टालर को सत्यपान कोड साझा करके आप निम्नलिखित की पुष्टि कर रहे हैं 1) आप स्थापना की गुणवत्ता से संतुष्ट हैं" +
                         " 2) आप सोलर पंप सेट के प्रदर्शन से संतुष्ट हैं 3) इंस्टॉलर ने किसी भी प्रकार की सामग्री या स्थापना कार्य के लिए कोई राशि नहीं ली हैं यदि उपरोक्त सभी तीन कथन सही हैं, " +
                         "तो कृपया अपने सोलर पम्प सेट की 5 वर्ष की सेवा को सक्रिय करने के लिए इंस्टॉलर के साथ सत्यपान कोड " + generatedVerificationCode + " साझा करें।:&sender=SHAKTl&route=2&country=91&DLT_TE_ID=1707167928540679513&unicode=1",
@@ -162,7 +170,7 @@ public class PendingFeedBackOTPVerification extends AppCompatActivity {
                 CustomUtility.hideProgressDialog(PendingFeedBackOTPVerification.this);
 
 
-                if (response.toString() != null && !res.toString().isEmpty()) {
+                if ( !res.toString().isEmpty()) {
                     VerificationCodeModel verificationCodeModel = new Gson().fromJson(res.toString(), VerificationCodeModel.class);
                     if (verificationCodeModel.getStatus().equals("Success")) {
 
@@ -181,6 +189,10 @@ public class PendingFeedBackOTPVerification extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
             }
         });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,  // maxNumRetries = 0 means no retry
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(jsonObjectRequest);
     }
 

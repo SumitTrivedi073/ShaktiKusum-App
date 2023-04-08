@@ -14,10 +14,33 @@
 
        <include layout="@layout/toolbar" />
 
+       <RelativeLayout
+           android:id="@+id/searchRelative"
+           android:layout_width="match_parent"
+           android:layout_height="@dimen/_40sdp"
+           android:layout_marginTop="@dimen/_10sdp"
+           android:layout_marginLeft="@dimen/_10sdp"
+           android:layout_marginStart="@dimen/_10sdp"
+           android:layout_marginRight="@dimen/_10sdp"
+           android:layout_marginEnd="@dimen/_10sdp"
+           android:background="@drawable/popup_relative">
+
+           <androidx.appcompat.widget.SearchView
+               android:id="@+id/searchUser"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:inputType="text"
+               app:queryHint="@string/action_search"
+               app:defaultQueryHint="@string/action_search"
+               android:backgroundTint="@color/colorPrimary"/>
+
+       </RelativeLayout>
+
        <androidx.recyclerview.widget.RecyclerView
            android:id="@+id/pendingfeedbacklist"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
+           android:layout_marginTop="@dimen/_5sdp"
            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
    </LinearLayout>

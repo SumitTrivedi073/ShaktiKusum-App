@@ -1,6 +1,5 @@
 package utility;
 
-import static debugapp.GlobalValue.Constant.CameraAppImage;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -13,13 +12,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Base64;
@@ -29,10 +28,11 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.gson.Gson;
+import com.shaktipumplimited.shaktikusum.R;
+
 import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -41,11 +41,6 @@ import java.util.Locale;
 import activity.BaseActivity;
 import activity.CustomProgressDialog;
 import bean.ImageModel;
-import debugapp.GlobalValue.Constant;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.shaktipumplimited.shaktikusum.R;
 
 /**
  * Created by Administrator on 1/3/2017.
@@ -293,6 +288,18 @@ public class CustomUtility {
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
+    public static void clearSharedPrefrences(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCE, 0);
+            SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+            prefsEditor.clear();
+            prefsEditor.apply();
+
+    }
+
+    public static boolean isValidMobile(String phone) {
+        return android.util.Patterns.PHONE.matcher(phone).matches();
+    }
+
     public String getCurrentDate() {
         simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         current_date = simpleDateFormat.format(new Date());
@@ -361,4 +368,18 @@ public class CustomUtility {
         }
         return path;
     }
+
+    public static boolean doesTableExist(SQLiteDatabase db, String tableName) {
+        Cursor cursor = db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '" + tableName + "'", null);
+
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                cursor.close();
+                return true;
+            }
+            cursor.close();
+        }
+        return false;
+    }
+
 }

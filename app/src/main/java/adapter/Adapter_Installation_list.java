@@ -17,17 +17,18 @@ import androidx.cardview.widget.CardView;
 import androidx.core.os.BuildCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.shaktipumplimited.shaktikusum.R;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import activity.InstallationInitial;
+import activity.UnloadInstReportImageActivity;
 import bean.InstallationBean;
 import bean.InstallationListBean;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.NewSolarVFD;
-import activity.InstallationInitial;
-import com.shaktipumplimited.shaktikusum.R;
-import activity.UnloadInstReportImageActivity;
 import utility.CustomUtility;
 import webservice.WebURL;
 
@@ -80,8 +81,8 @@ import webservice.WebURL;
             if (!TextUtils.isEmpty(responseList.get(position).getCustomer_name())) {
                 holder.cust_nm.setText(responseList.get(position).getCustomer_name());
             }
-            if (!TextUtils.isEmpty(responseList.get(position).getContact_no())) {
-                holder.cnt_no.setText(responseList.get(position).getContact_no());
+            if (!TextUtils.isEmpty(responseList.get(position).getCUS_CONTACT_NO())) {
+                holder.cnt_no.setText(responseList.get(position).getCUS_CONTACT_NO());
             }
             if (!TextUtils.isEmpty(responseList.get(position).getAddress())) {
                 holder.addrs.setText(responseList.get(position).getAddress());
@@ -115,7 +116,7 @@ import webservice.WebURL;
                             extras.putString("state_txt", responseList.get(position).getStatetxt());
                             extras.putString("city_txt", responseList.get(position).getCitytxt());
                             extras.putString("address", responseList.get(position).getAddress());
-                            extras.putString("mobile", responseList.get(position).getContact_no());
+                            extras.putString("mobile", responseList.get(position).getCUS_CONTACT_NO());
                             extras.putString("controller", responseList.get(position).getController());
                             extras.putString("motor", responseList.get(position).getMotor());
                             extras.putString("pump", responseList.get(position).getPump());
@@ -125,6 +126,7 @@ import webservice.WebURL;
                             extras.putString("loginno", responseList.get(position).getLoginno());
                             extras.putString("moduleqty", responseList.get(position).getModuleqty());
                             extras.putString("CUS_CONTACT_NO", responseList.get(position).getCUS_CONTACT_NO());
+                            extras.putString("BeneficiaryNo", responseList.get(position).getBeneficiary());
                             in.putExtras(extras);
                             context.startActivity(in);
                         }

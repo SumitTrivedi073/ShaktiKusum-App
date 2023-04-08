@@ -25,15 +25,14 @@ public class NewSolarVFD {
     public static final String BASE_URL_UPLOAD= "http://111.118.249.190:8090/RMSApp/";
     public static final String BASE_URL_VK= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/";
     public static final String BASE_URL_VK1= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/";
-    //public static final String BASE_URL_VK1= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/new_serial_no_update.htm";
+
     public static final String BASE_URL_OPTION_VK= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
-   // public static final String BASE_URL_VK= "http://spdevsrvr1.shaktipumps.com:8000/sap/bc/bsp/sap/zmap_debugger/";
-    //public static final String BASE_URL_VK= "http://spdevsrvr1.shaktipumps.com:8000/sap/bc/bsp/sap/zmap_debugger/";
+
 
 
 
     public static final String LOGIN_VK_PAGE = "login.htm";
-    public static final String SAVE_VK_PAGE = BASE_URL_VK +"save.htm";
+    public static final String SAVE_VK_PAGE = BASE_URL_VK1 +"save_installation.htm";
     public static final String UPDATE_IBASE_VK_PAGE = BASE_URL_VK1 +"new_serial_no_update.htm";
     public static final String SIM_STATUS_VK_PAGE = "sim_actiavtion_status.htm";
     public static final String RMS_VALIDAION_OPTION_API = "rms_validation.htm";

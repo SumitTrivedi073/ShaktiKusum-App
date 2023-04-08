@@ -51,6 +51,7 @@ public class InstallationBean {
     public String conntype = "";
     public String simcard_num = "";
     public String regis_no = "";
+    public String BeneficiaryNo = "";
 
 
     public InstallationBean() {
@@ -58,44 +59,13 @@ public class InstallationBean {
     }
 
 
-    public InstallationBean(String pernr_txt,
-                            String project_no_text,
-                            String login_no_text,
-                            String latitude_txt,
-                            String longitude_txt,
-                            String inst_bill_no_txt,
-                            String inst_date_txt,
-                            String bill_date_txt,
-                            String dely_rea_txt,
-                            String rms_data_status_txt,
-                            String customer_name_txt,
-                            String father_name_txt,
-                            String mobile_no_txt,
-                            String state_ins_Id,
-                            String state_ins_text,
-                            String district_ins_Id,
-                            String district_ins_text,
-                            String tehsil_ins_txt,
-                            String village_ins_txt,
-                            String address_ins_txt,
-                            String make_ins_txt,
-                            String solarpanel_wattage_txt,
-                            String solarpanel_stand_ins_quantity_txt,
-                            String total_watt_txt,
-                            String inst_hp_txt,
-                            String no_of_module_qty_txt,
-                            String no_of_module_value_txt,
-                            String module_total_plate_watt_txt,
-                            String solar_motor_model_details_txt,
-                            String smmd_sno_txt,
-                            String splar_pump_model_details_txt,
-                            String spmd_sno_txt,
-                            String solar_controller_model_txt,
-                            String scm_sno_txt,
-                            String simoprator_txt,
-                            String conntype_txt,
-                            String simcard_num_txt,
-                            String regis_no_txt
+    public InstallationBean(String pernr_txt, String project_no_text, String login_no_text, String latitude_txt, String longitude_txt, String inst_bill_no_txt, String inst_date_txt,
+                            String bill_date_txt, String dely_rea_txt, String rms_data_status_txt, String customer_name_txt, String father_name_txt, String mobile_no_txt,
+                            String state_ins_Id, String state_ins_text, String district_ins_Id, String district_ins_text, String tehsil_ins_txt, String village_ins_txt,
+                            String address_ins_txt, String make_ins_txt, String solarpanel_wattage_txt, String solarpanel_stand_ins_quantity_txt, String total_watt_txt,
+                            String inst_hp_txt, String no_of_module_qty_txt, String no_of_module_value_txt, String module_total_plate_watt_txt, String solar_motor_model_details_txt,
+                            String smmd_sno_txt, String splar_pump_model_details_txt, String spmd_sno_txt, String solar_controller_model_txt, String scm_sno_txt, String simoprator_txt,
+                            String conntype_txt, String simcard_num_txt, String regis_no_txt, String BeneficiaryNo
 
     ) {
 
@@ -122,30 +92,24 @@ public class InstallationBean {
         village_ins = village_ins_txt;
         address_ins = address_ins_txt;
         make_ins = make_ins_txt;
-
-
         solarpanel_wattage = solarpanel_wattage_txt;
         solarpanel_stand_ins_quantity = solarpanel_stand_ins_quantity_txt;
         total_watt = total_watt_txt;
         inst_hp = inst_hp_txt;
-
         no_of_module_qty = no_of_module_qty_txt;
         no_of_module_value = no_of_module_value_txt;
         module_total_plate_watt = module_total_plate_watt_txt;
-
         solar_motor_model_details = solar_motor_model_details_txt;
         smmd_sno = smmd_sno_txt;
-
         splar_pump_model_details = splar_pump_model_details_txt;
         spmd_sno = spmd_sno_txt;
-
         solar_controller_model = solar_controller_model_txt;
         scm_sno = scm_sno_txt;
-
         simoprator = simoprator_txt;
         conntype = conntype_txt;
         simcard_num = simcard_num_txt;
         regis_no = regis_no_txt;
+        BeneficiaryNo = BeneficiaryNo;
 
     }
 
@@ -451,6 +415,14 @@ public class InstallationBean {
 
     public void setRegis_no(String regis_no) {
         this.regis_no = regis_no;
+    }
+
+    public String getBeneficiaryNo() {
+        return BeneficiaryNo;
+    }
+
+    public void setBeneficiaryNo(String beneficiaryNo) {
+        BeneficiaryNo = beneficiaryNo;
     }
 }
 

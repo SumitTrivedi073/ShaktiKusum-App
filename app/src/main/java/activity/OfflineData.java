@@ -1,5 +1,6 @@
 package activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -62,7 +63,10 @@ public class OfflineData extends AppCompatActivity {
         inst_data.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                @SuppressLint("UnsafeOptInUsageError")
+                Intent intent = new Intent(context, InstallationList.class);
 
+                startActivity(intent);
             }
         });
 

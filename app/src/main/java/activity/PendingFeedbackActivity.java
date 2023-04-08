@@ -5,15 +5,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -26,6 +33,7 @@ import com.shaktipumplimited.shaktikusum.R;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import adapter.PendingFeedbackAdapter;
 import debugapp.GlobalValue.Constant;
@@ -43,6 +51,12 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
 
     TextView noDataFound;
 
+    SearchView searchUser;
+
+    PendingFeedbackAdapter pendingFeedbackAdapter;
+
+    RelativeLayout searchRelative;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +72,8 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
         mToolbar =  findViewById(R.id.toolbar);
         pendingFeedbackList = findViewById(R.id.pendingfeedbacklist);
         noDataFound = findViewById(R.id.noDataFound);
+        searchUser = findViewById(R.id.searchUser);
+        searchRelative = findViewById(R.id.searchRelative);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -72,6 +88,60 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
                 onBackPressed();
             }
         });
+
+        searchRelative.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchUser.setFocusableInTouchMode(true);
+                searchUser.requestFocus();
+                searchUser.onActionViewExpanded();
+
+            }
+        });
+
+        ImageView searchIcon = searchUser.findViewById(R.id.search_button);
+        searchIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.baseline_search_24));
+        searchIcon.setColorFilter(getResources().getColor(R.color.colorPrimary));
+
+        ImageView searchClose = searchUser.findViewById(R.id.search_close_btn);
+        searchClose.setColorFilter(getResources().getColor(R.color.colorPrimary));
+
+
+        EditText searchEditText = searchUser.findViewById(R.id.search_src_text);
+        searchEditText.setTextColor(getResources().getColor(R.color.colorPrimary));
+        searchEditText.setHintTextColor(getResources().getColor(R.color.colorPrimary));
+        searchEditText.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen._14sdp));
+
+        searchUser.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (pendingFeedbackAdapter != null) {
+                    if(!query.isEmpty()) {
+                        pendingFeedbackAdapter.getFilter().filter(query);
+                    }}
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (pendingFeedbackAdapter != null) {
+                    if(!newText.isEmpty()) {
+                        pendingFeedbackAdapter.getFilter().filter(newText);
+                    }
+                }
+                return false;
+            }
+        });
+
+        searchClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                searchUser.onActionViewCollapsed();
+            }
+        });
+
     }
 
 
@@ -91,7 +161,7 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
                     PendingFeedback pendingFeedback = new Gson().fromJson(response.toString(), PendingFeedback.class);
                     if(pendingFeedback.getStatus().equals("true")) {
 
-                        PendingFeedbackAdapter pendingFeedbackAdapter = new PendingFeedbackAdapter(getApplicationContext(),pendingFeedback.getResponse());
+                         pendingFeedbackAdapter = new PendingFeedbackAdapter(getApplicationContext(),pendingFeedback.getResponse(),noDataFound);
                         pendingFeedbackList.setHasFixedSize(true);
                         pendingFeedbackList.setAdapter(pendingFeedbackAdapter);
                         pendingFeedbackAdapter.SendOTP(PendingFeedbackActivity.this);
@@ -115,10 +185,13 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
                 noDataFound.setVisibility(View.VISIBLE);
                 pendingFeedbackList.setVisibility(View.GONE);
                 Log.e("error", String.valueOf(error));
-                Toast.makeText(PendingFeedbackActivity.this, error.getMessage(),
-                        Toast.LENGTH_LONG).show();
+
             }
         });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,  // maxNumRetries = 0 means no retry
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(jsonObjectRequest);
     }
 
@@ -130,8 +203,14 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
     }
 
     @Override
-    public void sendOtpListener(PendingFeedback.Response response, String generatedVerificationCode) {
-        sendVerificationCodeAPI(response,generatedVerificationCode);
+    public void sendOtpListener(List<PendingFeedback.Response> pendingFeedbackList,int position, String generatedVerificationCode) {
+
+        if(CustomUtility.isValidMobile(pendingFeedbackList.get(position).getContactNo())) {
+            sendVerificationCodeAPI(pendingFeedbackList.get(position),generatedVerificationCode);
+        }else {
+            CustomUtility.ShowToast(getResources().getString(R.string.mobile_number_not_valid), PendingFeedbackActivity.this);
+        }
+
     }
 
     private void sendVerificationCodeAPI(PendingFeedback.Response response, String generatedVerificationCode) {
@@ -150,7 +229,7 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
                 CustomUtility.hideProgressDialog(PendingFeedbackActivity.this);
 
 
-                if(response.toString()!=null && !res.toString().isEmpty()) {
+                if(res.toString()!=null && !res.toString().isEmpty()) {
                     VerificationCodeModel verificationCodeModel = new Gson().fromJson(res.toString(), VerificationCodeModel.class);
                     if(verificationCodeModel.getStatus().equals("Success")) {
 
@@ -169,6 +248,10 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
                         Toast.LENGTH_LONG).show();
             }
         });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,  // maxNumRetries = 0 means no retry
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(jsonObjectRequest);
     }
 
@@ -198,11 +281,19 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
             public void onClick(View v) {
                 alertDialog.dismiss();
                 Intent intent = new Intent(PendingFeedbackActivity.this, PendingFeedBackOTPVerification.class);
-                intent.putExtra(Constant.PendingFeedback,response);
+                intent.putExtra(Constant.PendingFeedbackContact,response.getContactNo());
+                intent.putExtra(Constant.PendingFeedbackVblen,response.getVbeln());
+                intent.putExtra(Constant.PendingFeedbackHp,response.getHp());
+                intent.putExtra(Constant.PendingFeedbackBeneficiary,response.getBeneficiary());
                 intent.putExtra(Constant.VerificationCode,generatedVerificationCode);
+
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
 
+                /* intent.putExtra(Constant.PendingFeedbackVblen,response.getVbeln());
+                intent.putExtra(Constant.PendingFeedbackHp,response.getHp());
+                intent.putExtra(Constant.PendingFeedbackBeneficiary,response.getBeneficiary());
+                intent.putExtra(Constant.VerificationCode,generatedVerificationCode);*/
             }
         });
 
