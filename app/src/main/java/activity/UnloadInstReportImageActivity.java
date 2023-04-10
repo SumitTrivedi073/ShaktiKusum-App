@@ -1,6 +1,9 @@
 package activity;
 
 import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.READ_MEDIA_AUDIO;
+import static android.Manifest.permission.READ_MEDIA_IMAGES;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION.SDK_INT;
 import static utility.FileUtils.getPath;
@@ -16,9 +19,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.StrictMode;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -40,8 +41,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
@@ -49,7 +48,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,12 +88,18 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_unload_instreport_image);
+      Init();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         CheakPermissions();
     }
 
     private void CheakPermissions() {
         if (checkPermission()) {
-            Init();
+            SetAdapter();
         } else {
             requestPermission();
         }
@@ -106,7 +110,7 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
         if (SDK_INT >= Build.VERSION_CODES.R) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA,
-                            Manifest.permission.MANAGE_EXTERNAL_STORAGE},
+                            Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_AUDIO},
                     REQUEST_CODE_PERMISSION);
         } else {
             ActivityCompat.requestPermissions(this,
@@ -119,14 +123,19 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
 
     private boolean checkPermission() {
         int cameraPermission =
-                ContextCompat.checkSelfPermission(UnloadInstReportImageActivity.this, CAMERA);
+                ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA);
+        int ReadMediaImages =
+                ContextCompat.checkSelfPermission(getApplicationContext(), READ_MEDIA_IMAGES);
+        int ReadAudioImages =
+                ContextCompat.checkSelfPermission(getApplicationContext(), READ_MEDIA_AUDIO);
         int writeExternalStorage =
-                ContextCompat.checkSelfPermission(UnloadInstReportImageActivity.this, WRITE_EXTERNAL_STORAGE);
+                ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
         int ReadExternalStorage =
-                ContextCompat.checkSelfPermission(UnloadInstReportImageActivity.this, WRITE_EXTERNAL_STORAGE);
+                ContextCompat.checkSelfPermission(getApplicationContext(), READ_EXTERNAL_STORAGE);
 
         if (SDK_INT >= Build.VERSION_CODES.R) {
-            return cameraPermission == PackageManager.PERMISSION_GRANTED;
+            return cameraPermission == PackageManager.PERMISSION_GRANTED&& ReadMediaImages == PackageManager.PERMISSION_GRANTED
+                    && ReadAudioImages == PackageManager.PERMISSION_GRANTED;
         } else {
             return cameraPermission == PackageManager.PERMISSION_GRANTED && writeExternalStorage == PackageManager.PERMISSION_GRANTED
                     && ReadExternalStorage == PackageManager.PERMISSION_GRANTED;
@@ -146,20 +155,12 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
                 if (grantResults.length > 0) {
                     if (SDK_INT >= Build.VERSION_CODES.R) {
                         boolean ACCESSCAMERA = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                        boolean ReadMediaImages = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                        boolean ReadAudioImages = grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
+                        if (ACCESSCAMERA && ReadMediaImages && ReadAudioImages) {
 
-                        if (ACCESSCAMERA) {
-                            try {
-                                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                                intent.addCategory("android.intent.category.DEFAULT");
-                                intent.setData(Uri.parse(String.format("package:%s", UnloadInstReportImageActivity.this.getPackageName())));
-                                startActivityForResult(intent, 2296);
-                            } catch (Exception e) {
-                                Intent intent = new Intent();
-                                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                                startActivityForResult(intent, 2296);
-                            }
-
+                            SetAdapter();
                         } else {
                             Toast.makeText(UnloadInstReportImageActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
                         }
@@ -171,7 +172,7 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
                                 grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
                         if (ACCESSCAMERA && writeExternalStorage && ReadExternalStorage) {
-                            Init();
+                            SetAdapter();
                         } else {
                             Toast.makeText(UnloadInstReportImageActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
                         }
@@ -257,26 +258,6 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
         }
 
         imageList = new ArrayList<>();
-       /* String json = CustomUtility.getSharedPreferences(UnloadInstReportImageActivity.this, CameraAppImage);
-        // below line is to get the type of our array list.
-        Type type = new TypeToken<ArrayList<ImageModel>>() {}.getType();
-
-        // in below line we are getting data from gson
-        // and saving it to our array list
-        imageList = new Gson().fromJson(json, type);
-
-        if (imageArrayList.size() > 0 && imageList != null && imageList.size() > 0) {
-
-            for (int j = 0; j < imageList.size(); j++) {
-                if (imageList.get(j).isImageSelected()) {
-                    ImageModel imageModel = new ImageModel();
-                    imageModel.setName(imageList.get(j).getName());
-                    imageModel.setImagePath(imageList.get(j).getImagePath());
-                    imageModel.setImageSelected(true);
-                    imageArrayList.set(j, imageModel);
-                }
-            }
-        }*/
 
         DatabaseHelper db = new DatabaseHelper(this);
 
@@ -451,17 +432,6 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
                 }
                 break;
 
-
-            case 2296:
-                if (SDK_INT >= Build.VERSION_CODES.R) {
-                    if (Environment.isExternalStorageManager()) {
-                        // perform action when allow permission success
-                        Init();
-                    } else {
-                        Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                break;
         }
 
     }
