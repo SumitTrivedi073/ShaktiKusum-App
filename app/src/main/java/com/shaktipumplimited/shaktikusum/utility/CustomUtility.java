@@ -28,6 +28,9 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.gson.Gson;
+import com.shaktipumplimited.shaktikusum.R;
+
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -294,6 +297,10 @@ public class CustomUtility {
             prefsEditor.clear();
             prefsEditor.apply();
 
+    }
+
+    public static boolean isValidMobile(String phone) {
+        return android.util.Patterns.PHONE.matcher(phone).matches();
     }
 
     public String getCurrentDate() {

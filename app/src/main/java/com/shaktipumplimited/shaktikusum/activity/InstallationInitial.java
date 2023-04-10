@@ -29,8 +29,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -1877,8 +1875,13 @@ public class InstallationInitial extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                sendVerificationCodeAPI(generatedVerificationCode,inst_mob_no.getText().toString().trim(),inst_hp.getText().toString().trim(),BeneficiaryNo,bill_no.getText().toString());
-
+                                   if(CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
+                                       sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
+                                   }else {
+                                       Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
+                                       startActivity(intent);
+                                       finish();
+                                   }
                             }
                         });
 
@@ -1976,85 +1979,6 @@ public class InstallationInitial extends AppCompatActivity {
 
         }
 
-    }
-
-    private boolean otpPupupForCusomerApproval() {
-        final Dialog dialog = new Dialog(mContext);
-        dialog.setContentView(R.layout.activity_otp_for_instaltion_varify);
-        // dialog.setTitle("Title...");
-        dialog.setCancelable(false);
-        RadioGroup radioSexGroup;
-        RelativeLayout rlvEditRemarkVieID;
-        EditText edtOTPremarkID;
-        TextView txtSubmitRDStatusID;
-        TextView txtOTPResendID;
-        TextView txtCloseID;
-
-        // set the custom dialog components - text, image and button
-        TextView txtTitleID = (TextView) dialog.findViewById(R.id.txtTitleID);
-        TextView txtOTPID = (TextView) dialog.findViewById(R.id.txtOTPID);
-        EditText edtOTPID = dialog.findViewById(R.id.edtOTPID);
-        radioSexGroup = dialog.findViewById(R.id.radioGroup);
-        rlvEditRemarkVieID = dialog.findViewById(R.id.rlvEditRemarkVieID);
-        edtOTPremarkID = dialog.findViewById(R.id.edtOTPremarkID);
-        txtSubmitRDStatusID = dialog.findViewById(R.id.txtSubmitRDStatusID);
-        txtOTPResendID = dialog.findViewById(R.id.txtOTPResendID);
-        txtCloseID = dialog.findViewById(R.id.txtCloseID);
-        edtOTPremarkID.setVisibility(View.GONE);
-        txtCloseID.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mStatusBool = false;
-                dialog.dismiss();
-            }
-        });
-
-        txtOTPResendID.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                reverseTimer(60, txtOTPResendID);
-                getRandomNumberString();
-                callInsertAndUpdateDebugDataAPI();
-            }
-        });
-
-        txtSubmitRDStatusID.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String ss = edtOTPremarkID.getText().toString().trim();
-                rlvEditRemarkVieID.setVisibility(View.VISIBLE);
-                mStatusBool = true;
-            }
-        });
-
-        radioSexGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                rlvEditRemarkVieID.setVisibility(View.VISIBLE);
-                int selectedId = radioSexGroup.getCheckedRadioButtonId();
-                RadioButton radioSexButton = (RadioButton) findViewById(selectedId);
-                Toast.makeText(mContext, radioSexButton.getText(), Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
-
-        txtOTPID.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String mOtpValueChck = edtOTPID.getText().toString().trim();
-                if (mORG_OTP_VALUE.equalsIgnoreCase(mOtpValueChck)) {
-                    mStatusBool = true;
-                    dialog.dismiss();
-                } else {
-                    Toast.makeText(mContext, "Please enter customer OTP to varify instalation.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        dialog.show();
-        if (mStatusBool)
-            return true;
-        else
-            return false;
     }
 
     public void reverseTimer(int Seconds, final TextView tv) {
@@ -2336,8 +2260,13 @@ public class InstallationInitial extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    sendVerificationCodeAPI(generatedVerificationCode,inst_mob_no.getText().toString().trim(),inst_hp.getText().toString().trim(),BeneficiaryNo,bill_no.getText().toString());
-
+                                    if(CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
+                                        sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
+                                    }else {
+                                        Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
                                 }
                             });
 
@@ -2457,6 +2386,7 @@ public class InstallationInitial extends AppCompatActivity {
 
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                finish();
 
                 /* intent.putExtra(Constant.PendingFeedbackVblen,response.getVbeln());
                 intent.putExtra(Constant.PendingFeedbackHp,response.getHp());

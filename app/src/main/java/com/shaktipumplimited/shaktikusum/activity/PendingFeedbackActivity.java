@@ -78,7 +78,11 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getResources().getString(R.string.pendingFeedback));
-        getPendingFeedbackList();
+        if(CustomUtility.isInternetOn()) {
+            getPendingFeedbackList();
+        }else {
+            CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection),getApplicationContext());
+        }
     }
 
     private void listner() {
@@ -204,7 +208,13 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
 
     @Override
     public void sendOtpListener(List<PendingFeedback.Response> pendingFeedbackList,int position, String generatedVerificationCode) {
-        sendVerificationCodeAPI(pendingFeedbackList.get(position),generatedVerificationCode);
+
+        if(CustomUtility.isValidMobile(pendingFeedbackList.get(position).getContactNo())) {
+            sendVerificationCodeAPI(pendingFeedbackList.get(position),generatedVerificationCode);
+        }else {
+            CustomUtility.ShowToast(getResources().getString(R.string.mobile_number_not_valid), PendingFeedbackActivity.this);
+        }
+
     }
 
     private void sendVerificationCodeAPI(PendingFeedback.Response response, String generatedVerificationCode) {
