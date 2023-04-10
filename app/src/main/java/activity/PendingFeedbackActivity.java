@@ -78,7 +78,11 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getResources().getString(R.string.pendingFeedback));
-        getPendingFeedbackList();
+        if(CustomUtility.isInternetOn()) {
+            getPendingFeedbackList();
+        }else {
+            CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection),getApplicationContext());
+        }
     }
 
     private void listner() {
