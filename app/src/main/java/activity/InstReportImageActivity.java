@@ -287,7 +287,7 @@ public class InstReportImageActivity extends AppCompatActivity implements ImageS
         TextView cancel = layout.findViewById(R.id.cancel);
 
         if (value.equals("0")) {
-            gallery.setVisibility(View.VISIBLE);
+            gallery.setVisibility(View.GONE);
             title.setText(getResources().getString(R.string.select_image));
             gallery.setText(getResources().getString(R.string.gallery));
             camera.setText(getResources().getString(R.string.camera));
