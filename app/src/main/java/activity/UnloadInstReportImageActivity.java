@@ -88,7 +88,7 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_unload_instreport_image);
-      Init();
+        Init();
     }
 
     @Override
@@ -98,9 +98,7 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
     }
 
     private void CheakPermissions() {
-        if (checkPermission()) {
-            SetAdapter();
-        } else {
+        if (!checkPermission()) {
             requestPermission();
         }
 
@@ -134,7 +132,7 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
                 ContextCompat.checkSelfPermission(getApplicationContext(), READ_EXTERNAL_STORAGE);
 
         if (SDK_INT >= Build.VERSION_CODES.R) {
-            return cameraPermission == PackageManager.PERMISSION_GRANTED&& ReadMediaImages == PackageManager.PERMISSION_GRANTED
+            return cameraPermission == PackageManager.PERMISSION_GRANTED && ReadMediaImages == PackageManager.PERMISSION_GRANTED
                     && ReadAudioImages == PackageManager.PERMISSION_GRANTED;
         } else {
             return cameraPermission == PackageManager.PERMISSION_GRANTED && writeExternalStorage == PackageManager.PERMISSION_GRANTED
@@ -158,10 +156,7 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
                         boolean ReadMediaImages = grantResults[1] == PackageManager.PERMISSION_GRANTED;
                         boolean ReadAudioImages = grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
-                        if (ACCESSCAMERA && ReadMediaImages && ReadAudioImages) {
-
-                            SetAdapter();
-                        } else {
+                        if (!ACCESSCAMERA && !ReadMediaImages && !ReadAudioImages) {
                             Toast.makeText(UnloadInstReportImageActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
                         }
                     } else {
@@ -171,9 +166,7 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
                         boolean ReadExternalStorage =
                                 grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
-                        if (ACCESSCAMERA && writeExternalStorage && ReadExternalStorage) {
-                            SetAdapter();
-                        } else {
+                        if (!ACCESSCAMERA && !writeExternalStorage && !ReadExternalStorage) {
                             Toast.makeText(UnloadInstReportImageActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
                         }
 
@@ -189,7 +182,7 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
         remarkEdt = findViewById(R.id.edtRemarkVKID);
         btnSave = findViewById(R.id.btnSave);
 
-         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -447,12 +440,12 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
 
         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 
-        if( isUpdate){
+        if (isUpdate) {
             db.updateUnloadingAlternate(imageArrayList.get(selectedIndex).getName(), path,
-                    true,  billNo);
-        }else {
+                    true, billNo);
+        } else {
             db.insertUnloadingImage(imageArrayList.get(selectedIndex).getName(), path,
-                    true,  billNo);
+                    true, billNo);
         }
 
 
@@ -499,9 +492,9 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
                 jsonObj.put("customer_name ", customerName);
                 jsonObj.put("project_login_no ", CustomUtility.getSharedPreferences(UnloadInstReportImageActivity.this, "loginid"));
                 System.out.println("only_text_jsonObj==>>" + jsonObj);
-                jsonObj.put("unld_photo1", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this,imageArrayList.get(0).getImagePath()));
-                jsonObj.put("unld_photo2",CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this,imageArrayList.get(1).getImagePath()));
-                jsonObj.put("unld_photo3", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this,imageArrayList.get(2).getImagePath()));
+                jsonObj.put("unld_photo1", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(0).getImagePath()));
+                jsonObj.put("unld_photo2", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(1).getImagePath()));
+                jsonObj.put("unld_photo3", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(2).getImagePath()));
                 ja_invc_data.put(jsonObj);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -532,9 +525,9 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
 
                             showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
                             NewSolarVFD.CHECK_DATA_UNOLAD = 0;
-                             Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-                             startActivity(intent);
-                             finish();
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(intent);
+                            finish();
 
                         } else if (invc_done.equalsIgnoreCase("N")) {
                             showingMessage(getResources().getString(R.string.dataNotSubmitted));

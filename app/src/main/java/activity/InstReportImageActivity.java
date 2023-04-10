@@ -139,10 +139,7 @@ public class InstReportImageActivity extends AppCompatActivity implements ImageS
                         boolean ReadMediaImages = grantResults[1] == PackageManager.PERMISSION_GRANTED;
                         boolean ReadAudioImages = grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
-                        if (ACCESSCAMERA && ReadMediaImages && ReadAudioImages) {
-
-                             SetAdapter();
-                        } else {
+                        if (!ACCESSCAMERA && !ReadMediaImages && !ReadAudioImages) {
                             Toast.makeText(InstReportImageActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
                         }
                     } else {
@@ -152,9 +149,7 @@ public class InstReportImageActivity extends AppCompatActivity implements ImageS
                         boolean ReadExternalStorage =
                                 grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
-                        if (ACCESSCAMERA && writeExternalStorage && ReadExternalStorage) {
-                            SetAdapter();
-                        } else {
+                        if (!ACCESSCAMERA && !writeExternalStorage && !ReadExternalStorage) {
                             Toast.makeText(InstReportImageActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
                         }
 

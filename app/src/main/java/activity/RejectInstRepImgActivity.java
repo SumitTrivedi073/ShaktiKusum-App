@@ -63,98 +63,6 @@ import webservice.WebURL;
 
 
 public class RejectInstRepImgActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks, ImageSelectionAdapter.ImageSelectionListener {
-  /*  public static final int RC_FILE_PICKER_PERM = 321;
-    public static final int BITMAP_SAMPLE_SIZE = 6;
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int REQUEST_CODE_PERMISSION = 123;
-    private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
-    private static final int GALLERY_IMAGE_REQUEST_CODE = 101;
-    Context mContext;
-    DatabaseHelper dataHelper;
-    double inst_latitude_double,
-            inst_longitude_double;
-    String sync_data = "0", lat, lng, type = "REJINST/";
-    int PERMISSION_ALL = 1;
-    Uri fileUri1;
-    String[] PERMISSIONS = {
-            android.Manifest.permission.READ_EXTERNAL_STORAGE,
-    };
-    public static final String GALLERY_DIRECTORY_NAME = "ShaktiKusum";
-    String imageStoragePath, enq_docno, photo1_text, photo2_text, photo3_text, photo4_text, photo5_text, photo6_text, photo7_text, photo8_text, photo9_text, photo10_text, photo11_text, photo12_text;
-    TextView photo1, photo2, photo3, photo4, photo5, photo6, photo7, photo8, photo9, photo10, photo11, photo12, save;
-    TextView remark1, remark2, remark3, remark4, remark5, remark6, remark7, remark8, remark9, remark10, remark11, remark12;
-    String remrk1, remrk2, remrk3, remrk4, remrk5, remrk6, remrk7, remrk8, remrk9, remrk10, remrk11, remrk12;
-    boolean photo1_flag = false,
-            photo2_flag = false,
-            photo3_flag = false,
-            photo4_flag = false,
-            photo5_flag = false,
-            photo6_flag = false,
-            photo7_flag = false,
-            photo8_flag = false,
-            photo9_flag = false,
-            photo10_flag = false,
-            photo11_flag = false,
-            photo12_flag = false;
-    private String mHomePath, PathHolder, Filename, cust_name, userid, benno, regno, projno, pht_1, pht_2, pht_3, pht_4, pht_5, pht_6, pht_7, pht_8, pht_9, pht_10, pht_11, pht_12;
-    private ArrayList<String> photoPaths = new ArrayList<>();
-    private ArrayList<String> docPaths = new ArrayList<>();
-    private RecyclerView recyclerView;
-    
-    Re
-
-    public static boolean hasPermissions(Context context, String... permissions) {
-        if (context != null && permissions != null) {
-            for (String permission : permissions) {
-                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    android.os.Handler mHandler2 = new android.os.Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            String mString = (String) msg.obj;
-            Toast.makeText(RejectInstRepImgActivity.this, mString, Toast.LENGTH_LONG).show();
-
-
-        }
-    };
-
- *//*   public static void deleteFiles(String path) {
-
-        File file = new File(path);
-
-        if (file.exists()) {
-            String deleteCmd = "rm -r " + path;
-            Runtime runtime = Runtime.getRuntime();
-            try {
-                runtime.exec(deleteCmd);
-            } catch (IOException e) {
-            }
-        }
-    }*//*
-
-    private boolean deleteDirectory(File path) {
-        if (path.exists()) {
-            File[] files = path.listFiles();
-            if (files == null) {
-                return false;
-            }
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    deleteDirectory(file);
-                } else {
-                    file.delete();
-                }
-            }
-        }
-        return path.exists() && path.delete();
-    }
-*/
 
     private static final int REQUEST_CODE_PERMISSION = 101;
     private static final int PICK_FROM_FILE = 102;
@@ -191,9 +99,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
     }
 
     private void CheakPermissions() {
-        if (checkPermission()) {
-            SetAdapter();
-        } else {
+        if (!checkPermission()) {
             requestPermission();
         }
 
@@ -251,10 +157,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                         boolean ReadMediaImages = grantResults[1] == PackageManager.PERMISSION_GRANTED;
                         boolean ReadAudioImages = grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
-                        if (ACCESSCAMERA && ReadMediaImages && ReadAudioImages) {
-
-                            SetAdapter();
-                        } else {
+                        if (!ACCESSCAMERA && !ReadMediaImages && !ReadAudioImages) {
                             Toast.makeText(RejectInstRepImgActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
                         }
                     } else {
@@ -264,9 +167,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                         boolean ReadExternalStorage =
                                 grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
-                        if (ACCESSCAMERA && writeExternalStorage && ReadExternalStorage) {
-                            SetAdapter();
-                        } else {
+                        if (!ACCESSCAMERA && !writeExternalStorage && !ReadExternalStorage) {
                             Toast.makeText(RejectInstRepImgActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
                         }
 
@@ -290,7 +191,6 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
         retrieveValue();
         SetAdapter();
         listner();
-        Bundle bundle = getIntent().getExtras();
 
     }
 

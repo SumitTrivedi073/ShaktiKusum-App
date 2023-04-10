@@ -145,10 +145,8 @@ public class RegReportImageActivity extends AppCompatActivity implements EasyPer
                         boolean ReadMediaImages = grantResults[1] == PackageManager.PERMISSION_GRANTED;
                         boolean ReadAudioImages = grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
-                        if (ACCESSCAMERA && ReadMediaImages && ReadAudioImages) {
+                        if (!ACCESSCAMERA && !ReadMediaImages && !ReadAudioImages) {
 
-                         SetAdapter();
-                        } else {
                             Toast.makeText(RegReportImageActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
                         }
                     } else {
@@ -158,9 +156,7 @@ public class RegReportImageActivity extends AppCompatActivity implements EasyPer
                         boolean ReadExternalStorage =
                                 grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
-                        if (ACCESSCAMERA && writeExternalStorage && ReadExternalStorage) {
-                            SetAdapter();
-                        } else {
+                        if (!ACCESSCAMERA && !writeExternalStorage && !ReadExternalStorage) {
                             Toast.makeText(RegReportImageActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
                         }
 
