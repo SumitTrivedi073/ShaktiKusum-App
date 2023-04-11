@@ -766,7 +766,12 @@ public class Login extends AppCompatActivity {
                         boolean  ReadMediaAudio = grantResults[6] == PackageManager.PERMISSION_GRANTED;
                         if (FineLocationAccepted && CoarseLocationAccepted && Bluetooth && ReadPhoneState && Camera && ReadMediaImages && ReadMediaAudio) {
                             // perform action when allow permission success
-                                    serverLogin();
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                askNotificationPermission();
+                            } else {
+                                serverLogin();
+                            }
+
                         }else {
                            requestPermission();
                         }
