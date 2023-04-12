@@ -33,6 +33,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -106,7 +107,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
     }
 
     private void requestPermission() {
-        if (SDK_INT >= Build.VERSION_CODES.R) {
+        if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA,
                             Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_AUDIO},
@@ -120,6 +121,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private boolean checkPermission() {
         int cameraPermission =
                 ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA);
@@ -132,7 +134,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
         int ReadExternalStorage =
                 ContextCompat.checkSelfPermission(getApplicationContext(), READ_EXTERNAL_STORAGE);
 
-        if (SDK_INT >= Build.VERSION_CODES.R) {
+        if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             return cameraPermission == PackageManager.PERMISSION_GRANTED&& ReadMediaImages == PackageManager.PERMISSION_GRANTED
                     && ReadAudioImages == PackageManager.PERMISSION_GRANTED;
         } else {
@@ -152,7 +154,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
             case REQUEST_CODE_PERMISSION:
 
                 if (grantResults.length > 0) {
-                    if (SDK_INT >= Build.VERSION_CODES.R) {
+                    if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         boolean ACCESSCAMERA = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                         boolean ReadMediaImages = grantResults[1] == PackageManager.PERMISSION_GRANTED;
                         boolean ReadAudioImages = grantResults[2] == PackageManager.PERMISSION_GRANTED;

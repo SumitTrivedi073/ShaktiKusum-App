@@ -115,17 +115,6 @@ public class SiteAuditList extends AppCompatActivity {
         version = WebURL.APP_VERSION_CODE;
         device_name = CustomUtility.getDeviceName();
 
-       /* if (SDK_INT >= Build.VERSION_CODES.R) {
-            if (Environment.isExternalStorageManager()) {
-                startActivity(new Intent(this, SiteAuditList.class));
-            } else { //request for the permission
-                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                Uri uri = Uri.fromParts("package", getPackageName(), null);
-                intent.setData(uri);
-                startActivity(intent);
-            }
-        }
-*/
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
