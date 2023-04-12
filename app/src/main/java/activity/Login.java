@@ -43,6 +43,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -111,6 +112,7 @@ public class Login extends AppCompatActivity {
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -505,6 +507,7 @@ public class Login extends AppCompatActivity {
     /**********************************************************************************************
      *                Validating form
      *********************************************************************************************/
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private void submitForm() {
 
         if (!validateName()) {
@@ -712,6 +715,7 @@ public class Login extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private boolean checkPermission() {
         int FineLocation = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_FINE_LOCATION);
         int CoarseLocation = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_COARSE_LOCATION);
@@ -724,7 +728,7 @@ public class Login extends AppCompatActivity {
         int ReadMediaAudio = ContextCompat.checkSelfPermission(getApplicationContext(), READ_MEDIA_AUDIO);
 
 
-        if (SDK_INT >= Build.VERSION_CODES.R) {
+        if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             return FineLocation == PackageManager.PERMISSION_GRANTED && CoarseLocation == PackageManager.PERMISSION_GRANTED
                     && Bluetooth == PackageManager.PERMISSION_GRANTED && PhoneState == PackageManager.PERMISSION_GRANTED
                     && Camera == PackageManager.PERMISSION_GRANTED  && ReadMediaImages == PackageManager.PERMISSION_GRANTED
@@ -738,8 +742,9 @@ public class Login extends AppCompatActivity {
         }
     }
 
+
     private void requestPermission() {
-        if (SDK_INT >= Build.VERSION_CODES.R) {
+        if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.BLUETOOTH, Manifest.permission.READ_PHONE_STATE,
                     Manifest.permission.CAMERA,Manifest.permission.READ_MEDIA_IMAGES,Manifest.permission.READ_MEDIA_AUDIO}, REQUEST_CODE_PERMISSION);
@@ -749,6 +754,7 @@ public class Login extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -756,7 +762,7 @@ public class Login extends AppCompatActivity {
             case REQUEST_CODE_PERMISSION:
                 if (grantResults.length > 0) {
 
-                    if (SDK_INT >= Build.VERSION_CODES.R) {
+                    if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         boolean  FineLocationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                         boolean CoarseLocationAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
                         boolean Bluetooth = grantResults[2] == PackageManager.PERMISSION_GRANTED;
@@ -764,13 +770,13 @@ public class Login extends AppCompatActivity {
                         boolean  Camera = grantResults[4] == PackageManager.PERMISSION_GRANTED;
                         boolean  ReadMediaImages = grantResults[5] == PackageManager.PERMISSION_GRANTED;
                         boolean  ReadMediaAudio = grantResults[6] == PackageManager.PERMISSION_GRANTED;
+
+
                         if (FineLocationAccepted && CoarseLocationAccepted && Bluetooth && ReadPhoneState && Camera && ReadMediaImages && ReadMediaAudio) {
                             // perform action when allow permission success
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
                                 askNotificationPermission();
-                            } else {
-                                serverLogin();
-                            }
+
 
                         }else {
                            requestPermission();
