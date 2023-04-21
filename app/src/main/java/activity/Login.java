@@ -617,8 +617,6 @@ public class Login extends AppCompatActivity {
                 try {
 
                     if (CustomUtility.isInternetOn()) {
-
-
                         progressBarStatus = 30;
 
                         // Updating the progress bar
@@ -744,7 +742,7 @@ public class Login extends AppCompatActivity {
 
 
     private void requestPermission() {
-        if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (SDK_INT >= Build.VERSION_CODES.S) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.BLUETOOTH, Manifest.permission.READ_PHONE_STATE,
                     Manifest.permission.CAMERA,Manifest.permission.READ_MEDIA_IMAGES,Manifest.permission.READ_MEDIA_AUDIO}, REQUEST_CODE_PERMISSION);
