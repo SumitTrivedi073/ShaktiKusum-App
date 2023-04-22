@@ -740,7 +740,7 @@ public class Login extends AppCompatActivity {
                     && Camera == PackageManager.PERMISSION_GRANTED  && ReadMediaImages == PackageManager.PERMISSION_GRANTED
                     && ReadMediaAudio == PackageManager.PERMISSION_GRANTED && BluetoothConnect == PackageManager.PERMISSION_GRANTED
                     && BluetoothScan == PackageManager.PERMISSION_GRANTED;
-        }else  if (SDK_INT >= Build.VERSION_CODES.S) {
+        }else  if  ( SDK_INT == Build.VERSION_CODES.S || SDK_INT == Build.VERSION_CODES.R)  {
             return  Camera == PackageManager.PERMISSION_GRANTED
                     && CoarseLocation == PackageManager.PERMISSION_GRANTED  && PhoneState == PackageManager.PERMISSION_GRANTED
                     && Bluetooth == PackageManager.PERMISSION_GRANTED   && BluetoothScan == PackageManager.PERMISSION_GRANTED
@@ -760,7 +760,7 @@ public class Login extends AppCompatActivity {
                             Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.BLUETOOTH ,
                             Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_CODE_PERMISSION);
-        } if (SDK_INT >= Build.VERSION_CODES.S) {
+        } if  ( SDK_INT == Build.VERSION_CODES.S || SDK_INT == Build.VERSION_CODES.R)  {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA,  Manifest.permission.READ_PHONE_STATE,
                             Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.BLUETOOTH,
