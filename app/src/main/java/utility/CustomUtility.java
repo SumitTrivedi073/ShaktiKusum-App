@@ -318,13 +318,12 @@ public class CustomUtility {
         if(progressDialog!=null&& progressDialog.isShowing()){
             progressDialog.dismiss();
             progressDialog.cancel();
-
+            progressDialog = null;
         }
 
           progressDialog = new CustomProgressDialog(context);
           progressDialog.setCancelable(false);
-          if (progressDialog != null && progressDialog.isShowing())
-              progressDialog.show();
+          progressDialog.show();
       }
 
 
