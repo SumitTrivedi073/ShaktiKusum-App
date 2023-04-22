@@ -147,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             new Dashboard().execute();
         } else {
+            getListData();
             Toast.makeText(context, "Please Connect to Internet", Toast.LENGTH_SHORT).show();
         }
 
