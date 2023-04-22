@@ -252,25 +252,6 @@ public class InstallationInitial extends AppCompatActivity {
         }
     };
 
-    private void deleteDirectory(File path) {
-        if (path.exists()) {
-            File[] files = path.listFiles();
-            if (files == null) {
-                return;
-            }
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    deleteDirectory(file);
-                } else {
-                    file.delete();
-                }
-            }
-        }
-        if (path.exists()) {
-            path.delete();
-        }
-    }
-
     List<ImageModel> imageList = new ArrayList<>();
     boolean isBaseUpdate = false;
 
