@@ -1204,9 +1204,7 @@ public class InstallationInitial extends AppCompatActivity {
                         Toast.makeText(mContext, "Please Take Latitude and Longitude", Toast.LENGTH_SHORT).show();
                     }
                 }
-
             } else {
-
                 if (reason.getVisibility() == View.VISIBLE) {
 
                     if (inst_latitude != null && !inst_latitude.equals("") && inst_longitude != null && !inst_longitude.equals("") && !inst_longitude.equals("0.0") && !inst_latitude.equals("0.0")) {
