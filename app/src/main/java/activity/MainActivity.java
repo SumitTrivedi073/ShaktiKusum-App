@@ -9,7 +9,6 @@ import android.content.IntentSender;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
@@ -51,7 +50,6 @@ import java.util.ArrayList;
 import adapter.Adapter_item_list;
 import bean.ItemNameBean;
 import bean.LoginBean;
-import ch.acra.acra.BuildConfig;
 import database.DatabaseHelper;
 import debugapp.ActivitySurveyList;
 import utility.CustomUtility;
@@ -145,9 +143,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         flvViewFlipperID.startFlipping();
 
         if (CustomUtility.isInternetOn()) {
-            dataHelper.deleteDashboardData();
             new Dashboard().execute();
         } else {
+            getListData();
             Toast.makeText(context, "Please Connect to Internet", Toast.LENGTH_SHORT).show();
         }
 
@@ -328,7 +326,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
 
-       // getListData();
     }
 
     @SuppressLint("NotifyDataSetChanged")

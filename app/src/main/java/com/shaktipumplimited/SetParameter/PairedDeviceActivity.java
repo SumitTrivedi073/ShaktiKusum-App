@@ -25,6 +25,8 @@ import java.util.Set;
 import com.shaktipumplimited.Settingadapter.BTPairedDeviceAdapter;
 import com.shaktipumplimited.shaktikusum.R;
 
+import debugapp.GlobalValue.Constant;
+
 public class PairedDeviceActivity extends AppCompatActivity {
 
 
@@ -38,6 +40,8 @@ public class PairedDeviceActivity extends AppCompatActivity {
     private RelativeLayout rlvBackViewID;
 
     private BluetoothAdapter bAdapter = BluetoothAdapter.getDefaultAdapter();
+
+    String ControllerSerialNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,10 @@ public class PairedDeviceActivity extends AppCompatActivity {
         lLayout = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
         rclSettingListViewID.setNestedScrollingEnabled(false);
         rclSettingListViewID.setLayoutManager(lLayout);
+
+       if( getIntent().getExtras()!=null){
+           ControllerSerialNumber = getIntent().getStringExtra(Constant.ControllerSerialNumber);
+       }
 
         try {
             bAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -125,7 +133,7 @@ public class PairedDeviceActivity extends AppCompatActivity {
                     recyclerViewAdapter = null;
 
                 // recyclerViewAdapter = new HomeOrderAdapter("sss",getActivity());
-                recyclerViewAdapter = new BTPairedDeviceAdapter(mContext, mDeviceNameList,mDeviceMACAddressList);
+                recyclerViewAdapter = new BTPairedDeviceAdapter(mContext, mDeviceNameList,mDeviceMACAddressList,ControllerSerialNumber);
 
                 rclSettingListViewID.setAdapter(recyclerViewAdapter);
             }
