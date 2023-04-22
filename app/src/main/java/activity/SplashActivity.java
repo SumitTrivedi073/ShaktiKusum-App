@@ -90,7 +90,6 @@ public class SplashActivity extends Activity {
             public void onResponse(JSONObject response) {
                 CustomUtility.hideProgressDialog(SplashActivity.this);
 
-
                 if(response.toString()!=null && !response.toString().isEmpty()) {
                     LoginSelectionModel loginSelectionModel = new Gson().fromJson(response.toString(), LoginSelectionModel.class);
                     if(loginSelectionModel.getLoginType().size()>0) {
