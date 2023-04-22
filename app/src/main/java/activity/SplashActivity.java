@@ -11,6 +11,8 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -30,15 +32,11 @@ import webservice.WebURL;
 
 
 @SuppressLint("CustomSplashScreen")
-public class SplashActivity extends Activity {
-
+public class SplashActivity extends AppCompatActivity {
 
     ImageView imageView;
     Context mContext;
     DatabaseHelper databaseHelper;
-
-
-
 
     @Override
     //** Called when the activity is first created. */
@@ -89,7 +87,6 @@ public class SplashActivity extends Activity {
             @Override
             public void onResponse(JSONObject response) {
                 CustomUtility.hideProgressDialog(SplashActivity.this);
-
 
                 if(response.toString()!=null && !response.toString().isEmpty()) {
                     LoginSelectionModel loginSelectionModel = new Gson().fromJson(response.toString(), LoginSelectionModel.class);

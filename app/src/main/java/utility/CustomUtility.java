@@ -54,6 +54,7 @@ public class CustomUtility {
     String current_date, current_time;
     Calendar calander = null;
     SimpleDateFormat simpleDateFormat = null;
+    @SuppressLint("StaticFieldLeak")
     public static CustomProgressDialog progressDialog;
 
 
@@ -314,10 +315,18 @@ public class CustomUtility {
         return current_time.trim();
     }
     public static void showProgressDialogue(Context context) {
-        progressDialog = new CustomProgressDialog(context);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-    }
+        if(progressDialog!=null&& progressDialog.isShowing()){
+            progressDialog.dismiss();
+            progressDialog.cancel();
+            progressDialog = null;
+        }
+
+          progressDialog = new CustomProgressDialog(context);
+          progressDialog.setCancelable(false);
+          progressDialog.show();
+      }
+
+
 
     public static void hideProgressDialog(Context context) {
         if(progressDialog!=null && progressDialog.isShowing()){

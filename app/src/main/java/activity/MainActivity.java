@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+        assert pkgInfo != null;
         versionName = String.valueOf(pkgInfo.versionName);
 
         LoginBean loginBean = new LoginBean();
@@ -302,12 +303,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dataHelper.deleteInstallationImages();
                 dataHelper.deleteUnloadingImages();
                 CustomUtility.clearSharedPrefrences(context);
-               /* CustomUtility.setSharedPreference(context, "userid", "");
-                CustomUtility.setSharedPreference(context, "username", "");
-                CustomUtility.setSharedPreference(context, "usertype", "");
-                CustomUtility.setSharedPreference(context, "projectid", "");
-                CustomUtility.setSharedPreference(context, "loginid", "");
-                CustomUtility.setSharedPreference(context, "CHECK_OTP_VARIFED", "N");*/
+
                 Intent intent = new Intent(context, Login.class);
                 startActivity(intent);
                 finish();
@@ -431,14 +427,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     e.printStackTrace();
                 }
             }
-            if (progressBarStatus >= 100) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                progressBar.dismiss();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            progressBar.dismiss();
         }).start();
     }
 
