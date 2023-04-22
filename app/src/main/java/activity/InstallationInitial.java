@@ -697,7 +697,7 @@ public class InstallationInitial extends AppCompatActivity {
             }
             if (!alreadySet) {
                 EditText edit_O = (EditText) moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
-                Log.e("Length==>",""+scannedDeviceNo.size());
+
                 if(scannedDeviceNo.size() > 0){
                     if(!scannedDeviceNo.contains(scanContent)){
                         edit_O.setText(scanContent);
@@ -716,16 +716,6 @@ public class InstallationInitial extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
-    private boolean checkDuplicate(String scanContent) {
-
-        if (scannedDeviceNo.contains(scanContent)){
-            return true;
-        }
-
-        return false;
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
