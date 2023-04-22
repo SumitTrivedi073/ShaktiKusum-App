@@ -29,7 +29,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -96,7 +95,6 @@ public class InstallationInitial extends AppCompatActivity {
     private DatabaseHelperTeacher mDatabaseHelperTeacher;
     List<SimDetailsInfoResponse> mSimDetailsInfoResponse;
     Context mContext;
-    boolean mStatusBool = false;
     DatabaseHelper db;
     TextView save;
     InstallationBean installationBean;
@@ -113,11 +111,8 @@ public class InstallationInitial extends AppCompatActivity {
     String login_no = "";
     String customer_name = "";
     String installation_date = "";
-    String installation_place = "";
     String address_ins = "";
     String make_ins = "";
-    String state_ins = "";
-    String district_ins = "";
     String tehsil_ins = "";
     String village_ins = "";
     String mobile_no_ins = "";
@@ -133,24 +128,20 @@ public class InstallationInitial extends AppCompatActivity {
     String simcard_num = "";
     String solar_controller_model = "";
     String scm_sno = "";
-    String dc_hill = "";
     String inst_latitude = "";
     String inst_longitude = "";
-    String inst_docno = "";
     String module_ser_no = "";
     String inst_bill_no = "";
     String inst_bill_date = "";
     String inst_delay_reason = "";
     String hp = "";
     String current_date = "";
-    String gprsno_text = "";
     String simoprator_text = "";
     String conntype_text = "";
     int id = 0;
     double inst_latitude_double,
             inst_longitude_double;
     String no_of_module_value = "";
-    String no_of_labour_value = "";
     String rmsdata_status = "";
     EditText inst_date = null;
     EditText bill_date = null;
@@ -164,7 +155,6 @@ public class InstallationInitial extends AppCompatActivity {
     EditText cust_name = null;
     EditText borewellstatus = null;
     EditText reasontxt = null;
-    EditText fath_name = null;
     EditText inst_address = null;
     EditText inst_make = null;
     EditText inst_village = null;
@@ -186,7 +176,6 @@ public class InstallationInitial extends AppCompatActivity {
     EditText inst_controller_ser = null;
     EditText inst_simcard_num = null;
     SimpleDateFormat simpleDateFormat;
-    EditText inst_gprsno = null;
     EditText inst_hp = null;
     EditText inst_fathers_name = null;
     LinearLayout reason = null;
@@ -222,20 +211,20 @@ public class InstallationInitial extends AppCompatActivity {
     String borewellstatus1 = "";
     String CUS_CONTACT_NO = "",BeneficiaryNo ="";
     int currentScannerFor = -1;
+    ArrayList<String> scannedDeviceNo = new ArrayList<>();
     String mDriveSerialNo = "";
     String mMotorSerialNo = "";
     String mPumpSerialNo = "";
 
-    private Toolbar mToolbar;
     private int value;
-    private LinearLayout moduleOneLL, moduleTwoLL;
+    private LinearLayout moduleOneLL;
     Boolean your_date_is_outdated = false;
     String delay;
     private TextView txtDebugAppID;
     private TextView txtLatIDD;
     private TextView txtLongIDD;
     private TextView txtIBaseUpdateID;
-    private RelativeLayout rlvCheckRMSDataID;
+
     private String mMOBNUM_1, mMOBNUM_2, mMOBNUM_3;
     private String mORG_OTP_VALUE;
     private String mORG_CONTACT_NO;
@@ -248,7 +237,7 @@ public class InstallationInitial extends AppCompatActivity {
     String mInstallerName = "";
     String RMS_SERVER_DOWN = "";
     String RMS_DEBUG_EXTRN = "";
-    String DEVICE_NO, SIGNL_STREN, INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "", SIM_SR_NO = "", KUNNR = "", SIM = "",
+    String DEVICE_NO, SIGNL_STREN, INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "", SIM_SR_NO = "", SIM = "",
             RMS_STATUS = "",
             RMS_LAST_ONLINE_DATE = "", RMS_CURRENT_ONLINE_STATUS = "";
     List<BTResonseData> mBTResonseDataList;
@@ -262,23 +251,6 @@ public class InstallationInitial extends AppCompatActivity {
             Toast.makeText(InstallationInitial.this, mString, Toast.LENGTH_LONG).show();
         }
     };
-
-    private boolean deleteDirectory(File path) {
-        if (path.exists()) {
-            File[] files = path.listFiles();
-            if (files == null) {
-                return false;
-            }
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    deleteDirectory(file);
-                } else {
-                    file.delete();
-                }
-            }
-        }
-        return path.exists() && path.delete();
-    }
 
     List<ImageModel> imageList = new ArrayList<>();
     boolean isBaseUpdate = false;
@@ -358,8 +330,8 @@ public class InstallationInitial extends AppCompatActivity {
         }
         mSimDetailsInfoResponse = new ArrayList<>();
         CustomUtility.setSharedPreference(mContext, "SYNCLIST", "0");
-        rlvCheckRMSDataID = (RelativeLayout) findViewById(R.id.rlvCheckRMSDataID);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -584,61 +556,55 @@ public class InstallationInitial extends AppCompatActivity {
             }
         });
 
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (CustomUtility.isInternetOn()) {
-                    if (mBTResonseDataList.size() > 0)
-                        mBTResonseDataList.clear();
-                    mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(controller);
-                    System.out.println("mBTResonseDataList.size()==>>" + mBTResonseDataList.size());
-                    if (mBTResonseDataList.size() > 0) {
-                        DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
-                        SIGNL_STREN = mBTResonseDataList.get(vkp).getSIGNLSTREN();
-                        String[] mStrArry = SIGNL_STREN.split("###");
-                        SIGNL_STREN = mStrArry[0];
-                        INVOICE_NO_B = mStrArry[1];
-                        SIM = mBTResonseDataList.get(vkp).getSIM();
-                        String[] mStrArrySim = SIM.split("###");
-                        SIM = mStrArrySim[0];
-                        SIM_SR_NO = mStrArrySim[1];
-                        NET_REG = mBTResonseDataList.get(vkp).getNETREG();
-                        SER_CONNECT = mBTResonseDataList.get(vkp).getSERCONNECT();
-                        CAB_CONNECT = mBTResonseDataList.get(vkp).getCABCONNECT();
-                        LATITUDE = mBTResonseDataList.get(vkp).getLATITUDE();
-                        LANGITUDE = mBTResonseDataList.get(vkp).getLANGITUDE();
-                        MOBILE = mBTResonseDataList.get(vkp).getMOBILE();
-                        IMEI = mBTResonseDataList.get(vkp).getIMEI();
-                        DONGAL_ID = mBTResonseDataList.get(vkp).getDONGALID();
-                        RMS_STATUS = mBTResonseDataList.get(vkp).getRMS_STATUS();
-                        RMS_CURRENT_ONLINE_STATUS = mBTResonseDataList.get(vkp).getRMS_CURRENT_ONLINE_STATUS();
-                        RMS_LAST_ONLINE_DATE = mBTResonseDataList.get(vkp).getRMS_LAST_ONLINE_DATE();
-                        mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
-                        mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
-                        RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
-                        RMS_SERVER_DOWN = "Working Fine";
-                        System.out.println("VikasVIHU==>>" + mBTResonseDataList.get(vkp).getDEVICENO());
-                        CustomUtility.showProgressDialogue(InstallationInitial.this);
-                        new SyncDebugDataFromLocal().execute();
+        save.setOnClickListener(v -> {
+            if (CustomUtility.isInternetOn()) {
+                if (mBTResonseDataList.size() > 0)
+                    mBTResonseDataList.clear();
+                mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(controller);
+                System.out.println("mBTResonseDataList.size()==>>" + mBTResonseDataList.size());
+                if (mBTResonseDataList.size() > 0) {
+                    DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
+                    SIGNL_STREN = mBTResonseDataList.get(vkp).getSIGNLSTREN();
+                    String[] mStrArry = SIGNL_STREN.split("###");
+                    SIGNL_STREN = mStrArry[0];
+                    INVOICE_NO_B = mStrArry[1];
+                    SIM = mBTResonseDataList.get(vkp).getSIM();
+                    String[] mStrArrySim = SIM.split("###");
+                    SIM = mStrArrySim[0];
+                    SIM_SR_NO = mStrArrySim[1];
+                    NET_REG = mBTResonseDataList.get(vkp).getNETREG();
+                    SER_CONNECT = mBTResonseDataList.get(vkp).getSERCONNECT();
+                    CAB_CONNECT = mBTResonseDataList.get(vkp).getCABCONNECT();
+                    LATITUDE = mBTResonseDataList.get(vkp).getLATITUDE();
+                    LANGITUDE = mBTResonseDataList.get(vkp).getLANGITUDE();
+                    MOBILE = mBTResonseDataList.get(vkp).getMOBILE();
+                    IMEI = mBTResonseDataList.get(vkp).getIMEI();
+                    DONGAL_ID = mBTResonseDataList.get(vkp).getDONGALID();
+                    RMS_STATUS = mBTResonseDataList.get(vkp).getRMS_STATUS();
+                    RMS_CURRENT_ONLINE_STATUS = mBTResonseDataList.get(vkp).getRMS_CURRENT_ONLINE_STATUS();
+                    RMS_LAST_ONLINE_DATE = mBTResonseDataList.get(vkp).getRMS_LAST_ONLINE_DATE();
+                    mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
+                    mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
+                    RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
+                    RMS_SERVER_DOWN = "Working Fine";
+                    System.out.println("VikasVIHU==>>" + mBTResonseDataList.get(vkp).getDEVICENO());
+                    CustomUtility.showProgressDialogue(InstallationInitial.this);
+                    new SyncDebugDataFromLocal().execute();
 
-                    } else {
-                        saveData();
-                    }
                 } else {
                     saveData();
                 }
-
-
+            } else {
+                saveData();
             }
+
+
         });
 
         if (CustomUtility.isInternetOn()) {
-            labeledSwitch.setOnToggledListener(new OnToggledListener() {
-                @Override
-                public void onSwitched(ToggleableView toggleableView, boolean isOn) {
-                    Intent intent = new Intent(mContext, DeviceStatusActivity.class);
-                    startActivity(intent);
-                }
+            labeledSwitch.setOnToggledListener((toggleableView, isOn) -> {
+                Intent intent = new Intent(mContext, DeviceStatusActivity.class);
+                startActivity(intent);
             });
         } else {
             Toast.makeText(mContext, "Please Connect to internet...", Toast.LENGTH_SHORT).show();
@@ -679,6 +645,7 @@ public class InstallationInitial extends AppCompatActivity {
         try {
             String scanContent = scanningResult.getContents();
             String scanFormat = scanningResult.getFormatName();
+
             Toast toast = Toast.makeText(getApplicationContext(), scanFormat + scanContent, Toast.LENGTH_SHORT);
             boolean alreadySet = false;
             switch (currentScannerFor) {
@@ -705,7 +672,20 @@ public class InstallationInitial extends AppCompatActivity {
             }
             if (!alreadySet) {
                 EditText edit_O = (EditText) moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
-                edit_O.setText(scanContent);
+
+                if(scannedDeviceNo.size() > 0){
+                    if(!scannedDeviceNo.contains(scanContent)){
+                        edit_O.setText(scanContent);
+                        scannedDeviceNo.add(scanContent);
+                    }
+                    else {
+                        Toast.makeText(mContext, "Already done.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else {
+                    edit_O.setText(scanContent);
+                    scannedDeviceNo.add(scanContent);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -804,11 +784,11 @@ public class InstallationInitial extends AppCompatActivity {
 
         for (int i = 0; i < new_value; i++) {
             View child_grid = LayoutInflater.from(mContext).inflate(R.layout.view_for_normal, null);
-            LinearLayout layout_s = (LinearLayout) child_grid.findViewById(R.id.sublayout_second);
-            LinearLayout layout_f = (LinearLayout) child_grid.findViewById(R.id.sublayout_first);
-            LinearLayout layout_f_inner = (LinearLayout) layout_f.findViewById(R.id.sublayout_first_inner);
-            EditText edit = (EditText) layout_f_inner.findViewById(R.id.view_edit_one);
-            final ImageView scan = (ImageView) layout_f_inner.findViewById(R.id.view_img_one);
+            LinearLayout layout_s =  child_grid.findViewById(R.id.sublayout_second);
+            LinearLayout layout_f =  child_grid.findViewById(R.id.sublayout_first);
+            LinearLayout layout_f_inner =  layout_f.findViewById(R.id.sublayout_first_inner);
+            EditText edit =  layout_f_inner.findViewById(R.id.view_edit_one);
+            final ImageView scan =  layout_f_inner.findViewById(R.id.view_img_one);
             scan.setId(i);
 
             scan.setOnClickListener(new View.OnClickListener() {
@@ -889,7 +869,7 @@ public class InstallationInitial extends AppCompatActivity {
         if (!inst_module_ser_no.getText().toString().trim().equals("0")) {
 
             for (int i = 0; i < moduleOneLL.getChildCount(); i++) {
-                EditText edit_O = (EditText) moduleOneLL.getChildAt(i).findViewById(R.id.view_edit_one);
+                EditText edit_O =  moduleOneLL.getChildAt(i).findViewById(R.id.view_edit_one);
                 if (edit_O.getVisibility() == View.VISIBLE) {
                     String s1 = edit_O.getText().toString().trim();
                     finalValue += s1 + ",";
@@ -1224,9 +1204,7 @@ public class InstallationInitial extends AppCompatActivity {
                         Toast.makeText(mContext, "Please Take Latitude and Longitude", Toast.LENGTH_SHORT).show();
                     }
                 }
-
             } else {
-
                 if (reason.getVisibility() == View.VISIBLE) {
 
                     if (inst_latitude != null && !inst_latitude.equals("") && inst_longitude != null && !inst_longitude.equals("") && !inst_longitude.equals("0.0") && !inst_latitude.equals("0.0")) {

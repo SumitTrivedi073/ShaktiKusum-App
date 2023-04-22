@@ -153,9 +153,11 @@ public class DeviceStatusActivity extends AppCompatActivity  {
                                 }
 
                                 if(deviceDetailModel.getResponse().getIsLogin()) {
+                                    CustomUtility.setSharedPreference(getApplicationContext(), getResources().getString(R.string.online),getResources().getString(R.string.online));
                                     deviceonline.setText(getResources().getString(R.string.online));
                                     deviceonline.setTextColor(Color.parseColor("#00FF00"));
                                 } else {
+                                    CustomUtility.setSharedPreference(getApplicationContext(), getResources().getString(R.string.offline),getResources().getString(R.string.offline));
                                     deviceonline.setText(getResources().getString(R.string.offline));
                                     deviceonline.setTextColor(Color.parseColor("#FF0000"));
                                 }
