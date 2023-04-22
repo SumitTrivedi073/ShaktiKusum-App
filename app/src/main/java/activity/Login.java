@@ -744,7 +744,7 @@ public class Login extends AppCompatActivity {
             return  Camera == PackageManager.PERMISSION_GRANTED
                     && CoarseLocation == PackageManager.PERMISSION_GRANTED  && PhoneState == PackageManager.PERMISSION_GRANTED
                     && Bluetooth == PackageManager.PERMISSION_GRANTED   && BluetoothScan == PackageManager.PERMISSION_GRANTED
-                    && BluetoothConnect == PackageManager.PERMISSION_GRANTED && MangeExternalStorage == PackageManager.PERMISSION_GRANTED;
+                    && BluetoothConnect == PackageManager.PERMISSION_GRANTED;
         } else {
             return FineLocation == PackageManager.PERMISSION_GRANTED && CoarseLocation == PackageManager.PERMISSION_GRANTED
                     && Bluetooth == PackageManager.PERMISSION_GRANTED && PhoneState == PackageManager.PERMISSION_GRANTED
