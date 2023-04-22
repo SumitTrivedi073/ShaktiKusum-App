@@ -556,61 +556,55 @@ public class InstallationInitial extends AppCompatActivity {
             }
         });
 
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (CustomUtility.isInternetOn()) {
-                    if (mBTResonseDataList.size() > 0)
-                        mBTResonseDataList.clear();
-                    mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(controller);
-                    System.out.println("mBTResonseDataList.size()==>>" + mBTResonseDataList.size());
-                    if (mBTResonseDataList.size() > 0) {
-                        DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
-                        SIGNL_STREN = mBTResonseDataList.get(vkp).getSIGNLSTREN();
-                        String[] mStrArry = SIGNL_STREN.split("###");
-                        SIGNL_STREN = mStrArry[0];
-                        INVOICE_NO_B = mStrArry[1];
-                        SIM = mBTResonseDataList.get(vkp).getSIM();
-                        String[] mStrArrySim = SIM.split("###");
-                        SIM = mStrArrySim[0];
-                        SIM_SR_NO = mStrArrySim[1];
-                        NET_REG = mBTResonseDataList.get(vkp).getNETREG();
-                        SER_CONNECT = mBTResonseDataList.get(vkp).getSERCONNECT();
-                        CAB_CONNECT = mBTResonseDataList.get(vkp).getCABCONNECT();
-                        LATITUDE = mBTResonseDataList.get(vkp).getLATITUDE();
-                        LANGITUDE = mBTResonseDataList.get(vkp).getLANGITUDE();
-                        MOBILE = mBTResonseDataList.get(vkp).getMOBILE();
-                        IMEI = mBTResonseDataList.get(vkp).getIMEI();
-                        DONGAL_ID = mBTResonseDataList.get(vkp).getDONGALID();
-                        RMS_STATUS = mBTResonseDataList.get(vkp).getRMS_STATUS();
-                        RMS_CURRENT_ONLINE_STATUS = mBTResonseDataList.get(vkp).getRMS_CURRENT_ONLINE_STATUS();
-                        RMS_LAST_ONLINE_DATE = mBTResonseDataList.get(vkp).getRMS_LAST_ONLINE_DATE();
-                        mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
-                        mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
-                        RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
-                        RMS_SERVER_DOWN = "Working Fine";
-                        System.out.println("VikasVIHU==>>" + mBTResonseDataList.get(vkp).getDEVICENO());
-                        CustomUtility.showProgressDialogue(InstallationInitial.this);
-                        new SyncDebugDataFromLocal().execute();
+        save.setOnClickListener(v -> {
+            if (CustomUtility.isInternetOn()) {
+                if (mBTResonseDataList.size() > 0)
+                    mBTResonseDataList.clear();
+                mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(controller);
+                System.out.println("mBTResonseDataList.size()==>>" + mBTResonseDataList.size());
+                if (mBTResonseDataList.size() > 0) {
+                    DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
+                    SIGNL_STREN = mBTResonseDataList.get(vkp).getSIGNLSTREN();
+                    String[] mStrArry = SIGNL_STREN.split("###");
+                    SIGNL_STREN = mStrArry[0];
+                    INVOICE_NO_B = mStrArry[1];
+                    SIM = mBTResonseDataList.get(vkp).getSIM();
+                    String[] mStrArrySim = SIM.split("###");
+                    SIM = mStrArrySim[0];
+                    SIM_SR_NO = mStrArrySim[1];
+                    NET_REG = mBTResonseDataList.get(vkp).getNETREG();
+                    SER_CONNECT = mBTResonseDataList.get(vkp).getSERCONNECT();
+                    CAB_CONNECT = mBTResonseDataList.get(vkp).getCABCONNECT();
+                    LATITUDE = mBTResonseDataList.get(vkp).getLATITUDE();
+                    LANGITUDE = mBTResonseDataList.get(vkp).getLANGITUDE();
+                    MOBILE = mBTResonseDataList.get(vkp).getMOBILE();
+                    IMEI = mBTResonseDataList.get(vkp).getIMEI();
+                    DONGAL_ID = mBTResonseDataList.get(vkp).getDONGALID();
+                    RMS_STATUS = mBTResonseDataList.get(vkp).getRMS_STATUS();
+                    RMS_CURRENT_ONLINE_STATUS = mBTResonseDataList.get(vkp).getRMS_CURRENT_ONLINE_STATUS();
+                    RMS_LAST_ONLINE_DATE = mBTResonseDataList.get(vkp).getRMS_LAST_ONLINE_DATE();
+                    mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
+                    mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
+                    RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
+                    RMS_SERVER_DOWN = "Working Fine";
+                    System.out.println("VikasVIHU==>>" + mBTResonseDataList.get(vkp).getDEVICENO());
+                    CustomUtility.showProgressDialogue(InstallationInitial.this);
+                    new SyncDebugDataFromLocal().execute();
 
-                    } else {
-                        saveData();
-                    }
                 } else {
                     saveData();
                 }
-
-
+            } else {
+                saveData();
             }
+
+
         });
 
         if (CustomUtility.isInternetOn()) {
-            labeledSwitch.setOnToggledListener(new OnToggledListener() {
-                @Override
-                public void onSwitched(ToggleableView toggleableView, boolean isOn) {
-                    Intent intent = new Intent(mContext, DeviceStatusActivity.class);
-                    startActivity(intent);
-                }
+            labeledSwitch.setOnToggledListener((toggleableView, isOn) -> {
+                Intent intent = new Intent(mContext, DeviceStatusActivity.class);
+                startActivity(intent);
             });
         } else {
             Toast.makeText(mContext, "Please Connect to internet...", Toast.LENGTH_SHORT).show();
