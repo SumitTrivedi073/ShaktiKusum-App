@@ -209,6 +209,8 @@
     <string name="notification_permission">Notification access required</string>
     <string name="notification_permission_txt">Please give access to receive notification for \nnew updates.</string>
     <string name="all_permission">Please allow all the permission</string>
+    <string name="capture">Capture</string>
+    <string name="Click_Again">Click Again</string>
 
 
 </resources>

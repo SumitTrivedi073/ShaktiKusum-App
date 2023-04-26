@@ -8,13 +8,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,7 +26,6 @@ import com.shaktipumplimited.shaktikusum.R;
 import org.json.JSONObject;
 
 import bean.DeviceDetailModel;
-import debugapp.PendingFeedback;
 import utility.CustomUtility;
 import utility.dialog4;
 import webservice.WebURL;
@@ -154,10 +151,13 @@ public class DeviceStatusActivity extends AppCompatActivity  {
 
                                 if(deviceDetailModel.getResponse().getIsLogin()) {
                                     CustomUtility.setSharedPreference(getApplicationContext(), getResources().getString(R.string.online),getResources().getString(R.string.online));
+                                    CustomUtility.setSharedPreference(getApplicationContext(), getResources().getString(R.string.offline),"");
+
                                     deviceonline.setText(getResources().getString(R.string.online));
                                     deviceonline.setTextColor(Color.parseColor("#00FF00"));
                                 } else {
                                     CustomUtility.setSharedPreference(getApplicationContext(), getResources().getString(R.string.offline),getResources().getString(R.string.offline));
+                                    CustomUtility.setSharedPreference(getApplicationContext(), getResources().getString(R.string.online),"");
                                     deviceonline.setText(getResources().getString(R.string.offline));
                                     deviceonline.setTextColor(Color.parseColor("#FF0000"));
                                 }

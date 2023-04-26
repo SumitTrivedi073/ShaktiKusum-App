@@ -42,11 +42,8 @@ import androidx.core.os.BuildCompat;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.github.angads25.toggle.interfaces.OnToggledListener;
-import com.github.angads25.toggle.model.ToggleableView;
 import com.github.angads25.toggle.widget.LabeledSwitch;
 import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -62,7 +59,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -73,6 +69,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 import bean.BTResonseData;
@@ -209,6 +206,7 @@ public class InstallationInitial extends AppCompatActivity {
     String mobileno = "";
     String tehvillage = "";
     String borewellstatus1 = "";
+    String DeviceOnline= "", DeviceOffline ="";
     String CUS_CONTACT_NO = "",BeneficiaryNo ="";
     int currentScannerFor = -1;
     ArrayList<String> scannedDeviceNo = new ArrayList<>();
@@ -244,6 +242,7 @@ public class InstallationInitial extends AppCompatActivity {
     BaseRequest baseRequest;
     private Dialog dialog;
 
+    @SuppressLint("HandlerLeak")
     android.os.Handler mHandler2 = new android.os.Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -333,7 +332,7 @@ public class InstallationInitial extends AppCompatActivity {
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Installation Form");
 
@@ -364,24 +363,24 @@ public class InstallationInitial extends AppCompatActivity {
         installationBean = new InstallationBean();
         installationBean = db.getInstallationData(CustomUtility.getSharedPreferences(mContext, "userid"), billno);
 
-        list_simoprator = new ArrayList<String>();
-        list_conntype = new ArrayList<String>();
+        list_simoprator = new ArrayList<>();
+        list_conntype = new ArrayList<>();
 
         getSimTypeValue();
         getConnTypeValue();
 
         String dt = dispdate;  // dispatch date
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
         Calendar c = Calendar.getInstance();
         try {
-            c.setTime(sdf.parse(dt));
+            c.setTime(Objects.requireNonNull(sdf.parse(dt)));
         } catch (ParseException e) {
             e.printStackTrace();
         }
         c.add(Calendar.DATE, 15);
         String output = sdf.format(c.getTime());
 
-        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+        @SuppressLint("SimpleDateFormat") DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         Date date = null;
         try {
             date = (Date) formatter.parse(output);
@@ -390,18 +389,17 @@ public class InstallationInitial extends AppCompatActivity {
         }
 
         Log.e("Timestamp1", "***" + System.currentTimeMillis());
+        assert date != null;
         Log.e("Timestamp2", "***" + date.getTime());
 
-        if (date != null) {
-            if (System.currentTimeMillis() > date.getTime()) {
-                your_date_is_outdated = true;
-                delay = "1";
-                reason.setVisibility(View.VISIBLE);
-            } else {
-                your_date_is_outdated = false;
-                delay = "2";
-                reason.setVisibility(View.GONE);
-            }
+        if (System.currentTimeMillis() > date.getTime()) {
+            your_date_is_outdated = true;
+            delay = "1";
+            reason.setVisibility(View.VISIBLE);
+        } else {
+            your_date_is_outdated = false;
+            delay = "2";
+            reason.setVisibility(View.GONE);
         }
 
         borewellstatus1 = CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno);
@@ -409,7 +407,7 @@ public class InstallationInitial extends AppCompatActivity {
         if (!TextUtils.isEmpty(borewellstatus1)) {
             borewellstatus.setText(borewellstatus1);
         }
-        dataAdapter_simoprator = new ArrayAdapter<String>(this, R.layout.spinner_item_left_optional, list_simoprator);
+        dataAdapter_simoprator = new ArrayAdapter<>(this, R.layout.spinner_item_left_optional, list_simoprator);
         dataAdapter_simoprator.setDropDownViewResource(R.layout.spinner_item_center);
         txtLongIDD = findViewById(R.id.txtLongIDD);
         txtLatIDD = findViewById(R.id.txtLatIDD);
@@ -434,7 +432,7 @@ public class InstallationInitial extends AppCompatActivity {
             }
         });
 
-        dataAdapter_conntype = new ArrayAdapter<String>(this, R.layout.spinner_item_left_optional, list_conntype);
+        dataAdapter_conntype = new ArrayAdapter<>(this, R.layout.spinner_item_left_optional, list_conntype);
         dataAdapter_conntype.setDropDownViewResource(R.layout.spinner_item_center);
         spinner_conntype.setAdapter(dataAdapter_conntype);
 
@@ -492,71 +490,50 @@ public class InstallationInitial extends AppCompatActivity {
             }
         }
 
-        img_scn_one.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                id = 1000;
-                startScanner(id);
-            }
+        img_scn_one.setOnClickListener(v -> {
+            id = 1000;
+            startScanner(id);
         });
 
 
-        img_scn_two.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                id = 2000;
-                startScanner(id);
-            }
+        img_scn_two.setOnClickListener(v -> {
+            id = 2000;
+            startScanner(id);
         });
 
-        img_scn_three.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                id = 3000;
-                startScanner(id);
-            }
+        img_scn_three.setOnClickListener(v -> {
+            id = 3000;
+            startScanner(id);
         });
 
-        img_scn_four.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                id = 4000;
-                startScanner(id);
-            }
+        img_scn_four.setOnClickListener(v -> {
+            id = 4000;
+            startScanner(id);
         });
 
-        borewellstatus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAlertDialog();
-            }
-        });
+        borewellstatus.setOnClickListener(v -> showAlertDialog());
 
-        inst_location.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.isEmpty(installationBean.getLatitude()) || installationBean.getLatitude().equals("0.0") || installationBean.getLatitude().equals("null")) {
-                    getGpsLocation();
-                } else {
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext, R.style.MyDialogTheme);
-                    alertDialog.setTitle("Confirmation");
-                    alertDialog.setMessage("Latitude, Longitude already saved, Do you want to change it?");
-                    alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            getGpsLocation();
-                        }
-                    });
-                    alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    alertDialog.show();
-                }
+        inst_location.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(installationBean.getLatitude()) || installationBean.getLatitude().equals("0.0") || installationBean.getLatitude().equals("null")) {
+                getGpsLocation();
+            } else {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext, R.style.MyDialogTheme);
+                alertDialog.setTitle("Confirmation");
+                alertDialog.setMessage("Latitude, Longitude already saved, Do you want to change it?");
+                alertDialog.setPositiveButton("Yes", (dialog, which) -> getGpsLocation());
+                alertDialog.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                alertDialog.show();
             }
         });
 
         save.setOnClickListener(v -> {
+
+            DeviceOnline = CustomUtility.getSharedPreferences(mContext,getResources().getString(R.string.online));
+            DeviceOffline = CustomUtility.getSharedPreferences(mContext,getResources().getString(R.string.offline));
+
+            Log.e("RMS","Device Status DeviceOnline===>" + DeviceOnline);
+            Log.e("RMS","Device Status DeviceOffline===>" + DeviceOffline);
+
             if (CustomUtility.isInternetOn()) {
                 if (mBTResonseDataList.size() > 0)
                     mBTResonseDataList.clear();
@@ -592,10 +569,20 @@ public class InstallationInitial extends AppCompatActivity {
                     new SyncDebugDataFromLocal().execute();
 
                 } else {
-                    saveData();
+                    if(!TextUtils.isEmpty(DeviceOffline) || !TextUtils.isEmpty(DeviceOnline)) {
+                        saveData();
+                    }
+                    else{
+                        Toast.makeText(mContext, "Please get RMS Device Status.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             } else {
-                saveData();
+                if(!TextUtils.isEmpty(DeviceOffline) || !TextUtils.isEmpty(DeviceOnline)) {
+                    saveData();
+                }
+                else{
+                    Toast.makeText(mContext, "Please get RMS Device Status.", Toast.LENGTH_SHORT).show();
+                }
             }
 
 
@@ -646,7 +633,7 @@ public class InstallationInitial extends AppCompatActivity {
             String scanContent = scanningResult.getContents();
             String scanFormat = scanningResult.getFormatName();
 
-            Toast toast = Toast.makeText(getApplicationContext(), scanFormat + scanContent, Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(), scanFormat + scanContent, Toast.LENGTH_SHORT);
             boolean alreadySet = false;
             switch (currentScannerFor) {
                 case 1000:
@@ -699,6 +686,7 @@ public class InstallationInitial extends AppCompatActivity {
         return true;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -747,11 +735,14 @@ public class InstallationInitial extends AppCompatActivity {
                 return true;
             case R.id.act_comp_attach_image:
 
-
                 borewellstatus1 = CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno);
+                DeviceOnline = CustomUtility.getSharedPreferences(mContext,getResources().getString(R.string.online));
+                DeviceOffline = CustomUtility.getSharedPreferences(mContext,getResources().getString(R.string.offline));
 
-                if (!TextUtils.isEmpty(borewellstatus1)) {
-                  //  if(!rmsdata_status.isEmpty()) {
+                if(!TextUtils.isEmpty(DeviceOffline) || !TextUtils.isEmpty(DeviceOnline)){
+
+                    if (!TextUtils.isEmpty(borewellstatus1)) {
+                        //  if(!rmsdata_status.isEmpty()) {
                         Intent intent = new Intent(InstallationInitial.this, InstReportImageActivity.class);
                         intent.putExtra("inst_id", bill_no.getText().toString().trim());
                         intent.putExtra("cust_name", custname);
@@ -760,10 +751,13 @@ public class InstallationInitial extends AppCompatActivity {
                     /*}else {
                         CustomUtility.showToast(getApplicationContext(),"Please check RMS status!");
                     }*/
-                } else {
-                    Toast.makeText(mContext, "Please Select Borewell Status", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(mContext, "Please Select Borewell Status", Toast.LENGTH_SHORT).show();
+                    }
                 }
-
+                else{
+                    Toast.makeText(mContext, "Please get RMS Device Status.", Toast.LENGTH_SHORT).show();
+                }
                 return true;
 
         }
@@ -829,32 +823,29 @@ public class InstallationInitial extends AppCompatActivity {
         } else if (CustomUtility.getSharedPreferences(mContext, "borewellstatus").equalsIgnoreCase("3")) {
             checkedItem = 2;
         }
-        alertDialog.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                        borewellstatus.setText(items[0]);
-                        CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, items[0]);
-                        CustomUtility.setSharedPreference(mContext, "borewellstatus", "1");
-                        Toast.makeText(mContext, CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno), Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                        break;
-                    case 1:
-                        borewellstatus.setText(items[1]);
-                        CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, items[1]);
-                        CustomUtility.setSharedPreference(mContext, "borewellstatus", "2");
-                        Toast.makeText(mContext, CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno), Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                        break;
-                    case 2:
-                        borewellstatus.setText(items[2]);
-                        CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, items[2]);
-                        CustomUtility.setSharedPreference(mContext, "borewellstatus", "3");
-                        Toast.makeText(mContext, CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno), Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                        break;
-                }
+        alertDialog.setSingleChoiceItems(items, checkedItem, (dialog, which) -> {
+            switch (which) {
+                case 0:
+                    borewellstatus.setText(items[0]);
+                    CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, items[0]);
+                    CustomUtility.setSharedPreference(mContext, "borewellstatus", "1");
+                    Toast.makeText(mContext, CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno), Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                    break;
+                case 1:
+                    borewellstatus.setText(items[1]);
+                    CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, items[1]);
+                    CustomUtility.setSharedPreference(mContext, "borewellstatus", "2");
+                    Toast.makeText(mContext, CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno), Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                    break;
+                case 2:
+                    borewellstatus.setText(items[2]);
+                    CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, items[2]);
+                    CustomUtility.setSharedPreference(mContext, "borewellstatus", "3");
+                    Toast.makeText(mContext, CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno), Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                    break;
             }
         });
         AlertDialog alert = alertDialog.create();
@@ -974,6 +965,7 @@ public class InstallationInitial extends AppCompatActivity {
 
             if (db.isRecordExist(db.TABLE_INSTALLATION_PUMP_DATA, db.KEY_BILL_NO, inst_bill_no)) {
                 db.updateInstallationData(inst_bill_no, installationBean);
+
             } else {
                 db.insertInstallationData(inst_bill_no, installationBean);
             }
@@ -1039,11 +1031,10 @@ public class InstallationInitial extends AppCompatActivity {
                                                                                                         CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
                                                                                                     }
                                                                                                 } else {
-                                                                                                    Toast.makeText(mContext, "Please debug first then submite", Toast.LENGTH_SHORT).show();
+                                                                                                    Toast.makeText(mContext, "Please debug first then submit", Toast.LENGTH_SHORT).show();
                                                                                                 }
                                                                                             }
                                                                                         }
-
 
                                                                                     } else {
                                                                                         Toast.makeText(mContext, "Please Select Photos", Toast.LENGTH_SHORT).show();
@@ -1123,8 +1114,6 @@ public class InstallationInitial extends AppCompatActivity {
                                                                             if (!TextUtils.isEmpty(borewellstatus1)) {
                                                                                 if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
                                                                                     //   new SyncInstallationData().execute();
-
-
                                                                                     if (project_no1.equalsIgnoreCase("0201") || project_no1.equalsIgnoreCase("201") || project_no1.equalsIgnoreCase("0202") || project_no1.equalsIgnoreCase("202") || project_no1.equalsIgnoreCase("0108") || project_no1.equalsIgnoreCase("108") || project_no1.equalsIgnoreCase("0203") || project_no1.equalsIgnoreCase("203")) {
                                                                                         if (imageList.size() > 0) {
                                                                                             new SyncInstallationData().execute();
@@ -1148,10 +1137,7 @@ public class InstallationInitial extends AppCompatActivity {
                                                                                         } else {
                                                                                             Toast.makeText(mContext, "Please insert new sim and try again!", Toast.LENGTH_SHORT).show();
                                                                                         }
-
                                                                                     }
-
-
                                                                                 } else {
                                                                                     Toast.makeText(mContext, "Please Select Photos", Toast.LENGTH_SHORT).show();
                                                                                 }
@@ -1436,6 +1422,9 @@ public class InstallationInitial extends AppCompatActivity {
             } else {
                 db.insertInstallationData(inst_bill_no, installationBean);
             }
+
+            Intent intent = new Intent(mContext, InstallationList.class);
+            startActivity(intent);
 
         }
 
@@ -1828,7 +1817,7 @@ public class InstallationInitial extends AppCompatActivity {
             param1_invc.add(new BasicNameValuePair("action", String.valueOf(ja_invc_data)));///array name lr_save
             Log.e("DATA", "$$$$" + param1_invc.toString());
 
-            System.out.println(param1_invc.toString());
+            System.out.println(param1_invc);
 
             try {
 
@@ -1848,19 +1837,18 @@ public class InstallationInitial extends AppCompatActivity {
                     System.out.println("jo11==>>" + jo11);
                     if (mStatus.equals("true")) {
                         Random random = new Random();
-                        String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
+                        @SuppressLint("DefaultLocale") String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                   if(CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
-                                       sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
-                                   }else {
-                                       Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
-                                       startActivity(intent);
-                                       finish();
-                                   }
-                            }
+                        runOnUiThread(() -> {
+                            CustomUtility.clearSharedPrefrences(mContext);
+                               if(CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
+                                   sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
+                               }else {
+
+                                   Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
+                                   startActivity(intent);
+                                   finish();
+                               }
                         });
 
 
@@ -2235,16 +2223,13 @@ public class InstallationInitial extends AppCompatActivity {
                             Random random = new Random();
                             String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
 
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if(CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
-                                        sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
-                                    }else {
-                                        Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
+                            runOnUiThread(() -> {
+                                if(CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
+                                    sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
+                                }else {
+                                    Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
+                                    startActivity(intent);
+                                    finish();
                                 }
                             });
 
@@ -2320,14 +2305,11 @@ public class InstallationInitial extends AppCompatActivity {
                 }
 
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                CustomUtility.hideProgressDialog(InstallationInitial.this);
-                Log.e("error", String.valueOf(error));
-                Toast.makeText(InstallationInitial.this, error.getMessage(),
-                        Toast.LENGTH_LONG).show();
-            }
+        }, error -> {
+            CustomUtility.hideProgressDialog(InstallationInitial.this);
+            Log.e("error", String.valueOf(error));
+            Toast.makeText(InstallationInitial.this, error.getMessage(),
+                    Toast.LENGTH_LONG).show();
         });
         requestQueue.add(jsonObjectRequest);
     }
@@ -2351,26 +2333,19 @@ public class InstallationInitial extends AppCompatActivity {
 
         title_txt.setText(getResources().getString(R.string.otp_send_successfully));
 
-        OK_txt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
-                Intent intent = new Intent(InstallationInitial.this, PendingFeedBackOTPVerification.class);
-                intent.putExtra(Constant.PendingFeedbackContact,ContactNo);
-                intent.putExtra(Constant.PendingFeedbackVblen,billNo);
-                intent.putExtra(Constant.PendingFeedbackHp,Hp);
-                intent.putExtra(Constant.PendingFeedbackBeneficiary,beneficiaryNo);
-                intent.putExtra(Constant.VerificationCode,generatedVerificationCode);
+        OK_txt.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            Intent intent = new Intent(InstallationInitial.this, PendingFeedBackOTPVerification.class);
+            intent.putExtra(Constant.PendingFeedbackContact,ContactNo);
+            intent.putExtra(Constant.PendingFeedbackVblen,billNo);
+            intent.putExtra(Constant.PendingFeedbackHp,Hp);
+            intent.putExtra(Constant.PendingFeedbackBeneficiary,beneficiaryNo);
+            intent.putExtra(Constant.VerificationCode,generatedVerificationCode);
 
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
 
-                /* intent.putExtra(Constant.PendingFeedbackVblen,response.getVbeln());
-                intent.putExtra(Constant.PendingFeedbackHp,response.getHp());
-                intent.putExtra(Constant.PendingFeedbackBeneficiary,response.getBeneficiary());
-                intent.putExtra(Constant.VerificationCode,generatedVerificationCode);*/
-            }
         });
 
     }
