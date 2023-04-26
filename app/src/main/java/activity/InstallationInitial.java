@@ -206,7 +206,7 @@ public class InstallationInitial extends AppCompatActivity {
     String mobileno = "";
     String tehvillage = "";
     String borewellstatus1 = "";
-    String DeviceOnline= "", DeviceOffline ="";
+    String DeviceStatus= "";
     String CUS_CONTACT_NO = "",BeneficiaryNo ="";
     int currentScannerFor = -1;
     ArrayList<String> scannedDeviceNo = new ArrayList<>();
@@ -528,11 +528,9 @@ public class InstallationInitial extends AppCompatActivity {
 
         save.setOnClickListener(v -> {
 
-            DeviceOnline = CustomUtility.getSharedPreferences(mContext,getResources().getString(R.string.online));
-            DeviceOffline = CustomUtility.getSharedPreferences(mContext,getResources().getString(R.string.offline));
+            DeviceStatus = CustomUtility.getSharedPreferences(mContext,"DeviceStatus");
 
-            Log.e("RMS","Device Status DeviceOnline===>" + DeviceOnline);
-            Log.e("RMS","Device Status DeviceOffline===>" + DeviceOffline);
+            Log.e("RMS","Device Status DeviceOnline===>" + DeviceStatus);
 
             if (CustomUtility.isInternetOn()) {
                 if (mBTResonseDataList.size() > 0)
@@ -569,7 +567,7 @@ public class InstallationInitial extends AppCompatActivity {
                     new SyncDebugDataFromLocal().execute();
 
                 } else {
-                    if(!TextUtils.isEmpty(DeviceOffline) || !TextUtils.isEmpty(DeviceOnline)) {
+                    if(!TextUtils.isEmpty(DeviceStatus)) {
                         saveData();
                     }
                     else{
@@ -577,7 +575,7 @@ public class InstallationInitial extends AppCompatActivity {
                     }
                 }
             } else {
-                if(!TextUtils.isEmpty(DeviceOffline) || !TextUtils.isEmpty(DeviceOnline)) {
+                if(!TextUtils.isEmpty(DeviceStatus)) {
                     saveData();
                 }
                 else{
@@ -736,10 +734,9 @@ public class InstallationInitial extends AppCompatActivity {
             case R.id.act_comp_attach_image:
 
                 borewellstatus1 = CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno);
-                DeviceOnline = CustomUtility.getSharedPreferences(mContext,getResources().getString(R.string.online));
-                DeviceOffline = CustomUtility.getSharedPreferences(mContext,getResources().getString(R.string.offline));
+                DeviceStatus = CustomUtility.getSharedPreferences(mContext,"DeviceStatus");
 
-                if(!TextUtils.isEmpty(DeviceOffline) || !TextUtils.isEmpty(DeviceOnline)){
+                if(!TextUtils.isEmpty(DeviceStatus) ){
 
                     if (!TextUtils.isEmpty(borewellstatus1)) {
                         //  if(!rmsdata_status.isEmpty()) {

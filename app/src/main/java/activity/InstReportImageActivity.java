@@ -438,11 +438,10 @@ public class InstReportImageActivity extends AppCompatActivity implements ImageS
     }
 
     public boolean Save() {
-        String Onlinestatus = CustomUtility.getSharedPreferences(InstReportImageActivity.this, getResources().getString(R.string.online));
-        String Offlinestatus = CustomUtility.getSharedPreferences(InstReportImageActivity.this, getResources().getString(R.string.offline));
+        String DeviceStatus = CustomUtility.getSharedPreferences(InstReportImageActivity.this, "DeviceStatus");
 
-        if (Onlinestatus == getResources().getString(R.string.online)){
-            Log.e("DeviceStatus==>", ""+Onlinestatus);
+        if (DeviceStatus == getResources().getString(R.string.online)){
+            Log.e("DeviceStatus==>", ""+DeviceStatus);
             if (CustomUtility.getSharedPreferences(InstReportImageActivity.this, "borewellstatus").equalsIgnoreCase("2")) {
                 if (!imageArrayList.get(0).isImageSelected()) {
                     Toast.makeText(this, getResources().getString(R.string.select_photosOfCivilMaterial), Toast.LENGTH_SHORT).show();
@@ -514,7 +513,7 @@ public class InstReportImageActivity extends AppCompatActivity implements ImageS
             }
         }
         else {
-            Log.e("DeviceStatus==>", ""+Offlinestatus);
+            Log.e("DeviceStatus==>", ""+ DeviceStatus);
             if (CustomUtility.getSharedPreferences(InstReportImageActivity.this, "borewellstatus").equalsIgnoreCase("2")) {
                 if (!imageArrayList.get(0).isImageSelected()) {
                     Toast.makeText(this, getResources().getString(R.string.select_photosOfCivilMaterial), Toast.LENGTH_SHORT).show();
