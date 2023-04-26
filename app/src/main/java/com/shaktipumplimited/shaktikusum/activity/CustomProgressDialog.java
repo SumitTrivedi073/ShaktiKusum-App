@@ -18,11 +18,7 @@ import com.shaktipumplimited.shaktikusum.R;
 public class CustomProgressDialog extends ProgressDialog {
     private TextView progressMessage;
     private  String mMessage;
-    public CustomProgressDialog(Context context, String message) {
-        super(context, R.style.CustomAlertDialogStyle);
-        //	this.mMessage = message;
-        // TODO Auto-generated constructor stub
-    }
+
 
     public CustomProgressDialog(Context context) {
         super(context, R.style.CustomAlertDialogStyle);
@@ -35,8 +31,6 @@ public class CustomProgressDialog extends ProgressDialog {
         // TODO Auto-generated method stub
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_custom_progress_dialog);
-
-
 
         progressMessage = findViewById(R.id.progressMessage);
         progressMessage.setText(mMessage);

@@ -1,29 +1,59 @@
 package com.shaktipumplimited.shaktikusum.activity;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.BLUETOOTH;
+import static android.Manifest.permission.BLUETOOTH_CONNECT;
+import static android.Manifest.permission.BLUETOOTH_SCAN;
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.MANAGE_EXTERNAL_STORAGE;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.READ_MEDIA_AUDIO;
+import static android.Manifest.permission.READ_MEDIA_IMAGES;
+import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.os.Build.VERSION.PREVIEW_SDK_INT;
+import static android.os.Build.VERSION.SDK_INT;
+
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
@@ -59,6 +89,7 @@ public class Login extends AppCompatActivity {
     private AppUpdateManager appUpdateManager;
     private static final int IMMEDIATE_APP_UPDATE_REQ_CODE = 100;
 
+    private static final int REQUEST_CODE_PERMISSION = 2;
     Spinner spinner_login_type, spinner_project_type;
     ProgressDialog progressBar;
     int index, index1;
@@ -83,7 +114,11 @@ public class Login extends AppCompatActivity {
     private EditText inputName, inputPassword;
     private TextInputLayout inputLayoutName, inputLayoutPassword;
 
+    boolean BluetoothConnect,BluetoothScan,FineLocationAccepted,CoarseLocationAccepted,Bluetooth,ReadPhoneState,Camera,ReadPhoneStorage,WritePhoneStorage;
 
+
+
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -269,6 +304,83 @@ public class Login extends AppCompatActivity {
                 checkUpdate();
             }
         }
+
+        if (requestCode == 2296) {
+            if (SDK_INT >= Build.VERSION_CODES.R) {
+                if (Environment.isExternalStorageManager()) {
+                    // perform action when allow permission success
+                    serverLogin();
+                } else {
+                    Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+
+    }
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // FCM SDK (and your app) can post notifications.
+                    serverLogin();
+                } else {
+                    // TODO: Inform user that that your app will not show notifications.
+                    askNotificationPermission();
+                }
+            });
+    private void askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                    PackageManager.PERMISSION_GRANTED) {
+                serverLogin();
+                // FCM SDK (and your app) can post notifications.
+            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+                // TODO: display an educational UI explaining to the user the features that will be enabled
+                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
+                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
+                //       If the user selects "No thanks," allow the user to continue without notifications.
+                showNotificationPopup();
+            } else {
+                // Directly ask for the permission
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
+        }
+    }
+
+    private void showNotificationPopup() {
+        LayoutInflater inflater = (LayoutInflater) Login.this.getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.notification_popup, null);
+        final AlertDialog.Builder builder =
+                new AlertDialog.Builder(Login.this, R.style.MyDialogTheme);
+
+        builder.setView(layout);
+        builder.setCancelable(true);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        alertDialog.getWindow().setGravity(Gravity.BOTTOM);
+        alertDialog.show();
+
+        LinearLayout okLinear = layout.findViewById(R.id.okLinear);
+        LinearLayout cancelLinear = layout.findViewById(R.id.cancelLinear);
+
+        okLinear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+                startActivity(new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS));
+            }
+        });
+
+        cancelLinear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+                askNotificationPermission();
+            }
+        });
+
     }
 
     @Override
@@ -371,17 +483,6 @@ public class Login extends AppCompatActivity {
                     CustomUtility.setSharedPreference(context, "username", username);
                     CustomUtility.setSharedPreference(context, "usertype", usertype);
 
-
-
-                       /* String OTP_CHECK = CustomUtility.getSharedPreferences(context, "CHECK_OTP_VARIFED");
-                        if(OTP_CHECK.equalsIgnoreCase("Y")) {
-                            Intent intent = new Intent(context, MainActivity.class);
-                            startActivity(intent);
-                        }
-                        else {
-                            Intent intent = new Intent(Login.this, OTPGenerationActivity.class);
-                            startActivity(intent);
-                        }*/
                         Intent intent = new Intent(Login.this, OTPGenerationActivity.class);
                         startActivity(intent);
                         finish();
@@ -412,6 +513,7 @@ public class Login extends AppCompatActivity {
     /**********************************************************************************************
      *                Validating form
      *********************************************************************************************/
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private void submitForm() {
 
         if (!validateName()) {
@@ -423,8 +525,18 @@ public class Login extends AppCompatActivity {
         }
 
 //********************   Server Login    *******************************************************/
-        serverLogin();
 
+        if (checkPermission()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                askNotificationPermission();
+            } else {
+                serverLogin();
+            }
+
+        } else {
+           requestPermission();
+
+        }
     }
 
     private boolean validateName() {
@@ -511,8 +623,6 @@ public class Login extends AppCompatActivity {
                 try {
 
                     if (CustomUtility.isInternetOn()) {
-
-
                         progressBarStatus = 30;
 
                         // Updating the progress bar
@@ -608,6 +718,158 @@ public class Login extends AppCompatActivity {
         }
 
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    private boolean checkPermission() {
+        int FineLocation = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_FINE_LOCATION);
+        int CoarseLocation = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_COARSE_LOCATION);
+        int Bluetooth = ContextCompat.checkSelfPermission(getApplicationContext(), BLUETOOTH);
+        int PhoneState = ContextCompat.checkSelfPermission(getApplicationContext(), READ_PHONE_STATE);
+        int Camera = ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA);
+        int ReadExternalStorage = ContextCompat.checkSelfPermission(getApplicationContext(), READ_EXTERNAL_STORAGE);
+        int WriteExternalStorage = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
+        int ReadMediaImages = ContextCompat.checkSelfPermission(getApplicationContext(), READ_MEDIA_IMAGES);
+        int ReadMediaAudio = ContextCompat.checkSelfPermission(getApplicationContext(), READ_MEDIA_AUDIO);
+        int BluetoothConnect =  ContextCompat.checkSelfPermission(getApplicationContext(), BLUETOOTH_CONNECT);
+        int BluetoothScan =  ContextCompat.checkSelfPermission(getApplicationContext(), BLUETOOTH_SCAN);
+
+
+        if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return CoarseLocation == PackageManager.PERMISSION_GRANTED && Bluetooth == PackageManager.PERMISSION_GRANTED
+                    && Camera == PackageManager.PERMISSION_GRANTED  && ReadMediaImages == PackageManager.PERMISSION_GRANTED
+                    && ReadMediaAudio == PackageManager.PERMISSION_GRANTED && BluetoothConnect == PackageManager.PERMISSION_GRANTED
+                    && BluetoothScan == PackageManager.PERMISSION_GRANTED;
+        }else  if  ( SDK_INT == Build.VERSION_CODES.S)  {
+            return  Camera == PackageManager.PERMISSION_GRANTED
+                    && CoarseLocation == PackageManager.PERMISSION_GRANTED  && PhoneState == PackageManager.PERMISSION_GRANTED
+                    && Bluetooth == PackageManager.PERMISSION_GRANTED   && BluetoothScan == PackageManager.PERMISSION_GRANTED
+                    && BluetoothConnect == PackageManager.PERMISSION_GRANTED;
+        } else  if  (SDK_INT == Build.VERSION_CODES.R)  {
+            return  Camera == PackageManager.PERMISSION_GRANTED
+                    && CoarseLocation == PackageManager.PERMISSION_GRANTED  && PhoneState == PackageManager.PERMISSION_GRANTED
+                    && Bluetooth == PackageManager.PERMISSION_GRANTED;
+        }else {
+            return FineLocation == PackageManager.PERMISSION_GRANTED && CoarseLocation == PackageManager.PERMISSION_GRANTED
+                    && Bluetooth == PackageManager.PERMISSION_GRANTED && PhoneState == PackageManager.PERMISSION_GRANTED
+                    && Camera == PackageManager.PERMISSION_GRANTED && ReadExternalStorage == PackageManager.PERMISSION_GRANTED
+                    && WriteExternalStorage == PackageManager.PERMISSION_GRANTED;
+        }
+    }
+
+    private void requestPermission() {
+        if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA,  Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_MEDIA_AUDIO,
+                            Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.BLUETOOTH ,
+                            Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_CODE_PERMISSION);
+        } else if  ( SDK_INT == Build.VERSION_CODES.S )  {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA,  Manifest.permission.READ_PHONE_STATE,
+                            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.BLUETOOTH,
+                            Manifest.permission.BLUETOOTH_CONNECT , Manifest.permission.BLUETOOTH_SCAN },
+                    REQUEST_CODE_PERMISSION);
+        }else if  ( SDK_INT == Build.VERSION_CODES.R)  {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_PHONE_STATE,
+                            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.BLUETOOTH,},
+                    REQUEST_CODE_PERMISSION);
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE,
+                            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.BLUETOOTH,Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISSION);
+
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CODE_PERMISSION:
+                if (grantResults.length > 0) {
+
+                    if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+                        boolean CoarseLocationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                        boolean Bluetooth = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                        boolean  Camera = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                        boolean  ReadMediaImages = grantResults[3] == PackageManager.PERMISSION_GRANTED;
+                        boolean  ReadMediaAudio = grantResults[4] == PackageManager.PERMISSION_GRANTED;
+                        boolean BluetoothConnect = grantResults[5] == PackageManager.PERMISSION_GRANTED;
+                        boolean BluetoothScan =grantResults[6] == PackageManager.PERMISSION_GRANTED;
+
+                        if (BluetoothConnect && BluetoothScan && CoarseLocationAccepted && Bluetooth  && Camera && ReadMediaImages && ReadMediaAudio) {
+                            // perform action when allow permission success
+                                askNotificationPermission();
+                        }else {
+                           requestPermission();
+                        }
+                    } else  if ( SDK_INT == Build.VERSION_CODES.S ) {
+                        boolean Camera = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                        boolean AccessCoarseLocation = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                        boolean Bluetooth = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                        boolean BluetoothConnect = grantResults[3] == PackageManager.PERMISSION_GRANTED;
+                        boolean BluetoothScan = grantResults[4] == PackageManager.PERMISSION_GRANTED;
+                        boolean  ReadPhoneState = grantResults[5] == PackageManager.PERMISSION_GRANTED;
+
+                        if (Camera && ReadPhoneState && AccessCoarseLocation && Bluetooth &&  BluetoothConnect && BluetoothScan) {
+                            try {
+                                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                                intent.addCategory("android.intent.category.DEFAULT");
+                                intent.setData(Uri.parse(String.format("package:%s",getApplicationContext().getPackageName())));
+                                startActivityForResult(intent, 2296);
+                            } catch (Exception e) {
+                                Intent intent = new Intent();
+                                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                                startActivityForResult(intent, 2296);
+                            }
+                        } else {
+                            requestPermission();
+                        }
+                    }else  if (  SDK_INT == Build.VERSION_CODES.R) {
+                        boolean Camera = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                        boolean AccessCoarseLocation = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                        boolean Bluetooth = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                        boolean  ReadPhoneState = grantResults[3] == PackageManager.PERMISSION_GRANTED;
+
+                        if (Camera && ReadPhoneState && AccessCoarseLocation && Bluetooth) {
+                            try {
+                                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                                intent.addCategory("android.intent.category.DEFAULT");
+                                intent.setData(Uri.parse(String.format("package:%s",getApplicationContext().getPackageName())));
+                                startActivityForResult(intent, 2296);
+                            } catch (Exception e) {
+                                Intent intent = new Intent();
+                                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                                startActivityForResult(intent, 2296);
+                            }
+                        } else {
+                            requestPermission();
+                        }
+                    }else  if ( SDK_INT <= Build.VERSION_CODES.Q) {
+                        boolean  FineLocationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                        boolean CoarseLocationAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                        boolean Bluetooth = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                        boolean  ReadPhoneState = grantResults[3] == PackageManager.PERMISSION_GRANTED;
+                        boolean  Camera = grantResults[4] == PackageManager.PERMISSION_GRANTED;
+                        boolean ReadPhoneStorage = grantResults[5] == PackageManager.PERMISSION_GRANTED;
+                        boolean WritePhoneStorage = grantResults[6] == PackageManager.PERMISSION_GRANTED;
+
+
+                        if(FineLocationAccepted && CoarseLocationAccepted && Bluetooth && ReadPhoneState && Camera && ReadPhoneStorage && WritePhoneStorage ){
+                            serverLogin();
+                        }else {
+                            requestPermission();
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
 
     @Override
     protected void onDestroy() {

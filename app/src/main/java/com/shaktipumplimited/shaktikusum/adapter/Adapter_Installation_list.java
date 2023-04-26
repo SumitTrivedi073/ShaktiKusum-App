@@ -17,6 +17,8 @@ import androidx.cardview.widget.CardView;
 import androidx.core.os.BuildCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.shaktipumplimited.shaktikusum.R;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -116,7 +118,7 @@ import com.shaktipumplimited.shaktikusum.webservice.WebURL;
                             extras.putString("state_txt", responseList.get(position).getStatetxt());
                             extras.putString("city_txt", responseList.get(position).getCitytxt());
                             extras.putString("address", responseList.get(position).getAddress());
-                            extras.putString("mobile", responseList.get(position).getContact_no());
+                            extras.putString("mobile", responseList.get(position).getCUS_CONTACT_NO());
                             extras.putString("controller", responseList.get(position).getController());
                             extras.putString("motor", responseList.get(position).getMotor());
                             extras.putString("pump", responseList.get(position).getPump());

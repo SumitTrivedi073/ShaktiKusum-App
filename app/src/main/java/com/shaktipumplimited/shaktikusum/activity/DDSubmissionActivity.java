@@ -1,6 +1,9 @@
 package com.shaktipumplimited.shaktikusum.activity;
 
 import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.READ_MEDIA_AUDIO;
+import static android.Manifest.permission.READ_MEDIA_IMAGES;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Environment.getExternalStorageDirectory;
@@ -26,7 +29,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
 import android.provider.OpenableColumns;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -43,6 +45,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -127,19 +130,6 @@ public class DDSubmissionActivity extends AppCompatActivity {
     private String mHomePath, PathHolder, Filename;
 
 
-/*    public static void deleteFiles(String path) {
-
-        File file = new File(path);
-
-        if (file.exists()) {
-            String deleteCmd = "rm -r " + path;
-            Runtime runtime = Runtime.getRuntime();
-            try {
-                runtime.exec(deleteCmd);
-            } catch (IOException e) {
-            }
-        }
-    }*/
 
     private boolean deleteDirectory(File path) {
         if (path.exists()) {
@@ -159,16 +149,6 @@ public class DDSubmissionActivity extends AppCompatActivity {
     }
 
 
-    public static boolean hasPermissions(Context context, String... permissions) {
-        if (context != null && permissions != null) {
-            for (String permission : permissions) {
-                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -321,11 +301,13 @@ public class DDSubmissionActivity extends AppCompatActivity {
         }
     }
 
+
+
     private void requestPermission() {
-        if (SDK_INT >= Build.VERSION_CODES.R) {
+        if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.CAMERA,
-                            Manifest.permission.MANAGE_EXTERNAL_STORAGE},
+                            Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_AUDIO},
                     REQUEST_CODE_PERMISSION);
         } else {
             ActivityCompat.requestPermissions(this,
@@ -336,16 +318,22 @@ public class DDSubmissionActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private boolean checkPermission() {
         int cameraPermission =
-                ContextCompat.checkSelfPermission(DDSubmissionActivity.this, CAMERA);
+                ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA);
+        int ReadMediaImages =
+                ContextCompat.checkSelfPermission(getApplicationContext(), READ_MEDIA_IMAGES);
+        int ReadAudioImages =
+                ContextCompat.checkSelfPermission(getApplicationContext(), READ_MEDIA_AUDIO);
         int writeExternalStorage =
-                ContextCompat.checkSelfPermission(DDSubmissionActivity.this, WRITE_EXTERNAL_STORAGE);
+                ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
         int ReadExternalStorage =
-                ContextCompat.checkSelfPermission(DDSubmissionActivity.this, WRITE_EXTERNAL_STORAGE);
+                ContextCompat.checkSelfPermission(getApplicationContext(), READ_EXTERNAL_STORAGE);
 
-        if (SDK_INT >= Build.VERSION_CODES.R) {
-            return cameraPermission == PackageManager.PERMISSION_GRANTED;
+        if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return cameraPermission == PackageManager.PERMISSION_GRANTED&& ReadMediaImages == PackageManager.PERMISSION_GRANTED
+                    && ReadAudioImages == PackageManager.PERMISSION_GRANTED;
         } else {
             return cameraPermission == PackageManager.PERMISSION_GRANTED && writeExternalStorage == PackageManager.PERMISSION_GRANTED
                     && ReadExternalStorage == PackageManager.PERMISSION_GRANTED;
@@ -363,20 +351,14 @@ public class DDSubmissionActivity extends AppCompatActivity {
             case REQUEST_CODE_PERMISSION:
 
                 if (grantResults.length > 0) {
-                    if (SDK_INT >= Build.VERSION_CODES.R) {
+                    if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         boolean ACCESSCAMERA = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                        if (ACCESSCAMERA) {
-                            try {
-                                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                                intent.addCategory("android.intent.category.DEFAULT");
-                                intent.setData(Uri.parse(String.format("package:%s", DDSubmissionActivity.this.getPackageName())));
-                                startActivityForResult(intent, 2296);
-                            } catch (Exception e) {
-                                Intent intent = new Intent();
-                                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                                startActivityForResult(intent, 2296);
-                            }
+                        boolean ReadMediaImages = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                        boolean ReadAudioImages = grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
+                        if (ACCESSCAMERA && ReadMediaImages && ReadAudioImages) {
+
+                            selectImage("0");
                         } else {
                             Toast.makeText(DDSubmissionActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
                         }
@@ -399,6 +381,8 @@ public class DDSubmissionActivity extends AppCompatActivity {
                 break;
         }
     }
+
+
 
 
     private void selectImage(String value) {
@@ -534,16 +518,6 @@ public class DDSubmissionActivity extends AppCompatActivity {
                 break;
 
 
-            case 2296:
-                if (SDK_INT >= Build.VERSION_CODES.R) {
-                    if (Environment.isExternalStorageManager()) {
-                        // perform action when allow permission success
-                        selectImage("0");
-                    } else {
-                        Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                break;
             case 1:
                 if (resultCode == RESULT_OK) {
                     // Get the Uri of the selected file
@@ -653,189 +627,6 @@ public class DDSubmissionActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-  /*  @SuppressLint("Range")
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // if the result is capturing Image
-
-        if (requestCode == CAMERA_CAPTURE_IMAGE_REQUEST_CODE) {
-
-
-                try {
-
-                    Bitmap bitmap = CameraUtils.optimizeBitmap(BITMAP_SAMPLE_SIZE, imageStoragePath);
-
-                    int count = bitmap.getByteCount();
-
-                    Log.e("Count", "&&&&&" + count);
-
-                    Log.e("IMAGEURI", "&&&&" + imageStoragePath);
-
-                    ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
-
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayBitmapStream);
-
-                    byte[] byteArray = byteArrayBitmapStream.toByteArray();
-
-                    long size = byteArray.length;
-
-                    Log.e("SIZE1234", "&&&&" + size);
-
-                    Log.e("SIZE1234", "&&&&" + Arrays.toString(byteArray));
-
-
-                    if (photo1_flag == true) {
-                        File file = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME + "/SKAPP/DDSUB/", "/IMG_PHOTO_1.jpg");
-                        if (file.exists()) {
-                            photo1_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                            CustomUtility.setSharedPreference(mContext, "PHOTO_1", photo1_text);
-                            Log.e("SIZE1", "&&&&" + CustomUtility.getSharedPreferences(mContext, "PHOTO_1"));
-                            setIcon(DatabaseHelper.KEY_PHOTO1);
-                        }
-
-                    }
-
-
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
-
-             *//*   File file = newworkorder File(imageStoragePath);
-                if (file.exists()) {
-                    file.delete();
-                }*//*
-
-        }
-        else {
-            if (requestCode == GALLERY_IMAGE_REQUEST_CODE) {
-
-                if (resultCode == RESULT_OK) {
-
-                    if (data != null) {
-
-
-                        Uri selectedImageUri = data.getData();
-                        String selectedImagePath = getImagePath(selectedImageUri);
-
-                        BitmapFactory.Options options = new BitmapFactory.Options();
-                        options.inJustDecodeBounds = true;
-                        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-                        options.inSampleSize = 6;
-                        options.inJustDecodeBounds = false;
-
-
-
-                        try {
-                            Log.e("IMAGEURI", "&&&&" + selectedImageUri);
-                            if (selectedImageUri != null) {
-
-                                Bitmap bitmap  = BitmapFactory.decodeFile(selectedImagePath, options);
-
-                                //Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImageUri));
-
-
-                                int count = bitmap.getByteCount();
-
-                                Log.e("Count", "&&&&&" + count);
-                                ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
-
-                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayBitmapStream);
-
-                                byte[] byteArray = byteArrayBitmapStream.toByteArray();
-
-                                long size = byteArray.length;
-
-
-                                Log.e("SIZE1234", "&&&&" + size);
-
-                                Log.e("SIZE1234", "&&&&" + Arrays.toString(byteArray));
-
-                                if (photo1_flag == true) {
-                                    String destFile = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME + "/SKAPP/DDSUB/" + "/IMG_PHOTO_1.jpg";
-                                    copyFile(selectedImagePath, destFile);
-                                    File file = new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+GALLERY_DIRECTORY_NAME + "/SKAPP/DDSUB/", "/IMG_PHOTO_1.jpg");
-                                    if (file.exists()) {
-                                        photo1_text = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                                        CustomUtility.setSharedPreference(mContext, "PHOTO_1", photo1_text);
-                                        Log.e("SIZE1", "&&&&" + photo1_text);
-                                        setIcon(DatabaseHelper.KEY_PHOTO1);
-                                    }
-
-                                }
-
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-            }
-        }
-
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                // Get the Uri of the selected file
-                Uri uri = data.getData();
-                String uriString = null;
-                if (uri != null) {
-                    uriString = uri.toString();
-                }
-                File myFile = new File(uriString);
-                //PathHolder = myFile.getPath();
-                Filename = null;
-
-
-                if (uriString.startsWith("content://")) {
-                    Cursor cursor = null;
-                    try {
-                        cursor = getContentResolver().query(uri, null, null, null, null);
-                        if (cursor != null && cursor.moveToFirst()) {
-
-                            Filename = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-                            PathHolder = getExternalStorageDirectory() + "/Download/" + Filename;
-                            Log.e("&&&&", "DDDDD" + Filename);
-
-                            if (PathHolder != null && !PathHolder.equals("")) {
-
-                            } else {
-
-                            }
-                        }
-                    } finally {
-                        if (cursor != null) {
-                            cursor.close();
-                        }
-                    }
-                } else if (uriString.startsWith("file://")) {
-                    Filename = myFile.getName();
-                    PathHolder = getExternalStorageDirectory() + "/Download/" + Filename;
-                    Log.e("&&&&", "DDDDD" + Filename);
-                    if (PathHolder != null && !PathHolder.equals("")) {
-
-                    } else {
-
-                    }
-                }
-            }
-        }
-
-        if (resultCode == Activity.RESULT_OK) {
-            super.onActivityResult(requestCode, resultCode, data);
-
-
-            if (requestCode == 301) {
-
-                String year = data.getStringExtra("year");
-                String month = data.getStringExtra("month");
-                String date = data.getStringExtra("date");
-                finaldate = year + "-" + month + "-" + date;
-                finaldate = CustomUtility.formateDate1(finaldate);
-            }
-        }
-    }
-
-*/
 
     public void Save() {
 

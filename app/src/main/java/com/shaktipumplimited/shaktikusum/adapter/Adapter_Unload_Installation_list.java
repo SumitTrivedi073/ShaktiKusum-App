@@ -1,5 +1,6 @@
 package com.shaktipumplimited.shaktikusum.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,9 +16,12 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.shaktipumplimited.shaktikusum.R;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 
 import com.shaktipumplimited.shaktikusum.bean.InstallationBean;
 import com.shaktipumplimited.shaktikusum.bean.InstallationListBean;
@@ -32,7 +36,6 @@ import com.shaktipumplimited.shaktikusum.webservice.WebURL;
 public class Adapter_Unload_Installation_list extends RecyclerView.Adapter<Adapter_Unload_Installation_list.HomeCategoryViewHolder> {
     View.OnClickListener onclick_listener;
     DatabaseHelper db;
-    InstallationBean installationBean;
     private Context context;
     private ArrayList<InstallationListBean> responseList;
     private List<InstallationListBean> SearchesList = null;
@@ -43,7 +46,7 @@ public class Adapter_Unload_Installation_list extends RecyclerView.Adapter<Adapt
         this.context = context;
         this.responseList = responseList;
         db = new DatabaseHelper(context);
-        this.SearchesList = new ArrayList<InstallationListBean>();
+        this.SearchesList = new ArrayList<>();
         this.SearchesList.addAll(responseList);
 
     }
@@ -129,48 +132,45 @@ public class Adapter_Unload_Installation_list extends RecyclerView.Adapter<Adapt
 */
 
             holder.status.setImageResource(R.drawable.red_icn);
-            holder.cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            holder.cardView.setOnClickListener(view -> {
 
-                    WebURL.mSettingCheckValue = "0";
+                WebURL.mSettingCheckValue = "0";
 
-                    if (responseList.get(position).getSync().equalsIgnoreCase("X")) {
-                        Toast.makeText(context, "Installation Already Completed...", Toast.LENGTH_SHORT).show();
-                    } else {
+                if (responseList.get(position).getSync().equalsIgnoreCase("X")) {
+                    Toast.makeText(context, "Installation Already Completed...", Toast.LENGTH_SHORT).show();
+                } else {
 
-                        Intent in = new Intent(context, InstallationInitial.class);
+                    @SuppressLint("UnsafeOptInUsageError") Intent in = new Intent(context, InstallationInitial.class);
 
-                        Bundle extras = new Bundle();
+                    Bundle extras = new Bundle();
 
-                        extras.putString("bill_no", responseList.get(position).getBillno());
-                        extras.putString("set_matno", responseList.get(position).getSet_matno());
-                        extras.putString("simha2", responseList.get(position).getSimha2());
-                        extras.putString("kunnr", responseList.get(position).getKunnr());
-                        extras.putString("gst_bill_no", responseList.get(position).getGstbillno());
-                        extras.putString("tehvillage", responseList.get(position).getTehsil());
-                        extras.putString("bill_date", responseList.get(position).getBilldate());
-                        extras.putString("disp_date", responseList.get(position).getDispdate());
-                        extras.putString("name", responseList.get(position).getCustomer_name());
-                        extras.putString("state", responseList.get(position).getState());
-                        extras.putString("city", responseList.get(position).getCity());
-                        extras.putString("state_txt", responseList.get(position).getStatetxt());
-                        extras.putString("city_txt", responseList.get(position).getCitytxt());
-                        extras.putString("address", responseList.get(position).getAddress());
-                        extras.putString("mobile", responseList.get(position).getContact_no());
-                        extras.putString("controller", responseList.get(position).getController());
-                        extras.putString("motor", responseList.get(position).getMotor());
-                        extras.putString("pump", responseList.get(position).getPump());
-                        extras.putString("simno", responseList.get(position).getSimno());
-                        extras.putString("regisno", responseList.get(position).getRegisno());
-                        extras.putString("projectno", responseList.get(position).getProjectno());
-                        extras.putString("loginno", responseList.get(position).getLoginno());
-                        extras.putString("moduleqty", responseList.get(position).getModuleqty());
-                        in.putExtras(extras);
-                        context.startActivity(in);
-                    }
-
+                    extras.putString("bill_no", responseList.get(position).getBillno());
+                    extras.putString("set_matno", responseList.get(position).getSet_matno());
+                    extras.putString("simha2", responseList.get(position).getSimha2());
+                    extras.putString("kunnr", responseList.get(position).getKunnr());
+                    extras.putString("gst_bill_no", responseList.get(position).getGstbillno());
+                    extras.putString("tehvillage", responseList.get(position).getTehsil());
+                    extras.putString("bill_date", responseList.get(position).getBilldate());
+                    extras.putString("disp_date", responseList.get(position).getDispdate());
+                    extras.putString("name", responseList.get(position).getCustomer_name());
+                    extras.putString("state", responseList.get(position).getState());
+                    extras.putString("city", responseList.get(position).getCity());
+                    extras.putString("state_txt", responseList.get(position).getStatetxt());
+                    extras.putString("city_txt", responseList.get(position).getCitytxt());
+                    extras.putString("address", responseList.get(position).getAddress());
+                    extras.putString("mobile", responseList.get(position).getContact_no());
+                    extras.putString("controller", responseList.get(position).getController());
+                    extras.putString("motor", responseList.get(position).getMotor());
+                    extras.putString("pump", responseList.get(position).getPump());
+                    extras.putString("simno", responseList.get(position).getSimno());
+                    extras.putString("regisno", responseList.get(position).getRegisno());
+                    extras.putString("projectno", responseList.get(position).getProjectno());
+                    extras.putString("loginno", responseList.get(position).getLoginno());
+                    extras.putString("moduleqty", responseList.get(position).getModuleqty());
+                    in.putExtras(extras);
+                    context.startActivity(in);
                 }
+
             });
 
             InstallationBean param_invc = new InstallationBean();

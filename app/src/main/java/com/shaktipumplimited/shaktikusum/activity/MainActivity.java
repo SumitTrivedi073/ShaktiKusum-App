@@ -49,6 +49,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+
 import com.shaktipumplimited.shaktikusum.adapter.Adapter_item_list;
 
 import com.shaktipumplimited.shaktikusum.database.DatabaseHelper;
@@ -56,7 +57,6 @@ import com.shaktipumplimited.shaktikusum.debugapp.ActivitySurveyList;
 import com.shaktipumplimited.shaktikusum.utility.CustomUtility;
 import com.shaktipumplimited.shaktikusum.webservice.CustomHttpClient;
 import com.shaktipumplimited.shaktikusum.webservice.WebURL;
-
 @SuppressWarnings("resource")
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+        assert pkgInfo != null;
         versionName = String.valueOf(pkgInfo.versionName);
 
         LoginBean loginBean = new LoginBean();
@@ -144,9 +145,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         flvViewFlipperID.startFlipping();
 
         if (CustomUtility.isInternetOn()) {
-            dataHelper.deleteDashboardData();
+
             new Dashboard().execute();
         } else {
+            getListData();
             Toast.makeText(context, "Please Connect to Internet", Toast.LENGTH_SHORT).show();
         }
 
@@ -433,14 +435,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     e.printStackTrace();
                 }
             }
-            if (progressBarStatus >= 100) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                progressBar.dismiss();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            progressBar.dismiss();
         }).start();
     }
 

@@ -14,7 +14,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -30,6 +29,7 @@ import org.json.JSONObject;
 import com.shaktipumplimited.shaktikusum.utility.CustomUtility;
 import com.shaktipumplimited.shaktikusum.utility.dialog4;
 import com.shaktipumplimited.shaktikusum.webservice.WebURL;
+
 
 
 public class DeviceStatusActivity extends AppCompatActivity  {
@@ -151,9 +151,12 @@ public class DeviceStatusActivity extends AppCompatActivity  {
                                 }
 
                                 if(deviceDetailModel.getResponse().getIsLogin()) {
+                                    CustomUtility.setSharedPreference(getApplicationContext(),"DeviceStatus",getResources().getString(R.string.online));
+
                                     deviceonline.setText(getResources().getString(R.string.online));
                                     deviceonline.setTextColor(Color.parseColor("#00FF00"));
                                 } else {
+                                    CustomUtility.setSharedPreference(getApplicationContext(),"DeviceStatus",getResources().getString(R.string.offline));
                                     deviceonline.setText(getResources().getString(R.string.offline));
                                     deviceonline.setTextColor(Color.parseColor("#FF0000"));
                                 }

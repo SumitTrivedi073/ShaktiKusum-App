@@ -19,6 +19,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Base64;
@@ -28,6 +29,9 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.gson.Gson;
+import com.shaktipumplimited.shaktikusum.R;
+
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -35,6 +39,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import activity.BaseActivity;
+import activity.CustomProgressDialog;
+import bean.ImageModel;
 import com.shaktipumplimited.shaktikusum.activity.BaseActivity;
 import com.shaktipumplimited.shaktikusum.activity.CustomProgressDialog;
 import com.shaktipumplimited.shaktikusum.bean.ImageModel;
@@ -50,10 +57,12 @@ public class CustomUtility {
     public static final String PERMISSIONS_FILE_PICKER = Manifest.permission.WRITE_EXTERNAL_STORAGE;
     public static Context appContext;
     static boolean connected;
+    static long  mLastClickTime;
     private static String PREFERENCE = "DealLizard";
     String current_date, current_time;
     Calendar calander = null;
     SimpleDateFormat simpleDateFormat = null;
+    @SuppressLint("StaticFieldLeak")
     public static CustomProgressDialog progressDialog;
 
 
