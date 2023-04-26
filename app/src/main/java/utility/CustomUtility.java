@@ -315,13 +315,7 @@ public class CustomUtility {
         return current_time.trim();
     }
     public static void showProgressDialogue(Context context) {
-        if(progressDialog!=null&& progressDialog.isShowing()){
-            progressDialog.dismiss();
-            progressDialog.cancel();
-            progressDialog = null;
-        }
-
-          progressDialog = new CustomProgressDialog(context);
+        progressDialog = new CustomProgressDialog(context);
           progressDialog.setCancelable(false);
           progressDialog.show();
       }

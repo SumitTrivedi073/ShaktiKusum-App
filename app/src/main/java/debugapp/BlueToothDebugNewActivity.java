@@ -49,7 +49,9 @@ import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -215,7 +217,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
     private boolean flag;
     private int mLengthCount;
     private String headerLenghtDAy = "";
-    private final String headerLenghtMonth = "";
+    private  String headerLenghtMonth = "";
     private final String headerLenghtDayDongle = "";
     private final String headerLenghtMonthDongle = "";
     private final String headerLenghtFalt = "";
@@ -311,7 +313,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         changeButtonVisibilityRLV(true, 0.5f, rlvBT_S2_ID);
         changeButtonVisibilityRLV(false, 0.5f, rlvBT_7_ID_save);
         setClickEventListner();
-        getGpsLocation();
+       getGpsLocation();
 
     }
 
@@ -522,21 +524,18 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                 mBoolflag = false;
                 mPostionFinal = 0;
                 mCheckCLICKDayORMonth = 0;
-                if (mMonthHeaderList.size() > 0)
-                    mMonthHeaderList.clear();
+
 
                 RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
                 checkFirstTimeOlineStstus = 1;
+                if (mMonthHeaderList.size() > 0)
+                    mMonthHeaderList.clear();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
-
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                //textView.setText("Your new text");
-                                // new BluetoothCommunicationGetDayParameter().execute(":DLENGTH#", ":DLENGTH#", "OKAY");
                                 new BluetoothCommunicationGetMonthParameter().execute(":MLENGTH#", ":MDATA#", "START");
 
                             }
@@ -760,8 +759,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         tv.setBackgroundColor(getResources().getColor(R.color.black));
         tv.setGravity(Gravity.START);
 
-        // tv.setWidth(200);
-        // tv.setOnClickListener(this);
+
         return tv;
     }
 
@@ -881,14 +879,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         GPSTracker gps = new GPSTracker(mContext);
 
         if (gps.canGetLocation()) {
-            //Long llat =gps.getLatitude();
-            //  inst_latitude_double =String.format("%9s", String.valueOf(gps.getLatitude()));
-            //  inst_longitude_double = String.format("%9s",String.valueOf(gps.getLongitude()));
-
-          /*  inst_latitude_double =String.format("%9s", gps.getLatitude());
-            inst_longitude_double = String.format("%9s",gps.getLongitude());
-*/
-
             String lat111 = "" + gps.getLatitude();
             String long111 = "" + gps.getLongitude();
 
@@ -902,11 +892,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
             System.out.println("lat111==>>" + lat111 + "   , " + long111);
 
-
-            //   inst_latitude_double =String.format("%9s", lat111);
-            // inst_longitude_double = String.format("%9s",long111);
-
-
             inst_latitude_double = "" + lat111;
             inst_longitude_double = "" + long111;
 
@@ -915,26 +900,10 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
             latLenght = inst_latitude_double.length();
             longLenght = inst_longitude_double.length();
 
-            //  String padded = String.format("%8s", toPad)
-            // if (inst_latitude_double == 0.0)
             if (inst_latitude_double.equalsIgnoreCase("0.0")) {
-                //CustomUtility.ShowToast("Lat Long not captured, Please try again.", context);
-
                 Toast.makeText(mContext, "Lat Long not captured, Please try again", Toast.LENGTH_SHORT).show();
-                /*if (UtilMethod.isOnline(mContext)) {
-                    // checkRMSAPIStatus();
-                    new SyncRMSCHECKDATAAPI().execute();
-                } else {
-                    Toast.makeText(mContext, "Please check internet connections.", Toast.LENGTH_SHORT).show();
-                }
-*/
+
             } else {
-
-                // geoIndigation.setImageDrawable(getResources().getDrawable(R.drawable.right_mark_icn_green));
-                //  CustomUtility.ShowToast("Latitude:-" + inst_latitude_double + "     " + "Longitude:-" + inst_longitude_double, context);
-                //  Toast.makeText(mContext, "Latitude:-" + inst_latitude_double + "     " + "Longitude:-" + inst_longitude_double, Toast.LENGTH_SHORT).show();
-                //  new BluetoothCommunicationSET_LAT().execute(":LAT :0"+latLenght+","+inst_latitude_double+"#", ":LAT :"+latLenght+","+inst_latitude_double+"#", "Start");
-
                 baseRequest.showLoader();
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -945,8 +914,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
                     }
                 }, 10000);//800
-
-                //   Toast.makeText(mContext, "Latitude:-" + inst_latitude_double + "     " + "Longitude:-" + inst_longitude_double, Toast.LENGTH_SHORT).show();
 
             }
         } else {
@@ -1153,9 +1120,11 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         //  wordsByKey.put("userid", inputName.getText().toString().trim());
         wordsByKey.put("device", DEVICE_NO);// DEVICE_NO = sssM[0];
 
-        System.out.println("DEVICE_NO==>>" + DEVICE_NO);
-        if (!DEVICE_NO.equals(ControllerSerialNumber)) {
+
+        if (DEVICE_NO!=null&& !DEVICE_NO.isEmpty() &&!DEVICE_NO.equals(ControllerSerialNumber+"-0")) {
             ShowAlertResponse();
+        }else {
+            CustomUtility.ShowToast("Not able to read Device Serial Number", getApplicationContext());
         }
         baseRequest.callAPIGETDebugApp(1, wordsByKey, NewSolarVFD.SIM_STATUS_VK_PAGE);/////
 
@@ -1173,8 +1142,9 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        alertDialog.show();
-
+        if(!isFinishing()) {
+            alertDialog.show();
+        }
         CircleImageView user_img = layout.findViewById(R.id.user_img);
         TextView OK_txt = layout.findViewById(R.id.OK_txt);
         TextView title_txt = layout.findViewById(R.id.title_txt);
@@ -1711,7 +1681,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                     if (sssM.length == 8) {
                                         if (i == 0) {
                                             DEVICE_NO = sssM[0];
-                                            Log.e("DEVICE_NO", DEVICE_NO);
                                             AllCommomSTRContainer = AllCommomSTRContainer + " :\n Device No :" + sssM[0];
                                             lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDevice No : " + sssM[0]));
                                         } else if (i == 1) {
@@ -1831,7 +1800,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                     } else {
                                         if (i == 0) {
                                             DEVICE_NO = sssM[0];
-                                            Log.e("DEVICE_NO2", DEVICE_NO);
                                             AllCommomSTRContainer = AllCommomSTRContainer + " :\n Device No :" + sssM[0];
                                             //AllCommomSTRContainer = AllCommomSTRContainer + " :\n " + AllTextSTR +"\n";
                                             lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDevice No : " + sssM[0]));
@@ -1938,180 +1906,8 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                             }
                                             MOBILE = "Not Available";
                                         }
-                                   /*     else  if(i == 7)
-                                        {
-                                            String [] ssSubIn1 = sssM[7].split("-");
 
-                                            if(!ssSubIn1[1].equalsIgnoreCase(""))
-                                            {
-                                                MOBILE = ssSubIn1[1];
-                                                AllCommomSTRContainer = AllCommomSTRContainer + " :\n Mobile Number:"+ssSubIn1[1];
-                                                lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nMobile Number:"+ssSubIn1[1]));
-                                            }
-                                            else
-                                            {
-                                                MOBILE = "Not Available";
-                                                AllCommomSTRContainer = AllCommomSTRContainer + " :\n Mobile Number: Not Available";
-                                                lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nMobile Number: Not Available"));
-                                            }
-                                        } */
                                     }
-
-
-
-                              /*      if(i == 0)
-                                    {
-                                        DEVICE_NO = sssM[0];
-                                        AllCommomSTRContainer = AllCommomSTRContainer + " :\n Device No :" + sssM[0] ;
-                                        //AllCommomSTRContainer = AllCommomSTRContainer + " :\n " + AllTextSTR +"\n";
-                                        lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDevice No : " + sssM[0]));
-                                    }
-                                    else  if(i == 1)
-                                    {
-                                       String [] ssSubIn1 = sssM[1].split("-");
-
-                                      // mCheckSignelValue =Integer.parseInt(ssSubIn1[1]);
-                                        mCheckSignelValue =1;
-                                        SIGNL_STREN = ssSubIn1[1];
-                                        AllCommomSTRContainer = AllCommomSTRContainer + " :\n Signal Strength :" + ssSubIn1[1];
-                                        lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nSignal Strength : " + ssSubIn1[1]));
-
-                                 *//*      if(Integer.parseInt(ssSubIn1[1]) > 7 && Integer.parseInt(ssSubIn1[1]) < 32)
-                                       {
-                                           mCheckSignelValue =1;
-                                           SIGNL_STREN = ssSubIn1[1];
-                                           AllCommomSTRContainer = AllCommomSTRContainer + " :\n Signal Strength :" + ssSubIn1[1];
-                                           lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nSignal Strength : " + ssSubIn1[1]));
-                                       }
-                                       else
-                                       {
-                                           mCheckSignelValue = 0;
-                                           SIGNL_STREN = "0";
-                                           AllCommomSTRContainer = AllCommomSTRContainer + " :\n Signal Strength : 0";
-                                           lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nSignal Strength : 0"));
-                                       }*//*
-                                    }
-                                    else  if(i == 2)
-                                    {
-                                        String [] ssSubIn1 = sssM[2].split("-");
-
-                                        if(Integer.parseInt(ssSubIn1[1]) == 0)
-                                        {
-                                            mCheckNetworkValue =0;
-                                            NET_REG = "Not registered";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Network Registration:  Not registered";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nNetwork Registration:  Not registered"));
-                                        }
-                                        else
-                                        {
-                                            mCheckNetworkValue =1;
-                                            NET_REG = "Registered";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Network Registration:   Registered";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nNetwork Registration:  Registered"));
-                                        }
-                                    }
-                                    else  if(i == 3)
-                                    {
-                                        String [] ssSubIn1 = sssM[3].split("-");
-
-                                        if(Integer.parseInt(ssSubIn1[1]) == 0)
-                                        {
-                                            mCheckServerConnectivityValue = 0;
-                                            SER_CONNECT = "Not connected";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Server connectivity:  Not connected";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nServer connectivity:  Not connected"));
-                                        }
-                                        else
-                                        {
-                                            mCheckServerConnectivityValue = 1;
-                                            SER_CONNECT = "Connected";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Server connectivity:  Connected";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nServer connectivity: Connected."));
-                                        }
-                                    }
-                                    else  if(i == 4)
-                                    {
-                                        String [] ssSubIn1 = sssM[4].split("-");
-
-                                        if(Integer.parseInt(ssSubIn1[1]) == 0)
-                                        {
-                                            mCheckCableOKValue = 0;
-                                            CAB_CONNECT = "Not working";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n FRC cable connectivity:  Not working";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nFRC cable connectivity:  Working"));
-                                        }
-                                        else
-                                        {
-                                            mCheckCableOKValue  = 1;
-                                            CAB_CONNECT = "Ok";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n FRC cable connectivity: Ok";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nFRC cable connectivity: Ok"));
-                                        }
-                                    }
-                                    else  if(i == 5)
-                                    {
-                                        String [] ssSubIn2 = sssM[5].split("-");
-
-                                        if(!ssSubIn2[1].equalsIgnoreCase("")) {
-
-                                            LATITUDE = ssSubIn2[1];
-
-                                            if(LATITUDE.equalsIgnoreCase("1.00000000"))
-                                            {
-                                                --i;
-                                                --pp;
-                                            }
-                                            else
-                                            {
-                                                AllCommomSTRContainer = AllCommomSTRContainer + " :\n Latitude: " + ssSubIn2[1];
-                                                lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nLatitude: " + ssSubIn2[1]));
-                                            }
-
-
-                                           // AllCommomSTRContainer = AllCommomSTRContainer + " :\n Latitude: " + ssSubIn2[1];
-                                          //  lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nLatitude: " + ssSubIn2[1]));
-                                        }
-                                        else {
-
-                                            LATITUDE = "Not Available";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Latitude: Not Available";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nLatitude: Not Available"));
-                                        }
-                                    }
-                                    else  if(i == 6)
-                                    {
-                                        String [] ssSubIn3 = sssM[6].split("-");
-
-                                        if(!ssSubIn3[1].equalsIgnoreCase("")) {
-
-                                            LANGITUDE = ssSubIn3[1];
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Longitude: " + ssSubIn3[1];
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nLongitude: " + ssSubIn3[1]));
-                                        }
-                                        else {
-
-                                            LANGITUDE = "Not Available";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Longitude: Not Available ";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nLongitude: Not Available"));
-                                        }
-                                    }
-                                    else  if(i == 7)
-                                    {
-                                        String [] ssSubIn1 = sssM[7].split("-");
-
-                                        if(!ssSubIn1[1].equalsIgnoreCase(""))
-                                        {
-                                            MOBILE = ssSubIn1[1];
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Mobile Number:"+ssSubIn1[1];
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nMobile Number:"+ssSubIn1[1]));
-                                        }
-                                        else
-                                        {
-                                            MOBILE = "Not Available";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Mobile Number: Not Available";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nMobile Number: Not Available"));
-                                        }
-                                    }*/
 
                                 }
 
@@ -2119,25 +1915,18 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                 exception.printStackTrace();
                             }
 
-                            //  AllCommomSTRContainer = AllCommomSTRContainer + " : " + AllTextSTR +"\n";
-                            //AllCommomSTRContainer = AllCommomSTRContainer + "\n" + AllTextSTR;
-                            //  lvlMainTextContainerID.addView(getTextViewTTpp(pp, "" + AllTextSTR));
-                            //baseRequest.hideLoader();
+
                             AllTextSTR = "";
-                            // addDataMonth(mPostionFinal + 1, mvDay + "", mvMonth + "", mvYear + "", mvHour, mvMinute, mvNo_of_Start, fvFrequency, fvRMSVoltage, fvOutputCurrent, mvRPM, fvLPM, fvPVVoltage, fvPVCurrent, mvFault, fvInvTemp);
-                        }
+                         }
                     });
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 baseRequest.hideLoader();
-                // btSocket = null;
-                //   Toast.makeText(mActivity, "BT Connection lost..", Toast.LENGTH_SHORT).show();
-                // myBluetooth.disable();
+
                 return false;
             }
 
-            //baseRequest.hideLoader();
             return false;
         }
 
@@ -2181,18 +1970,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                         myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
                         //   BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(mBtMacAddressHead);//connects to the device's address and checks if it's available
                         BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(Constant.BT_DEVICE_MAC_ADDRESS);//connects to the device's address and checks if it's available
-                        if (ActivityCompat.checkSelfPermission(BlueToothDebugNewActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
-                            Boolean TODO = null;
-
-                            return TODO;
-                        }
                         btSocket = dispositivo.createRfcommSocketToServiceRecord(mMyUDID);//create a RFCOMM (SPP) connection
                         myBluetooth.cancelDiscovery();
                     }
@@ -2200,18 +1977,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                     myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
                     //   BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(mBtMacAddressHead);//connects to the device's address and checks if it's available
                     BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(Constant.BT_DEVICE_MAC_ADDRESS);//connects to the device's address and checks if it's available
-                    if (ActivityCompat.checkSelfPermission(BlueToothDebugNewActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        Boolean TODO = null;
 
-                        return TODO;
-                    }
                     btSocket = dispositivo.createRfcommSocketToServiceRecord(mMyUDID);//create a RFCOMM (SPP) connection
                     myBluetooth.cancelDiscovery();
                 }
@@ -2430,8 +2196,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                     if (i == 0) {
 
                                         DEVICE_NO = sssM[0];
-                                        Log.e("DEVICE_NO3", DEVICE_NO);
-                                        AllCommomSTRContainer = AllCommomSTRContainer + " :\n Device No :" + sssM[0];
+                                       AllCommomSTRContainer = AllCommomSTRContainer + " :\n Device No :" + sssM[0];
                                         lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDevice No : " + sssM[0]));
                                     } else if (i == 1) {
                                         String[] ssSubIn1 = sssM[1].split("-");
@@ -2988,7 +2753,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                     if (sssM.length > 10) {
                                         if (i == 0) {
                                             DEVICE_NO = sssM[0];
-                                            Log.e("DEVICE_NO4", DEVICE_NO);
                                             AllCommomSTRContainer = AllCommomSTRContainer + " :\n Device No :" + sssM[0];
                                             lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDevice No : " + sssM[0]));
                                         } else if (i == 1) {
@@ -3145,8 +2909,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                         if (i == 0) {
 
                                             DEVICE_NO = sssM[0];
-                                            Log.e("DEVICE_NO5", DEVICE_NO);
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Device No :" + sssM[0];
+                                             AllCommomSTRContainer = AllCommomSTRContainer + " :\n Device No :" + sssM[0];
                                             lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDevice No : " + sssM[0]));
                                         } else if (i == 1) {
                                             String[] ssSubIn1 = sssM[1].split("-");
@@ -3506,17 +3269,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                         myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
                         //   BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(mBtMacAddressHead);//connects to the device's address and checks if it's available
                         BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(Constant.BT_DEVICE_MAC_ADDRESS);//connects to the device's address and checks if it's available
-                        if (ActivityCompat.checkSelfPermission(BlueToothDebugNewActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
-                            Boolean TODO = null;
-                            return TODO;
-                        }
                         btSocket = dispositivo.createRfcommSocketToServiceRecord(mMyUDID);//create a RFCOMM (SPP) connection
                         myBluetooth.cancelDiscovery();
                     }
@@ -3524,17 +3276,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                     myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
                     //   BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(mBtMacAddressHead);//connects to the device's address and checks if it's available
                     BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(Constant.BT_DEVICE_MAC_ADDRESS);//connects to the device's address and checks if it's available
-                    if (ActivityCompat.checkSelfPermission(BlueToothDebugNewActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        Boolean TODO = null;
-                        return TODO;
-                    }
                     btSocket = dispositivo.createRfcommSocketToServiceRecord(mMyUDID);//create a RFCOMM (SPP) connection
                     myBluetooth.cancelDiscovery();
                 }
@@ -3580,34 +3321,13 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                         e1.printStackTrace();
                     }
 
-                   /* runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ///  addHeadersMonths();
-                            // AllCommomSTRContainer = AllCommomSTRContainer + "\n" + AllTextSTR;
-                            AllCommomSTRContainer = AllCommomSTRContainer + " : " + AllTextSTR + "\n";
-                            lvlMainTextContainerID.addView(getTextViewTTppSingle(pp, "" + AllTextSTR));
-                            AllTextSTR = "";
-                            // addDataMonth(mPostionFinal + 1, mvDay + "", mvMonth + "", mvYear + "", mvHour, mvMinute, mvNo_of_Start, fvFrequency, fvRMSVoltage, fvOutputCurrent, mvRPM, fvLPM, fvPVVoltage, fvPVCurrent, mvFault, fvInvTemp);
-                        }
-                    });*/
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 baseRequest.hideLoader();
-               /* runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
 
-                        Toast.makeText(mContext, "2", Toast.LENGTH_SHORT).show();
-                    }
-                });*/
-                // btSocket = null;
-                //   Toast.makeText(mActivity, "BT Connection lost..", Toast.LENGTH_SHORT).show();
-                // myBluetooth.disable();
                 return false;
             }
-            //  baseRequest.hideLoader();
             return false;
         }
 
@@ -3623,10 +3343,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ///  addHeadersMonths();
-                    // AllCommomSTRContainer = AllCommomSTRContainer + "\n" + AllTextSTR;
-                    // Do this instead
-
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -3635,17 +3351,8 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
                         }
                     }, 2 * 400);
-
-
-                    //  new BluetoothCommunicationSET_Long().execute(":LONG :"+longLenght+","+inst_latitude_double+"#", ":LONG :"+longLenght+","+inst_latitude_double+"#", "Start");
-
-                    //   new BluetoothCommunicationSET_Long().execute(":LONG :06,"+inst_longitude_double+"#", ":LONG :06,"+inst_longitude_double+"#", "Start");
-                    // addDataMonth(mPostionFinal + 1, mvDay + "", mvMonth + "", mvYear + "", mvHour, mvMinute, mvNo_of_Start, fvFrequency, fvRMSVoltage, fvOutputCurrent, mvRPM, fvLPM, fvPVVoltage, fvPVCurrent, mvFault, fvInvTemp);
                 }
             });
-            // baseRequest.hideLoader();
-
-            // scrlViewID.fullScroll(View.FOCUS_DOWN);
         }
     }
 
@@ -3811,13 +3518,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-        /*    if(vkp == 0)
-            {
-                progressDialog = new ProgressDialog(mContext);
-                progressDialog = ProgressDialog.show(mContext, "", "Sending Data to server..please wait !");
-            }*/
-            // progressDialog = new ProgressDialog(mContext);
-            // progressDialog = ProgressDialog.show(mContext, "", "Sending Data to server..please wait !");
         }
 
         @Override
@@ -3939,12 +3639,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            // write display tracks logic here
-            onResume();
-
-            //   runOnUiThread(new Runnable(){
-            //   public void run() {
-            // UI code goes here
             try {
                 vkp++;
 
@@ -3952,7 +3646,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
                 if (vkp < mBTResonseDataList.size()) {
                     DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
-                    Log.e("DEVICE_NO6", DEVICE_NO);
 
                     SIGNL_STREN = mBTResonseDataList.get(vkp).getSIGNLSTREN();
                     String[] mStrArry = SIGNL_STREN.split("###");
@@ -3975,8 +3668,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                     RMS_STATUS = mBTResonseDataList.get(vkp).getRMS_STATUS();
                     RMS_CURRENT_ONLINE_STATUS = mBTResonseDataList.get(vkp).getRMS_CURRENT_ONLINE_STATUS();
                     RMS_LAST_ONLINE_DATE = mBTResonseDataList.get(vkp).getRMS_LAST_ONLINE_DATE();
-                    //  mInstallerName = mBTResonseDataList.get(vkp).getDEVICE_INS_NAME();
-                    //  mInstallerMOB = mBTResonseDataList.get(vkp).getDEVICE_INS_MOBILE();
                     mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
                     mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
                     RMS_DEBUG_EXTRN = "ONLINE FROM SERVER";
@@ -3995,8 +3686,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            //   }
-            // });
 
 
         }
@@ -4142,25 +3831,16 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
         @Override
         protected void onPreExecute() {
-
-           /* progressDialog = new ProgressDialog(mContext);
-            progressDialog = ProgressDialog.show(mContext, "", "Sending Data to server..please wait !");*/
-            //   baseRequest.showLoader();
-
         }
 
         @Override
         protected String doInBackground(String... params) {
 
             try {
-                String url = NewSolarVFD.BASE_URL_VK_CHECK_STATUS + "a=" + DEVICE_NO;
-
-
+              //  String url = NewSolarVFD.BASE_URL_VK_CHECK_STATUS + "a=" + DEVICE_NO;
+                String url  = WebURL.DEVICE_DETAILS+"?DeviceNo="+DEVICE_NO;
                 System.out.println("home_obj====>" + url);
                 String obj = CustomHttpClient.executeHttpGet(url);
-
-
-                //  if (obj != null || !obj.equalsIgnoreCase(""))
                 if (!obj.equalsIgnoreCase("")) {
 
                     JSONObject jresponse = new JSONObject(obj.substring(1, obj.length() - 1));
@@ -4336,24 +4016,17 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                             // Toast.makeText(mContext, "RMS CHECK", Toast.LENGTH_SHORT).show();
                             // Stuff that updates the UI
                             try {
-                                //  changeButtonVisibilityRLV(true, 1.0f, rlvBT_8_ID);
-                                //baseRequest.hideLoader();
                                 baseRequest.hideLoader();
                                 RMS_STATUS = "NO";
                                 RMS_CURRENT_ONLINE_STATUS = "NA";
                                 RMS_LAST_ONLINE_DATE = "NA";
                                 AllCommomSTRContainer = AllCommomSTRContainer + " :\n RMS Data Status: NO";
                                 lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\n RMS Data Status: NO"));
-
-
                                 checkFirstTimeOlineStstus = 1;
                                 changeButtonVisibilityRLV(true, 1.0f, rlvBT_9_ID);
 
                                 RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
                                 RMS_SERVER_DOWN = "Not Responding";
-                                //  sendDataToServer();
-                                // Toast.makeText(mContext, "Data not found on RMS server.", Toast.LENGTH_SHORT).show();
-
 
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -4413,17 +4086,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                         btSocket = null;
                         myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
                         BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(Constant.BT_DEVICE_MAC_ADDRESS);//connects to the device's address and checks if it's available
-                        if (ActivityCompat.checkSelfPermission(BlueToothDebugNewActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
-                            Boolean TODO = null;
-                            return TODO;
-                        }
                         btSocket = dispositivo.createRfcommSocketToServiceRecord(mMyUDID);//create a RFCOMM (SPP) connection
                         myBluetooth.cancelDiscovery();
                     }
@@ -4431,35 +4093,18 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                     btSocket = null;
                     myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
                     BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(Constant.BT_DEVICE_MAC_ADDRESS);//connects to the device's address and checks if it's available
-                    if (ActivityCompat.checkSelfPermission(BlueToothDebugNewActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        Boolean TODO = null;
-                        return TODO;
-                    }
                     btSocket = dispositivo.createRfcommSocketToServiceRecord(mMyUDID);//create a RFCOMM (SPP) connection
                     myBluetooth.cancelDiscovery();
                 }
 
-
+              /*  if (btSocket == null) {
+                    myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
+                    BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(Constant.BT_DEVICE_MAC_ADDRESS);//connects to the device's address and checks if it's available
+                    btSocket = dispositivo.createRfcommSocketToServiceRecord(mMyUDID);//create a RFCOMM (SPP) connection
+                    myBluetooth.cancelDiscovery();
+                }*/
                 if (!btSocket.isConnected())
-                    if (ActivityCompat.checkSelfPermission(BlueToothDebugNewActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        Boolean TODO = null;
-                        return TODO;
-                    }
-                btSocket.connect();//start connection
+                    btSocket.connect();//start connection
 
 
                 if (btSocket.isConnected()) {
@@ -4484,6 +4129,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                     while (iStream.available() > 0) {
                         SS += (char) iStream.read();
                     }
+//                   String SS =convertStreamToString();
 
                     if (SS.trim().equalsIgnoreCase("")) {
 
@@ -4498,7 +4144,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
                                 System.out.println("mSmSmS====>>" + mS[i]);
 
-                                if (!mS[i].trim().equalsIgnoreCase("") || !mS[i].trim().equalsIgnoreCase(null)) {
+                                if (!mS[i].trim().equalsIgnoreCase("")) {
                                     if (i == 0) {
                                         //mLengthCount = Integer.parseInt(mS[i]);
                                         mLengthCount = Integer.valueOf(mS[i]);
@@ -4506,10 +4152,17 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                         mMonthHeaderList.add(mS[i]);
                                     }
                                 }
-
-                                headerLenghtDAy = "" + mMonthHeaderList.size();
-                                System.out.println("headerLenghtDAy==>>" + headerLenghtDAy);
+                                headerLenghtMonth = "" + mMonthHeaderList.size();
                             }
+
+                            System.out.println("headerLenghtMonth==>> " + headerLenghtMonth);
+                        } else {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    //new BluetoothCommunicationGetDayParameter().execute(":DLENGTH#", ":DLENGTH#", "OKAY");
+                                }
+                            });
                         }
                     }
 
@@ -4533,42 +4186,17 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean result) //after the doInBackground, it checks if everything went fine
         {
             super.onPostExecute(result);
+            // baseRequest.hideLoader();
             if (mMonthHeaderList.size() > 0) {
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                //textView.setText("Your new text");
-                                new BluetoothCommunicationForFirstActivity().execute(":MDATA#", ":MDATA#", "START");
-
-                            }
-                        }, 2 * 600);
-
-                    }
-                });
+                new BluetoothCommunicationForFirstActivity().execute(":MDATA#", ":MDATA#", "START");
             } else {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                //textView.setText("Your new text");
-                                new BluetoothCommunicationGetMonthParameter().execute(":MLENGTH#", ":MLENGTH#", "OKAY");
-
-                            }
-                        }, 2 * 100);
-
+                        new BluetoothCommunicationGetMonthParameter().execute(":MLENGTH#", ":MLENGTH#", "OKAY");
                     }
                 });
             }
-
-
         }
     }
 
@@ -4591,18 +4219,8 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         {
             try {
                 // btSocket.close();
-               /* if (!btSocket.isConnected())
-                    if (ActivityCompat.checkSelfPermission(BlueToothDebugNewActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        Boolean TODO= null;
-                        return TODO;
-                    }btSocket.connect();//start connection*/
+                if (!btSocket.isConnected())
+                    btSocket.connect();//start connection
                 if (btSocket.isConnected()) {
                     byte[] STARTRequest = requests[0].getBytes(StandardCharsets.US_ASCII);
                     try {
@@ -4706,13 +4324,17 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                 i++;
                             }
                         } else {
+
                             File file = new File(UtilMethod.commonDocumentDirPath("ShaktiKusumDebugExtractionFile"), "Month_" + mBtNameHead + ".xls");
 
-                            //   FileOutputStream os;
+                            // File file = new File(mContext.getExternalFilesDir(null), "Month_" + mBtNameHead + ".xls");
+                            // File file = new File(mContext.getExternalFilesDir(null), "Month_" + mBtNameHead + ".xlsx");
+                            FileOutputStream os = null;
                             System.out.println("vikas--4==>4");
+                            //baseRequest.hideLoader();
                             try {
-                                //    os = new FileOutputStream(file);
-                                wb.write(Files.newOutputStream(file.toPath()));
+                                os = new FileOutputStream(file);
+                                wb.write(os);
                                 Log.w("FileUtils", "Writing file" + file);
                                 success = true;
                             } catch (IOException e) {
@@ -4721,25 +4343,35 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                 Log.w("FileUtils", "Failed to save file", e);
                             } finally {
                                 try {
-                                    //  os = new FileOutputStream(file);
-
-
-                                    wb.write(Files.newOutputStream(file.toPath()));
-
+                                    os = new FileOutputStream(file);
+                                    wb.write(os);
+                                    if (null != os)
+                                        os.close();
                                 } catch (Exception ex) {
                                     System.out.println("vikas--5==>5");
                                     // baseRequest.hideLoader();
                                     ex.printStackTrace();
                                 }
                             }
+                            // myBluetooth.disable();
+
+                            // Toast.makeText(mContext, "Process completed..1", Toast.LENGTH_SHORT).show();
                             break;
                         }
+                        //  if((mDay == 255) && (mMonth == 255) && (mYear == 255) && (mHour == 255) && (mMinut == 255) && (mStatus == 255))
                         if (((mDay == 255) && (mMonth == 255) && (mYear == 255)) || ((mDay == 0) && (mMonth == 0) && (mYear == 0))) {
+                            // File file = new File(mContext.getExternalFilesDir(null), "Month_" + mBtNameHead + ".xlsx");
 
                             File file = new File(UtilMethod.commonDocumentDirPath("ShaktiKusumDebugExtractionFile"), "Month_" + mBtNameHead + ".xls");
+
+                            //  File file = new File(mContext.getExternalFilesDir(null), "Month_" + mBtNameHead + ".xls");
                             FileOutputStream os = null;
+                            //  File file = new File(mContext.getExternalFilesDir(null), "Month" + mBtNameHead + ".xls");
+                            //   FileOutputStream os = null;
+                            //    baseRequest.hideLoader();
                             try {
-                                wb.write(Files.newOutputStream(file.toPath()));
+                                os = new FileOutputStream(file);
+                                wb.write(os);
                                 Log.w("FileUtils", "Writing file" + file);
                                 success = true;
                             } catch (IOException e) {
@@ -4748,22 +4380,29 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                 Log.w("FileUtils", "Failed to save file", e);
                             } finally {
                                 try {
-                                    wb.write(Files.newOutputStream(file.toPath()));
-
+                                    os = new FileOutputStream(file);
+                                    wb.write(os);
+                                    if (null != os)
+                                        os.close();
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
                                 }
                             }
                             mBoolflag = true;
                         } else {
+                            // saveExcelFile(mContext, "VikasTest.xls", mPostionFinal,mDay,mMonth,mYear,mHour,mMinut,mStatus,mFrequency,mRMSVoltage,mOutputCurrent,mRPM,mLPM,mPVVoltage,mPVCurrent,mFault,mInvTemp);
                             if (mPostionFinal == 0) {
                                 //New Workbook
                                 wb = new HSSFWorkbook();
-                                //Cell style for header row
-                                cs = wb.createCellStyle();
 
                                 sheet1 = wb.createSheet("myOrder");
                                 row = sheet1.createRow(0);
+                                //Cell style for header row
+                               /* cs = wb.createCellStyle();
+                                cs.setFillForegroundColor(HSSFColor.LIME.index);
+                                cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);*/
+                                //New Sheet
+
 
                                 for (int k = 0; k < mMonthHeaderList.size(); k++) {
 
@@ -4771,11 +4410,15 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
                                     sheet1.setColumnWidth(k, (10 * 200));
                                     c = row.createCell(k);
-
+                                    // c.setCellValue(mMonthHeaderList.get(k));
                                     c.setCellValue(mStringSplitStart[0]);
                                     c.setCellStyle(cs);
                                 }
-
+                                /*
+                                c = row.createCell(3);
+                                c.setCellValue("Hour");
+                                c.setCellStyle(cs);
+                        */
                                 row = sheet1.createRow(mPostionFinal + 1);
 
                                 c = row.createCell(0);
@@ -4850,43 +4493,8 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                     }
                                 } catch (NumberFormatException e) {
                                     e.printStackTrace();
-                                    //      baseRequest.hideLoader();
+                                    baseRequest.hideLoader();
                                 }
-
-                                mvDay = mDay;
-                                mvMonth = mMonth;
-                                mvYear = mYear;
-                                mvHour = "" + mHour;
-                                mvMinute = "" + mMinut;
-                                mvNo_of_Start = "" + mStatus;
-
-                                fvFrequency = fFrequency;
-                                fvRMSVoltage = fRMSVoltage;
-                                fvOutputCurrent = fOutputCurrent;
-                                mvRPM = "" + mRPM;
-                                fvLPM = fLPM;
-                                fvPVVoltage = fPVVoltage;
-                                fvPVCurrent = fPVCurrent;
-                                mvFault = "" + mFault;
-                                fvInvTemp = fInvTemp;
-
-                                mvDay = mDay;
-                                mvMonth = mMonth;
-                                mvYear = mYear;
-                                mvHour = "" + mHour;
-                                mvMinute = "" + mMinut;
-                                mvNo_of_Start = "" + mStatus;
-
-                                fvFrequency = fFrequency;
-                                fvRMSVoltage = fRMSVoltage;
-                                fvOutputCurrent = fOutputCurrent;
-                                mvRPM = "" + mRPM;
-                                fvLPM = fLPM;
-                                fvPVVoltage = fPVVoltage;
-                                fvPVCurrent = fPVCurrent;
-                                mvFault = "" + mFault;
-                                fvInvTemp = fInvTemp;
-
 
                             } else {
                                 // cs.setFillPattern(HSSFCellStyle.NO_FILL);
@@ -4957,20 +4565,14 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                             }
 
                                         } catch (Exception e) {
-                                            //   baseRequest.hideLoader();
+                                               baseRequest.hideLoader();
                                             e.printStackTrace();
                                         }
 
-                                       /* sheet1.setColumnWidth(j, (10 * 200));
-                                        fFrequency = mTotalTime[j];
-
-                                        c = row.createCell(j);
-                                        c.setCellValue("" + fFrequency);
-                                        c.setCellStyle(cs);*/
                                     }
                                 } catch (NumberFormatException e) {
                                     e.printStackTrace();
-                                    //      baseRequest.hideLoader();
+                                    baseRequest.hideLoader();
                                 }
 
 
@@ -4992,7 +4594,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                             mvFault = "" + mFault;
                             fvInvTemp = fInvTemp;
 
-
                             mPostionFinal++;
                         }
                     }
@@ -5003,7 +4604,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("vikas--8==>8");
-                // baseRequest.hideLoader();
+                 baseRequest.hideLoader();
             }
             return false;
         }
@@ -5012,32 +4613,16 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean result) //after the doInBackground, it checks if everything went fine
         {
-
-
-            super.onPostExecute(result);
+            // baseRequest.hideLoader();
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        if (Build.VERSION.SDK_INT >= 30) {
-                            //only api 21 above
-                            filePath = "/storage/emulated/0/Documents/ShaktiKusumDebugExtractionFile/Month_" + mBtNameHead + ".xls";//Month_26-0018-0-18-03-19-0.xls";
-                        } else {
-                            //only api 21 down
-                            filePath = "/storage/emulated/0/ShaktiKusumDebugExtractionFile/Month_" + mBtNameHead + ".xls";//Month_26-0018-0-18-03-19-0.xls";
-                        }
 
-                            String[] mDataNameString = filePath.split("ShaktiKusumDebugExtractionFile/");
-                        String[] mDataNameString1 = mDataNameString[1].split(".xls");
-                        String[] mDataNameString2 = mDataNameString1[0].split("_");
-                        GetProfileUpdate_Task(mDataNameString2[1], mDataNameString2[0], headerLenghtDAy);
-                        dialog.dismiss();
-                    } catch (Exception e) {
-                        baseRequest.hideLoader();
-                        e.printStackTrace();
-                    }
+                    baseRequest.hideLoader();
                 }
             });
+
+            super.onPostExecute(result);
             //btSocket = null;
         }
     }
