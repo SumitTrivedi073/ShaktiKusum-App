@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,6 +41,13 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.shaktipumplimited.retrofit.ApiClient;
 import com.shaktipumplimited.retrofit.ApiInterface;
@@ -78,8 +86,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import activity.DeviceStatusActivity;
 import activity.GPSTracker;
 import bean.BTResonseData;
+import bean.DeviceDetailModel;
 import bean.ProfileUpdateModel;
 import ch.acra.acra.BuildConfig;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -216,13 +226,9 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
     private final String[] AllCommandArray = {"AT+GSN\r\n", "AT+CIMI\r\n", "AT+QINISTAT\r\n", "AT+CSQ\r\n", "AT+CREG?\r\n", "AT+CGREG?\r\n", "AT+CGDCONT?\r\n", "AT+QICSGP?\r\n"};
     private boolean flag;
     private int mLengthCount;
-    private String headerLenghtDAy = "";
+
     private  String headerLenghtMonth = "";
-    private final String headerLenghtDayDongle = "";
-    private final String headerLenghtMonthDongle = "";
-    private final String headerLenghtFalt = "";
-    private final boolean mBoolflag1 = false;
-    private int mCheckCLICKDayORMonth = 0;
+
     private List<String> mMonthHeaderList;
     private boolean mBoolflag = false;
     private final boolean mBoolflagCheck = false;
@@ -508,7 +514,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                 if (UtilMethod.isOnline(mContext)) {
                     // checkRMSAPIStatus();
 
-                    new SyncRMSCHECKDATAAPI().execute();
+                     SyncRMSCHECKDATAAPI();
                 } else {
                     Toast.makeText(mContext, "Please check internet connections.", Toast.LENGTH_SHORT).show();
                 }
@@ -523,7 +529,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                 mMyUDID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");//////////////this is fixed for blue tooth deviceee data
                 mBoolflag = false;
                 mPostionFinal = 0;
-                mCheckCLICKDayORMonth = 0;
 
 
                 RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
@@ -1045,7 +1050,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                 if (UtilMethod.isOnline(mContext)) {
                                     // checkRMSAPIStatus();
 
-                                    new SyncRMSCHECKDATAAPI().execute();
+                                    SyncRMSCHECKDATAAPI();
                                 } else {
                                     Toast.makeText(mContext, "Please check internet connections.", Toast.LENGTH_SHORT).show();
 
@@ -1065,7 +1070,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
                                 if (UtilMethod.isOnline(mContext)) {
                                     // checkRMSAPIStatus();
-                                    new SyncRMSCHECKDATAAPI().execute();
+                                    SyncRMSCHECKDATAAPI();
 
                                 } else {
                                     Toast.makeText(mContext, "Please check internet connections.", Toast.LENGTH_SHORT).show();
@@ -1097,7 +1102,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                         if (UtilMethod.isOnline(mContext)) {
                             // checkRMSAPIStatus();
 
-                            new SyncRMSCHECKDATAAPI().execute();
+                             SyncRMSCHECKDATAAPI();
                         } else {
                             Toast.makeText(mContext, "Please check internet connections.", Toast.LENGTH_SHORT).show();
 
@@ -1121,11 +1126,11 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         wordsByKey.put("device", DEVICE_NO);// DEVICE_NO = sssM[0];
 
 
-        if (DEVICE_NO!=null&& !DEVICE_NO.isEmpty() &&!DEVICE_NO.equals(ControllerSerialNumber+"-0")) {
+     /*   if (DEVICE_NO!=null&& !DEVICE_NO.isEmpty() &&!DEVICE_NO.equals(ControllerSerialNumber+"-0")) {
             ShowAlertResponse();
         }else {
             CustomUtility.ShowToast("Not able to read Device Serial Number", getApplicationContext());
-        }
+        }*/
         baseRequest.callAPIGETDebugApp(1, wordsByKey, NewSolarVFD.SIM_STATUS_VK_PAGE);/////
 
     }
@@ -1178,7 +1183,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
     public void GetProfileUpdate_Task(String deviceno, String type, String len) {
 
         if (UtilMethod.isOnline(mContext)) {
-            //  baseRequest.showLoader();
+              baseRequest.showLoader();
             // rlvLoadingViewID.setVisibility(View.GONE);
             ApiInterface apiService = ApiClient.getClientFileUpload().create(ApiInterface.class);
             RequestBody fbody;
@@ -1193,8 +1198,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
             RequestBody deviceno1 = RequestBody.create(MediaType.parse("multipart/form-data"), deviceno);
             RequestBody type1 = RequestBody.create(MediaType.parse("multipart/form-data"), type);
             RequestBody headerLenght1 = RequestBody.create(MediaType.parse("multipart/form-data"), len);
-            // RequestBody lenCount = RequestBody.create(MediaType.parse("multipart/form-data"), lenCount);
-            //Call<ProfileUpdateModel> call = apiService.getProfileUpdateData(deviceno1, type1, body);
+
             Call<ProfileUpdateModel> call = apiService.getProfileUpdateDatanew(deviceno1, type1, headerLenght1, body);
 
             call.enqueue(new Callback<ProfileUpdateModel>() {
@@ -1203,8 +1207,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                     try {
                         ProfileUpdateModel dashResponse = response.body();
 
-                        //    System.out.println("dashResponse==>>"+dashResponse.getStatus());
-                        //  System.out.println("dashResponse==>>"+dashResponse.getMessage());
                         Log.e("status", "** " + dashResponse);
                         runOnUiThread(new Runnable() {
                             @Override
@@ -1430,7 +1432,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
     private class BluetoothCommunicationForDebugCheckDevice extends AsyncTask<String, Void, Boolean>  // UI thread
     {
         public int RetryCount = 0;
@@ -1442,7 +1443,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
             baseRequest.showLoader();
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         protected Boolean doInBackground(String... requests) //while the progress dialog is shown, the connection is done in background
         {
@@ -1451,19 +1451,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                     if (btSocket.isConnected()) {
                     } else {
                         myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
-                        //   BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(mBtMacAddressHead);//connects to the device's address and checks if it's available
                         BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(Constant.BT_DEVICE_MAC_ADDRESS);//connects to the device's address and checks if it's available
-                        if (ActivityCompat.checkSelfPermission(BlueToothDebugNewActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
-                            Boolean TODO = null;
-                            return TODO;
-                        }
                         btSocket = dispositivo.createRfcommSocketToServiceRecord(mMyUDID);//create a RFCOMM (SPP) connection
                         myBluetooth.cancelDiscovery();
                     }
@@ -1486,8 +1474,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                             try {
                                 kkkkkk1 = (char) iStream.read() + "";
                                 AllTextSTR = AllTextSTR + kkkkkk1;
-                                // AllTextSTR = AllTextSTR.replaceAll("[\r]", "");
-                                // AllTextSTR = AllTextSTR.replaceAll("[\n]", "");
                                 if (iStream.available() == 0) {
                                     break;
                                 }
@@ -1496,7 +1482,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                 e.printStackTrace();
                                 break;
                             }
-                            //ssssss = ssssss + () kkkkkk1;
                         }
 
                     } catch (InterruptedException e1) {
@@ -1507,7 +1492,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            ///addHeadersMonths();
                             try {
 
                                 String[] sssM = AllTextSTR.split(",");
@@ -3368,8 +3352,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
             //   baseRequest.showLoader();
         }
 
-        @SuppressLint("MissingPermission")
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         protected Boolean doInBackground(String... requests) //while the progress dialog is shown, the connection is done in background
         {
@@ -3378,53 +3360,18 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                     if (btSocket.isConnected()) {
                     } else {
                         myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
-                        //   BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(mBtMacAddressHead);//connects to the device's address and checks if it's available
                         BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(Constant.BT_DEVICE_MAC_ADDRESS);//connects to the device's address and checks if it's available
-                        if (ActivityCompat.checkSelfPermission(BlueToothDebugNewActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
-                            Boolean TODO = null;
-                            return TODO;
-                        }
                         btSocket = dispositivo.createRfcommSocketToServiceRecord(mMyUDID);//create a RFCOMM (SPP) connection
                         myBluetooth.cancelDiscovery();
                     }
                 } else {
                     myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
-                    //   BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(mBtMacAddressHead);//connects to the device's address and checks if it's available
                     BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(Constant.BT_DEVICE_MAC_ADDRESS);//connects to the device's address and checks if it's available
-                    if (ActivityCompat.checkSelfPermission(BlueToothDebugNewActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        Boolean TODO = null;
-                        return TODO;
-                    }
                     btSocket = dispositivo.createRfcommSocketToServiceRecord(mMyUDID);//create a RFCOMM (SPP) connection
                     myBluetooth.cancelDiscovery();
                 }
 
                 if (!btSocket.isConnected())
-                    if (ActivityCompat.checkSelfPermission(BlueToothDebugNewActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        Boolean TODO = null;
-                        return TODO;
-                    }
                 btSocket.connect();//start connection
                 if (btSocket.isConnected()) {
                     byte[] STARTRequest = requests[0].getBytes(StandardCharsets.US_ASCII);
@@ -3444,7 +3391,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                 e.printStackTrace();
                                 break;
                             }
-                            //ssssss = ssssss + () kkkkkk1;
                         }
 
                     } catch (InterruptedException e1) {
@@ -3452,31 +3398,16 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                         e1.printStackTrace();
                     }
 
-                  /*  runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ///  addHeadersMonths();
-                            // AllCommomSTRContainer = AllCommomSTRContainer + "\n" + AllTextSTR;
-                            AllCommomSTRContainer = AllCommomSTRContainer + " : " + AllTextSTR + "\n";
-                            lvlMainTextContainerID.addView(getTextViewTTppSingle(pp, "" + AllTextSTR));
-                            AllTextSTR = "";
-                            // addDataMonth(mPostionFinal + 1, mvDay + "", mvMonth + "", mvYear + "", mvHour, mvMinute, mvNo_of_Start, fvFrequency, fvRMSVoltage, fvOutputCurrent, mvRPM, fvLPM, fvPVVoltage, fvPVCurrent, mvFault, fvInvTemp);
-                        }
-                    });*/
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 baseRequest.hideLoader();
-                // btSocket = null;
-                //   Toast.makeText(mActivity, "BT Connection lost..", Toast.LENGTH_SHORT).show();
-                // myBluetooth.disable();
                 return false;
             }
-            // baseRequest.hideLoader();
             return false;
         }
 
-        @SuppressLint("SetTextI18n")
+
         @Override
         protected void onPostExecute(Boolean result) //after the doInBackground, it checks if everything went fine
         {
@@ -3486,10 +3417,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ///  addHeadersMonths();
-                    // AllCommomSTRContainer = AllCommomSTRContainer + "\n" + AllTextSTR;
-                    // Do this instead
-
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -3498,12 +3425,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
                         }
                     }, 2 * 200);
-
-
-                    //  new BluetoothCommunicationSET_Long().execute(":LONG :"+longLenght+","+inst_latitude_double+"#", ":LONG :"+longLenght+","+inst_latitude_double+"#", "Start");
-
-                    //   new BluetoothCommunicationSET_Long().execute(":LONG :06,"+inst_longitude_double+"#", ":LONG :06,"+inst_longitude_double+"#", "Start");
-                    // addDataMonth(mPostionFinal + 1, mvDay + "", mvMonth + "", mvYear + "", mvHour, mvMinute, mvNo_of_Start, fvFrequency, fvRMSVoltage, fvOutputCurrent, mvRPM, fvLPM, fvPVVoltage, fvPVCurrent, mvFault, fvInvTemp);
                 }
             });
 
@@ -3824,7 +3745,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         }
     }
 
-    private class SyncRMSCHECKDATAAPI extends AsyncTask<String, String, String> {
+  /*  private class SyncRMSCHECKDATAAPI extends AsyncTask<String, String, String> {
 
         ProgressDialog progressDialog;
         String obj;
@@ -3841,11 +3762,9 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                 String url  = WebURL.DEVICE_DETAILS+"?DeviceNo="+DEVICE_NO;
                 System.out.println("home_obj====>" + url);
                 String obj = CustomHttpClient.executeHttpGet(url);
-                if (!obj.equalsIgnoreCase("")) {
+                if (!obj.isEmpty()) {
 
                     JSONObject jresponse = new JSONObject(obj.substring(1, obj.length() - 1));
-                    //  JSONObject jresponse = new JSONObject(obj);
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -4050,6 +3969,40 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
 
         }
+    }*/
+
+    public void SyncRMSCHECKDATAAPI(){
+        CustomUtility.showProgressDialogue(BlueToothDebugNewActivity.this);
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                WebURL.DEVICE_DETAILS +"?DeviceNo="+DEVICE_NO, null, new Response.Listener<JSONObject >() {
+            @Override
+            public void onResponse(JSONObject  response) {
+                CustomUtility.hideProgressDialog(BlueToothDebugNewActivity.this);
+
+
+
+                if(!response.toString().isEmpty()) {
+
+                    DeviceDetailModel deviceDetailModel = new Gson().fromJson(response.toString(),DeviceDetailModel.class);
+                    if(deviceDetailModel!=null && deviceDetailModel.getResponse()!=null && String.valueOf(deviceDetailModel.getStatus()).equals("true")) {
+
+
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                CustomUtility.hideProgressDialog(BlueToothDebugNewActivity.this);
+                if(error.getMessage()!=null && !error.getMessage().isEmpty()) {
+                    CustomUtility.ShowToast(error.getMessage(),BlueToothDebugNewActivity.this);
+
+                }
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -4107,6 +4060,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                     btSocket.connect();//start connection
 
 
+
                 if (btSocket.isConnected()) {
 
                     byte[] STARTRequest = requests[0].getBytes(StandardCharsets.US_ASCII);
@@ -4156,6 +4110,14 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                             }
 
                             System.out.println("headerLenghtMonth==>> " + headerLenghtMonth);
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new BluetoothCommunicationForFirstActivity().execute(":MDATA#", ":MDATA#", "START");
+                                }
+                            });
+
                         } else {
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -4213,7 +4175,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
             //  baseRequest.showLoader();
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         protected Boolean doInBackground(String... requests) //while the progress dialog is shown, the connection is done in background
         {
@@ -4325,7 +4286,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                             }
                         } else {
 
-                            File file = new File(UtilMethod.commonDocumentDirPath("ShaktiKusumDebugExtractionFile"), "Month_" + mBtNameHead + ".xls");
+                            File file = new File(UtilMethod.commonDocumentDirPath("ShaktiKusumExtractionFile"), "Month_" + mBtNameHead + ".xls");
 
                             // File file = new File(mContext.getExternalFilesDir(null), "Month_" + mBtNameHead + ".xls");
                             // File file = new File(mContext.getExternalFilesDir(null), "Month_" + mBtNameHead + ".xlsx");
@@ -4353,16 +4314,13 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                     ex.printStackTrace();
                                 }
                             }
-                            // myBluetooth.disable();
-
-                            // Toast.makeText(mContext, "Process completed..1", Toast.LENGTH_SHORT).show();
-                            break;
+                             break;
                         }
                         //  if((mDay == 255) && (mMonth == 255) && (mYear == 255) && (mHour == 255) && (mMinut == 255) && (mStatus == 255))
                         if (((mDay == 255) && (mMonth == 255) && (mYear == 255)) || ((mDay == 0) && (mMonth == 0) && (mYear == 0))) {
                             // File file = new File(mContext.getExternalFilesDir(null), "Month_" + mBtNameHead + ".xlsx");
 
-                            File file = new File(UtilMethod.commonDocumentDirPath("ShaktiKusumDebugExtractionFile"), "Month_" + mBtNameHead + ".xls");
+                            File file = new File(UtilMethod.commonDocumentDirPath("ShaktiKusumExtractionFile"), "Month_" + mBtNameHead + ".xls");
 
                             //  File file = new File(mContext.getExternalFilesDir(null), "Month_" + mBtNameHead + ".xls");
                             FileOutputStream os = null;
@@ -4389,20 +4347,17 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                 }
                             }
                             mBoolflag = true;
-                        } else {
-                            // saveExcelFile(mContext, "VikasTest.xls", mPostionFinal,mDay,mMonth,mYear,mHour,mMinut,mStatus,mFrequency,mRMSVoltage,mOutputCurrent,mRPM,mLPM,mPVVoltage,mPVCurrent,mFault,mInvTemp);
+                         } else {
                             if (mPostionFinal == 0) {
                                 //New Workbook
                                 wb = new HSSFWorkbook();
-
-                                sheet1 = wb.createSheet("myOrder");
-                                row = sheet1.createRow(0);
                                 //Cell style for header row
                                /* cs = wb.createCellStyle();
                                 cs.setFillForegroundColor(HSSFColor.LIME.index);
-                                cs.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);*/
+                                cs.setFillPattern(HSSFCellStyle.NO_FILL);*/
                                 //New Sheet
-
+                                sheet1 = wb.createSheet("myOrder");
+                                row = sheet1.createRow(0);
 
                                 for (int k = 0; k < mMonthHeaderList.size(); k++) {
 
@@ -4410,15 +4365,11 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
                                     sheet1.setColumnWidth(k, (10 * 200));
                                     c = row.createCell(k);
-                                    // c.setCellValue(mMonthHeaderList.get(k));
+
                                     c.setCellValue(mStringSplitStart[0]);
                                     c.setCellStyle(cs);
                                 }
-                                /*
-                                c = row.createCell(3);
-                                c.setCellValue("Hour");
-                                c.setCellStyle(cs);
-                        */
+
                                 row = sheet1.createRow(mPostionFinal + 1);
 
                                 c = row.createCell(0);
@@ -4493,8 +4444,9 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                     }
                                 } catch (NumberFormatException e) {
                                     e.printStackTrace();
-                                    baseRequest.hideLoader();
+                                    //      baseRequest.hideLoader();
                                 }
+
 
                             } else {
                                 // cs.setFillPattern(HSSFCellStyle.NO_FILL);
@@ -4565,14 +4517,14 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                             }
 
                                         } catch (Exception e) {
-                                               baseRequest.hideLoader();
+                                            //   baseRequest.hideLoader();
                                             e.printStackTrace();
                                         }
 
                                     }
                                 } catch (NumberFormatException e) {
                                     e.printStackTrace();
-                                    baseRequest.hideLoader();
+                                    //      baseRequest.hideLoader();
                                 }
 
 
@@ -4604,7 +4556,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("vikas--8==>8");
-                 baseRequest.hideLoader();
+                // baseRequest.hideLoader();
             }
             return false;
         }
@@ -4614,17 +4566,48 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean result) //after the doInBackground, it checks if everything went fine
         {
             // baseRequest.hideLoader();
+          /*  runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    rlvLoadingViewID.setVisibility(View.GONE);
+                }
+            });*/
+
+            super.onPostExecute(result);
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
 
-                    baseRequest.hideLoader();
+
+                    try {
+                        // baseRequest.hideLoader();
+                        //rlvLoadingViewID.setVisibility(View.GONE);
+                        if(Build.VERSION.SDK_INT >= 30) {
+                            //only api 21 above
+                            filePath = "/storage/emulated/0/Documents/ShaktiKusumExtractionFile/Month_" + mBtNameHead + ".xls";//Month_26-0018-0-18-03-19-0.xls";
+                        }else{
+                            //only api 21 down
+                            filePath = "/storage/emulated/0/ShaktiKusumExtractionFile/Month_" + mBtNameHead + ".xls";//Month_26-0018-0-18-03-19-0.xls";
+                        }
+
+                        Log.d("filePath", filePath);
+                        // String[] mDataNameString = filePath.split("files/");
+                        String[] mDataNameString = filePath.split("ShaktiKusumExtractionFile/");
+                        String[] mDataNameString1 = mDataNameString[1].split(".xls");
+                        String[] mDataNameString2 = mDataNameString1[0].split("_");
+                        GetProfileUpdate_Task(mDataNameString2[1], mDataNameString2[0], headerLenghtMonth);
+                        dialog.dismiss();
+                    } catch (Exception e) {
+                        baseRequest.hideLoader();
+                        e.printStackTrace();
+                    }
                 }
             });
-
-            super.onPostExecute(result);
             //btSocket = null;
         }
     }
+
+
 }
 

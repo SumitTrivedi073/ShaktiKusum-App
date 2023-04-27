@@ -323,10 +323,12 @@ public class CustomUtility {
         return current_time.trim();
     }
 
-    public static void showProgressDialogue(Context context) {
+    public static void showProgressDialogue(Activity context) {
         progressDialog = new CustomProgressDialog(context);
           progressDialog.setCancelable(false);
-          progressDialog.show();
+          if(!context.isFinishing()) {
+              progressDialog.show();
+          }
       }
 
 
