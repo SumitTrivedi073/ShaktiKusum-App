@@ -340,6 +340,9 @@ public class SiteAuditInitial extends AppCompatActivity {
 
                                     if (CustomUtility.getSharedPreferences(context, "AUDSYNC" + billno).equalsIgnoreCase("1")) {
                                         new SyncAuditData().execute();
+
+                                        db.deleteSiteAuditImages();
+
                                     } else {
                                         Toast.makeText(context, "Please Select Photos", Toast.LENGTH_SHORT).show();
                                     }
@@ -406,6 +409,8 @@ public class SiteAuditInitial extends AppCompatActivity {
             }
 
         }
+
+
     }
 
     public void getData() {

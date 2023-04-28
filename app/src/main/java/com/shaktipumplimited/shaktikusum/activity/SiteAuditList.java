@@ -78,7 +78,7 @@ public class SiteAuditList extends AppCompatActivity {
     LinearLayout lin1, lin2;
     RecyclerView recyclerView;
     Adapter_auditsite_list adapter_auditsite_list;
-    List<String> enq_docno = new ArrayList<>();
+
     EditText editsearch;
     private SiteAuditList activity;
     ArrayList<SiteAuditListBean> auditListBeans;

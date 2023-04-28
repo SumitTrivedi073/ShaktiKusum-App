@@ -54,133 +54,141 @@
             android:src="@drawable/logo"
             android:visibility="gone" />
 
-        <RelativeLayout
-            android:id="@+id/rlvOneID"
-            android:layout_width="@dimen/_300sdp"
-            android:layout_height="@dimen/_290sdp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/rounded_corner_all">
+      <ScrollView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+          >
 
-            <RelativeLayout
-                android:id="@+id/lvlBotttomOptionID1"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:background="@drawable/edt_shape_round_blue"
-                android:orientation="horizontal">
+          <RelativeLayout
+              android:id="@+id/rlvOneID"
+              android:layout_width="@dimen/_300sdp"
+              android:layout_height="@dimen/_290sdp"
+              android:layout_centerInParent="true"
+              android:background="@drawable/rounded_corner_all">
 
-                <EditText
-                    android:id="@+id/edtINSTNmaeID"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_20sdp"
-                    android:background="#00ffffff"
-                    android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                    android:gravity="center_vertical"
-                    android:hint="Enter your name"
-                    android:inputType="text"
-                    android:maxLength="30"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/gray"
-                    android:textSize="@dimen/_14sdp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
+              <RelativeLayout
+                  android:id="@+id/lvlBotttomOptionID1"
+                  android:layout_width="match_parent"
+                  android:layout_height="@dimen/_40sdp"
+                  android:layout_marginStart="@dimen/_10sdp"
+                  android:layout_marginTop="@dimen/_10sdp"
+                  android:layout_marginEnd="@dimen/_10sdp"
+                  android:background="@drawable/edt_shape_round_blue"
+                  android:orientation="horizontal">
 
-            <RelativeLayout
-                android:id="@+id/lvlBotttomOptionID2"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
-                android:layout_below="@+id/lvlBotttomOptionID1"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:background="@drawable/edt_shape_round_blue"
-                android:orientation="horizontal">
+                  <EditText
+                      android:id="@+id/edtINSTNmaeID"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_marginStart="@dimen/_10sdp"
+                      android:layout_marginEnd="@dimen/_20sdp"
+                      android:background="#00ffffff"
+                      android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                      android:gravity="center_vertical"
+                      android:hint="Enter your name"
+                      android:inputType="text"
+                      android:maxLength="30"
+                      android:textColor="@color/black"
+                      android:textColorHint="@color/gray"
+                      android:textSize="@dimen/_14sdp"
+                      android:textStyle="bold" />
+              </RelativeLayout>
 
-                <EditText
-                    android:id="@+id/edtINSTNumberID"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_20sdp"
-                    android:background="#00ffffff"
-                    android:digits="0123456789"
-                    android:gravity="center_vertical"
-                    android:hint="Enter your mobile number"
-                    android:inputType="number"
-                    android:maxLength="13"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/gray"
-                    android:textSize="@dimen/_14sdp"
-                    android:textStyle="bold" />
+              <RelativeLayout
+                  android:id="@+id/lvlBotttomOptionID2"
+                  android:layout_width="match_parent"
+                  android:layout_height="@dimen/_40sdp"
+                  android:layout_below="@+id/lvlBotttomOptionID1"
+                  android:layout_marginStart="@dimen/_10sdp"
+                  android:layout_marginTop="@dimen/_10sdp"
+                  android:layout_marginEnd="@dimen/_10sdp"
+                  android:background="@drawable/edt_shape_round_blue"
+                  android:orientation="horizontal">
 
-            </RelativeLayout>
+                  <EditText
+                      android:id="@+id/edtINSTNumberID"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_marginStart="@dimen/_10sdp"
+                      android:layout_marginEnd="@dimen/_20sdp"
+                      android:background="#00ffffff"
+                      android:digits="0123456789"
+                      android:gravity="center_vertical"
+                      android:hint="Enter your mobile number"
+                      android:inputType="number"
+                      android:maxLength="13"
+                      android:textColor="@color/black"
+                      android:textColorHint="@color/gray"
+                      android:textSize="@dimen/_14sdp"
+                      android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/txtPODID"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_35sdp"
-                android:layout_below="@+id/lvlBotttomOptionID2"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="26dp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:background="@drawable/blue_btn_round"
-                android:fontFamily="@font/open_sans_bold"
-                android:gravity="center"
-                android:text="Send OTP"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_12ssp"
-                android:visibility="visible" />
+              </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/lvlOTPMianID"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
-                android:layout_below="@+id/txtPODID"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:background="@drawable/edt_shape_round_blue"
-                android:orientation="horizontal"
-                android:visibility="gone">
+              <TextView
+                  android:id="@+id/txtPODID"
+                  android:layout_width="match_parent"
+                  android:layout_height="@dimen/_35sdp"
+                  android:layout_below="@+id/lvlBotttomOptionID2"
+                  android:layout_marginStart="@dimen/_10sdp"
+                  android:layout_marginTop="26dp"
+                  android:layout_marginEnd="@dimen/_10sdp"
+                  android:background="@drawable/blue_btn_round"
+                  android:fontFamily="@font/open_sans_bold"
+                  android:gravity="center"
+                  android:text="Send OTP"
+                  android:textColor="@color/white"
+                  android:textSize="@dimen/_12ssp"
+                  android:visibility="visible" />
 
-                <EditText
-                    android:id="@+id/edtOTPID"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_20sdp"
-                    android:background="#00ffffff"
-                    android:digits="0123456789"
-                    android:gravity="center_vertical"
-                    android:hint="Enter OTP"
-                    android:inputType="number"
-                    android:maxLength="4"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/gray"
-                    android:textSize="@dimen/_14sdp"
-                    android:textStyle="bold"
-                    />
-            </RelativeLayout>
+              <RelativeLayout
+                  android:id="@+id/lvlOTPMianID"
+                  android:layout_width="match_parent"
+                  android:layout_height="@dimen/_40sdp"
+                  android:layout_below="@+id/txtPODID"
+                  android:layout_marginStart="@dimen/_10sdp"
+                  android:layout_marginTop="@dimen/_10sdp"
+                  android:layout_marginEnd="@dimen/_10sdp"
+                  android:background="@drawable/edt_shape_round_blue"
+                  android:orientation="horizontal"
+                  android:visibility="gone">
 
-            <TextView
-                android:id="@+id/txtOTPID"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_35sdp"
-                android:layout_below="@+id/lvlOTPMianID"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:background="@drawable/blue_btn_round"
-                android:fontFamily="@font/open_sans_bold"
-                android:gravity="center"
-                android:text="Verify OTP"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_12ssp"
-                android:visibility="gone" />
-        </RelativeLayout>
+                  <EditText
+                      android:id="@+id/edtOTPID"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_marginStart="@dimen/_10sdp"
+                      android:layout_marginEnd="@dimen/_20sdp"
+                      android:background="#00ffffff"
+                      android:digits="0123456789"
+                      android:gravity="center_vertical"
+                      android:hint="Enter OTP"
+                      android:inputType="number"
+                      android:maxLength="4"
+                      android:textColor="@color/black"
+                      android:textColorHint="@color/gray"
+                      android:textSize="@dimen/_14sdp"
+                      android:textStyle="bold" />
+              </RelativeLayout>
+
+              <TextView
+                  android:id="@+id/txtOTPID"
+                  android:layout_width="match_parent"
+                  android:layout_height="@dimen/_35sdp"
+                  android:layout_below="@+id/lvlOTPMianID"
+                  android:layout_marginStart="@dimen/_10sdp"
+                  android:layout_marginTop="@dimen/_20sdp"
+                  android:layout_marginEnd="@dimen/_10sdp"
+                  android:background="@drawable/blue_btn_round"
+                  android:fontFamily="@font/open_sans_bold"
+                  android:gravity="center"
+                  android:text="Verify OTP"
+                  android:textColor="@color/white"
+                  android:textSize="@dimen/_12ssp"
+                  android:visibility="gone" />
+          </RelativeLayout>
+
+      </ScrollView>
+
     </RelativeLayout>
 </RelativeLayout>
