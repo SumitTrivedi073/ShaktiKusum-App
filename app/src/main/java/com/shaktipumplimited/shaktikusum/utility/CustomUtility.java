@@ -1,5 +1,4 @@
-package utility;
-
+package com.shaktipumplimited.shaktikusum.utility;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -31,6 +30,9 @@ import androidx.core.content.ContextCompat;
 
 import com.google.gson.Gson;
 import com.shaktipumplimited.shaktikusum.R;
+import com.shaktipumplimited.shaktikusum.activity.BaseActivity;
+import com.shaktipumplimited.shaktikusum.activity.CustomProgressDialog;
+import com.shaktipumplimited.shaktikusum.bean.ImageModel;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
@@ -39,9 +41,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import activity.BaseActivity;
-import activity.CustomProgressDialog;
-import bean.ImageModel;
 
 /**
  * Created by Administrator on 1/3/2017.
@@ -283,7 +282,7 @@ public class CustomUtility {
         return false;
     }
 
-    public static void saveArrayList(Context context, List<ImageModel> imageArrayList,String name) {
+    public static void saveArrayList(Context context, List<ImageModel> imageArrayList, String name) {
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);
         SharedPreferences.Editor editor = settings.edit();
         Gson gson = new Gson();

@@ -1,4 +1,4 @@
-package debugapp;
+package com.shaktipumplimited.shaktikusum.debugapp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,8 +12,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.shaktipumplimited.retrofit.BaseRequest;
-import com.shaktipumplimited.retrofit.RequestReciever;
 import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.HashMap;
@@ -22,22 +20,15 @@ import java.util.Random;
 import com.shaktipumplimited.shaktikusum.webservice.retrofit.BaseRequest;
 import com.shaktipumplimited.shaktikusum.webservice.retrofit.RequestReciever;
 import com.shaktipumplimited.shaktikusum.activity.MainActivity;
-import com.shaktipumplimited.shaktikusum.R;
-
 import com.shaktipumplimited.shaktikusum.utility.CustomUtility;
-
-import activity.MainActivity;
-import utility.CustomUtility;
-
 
 public class OTPGenerationActivity extends AppCompatActivity {
 
     Context mContext;
 
     private RelativeLayout lvlOTPMianID;
-    private TextView txtPODID;
+    private TextView txtPODID,txtSimNumberID;
     private TextView txtOTPID;
-    private TextView txtSimNumberID;
     private EditText edtINSTNmaeID;
     private EditText edtOTPID;
     private EditText edtINSTNumberID;

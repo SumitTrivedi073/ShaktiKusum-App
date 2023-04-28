@@ -13,13 +13,11 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.shaktipumplimited.shaktikusum.R;
+import com.shaktipumplimited.shaktikusum.debugapp.BlueToothDebugNewActivity;
+import com.shaktipumplimited.shaktikusum.debugapp.GlobalValue.Constant;
+import com.shaktipumplimited.shaktikusum.webservice.WebURL;
 
 import java.util.List;
-
-import debugapp.BlueToothDebugNewActivity;
-import debugapp.GlobalValue.Constant;
-import webservice.WebURL;
-
 
 public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAdapter.ViewHolder> {
 
@@ -52,7 +50,7 @@ public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAd
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         // holder.rlvHomeMainView.getLayoutParams().width = Validation.getDeviceHeightWidth(mContext, true)/2;
         //  holder.rlvHomeMainView.getLayoutParams().height = Validation.getDeviceHeightWidth(mContext, false)/3+30;
 

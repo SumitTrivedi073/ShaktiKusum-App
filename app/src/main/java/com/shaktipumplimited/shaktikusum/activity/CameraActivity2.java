@@ -368,7 +368,6 @@ public class CameraActivity2 extends AppCompatActivity{
             {
                 ActivityCompat.requestPermissions(this,new String[]{
                         Manifest.permission.CAMERA,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
                 },REQUEST_CAMERA_PERMISSION);
                 return;
             }

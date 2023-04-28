@@ -62,7 +62,7 @@ android {
 
         production{
             dimension 'server'
-            buildConfigField 'String', 'baseUrl', '"https://spprdsrvr1.shaktipumps.com:8423"'
+            buildConfigField 'String', 'baseUrl', '"https://spprdsrvr1.shaktipumps.com:8423/sap(bD1lbiZjPTkwMA==)"'
             buildConfigField 'String', 'baseUrlVK', '"https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/"'
             buildConfigField 'String', 'baseUrlVK1', '"https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/"'
             buildConfigField 'String', 'baseUrlOptionVK', '"https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/"'
