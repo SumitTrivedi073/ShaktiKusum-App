@@ -63,15 +63,15 @@ public class SplashActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else {
-                      if (CustomUtility.isInternetOn())
-                      {
-                          loginSelection();
-                      }else {
-                          Intent intent = new Intent(mContext, Login.class);
-                          startActivity(intent);
-                          finish();
-                      }
-                    }
+                         if (CustomUtility.isInternetOn()) {
+                             loginSelection();
+                         } else {
+                             Intent intent = new Intent(mContext, Login.class);
+                             startActivity(intent);
+                             finish();
+                         }
+                     }
+
                 }
             }, 3000);
 

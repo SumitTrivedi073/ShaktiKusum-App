@@ -1,5 +1,6 @@
 package com.shaktipumplimited.Settingadapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -11,13 +12,12 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-
+import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.List;
 
 import debugapp.BlueToothDebugNewActivity;
 import debugapp.GlobalValue.Constant;
-import com.shaktipumplimited.shaktikusum.R;
 import webservice.WebURL;
 
 
@@ -27,13 +27,13 @@ public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAd
 
     private List mDeviceNameList;
     private List mDeviceMACAddressList;
-    //private HomeUserNameClickListener mHomeUserNameClickListener;
+    String ControllerSerialNumber;
 
-    public BTPairedDeviceAdapter(Context mContext, List mDeviceNameList, List mDeviceMACAddressList) {
+    public BTPairedDeviceAdapter(Context mContext, List mDeviceNameList, List mDeviceMACAddressList, String controllerSerialNumber) {
 
         this.mDeviceNameList = mDeviceNameList;
         this.mDeviceMACAddressList = mDeviceMACAddressList;
-        // this.mHomeUserNameClickListener = mHomeUserNameClickListener;
+         this.ControllerSerialNumber = controllerSerialNumber;
         this.mContext = mContext;
 
     }
@@ -52,7 +52,7 @@ public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAd
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         // holder.rlvHomeMainView.getLayoutParams().width = Validation.getDeviceHeightWidth(mContext, true)/2;
         //  holder.rlvHomeMainView.getLayoutParams().height = Validation.getDeviceHeightWidth(mContext, false)/3+30;
 
@@ -73,17 +73,15 @@ public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAd
 
                 WebURL.BT_DEVICE_NAME = mDeviceNameList.get(position).toString();
                 holder.txtDeviceNoID.setText(WebURL.BT_DEVICE_NAME);
-                System.out.println("BT_NAME_SAP_MATCH=1=>"+WebURL.BT_DEVICE_NAME);
                 WebURL.BT_DEVICE_MAC_ADDRESS = mDeviceMACAddressList.get(position).toString();
-                System.out.println("BT_NAME_SAP_MATCH=2=>"+WebURL.BT_DEVICE_NAME);
                 String BT_NAME_ORG = holder.txtDeviceNoID.getText().toString().trim();
-
                 Constant.BT_DEVICE_NAME = mDeviceNameList.get(position).toString();
                 Constant.BT_DEVICE_MAC_ADDRESS = mDeviceMACAddressList.get(position).toString();
 
                 Intent intent = new Intent(mContext, BlueToothDebugNewActivity.class);
                 intent.putExtra("BtNameHead",Constant.BT_DEVICE_NAME );
                 intent.putExtra("BtMacAddressHead",Constant.BT_DEVICE_MAC_ADDRESS );
+                intent.putExtra(Constant.ControllerSerialNumber,ControllerSerialNumber);
                 mContext.startActivity(intent);
 
                 ((Activity)mContext).finish();

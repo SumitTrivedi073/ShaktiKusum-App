@@ -144,7 +144,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         flvViewFlipperID.startFlipping();
 
         if (CustomUtility.isInternetOn()) {
-
             new Dashboard().execute();
         } else {
             getListData();
@@ -323,7 +322,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
 
-       // getListData();
     }
 
     @SuppressLint("NotifyDataSetChanged")
