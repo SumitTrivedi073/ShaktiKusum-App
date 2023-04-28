@@ -1,7 +1,6 @@
 package com.shaktipumplimited.shaktikusum.debugapp.GlobalValue;
 
 import android.content.Context;
-import android.graphics.Color;
 
 public class Constant {
     private Context mContectt;
@@ -35,6 +34,8 @@ public class Constant {
 
     public static String RejectedImage ="RejectedImage";
     public  static  boolean isLoding = false;
+
+    public static  String ControllerSerialNumber = "ControllerSerialNumber";
 
 
 

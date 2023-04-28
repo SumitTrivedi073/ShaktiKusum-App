@@ -1,4 +1,4 @@
-package com.shaktipumplimited.shaktikusum.utility;
+package utility;
 
 
 import android.Manifest;
@@ -39,12 +39,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import com.shaktipumplimited.shaktikusum.activity.BaseActivity;
-import com.shaktipumplimited.shaktikusum.activity.CustomProgressDialog;
-import com.shaktipumplimited.shaktikusum.bean.ImageModel;
-
-import com.google.gson.Gson;
-import com.shaktipumplimited.shaktikusum.R;
+import activity.BaseActivity;
+import activity.CustomProgressDialog;
+import bean.ImageModel;
 
 /**
  * Created by Administrator on 1/3/2017.
@@ -278,7 +275,13 @@ public class CustomUtility {
     }
 
 
-
+    public static boolean disableButtonTwoSecs() {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 3000) {
+            return true;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+        return false;
+    }
 
     public static void saveArrayList(Context context, List<ImageModel> imageArrayList,String name) {
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);
@@ -324,6 +327,14 @@ public class CustomUtility {
         progressDialog.setCancelable(false);
         progressDialog.show();
     }
+
+    public static void showProgressDialogue(Activity context) {
+        progressDialog = new CustomProgressDialog(context);
+          progressDialog.setCancelable(false);
+          if(!context.isFinishing()) {
+              progressDialog.show();
+          }
+      }
 
     public static void hideProgressDialog(Context context) {
         if(progressDialog!=null && progressDialog.isShowing()){

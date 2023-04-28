@@ -1,5 +1,6 @@
 package com.shaktipumplimited.shaktikusum.Settingadapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -11,14 +12,13 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-
+import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.List;
 
-import com.shaktipumplimited.shaktikusum.debugapp.BlueToothDebugNewActivity;
-import com.shaktipumplimited.shaktikusum.debugapp.GlobalValue.Constant;
-import com.shaktipumplimited.shaktikusum.R;
-import com.shaktipumplimited.shaktikusum.webservice.WebURL;
+import debugapp.BlueToothDebugNewActivity;
+import debugapp.GlobalValue.Constant;
+import webservice.WebURL;
 
 
 public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAdapter.ViewHolder> {
@@ -27,13 +27,13 @@ public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAd
 
     private List mDeviceNameList;
     private List mDeviceMACAddressList;
-    //private HomeUserNameClickListener mHomeUserNameClickListener;
+    String ControllerSerialNumber;
 
-    public BTPairedDeviceAdapter(Context mContext, List mDeviceNameList, List mDeviceMACAddressList) {
+    public BTPairedDeviceAdapter(Context mContext, List mDeviceNameList, List mDeviceMACAddressList, String controllerSerialNumber) {
 
         this.mDeviceNameList = mDeviceNameList;
         this.mDeviceMACAddressList = mDeviceMACAddressList;
-        // this.mHomeUserNameClickListener = mHomeUserNameClickListener;
+         this.ControllerSerialNumber = controllerSerialNumber;
         this.mContext = mContext;
 
     }

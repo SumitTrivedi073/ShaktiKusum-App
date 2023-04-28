@@ -11,9 +11,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
+import com.shaktipumplimited.shaktikusum.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +30,6 @@ import com.shaktipumplimited.shaktikusum.debugapp.GlobalValue.NewSolarVFD;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import com.shaktipumplimited.shaktikusum.R;
 import com.shaktipumplimited.shaktikusum.webservice.WebURL;
 
 
@@ -63,7 +64,7 @@ public class BaseRequest extends BaseRequestParser {
 
     public Callback<JsonElement> responseCallback = new Callback<JsonElement>() {
         @Override
-        public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+        public void onResponse(@NonNull Call<JsonElement> call, Response<JsonElement> response) {
             String responseServer = "";
             if (null != response.body()) {
                 JsonElement jsonElement = (JsonElement) response.body();

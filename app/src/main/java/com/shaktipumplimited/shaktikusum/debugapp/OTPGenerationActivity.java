@@ -1,4 +1,4 @@
-package com.shaktipumplimited.shaktikusum.debugapp;
+package debugapp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,7 +9,13 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.shaktipumplimited.retrofit.BaseRequest;
+import com.shaktipumplimited.retrofit.RequestReciever;
+import com.shaktipumplimited.shaktikusum.R;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -19,6 +25,9 @@ import com.shaktipumplimited.shaktikusum.activity.MainActivity;
 import com.shaktipumplimited.shaktikusum.R;
 
 import com.shaktipumplimited.shaktikusum.utility.CustomUtility;
+
+import activity.MainActivity;
+import utility.CustomUtility;
 
 
 public class OTPGenerationActivity extends AppCompatActivity {
@@ -148,6 +157,9 @@ public class OTPGenerationActivity extends AppCompatActivity {
         System.out.println("jsonObject==>>" + wordsByKey);
         //baseRequest.callAPIGET(1, wordsByKey, NewSolarVFD.GET_DEVICE_SIM_NUMBER_API);/////
        //old baseRequest.callAPIGETDirectURL(1, "http://login.yourbulksms.com/api/sendhttp.php?authkey=8716AQbKpjEHR5b4479de&mobiles=" + edtINSTNumberIDSTR + "&message=Enter The Following OTP To Verify Your Account " + mORG_OTP_VALUE + " SHAKTI&sender=SHAKTl&route=4&country=91&DLT_TE_ID=1707161675029844457");/////
-         baseRequest.callAPIGETDirectURL(1, "http://control.yourbulksms.com/api/sendhttp.php?authkey=393770756d707334373701&mobiles="+edtINSTNumberIDSTR+"&message=प्रिय उपभोक्ता, शक्ति पम्प इंस्टालेशन टीम द्वारा सोलर पम्प सफलतापूर्वक इनस्टॉल कर दिया गया है यदि आप इंस्टालेशन से संतुष्ट है तो इंस्टालेशन टीम को OTP बताये और यदि संतुष्ट नहीं है तो कृपया इंस्टालेशन टीम को मोबाइल एप्प में कारण दर्ज करवाये OTP NO - "+ mORG_OTP_VALUE +" . शक्ति पम्प&sender=SHAKTl&unicode=1&route=2&unicode=1&country=91&DLT_TE_ID=1707165768934110550");/////
+         baseRequest.callAPIGETDirectURL(1, "http://control.yourbulksms.com/api/sendhttp.php?authkey=393770756d707334373701&mobiles="
+                 +edtINSTNumberIDSTR+"&message=प्रिय उपभोक्ता, शक्ति पम्प इंस्टालेशन टीम द्वारा सोलर पम्प सफलतापूर्वक इनस्टॉल कर दिया गया है यदि आप इंस्टालेशन से संतुष्ट है तो इंस्टालेशन टीम को OTP बताये " +
+                 "और यदि संतुष्ट नहीं है तो कृपया इंस्टालेशन टीम को मोबाइल एप्प में कारण दर्ज करवाये OTP NO - "+ mORG_OTP_VALUE +" ." +
+                 " शक्ति पम्प&sender=SHAKTl&unicode=1&route=2&unicode=1&country=91&DLT_TE_ID=1707165768934110550");/////
     }
 }
