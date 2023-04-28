@@ -24,17 +24,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.shaktipumplimited.shaktikusum.R;
+import com.shaktipumplimited.shaktikusum.bean.LoginSelectionModel;
+import com.shaktipumplimited.shaktikusum.database.DatabaseHelper;
+import com.shaktipumplimited.shaktikusum.utility.CustomUtility;
+import com.shaktipumplimited.shaktikusum.webservice.WebURL;
 
-import org.apache.http.NameValuePair;
-import org.json.JSONArray;
 import org.json.JSONObject;
-
-import bean.LoginSelectionModel;
-import database.DatabaseHelper;
-import utility.CustomUtility;
-import webservice.WebURL;
-
-
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {

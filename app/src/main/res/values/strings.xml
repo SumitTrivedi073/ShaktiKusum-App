@@ -184,6 +184,7 @@
 
     <string name="material_unloading_img">Material Unloading Images</string>
     <string name="installationImg">Installation Images</string>
+    <string name="siteAuditImages">Site Audit Images</string>
     <string name="registrationImg">Registration Images</string>
     <string name="rejectedImg">Rejected Images</string>
     <string name="select_pannel_photo">Please select panel module front side with farmer Photo.</string>
@@ -211,6 +212,12 @@
     <string name="all_permission">Please allow all the permission</string>
     <string name="capture">Capture</string>
     <string name="Click_Again">Click Again</string>
-
-
+    <string name="foundation_photo">Foundation Photo</string>
+    <string name="Structure_Assembly_photo">Structure Assembly Photo</string>
+    <string name="LA_and_Earthing_Photo">LA and Earthing Photo</string>
+    <string name="MISC_Photo">MISC Photo</string>
+    <string name="Please_foundation_photo">Please select Foundation Photo</string>
+    <string name="Please_Structure_Assembly_photo">Please select Structure Assembly Photo</string>
+    <string name="Please_LA_and_Earthing_Photo">Please select LA and Earthing Photo</string>
+    <string name="Please_MISC_Photo">Please select MISC Photo</string>
 </resources>

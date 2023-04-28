@@ -53,7 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_REJECTION_LIST = "tbl_rejection_list";
     public static final String TABLE_SURVEY_LIST = "tbl_survey_list";
     public static final String TABLE_INSTALLATION_PUMP_DATA = "tbl_installation_pump_data";
-
+    public static final String TABLE_SITE_AUDIT = "tbl_site_audit";
     public static final String TABLE_INSTALLATION_IMAGE_DATA = "tbl_installation_image_data";
 
     public static final String TABLE_UNLOADING_IMAGE_DATA = "tbl_unloading_image_data";
@@ -243,6 +243,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String KEY_INSTALLATION_ID = "installationId",KEY_INSTALLATION_NAME = "installationImageName",KEY_INSTALLATION_PATH = "installtionPath",KEY_INSTALLATION_IMAGE_SELECTED = "installtionImageSelected",KEY_INSTALLATION_BILL_NO = "InstalltionBillNo";
 
+    public static final String KEY_SITE_AUDIT_ID = "siteAuditId",KEY_SITE_AUDIT_NAME = "siteAuditImageName",KEY_SITE_AUDIT_PATH = "siteAuditPath",KEY_SITE_AUDIT_IMAGE_SELECTED = "siteAuditImageSelected";
+
     public static final String KEY_UNLOADING_ID = "unloadingId",KEY_UNLOADING_NAME = "unloadingImageName",KEY_UNLOADING_PATH = "unloadingPath",KEY_UNLOADING_IMAGE_SELECTED = "unloadingImageSelected",KEY_UNLOADING_BILL_NO = "unloadingBillNo";
 
 
@@ -376,7 +378,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_PHOTO3, mDamageMissResponse.getMPhotoValue3());
             values.put(KEY_PHOTO4, mDamageMissResponse.getMPhotoValue4());
             values.put(KEY_PHOTO5, mDamageMissResponse.getMPhotoValue5());
-            long i = db.insert(TABLE_DAMAGE_MISS_COMPLAIN, null, values);
+            db.insert(TABLE_DAMAGE_MISS_COMPLAIN, null, values);
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
             e.printStackTrace();
@@ -388,11 +390,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Updated Damage record
     public void updatedDamageMissData(DamageMissResponse mDamageMissResponse) {
-        long i = 0;
+
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
         ContentValues values;
-        String where = " ";
+        String where;
         try {
             values = new ContentValues();
             values.put(KEY_BILL_NO, mDamageMissResponse.getMBillNo());
@@ -434,7 +436,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // Insert Row
             // long i = db.insert(TABLE_DAMAGE_MISS_COMPLAIN , null, values);
             where = KEY_BILL_NO + "='" + mDamageMissResponse.getMBillNo() + "'";
-            i = db.update(TABLE_DAMAGE_MISS_COMPLAIN, values, where, null);
+            db.update(TABLE_DAMAGE_MISS_COMPLAIN, values, where, null);
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
             e.printStackTrace();
@@ -678,10 +680,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_INSTALLATION_IMAGES = "CREATE TABLE "
             + TABLE_INSTALLATION_IMAGE_DATA + "("  + KEY_INSTALLATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_INSTALLATION_NAME + " TEXT," + KEY_INSTALLATION_PATH + " TEXT," + KEY_INSTALLATION_IMAGE_SELECTED + " BOOLEAN," + KEY_INSTALLATION_BILL_NO + " TEXT)";
 
+    private static final String CREATE_TABLE_SITE_AUDIT_IMAGES = "CREATE TABLE "
+            + TABLE_SITE_AUDIT + "("  + KEY_SITE_AUDIT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_SITE_AUDIT_NAME + " TEXT," + KEY_SITE_AUDIT_PATH + " TEXT," + KEY_SITE_AUDIT_IMAGE_SELECTED + " BOOLEAN)";
+
     private static final String CREATE_TABLE_UNLOADING_IMAGES = "CREATE TABLE "
             + TABLE_UNLOADING_IMAGE_DATA + "("  + KEY_UNLOADING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_UNLOADING_NAME + " TEXT," + KEY_UNLOADING_PATH + " TEXT," + KEY_UNLOADING_IMAGE_SELECTED + " TEXT," + KEY_UNLOADING_BILL_NO + " TEXT)";
-
-
 
     private static final String CREATE_TABLE_AUDIT_PUMP = "CREATE TABLE "
             + TABLE_AUDIT_PUMP_DATA + "("
@@ -1073,6 +1076,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_SIM_CARD_REPLACEMENT);
         db.execSQL(CREATE_TABLE_SURVEY_DATA);
         db.execSQL(CREATE_TABLE_INSTALLATION_IMAGES);
+        db.execSQL(CREATE_TABLE_SITE_AUDIT_IMAGES);
         db.execSQL(CREATE_TABLE_UNLOADING_IMAGES);
     }
 
@@ -1099,6 +1103,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_AUDITSITE_LIST);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_AUDIT_PUMP_DATA);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_INSTALLATION_IMAGE_DATA);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_SITE_AUDIT);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_UNLOADING_IMAGE_DATA);
             // create newworkorder tables
             onCreate(db);
@@ -3404,6 +3409,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void deleteSiteAuditImages() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(CustomUtility.doesTableExist(db,TABLE_SITE_AUDIT)) {
+            db.delete(TABLE_SITE_AUDIT, null, null);
+        }
+    }
+
     public void deleteUnloadingImages() {
         SQLiteDatabase db = this.getWritableDatabase();
         if(CustomUtility.doesTableExist(db,TABLE_UNLOADING_IMAGE_DATA)) {
@@ -3797,6 +3809,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.close();
     }
 
+    public void insertSiteAuditImage( String name,String path, boolean isSelected) {
+        SQLiteDatabase  database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_SITE_AUDIT_NAME, name);
+        contentValues.put(KEY_SITE_AUDIT_PATH, path);
+        contentValues.put(KEY_SITE_AUDIT_IMAGE_SELECTED, isSelected);
+        database.insert(TABLE_SITE_AUDIT, null, contentValues);
+        database.close();
+    }
+
     public void updateRecordAlternate( String name, String path, boolean isSelected, String billNo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -3806,6 +3828,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_INSTALLATION_BILL_NO, billNo);
         // update Row
         db.update(TABLE_INSTALLATION_IMAGE_DATA,values,"installationImageName = '"+name+"'",null);
+        db.close();
+    }
+
+    public void updateSiteAuditRecord( String name, String path, boolean isSelected) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_SITE_AUDIT_NAME, name);
+        values.put(KEY_SITE_AUDIT_PATH, path);
+        values.put(KEY_SITE_AUDIT_IMAGE_SELECTED, isSelected);
+        // update Row
+        db.update(TABLE_SITE_AUDIT,values,"siteAuditImageName = '"+name+"'",null);
         db.close();
     }
 
@@ -3835,6 +3868,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             database.close();
         }
         return installationImages;
+    }
+
+    public List<ImageModel> getAllAuditSiteImages() {
+        ArrayList<ImageModel> siteAuditImages = new ArrayList<ImageModel>();
+        SQLiteDatabase  database = this.getWritableDatabase();
+        if(CustomUtility.doesTableExist(database,TABLE_SITE_AUDIT)) {
+            Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_SITE_AUDIT, null);
+            ImageModel imageModel;
+
+            if (mcursor.getCount() > 0) {
+                for (int i = 0; i < mcursor.getCount(); i++) {
+                    mcursor.moveToNext();
+
+                    imageModel = new ImageModel();
+                    imageModel.setID(mcursor.getString(0));
+                    imageModel.setName(mcursor.getString(1));
+                    imageModel.setImagePath(mcursor.getString(2));
+                    imageModel.setImageSelected(Boolean.parseBoolean(mcursor.getString(3)));
+                    siteAuditImages.add(imageModel);
+                }
+            }
+            mcursor.close();
+            database.close();
+        }
+        return siteAuditImages;
     }
 
 

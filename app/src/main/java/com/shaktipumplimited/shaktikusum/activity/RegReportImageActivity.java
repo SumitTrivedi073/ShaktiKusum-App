@@ -6,8 +6,7 @@ import static android.Manifest.permission.READ_MEDIA_AUDIO;
 import static android.Manifest.permission.READ_MEDIA_IMAGES;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION.SDK_INT;
-import static debugapp.GlobalValue.Constant.RegistrationImage;
-import static utility.FileUtils.getPath;
+
 
 import android.Manifest;
 import android.app.Activity;

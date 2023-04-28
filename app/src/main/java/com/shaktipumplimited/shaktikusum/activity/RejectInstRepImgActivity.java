@@ -101,8 +101,10 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
     }
 
     private void CheakPermissions() {
-        if (!checkPermission()) {
-            requestPermission();
+        if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (!checkPermission()) {
+                requestPermission();
+            }
         }
 
     }

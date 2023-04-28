@@ -35,9 +35,11 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import com.shaktipumplimited.shaktikusum.bean.AuditSiteBean;
+import com.shaktipumplimited.shaktikusum.bean.ImageModel;
 import com.shaktipumplimited.shaktikusum.database.DatabaseHelper;
 import com.shaktipumplimited.shaktikusum.utility.CustomUtility;
 import com.shaktipumplimited.shaktikusum.webservice.CustomHttpClient;
@@ -52,7 +54,7 @@ public class SiteAuditInitial extends AppCompatActivity {
 
     Context context;
     DatabaseHelper db;
-
+    List<ImageModel> imageList = new ArrayList<>();
     public static final String GALLERY_DIRECTORY_NAME = "ShaktiKusum";
     String billno = "";
     String billdate = "";
@@ -64,6 +66,7 @@ public class SiteAuditInitial extends AppCompatActivity {
     String regisno = "";
     String auddate = "";
     String contactno = "";
+    String beneficiary ="";
     AuditSiteBean auditSiteBean;
     EditText foud_rea_txt,stru_rea_txt,drvcb_txt,laer_txt,wrk_txt,siteaudit_date;
 
@@ -137,6 +140,7 @@ public class SiteAuditInitial extends AppCompatActivity {
                 regisno    = null;
                 projectno  = null;
                 contactno  = null;
+                beneficiary = null;
 
             } else {
 
@@ -149,6 +153,7 @@ public class SiteAuditInitial extends AppCompatActivity {
                 regisno    = extras.getString("regisno");
                 projectno  = extras.getString("projectno");
                 contactno  = extras.getString("contact");
+                beneficiary = extras.getString("benficiary");
 
             }
         } else {
@@ -162,7 +167,7 @@ public class SiteAuditInitial extends AppCompatActivity {
             regisno    = (String) savedInstanceState.getSerializable("regisno");
             projectno  = (String) savedInstanceState.getSerializable("projectno");
             contactno  = (String) savedInstanceState.getSerializable("contact");
-
+            beneficiary = (String) savedInstanceState.getSerializable("benficiary");
         }
 
 
@@ -228,49 +233,11 @@ public class SiteAuditInitial extends AppCompatActivity {
                 onBackPressed();
                 return true;
             case R.id.act_comp_attach_image:
-       /*         if(SDK_INT >= 30) {
-                if (!Environment.isExternalStorageManager()) {
-                    Snackbar.make(findViewById(android.R.id.content), "Permission needed!", Snackbar.LENGTH_INDEFINITE)
-                            .setAction("Settings", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                    try {
-                                        Uri uri = Uri.parse("package:" + BuildConfig.APPLICATION_ID);
-                                        Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri);
-                                        startActivity(intent);
-                                    } catch (Exception ex) {
-                                        Intent intent = new Intent();
-                                        intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                                        startActivity(intent);
-                                    }
-                                }
-                            })
-                            .show();
-                }
-                else{
-                    Intent intent = new Intent(getApplicationContext(), SiteAuditImageActivity.class);
-                    intent.putExtra("billno", billno);
-                    intent.putExtra("custnm", name);
-                    startActivity(intent);
-
-                    return true;
-                }
-            }
-                else {
-                Intent intent = new Intent(getApplicationContext(), SiteAuditImageActivity.class);
-                    intent.putExtra("billno", billno);
-                    intent.putExtra("custnm", name);
-                    startActivity(intent);
-
-                    return true;
-                }*/
 
                 Intent intent = new Intent(getApplicationContext(), SiteAuditImageActivity.class);
                 intent.putExtra("billno", billno);
                 intent.putExtra("custnm", name);
                 startActivity(intent);
-
                 return true;
 
         }
@@ -313,7 +280,6 @@ public class SiteAuditInitial extends AppCompatActivity {
                     drv_mount_remark,
                     la_earth_remark,
                     wrkmn_qlty_remark
-
             );
 
             if (db.isRecordExist(db.TABLE_AUDIT_PUMP_DATA, db.KEY_BILL_NO, billno)) {
@@ -352,7 +318,6 @@ public class SiteAuditInitial extends AppCompatActivity {
                     drv_mount_remark,
                     la_earth_remark,
                     wrkmn_qlty_remark
-
             );
 
             if (db.isRecordExist(db.TABLE_AUDIT_PUMP_DATA, db.KEY_BILL_NO, billno)) {
@@ -432,7 +397,6 @@ public class SiteAuditInitial extends AppCompatActivity {
                     drv_mount_remark,
                     la_earth_remark,
                     wrkmn_qlty_remark
-
             );
 
             if (db.isRecordExist(db.TABLE_AUDIT_PUMP_DATA, db.KEY_BILL_NO, billno)) {
@@ -530,7 +494,7 @@ public class SiteAuditInitial extends AppCompatActivity {
 
     public void setData() {
 
-        auditSiteBean = new AuditSiteBean();
+        auditSiteBean = new AuditSiteBean(pernr, project_no, billno, billdate, auddate, name, contactno, state_id, city_id, address, regisno, found, struc, drv_mount, la_earth, wrkmn_qlty, site_rating, found_remark, stru_remark, drv_mount_remark, la_earth_remark, wrkmn_qlty_remark);
         auditSiteBean = db.getAuditData(CustomUtility.getSharedPreferences(context, "userid"), billno);
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
@@ -619,6 +583,39 @@ public class SiteAuditInitial extends AppCompatActivity {
             siterating.setRating(auditSiteBean.getSite_art());
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        retriveArrayList();
+    }
+
+    private void retriveArrayList() {
+      /*  imageList = new ArrayList<>();
+        String json = CustomUtility.getSharedPreferences(InstallationInitial.this, InstallationImage);
+        // below line is to get the type of our array list.
+        Type type = new TypeToken<ArrayList<ImageModel>>() {
+        }.getType();
+
+        // in below line we are getting data from gson
+        // and saving it to our array list
+        imageList = new Gson().fromJson(json, type);*/
+        imageList = new ArrayList<>();
+        DatabaseHelper db = new DatabaseHelper(this);
+
+        List<ImageModel> siteAuditImages = db.getAllAuditSiteImages();
+        Log.e("installationImages===>",""+siteAuditImages.size());
+        for (int i = 0; i < siteAuditImages.size(); i++) {
+
+                ImageModel imageModel = new ImageModel();
+                imageModel.setName(siteAuditImages.get(i).getName());
+                imageModel.setImagePath(siteAuditImages.get(i).getImagePath());
+                imageModel.setImageSelected(true);
+                imageList.add(imageModel);
+            }
+
 
     }
 
@@ -642,7 +639,7 @@ public class SiteAuditInitial extends AppCompatActivity {
 
             DatabaseHelper db = new DatabaseHelper(context);
 
-            AuditSiteBean param_invc = new AuditSiteBean();
+            AuditSiteBean param_invc = new AuditSiteBean(pernr, project_no, billno, billdate, auddate, name, contactno, state_id, city_id, address, regisno, found, struc, drv_mount, la_earth, wrkmn_qlty, site_rating, found_remark, stru_remark, drv_mount_remark, la_earth_remark, wrkmn_qlty_remark);
 
             param_invc = db.getAuditData(pernr, billno);
 
@@ -661,8 +658,6 @@ public class SiteAuditInitial extends AppCompatActivity {
                 Date date = dt.parse(date_s);
                 Date date1 = dt.parse(date_s1);
                 SimpleDateFormat dt1 = new SimpleDateFormat("yyyyMMdd");
-
-
 
                 jsonObj.put("vbeln", param_invc.getInst_bill_no());
                 jsonObj.put("project_no", param_invc.getProject_no());
@@ -686,18 +681,24 @@ public class SiteAuditInitial extends AppCompatActivity {
                 jsonObj.put("wrkmn_qlty", param_invc.getWrk_quality());
                 jsonObj.put("wrkmn_qlty_remark", param_invc.getWrk_quality_rmk());
                 jsonObj.put("site_rating", param_invc.getSite_art());
+                jsonObj.put("beneficiary", beneficiary);
 
-                jsonObj.put("PHOTO1", CustomUtility.getSharedPreferences(context, billno + "PHOTO_1"));
-                jsonObj.put("PHOTO2", CustomUtility.getSharedPreferences(context, billno + "PHOTO_2"));
-                jsonObj.put("PHOTO3", CustomUtility.getSharedPreferences(context, billno + "PHOTO_3"));
-                jsonObj.put("PHOTO4", CustomUtility.getSharedPreferences(context, billno + "PHOTO_4"));
+                if (imageList.size() > 0) {
 
-                Log.e("photo1","&&&&"+CustomUtility.getSharedPreferences(context, billno + "PHOTO_1"));
-                Log.e("photo2","&&&&"+CustomUtility.getSharedPreferences(context, billno + "PHOTO_2"));
-                Log.e("photo3","&&&&"+CustomUtility.getSharedPreferences(context, billno + "PHOTO_3"));
-                Log.e("photo4","&&&&"+CustomUtility.getSharedPreferences(context, billno + "PHOTO_4"));
+                    if (imageList.get(0).isImageSelected()) {
+                        jsonObj.put("PHOTO1", CustomUtility.getBase64FromBitmap(SiteAuditInitial.this, imageList.get(0).getImagePath()));
+                    }
+                    if (1 < imageList.size() && imageList.get(1).isImageSelected()) {
+                        jsonObj.put("PHOTO2", CustomUtility.getBase64FromBitmap(SiteAuditInitial.this, imageList.get(1).getImagePath()));
+                    }
+                    if (2 < imageList.size() && imageList.get(2).isImageSelected()) {
+                        jsonObj.put("PHOTO3", CustomUtility.getBase64FromBitmap(SiteAuditInitial.this, imageList.get(2).getImagePath()));
+                    }
+                    if (3 < imageList.size() && imageList.get(3).isImageSelected()) {
+                        jsonObj.put("PHOTO4", CustomUtility.getBase64FromBitmap(SiteAuditInitial.this, imageList.get(3).getImagePath()));
+                    }
 
-
+                }
                 ja_invc_data.put(jsonObj);
 
             } catch (Exception e) {
@@ -705,7 +706,7 @@ public class SiteAuditInitial extends AppCompatActivity {
             }
 
 
-            final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
+            final ArrayList<NameValuePair> param1_invc = new ArrayList<>();
             param1_invc.add(new BasicNameValuePair("site_audit_data", String.valueOf(ja_invc_data)));
             Log.e("DATA", "$$$$" + param1_invc.toString());
 

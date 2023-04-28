@@ -303,6 +303,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dataHelper.deleteInstallationData();
                 dataHelper.deleteSurveyData();
                 dataHelper.deleteInstallationImages();
+                dataHelper.deleteSiteAuditImages();
                 dataHelper.deleteUnloadingImages();
                 CustomUtility.clearSharedPrefrences(context);
                /* CustomUtility.setSharedPreference(context, "userid", "");

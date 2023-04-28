@@ -1,8 +1,5 @@
 package com.shaktipumplimited.shaktikusum.activity;
 
-import static activity.Config.TIME_STAMP_FORMAT_DATE;
-import static activity.Config.TIME_STAMP_FORMAT_TIME;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -29,7 +26,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.media.Image;
 import android.media.ImageReader;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -43,7 +39,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -51,6 +46,7 @@ import androidx.core.content.ContextCompat;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.shaktipumplimited.shaktikusum.R;
+import com.shaktipumplimited.shaktikusum.utility.CustomUtility;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -65,8 +61,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import utility.CustomUtility;
 
+
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class CameraActivity2 extends AppCompatActivity{
     private static final String GALLERY_DIRECTORY_NAME_COMMON = "SurfaceCamera";
     private TextureView textureView;
@@ -174,29 +171,24 @@ public class CameraActivity2 extends AppCompatActivity{
             int rotation = getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION,ORIENTATIONS.get(rotation));
 
-            ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
-                @RequiresApi(api = Build.VERSION_CODES.O)
-                @Override
-                public void onImageAvailable(ImageReader imageReader) {
-                    Image image = null;
-                    try{
-                        image = reader.acquireLatestImage();
-                        ByteBuffer buffer = image.getPlanes()[0].getBuffer();
-                        byte[] bytes = new byte[buffer.capacity()];
-                        buffer.get(bytes);
-                        //save(bytes);
+            ImageReader.OnImageAvailableListener readerListener = imageReader -> {
+                Image image = null;
+                try{
+                    image = reader.acquireLatestImage();
+                    ByteBuffer buffer = image.getPlanes()[0].getBuffer();
+                    byte[] bytes = new byte[buffer.capacity()];
+                    buffer.get(bytes);
+                    //save(bytes);
 
-                        bitmap = saveImageWithTimeStamp(bytes);
-                        file = saveFile(bitmap,customer_name.trim());
+                    bitmap = saveImageWithTimeStamp(bytes);
+                    file = saveFile(bitmap,customer_name.trim());
 
-                    } finally {
-                        {
-                            if(image != null)
-                                image.close();
-                        }
+                } finally {
+                    {
+                        if(image != null)
+                            image.close();
                     }
                 }
-
             };
 
             reader.setOnImageAvailableListener(readerListener,mBackgroundHandler);
@@ -266,23 +258,22 @@ public class CameraActivity2 extends AppCompatActivity{
         }
 
         // Create a media file name
-        return dir.getPath() + File.separator + "IMG_"+  String.valueOf(Calendar.getInstance().getTimeInMillis()) +".jpg";
+        return dir.getPath() + File.separator + "IMG_"+ Calendar.getInstance().getTimeInMillis() +".jpg";
     }
 
 
-    public Bitmap saveImageWithTimeStamp( byte data[]) {
+    public Bitmap saveImageWithTimeStamp(byte[] data) {
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inMutable = true;
         Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length, options);
 
         // bmp = rotateBitmap(bmp);
-        SimpleDateFormat sdf = new SimpleDateFormat(TIME_STAMP_FORMAT_DATE, Locale.getDefault());
-        SimpleDateFormat sdf1 = new SimpleDateFormat(TIME_STAMP_FORMAT_TIME, Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat(Config.TIME_STAMP_FORMAT_DATE, Locale.getDefault());
+        SimpleDateFormat sdf1 = new SimpleDateFormat(Config.TIME_STAMP_FORMAT_TIME, Locale.getDefault());
         String date = sdf.format(new Date());
         String time = sdf1.format(new Date());
 
-        float scale = this.getResources().getDisplayMetrics().density;
         Canvas canvas = new Canvas(bmp);
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -304,8 +295,8 @@ public class CameraActivity2 extends AppCompatActivity{
 
 
 
-        String text = "Latitude: "+latitudetxt;
-        String text1 = "Longitude: "+longitudetxt;
+        String text = "Latitude: "+ latitudetxt;
+        String text1 = "Longitude: "+ longitudetxt;
         String text2 = "Date: "+date;
         String text3 = "Time: "+time;
 
@@ -487,8 +478,8 @@ public class CameraActivity2 extends AppCompatActivity{
                                 state = addresses.get(0).getAdminArea();
                                 postalcode = addresses.get(0).getPostalCode();
                                 country = addresses.get(0).getCountryName();
-                                getDate = new SimpleDateFormat(TIME_STAMP_FORMAT_DATE, Locale.getDefault());
-                                getTime = new SimpleDateFormat(TIME_STAMP_FORMAT_TIME, Locale.getDefault());
+                                getDate = new SimpleDateFormat(Config.TIME_STAMP_FORMAT_DATE, Locale.getDefault());
+                                getTime = new SimpleDateFormat(Config.TIME_STAMP_FORMAT_TIME, Locale.getDefault());
 
 
                                 display.setText(" Latitude : " + latitudetxt + "\n" + " Longitude : " + longitudetxt+ "\n" + " Address : " + addresstxt +","

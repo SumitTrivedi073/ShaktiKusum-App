@@ -39,9 +39,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import activity.BaseActivity;
-import activity.CustomProgressDialog;
-import bean.ImageModel;
 import com.shaktipumplimited.shaktikusum.activity.BaseActivity;
 import com.shaktipumplimited.shaktikusum.activity.CustomProgressDialog;
 import com.shaktipumplimited.shaktikusum.bean.ImageModel;
@@ -303,6 +300,10 @@ public class CustomUtility {
             prefsEditor.clear();
             prefsEditor.apply();
 
+    }
+
+    public static boolean isValidMobile(String phone) {
+        return android.util.Patterns.PHONE.matcher(phone).matches();
     }
 
     public String getCurrentDate() {

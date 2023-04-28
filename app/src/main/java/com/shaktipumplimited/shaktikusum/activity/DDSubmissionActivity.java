@@ -116,10 +116,10 @@ public class DDSubmissionActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private DDSubmissionActivity activity;
 
-    List<ImageModel> imageArrayList = new ArrayList<>();
+
     List<ImageModel> imageList = new ArrayList<>();
     AlertDialog alertDialog;
-
+    List<ImageModel> imageArrayList = new ArrayList<>();
     int selectedIndex = 0;
     ImageView inst_location, geoIndigation;
 
@@ -653,7 +653,6 @@ public class DDSubmissionActivity extends AppCompatActivity {
             photo1.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_mendotry, 0, R.drawable.red_icn, 0);
         }
           }
-
     }
 
     @Override

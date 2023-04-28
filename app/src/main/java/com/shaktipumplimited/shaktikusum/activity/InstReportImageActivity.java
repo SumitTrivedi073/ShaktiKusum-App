@@ -169,7 +169,7 @@ public class InstReportImageActivity extends AppCompatActivity implements ImageS
         recyclerview = findViewById(R.id.recyclerview);
 
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -254,13 +254,11 @@ public class InstReportImageActivity extends AppCompatActivity implements ImageS
         recyclerview.setHasFixedSize(true);
         recyclerview.setAdapter(customAdapter);
         customAdapter.ImageSelection(this);
-
     }
 
     @Override
     public void ImageSelectionListener(ImageModel imageModelList, int position) {
         selectedIndex = position;
-
         if (imageModelList.isImageSelected()) {
             isUpdate = true;
             selectImage("1");

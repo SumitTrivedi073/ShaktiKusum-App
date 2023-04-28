@@ -1,5 +1,6 @@
 package com.shaktipumplimited.shaktikusum.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -58,7 +59,7 @@ public class Adapter_auditsite_list extends RecyclerView.Adapter<Adapter_auditsi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final HomeCategoryViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final HomeCategoryViewHolder holder, @SuppressLint("RecyclerView") final int position) {
 
         try {
 
@@ -121,6 +122,7 @@ public class Adapter_auditsite_list extends RecyclerView.Adapter<Adapter_auditsi
                         extras.putString("city", responseList.get(position).getCity());
                         extras.putString("address", responseList.get(position).getAddress());
                         extras.putString("contact", responseList.get(position).getContact_no());
+                        extras.putString("benficiary", responseList.get(position).getBeneficiary());
                         in.putExtras(extras);
                         context.startActivity(in);
 

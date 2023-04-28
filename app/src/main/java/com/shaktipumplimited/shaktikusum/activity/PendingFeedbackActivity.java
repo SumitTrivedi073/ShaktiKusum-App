@@ -221,11 +221,13 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
         CustomUtility.showProgressDialogue(PendingFeedbackActivity.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.SendOTP +"&mobiles="+response.getContactNo()+
-                        "&message=आप अपने खेत में शक्ति पम्प्स (इंडिया) लिमिटेड द्वारा स्थापित "+response.getHp()+" एचपी रेटिंग सोलर पंप सेट के लिए लाभार्थी आईडी "+response.getBeneficiary()+" के संदर्भ में यह संदेश प्राप्त कर रहे हैं।" +
-                        " यह संदेश केवल आपकी प्रतिक्रिया के उद्देश्य से है शक्ति पंप्स इंस्टालर को सत्यपान कोड साझा करके आप निम्नलिखित की पुष्टि कर रहे हैं 1) आप स्थापना की गुणवत्ता से संतुष्ट हैं" +
-                        " 2) आप सोलर पंप सेट के प्रदर्शन से संतुष्ट हैं 3) इंस्टॉलर ने किसी भी प्रकार की सामग्री या स्थापना कार्य के लिए कोई राशि नहीं ली हैं यदि उपरोक्त सभी तीन कथन सही हैं, " +
-                        "तो कृपया अपने सोलर पम्प सेट की 5 वर्ष की सेवा को सक्रिय करने के लिए इंस्टॉलर के साथ सत्यपान कोड "+generatedVerificationCode+" साझा करें।:&sender=SHAKTl&route=2&country=91&DLT_TE_ID=1707167928540679513&unicode=1",
+                WebURL.SendOTP +"&mobiles="+ response.getContactNo()+ "&message=प्रिय ग्राहक, आप अपने खेत में शक्ति पंप्स " +
+                        "(इंडिया) लिमिटेड द्वारा इन्सटाल्ड " + response.getHp() + " HP रेटिंग सोलर पंप सेट के लिए कस्टमर आईडी " +
+                        response.getBeneficiary() + " के सम्बन्ध में यह मेसेज प्राप्त कर रहे हैं। यह मैसेज आपको फीडबैक के उद्देश्य से दिया जा रहा है । " +
+                        "शक्ति पंप इंस्टालर को OTP शेयर करके आप निचे दिए पॉइंट की पुष्टि कर रहे हैं कि (1) आप इंस्टालेशन की क्वालिटी से संतुष्ट हैं। (2) " +
+                        "आप सोलर पंप सेट के परफॉरमेंस से संतुष्ट हैं । (3) इंस्टालर द्वारा सोलर सिस्टम लगाने के लिए आपसे किसी भी प्रकार राशि नहीं ली गई है." +
+                        " यदि ऊपर दिए तीनो पॉइंट सही हैं तो कृपया अपने सोलर पंप सेट की 05 वर्ष की सर्विस को सक्रिय करने के लिए इंस्टालर के साथ "
+                        + generatedVerificationCode + " ( OTP) शेयर करे।:&sender=SHAKTl&route=2&country=91&DLT_TE_ID=1707168242000670452&unicode=1",
 
                 null, new Response.Listener<JSONObject >() {
             @Override

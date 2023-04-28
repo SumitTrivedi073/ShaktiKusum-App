@@ -3888,8 +3888,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
 
-            // write display tracks logic here
-
             dialog.dismiss();
             progressDialog.dismiss();  // dismiss dialog
 
