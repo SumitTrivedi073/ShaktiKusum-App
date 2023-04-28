@@ -476,7 +476,7 @@ public class Login extends AppCompatActivity {
 
                     progressDialog.dismiss();
 
-//*********************create message in thread*******************************/
+//*********************create message in thread *******************************/
                     Message msg = new Message();
                     msg.obj = "Invalid username or password";
                     mHandler.sendMessage(msg);
