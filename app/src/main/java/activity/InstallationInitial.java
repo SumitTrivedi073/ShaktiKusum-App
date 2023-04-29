@@ -6,12 +6,10 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Message;
 import android.os.StrictMode;
 import android.provider.Settings;
@@ -76,6 +74,7 @@ import bean.BTResonseData;
 import bean.ImageModel;
 import bean.InstallationBean;
 import database.DatabaseHelper;
+import de.hdodenhof.circleimageview.CircleImageView;
 import debugapp.Bean.SimDetailsInfoResponse;
 import debugapp.GlobalValue.Constant;
 import debugapp.GlobalValue.NewSolarVFD;
@@ -206,8 +205,8 @@ public class InstallationInitial extends AppCompatActivity {
     String mobileno = "";
     String tehvillage = "";
     String borewellstatus1 = "";
-    String DeviceStatus= "";
-    String CUS_CONTACT_NO = "",BeneficiaryNo ="";
+    String DeviceStatus = "";
+    String CUS_CONTACT_NO = "", BeneficiaryNo = "";
     int currentScannerFor = -1;
     ArrayList<String> scannedDeviceNo = new ArrayList<>();
     String mDriveSerialNo = "";
@@ -252,7 +251,7 @@ public class InstallationInitial extends AppCompatActivity {
     };
 
     List<ImageModel> imageList = new ArrayList<>();
-    boolean isBaseUpdate = false;
+    boolean isBaseUpdate = false, isControllerIDScan = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -305,7 +304,7 @@ public class InstallationInitial extends AppCompatActivity {
         loginno = extras.getString("loginno");
         moduleqty = extras.getString("moduleqty");
         CUS_CONTACT_NO = extras.getString("CUS_CONTACT_NO");
-        BeneficiaryNo =  extras.getString("BeneficiaryNo");
+        BeneficiaryNo = extras.getString("BeneficiaryNo");
         try {
             Constant.BILL_NUMBER_UNIC = billno;
             // WebURL.mSettingCheckValue = simha2;
@@ -350,7 +349,7 @@ public class InstallationInitial extends AppCompatActivity {
                 if (AllPopupUtil.pairedDeviceListGloable(mContext)) {
                     if (WebURL.BT_DEVICE_NAME.equalsIgnoreCase("") || WebURL.BT_DEVICE_MAC_ADDRESS.equalsIgnoreCase("")) {
                         Intent intent = new Intent(mContext, PairedDeviceActivity.class);
-                        intent.putExtra(Constant.ControllerSerialNumber,inst_controller_ser.getText().toString().trim());
+                        intent.putExtra(Constant.ControllerSerialNumber, inst_controller_ser.getText().toString().trim());
                         startActivity(intent);
                     }
                 } else {
@@ -529,9 +528,9 @@ public class InstallationInitial extends AppCompatActivity {
 
         save.setOnClickListener(v -> {
 
-            DeviceStatus = CustomUtility.getSharedPreferences(mContext,"DeviceStatus");
+            DeviceStatus = CustomUtility.getSharedPreferences(mContext, "DeviceStatus");
 
-            Log.e("RMS","Device Status DeviceOnline===>" + DeviceStatus);
+            Log.e("RMS", "Device Status DeviceOnline===>" + DeviceStatus);
 
             if (CustomUtility.isInternetOn()) {
                 if (mBTResonseDataList.size() > 0)
@@ -568,19 +567,26 @@ public class InstallationInitial extends AppCompatActivity {
                     new SyncDebugDataFromLocal().execute();
 
                 } else {
-                    if(!TextUtils.isEmpty(DeviceStatus)) {
-                        saveData();
-                    }
-                    else{
-                        Toast.makeText(mContext, "Please get RMS Device Status.", Toast.LENGTH_SHORT).show();
+                    if (!TextUtils.isEmpty(DeviceStatus)) {
+                        if (!isControllerIDScan) {
+                            saveData();
+                        } else {
+                            CustomUtility.ShowToast("Please Scan Controller ID first!", getApplicationContext());
+                        }
+                    } else {
+                        CustomUtility.ShowToast("Please get RMS Device Status.", getApplicationContext());
                     }
                 }
             } else {
-                if(!TextUtils.isEmpty(DeviceStatus)) {
-                    saveData();
-                }
-                else{
-                    Toast.makeText(mContext, "Please get RMS Device Status.", Toast.LENGTH_SHORT).show();
+                if (!TextUtils.isEmpty(DeviceStatus)) {
+                    if (!isControllerIDScan) {
+                        saveData();
+                    } else {
+                        CustomUtility.ShowToast("Please Scan Controller ID first!", getApplicationContext());
+                    }
+                } else {
+                    CustomUtility.ShowToast("Please get RMS Device Status.", getApplicationContext());
+
                 }
             }
 
@@ -646,9 +652,15 @@ public class InstallationInitial extends AppCompatActivity {
                     alreadySet = true;
                     break;
                 case 3000:
-                    inst_controller_ser.setText("");
-                    inst_controller_ser.setText(scanContent);
-                    alreadySet = true;
+                    if (scanContent.equals(inst_controller_ser.getText().toString())) {
+                        inst_controller_ser.setText("");
+                        inst_controller_ser.setText(scanContent);
+                        alreadySet = true;
+                        isControllerIDScan = true;
+                    } else {
+                        MatchControllerIDPopup();
+                    }
+
                     break;
                 case 4000:
                     inst_simcard_num.setText("");
@@ -659,16 +671,14 @@ public class InstallationInitial extends AppCompatActivity {
             if (!alreadySet) {
                 EditText edit_O = (EditText) moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
 
-                if(scannedDeviceNo.size() > 0){
-                    if(!scannedDeviceNo.contains(scanContent)){
+                if (scannedDeviceNo.size() > 0) {
+                    if (!scannedDeviceNo.contains(scanContent)) {
                         edit_O.setText(scanContent);
                         scannedDeviceNo.add(scanContent);
-                    }
-                    else {
+                    } else {
                         Toast.makeText(mContext, "Already done.", Toast.LENGTH_SHORT).show();
                     }
-                }
-                else {
+                } else {
                     edit_O.setText(scanContent);
                     scannedDeviceNo.add(scanContent);
                 }
@@ -676,6 +686,39 @@ public class InstallationInitial extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void MatchControllerIDPopup() {
+        LayoutInflater inflater = (LayoutInflater) InstallationInitial.this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.send_successfully_layout,
+                null);
+        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(InstallationInitial.this, R.style.MyDialogTheme);
+
+        builder.setView(layout);
+        builder.setCancelable(false);
+        android.app.AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        if (!isFinishing()) {
+            alertDialog.show();
+        }
+        CircleImageView user_img = layout.findViewById(R.id.user_img);
+        TextView OK_txt = layout.findViewById(R.id.OK_txt);
+        TextView title_txt = layout.findViewById(R.id.title_txt);
+
+        user_img.setVisibility(View.GONE);
+
+        title_txt.setText(getResources().getString(R.string.cant_proceed));
+
+        OK_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                ibaseUpdateFormPopup();
+            }
+        });
+
     }
 
     @Override
@@ -735,9 +778,9 @@ public class InstallationInitial extends AppCompatActivity {
             case R.id.act_comp_attach_image:
 
                 borewellstatus1 = CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno);
-                DeviceStatus = CustomUtility.getSharedPreferences(mContext,"DeviceStatus");
+                DeviceStatus = CustomUtility.getSharedPreferences(mContext, "DeviceStatus");
 
-                if(!TextUtils.isEmpty(DeviceStatus) ){
+                if (!TextUtils.isEmpty(DeviceStatus)) {
 
                     if (!TextUtils.isEmpty(borewellstatus1)) {
                         //  if(!rmsdata_status.isEmpty()) {
@@ -752,8 +795,7 @@ public class InstallationInitial extends AppCompatActivity {
                     } else {
                         Toast.makeText(mContext, "Please Select Borewell Status", Toast.LENGTH_SHORT).show();
                     }
-                }
-                else{
+                } else {
                     Toast.makeText(mContext, "Please get RMS Device Status.", Toast.LENGTH_SHORT).show();
                 }
                 return true;
@@ -776,11 +818,11 @@ public class InstallationInitial extends AppCompatActivity {
 
         for (int i = 0; i < new_value; i++) {
             View child_grid = LayoutInflater.from(mContext).inflate(R.layout.view_for_normal, null);
-            LinearLayout layout_s =  child_grid.findViewById(R.id.sublayout_second);
-            LinearLayout layout_f =  child_grid.findViewById(R.id.sublayout_first);
-            LinearLayout layout_f_inner =  layout_f.findViewById(R.id.sublayout_first_inner);
-            EditText edit =  layout_f_inner.findViewById(R.id.view_edit_one);
-            final ImageView scan =  layout_f_inner.findViewById(R.id.view_img_one);
+            LinearLayout layout_s = child_grid.findViewById(R.id.sublayout_second);
+            LinearLayout layout_f = child_grid.findViewById(R.id.sublayout_first);
+            LinearLayout layout_f_inner = layout_f.findViewById(R.id.sublayout_first_inner);
+            EditText edit = layout_f_inner.findViewById(R.id.view_edit_one);
+            final ImageView scan = layout_f_inner.findViewById(R.id.view_img_one);
             scan.setId(i);
 
             scan.setOnClickListener(new View.OnClickListener() {
@@ -858,7 +900,7 @@ public class InstallationInitial extends AppCompatActivity {
         if (!inst_module_ser_no.getText().toString().trim().equals("0")) {
 
             for (int i = 0; i < moduleOneLL.getChildCount(); i++) {
-                EditText edit_O =  moduleOneLL.getChildAt(i).findViewById(R.id.view_edit_one);
+                EditText edit_O = moduleOneLL.getChildAt(i).findViewById(R.id.view_edit_one);
                 if (edit_O.getVisibility() == View.VISIBLE) {
                     String s1 = edit_O.getText().toString().trim();
                     finalValue += s1 + ",";
@@ -1411,7 +1453,7 @@ public class InstallationInitial extends AppCompatActivity {
                     simoprator_text,
                     conntype_text,
                     simcard_num,
-                    regisno,BeneficiaryNo
+                    regisno, BeneficiaryNo
 
             );
 
@@ -1423,6 +1465,7 @@ public class InstallationInitial extends AppCompatActivity {
 
             Intent intent = new Intent(mContext, InstallationList.class);
             startActivity(intent);
+            finish();
 
         }
 
@@ -1439,7 +1482,7 @@ public class InstallationInitial extends AppCompatActivity {
                 project_no, login_no, inst_latitude, inst_longitude, inst_bill_no, inst_delay_reason, installation_date, inst_bill_date, String.valueOf(labeledSwitch.isEnabled()), customer_name, fathname,
                 mobileno, state, state_txt, city, city_txt, tehsil_ins, village_ins, address, make, solarpanel_wattage, solarpanel_stand_ins_quantity, total_watt, hp,
                 no_of_module, no_of_module_value, module_total_plate_watt, solar_motor_model_details, smmd_sno, splar_pump_model_details, spmd_sno, solar_controller_model,
-                scm_sno, simoprator_text, conntype_text, simcard_num, regisno,BeneficiaryNo
+                scm_sno, simoprator_text, conntype_text, simcard_num, regisno, BeneficiaryNo
 
         );
 
@@ -1579,13 +1622,13 @@ public class InstallationInitial extends AppCompatActivity {
 
         rmsdata_status = installationBean.getRms_data_status();
 
-        Log.e("RMSDATA", "&&&&" + rmsdata_status);
+       /* Log.e("RMSDATA", "&&&&" + rmsdata_status);
 
         if (rmsdata_status.equalsIgnoreCase("true")) {
             labeledSwitch.setOn(true);
         } else if (rmsdata_status.equalsIgnoreCase("false")) {
             labeledSwitch.setOn(false);
-        }
+        }*/
 
         simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         current_date = simpleDateFormat.format(new Date());
@@ -1720,7 +1763,7 @@ public class InstallationInitial extends AppCompatActivity {
         param.add(new BasicNameValuePair("con_serno", mDriveSerialNo));
         param.add(new BasicNameValuePair("set_serno", pump));
 
-          CustomUtility.showProgressDialogue(InstallationInitial.this);
+        CustomUtility.showProgressDialogue(InstallationInitial.this);
         new Thread() {
             public void run() {
                 try {
@@ -1839,16 +1882,15 @@ public class InstallationInitial extends AppCompatActivity {
 
                         runOnUiThread(() -> {
                             CustomUtility.clearSharedPrefrences(mContext);
-                               if(CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
-                                   sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
-                               }else {
+                            if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
+                                sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
+                            } else {
 
-                                   Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
-                                   startActivity(intent);
-                                   finish();
-                               }
+                                Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
                         });
-
 
 
                     }
@@ -1917,15 +1959,6 @@ public class InstallationInitial extends AppCompatActivity {
     }
 
     private void retriveArrayList() {
-      /*  imageList = new ArrayList<>();
-        String json = CustomUtility.getSharedPreferences(InstallationInitial.this, InstallationImage);
-        // below line is to get the type of our array list.
-        Type type = new TypeToken<ArrayList<ImageModel>>() {
-        }.getType();
-
-        // in below line we are getting data from gson
-        // and saving it to our array list
-        imageList = new Gson().fromJson(json, type);*/
         imageList = new ArrayList<>();
         DatabaseHelper db = new DatabaseHelper(this);
 
@@ -1943,24 +1976,6 @@ public class InstallationInitial extends AppCompatActivity {
 
         }
 
-    }
-
-    public void reverseTimer(int Seconds, final TextView tv) {
-
-        new CountDownTimer(Seconds * 1000 + 1000, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                int seconds = (int) (millisUntilFinished / 1000);
-                int minutes = seconds / 60;
-                seconds = seconds % 60;
-                tv.setText("TIME : " + String.format("%02d", minutes)
-                        + ":" + String.format("%02d", seconds));
-            }
-
-            public void onFinish() {
-                tv.setText("Resend");
-            }
-        }.start();
     }
 
 
@@ -2078,9 +2093,9 @@ public class InstallationInitial extends AppCompatActivity {
                 SimpleDateFormat dt1 = new SimpleDateFormat("yyyyMMdd");
 
                 jsonObj.put("userid", param_invc.getPernr());
-                if(param_invc.getBeneficiaryNo()!=null && !param_invc.getBeneficiaryNo().isEmpty()) {
+                if (param_invc.getBeneficiaryNo() != null && !param_invc.getBeneficiaryNo().isEmpty()) {
                     jsonObj.put("beneficiary", param_invc.getBeneficiaryNo());
-                }else {
+                } else {
                     jsonObj.put("beneficiary", BeneficiaryNo);
                 }
                 jsonObj.put("setting_check", "Para Setting Stop");
@@ -2222,9 +2237,9 @@ public class InstallationInitial extends AppCompatActivity {
                             String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
 
                             runOnUiThread(() -> {
-                                if(CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
+                                if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
                                     sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
-                                }else {
+                                } else {
                                     Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
                                     startActivity(intent);
                                     finish();
@@ -2277,27 +2292,27 @@ public class InstallationInitial extends AppCompatActivity {
         }
     }
 
-    private void sendVerificationCodeAPI(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo,String billNo) {
+    private void sendVerificationCodeAPI(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo, String billNo) {
         CustomUtility.showProgressDialogue(InstallationInitial.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.SendOTP +"&mobiles="+ContactNo+
-                        "&message=आप अपने खेत में शक्ति पम्प्स (इंडिया) लिमिटेड द्वारा स्थापित "+Hp+" एचपी रेटिंग सोलर पंप सेट के लिए लाभार्थी आईडी "+beneficiaryNo+" के संदर्भ में यह संदेश प्राप्त कर रहे हैं।" +
+                WebURL.SendOTP + "&mobiles=" + ContactNo +
+                        "&message=आप अपने खेत में शक्ति पम्प्स (इंडिया) लिमिटेड द्वारा स्थापित " + Hp + " एचपी रेटिंग सोलर पंप सेट के लिए लाभार्थी आईडी " + beneficiaryNo + " के संदर्भ में यह संदेश प्राप्त कर रहे हैं।" +
                         " यह संदेश केवल आपकी प्रतिक्रिया के उद्देश्य से है शक्ति पंप्स इंस्टालर को सत्यपान कोड साझा करके आप निम्नलिखित की पुष्टि कर रहे हैं 1) आप स्थापना की गुणवत्ता से संतुष्ट हैं" +
                         " 2) आप सोलर पंप सेट के प्रदर्शन से संतुष्ट हैं 3) इंस्टॉलर ने किसी भी प्रकार की सामग्री या स्थापना कार्य के लिए कोई राशि नहीं ली हैं यदि उपरोक्त सभी तीन कथन सही हैं, " +
-                        "तो कृपया अपने सोलर पम्प सेट की 5 वर्ष की सेवा को सक्रिय करने के लिए इंस्टॉलर के साथ सत्यपान कोड "+generatedVerificationCode+" साझा करें।:&sender=SHAKTl&route=2&country=91&DLT_TE_ID=1707167928540679513&unicode=1",
+                        "तो कृपया अपने सोलर पम्प सेट की 5 वर्ष की सेवा को सक्रिय करने के लिए इंस्टॉलर के साथ सत्यपान कोड " + generatedVerificationCode + " साझा करें।:&sender=SHAKTl&route=2&country=91&DLT_TE_ID=1707167928540679513&unicode=1",
 
-                null, new Response.Listener<JSONObject >() {
+                null, new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(JSONObject  res) {
+            public void onResponse(JSONObject res) {
                 CustomUtility.hideProgressDialog(InstallationInitial.this);
 
 
-                if(!res.toString().isEmpty()) {
+                if (!res.toString().isEmpty()) {
                     VerificationCodeModel verificationCodeModel = new Gson().fromJson(res.toString(), VerificationCodeModel.class);
-                    if(verificationCodeModel.getStatus().equals("Success")) {
+                    if (verificationCodeModel.getStatus().equals("Success")) {
 
-                        ShowAlertResponse(generatedVerificationCode,ContactNo,Hp,beneficiaryNo,billNo);
+                        ShowAlertResponse(generatedVerificationCode, ContactNo, Hp, beneficiaryNo, billNo);
                     }
 
                 }
@@ -2311,7 +2326,8 @@ public class InstallationInitial extends AppCompatActivity {
         });
         requestQueue.add(jsonObjectRequest);
     }
-    private void ShowAlertResponse(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo,String billNo) {
+
+    private void ShowAlertResponse(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo, String billNo) {
         LayoutInflater inflater = (LayoutInflater) InstallationInitial.this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.send_successfully_layout,
@@ -2320,7 +2336,7 @@ public class InstallationInitial extends AppCompatActivity {
 
         builder.setView(layout);
         builder.setCancelable(false);
-       android.app.AlertDialog alertDialog = builder.create();
+        android.app.AlertDialog alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         alertDialog.show();
@@ -2334,11 +2350,11 @@ public class InstallationInitial extends AppCompatActivity {
         OK_txt.setOnClickListener(v -> {
             alertDialog.dismiss();
             Intent intent = new Intent(InstallationInitial.this, PendingFeedBackOTPVerification.class);
-            intent.putExtra(Constant.PendingFeedbackContact,ContactNo);
-            intent.putExtra(Constant.PendingFeedbackVblen,billNo);
-            intent.putExtra(Constant.PendingFeedbackHp,Hp);
-            intent.putExtra(Constant.PendingFeedbackBeneficiary,beneficiaryNo);
-            intent.putExtra(Constant.VerificationCode,generatedVerificationCode);
+            intent.putExtra(Constant.PendingFeedbackContact, ContactNo);
+            intent.putExtra(Constant.PendingFeedbackVblen, billNo);
+            intent.putExtra(Constant.PendingFeedbackHp, Hp);
+            intent.putExtra(Constant.PendingFeedbackBeneficiary, beneficiaryNo);
+            intent.putExtra(Constant.VerificationCode, generatedVerificationCode);
 
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

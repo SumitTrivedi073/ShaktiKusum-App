@@ -212,6 +212,7 @@
     <string name="cant_Debug">Your not able to debug the device because Drive Number are not matched.</string>
     <string name="capture">Capture</string>
     <string name="Click_Again">Click Again</string>
+    <string name="cant_proceed">Your not able to proceed with this device because Drive Number are not matched.Please Update the I-Base first</string>
 
 
 </resources>
