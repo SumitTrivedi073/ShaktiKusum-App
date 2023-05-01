@@ -1087,12 +1087,12 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         //  wordsByKey.put("userid", inputName.getText().toString().trim());
         wordsByKey.put("device", DEVICE_NO);// DEVICE_NO = sssM[0];
 
-/*
+
         if (DEVICE_NO!=null&& !DEVICE_NO.isEmpty() &&!DEVICE_NO.equals(ControllerSerialNumber+"-0")) {
             ShowAlertResponse();
         }else {
             CustomUtility.ShowToast("Not able to read Device Serial Number", getApplicationContext());
-        }*/
+        }
         baseRequest.callAPIGETDebugApp(1, wordsByKey, NewSolarVFD.SIM_STATUS_VK_PAGE);/////
 
     }
