@@ -1,9 +1,9 @@
 package com.shaktipumplimited.retrofit;
 
 
+import android.util.Log;
 
-
-
+import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -39,7 +39,7 @@ public class ApiClient {
 
             retrofit = new Retrofit.Builder()
                     .baseUrl(WebURL.HOST_NAME_SETTING1)// close by vikas
-                   // .client(getRequestHeader())
+                    .client(getRequestHeader())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
@@ -52,7 +52,7 @@ public class ApiClient {
 
             retrofit2 = new Retrofit.Builder()
                     .baseUrl(NewSolarVFD.BASE_URL_VK)// close by vikas
-                    // .client(getRequestHeader())
+                     .client(getRequestHeader())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
@@ -66,24 +66,14 @@ public class ApiClient {
             retrofit1 = new Retrofit.Builder()
                    .baseUrl(WebURL.HOST_NAME_SETTING1)// close by vikas
                     //.baseUrl(NewSolarVFD.BASE_URL_UPLOAD)// close by vikas
-                    // .client(getRequestHeader())
+                    .client(getRequestHeader())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
         return retrofit1;
     }
 
-/*    public static Retrofit getClientIMEI() {
 
-        if (retrofit == null) {
-            retrofit = new Retrofit.Builder()
-                    .baseUrl("https://pmkapi.hareda.gov.in/api/")
-                    .client(getRequestHeader())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-        }
-        return retrofit;
-    }*/
 
     public static OkHttpClient okHttpClient = null;
 
@@ -91,31 +81,41 @@ public class ApiClient {
         if (null == okHttpClient) {
             okHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(new Interceptor() {
+                        @NonNull
                         @Override
-                        public Response intercept(Chain chain) throws IOException {
-                            Request.Builder ongoing = chain.request().newBuilder();
+                        public Response intercept(@NonNull Chain chain) throws IOException {
+                           /* Request.Builder ongoing = chain.request().newBuilder();
                             //ongoing.addHeader(HEADER_CONTENT_TYPE, HEADER_CONTENT_TYPE_VALUE);
                           //  ongoing.addHeader("Authorization", NewSolarVFD.COMPELETE_ACCESS_TOKEN_NAME);
-                            return chain.proceed(ongoing.build());
+                            return chain.proceed(ongoing.build());*/
+
+                            Request request = chain.request();
+
+                            // try the request
+                            Response response = chain.proceed(request);
+
+                            int tryCount = 0;
+                            while (!response.isSuccessful() && tryCount < 3) {
+
+                                Log.d("intercept", "Request is not successful - " + tryCount);
+
+                                tryCount++;
+
+                                // retry the request
+                                response.close();
+                                response = chain.proceed(request);
+                            }
+
+                            // otherwise just pass the original response on
+                            return response;
                         }
                     })
-                    .readTimeout(45, TimeUnit.SECONDS)
-                    .connectTimeout(45, TimeUnit.SECONDS)
+                    .readTimeout(60, TimeUnit.SECONDS)
+                    .connectTimeout(60, TimeUnit.SECONDS)
                     .build();
         }
         return okHttpClient;
     }
-
-
-   /* public static OkHttpClient getRequestHeader() {
-        if (null == okHttpClient) {
-            okHttpClient = new OkHttpClient.Builder()
-                    .readTimeout(45, TimeUnit.SECONDS)
-                    .connectTimeout(45, TimeUnit.SECONDS)
-                    .build();
-        }
-        return okHttpClient;
-    }*/
 
 
 }
