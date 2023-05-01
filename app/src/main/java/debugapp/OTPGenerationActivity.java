@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Random;
 
 import activity.MainActivity;
+import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;
 
 
@@ -90,6 +91,8 @@ public class OTPGenerationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 edtOTPIDSTR = edtOTPID.getText().toString().trim();
                 if (mORG_OTP_VALUE.equalsIgnoreCase(edtOTPIDSTR)) {
+                    CustomUtility.setSharedPreference(getApplicationContext(), Constant.PersonName,edtINSTNmaeID.getText().toString().trim());
+                    CustomUtility.setSharedPreference(getApplicationContext(), Constant.PersonNumber,edtINSTNumberID.getText().toString().trim());
                       Intent intent = new Intent(mContext, MainActivity.class);
                     startActivity(intent);
                     finish();

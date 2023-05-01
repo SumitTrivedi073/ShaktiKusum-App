@@ -37,6 +37,9 @@ public class Constant {
 
     public static  String ControllerSerialNumber = "ControllerSerialNumber";
 
+    public static  String PersonName = "PersonName";
+    public static  String PersonNumber = "PersonNumber";
+
 
 
 

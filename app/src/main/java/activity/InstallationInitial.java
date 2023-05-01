@@ -2138,6 +2138,11 @@ public class InstallationInitial extends AppCompatActivity {
                 jsonObj.put("dbug_ofline", Constant.DBUG_PER_OFLINE);
                 jsonObj.put("app_version", WebURL.APP_VERSION_CODE);
 
+                jsonObj.put("LOGIN_NAME", CustomUtility.getSharedPreferences(getApplicationContext(),Constant.PersonName));
+                jsonObj.put("LOGIN_CONT",  CustomUtility.getSharedPreferences(getApplicationContext(),Constant.PersonNumber));
+
+
+
                 System.out.println("only_text_jsonObj==>>" + jsonObj);
 
                 if (imageList.size() > 0) {
