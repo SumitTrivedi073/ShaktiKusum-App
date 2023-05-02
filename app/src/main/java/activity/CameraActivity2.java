@@ -39,6 +39,7 @@ import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.TextureView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -95,6 +96,7 @@ public class CameraActivity2 extends AppCompatActivity{
     private static final int REQUEST_CAMERA_PERMISSION = 200;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
+    LinearLayout layoutPreview;
 
     CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
         @Override
@@ -123,6 +125,7 @@ public class CameraActivity2 extends AppCompatActivity{
         //From Java 1.4 , you can use keyword 'assert' to check expression true or false
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
+        layoutPreview = findViewById(R.id.layoutPreview);
         Button btnCapture = findViewById(R.id.btnCapture);
         btnCapture.setOnClickListener(view -> takePicture());
 
@@ -336,10 +339,15 @@ public class CameraActivity2 extends AppCompatActivity{
             cameraDevice.createCaptureSession(Collections.singletonList(surface), new CameraCaptureSession.StateCallback() {
                 @Override
                 public void onConfigured(@NonNull CameraCaptureSession cameraCaptureSession) {
-                        if(cameraDevice != null)
-                            findViewById(R.id.layoutPreview).bringToFront();
-                    cameraCaptureSessions = cameraCaptureSession;
-                    updatePreview();
+                      runOnUiThread(new Runnable() {
+                          @Override
+                          public void run() {
+                              if(cameraDevice != null)
+                                  layoutPreview.bringToFront();
+                              cameraCaptureSessions = cameraCaptureSession;
+                              updatePreview();
+                          }
+                      });
                 }
 
                 @Override

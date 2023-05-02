@@ -2,7 +2,6 @@ package activity;
 
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,7 +40,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     //** Called when the activity is first created. */
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+       super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         mContext = this;
 
@@ -80,13 +79,13 @@ public class SplashActivity extends AppCompatActivity {
 
     public void loginSelection(){
 
-        CustomUtility.showProgressDialogue(SplashActivity.this);
+      //  CustomUtility.showProgressDialogue(SplashActivity.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.LOGIN_SELEC_PAGE, null, new Response.Listener<JSONObject >() {
             @Override
             public void onResponse(JSONObject response) {
-                CustomUtility.hideProgressDialog(SplashActivity.this);
+            //    CustomUtility.hideProgressDialog(SplashActivity.this);
 
                 if(response.toString()!=null && !response.toString().isEmpty()) {
                     LoginSelectionModel loginSelectionModel = new Gson().fromJson(response.toString(), LoginSelectionModel.class);
@@ -115,7 +114,7 @@ public class SplashActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                CustomUtility.hideProgressDialog(SplashActivity.this);
+             //   CustomUtility.hideProgressDialog(SplashActivity.this);
                 Log.e("error", String.valueOf(error));
                 Toast.makeText(SplashActivity.this, error.getMessage(),
                         Toast.LENGTH_LONG).show();

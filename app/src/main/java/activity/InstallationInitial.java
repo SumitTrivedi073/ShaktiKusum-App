@@ -251,7 +251,7 @@ public class InstallationInitial extends AppCompatActivity {
     };
 
     List<ImageModel> imageList = new ArrayList<>();
-    boolean isBaseUpdate = false, isControllerIDScan = false;
+    boolean isBaseUpdate = false, isControllerIDScan = false, isDebug = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -348,6 +348,7 @@ public class InstallationInitial extends AppCompatActivity {
             if (mBluetoothAdapter.isEnabled()) {
                 if (AllPopupUtil.pairedDeviceListGloable(mContext)) {
                     if (WebURL.BT_DEVICE_NAME.equalsIgnoreCase("") || WebURL.BT_DEVICE_MAC_ADDRESS.equalsIgnoreCase("")) {
+                        isDebug = true;
                         Intent intent = new Intent(mContext, PairedDeviceActivity.class);
                         intent.putExtra(Constant.ControllerSerialNumber, inst_controller_ser.getText().toString().trim());
                         startActivity(intent);
@@ -567,9 +568,14 @@ public class InstallationInitial extends AppCompatActivity {
                     new SyncDebugDataFromLocal().execute();
 
                 } else {
+                    Log.e("DeviceStatus",DeviceStatus);
                     if (!TextUtils.isEmpty(DeviceStatus)) {
-                        if (!isControllerIDScan) {
-                            saveData();
+                        if (isControllerIDScan) {
+                            if (isDebug) {
+                                saveData();
+                            }else {
+                                CustomUtility.ShowToast("Please debug first than proceed!", getApplicationContext());
+                            }
                         } else {
                             CustomUtility.ShowToast("Please Scan Controller ID first!", getApplicationContext());
                         }
@@ -579,8 +585,12 @@ public class InstallationInitial extends AppCompatActivity {
                 }
             } else {
                 if (!TextUtils.isEmpty(DeviceStatus)) {
-                    if (!isControllerIDScan) {
-                        saveData();
+                    if (isControllerIDScan) {
+                        if (isDebug) {
+                            saveData();
+                        }else {
+                            CustomUtility.ShowToast("Please debug first than proceed!", getApplicationContext());
+                        }
                     } else {
                         CustomUtility.ShowToast("Please Scan Controller ID first!", getApplicationContext());
                     }
@@ -1489,7 +1499,7 @@ public class InstallationInitial extends AppCompatActivity {
         if (db.isRecordExist(db.TABLE_INSTALLATION_PUMP_DATA, db.KEY_BILL_NO, inst_bill_no)) {
             db.updateInstallationData(inst_bill_no, installationBean);
         } else {
-            db.insertInstallationData(inst_bill_no, installationBean);
+            db.   insertInstallationData(inst_bill_no, installationBean);
         }
 
     }
