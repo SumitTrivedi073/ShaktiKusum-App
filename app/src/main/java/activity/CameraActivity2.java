@@ -279,7 +279,7 @@ public class CameraActivity2 extends AppCompatActivity{
         options.inMutable = true;
         Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length, options);
 
-        // bmp = rotateBitmap(bmp);
+         bmp = rotateBitmap(bmp);
         SimpleDateFormat sdf = new SimpleDateFormat(TIME_STAMP_FORMAT_DATE, Locale.getDefault());
         SimpleDateFormat sdf1 = new SimpleDateFormat(TIME_STAMP_FORMAT_TIME, Locale.getDefault());
         String date = sdf.format(new Date());
