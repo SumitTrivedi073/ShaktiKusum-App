@@ -6,13 +6,11 @@ import static android.Manifest.permission.BLUETOOTH;
 import static android.Manifest.permission.BLUETOOTH_CONNECT;
 import static android.Manifest.permission.BLUETOOTH_SCAN;
 import static android.Manifest.permission.CAMERA;
-import static android.Manifest.permission.MANAGE_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_MEDIA_AUDIO;
 import static android.Manifest.permission.READ_MEDIA_IMAGES;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static android.os.Build.VERSION.PREVIEW_SDK_INT;
 import static android.os.Build.VERSION.SDK_INT;
 
 import android.Manifest;
@@ -22,10 +20,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
@@ -302,17 +298,6 @@ public class Login extends AppCompatActivity {
             } else {
                 Toast.makeText(getApplicationContext(), "Update Failed! Result Code: " + resultCode, Toast.LENGTH_LONG).show();
                 checkUpdate();
-            }
-        }
-
-        if (requestCode == 2296) {
-            if (SDK_INT >= Build.VERSION_CODES.R) {
-                if (Environment.isExternalStorageManager()) {
-                    // perform action when allow permission success
-                    serverLogin();
-                } else {
-                    Toast.makeText(this, "Allow permission for storage access!", Toast.LENGTH_SHORT).show();
-                }
             }
         }
 
@@ -816,16 +801,7 @@ public class Login extends AppCompatActivity {
                         boolean  ReadPhoneState = grantResults[5] == PackageManager.PERMISSION_GRANTED;
 
                         if (Camera && ReadPhoneState && AccessCoarseLocation && Bluetooth &&  BluetoothConnect && BluetoothScan) {
-                            try {
-                                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                                intent.addCategory("android.intent.category.DEFAULT");
-                                intent.setData(Uri.parse(String.format("package:%s",getApplicationContext().getPackageName())));
-                                startActivityForResult(intent, 2296);
-                            } catch (Exception e) {
-                                Intent intent = new Intent();
-                                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                                startActivityForResult(intent, 2296);
-                            }
+                            serverLogin();
                         } else {
                             requestPermission();
                         }
@@ -836,16 +812,7 @@ public class Login extends AppCompatActivity {
                         boolean  ReadPhoneState = grantResults[3] == PackageManager.PERMISSION_GRANTED;
 
                         if (Camera && ReadPhoneState && AccessCoarseLocation && Bluetooth) {
-                            try {
-                                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                                intent.addCategory("android.intent.category.DEFAULT");
-                                intent.setData(Uri.parse(String.format("package:%s",getApplicationContext().getPackageName())));
-                                startActivityForResult(intent, 2296);
-                            } catch (Exception e) {
-                                Intent intent = new Intent();
-                                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                                startActivityForResult(intent, 2296);
-                            }
+                            serverLogin();
                         } else {
                             requestPermission();
                         }

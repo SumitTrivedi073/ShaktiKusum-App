@@ -14,7 +14,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -57,9 +56,7 @@ import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
@@ -75,7 +72,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -86,7 +82,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import activity.DeviceStatusActivity;
 import activity.GPSTracker;
 import bean.BTResonseData;
 import bean.DeviceDetailModel;
@@ -471,12 +466,8 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //  showPopupSAVEData();
-
                 mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
                 mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
-
-                // sendDataToServer();
 
                 if (!mInstallerName.equalsIgnoreCase("") && !mInstallerName.equalsIgnoreCase("null") && !mInstallerMOB.equalsIgnoreCase("") && !mInstallerMOB.equalsIgnoreCase("null")) {
                     sendDataToServer();
@@ -991,57 +982,36 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                             mSimStatus = join.getString("status_txt").trim();
                             mSimStatusActive = join.getString("status").trim();
 
-                           /* if(mSimStatus.equalsIgnoreCase("Activate"))
-                            {
-                                mSimSValue = 1;
-                            }
-                            else if(mSimStatus.equalsIgnoreCase("Deactivate"))
-                            {
-                                mSimSValue = 2;
-                            }else
-                            {
-                                mSimSValue = 3;
-                            }*/
+
                             AllCommomSTRContainer = AllCommomSTRContainer + " :\nSim  Status :" + mSimStatus;
-                            //AllCommomSTRContainer = AllCommomSTRContainer + " :\n " + AllTextSTR +"\n";
-                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nSim  Status : " + mSimStatus));
+                             lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nSim  Status : " + mSimStatus));
 
                             if (mSignalStrength == 1 && mNetworkConnect == 1 && mServerConnect == 1) {
                                 AllCommomSTRContainer = AllCommomSTRContainer + " :\n Data Pack : Activate";
-                                //AllCommomSTRContainer = AllCommomSTRContainer + " :\n " + AllTextSTR +"\n";
                                 lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nData Pack : Activate"));
 
                             } else if (mSignalStrength == 1 && mNetworkConnect == 1 && mServerConnect == 0) {
                                 if (mSimStatusActive.equalsIgnoreCase("1")) {
                                     AllCommomSTRContainer = AllCommomSTRContainer + " :\n Data Pack : Activate";
-                                    //AllCommomSTRContainer = AllCommomSTRContainer + " :\n " + AllTextSTR +"\n";
                                     lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nData Pack : Activate"));
                                 } else {
                                     AllCommomSTRContainer = AllCommomSTRContainer + " :\n Data Pack : Not Activate";
-                                    //AllCommomSTRContainer = AllCommomSTRContainer + " :\n " + AllTextSTR +"\n";
                                     lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nData Pack : Not Activate"));
                                 }
                             } else {
                                 AllCommomSTRContainer = AllCommomSTRContainer + " :\n Data Pack :" + mSimStatus;
-                                //AllCommomSTRContainer = AllCommomSTRContainer + " :\n " + AllTextSTR +"\n";
                                 lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nData Pack : " + mSimStatus));
 
                                 if (mSimStatusActive.equalsIgnoreCase("1")) {
                                     AllCommomSTRContainer = AllCommomSTRContainer + " :\n Data Pack : Activate";
-                                    //AllCommomSTRContainer = AllCommomSTRContainer + " :\n " + AllTextSTR +"\n";
                                     lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nData Pack : Activate"));
                                 } else {
                                     AllCommomSTRContainer = AllCommomSTRContainer + " :\n Data Pack : Not Activate";
-                                    //AllCommomSTRContainer = AllCommomSTRContainer + " :\n " + AllTextSTR +"\n";
                                     lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nData Pack : Not Activate"));
                                 }
                             }
                             // mLoginResponseList.add(mmLoginResponse);
                         }
-                        //baseRequest.hideLoader();
-                      /*  Message msg1 = new Message();
-                        msg1.obj = mMessage;
-                        mHandler.sendMessage(msg1);*/
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -1055,36 +1025,28 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                     Toast.makeText(mContext, "Please check internet connections.", Toast.LENGTH_SHORT).show();
 
                                 }
-                                // addDataMonth(mPostionFinal + 1, mvDay + "", mvMonth + "", mvYear + "", mvHour, mvMinute, mvNo_of_Start, fvFrequency, fvRMSVoltage, fvOutputCurrent, mvRPM, fvLPM, fvPVVoltage, fvPVCurrent, mvFault, fvInvTemp);
-                            }
+                                    }
                         });
 
                     } else {
-                        // baseRequest.hideLoader();
+                         baseRequest.hideLoader();
 
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
-                                //Toast.makeText(mContext, mMessage, Toast.LENGTH_SHORT).show();
-
                                 if (UtilMethod.isOnline(mContext)) {
-                                    // checkRMSAPIStatus();
+
                                     SyncRMSCHECKDATAAPI();
 
                                 } else {
                                     Toast.makeText(mContext, "Please check internet connections.", Toast.LENGTH_SHORT).show();
                                 }
-                                // addDataMonth(mPostionFinal + 1, mvDay + "", mvMonth + "", mvYear + "", mvHour, mvMinute, mvNo_of_Start, fvFrequency, fvRMSVoltage, fvOutputCurrent, mvRPM, fvLPM, fvPVVoltage, fvPVCurrent, mvFault, fvInvTemp);
-                            }
+                              }
                         });
 
-                       /* Message msg1 = new Message();
-                        msg1.obj = "Invalid username or password";
-                        mHandler.sendMessage(msg1);*/
+
                     }
 
-                    //  getDeviceSettingListResponse(mSettingModelView);
                 } catch (Exception e) {
                     baseRequest.hideLoader();
                     e.printStackTrace();
@@ -1126,11 +1088,11 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         wordsByKey.put("device", DEVICE_NO);// DEVICE_NO = sssM[0];
 
 
-     /*   if (DEVICE_NO!=null&& !DEVICE_NO.isEmpty() &&!DEVICE_NO.equals(ControllerSerialNumber+"-0")) {
+        if (DEVICE_NO!=null&& !DEVICE_NO.isEmpty() &&!DEVICE_NO.equals(ControllerSerialNumber+"-0")) {
             ShowAlertResponse();
         }else {
             CustomUtility.ShowToast("Not able to read Device Serial Number", getApplicationContext());
-        }*/
+        }
         baseRequest.callAPIGETDebugApp(1, wordsByKey, NewSolarVFD.SIM_STATUS_VK_PAGE);/////
 
     }
@@ -1180,7 +1142,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         return sDate;
     }
 
-    public void GetProfileUpdate_Task(String deviceno, String type, String len) {
+    public void GetProfileUpdate_Task(String deviceno, String type, String len, String filePath) {
 
         if (UtilMethod.isOnline(mContext)) {
               baseRequest.showLoader();
@@ -1188,7 +1150,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
             ApiInterface apiService = ApiClient.getClientFileUpload().create(ApiInterface.class);
             RequestBody fbody;
             MultipartBody.Part body = null;
-            Log.e("fileActualPath", "& " + filePath);
+            Log.e("fileActualPath", "& " +filePath);
             if (!UtilMethod.isStringNullOrBlank(filePath)) {
                 file = new File(filePath);
                 // fbody = RequestBody.create(MediaType.parse("xls/*"), file);
@@ -1203,7 +1165,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
             call.enqueue(new Callback<ProfileUpdateModel>() {
                 @Override
-                public void onResponse(Call<ProfileUpdateModel> call, retrofit2.Response<ProfileUpdateModel> response) {
+                public void onResponse(@NonNull Call<ProfileUpdateModel> call, @NonNull retrofit2.Response<ProfileUpdateModel> response) {
                     try {
                         ProfileUpdateModel dashResponse = response.body();
 
@@ -1233,9 +1195,11 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                         rlvLoadingViewID.setVisibility(View.GONE);
                         Toast.makeText(mContext, "File upload faild.", Toast.LENGTH_SHORT).show();
                         baseRequest.hideLoader();
+                        Log.e("Error====>",t.getMessage());
                     } catch (Exception e) {
                         rlvLoadingViewID.setVisibility(View.GONE);
                         e.printStackTrace();
+                        Log.e("Error====>",t.getMessage());
                     }
                 }
             });
@@ -1250,16 +1214,11 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
         final Dialog dialog = new Dialog(mContext);
         dialog.setContentView(R.layout.user_pr_infor);
-        // dialog.setTitle("Title...");
         dialog.setCancelable(true);
 
-        // set the custom dialog components - text, image and button
-        TextView txtTitleID = (TextView) dialog.findViewById(R.id.txtTitleID);
+         TextView txtTitleID = (TextView) dialog.findViewById(R.id.txtTitleID);
         EditText edtMobileInstallerID = (EditText) dialog.findViewById(R.id.edtMobileInstallerID);
         EditText edtNameInstallerID = (EditText) dialog.findViewById(R.id.edtNameInstallerID);
-        // text.setText("Android custom dialog example!");
-      /*  ImageView image = (ImageView) dialog.findViewById(R.id.image);
-        image.setImageResource(R.drawable.ic_launcher);*/
 
         Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
 
@@ -1284,8 +1243,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                     CustomUtility.setSharedPreference(mContext, "InstallerName", mInstallerName);
                     CustomUtility.setSharedPreference(mContext, "InstallerMOB", mInstallerMOB);
 
-                    //  sendDataToServer();
-                    //  long iiii = mDatabaseHelperTeacher.insertSimInfoData(controller,mSimNumberData,Constant.BILL_NUMBER_UNIC,Constant.BILL_NUMBER_UNIC,MUserId, true);
                     Toast.makeText(mContext, "User Information insterted successfully!", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
@@ -2013,21 +1970,13 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                 exception.printStackTrace();
                             }
 
-                            //  AllCommomSTRContainer = AllCommomSTRContainer + " : " + AllTextSTR +"\n";
-                            //AllCommomSTRContainer = AllCommomSTRContainer + "\n" + AllTextSTR;
-                            //  lvlMainTextContainerID.addView(getTextViewTTpp(pp, "" + AllTextSTR));
-                            //  baseRequest.hideLoader();
-                            AllTextSTR = "";
-                            // addDataMonth(mPostionFinal + 1, mvDay + "", mvMonth + "", mvYear + "", mvHour, mvMinute, mvNo_of_Start, fvFrequency, fvRMSVoltage, fvOutputCurrent, mvRPM, fvLPM, fvPVVoltage, fvPVCurrent, mvFault, fvInvTemp);
+                              AllTextSTR = "";
                         }
                     });
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 baseRequest.hideLoader();
-                // btSocket = null;
-                //   Toast.makeText(mActivity, "BT Connection lost..", Toast.LENGTH_SHORT).show();
-                // myBluetooth.disable();
                 return false;
             }
 
@@ -3696,7 +3645,8 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
                 Log.e("OUTPUT1", "&&&&" + obj2);
 
-                if (obj2 != "") {
+                if (!obj2.isEmpty()) {
+                    progressDialog.dismiss();
                     JSONObject object = new JSONObject(obj2);
                     String mStatus = object.getString("status");
                     final String mMessage = object.getString("message");
@@ -3745,231 +3695,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         }
     }
 
-  /*  private class SyncRMSCHECKDATAAPI extends AsyncTask<String, String, String> {
-
-        ProgressDialog progressDialog;
-        String obj;
-
-        @Override
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            try {
-              //  String url = NewSolarVFD.BASE_URL_VK_CHECK_STATUS + "a=" + DEVICE_NO;
-                String url  = WebURL.DEVICE_DETAILS+"?DeviceNo="+DEVICE_NO;
-                System.out.println("home_obj====>" + url);
-                String obj = CustomHttpClient.executeHttpGet(url);
-                if (!obj.isEmpty()) {
-
-                    JSONObject jresponse = new JSONObject(obj.substring(1, obj.length() - 1));
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-
-                                RMS_SERVER_DOWN = "Working Fine";
-
-                                String[] mDate = jresponse.getString("lastUpdateTime").split(" ");
-
-                                RMS_LAST_ONLINE_DATE = mDate[0];
-                                System.out.println("======= min :: " + jresponse.getString("lastUpdateTime"));
-                                System.out.println("======= min :: " + RMS_LAST_ONLINE_DATE);
-
-                                if (mDate[0].equalsIgnoreCase("null") || mDate[0].equalsIgnoreCase("")) {
-                                    AllCommomSTRContainer = AllCommomSTRContainer + " :\n RMS Last Online Date: Not Available";
-                                    lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\n RMS Last Online Date: Not Available"));
-
-                                    RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
-
-
-                                } else {
-                                    AllCommomSTRContainer = AllCommomSTRContainer + " :\n RMS Last Online Date: " + mDate[0];
-                                    lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\n RMS Last Online Date: " + mDate[0]));
-                                }
-                                Date d = new Date();
-                                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-                                String currentDateTimeString = sdf.format(d);
-
-                                System.out.println("currentDateTimeString= " + currentDateTimeString);
-
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-
-
-                                Date date1 = simpleDateFormat.parse(currentDateTimeString);
-                                Date date2 = simpleDateFormat.parse(jresponse.getString("lastUpdateTime"));
-
-
-                                long difference = date2.getTime() - date1.getTime();
-                                int days = (int) (difference / (1000 * 60 * 60 * 24));
-                                int hours = (int) ((difference - (1000 * 60 * 60 * 24 * days)) / (1000 * 60 * 60));
-                                int min = (int) (difference - (1000 * 60 * 60 * 24 * days) - (1000 * 60 * 60 * hours)) / (1000 * 60);
-                                hours = (hours < 0 ? -hours : hours);
-
-                                Log.i("======= Hours", " :: " + hours);
-                                String mSTRN = String.valueOf(min);
-                                String mSTRN1 = mSTRN.replace("-", "");
-
-                                min = Integer.parseInt(mSTRN1);
-
-                                System.out.println("======= min :: " + min);
-
-
-                                if (days == 0) {
-                                    if (hours > 0) {
-                                        changeButtonVisibilityRLV(true, 1.0f, rlvBT_9_ID);
-                                        RMS_CURRENT_ONLINE_STATUS = "Offline";
-                                        AllCommomSTRContainer = AllCommomSTRContainer + " :\n RMS Current Status: Offline";
-                                        lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\n RMS Current Status: Offline"));
-                                        if (mCheckServerConnectivityValue == 1) {
-                                            if (mCheckCableOKValue == 1) {
-                                                CAB_CONNECT = "Ok";
-                                            } else {
-                                                CAB_CONNECT = "Not working";
-                                            }
-                                        } else   ///// change by me
-                                        {
-                                            CAB_CONNECT = "Not applicable";
-                                        }
-                                    } else {
-                                        if (min < 15) {
-                                            changeButtonVisibilityRLV(false, 0.5f, rlvBT_9_ID);
-                                            RMS_CURRENT_ONLINE_STATUS = "Online";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n RMS Current Status: Online";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\n RMS Current Status: Online"));
-                                        } else {
-                                            changeButtonVisibilityRLV(true, 1.0f, rlvBT_9_ID);
-                                            RMS_CURRENT_ONLINE_STATUS = "Offline";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n RMS Current Status: Offline";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\n RMS Current Status: Offline"));
-                                            if (mCheckServerConnectivityValue == 1) {
-                                                if (mCheckCableOKValue == 1) {
-                                                    CAB_CONNECT = "Ok";
-                                                } else {
-                                                    CAB_CONNECT = "Not working";
-                                                }
-
-                                            } else   ///// change by me
-                                            {
-                                                CAB_CONNECT = "Not applicable";
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    changeButtonVisibilityRLV(true, 1.0f, rlvBT_9_ID);
-                                    RMS_CURRENT_ONLINE_STATUS = "Offline";
-                                    AllCommomSTRContainer = AllCommomSTRContainer + " :\n RMS Current Status: Offline";
-                                    lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\n RMS Current Status: Offline"));
-                                    if (mCheckServerConnectivityValue == 1) {
-                                        if (mCheckCableOKValue == 1) {
-                                            CAB_CONNECT = "Ok";
-                                        } else {
-                                            CAB_CONNECT = "Not working";
-                                        }
-
-                                    } else   ///// change by me
-                                    {
-                                        CAB_CONNECT = "Not applicable";
-                                    }
-                                }
-
-                                if (jresponse.getBoolean("dataRecived")) {
-                                    AllCommomSTRContainer = AllCommomSTRContainer + " :\n RMS Data Status: YES";
-                                    lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\n RMS Data Status: YES"));
-                                    RMS_STATUS = "YES";
-                                    if (checkFirstTimeOlineStstus == 1) {
-                                        RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
-                                    } else {
-                                        RMS_DEBUG_EXTRN = "ONLINE FROM SERVER";
-                                        checkFirstTimeOlineStstus = 1;
-                                    }
-                                } else {
-                                    AllCommomSTRContainer = AllCommomSTRContainer + " :\n RMS Data Status: NO";
-                                    lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\n RMS Data Status: NO"));
-                                    RMS_STATUS = "NO";
-                                }
-
-
-                                if (mCheckButtonclick == 0) {
-                                    if (!MOBILE.equalsIgnoreCase("Not Available")) {
-                                        long iiii = mDatabaseHelperTeacher.insertSimInfoData(DEVICE_NO, MOBILE, Constant.BILL_NUMBER_UNIC, Constant.BILL_NUMBER_UNIC, MUserId, true);
-                                    }
-
-                                }
-
-
-                                if (mSimDetailsInfoResponse.size() > 0)
-                                    mSimDetailsInfoResponse.clear();
-
-                                mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
-
-                                if (SER_CONNECT.equalsIgnoreCase("Connected")) {
-                                    if (RMS_STATUS.equalsIgnoreCase("YES")) {
-                                        mCheckExtraction = "Yes";
-                                    } else {
-                                        mCheckExtraction = "No";
-                                    }
-                                } else {
-                                    if (mSimDetailsInfoResponse.size() == 3 || mSimDetailsInfoResponse.size() > 3) {
-                                        mCheckExtraction = "Yes";
-                                    } else {
-                                        mCheckExtraction = "No";
-                                    }
-
-                                }
-
-                                // sendDataToServer();
-
-                            } catch (Exception e) {
-                                // sendDataToServer();
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                } else {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            // Toast.makeText(mContext, "RMS CHECK", Toast.LENGTH_SHORT).show();
-                            // Stuff that updates the UI
-                            try {
-                                baseRequest.hideLoader();
-                                RMS_STATUS = "NO";
-                                RMS_CURRENT_ONLINE_STATUS = "NA";
-                                RMS_LAST_ONLINE_DATE = "NA";
-                                AllCommomSTRContainer = AllCommomSTRContainer + " :\n RMS Data Status: NO";
-                                lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\n RMS Data Status: NO"));
-                                checkFirstTimeOlineStstus = 1;
-                                changeButtonVisibilityRLV(true, 1.0f, rlvBT_9_ID);
-
-                                RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
-                                RMS_SERVER_DOWN = "Not Responding";
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                    // CustomUtility.isErrorDialog(context, getString(R.string.error), getString(R.string.err_connection));
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return obj;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            baseRequest.hideLoader();
-
-
-        }
-    }*/
 
     public void SyncRMSCHECKDATAAPI(){
         CustomUtility.showProgressDialogue(BlueToothDebugNewActivity.this);
@@ -3980,7 +3705,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject  response) {
                 CustomUtility.hideProgressDialog(BlueToothDebugNewActivity.this);
-
+                baseRequest.hideLoader();
 
 
                 if(!response.toString().isEmpty()) {
@@ -3995,6 +3720,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                baseRequest.hideLoader();
                 CustomUtility.hideProgressDialog(BlueToothDebugNewActivity.this);
                 if(error.getMessage()!=null && !error.getMessage().isEmpty()) {
                     CustomUtility.ShowToast(error.getMessage(),BlueToothDebugNewActivity.this);
@@ -4581,8 +4307,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
 
                     try {
-                        // baseRequest.hideLoader();
-                        //rlvLoadingViewID.setVisibility(View.GONE);
+
                         if(Build.VERSION.SDK_INT >= 30) {
                             //only api 21 above
                             filePath = "/storage/emulated/0/Documents/ShaktiKusumExtractionFile/Month_" + mBtNameHead + ".xls";//Month_26-0018-0-18-03-19-0.xls";
@@ -4591,12 +4316,15 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                             filePath = "/storage/emulated/0/ShaktiKusumExtractionFile/Month_" + mBtNameHead + ".xls";//Month_26-0018-0-18-03-19-0.xls";
                         }
 
+                       /* File file = new File(UtilMethod.commonDocumentDirPath("ShaktiKusumExtractionFile"), "Month_" + mBtNameHead + ".xls");
+                        filePath = file.getAbsolutePath();*/
+
                         Log.d("filePath", filePath);
                         // String[] mDataNameString = filePath.split("files/");
                         String[] mDataNameString = filePath.split("ShaktiKusumExtractionFile/");
                         String[] mDataNameString1 = mDataNameString[1].split(".xls");
                         String[] mDataNameString2 = mDataNameString1[0].split("_");
-                        GetProfileUpdate_Task(mDataNameString2[1], mDataNameString2[0], headerLenghtMonth);
+                        GetProfileUpdate_Task(mDataNameString2[1], mDataNameString2[0], headerLenghtMonth,filePath);
                         dialog.dismiss();
                     } catch (Exception e) {
                         baseRequest.hideLoader();

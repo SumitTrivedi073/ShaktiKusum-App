@@ -1,6 +1,8 @@
 
 package bean;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 
@@ -36,5 +38,15 @@ public class ProfileUpdateModel {
 
     public void setStatus(String status) {
         mStatus = status;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "ProfileUpdateModel{" +
+                "mMessage='" + mMessage + '\'' +
+                ", mResponse=" + mResponse +
+                ", mStatus='" + mStatus + '\'' +
+                '}';
     }
 }

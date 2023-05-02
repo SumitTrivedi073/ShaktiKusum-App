@@ -440,8 +440,8 @@ public class InstReportImageActivity extends AppCompatActivity implements ImageS
     public boolean Save() {
         String DeviceStatus = CustomUtility.getSharedPreferences(InstReportImageActivity.this, "DeviceStatus");
 
-        if (DeviceStatus == getResources().getString(R.string.online)){
-            Log.e("DeviceStatus==>", ""+DeviceStatus);
+        if (DeviceStatus.equals(getResources().getString(R.string.online))){
+
             if (CustomUtility.getSharedPreferences(InstReportImageActivity.this, "borewellstatus").equalsIgnoreCase("2")) {
                 if (!imageArrayList.get(0).isImageSelected()) {
                     Toast.makeText(this, getResources().getString(R.string.select_photosOfCivilMaterial), Toast.LENGTH_SHORT).show();
@@ -460,7 +460,8 @@ public class InstReportImageActivity extends AppCompatActivity implements ImageS
                     isBackPressed = true;
                 }
 
-            } else if (CustomUtility.getSharedPreferences(InstReportImageActivity.this, "borewellstatus").equalsIgnoreCase("1")) {
+            }
+            else if (CustomUtility.getSharedPreferences(InstReportImageActivity.this, "borewellstatus").equalsIgnoreCase("1")) {
                 if (!imageArrayList.get(0).isImageSelected()) {
                     Toast.makeText(this, getResources().getString(R.string.select_photosOfCivilMaterial), Toast.LENGTH_SHORT).show();
                 } else if (!imageArrayList.get(1).isImageSelected()) {
@@ -481,7 +482,8 @@ public class InstReportImageActivity extends AppCompatActivity implements ImageS
                     // finish();
                 }
 
-            } else {
+            }
+            else {
                 if (!imageArrayList.get(0).isImageSelected()) {
                     Toast.makeText(this, getResources().getString(R.string.select_photosOfCivilMaterial), Toast.LENGTH_SHORT).show();
                 } else if (!imageArrayList.get(1).isImageSelected()) {
