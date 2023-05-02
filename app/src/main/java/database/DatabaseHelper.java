@@ -297,7 +297,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_REMARKD3 = "key_remark3";
     public static final String KEY_REMARKD4 = "key_remark4";
     public static final String KEY_REMARKD5 = "key_remark5";
-    public static final String KEY_SITE_AUDIT_ID = "siteAuditId",KEY_SITE_AUDIT_NAME = "siteAuditImageName",KEY_SITE_AUDIT_PATH = "siteAuditPath",KEY_SITE_AUDIT_IMAGE_SELECTED = "siteAuditImageSelected";
+    public static final String KEY_SITE_AUDIT_ID = "siteAuditId",KEY_SITE_AUDIT_NAME = "siteAuditImageName",KEY_SITE_AUDIT_PATH = "siteAuditPath",KEY_SITE_AUDIT_IMAGE_SELECTED = "siteAuditImageSelected",KEY_SITE_AUDIT_BILL_NO= "siteAuditBillNo";
 
 
 // Table Create Statements
@@ -684,7 +684,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + TABLE_INSTALLATION_IMAGE_DATA + "("  + KEY_INSTALLATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_INSTALLATION_NAME + " TEXT," + KEY_INSTALLATION_PATH + " TEXT," + KEY_INSTALLATION_IMAGE_SELECTED + " BOOLEAN," + KEY_INSTALLATION_BILL_NO + " TEXT)";
 
     private static final String CREATE_TABLE_SITE_AUDIT_IMAGES = "CREATE TABLE "
-            + TABLE_SITE_AUDIT + "("  + KEY_SITE_AUDIT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_SITE_AUDIT_NAME + " TEXT," + KEY_SITE_AUDIT_PATH + " TEXT," + KEY_SITE_AUDIT_IMAGE_SELECTED + " BOOLEAN)";
+            + TABLE_SITE_AUDIT + "("  + KEY_SITE_AUDIT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_SITE_AUDIT_NAME + " TEXT," + KEY_SITE_AUDIT_PATH + " TEXT," + KEY_SITE_AUDIT_IMAGE_SELECTED + " BOOLEAN," + KEY_SITE_AUDIT_BILL_NO + " TEXT)";
 
 
     private static final String CREATE_TABLE_UNLOADING_IMAGES = "CREATE TABLE "
@@ -3826,22 +3826,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void insertSiteAuditImage( String name,String path, boolean isSelected) {
+    public void insertSiteAuditImage( String name,String path, boolean isSelected, String billno) {
         SQLiteDatabase  database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_SITE_AUDIT_NAME, name);
         contentValues.put(KEY_SITE_AUDIT_PATH, path);
         contentValues.put(KEY_SITE_AUDIT_IMAGE_SELECTED, isSelected);
+        contentValues.put(KEY_SITE_AUDIT_BILL_NO, billno);
         database.insert(TABLE_SITE_AUDIT, null, contentValues);
         database.close();
     }
 
-    public void updateSiteAuditRecord( String name, String path, boolean isSelected) {
+    public void updateSiteAuditRecord( String name, String path, boolean isSelected, String billno) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_SITE_AUDIT_NAME, name);
         values.put(KEY_SITE_AUDIT_PATH, path);
         values.put(KEY_SITE_AUDIT_IMAGE_SELECTED, isSelected);
+        values.put(KEY_SITE_AUDIT_BILL_NO, billno);
         // update Row
         db.update(TABLE_SITE_AUDIT,values,"siteAuditImageName = '"+name+"'",null);
         db.close();
@@ -3863,6 +3865,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     imageModel.setName(mcursor.getString(1));
                     imageModel.setImagePath(mcursor.getString(2));
                     imageModel.setImageSelected(Boolean.parseBoolean(mcursor.getString(3)));
+                    imageModel.setBillNo(mcursor.getString(4));
                     siteAuditImages.add(imageModel);
                 }
             }

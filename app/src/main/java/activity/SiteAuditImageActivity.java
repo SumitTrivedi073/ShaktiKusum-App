@@ -90,6 +90,7 @@ public class SiteAuditImageActivity extends AppCompatActivity implements ImageSe
         enq_docno= bundle.getString("billno");
         cust_nm= bundle.getString("custnm");
 
+        Log.e("enq_docno",""+enq_docno);
         SetAdapter();
         listner();
     }
@@ -131,6 +132,7 @@ public class SiteAuditImageActivity extends AppCompatActivity implements ImageSe
             ImageModel imageModel = new ImageModel();
             imageModel.setName(itemNameList.get(i));
             imageModel.setImagePath("");
+            imageModel.setBillNo("");
             imageModel.setImageSelected(false);
             imageArrayList.add(imageModel);
         }
@@ -139,18 +141,22 @@ public class SiteAuditImageActivity extends AppCompatActivity implements ImageSe
 
         //Create Table
         imageList = db.getAllAuditSiteImages();
-        Log.e("ImageList===>" , " " + imageList.size());
+        Log.e("ImageList===>" , " " + imageList.get(0).getBillNo());
 
         if (itemNameList.size() > 0 && imageList != null && imageList.size() > 0) {
 
             for (int i = 0; i < imageList.size(); i++) {
                 for (int j = 0; j < itemNameList.size(); j++) {
-                    if (imageList.get(i).getName().equals(itemNameList.get(j))) {
-                        ImageModel imageModel = new ImageModel();
-                        imageModel.setName(imageList.get(i).getName());
-                        imageModel.setImagePath(imageList.get(i).getImagePath());
-                        imageModel.setImageSelected(true);
-                        imageArrayList.set(j, imageModel);
+                    if (imageList.get(i).getBillNo()!=null &&
+                            imageList.get(i).getBillNo().trim().equals(enq_docno)) {
+                        if (imageList.get(i).getName().equals(itemNameList.get(j))) {
+                            ImageModel imageModel = new ImageModel();
+                            imageModel.setName(imageList.get(i).getName());
+                            imageModel.setImagePath(imageList.get(i).getImagePath());
+                            imageModel.setBillNo(imageList.get(i).getBillNo());
+                            imageModel.setImageSelected(true);
+                            imageArrayList.set(j, imageModel);
+                        }
                     }
                 }
             }
@@ -185,15 +191,16 @@ public class SiteAuditImageActivity extends AppCompatActivity implements ImageSe
         ImageModel imageModel = new ImageModel();
         imageModel.setName(imageArrayList.get(selectedIndex).getName());
         imageModel.setImagePath(path);
+        imageModel.setBillNo(enq_docno);
         imageModel.setImageSelected(true);
         imageArrayList.set(selectedIndex, imageModel);
 
         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 
         if( isUpdate){
-            db.updateSiteAuditRecord(imageArrayList.get(selectedIndex).getName(), path,true);
+            db.updateSiteAuditRecord(imageArrayList.get(selectedIndex).getName(), path,true, enq_docno);
         }else {
-            db.insertSiteAuditImage(imageArrayList.get(selectedIndex).getName(), path,true);
+            db.insertSiteAuditImage(imageArrayList.get(selectedIndex).getName(), path,true, enq_docno);
         }
         siteAuditAdapter.notifyDataSetChanged();
 
