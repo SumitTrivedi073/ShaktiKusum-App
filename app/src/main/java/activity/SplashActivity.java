@@ -74,12 +74,13 @@ public class SplashActivity extends AppCompatActivity {
 
 
     public void loginSelection(){
+        CustomUtility.showProgressDialogue(SplashActivity.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.LOGIN_SELEC_PAGE, null, new Response.Listener<JSONObject >() {
             @Override
             public void onResponse(JSONObject response) {
-
+               CustomUtility.hideProgressDialog(SplashActivity.this);
                 if(!response.toString().isEmpty()) {
                     LoginSelectionModel loginSelectionModel = new Gson().fromJson(response.toString(), LoginSelectionModel.class);
                     if(loginSelectionModel.getLoginType().size()>0) {
@@ -96,18 +97,18 @@ public class SplashActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     }else {
-                        Toast.makeText(getApplicationContext(),"Login types are not available",Toast.LENGTH_LONG).show();
+                        Toast.makeText(SplashActivity.this,"Login types are not available",Toast.LENGTH_LONG).show();
                     }
 
                 }else {
-                    Toast.makeText(getApplicationContext(),"Something Went Wrong!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(SplashActivity.this,"Something Went Wrong!",Toast.LENGTH_LONG).show();
                 }
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-             //   CustomUtility.hideProgressDialog(SplashActivity.this);
+                CustomUtility.hideProgressDialog(SplashActivity.this);
                 Log.e("error", String.valueOf(error));
                 Toast.makeText(SplashActivity.this, error.getMessage(),
                         Toast.LENGTH_LONG).show();
