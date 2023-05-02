@@ -1,7 +1,6 @@
 package activity;
 
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,7 +29,6 @@ import webservice.WebURL;
 
 
 
-@SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
 
     ImageView imageView;
@@ -38,13 +36,11 @@ public class SplashActivity extends AppCompatActivity {
     DatabaseHelper databaseHelper;
 
     @Override
-    //** Called when the activity is first created. */
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         mContext = this;
 
-        imageView = (ImageView) findViewById(R.id.imageSplash);
         databaseHelper = new DatabaseHelper(SplashActivity.this);
 
         CheckLoginStatus();
@@ -78,16 +74,13 @@ public class SplashActivity extends AppCompatActivity {
 
 
     public void loginSelection(){
-
-      //  CustomUtility.showProgressDialogue(SplashActivity.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.LOGIN_SELEC_PAGE, null, new Response.Listener<JSONObject >() {
             @Override
             public void onResponse(JSONObject response) {
-            //    CustomUtility.hideProgressDialog(SplashActivity.this);
 
-                if(response.toString()!=null && !response.toString().isEmpty()) {
+                if(!response.toString().isEmpty()) {
                     LoginSelectionModel loginSelectionModel = new Gson().fromJson(response.toString(), LoginSelectionModel.class);
                     if(loginSelectionModel.getLoginType().size()>0) {
 
