@@ -9,8 +9,8 @@ android {
         minSdkVersion 26
         targetSdkVersion 33
         vectorDrawables.useSupportLibrary = true
-        versionCode 6
-        versionName "1.4"
+        versionCode 11
+        versionName "1.10.1"
         resConfigs "en"
         multiDexEnabled true
         useLibrary 'org.apache.http.legacy'
@@ -29,6 +29,7 @@ android {
             keyAlias 'newkusum'
             keyPassword 'shakti@123'
             storePassword 'shakti@123'
+            storeFile file('D:\\android projects\\ShaktiKusum\\app\\keystore\\kusum.jks')
         }
     }
 
@@ -46,30 +47,24 @@ android {
     }
 
     buildTypes {
-        release {
-            minifyEnabled true
+        debug {
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            shrinkResources true
+
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
         }
     }
-
-    dexOptions {
-        preDexLibraries false
-            }
-}
-
-
-configurations {
-    all {
-        exclude module: 'httpclient'
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
-repositories {
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
-    maven { url "https://repository.aspose.com/repo/" }
-}
+
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

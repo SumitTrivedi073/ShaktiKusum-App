@@ -1,8 +1,6 @@
 package activity;
 
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +8,8 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,9 +29,7 @@ import webservice.WebURL;
 
 
 
-@SuppressLint("CustomSplashScreen")
-public class SplashActivity extends Activity {
-
+public class SplashActivity extends AppCompatActivity {
 
     ImageView imageView;
     Context mContext;
@@ -41,13 +39,11 @@ public class SplashActivity extends Activity {
 
 
     @Override
-    //** Called when the activity is first created. */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         mContext = this;
 
-        imageView = (ImageView) findViewById(R.id.imageSplash);
         databaseHelper = new DatabaseHelper(SplashActivity.this);
 
         CheckLoginStatus();
@@ -77,17 +73,13 @@ public class SplashActivity extends Activity {
 
 
     public void loginSelection(){
-
-        CustomUtility.showProgressDialogue(SplashActivity.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.LOGIN_SELEC_PAGE, null, new Response.Listener<JSONObject >() {
             @Override
             public void onResponse(JSONObject response) {
-                CustomUtility.hideProgressDialog(SplashActivity.this);
 
-
-                if(response.toString()!=null && !response.toString().isEmpty()) {
+                if(!response.toString().isEmpty()) {
                     LoginSelectionModel loginSelectionModel = new Gson().fromJson(response.toString(), LoginSelectionModel.class);
                     if(loginSelectionModel.getLoginType().size()>0) {
 
