@@ -257,7 +257,7 @@ public class SiteAuditList extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            final ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
+            final ArrayList<NameValuePair> param = new ArrayList<>();
 
             String stateId = params[0];
             String districtId = params[1];
