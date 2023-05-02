@@ -120,7 +120,9 @@ public class Adapter_auditsite_list extends RecyclerView.Adapter<Adapter_auditsi
                         extras.putString("city", responseList.get(position).getCity());
                         extras.putString("address", responseList.get(position).getAddress());
                         extras.putString("contact", responseList.get(position).getContact_no());
-                        in.putExtras(extras);
+                        extras.putString("benficiary", responseList.get(position).getBeneficiary());
+
+                    in.putExtras(extras);
                         context.startActivity(in);
 
                 }

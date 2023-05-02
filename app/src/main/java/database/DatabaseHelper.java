@@ -10,6 +10,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Spinner;
 
+import com.shaktipumplimited.DamageMissBean.DamageMissResponse;
+import com.shaktipumplimited.SettingModel.SettingParameterResponse;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +30,6 @@ import bean.SiteAuditListBean;
 import bean.SubmitOfflineDataInput;
 import bean.SurveyBean;
 import bean.SurveyListBean;
-import com.shaktipumplimited.DamageMissBean.DamageMissResponse;
-import com.shaktipumplimited.SettingModel.SettingParameterResponse;
 import utility.CustomUtility;
 
 
@@ -61,6 +62,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_SURVEY_PUMP_DATA = "tbl_survey_pump_data";
     public static final String TABLE_SIM_REPLACMENT_DATA = "tbl_sim_card_replacement";
     public static final String TABLE_DAMAGE_MISS_COMPLAIN = "tbl_damage_midd_complain";
+
+    public static final String TABLE_SITE_AUDIT = "tbl_site_audit";
     //TABLE_OFFLINE_SUBMITTED_LIST field name
     public static final String KEY_OFFLINE_BILL_NO = "bill_no";
     public static final String KEY_OFFLINE_BENEFICIARY = "beneficiary";
@@ -294,6 +297,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_REMARKD3 = "key_remark3";
     public static final String KEY_REMARKD4 = "key_remark4";
     public static final String KEY_REMARKD5 = "key_remark5";
+    public static final String KEY_SITE_AUDIT_ID = "siteAuditId",KEY_SITE_AUDIT_NAME = "siteAuditImageName",KEY_SITE_AUDIT_PATH = "siteAuditPath",KEY_SITE_AUDIT_IMAGE_SELECTED = "siteAuditImageSelected",KEY_SITE_AUDIT_BILL_NO= "siteAuditBillNo";
+
 
 // Table Create Statements
 
@@ -376,7 +381,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_PHOTO3, mDamageMissResponse.getMPhotoValue3());
             values.put(KEY_PHOTO4, mDamageMissResponse.getMPhotoValue4());
             values.put(KEY_PHOTO5, mDamageMissResponse.getMPhotoValue5());
-            long i = db.insert(TABLE_DAMAGE_MISS_COMPLAIN, null, values);
+            db.insert(TABLE_DAMAGE_MISS_COMPLAIN, null, values);
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
             e.printStackTrace();
@@ -392,7 +397,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
         ContentValues values;
-        String where = " ";
+        String where;
         try {
             values = new ContentValues();
             values.put(KEY_BILL_NO, mDamageMissResponse.getMBillNo());
@@ -434,7 +439,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // Insert Row
             // long i = db.insert(TABLE_DAMAGE_MISS_COMPLAIN , null, values);
             where = KEY_BILL_NO + "='" + mDamageMissResponse.getMBillNo() + "'";
-            i = db.update(TABLE_DAMAGE_MISS_COMPLAIN, values, where, null);
+            db.update(TABLE_DAMAGE_MISS_COMPLAIN, values, where, null);
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
             e.printStackTrace();
@@ -677,6 +682,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_TABLE_INSTALLATION_IMAGES = "CREATE TABLE "
             + TABLE_INSTALLATION_IMAGE_DATA + "("  + KEY_INSTALLATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_INSTALLATION_NAME + " TEXT," + KEY_INSTALLATION_PATH + " TEXT," + KEY_INSTALLATION_IMAGE_SELECTED + " BOOLEAN," + KEY_INSTALLATION_BILL_NO + " TEXT)";
+
+    private static final String CREATE_TABLE_SITE_AUDIT_IMAGES = "CREATE TABLE "
+            + TABLE_SITE_AUDIT + "("  + KEY_SITE_AUDIT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_SITE_AUDIT_NAME + " TEXT," + KEY_SITE_AUDIT_PATH + " TEXT," + KEY_SITE_AUDIT_IMAGE_SELECTED + " BOOLEAN," + KEY_SITE_AUDIT_BILL_NO + " TEXT)";
+
 
     private static final String CREATE_TABLE_UNLOADING_IMAGES = "CREATE TABLE "
             + TABLE_UNLOADING_IMAGE_DATA + "("  + KEY_UNLOADING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_UNLOADING_NAME + " TEXT," + KEY_UNLOADING_PATH + " TEXT," + KEY_UNLOADING_IMAGE_SELECTED + " TEXT," + KEY_UNLOADING_BILL_NO + " TEXT)";
@@ -1073,6 +1082,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_SIM_CARD_REPLACEMENT);
         db.execSQL(CREATE_TABLE_SURVEY_DATA);
         db.execSQL(CREATE_TABLE_INSTALLATION_IMAGES);
+        db.execSQL(CREATE_TABLE_SITE_AUDIT_IMAGES);
         db.execSQL(CREATE_TABLE_UNLOADING_IMAGES);
     }
 
@@ -1099,6 +1109,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_AUDITSITE_LIST);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_AUDIT_PUMP_DATA);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_INSTALLATION_IMAGE_DATA);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_SITE_AUDIT);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_UNLOADING_IMAGE_DATA);
             // create newworkorder tables
             onCreate(db);
@@ -3403,6 +3414,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.delete(TABLE_INSTALLATION_IMAGE_DATA, null, null);
         }
     }
+    public void deleteSiteAuditImages() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(CustomUtility.doesTableExist(db,TABLE_SITE_AUDIT)) {
+            db.delete(TABLE_SITE_AUDIT, null, null);
+        }
+    }
 
     public void deleteUnloadingImages() {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -3808,6 +3825,56 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update(TABLE_INSTALLATION_IMAGE_DATA,values,"installationImageName = '"+name+"'",null);
         db.close();
     }
+
+    public void insertSiteAuditImage( String name,String path, boolean isSelected, String billno) {
+        SQLiteDatabase  database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_SITE_AUDIT_NAME, name);
+        contentValues.put(KEY_SITE_AUDIT_PATH, path);
+        contentValues.put(KEY_SITE_AUDIT_IMAGE_SELECTED, isSelected);
+        contentValues.put(KEY_SITE_AUDIT_BILL_NO, billno);
+        database.insert(TABLE_SITE_AUDIT, null, contentValues);
+        database.close();
+    }
+
+    public void updateSiteAuditRecord( String name, String path, boolean isSelected, String billno) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_SITE_AUDIT_NAME, name);
+        values.put(KEY_SITE_AUDIT_PATH, path);
+        values.put(KEY_SITE_AUDIT_IMAGE_SELECTED, isSelected);
+        values.put(KEY_SITE_AUDIT_BILL_NO, billno);
+        // update Row
+        db.update(TABLE_SITE_AUDIT,values,"siteAuditImageName = '"+name+"'",null);
+        db.close();
+    }
+
+    public List<ImageModel> getAllAuditSiteImages() {
+        ArrayList<ImageModel> siteAuditImages = new ArrayList<ImageModel>();
+        SQLiteDatabase  database = this.getWritableDatabase();
+        if(CustomUtility.doesTableExist(database,TABLE_SITE_AUDIT)) {
+            Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_SITE_AUDIT, null);
+            ImageModel imageModel;
+
+            if (mcursor.getCount() > 0) {
+                for (int i = 0; i < mcursor.getCount(); i++) {
+                    mcursor.moveToNext();
+
+                    imageModel = new ImageModel();
+                    imageModel.setID(mcursor.getString(0));
+                    imageModel.setName(mcursor.getString(1));
+                    imageModel.setImagePath(mcursor.getString(2));
+                    imageModel.setImageSelected(Boolean.parseBoolean(mcursor.getString(3)));
+                    imageModel.setBillNo(mcursor.getString(4));
+                    siteAuditImages.add(imageModel);
+                }
+            }
+            mcursor.close();
+            database.close();
+        }
+        return siteAuditImages;
+    }
+
 
     public ArrayList<ImageModel> getAllInstallationImages() {
         ArrayList<ImageModel> installationImages = new ArrayList<ImageModel>();

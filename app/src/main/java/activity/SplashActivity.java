@@ -1,8 +1,6 @@
 package activity;
 
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +8,8 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,25 +29,18 @@ import webservice.WebURL;
 
 
 
-@SuppressLint("CustomSplashScreen")
-public class SplashActivity extends Activity {
-
+public class SplashActivity extends AppCompatActivity {
 
     ImageView imageView;
     Context mContext;
     DatabaseHelper databaseHelper;
 
-
-
-
     @Override
-    //** Called when the activity is first created. */
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+       super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         mContext = this;
 
-        imageView = (ImageView) findViewById(R.id.imageSplash);
         databaseHelper = new DatabaseHelper(SplashActivity.this);
 
         CheckLoginStatus();
@@ -56,7 +49,7 @@ public class SplashActivity extends Activity {
     }
 
     private void CheckLoginStatus() {
-        if(CustomUtility.isInternetOn()) {
+
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -65,29 +58,30 @@ public class SplashActivity extends Activity {
                         startActivity(intent);
                         finish();
                     } else {
-                        loginSelection();
+                         if (CustomUtility.isInternetOn()) {
+                             loginSelection();
+                         } else {
+                             Intent intent = new Intent(mContext, Login.class);
+                             startActivity(intent);
+                             finish();
+                         }
+                     }
 
-                    }
                 }
             }, 3000);
-        }else {
-            Toast.makeText(getApplicationContext(), R.string.check_internet_connection,Toast.LENGTH_LONG).show();
-        }
+
     }
 
 
     public void loginSelection(){
-
         CustomUtility.showProgressDialogue(SplashActivity.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.LOGIN_SELEC_PAGE, null, new Response.Listener<JSONObject >() {
             @Override
             public void onResponse(JSONObject response) {
-                CustomUtility.hideProgressDialog(SplashActivity.this);
-
-
-                if(response.toString()!=null && !response.toString().isEmpty()) {
+               CustomUtility.hideProgressDialog(SplashActivity.this);
+                if(!response.toString().isEmpty()) {
                     LoginSelectionModel loginSelectionModel = new Gson().fromJson(response.toString(), LoginSelectionModel.class);
                     if(loginSelectionModel.getLoginType().size()>0) {
 
@@ -103,11 +97,11 @@ public class SplashActivity extends Activity {
                         startActivity(intent);
                         finish();
                     }else {
-                        Toast.makeText(getApplicationContext(),"Login types are not available",Toast.LENGTH_LONG).show();
+                        Toast.makeText(SplashActivity.this,"Login types are not available",Toast.LENGTH_LONG).show();
                     }
 
                 }else {
-                    Toast.makeText(getApplicationContext(),"Something Went Wrong!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(SplashActivity.this,"Something Went Wrong!",Toast.LENGTH_LONG).show();
                 }
 
             }

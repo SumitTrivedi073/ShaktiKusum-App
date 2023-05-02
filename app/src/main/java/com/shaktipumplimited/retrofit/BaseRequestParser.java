@@ -17,7 +17,7 @@ public abstract class BaseRequestParser {
      */
     public boolean parseJson(String json) {
         if (!TextUtils.isEmpty(json)) {
-            try {
+            /*try {
                 mRespJSONObject = new JSONObject(json);
                 if (null != mRespJSONObject) {
                     mResponseCode = mRespJSONObject.optString("status",
@@ -28,7 +28,8 @@ public abstract class BaseRequestParser {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
+            return true;
         }
 
         return false;

@@ -3,6 +3,8 @@ package activity;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.BLUETOOTH;
+import static android.Manifest.permission.BLUETOOTH_CONNECT;
+import static android.Manifest.permission.BLUETOOTH_SCAN;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_MEDIA_AUDIO;
@@ -108,7 +110,7 @@ public class Login extends AppCompatActivity {
     private EditText inputName, inputPassword;
     private TextInputLayout inputLayoutName, inputLayoutPassword;
 
-    boolean FineLocationAccepted,CoarseLocationAccepted,Bluetooth,ReadPhoneState,Camera,ReadPhoneStorage,WritePhoneStorage;
+    boolean BluetoothConnect,BluetoothScan,FineLocationAccepted,CoarseLocationAccepted,Bluetooth,ReadPhoneState,Camera,ReadPhoneStorage,WritePhoneStorage;
 
 
 
@@ -466,17 +468,6 @@ public class Login extends AppCompatActivity {
                     CustomUtility.setSharedPreference(context, "username", username);
                     CustomUtility.setSharedPreference(context, "usertype", usertype);
 
-
-
-                       /* String OTP_CHECK = CustomUtility.getSharedPreferences(context, "CHECK_OTP_VARIFED");
-                        if(OTP_CHECK.equalsIgnoreCase("Y")) {
-                            Intent intent = new Intent(context, MainActivity.class);
-                            startActivity(intent);
-                        }
-                        else {
-                            Intent intent = new Intent(Login.this, OTPGenerationActivity.class);
-                            startActivity(intent);
-                        }*/
                         Intent intent = new Intent(Login.this, OTPGenerationActivity.class);
                         startActivity(intent);
                         finish();
@@ -617,8 +608,6 @@ public class Login extends AppCompatActivity {
                 try {
 
                     if (CustomUtility.isInternetOn()) {
-
-
                         progressBarStatus = 30;
 
                         // Updating the progress bar
@@ -726,15 +715,25 @@ public class Login extends AppCompatActivity {
         int WriteExternalStorage = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
         int ReadMediaImages = ContextCompat.checkSelfPermission(getApplicationContext(), READ_MEDIA_IMAGES);
         int ReadMediaAudio = ContextCompat.checkSelfPermission(getApplicationContext(), READ_MEDIA_AUDIO);
+        int BluetoothConnect =  ContextCompat.checkSelfPermission(getApplicationContext(), BLUETOOTH_CONNECT);
+        int BluetoothScan =  ContextCompat.checkSelfPermission(getApplicationContext(), BLUETOOTH_SCAN);
 
 
         if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            return FineLocation == PackageManager.PERMISSION_GRANTED && CoarseLocation == PackageManager.PERMISSION_GRANTED
-                    && Bluetooth == PackageManager.PERMISSION_GRANTED && PhoneState == PackageManager.PERMISSION_GRANTED
+            return CoarseLocation == PackageManager.PERMISSION_GRANTED && Bluetooth == PackageManager.PERMISSION_GRANTED
                     && Camera == PackageManager.PERMISSION_GRANTED  && ReadMediaImages == PackageManager.PERMISSION_GRANTED
-                    && ReadMediaAudio == PackageManager.PERMISSION_GRANTED;
-        } else {
-
+                    && ReadMediaAudio == PackageManager.PERMISSION_GRANTED && BluetoothConnect == PackageManager.PERMISSION_GRANTED
+                    && BluetoothScan == PackageManager.PERMISSION_GRANTED;
+        }else  if  ( SDK_INT == Build.VERSION_CODES.S)  {
+            return  Camera == PackageManager.PERMISSION_GRANTED
+                    && CoarseLocation == PackageManager.PERMISSION_GRANTED  && PhoneState == PackageManager.PERMISSION_GRANTED
+                    && Bluetooth == PackageManager.PERMISSION_GRANTED   && BluetoothScan == PackageManager.PERMISSION_GRANTED
+                    && BluetoothConnect == PackageManager.PERMISSION_GRANTED;
+        } else  if  (SDK_INT == Build.VERSION_CODES.R)  {
+            return  Camera == PackageManager.PERMISSION_GRANTED
+                    && CoarseLocation == PackageManager.PERMISSION_GRANTED  && PhoneState == PackageManager.PERMISSION_GRANTED
+                    && Bluetooth == PackageManager.PERMISSION_GRANTED;
+        }else {
             return FineLocation == PackageManager.PERMISSION_GRANTED && CoarseLocation == PackageManager.PERMISSION_GRANTED
                     && Bluetooth == PackageManager.PERMISSION_GRANTED && PhoneState == PackageManager.PERMISSION_GRANTED
                     && Camera == PackageManager.PERMISSION_GRANTED && ReadExternalStorage == PackageManager.PERMISSION_GRANTED
@@ -742,15 +741,30 @@ public class Login extends AppCompatActivity {
         }
     }
 
-
     private void requestPermission() {
         if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.BLUETOOTH, Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.CAMERA,Manifest.permission.READ_MEDIA_IMAGES,Manifest.permission.READ_MEDIA_AUDIO}, REQUEST_CODE_PERMISSION);
-        }else {
-            ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, BLUETOOTH, READ_PHONE_STATE,
-                    CAMERA, READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISSION);
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA,  Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_MEDIA_AUDIO,
+                            Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.BLUETOOTH ,
+                            Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_CODE_PERMISSION);
+        } else if  ( SDK_INT == Build.VERSION_CODES.S )  {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA,  Manifest.permission.READ_PHONE_STATE,
+                            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.BLUETOOTH,
+                            Manifest.permission.BLUETOOTH_CONNECT , Manifest.permission.BLUETOOTH_SCAN },
+                    REQUEST_CODE_PERMISSION);
+        }else if  ( SDK_INT == Build.VERSION_CODES.R)  {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_PHONE_STATE,
+                            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.BLUETOOTH,},
+                    REQUEST_CODE_PERMISSION);
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE,
+                            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.BLUETOOTH,Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISSION);
+
         }
     }
 
@@ -763,25 +777,46 @@ public class Login extends AppCompatActivity {
                 if (grantResults.length > 0) {
 
                     if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        boolean  FineLocationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                        boolean CoarseLocationAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                        boolean Bluetooth = grantResults[2] == PackageManager.PERMISSION_GRANTED;
-                        boolean  ReadPhoneState = grantResults[3] == PackageManager.PERMISSION_GRANTED;
-                        boolean  Camera = grantResults[4] == PackageManager.PERMISSION_GRANTED;
-                        boolean  ReadMediaImages = grantResults[5] == PackageManager.PERMISSION_GRANTED;
-                        boolean  ReadMediaAudio = grantResults[6] == PackageManager.PERMISSION_GRANTED;
 
+                        boolean CoarseLocationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                        boolean Bluetooth = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                        boolean  Camera = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                        boolean  ReadMediaImages = grantResults[3] == PackageManager.PERMISSION_GRANTED;
+                        boolean  ReadMediaAudio = grantResults[4] == PackageManager.PERMISSION_GRANTED;
+                        boolean BluetoothConnect = grantResults[5] == PackageManager.PERMISSION_GRANTED;
+                        boolean BluetoothScan =grantResults[6] == PackageManager.PERMISSION_GRANTED;
 
-                        if (FineLocationAccepted && CoarseLocationAccepted && Bluetooth && ReadPhoneState && Camera && ReadMediaImages && ReadMediaAudio) {
+                        if (BluetoothConnect && BluetoothScan && CoarseLocationAccepted && Bluetooth  && Camera && ReadMediaImages && ReadMediaAudio) {
                             // perform action when allow permission success
-
                                 askNotificationPermission();
-
-
                         }else {
                            requestPermission();
                         }
-                    } else {
+                    } else  if ( SDK_INT == Build.VERSION_CODES.S ) {
+                        boolean Camera = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                        boolean AccessCoarseLocation = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                        boolean Bluetooth = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                        boolean BluetoothConnect = grantResults[3] == PackageManager.PERMISSION_GRANTED;
+                        boolean BluetoothScan = grantResults[4] == PackageManager.PERMISSION_GRANTED;
+                        boolean  ReadPhoneState = grantResults[5] == PackageManager.PERMISSION_GRANTED;
+
+                        if (Camera && ReadPhoneState && AccessCoarseLocation && Bluetooth &&  BluetoothConnect && BluetoothScan) {
+                            serverLogin();
+                        } else {
+                            requestPermission();
+                        }
+                    }else  if (  SDK_INT == Build.VERSION_CODES.R) {
+                        boolean Camera = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                        boolean AccessCoarseLocation = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                        boolean Bluetooth = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                        boolean  ReadPhoneState = grantResults[3] == PackageManager.PERMISSION_GRANTED;
+
+                        if (Camera && ReadPhoneState && AccessCoarseLocation && Bluetooth) {
+                            serverLogin();
+                        } else {
+                            requestPermission();
+                        }
+                    }else  if ( SDK_INT <= Build.VERSION_CODES.Q) {
                         boolean  FineLocationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                         boolean CoarseLocationAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
                         boolean Bluetooth = grantResults[2] == PackageManager.PERMISSION_GRANTED;
@@ -789,7 +824,9 @@ public class Login extends AppCompatActivity {
                         boolean  Camera = grantResults[4] == PackageManager.PERMISSION_GRANTED;
                         boolean ReadPhoneStorage = grantResults[5] == PackageManager.PERMISSION_GRANTED;
                         boolean WritePhoneStorage = grantResults[6] == PackageManager.PERMISSION_GRANTED;
-                        if( FineLocationAccepted && CoarseLocationAccepted && Bluetooth && ReadPhoneState && Camera && ReadPhoneStorage && WritePhoneStorage ){
+
+
+                        if(FineLocationAccepted && CoarseLocationAccepted && Bluetooth && ReadPhoneState && Camera && ReadPhoneStorage && WritePhoneStorage ){
                             serverLogin();
                         }else {
                             requestPermission();
