@@ -35,12 +35,9 @@ public class SplashActivity extends AppCompatActivity {
     Context mContext;
     DatabaseHelper databaseHelper;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+       super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         mContext = this;
 
@@ -52,7 +49,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void CheckLoginStatus() {
-        if(CustomUtility.isInternetOn()) {
+
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -61,14 +58,18 @@ public class SplashActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else {
-                        loginSelection();
+                         if (CustomUtility.isInternetOn()) {
+                             loginSelection();
+                         } else {
+                             Intent intent = new Intent(mContext, Login.class);
+                             startActivity(intent);
+                             finish();
+                         }
+                     }
 
-                    }
                 }
             }, 3000);
-        }else {
-            Toast.makeText(getApplicationContext(), R.string.check_internet_connection,Toast.LENGTH_LONG).show();
-        }
+
     }
 
 
@@ -106,7 +107,7 @@ public class SplashActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                CustomUtility.hideProgressDialog(SplashActivity.this);
+             //   CustomUtility.hideProgressDialog(SplashActivity.this);
                 Log.e("error", String.valueOf(error));
                 Toast.makeText(SplashActivity.this, error.getMessage(),
                         Toast.LENGTH_LONG).show();

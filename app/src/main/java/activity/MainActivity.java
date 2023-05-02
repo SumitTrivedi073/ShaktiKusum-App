@@ -9,7 +9,6 @@ import android.content.IntentSender;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
@@ -51,7 +50,6 @@ import java.util.ArrayList;
 import adapter.Adapter_item_list;
 import bean.ItemNameBean;
 import bean.LoginBean;
-import ch.acra.acra.BuildConfig;
 import database.DatabaseHelper;
 import debugapp.ActivitySurveyList;
 import utility.CustomUtility;
@@ -105,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+        assert pkgInfo != null;
         versionName = String.valueOf(pkgInfo.versionName);
 
         LoginBean loginBean = new LoginBean();
@@ -145,9 +144,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         flvViewFlipperID.startFlipping();
 
         if (CustomUtility.isInternetOn()) {
-            dataHelper.deleteDashboardData();
             new Dashboard().execute();
         } else {
+            getListData();
             Toast.makeText(context, "Please Connect to Internet", Toast.LENGTH_SHORT).show();
         }
 
@@ -304,12 +303,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 dataHelper.deleteInstallationImages();
                 dataHelper.deleteUnloadingImages();
                 CustomUtility.clearSharedPrefrences(context);
-               /* CustomUtility.setSharedPreference(context, "userid", "");
-                CustomUtility.setSharedPreference(context, "username", "");
-                CustomUtility.setSharedPreference(context, "usertype", "");
-                CustomUtility.setSharedPreference(context, "projectid", "");
-                CustomUtility.setSharedPreference(context, "loginid", "");
-                CustomUtility.setSharedPreference(context, "CHECK_OTP_VARIFED", "N");*/
+
                 Intent intent = new Intent(context, Login.class);
                 startActivity(intent);
                 finish();
@@ -328,7 +322,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         super.onResume();
 
-       // getListData();
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -434,14 +427,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     e.printStackTrace();
                 }
             }
-            if (progressBarStatus >= 100) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                progressBar.dismiss();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            progressBar.dismiss();
         }).start();
     }
 

@@ -1,7 +1,6 @@
 package debugapp.GlobalValue;
 
 import android.content.Context;
-import android.graphics.Color;
 
 public class Constant {
     private Context mContectt;
@@ -35,6 +34,11 @@ public class Constant {
 
     public static String RejectedImage ="RejectedImage";
     public  static  boolean isLoding = false;
+
+    public static  String ControllerSerialNumber = "ControllerSerialNumber";
+
+    public static  String PersonName = "PersonName";
+    public static  String PersonNumber = "PersonNumber";
 
 
 

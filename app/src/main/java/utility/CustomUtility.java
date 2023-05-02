@@ -19,6 +19,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Base64;
@@ -50,10 +51,12 @@ public class CustomUtility {
     public static final String PERMISSIONS_FILE_PICKER = Manifest.permission.WRITE_EXTERNAL_STORAGE;
     public static Context appContext;
     static boolean connected;
+    static long  mLastClickTime;
     private static String PREFERENCE = "DealLizard";
     String current_date, current_time;
     Calendar calander = null;
     SimpleDateFormat simpleDateFormat = null;
+    @SuppressLint("StaticFieldLeak")
     public static CustomProgressDialog progressDialog;
 
 
@@ -272,7 +275,13 @@ public class CustomUtility {
     }
 
 
-
+    public static boolean disableButtonTwoSecs() {
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 3000) {
+            return true;
+        }
+        mLastClickTime = SystemClock.elapsedRealtime();
+        return false;
+    }
 
     public static void saveArrayList(Context context, List<ImageModel> imageArrayList,String name) {
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);
@@ -313,19 +322,25 @@ public class CustomUtility {
         current_time = simpleDateFormat.format(calander.getTime());
         return current_time.trim();
     }
-    public static void showProgressDialogue(Context context) {
+
+    public static void showProgressDialogue(Activity context) {
         progressDialog = new CustomProgressDialog(context);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-    }
+          progressDialog.setCancelable(false);
+          if(!context.isFinishing()) {
+              progressDialog.show();
+          }
+      }
+
+
 
     public static void hideProgressDialog(Context context) {
         if(progressDialog!=null && progressDialog.isShowing()){
             progressDialog.dismiss();
         }
     }
+
     public static String getBase64FromBitmap(Context context,String Imagepath) {
-        String imageString="";
+        String imageString=" ";
         try {
             Bitmap bitmap = BitmapFactory.decodeFile(Imagepath);
 

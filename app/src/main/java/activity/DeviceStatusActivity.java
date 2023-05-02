@@ -6,15 +6,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,7 +25,6 @@ import com.shaktipumplimited.shaktikusum.R;
 import org.json.JSONObject;
 
 import bean.DeviceDetailModel;
-import debugapp.PendingFeedback;
 import utility.CustomUtility;
 import utility.dialog4;
 import webservice.WebURL;
@@ -153,9 +149,12 @@ public class DeviceStatusActivity extends AppCompatActivity  {
                                 }
 
                                 if(deviceDetailModel.getResponse().getIsLogin()) {
+                                    CustomUtility.setSharedPreference(getApplicationContext(),"DeviceStatus",getResources().getString(R.string.online));
+
                                     deviceonline.setText(getResources().getString(R.string.online));
                                     deviceonline.setTextColor(Color.parseColor("#00FF00"));
                                 } else {
+                                    CustomUtility.setSharedPreference(getApplicationContext(),"DeviceStatus",getResources().getString(R.string.offline));
                                     deviceonline.setText(getResources().getString(R.string.offline));
                                     deviceonline.setTextColor(Color.parseColor("#FF0000"));
                                 }
@@ -176,9 +175,10 @@ public class DeviceStatusActivity extends AppCompatActivity  {
             @Override
             public void onErrorResponse(VolleyError error) {
                 CustomUtility.hideProgressDialog(DeviceStatusActivity.this);
-                Log.e("error", String.valueOf(error));
-                Toast.makeText(DeviceStatusActivity.this, error.getMessage(),
-                        Toast.LENGTH_LONG).show();
+                if(error.getMessage()!=null && !error.getMessage().isEmpty()) {
+                    CustomUtility.ShowToast(error.getMessage(),DeviceStatusActivity.this);
+
+                }
             }
         });
         requestQueue.add(jsonObjectRequest);

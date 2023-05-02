@@ -6,12 +6,10 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Message;
 import android.os.StrictMode;
 import android.provider.Settings;
@@ -29,7 +27,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,11 +40,8 @@ import androidx.core.os.BuildCompat;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.github.angads25.toggle.interfaces.OnToggledListener;
-import com.github.angads25.toggle.model.ToggleableView;
 import com.github.angads25.toggle.widget.LabeledSwitch;
 import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -63,7 +57,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -74,12 +67,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 import bean.BTResonseData;
 import bean.ImageModel;
 import bean.InstallationBean;
 import database.DatabaseHelper;
+import de.hdodenhof.circleimageview.CircleImageView;
 import debugapp.Bean.SimDetailsInfoResponse;
 import debugapp.GlobalValue.Constant;
 import debugapp.GlobalValue.NewSolarVFD;
@@ -96,7 +91,6 @@ public class InstallationInitial extends AppCompatActivity {
     private DatabaseHelperTeacher mDatabaseHelperTeacher;
     List<SimDetailsInfoResponse> mSimDetailsInfoResponse;
     Context mContext;
-    boolean mStatusBool = false;
     DatabaseHelper db;
     TextView save;
     InstallationBean installationBean;
@@ -113,11 +107,8 @@ public class InstallationInitial extends AppCompatActivity {
     String login_no = "";
     String customer_name = "";
     String installation_date = "";
-    String installation_place = "";
     String address_ins = "";
     String make_ins = "";
-    String state_ins = "";
-    String district_ins = "";
     String tehsil_ins = "";
     String village_ins = "";
     String mobile_no_ins = "";
@@ -133,24 +124,20 @@ public class InstallationInitial extends AppCompatActivity {
     String simcard_num = "";
     String solar_controller_model = "";
     String scm_sno = "";
-    String dc_hill = "";
     String inst_latitude = "";
     String inst_longitude = "";
-    String inst_docno = "";
     String module_ser_no = "";
     String inst_bill_no = "";
     String inst_bill_date = "";
     String inst_delay_reason = "";
     String hp = "";
     String current_date = "";
-    String gprsno_text = "";
     String simoprator_text = "";
     String conntype_text = "";
     int id = 0;
     double inst_latitude_double,
             inst_longitude_double;
     String no_of_module_value = "";
-    String no_of_labour_value = "";
     String rmsdata_status = "";
     EditText inst_date = null;
     EditText bill_date = null;
@@ -164,7 +151,6 @@ public class InstallationInitial extends AppCompatActivity {
     EditText cust_name = null;
     EditText borewellstatus = null;
     EditText reasontxt = null;
-    EditText fath_name = null;
     EditText inst_address = null;
     EditText inst_make = null;
     EditText inst_village = null;
@@ -186,7 +172,6 @@ public class InstallationInitial extends AppCompatActivity {
     EditText inst_controller_ser = null;
     EditText inst_simcard_num = null;
     SimpleDateFormat simpleDateFormat;
-    EditText inst_gprsno = null;
     EditText inst_hp = null;
     EditText inst_fathers_name = null;
     LinearLayout reason = null;
@@ -220,22 +205,23 @@ public class InstallationInitial extends AppCompatActivity {
     String mobileno = "";
     String tehvillage = "";
     String borewellstatus1 = "";
-    String CUS_CONTACT_NO = "",BeneficiaryNo ="";
+    String DeviceStatus = "";
+    String CUS_CONTACT_NO = "", BeneficiaryNo = "";
     int currentScannerFor = -1;
+    ArrayList<String> scannedDeviceNo = new ArrayList<>();
     String mDriveSerialNo = "";
     String mMotorSerialNo = "";
     String mPumpSerialNo = "";
 
-    private Toolbar mToolbar;
     private int value;
-    private LinearLayout moduleOneLL, moduleTwoLL;
+    private LinearLayout moduleOneLL;
     Boolean your_date_is_outdated = false;
     String delay;
     private TextView txtDebugAppID;
     private TextView txtLatIDD;
     private TextView txtLongIDD;
     private TextView txtIBaseUpdateID;
-    private RelativeLayout rlvCheckRMSDataID;
+
     private String mMOBNUM_1, mMOBNUM_2, mMOBNUM_3;
     private String mORG_OTP_VALUE;
     private String mORG_CONTACT_NO;
@@ -248,13 +234,14 @@ public class InstallationInitial extends AppCompatActivity {
     String mInstallerName = "";
     String RMS_SERVER_DOWN = "";
     String RMS_DEBUG_EXTRN = "";
-    String DEVICE_NO, SIGNL_STREN, INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "", SIM_SR_NO = "", KUNNR = "", SIM = "",
+    String DEVICE_NO, SIGNL_STREN, INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "", SIM_SR_NO = "", SIM = "",
             RMS_STATUS = "",
             RMS_LAST_ONLINE_DATE = "", RMS_CURRENT_ONLINE_STATUS = "";
     List<BTResonseData> mBTResonseDataList;
     BaseRequest baseRequest;
     private Dialog dialog;
 
+    @SuppressLint("HandlerLeak")
     android.os.Handler mHandler2 = new android.os.Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -263,25 +250,8 @@ public class InstallationInitial extends AppCompatActivity {
         }
     };
 
-    private boolean deleteDirectory(File path) {
-        if (path.exists()) {
-            File[] files = path.listFiles();
-            if (files == null) {
-                return false;
-            }
-            for (File file : files) {
-                if (file.isDirectory()) {
-                    deleteDirectory(file);
-                } else {
-                    file.delete();
-                }
-            }
-        }
-        return path.exists() && path.delete();
-    }
-
     List<ImageModel> imageList = new ArrayList<>();
-    boolean isBaseUpdate = false;
+    boolean isBaseUpdate = false, isControllerIDScan = false, isDebug = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -334,7 +304,7 @@ public class InstallationInitial extends AppCompatActivity {
         loginno = extras.getString("loginno");
         moduleqty = extras.getString("moduleqty");
         CUS_CONTACT_NO = extras.getString("CUS_CONTACT_NO");
-        BeneficiaryNo =  extras.getString("BeneficiaryNo");
+        BeneficiaryNo = extras.getString("BeneficiaryNo");
         try {
             Constant.BILL_NUMBER_UNIC = billno;
             // WebURL.mSettingCheckValue = simha2;
@@ -358,10 +328,10 @@ public class InstallationInitial extends AppCompatActivity {
         }
         mSimDetailsInfoResponse = new ArrayList<>();
         CustomUtility.setSharedPreference(mContext, "SYNCLIST", "0");
-        rlvCheckRMSDataID = (RelativeLayout) findViewById(R.id.rlvCheckRMSDataID);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Installation Form");
 
@@ -378,7 +348,9 @@ public class InstallationInitial extends AppCompatActivity {
             if (mBluetoothAdapter.isEnabled()) {
                 if (AllPopupUtil.pairedDeviceListGloable(mContext)) {
                     if (WebURL.BT_DEVICE_NAME.equalsIgnoreCase("") || WebURL.BT_DEVICE_MAC_ADDRESS.equalsIgnoreCase("")) {
+                        isDebug = true;
                         Intent intent = new Intent(mContext, PairedDeviceActivity.class);
+                        intent.putExtra(Constant.ControllerSerialNumber, inst_controller_ser.getText().toString().trim());
                         startActivity(intent);
                     }
                 } else {
@@ -392,24 +364,24 @@ public class InstallationInitial extends AppCompatActivity {
         installationBean = new InstallationBean();
         installationBean = db.getInstallationData(CustomUtility.getSharedPreferences(mContext, "userid"), billno);
 
-        list_simoprator = new ArrayList<String>();
-        list_conntype = new ArrayList<String>();
+        list_simoprator = new ArrayList<>();
+        list_conntype = new ArrayList<>();
 
         getSimTypeValue();
         getConnTypeValue();
 
         String dt = dispdate;  // dispatch date
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
         Calendar c = Calendar.getInstance();
         try {
-            c.setTime(sdf.parse(dt));
+            c.setTime(Objects.requireNonNull(sdf.parse(dt)));
         } catch (ParseException e) {
             e.printStackTrace();
         }
         c.add(Calendar.DATE, 15);
         String output = sdf.format(c.getTime());
 
-        DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+        @SuppressLint("SimpleDateFormat") DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         Date date = null;
         try {
             date = (Date) formatter.parse(output);
@@ -418,18 +390,17 @@ public class InstallationInitial extends AppCompatActivity {
         }
 
         Log.e("Timestamp1", "***" + System.currentTimeMillis());
+        assert date != null;
         Log.e("Timestamp2", "***" + date.getTime());
 
-        if (date != null) {
-            if (System.currentTimeMillis() > date.getTime()) {
-                your_date_is_outdated = true;
-                delay = "1";
-                reason.setVisibility(View.VISIBLE);
-            } else {
-                your_date_is_outdated = false;
-                delay = "2";
-                reason.setVisibility(View.GONE);
-            }
+        if (System.currentTimeMillis() > date.getTime()) {
+            your_date_is_outdated = true;
+            delay = "1";
+            reason.setVisibility(View.VISIBLE);
+        } else {
+            your_date_is_outdated = false;
+            delay = "2";
+            reason.setVisibility(View.GONE);
         }
 
         borewellstatus1 = CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno);
@@ -437,7 +408,7 @@ public class InstallationInitial extends AppCompatActivity {
         if (!TextUtils.isEmpty(borewellstatus1)) {
             borewellstatus.setText(borewellstatus1);
         }
-        dataAdapter_simoprator = new ArrayAdapter<String>(this, R.layout.spinner_item_left_optional, list_simoprator);
+        dataAdapter_simoprator = new ArrayAdapter<>(this, R.layout.spinner_item_left_optional, list_simoprator);
         dataAdapter_simoprator.setDropDownViewResource(R.layout.spinner_item_center);
         txtLongIDD = findViewById(R.id.txtLongIDD);
         txtLatIDD = findViewById(R.id.txtLatIDD);
@@ -462,7 +433,7 @@ public class InstallationInitial extends AppCompatActivity {
             }
         });
 
-        dataAdapter_conntype = new ArrayAdapter<String>(this, R.layout.spinner_item_left_optional, list_conntype);
+        dataAdapter_conntype = new ArrayAdapter<>(this, R.layout.spinner_item_left_optional, list_conntype);
         dataAdapter_conntype.setDropDownViewResource(R.layout.spinner_item_center);
         spinner_conntype.setAdapter(dataAdapter_conntype);
 
@@ -520,125 +491,122 @@ public class InstallationInitial extends AppCompatActivity {
             }
         }
 
-        img_scn_one.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                id = 1000;
-                startScanner(id);
-            }
+        img_scn_one.setOnClickListener(v -> {
+            id = 1000;
+            startScanner(id);
         });
 
 
-        img_scn_two.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                id = 2000;
-                startScanner(id);
+        img_scn_two.setOnClickListener(v -> {
+            id = 2000;
+            startScanner(id);
+        });
+
+        img_scn_three.setOnClickListener(v -> {
+            id = 3000;
+            startScanner(id);
+        });
+
+        img_scn_four.setOnClickListener(v -> {
+            id = 4000;
+            startScanner(id);
+        });
+
+        borewellstatus.setOnClickListener(v -> showAlertDialog());
+
+        inst_location.setOnClickListener(v -> {
+            if (TextUtils.isEmpty(installationBean.getLatitude()) || installationBean.getLatitude().equals("0.0") || installationBean.getLatitude().equals("null")) {
+                getGpsLocation();
+            } else {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext, R.style.MyDialogTheme);
+                alertDialog.setTitle("Confirmation");
+                alertDialog.setMessage("Latitude, Longitude already saved, Do you want to change it?");
+                alertDialog.setPositiveButton("Yes", (dialog, which) -> getGpsLocation());
+                alertDialog.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                alertDialog.show();
             }
         });
 
-        img_scn_three.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                id = 3000;
-                startScanner(id);
-            }
-        });
+        save.setOnClickListener(v -> {
 
-        img_scn_four.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                id = 4000;
-                startScanner(id);
-            }
-        });
+            DeviceStatus = CustomUtility.getSharedPreferences(mContext, "DeviceStatus");
 
-        borewellstatus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAlertDialog();
-            }
-        });
+            Log.e("RMS", "Device Status DeviceOnline===>" + DeviceStatus);
 
-        inst_location.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (TextUtils.isEmpty(installationBean.getLatitude()) || installationBean.getLatitude().equals("0.0") || installationBean.getLatitude().equals("null")) {
-                    getGpsLocation();
+            if (CustomUtility.isInternetOn()) {
+                if (mBTResonseDataList.size() > 0)
+                    mBTResonseDataList.clear();
+                mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(controller);
+                System.out.println("mBTResonseDataList.size()==>>" + mBTResonseDataList.size());
+                if (mBTResonseDataList.size() > 0) {
+                    DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
+                    SIGNL_STREN = mBTResonseDataList.get(vkp).getSIGNLSTREN();
+                    String[] mStrArry = SIGNL_STREN.split("###");
+                    SIGNL_STREN = mStrArry[0];
+                    INVOICE_NO_B = mStrArry[1];
+                    SIM = mBTResonseDataList.get(vkp).getSIM();
+                    String[] mStrArrySim = SIM.split("###");
+                    SIM = mStrArrySim[0];
+                    SIM_SR_NO = mStrArrySim[1];
+                    NET_REG = mBTResonseDataList.get(vkp).getNETREG();
+                    SER_CONNECT = mBTResonseDataList.get(vkp).getSERCONNECT();
+                    CAB_CONNECT = mBTResonseDataList.get(vkp).getCABCONNECT();
+                    LATITUDE = mBTResonseDataList.get(vkp).getLATITUDE();
+                    LANGITUDE = mBTResonseDataList.get(vkp).getLANGITUDE();
+                    MOBILE = mBTResonseDataList.get(vkp).getMOBILE();
+                    IMEI = mBTResonseDataList.get(vkp).getIMEI();
+                    DONGAL_ID = mBTResonseDataList.get(vkp).getDONGALID();
+                    RMS_STATUS = mBTResonseDataList.get(vkp).getRMS_STATUS();
+                    RMS_CURRENT_ONLINE_STATUS = mBTResonseDataList.get(vkp).getRMS_CURRENT_ONLINE_STATUS();
+                    RMS_LAST_ONLINE_DATE = mBTResonseDataList.get(vkp).getRMS_LAST_ONLINE_DATE();
+                    mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
+                    mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
+                    RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
+                    RMS_SERVER_DOWN = "Working Fine";
+                    System.out.println("VikasVIHU==>>" + mBTResonseDataList.get(vkp).getDEVICENO());
+                    CustomUtility.showProgressDialogue(InstallationInitial.this);
+                    new SyncDebugDataFromLocal().execute();
+
                 } else {
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext, R.style.MyDialogTheme);
-                    alertDialog.setTitle("Confirmation");
-                    alertDialog.setMessage("Latitude, Longitude already saved, Do you want to change it?");
-                    alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            getGpsLocation();
+                    Log.e("DeviceStatus",DeviceStatus);
+                    if (!TextUtils.isEmpty(DeviceStatus)) {
+                        if (isControllerIDScan) {
+                            if (isDebug) {
+                                saveData();
+                            }else {
+                                CustomUtility.ShowToast("Please debug first than proceed!", getApplicationContext());
+                            }
+                        } else {
+                            CustomUtility.ShowToast("Please Scan Controller ID first!", getApplicationContext());
                         }
-                    });
-                    alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-                    alertDialog.show();
-                }
-            }
-        });
-
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (CustomUtility.isInternetOn()) {
-                    if (mBTResonseDataList.size() > 0)
-                        mBTResonseDataList.clear();
-                    mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(controller);
-                    System.out.println("mBTResonseDataList.size()==>>" + mBTResonseDataList.size());
-                    if (mBTResonseDataList.size() > 0) {
-                        DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
-                        SIGNL_STREN = mBTResonseDataList.get(vkp).getSIGNLSTREN();
-                        String[] mStrArry = SIGNL_STREN.split("###");
-                        SIGNL_STREN = mStrArry[0];
-                        INVOICE_NO_B = mStrArry[1];
-                        SIM = mBTResonseDataList.get(vkp).getSIM();
-                        String[] mStrArrySim = SIM.split("###");
-                        SIM = mStrArrySim[0];
-                        SIM_SR_NO = mStrArrySim[1];
-                        NET_REG = mBTResonseDataList.get(vkp).getNETREG();
-                        SER_CONNECT = mBTResonseDataList.get(vkp).getSERCONNECT();
-                        CAB_CONNECT = mBTResonseDataList.get(vkp).getCABCONNECT();
-                        LATITUDE = mBTResonseDataList.get(vkp).getLATITUDE();
-                        LANGITUDE = mBTResonseDataList.get(vkp).getLANGITUDE();
-                        MOBILE = mBTResonseDataList.get(vkp).getMOBILE();
-                        IMEI = mBTResonseDataList.get(vkp).getIMEI();
-                        DONGAL_ID = mBTResonseDataList.get(vkp).getDONGALID();
-                        RMS_STATUS = mBTResonseDataList.get(vkp).getRMS_STATUS();
-                        RMS_CURRENT_ONLINE_STATUS = mBTResonseDataList.get(vkp).getRMS_CURRENT_ONLINE_STATUS();
-                        RMS_LAST_ONLINE_DATE = mBTResonseDataList.get(vkp).getRMS_LAST_ONLINE_DATE();
-                        mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
-                        mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
-                        RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
-                        RMS_SERVER_DOWN = "Working Fine";
-                        System.out.println("VikasVIHU==>>" + mBTResonseDataList.get(vkp).getDEVICENO());
-                        CustomUtility.showProgressDialogue(InstallationInitial.this);
-                        new SyncDebugDataFromLocal().execute();
-
                     } else {
-                        saveData();
+                        CustomUtility.ShowToast("Please get RMS Device Status.", getApplicationContext());
+                    }
+                }
+            } else {
+                if (!TextUtils.isEmpty(DeviceStatus)) {
+                    if (isControllerIDScan) {
+                        if (isDebug) {
+                            saveData();
+                        }else {
+                            CustomUtility.ShowToast("Please debug first than proceed!", getApplicationContext());
+                        }
+                    } else {
+                        CustomUtility.ShowToast("Please Scan Controller ID first!", getApplicationContext());
                     }
                 } else {
-                    saveData();
+                    CustomUtility.ShowToast("Please get RMS Device Status.", getApplicationContext());
+
                 }
-
-
             }
+
+
         });
 
         if (CustomUtility.isInternetOn()) {
-            labeledSwitch.setOnToggledListener(new OnToggledListener() {
-                @Override
-                public void onSwitched(ToggleableView toggleableView, boolean isOn) {
-                    Intent intent = new Intent(mContext, DeviceStatusActivity.class);
-                    startActivity(intent);
-                }
+            labeledSwitch.setOnToggledListener((toggleableView, isOn) -> {
+                Intent intent = new Intent(mContext, DeviceStatusActivity.class);
+                startActivity(intent);
             });
         } else {
             Toast.makeText(mContext, "Please Connect to internet...", Toast.LENGTH_SHORT).show();
@@ -679,7 +647,8 @@ public class InstallationInitial extends AppCompatActivity {
         try {
             String scanContent = scanningResult.getContents();
             String scanFormat = scanningResult.getFormatName();
-            Toast toast = Toast.makeText(getApplicationContext(), scanFormat + scanContent, Toast.LENGTH_SHORT);
+
+            Toast.makeText(getApplicationContext(), scanFormat + scanContent, Toast.LENGTH_SHORT);
             boolean alreadySet = false;
             switch (currentScannerFor) {
                 case 1000:
@@ -693,9 +662,15 @@ public class InstallationInitial extends AppCompatActivity {
                     alreadySet = true;
                     break;
                 case 3000:
-                    inst_controller_ser.setText("");
-                    inst_controller_ser.setText(scanContent);
-                    alreadySet = true;
+                    if (scanContent.equals(inst_controller_ser.getText().toString())) {
+                        inst_controller_ser.setText("");
+                        inst_controller_ser.setText(scanContent);
+                        alreadySet = true;
+                        isControllerIDScan = true;
+                    } else {
+                        MatchControllerIDPopup();
+                    }
+
                     break;
                 case 4000:
                     inst_simcard_num.setText("");
@@ -705,11 +680,55 @@ public class InstallationInitial extends AppCompatActivity {
             }
             if (!alreadySet) {
                 EditText edit_O = (EditText) moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
-                edit_O.setText(scanContent);
+
+                if (scannedDeviceNo.size() > 0) {
+                    if (!scannedDeviceNo.contains(scanContent)) {
+                        edit_O.setText(scanContent);
+                        scannedDeviceNo.add(scanContent);
+                    } else {
+                        Toast.makeText(mContext, "Already done.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    edit_O.setText(scanContent);
+                    scannedDeviceNo.add(scanContent);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void MatchControllerIDPopup() {
+        LayoutInflater inflater = (LayoutInflater) InstallationInitial.this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.send_successfully_layout,
+                null);
+        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(InstallationInitial.this, R.style.MyDialogTheme);
+
+        builder.setView(layout);
+        builder.setCancelable(false);
+        android.app.AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        if (!isFinishing()) {
+            alertDialog.show();
+        }
+        CircleImageView user_img = layout.findViewById(R.id.user_img);
+        TextView OK_txt = layout.findViewById(R.id.OK_txt);
+        TextView title_txt = layout.findViewById(R.id.title_txt);
+
+        user_img.setVisibility(View.GONE);
+
+        title_txt.setText(getResources().getString(R.string.cant_proceed));
+
+        OK_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                ibaseUpdateFormPopup();
+            }
+        });
+
     }
 
     @Override
@@ -719,6 +738,7 @@ public class InstallationInitial extends AppCompatActivity {
         return true;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -767,11 +787,13 @@ public class InstallationInitial extends AppCompatActivity {
                 return true;
             case R.id.act_comp_attach_image:
 
-
                 borewellstatus1 = CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno);
+                DeviceStatus = CustomUtility.getSharedPreferences(mContext, "DeviceStatus");
 
-                if (!TextUtils.isEmpty(borewellstatus1)) {
-                  //  if(!rmsdata_status.isEmpty()) {
+                if (!TextUtils.isEmpty(DeviceStatus)) {
+
+                    if (!TextUtils.isEmpty(borewellstatus1)) {
+                        //  if(!rmsdata_status.isEmpty()) {
                         Intent intent = new Intent(InstallationInitial.this, InstReportImageActivity.class);
                         intent.putExtra("inst_id", bill_no.getText().toString().trim());
                         intent.putExtra("cust_name", custname);
@@ -780,10 +802,12 @@ public class InstallationInitial extends AppCompatActivity {
                     /*}else {
                         CustomUtility.showToast(getApplicationContext(),"Please check RMS status!");
                     }*/
+                    } else {
+                        Toast.makeText(mContext, "Please Select Borewell Status", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(mContext, "Please Select Borewell Status", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Please get RMS Device Status.", Toast.LENGTH_SHORT).show();
                 }
-
                 return true;
 
         }
@@ -804,11 +828,11 @@ public class InstallationInitial extends AppCompatActivity {
 
         for (int i = 0; i < new_value; i++) {
             View child_grid = LayoutInflater.from(mContext).inflate(R.layout.view_for_normal, null);
-            LinearLayout layout_s = (LinearLayout) child_grid.findViewById(R.id.sublayout_second);
-            LinearLayout layout_f = (LinearLayout) child_grid.findViewById(R.id.sublayout_first);
-            LinearLayout layout_f_inner = (LinearLayout) layout_f.findViewById(R.id.sublayout_first_inner);
-            EditText edit = (EditText) layout_f_inner.findViewById(R.id.view_edit_one);
-            final ImageView scan = (ImageView) layout_f_inner.findViewById(R.id.view_img_one);
+            LinearLayout layout_s = child_grid.findViewById(R.id.sublayout_second);
+            LinearLayout layout_f = child_grid.findViewById(R.id.sublayout_first);
+            LinearLayout layout_f_inner = layout_f.findViewById(R.id.sublayout_first_inner);
+            EditText edit = layout_f_inner.findViewById(R.id.view_edit_one);
+            final ImageView scan = layout_f_inner.findViewById(R.id.view_img_one);
             scan.setId(i);
 
             scan.setOnClickListener(new View.OnClickListener() {
@@ -849,32 +873,29 @@ public class InstallationInitial extends AppCompatActivity {
         } else if (CustomUtility.getSharedPreferences(mContext, "borewellstatus").equalsIgnoreCase("3")) {
             checkedItem = 2;
         }
-        alertDialog.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                        borewellstatus.setText(items[0]);
-                        CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, items[0]);
-                        CustomUtility.setSharedPreference(mContext, "borewellstatus", "1");
-                        Toast.makeText(mContext, CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno), Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                        break;
-                    case 1:
-                        borewellstatus.setText(items[1]);
-                        CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, items[1]);
-                        CustomUtility.setSharedPreference(mContext, "borewellstatus", "2");
-                        Toast.makeText(mContext, CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno), Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                        break;
-                    case 2:
-                        borewellstatus.setText(items[2]);
-                        CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, items[2]);
-                        CustomUtility.setSharedPreference(mContext, "borewellstatus", "3");
-                        Toast.makeText(mContext, CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno), Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                        break;
-                }
+        alertDialog.setSingleChoiceItems(items, checkedItem, (dialog, which) -> {
+            switch (which) {
+                case 0:
+                    borewellstatus.setText(items[0]);
+                    CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, items[0]);
+                    CustomUtility.setSharedPreference(mContext, "borewellstatus", "1");
+                    Toast.makeText(mContext, CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno), Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                    break;
+                case 1:
+                    borewellstatus.setText(items[1]);
+                    CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, items[1]);
+                    CustomUtility.setSharedPreference(mContext, "borewellstatus", "2");
+                    Toast.makeText(mContext, CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno), Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                    break;
+                case 2:
+                    borewellstatus.setText(items[2]);
+                    CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, items[2]);
+                    CustomUtility.setSharedPreference(mContext, "borewellstatus", "3");
+                    Toast.makeText(mContext, CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno), Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                    break;
             }
         });
         AlertDialog alert = alertDialog.create();
@@ -889,7 +910,7 @@ public class InstallationInitial extends AppCompatActivity {
         if (!inst_module_ser_no.getText().toString().trim().equals("0")) {
 
             for (int i = 0; i < moduleOneLL.getChildCount(); i++) {
-                EditText edit_O = (EditText) moduleOneLL.getChildAt(i).findViewById(R.id.view_edit_one);
+                EditText edit_O = moduleOneLL.getChildAt(i).findViewById(R.id.view_edit_one);
                 if (edit_O.getVisibility() == View.VISIBLE) {
                     String s1 = edit_O.getText().toString().trim();
                     finalValue += s1 + ",";
@@ -994,6 +1015,7 @@ public class InstallationInitial extends AppCompatActivity {
 
             if (db.isRecordExist(db.TABLE_INSTALLATION_PUMP_DATA, db.KEY_BILL_NO, inst_bill_no)) {
                 db.updateInstallationData(inst_bill_no, installationBean);
+
             } else {
                 db.insertInstallationData(inst_bill_no, installationBean);
             }
@@ -1059,11 +1081,10 @@ public class InstallationInitial extends AppCompatActivity {
                                                                                                         CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
                                                                                                     }
                                                                                                 } else {
-                                                                                                    Toast.makeText(mContext, "Please debug first then submite", Toast.LENGTH_SHORT).show();
+                                                                                                    Toast.makeText(mContext, "Please debug first then submit", Toast.LENGTH_SHORT).show();
                                                                                                 }
                                                                                             }
                                                                                         }
-
 
                                                                                     } else {
                                                                                         Toast.makeText(mContext, "Please Select Photos", Toast.LENGTH_SHORT).show();
@@ -1143,8 +1164,6 @@ public class InstallationInitial extends AppCompatActivity {
                                                                             if (!TextUtils.isEmpty(borewellstatus1)) {
                                                                                 if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
                                                                                     //   new SyncInstallationData().execute();
-
-
                                                                                     if (project_no1.equalsIgnoreCase("0201") || project_no1.equalsIgnoreCase("201") || project_no1.equalsIgnoreCase("0202") || project_no1.equalsIgnoreCase("202") || project_no1.equalsIgnoreCase("0108") || project_no1.equalsIgnoreCase("108") || project_no1.equalsIgnoreCase("0203") || project_no1.equalsIgnoreCase("203")) {
                                                                                         if (imageList.size() > 0) {
                                                                                             new SyncInstallationData().execute();
@@ -1168,10 +1187,7 @@ public class InstallationInitial extends AppCompatActivity {
                                                                                         } else {
                                                                                             Toast.makeText(mContext, "Please insert new sim and try again!", Toast.LENGTH_SHORT).show();
                                                                                         }
-
                                                                                     }
-
-
                                                                                 } else {
                                                                                     Toast.makeText(mContext, "Please Select Photos", Toast.LENGTH_SHORT).show();
                                                                                 }
@@ -1224,9 +1240,7 @@ public class InstallationInitial extends AppCompatActivity {
                         Toast.makeText(mContext, "Please Take Latitude and Longitude", Toast.LENGTH_SHORT).show();
                     }
                 }
-
             } else {
-
                 if (reason.getVisibility() == View.VISIBLE) {
 
                     if (inst_latitude != null && !inst_latitude.equals("") && inst_longitude != null && !inst_longitude.equals("") && !inst_longitude.equals("0.0") && !inst_latitude.equals("0.0")) {
@@ -1449,7 +1463,7 @@ public class InstallationInitial extends AppCompatActivity {
                     simoprator_text,
                     conntype_text,
                     simcard_num,
-                    regisno,BeneficiaryNo
+                    regisno, BeneficiaryNo
 
             );
 
@@ -1458,6 +1472,10 @@ public class InstallationInitial extends AppCompatActivity {
             } else {
                 db.insertInstallationData(inst_bill_no, installationBean);
             }
+
+            Intent intent = new Intent(mContext, InstallationList.class);
+            startActivity(intent);
+            finish();
 
         }
 
@@ -1474,14 +1492,14 @@ public class InstallationInitial extends AppCompatActivity {
                 project_no, login_no, inst_latitude, inst_longitude, inst_bill_no, inst_delay_reason, installation_date, inst_bill_date, String.valueOf(labeledSwitch.isEnabled()), customer_name, fathname,
                 mobileno, state, state_txt, city, city_txt, tehsil_ins, village_ins, address, make, solarpanel_wattage, solarpanel_stand_ins_quantity, total_watt, hp,
                 no_of_module, no_of_module_value, module_total_plate_watt, solar_motor_model_details, smmd_sno, splar_pump_model_details, spmd_sno, solar_controller_model,
-                scm_sno, simoprator_text, conntype_text, simcard_num, regisno,BeneficiaryNo
+                scm_sno, simoprator_text, conntype_text, simcard_num, regisno, BeneficiaryNo
 
         );
 
         if (db.isRecordExist(db.TABLE_INSTALLATION_PUMP_DATA, db.KEY_BILL_NO, inst_bill_no)) {
             db.updateInstallationData(inst_bill_no, installationBean);
         } else {
-            db.insertInstallationData(inst_bill_no, installationBean);
+            db.   insertInstallationData(inst_bill_no, installationBean);
         }
 
     }
@@ -1614,13 +1632,13 @@ public class InstallationInitial extends AppCompatActivity {
 
         rmsdata_status = installationBean.getRms_data_status();
 
-        Log.e("RMSDATA", "&&&&" + rmsdata_status);
+       /* Log.e("RMSDATA", "&&&&" + rmsdata_status);
 
         if (rmsdata_status.equalsIgnoreCase("true")) {
             labeledSwitch.setOn(true);
         } else if (rmsdata_status.equalsIgnoreCase("false")) {
             labeledSwitch.setOn(false);
-        }
+        }*/
 
         simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         current_date = simpleDateFormat.format(new Date());
@@ -1755,7 +1773,7 @@ public class InstallationInitial extends AppCompatActivity {
         param.add(new BasicNameValuePair("con_serno", mDriveSerialNo));
         param.add(new BasicNameValuePair("set_serno", pump));
 
-          CustomUtility.showProgressDialogue(InstallationInitial.this);
+        CustomUtility.showProgressDialogue(InstallationInitial.this);
         new Thread() {
             public void run() {
                 try {
@@ -1850,7 +1868,7 @@ public class InstallationInitial extends AppCompatActivity {
             param1_invc.add(new BasicNameValuePair("action", String.valueOf(ja_invc_data)));///array name lr_save
             Log.e("DATA", "$$$$" + param1_invc.toString());
 
-            System.out.println(param1_invc.toString());
+            System.out.println(param1_invc);
 
             try {
 
@@ -1870,21 +1888,19 @@ public class InstallationInitial extends AppCompatActivity {
                     System.out.println("jo11==>>" + jo11);
                     if (mStatus.equals("true")) {
                         Random random = new Random();
-                        String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
+                        @SuppressLint("DefaultLocale") String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                   if(CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
-                                       sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
-                                   }else {
-                                       Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
-                                       startActivity(intent);
-                                       finish();
-                                   }
+                        runOnUiThread(() -> {
+                            CustomUtility.clearSharedPrefrences(mContext);
+                            if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
+                                sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
+                            } else {
+
+                                Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
+                                startActivity(intent);
+                                finish();
                             }
                         });
-
 
 
                     }
@@ -1953,15 +1969,6 @@ public class InstallationInitial extends AppCompatActivity {
     }
 
     private void retriveArrayList() {
-      /*  imageList = new ArrayList<>();
-        String json = CustomUtility.getSharedPreferences(InstallationInitial.this, InstallationImage);
-        // below line is to get the type of our array list.
-        Type type = new TypeToken<ArrayList<ImageModel>>() {
-        }.getType();
-
-        // in below line we are getting data from gson
-        // and saving it to our array list
-        imageList = new Gson().fromJson(json, type);*/
         imageList = new ArrayList<>();
         DatabaseHelper db = new DatabaseHelper(this);
 
@@ -1979,24 +1986,6 @@ public class InstallationInitial extends AppCompatActivity {
 
         }
 
-    }
-
-    public void reverseTimer(int Seconds, final TextView tv) {
-
-        new CountDownTimer(Seconds * 1000 + 1000, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                int seconds = (int) (millisUntilFinished / 1000);
-                int minutes = seconds / 60;
-                seconds = seconds % 60;
-                tv.setText("TIME : " + String.format("%02d", minutes)
-                        + ":" + String.format("%02d", seconds));
-            }
-
-            public void onFinish() {
-                tv.setText("Resend");
-            }
-        }.start();
     }
 
 
@@ -2114,9 +2103,9 @@ public class InstallationInitial extends AppCompatActivity {
                 SimpleDateFormat dt1 = new SimpleDateFormat("yyyyMMdd");
 
                 jsonObj.put("userid", param_invc.getPernr());
-                if(param_invc.getBeneficiaryNo()!=null && !param_invc.getBeneficiaryNo().isEmpty()) {
+                if (param_invc.getBeneficiaryNo() != null && !param_invc.getBeneficiaryNo().isEmpty()) {
                     jsonObj.put("beneficiary", param_invc.getBeneficiaryNo());
-                }else {
+                } else {
                     jsonObj.put("beneficiary", BeneficiaryNo);
                 }
                 jsonObj.put("setting_check", "Para Setting Stop");
@@ -2158,6 +2147,11 @@ public class InstallationInitial extends AppCompatActivity {
                 jsonObj.put("dbug_ofline", Constant.DBUG_PER_OFLINE);
                 jsonObj.put("dbug_ofline", Constant.DBUG_PER_OFLINE);
                 jsonObj.put("app_version", WebURL.APP_VERSION_CODE);
+
+                jsonObj.put("LOGIN_NAME", CustomUtility.getSharedPreferences(getApplicationContext(),Constant.PersonName));
+                jsonObj.put("LOGIN_CONT",  CustomUtility.getSharedPreferences(getApplicationContext(),Constant.PersonNumber));
+
+
 
                 System.out.println("only_text_jsonObj==>>" + jsonObj);
 
@@ -2257,16 +2251,13 @@ public class InstallationInitial extends AppCompatActivity {
                             Random random = new Random();
                             String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
 
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if(CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
-                                        sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
-                                    }else {
-                                        Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
+                            runOnUiThread(() -> {
+                                if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
+                                    sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
+                                } else {
+                                    Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
+                                    startActivity(intent);
+                                    finish();
                                 }
                             });
 
@@ -2316,44 +2307,42 @@ public class InstallationInitial extends AppCompatActivity {
         }
     }
 
-    private void sendVerificationCodeAPI(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo,String billNo) {
+    private void sendVerificationCodeAPI(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo, String billNo) {
         CustomUtility.showProgressDialogue(InstallationInitial.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.SendOTP +"&mobiles="+ContactNo+
-                        "&message=आप अपने खेत में शक्ति पम्प्स (इंडिया) लिमिटेड द्वारा स्थापित "+Hp+" एचपी रेटिंग सोलर पंप सेट के लिए लाभार्थी आईडी "+beneficiaryNo+" के संदर्भ में यह संदेश प्राप्त कर रहे हैं।" +
+                WebURL.SendOTP + "&mobiles=" + ContactNo +
+                        "&message=आप अपने खेत में शक्ति पम्प्स (इंडिया) लिमिटेड द्वारा स्थापित " + Hp + " एचपी रेटिंग सोलर पंप सेट के लिए लाभार्थी आईडी " + beneficiaryNo + " के संदर्भ में यह संदेश प्राप्त कर रहे हैं।" +
                         " यह संदेश केवल आपकी प्रतिक्रिया के उद्देश्य से है शक्ति पंप्स इंस्टालर को सत्यपान कोड साझा करके आप निम्नलिखित की पुष्टि कर रहे हैं 1) आप स्थापना की गुणवत्ता से संतुष्ट हैं" +
                         " 2) आप सोलर पंप सेट के प्रदर्शन से संतुष्ट हैं 3) इंस्टॉलर ने किसी भी प्रकार की सामग्री या स्थापना कार्य के लिए कोई राशि नहीं ली हैं यदि उपरोक्त सभी तीन कथन सही हैं, " +
-                        "तो कृपया अपने सोलर पम्प सेट की 5 वर्ष की सेवा को सक्रिय करने के लिए इंस्टॉलर के साथ सत्यपान कोड "+generatedVerificationCode+" साझा करें।:&sender=SHAKTl&route=2&country=91&DLT_TE_ID=1707167928540679513&unicode=1",
+                        "तो कृपया अपने सोलर पम्प सेट की 5 वर्ष की सेवा को सक्रिय करने के लिए इंस्टॉलर के साथ सत्यपान कोड " + generatedVerificationCode + " साझा करें।:&sender=SHAKTl&route=2&country=91&DLT_TE_ID=1707167928540679513&unicode=1",
 
-                null, new Response.Listener<JSONObject >() {
+                null, new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(JSONObject  res) {
+            public void onResponse(JSONObject res) {
                 CustomUtility.hideProgressDialog(InstallationInitial.this);
 
 
-                if(!res.toString().isEmpty()) {
+                if (!res.toString().isEmpty()) {
                     VerificationCodeModel verificationCodeModel = new Gson().fromJson(res.toString(), VerificationCodeModel.class);
-                    if(verificationCodeModel.getStatus().equals("Success")) {
+                    if (verificationCodeModel.getStatus().equals("Success")) {
 
-                        ShowAlertResponse(generatedVerificationCode,ContactNo,Hp,beneficiaryNo,billNo);
+                        ShowAlertResponse(generatedVerificationCode, ContactNo, Hp, beneficiaryNo, billNo);
                     }
 
                 }
 
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                CustomUtility.hideProgressDialog(InstallationInitial.this);
-                Log.e("error", String.valueOf(error));
-                Toast.makeText(InstallationInitial.this, error.getMessage(),
-                        Toast.LENGTH_LONG).show();
-            }
+        }, error -> {
+            CustomUtility.hideProgressDialog(InstallationInitial.this);
+            Log.e("error", String.valueOf(error));
+            Toast.makeText(InstallationInitial.this, error.getMessage(),
+                    Toast.LENGTH_LONG).show();
         });
         requestQueue.add(jsonObjectRequest);
     }
-    private void ShowAlertResponse(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo,String billNo) {
+
+    private void ShowAlertResponse(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo, String billNo) {
         LayoutInflater inflater = (LayoutInflater) InstallationInitial.this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.send_successfully_layout,
@@ -2362,7 +2351,7 @@ public class InstallationInitial extends AppCompatActivity {
 
         builder.setView(layout);
         builder.setCancelable(false);
-       android.app.AlertDialog alertDialog = builder.create();
+        android.app.AlertDialog alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         alertDialog.show();
@@ -2373,26 +2362,19 @@ public class InstallationInitial extends AppCompatActivity {
 
         title_txt.setText(getResources().getString(R.string.otp_send_successfully));
 
-        OK_txt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
-                Intent intent = new Intent(InstallationInitial.this, PendingFeedBackOTPVerification.class);
-                intent.putExtra(Constant.PendingFeedbackContact,ContactNo);
-                intent.putExtra(Constant.PendingFeedbackVblen,billNo);
-                intent.putExtra(Constant.PendingFeedbackHp,Hp);
-                intent.putExtra(Constant.PendingFeedbackBeneficiary,beneficiaryNo);
-                intent.putExtra(Constant.VerificationCode,generatedVerificationCode);
+        OK_txt.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            Intent intent = new Intent(InstallationInitial.this, PendingFeedBackOTPVerification.class);
+            intent.putExtra(Constant.PendingFeedbackContact, ContactNo);
+            intent.putExtra(Constant.PendingFeedbackVblen, billNo);
+            intent.putExtra(Constant.PendingFeedbackHp, Hp);
+            intent.putExtra(Constant.PendingFeedbackBeneficiary, beneficiaryNo);
+            intent.putExtra(Constant.VerificationCode, generatedVerificationCode);
 
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
 
-                /* intent.putExtra(Constant.PendingFeedbackVblen,response.getVbeln());
-                intent.putExtra(Constant.PendingFeedbackHp,response.getHp());
-                intent.putExtra(Constant.PendingFeedbackBeneficiary,response.getBeneficiary());
-                intent.putExtra(Constant.VerificationCode,generatedVerificationCode);*/
-            }
         });
 
     }
