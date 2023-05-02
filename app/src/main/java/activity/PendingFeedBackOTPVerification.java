@@ -34,7 +34,6 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import debugapp.GlobalValue.Constant;
-import debugapp.PendingFeedback;
 import debugapp.VerificationCodeModel;
 import utility.CustomUtility;
 import webservice.WebURL;
@@ -71,7 +70,6 @@ public class PendingFeedBackOTPVerification extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getResources().getString(R.string.otpVerification));
 
-      //  response = getIntent().getParcelableExtra(Constant.PendingFeedback);
         contactNumber =   getIntent().getStringExtra(Constant.PendingFeedbackContact);
         vblen =   getIntent().getStringExtra(Constant.PendingFeedbackVblen);
         Hp =    getIntent().getStringExtra(Constant.PendingFeedbackHp);
