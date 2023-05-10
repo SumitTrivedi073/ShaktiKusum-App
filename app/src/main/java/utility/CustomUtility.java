@@ -38,6 +38,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import activity.BaseActivity;
 import activity.CustomProgressDialog;
@@ -306,7 +307,10 @@ public class CustomUtility {
     }
 
     public static boolean isValidMobile(String phone) {
-        return android.util.Patterns.PHONE.matcher(phone).matches();
+        if(!Pattern.matches("[a-zA-Z]+", phone)) {
+            return phone.length() > 9 && phone.length() <= 13;
+        }
+        return false;
     }
 
     public String getCurrentDate() {

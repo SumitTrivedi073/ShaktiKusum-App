@@ -1208,7 +1208,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_USERID, loginBean.getUserid());
             values.put(KEY_USERNAME, loginBean.getUsername());
             values.put(KEY_USERTYPE, loginBean.getUsertype());
-            long i = db.insert(TABLE_LOGIN, null, values);
+            if(CustomUtility.doesTableExist(db,TABLE_LOGIN)) {
+                db.insert(TABLE_LOGIN, null, values);
+            }
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
             e.printStackTrace();

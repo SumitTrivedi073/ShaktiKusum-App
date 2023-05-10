@@ -73,6 +73,8 @@ public class OTPGenerationActivity extends AppCompatActivity {
                     Toast.makeText(mContext, "Please enter your name.", Toast.LENGTH_SHORT).show();
                 } else if (edtINSTNumberIDSTR.equalsIgnoreCase("")) {
                     Toast.makeText(mContext, "Please enter your mobile number.", Toast.LENGTH_SHORT).show();
+                }  else if (!CustomUtility.isValidMobile(edtINSTNumberID.getText().toString().trim())) {
+                    Toast.makeText(mContext, "Please enter valid mobile number.", Toast.LENGTH_SHORT).show();
                 } else {
 
                     CustomUtility.setSharedPreference(mContext, "InstallerName", edtINSTNmaeIDSTR);
@@ -159,7 +161,9 @@ public class OTPGenerationActivity extends AppCompatActivity {
                  "और यदि संतुष्ट नहीं है तो कृपया इंस्टालेशन टीम को मोबाइल एप्प में कारण दर्ज करवाये OTP NO - "+ mORG_OTP_VALUE +" ." +
                  " शक्ति पम्प&sender=SHAKTl&unicode=1&route=2&unicode=1&country=91&DLT_TE_ID=1707165768934110550");/////
 */
-        baseRequest.callAPIGETDirectURL(1,   "http://login.yourbulksms.com/api/sendhttp.php?authkey=8716AQbKpjEHR5b4479de&" +
-                "mobiles="+edtINSTNumberIDSTR+"&message=Enter The Following OTP To Verify Your Account OTP NO - "+ mORG_OTP_VALUE +" ." +" SHAKTI&sender=SHAKTl&route=4&unicode=1&country=91&DLT_TE_ID=1707161675029844457");
+        baseRequest.callAPIGETDirectURL(1,   "http://control.yourbulksms.com/api/sendhttp.php?authkey=393770756d707334373701&" +
+                "mobiles="+edtINSTNumberIDSTR+"&message=Enter The Following OTP To Verify Your Account " + mORG_OTP_VALUE + " SHAKTI&sender=SHAKTl&route=2&unicode=0&country=91&DLT_TE_ID=1707161675029844457");
+
+
     }
 }
