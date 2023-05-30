@@ -16,11 +16,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 
 import com.shaktipumplimited.shaktikusum.R;
 
@@ -41,7 +39,7 @@ import webservice.CustomHttpClient;
 import webservice.WebURL;
 
 
-public class SurveyList extends AppCompatActivity {
+public class SurveyList extends BaseActivity {
     public String ben_id = "";
     public String custnam = "";
     public String contctno = "";
@@ -145,7 +143,7 @@ public class SurveyList extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if (CustomUtility.isInternetOn()) {
+        if (CustomUtility.isInternetOn(getApplicationContext())) {
 
             recyclerView.setAdapter(null);
             db.deleteSurveyListData();

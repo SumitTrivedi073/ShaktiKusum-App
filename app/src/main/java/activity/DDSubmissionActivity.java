@@ -78,7 +78,7 @@ import webservice.CustomHttpClient;
 import webservice.WebURL;
 
 
-public class DDSubmissionActivity extends AppCompatActivity {
+public class DDSubmissionActivity extends BaseActivity {
     public static final int RC_FILE_PICKER_PERM = 321;
     public static final int BITMAP_SAMPLE_SIZE = 6;
     public static final int MEDIA_TYPE_IMAGE = 1;

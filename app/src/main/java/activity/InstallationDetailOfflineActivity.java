@@ -39,7 +39,7 @@ import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-public class InstallationDetailOfflineActivity extends AppCompatActivity {
+public class InstallationDetailOfflineActivity extends BaseActivity {
 
     private ProgressDialog progressDialog;
     Context mContext;
@@ -90,7 +90,7 @@ public class InstallationDetailOfflineActivity extends AppCompatActivity {
         save.setOnClickListener(v -> {
             if (validationCheck()) {
                 saveDeliveredData();
-                if (CustomUtility.isInternetOn()) {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
                     submitOfflineSubmittedData();
                 } else {
                     Toast.makeText(getApplicationContext(), "No internet Connection....", Toast.LENGTH_SHORT).show();
@@ -258,7 +258,7 @@ public class InstallationDetailOfflineActivity extends AppCompatActivity {
         new Thread() {
             public void run() {
                 try {
-                    if (CustomUtility.isInternetOn()) {
+                    if (CustomUtility.isInternetOn(getApplicationContext())) {
                         JSONArray ja_invc_data = new JSONArray();
                         JSONObject jsonObj = new JSONObject();
                         try {

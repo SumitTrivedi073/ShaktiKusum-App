@@ -25,9 +25,10 @@ import java.util.Set;
 import com.shaktipumplimited.Settingadapter.BTPairedDeviceAdapter;
 import com.shaktipumplimited.shaktikusum.R;
 
+import activity.BaseActivity;
 import debugapp.GlobalValue.Constant;
 
-public class PairedDeviceActivity extends AppCompatActivity {
+public class PairedDeviceActivity extends BaseActivity {
 
 
     private Context mContext;

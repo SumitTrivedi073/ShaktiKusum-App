@@ -16,12 +16,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.os.BuildCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 
 import com.shaktipumplimited.shaktikusum.R;
 
@@ -46,7 +44,7 @@ import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-@BuildCompat.PrereleaseSdkCheck public class InstallationList extends AppCompatActivity {
+@BuildCompat.PrereleaseSdkCheck public class InstallationList extends BaseActivity {
     public String bill_no = "";
     public String gst_bill_no = "";
     public String bill_date = "";
@@ -178,7 +176,7 @@ import webservice.WebURL;
                 // TODO Auto-generated method stub
             }
         });
-        /*if (CustomUtility.isInternetOn()) {
+        /*if (CustomUtility.isInternetOn(getApplicationContext())) {
             if (db.getcount(db.TABLE_INSTALLATION_LIST)) {
                 installationBeans = new ArrayList<InstallationListBean>();
                 installationBeans = db.getInstallationListData(user_id);
@@ -278,7 +276,7 @@ import webservice.WebURL;
                 onBackPressed();
                 return true;
             case R.id.action_menu_unsync:
-                if (CustomUtility.isInternetOn()) {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
                     recyclerView.setAdapter(null);
                     db.deleteInstallationListData();
                     NewSolarVFD.CHECK_DATA_UNOLAD = 0;
@@ -289,7 +287,7 @@ import webservice.WebURL;
                 return true;
 
             case R.id.action_menu_unloading:
-                if (CustomUtility.isInternetOn()) {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
                     recyclerView.setAdapter(null);
                     // db.deleteInstallationListData();
 

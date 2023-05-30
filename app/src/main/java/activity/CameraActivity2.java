@@ -7,10 +7,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
@@ -25,13 +23,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.shaktipumplimited.shaktikusum.R;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -42,7 +40,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class CameraActivity2 extends AppCompatActivity implements SurfaceHolder.Callback, android.hardware.Camera.PictureCallback {
+public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callback, android.hardware.Camera.PictureCallback {
     private static final String TIME_STAMP_FORMAT_DATE = "dd.mm.yyyy";
     private static final String TIME_STAMP_FORMAT_TIME = "h:mm a";
     private static final String GALLERY_DIRECTORY_NAME_COMMON = "SurfaceCamera";

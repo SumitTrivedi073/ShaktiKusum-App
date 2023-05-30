@@ -50,7 +50,7 @@ import utility.CustomUtility;
 
 
 @BuildCompat.PrereleaseSdkCheck
-public class InstReportImageActivity extends AppCompatActivity implements ImageSelectionAdapter.ImageSelectionListener {
+public class InstReportImageActivity extends BaseActivity implements ImageSelectionAdapter.ImageSelectionListener {
 
 
     private static final int REQUEST_CODE_PERMISSION = 101;

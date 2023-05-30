@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.shaktipumplimited.shaktikusum.R;
@@ -19,7 +18,7 @@ import utility.CustomUtility;
 import webservice.WebURL;
 
 
-public class OfflineData extends AppCompatActivity {
+public class OfflineData extends BaseActivity {
     Context context;
 
     DatabaseHelper db;

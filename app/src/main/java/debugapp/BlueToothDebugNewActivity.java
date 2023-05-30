@@ -37,7 +37,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.android.volley.Request;
@@ -82,6 +81,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import activity.BaseActivity;
 import activity.GPSTracker;
 import bean.BTResonseData;
 import bean.DeviceDetailModel;
@@ -102,7 +102,7 @@ import retrofit2.Callback;
 import utility.CustomUtility;
 import webservice.WebURL;
 
-public class BlueToothDebugNewActivity extends AppCompatActivity {
+public class BlueToothDebugNewActivity extends BaseActivity {
     private static boolean success = false;
     private static Workbook wb = null;
     private static CellStyle cs = null;

@@ -47,6 +47,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.UUID;
 
+import activity.BaseActivity;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.UtilMethod;
 import com.shaktipumplimited.SettingModel.AllPopupUtil;
@@ -62,7 +63,7 @@ import webservice.WebURL;
 import static java.lang.Thread.sleep;
 
 
-public class DeviceSettingActivity extends AppCompatActivity {
+public class DeviceSettingActivity extends BaseActivity {
     Timer timer;
 int counterValue = 0;
 int mWriteAllCounterValue = 0;

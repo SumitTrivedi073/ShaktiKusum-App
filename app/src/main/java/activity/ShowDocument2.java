@@ -1,5 +1,7 @@
 package activity;
 
+import static android.os.Environment.getExternalStoragePublicDirectory;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,19 +11,16 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import com.shaktipumplimited.shaktikusum.R;
 
 import java.io.File;
 
 import database.DatabaseHelper;
 
-import static android.os.Environment.getExternalStoragePublicDirectory;
 
-import com.shaktipumplimited.shaktikusum.R;
-
-
-public class ShowDocument2 extends AppCompatActivity {
+public class ShowDocument2 extends BaseActivity {
 
     Context context;
     String string_image = "";

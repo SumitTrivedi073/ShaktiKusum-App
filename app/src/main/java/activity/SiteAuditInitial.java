@@ -24,7 +24,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.shaktipumplimited.shaktikusum.R;
@@ -49,7 +48,7 @@ import webservice.CustomHttpClient;
 import webservice.WebURL;
 
 
-public class SiteAuditInitial extends AppCompatActivity {
+public class SiteAuditInitial extends BaseActivity {
 
     Context context;
     DatabaseHelper db;
@@ -291,7 +290,7 @@ public class SiteAuditInitial extends AppCompatActivity {
 
     public void saveData() {
 
-        if (CustomUtility.isInternetOn()) {
+        if (CustomUtility.isInternetOn(getApplicationContext())) {
             //GET DATA
             getData();
 

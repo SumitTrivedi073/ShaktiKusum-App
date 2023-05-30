@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.StrictMode;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,11 +17,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 
 import com.shaktipumplimited.shaktikusum.R;
 
@@ -46,7 +43,7 @@ import webservice.CustomHttpClient;
 import webservice.WebURL;
 
 
-public class SimOfflineData extends AppCompatActivity {
+public class SimOfflineData extends BaseActivity {
 
     Context context;
     private Toolbar mToolbar;
@@ -123,7 +120,7 @@ public class SimOfflineData extends AppCompatActivity {
                 return true;
             case R.id.action_sync_offline:
 
-                if (CustomUtility.isInternetOn()) {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
 
                    new SIMData().execute();
                 }

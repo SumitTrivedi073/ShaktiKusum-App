@@ -71,7 +71,7 @@ import static android.os.Environment.getExternalStoragePublicDirectory;
 
 import com.shaktipumplimited.shaktikusum.R;
 
-public class SurveyActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
+public class SurveyActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
     public static final int RC_FILE_PICKER_PERM = 321;
     public static final int BITMAP_SAMPLE_SIZE = 6;
     public static final int MEDIA_TYPE_IMAGE = 1;
@@ -943,7 +943,7 @@ public class SurveyActivity extends AppCompatActivity implements EasyPermissions
 
     public void Save() {
 
-        if (CustomUtility.isInternetOn()) {
+        if (CustomUtility.isInternetOn(getApplicationContext())) {
 
             //GET DATA
             getData();

@@ -27,7 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class CameraActivitySurvey extends Activity {
+public class CameraActivitySurvey extends BaseActivity {
 
     private static final int REQUEST_CODE_CHANGE_SETTING = 1;
 

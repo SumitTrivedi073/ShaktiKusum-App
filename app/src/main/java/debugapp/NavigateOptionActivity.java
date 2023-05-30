@@ -10,24 +10,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-
+import com.shaktipumplimited.SetParameter.PairedDeviceActivity;
+import com.shaktipumplimited.retrofit.BaseRequest;
+import com.shaktipumplimited.retrofit.RequestReciever;
+import com.shaktipumplimited.shaktikusum.R;
 
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import activity.BaseActivity;
 import debugapp.GlobalValue.AllPopupUtil;
 import debugapp.GlobalValue.Constant;
 import debugapp.GlobalValue.NewSolarVFD;
-import com.shaktipumplimited.SetParameter.PairedDeviceActivity;
-import com.shaktipumplimited.retrofit.BaseRequest;
-import com.shaktipumplimited.retrofit.RequestReciever;
-import com.shaktipumplimited.shaktikusum.R;
 
-public class NavigateOptionActivity extends AppCompatActivity {
+public class NavigateOptionActivity extends BaseActivity {
 
     // Splash screen timer
     Context context;

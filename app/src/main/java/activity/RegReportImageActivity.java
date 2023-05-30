@@ -32,7 +32,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -52,7 +51,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 import utility.CustomUtility;
 
 
-public class RegReportImageActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks, ImageSelectionAdapter.ImageSelectionListener {
+public class RegReportImageActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks, ImageSelectionAdapter.ImageSelectionListener {
 
     private static final int REQUEST_CODE_PERMISSION = 101;
     private static final int PICK_FROM_FILE = 102;

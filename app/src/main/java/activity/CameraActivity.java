@@ -27,7 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class CameraActivity extends Activity {
+public class CameraActivity extends BaseActivity {
 
     private static final int REQUEST_CODE_CHANGE_SETTING = 1;
     private static final int TIME_STAMP_UPDATE_INTERVAL = 1000;

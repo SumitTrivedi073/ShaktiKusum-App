@@ -1,5 +1,9 @@
 package activity;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.os.Environment.getExternalStorageDirectory;
+import static android.os.Environment.getExternalStoragePublicDirectory;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,9 +35,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+
+import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -62,14 +67,8 @@ import utility.dialog2;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.os.Environment.getExternalStorageDirectory;
-import static android.os.Environment.getExternalStoragePublicDirectory;
 
-import com.shaktipumplimited.shaktikusum.R;
-
-
-public class OffSubDocActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
+public class OffSubDocActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
     public static final int RC_FILE_PICKER_PERM = 321;
     public static final int BITMAP_SAMPLE_SIZE = 6;
     public static final int MEDIA_TYPE_IMAGE = 1;

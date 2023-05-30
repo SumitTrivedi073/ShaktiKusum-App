@@ -21,7 +21,6 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,7 +38,7 @@ import utility.CustomUtility;
 
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
-public class SiteAuditImageActivity extends AppCompatActivity implements ImageSelectionAdapter.ImageSelectionListener {
+public class SiteAuditImageActivity extends BaseActivity implements ImageSelectionAdapter.ImageSelectionListener {
 
     public static final int MEDIA_TYPE_IMAGE = 1;
     private static final int GALLERY_IMAGE_REQUEST_CODE = 101;

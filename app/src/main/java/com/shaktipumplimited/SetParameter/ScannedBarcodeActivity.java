@@ -12,21 +12,20 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.shaktipumplimited.shaktikusum.R;
 
 import java.io.IOException;
 
-import com.shaktipumplimited.shaktikusum.R;
+import activity.BaseActivity;
 import webservice.WebURL;
 
-public class ScannedBarcodeActivity extends AppCompatActivity {
+public class ScannedBarcodeActivity extends BaseActivity {
     SurfaceView surfaceView;
     private RelativeLayout rlvSubmitBarcodeDataID;
     private EditText edtBarcodeValueID;

@@ -14,7 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -42,7 +41,7 @@ import debugapp.VerificationCodeModel;
 import utility.CustomUtility;
 import webservice.WebURL;
 
-public class PendingFeedbackActivity extends AppCompatActivity implements PendingFeedbackAdapter.SendOTPListner{
+public class PendingFeedbackActivity extends BaseActivity implements PendingFeedbackAdapter.SendOTPListner{
 
     private  RecyclerView pendingFeedbackList;
     private Toolbar mToolbar;
@@ -78,7 +77,7 @@ public class PendingFeedbackActivity extends AppCompatActivity implements Pendin
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getResources().getString(R.string.pendingFeedback));
-        if(CustomUtility.isInternetOn()) {
+        if(CustomUtility.isInternetOn(getApplicationContext())) {
             getPendingFeedbackList();
         }else {
             CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection),getApplicationContext());

@@ -23,7 +23,6 @@ import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
@@ -57,7 +56,7 @@ import webservice.CustomHttpClient;
 import webservice.WebURL;
 
 @SuppressWarnings("resource")
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static DatabaseHelper dataHelper;
     private AppUpdateManager appUpdateManager;
@@ -143,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         flvViewFlipperID.setFlipInterval(3000); //set 1 seconds for interval time
         flvViewFlipperID.startFlipping();
 
-        if (CustomUtility.isInternetOn()) {
+        if (CustomUtility.isInternetOn(getApplicationContext())) {
             new Dashboard().execute();
         } else {
             getListData();
@@ -236,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.action_state_city) {
             CustomUtility.getSharedPreferences(context, "usertype");
             if (CustomUtility.getSharedPreferences(context, "usertype").equalsIgnoreCase("02")) {
-                if (CustomUtility.isInternetOn()) {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
                     syncState();
                 } else {
                     Toast.makeText(context, "Please Connect to Internet...", Toast.LENGTH_SHORT).show();
@@ -291,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void logout() {
         try {
-            if (CustomUtility.isInternetOn()) {
+            if (CustomUtility.isInternetOn(getApplicationContext())) {
                 dataHelper = new DatabaseHelper(context);
                 dataHelper.deleteLoginData();
                 dataHelper.deleteDashboardData();
@@ -415,7 +414,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         new Thread(() -> {
             while (progressBarStatus < 100) {
                 try {
-                    if (CustomUtility.isInternetOn()) {
+                    if (CustomUtility.isInternetOn(getApplicationContext())) {
                         progressBarStatus = 30;
                         progressBarHandler.post(() -> progressBar.setProgress(progressBarStatus));
                         getStateData(MainActivity.this);

@@ -1,5 +1,8 @@
 package activity;
 
+import static android.os.Environment.getExternalStoragePublicDirectory;
+import static debugapp.GlobalValue.Constant.RegistrationImage;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +26,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -45,14 +51,6 @@ import database.DatabaseHelper;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
-
-import static android.os.Environment.getExternalStoragePublicDirectory;
-
-import static debugapp.GlobalValue.Constant.RegistrationImage;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.shaktipumplimited.shaktikusum.R;
 
 
 public class CustomerRegistrationActivity extends AppCompatActivity {
@@ -265,7 +263,7 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (CustomUtility.isInternetOn()) {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
 
                     saveData();
                 } else {
@@ -480,7 +478,7 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
                                                         if (branchname != null && !branchname.equals("")) {
                                                             if (ifsccode != null && !ifsccode.equals("")) {
                                                                 if (amt != null && !amt.equals("")) {
-                                                                    if (CustomUtility.isInternetOn()) {
+                                                                    if (CustomUtility.isInternetOn(getApplicationContext())) {
 
 
                                                                         RegistrationBean registrationBean = new RegistrationBean(enq_docno, pernr, project_no,

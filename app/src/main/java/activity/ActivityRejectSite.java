@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,13 +34,12 @@ import java.util.Locale;
 import adapter.Adapter_reject_list;
 import bean.RejectListBean;
 import database.DatabaseHelper;
-
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
 
-public class ActivityRejectSite extends AppCompatActivity {
+public class ActivityRejectSite extends BaseActivity {
     public String bill_no = "";
     public String  ben_no = "";
     public String  reg_no = "";
@@ -151,7 +149,7 @@ public class ActivityRejectSite extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (CustomUtility.isInternetOn()) {
+        if (CustomUtility.isInternetOn(getApplicationContext())) {
             recyclerView.setAdapter(null);
             db.deleteRejectListData();
             new GetRejectDataList_Task().execute();

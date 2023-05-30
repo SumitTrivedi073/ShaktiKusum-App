@@ -212,7 +212,7 @@ public class Login extends AppCompatActivity {
 
                                 if(spinner_login_id.equalsIgnoreCase("02"))
                                 {
-                                    if (CustomUtility.isInternetOn()) {
+                                    if (CustomUtility.isInternetOn(getApplicationContext())) {
                                         // Write Your Code What you want to do
                                         syncState();
                                     } else {
@@ -245,7 +245,7 @@ public class Login extends AppCompatActivity {
             if (validateType()) {
                 if (validateType1()) {
 
-                        if (CustomUtility.isInternetOn()) {
+                        if (CustomUtility.isInternetOn(getApplicationContext())) {
                             // Write Your Code What you want to do
                             submitForm();
                         } else {
@@ -607,7 +607,7 @@ public class Login extends AppCompatActivity {
 
                 try {
 
-                    if (CustomUtility.isInternetOn()) {
+                    if (CustomUtility.isInternetOn(getApplicationContext())) {
                         progressBarStatus = 30;
 
                         // Updating the progress bar

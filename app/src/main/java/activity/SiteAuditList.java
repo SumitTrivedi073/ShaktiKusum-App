@@ -17,11 +17,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 
 import com.shaktipumplimited.shaktikusum.R;
 
@@ -43,7 +41,7 @@ import webservice.CustomHttpClient;
 import webservice.WebURL;
 
 
-public class SiteAuditList extends AppCompatActivity {
+public class SiteAuditList extends BaseActivity {
     public String bill_no = "";
     public String gst_bill_no = "";
     public String bill_date = "";
@@ -205,7 +203,7 @@ public class SiteAuditList extends AppCompatActivity {
 
     public void searchWord(String textState,String textDistrict,String textvendorno) {
 
-        if (CustomUtility.isInternetOn()) {
+        if (CustomUtility.isInternetOn(getApplicationContext())) {
             if (!textState.equals("")) {
                 if (!textDistrict.equals("")) {
                     if (!textvendorno.equals("")) {

@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +33,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 import adapter.InstallationOfflineAdapter;
 import bean.BTResonseData;
 import bean.InstallationOfflineBean;
@@ -44,7 +44,7 @@ import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-public class InstallationListOfflineActivity extends AppCompatActivity {
+public class InstallationListOfflineActivity extends BaseActivity {
     private String bill_no = "";
     private String gst_bill_no = "";
     private String bill_date = "";
@@ -140,7 +140,7 @@ public class InstallationListOfflineActivity extends AppCompatActivity {
         });
         submitOfflineSubmittedData();
 
-//        if (CustomUtility.isInternetOn()) {
+//        if (CustomUtility.isInternetOn(getApplicationContext())) {
 //            if (db.getcount(db.TABLE_INSTALLATION_OFFLINE_LIST)) {
 //                installationOfflineBeanList = new ArrayList<InstallationOfflineBean>();
 //                installationOfflineBeanList = db.getInstallationOfflineListData(user_id);
@@ -222,7 +222,7 @@ public class InstallationListOfflineActivity extends AppCompatActivity {
         new Thread() {
             public void run() {
                 try {
-                    if (CustomUtility.isInternetOn()) {
+                    if (CustomUtility.isInternetOn(getApplicationContext())) {
                         for (int i = 0; i < submitOfflineDataInputLst.size(); i++) {
                             JSONArray ja_invc_data = new JSONArray();
                             JSONObject jsonObj = new JSONObject();

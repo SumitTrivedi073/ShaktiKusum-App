@@ -44,7 +44,7 @@ import static android.os.Environment.getExternalStoragePublicDirectory;
 import com.shaktipumplimited.shaktikusum.R;
 
 
-public class OfflineDataReg extends AppCompatActivity {
+public class OfflineDataReg extends BaseActivity {
     Context context;
 
     DatabaseHelper db;
@@ -179,7 +179,7 @@ public class OfflineDataReg extends AppCompatActivity {
                 onBackPressed();
                 return true;
             case R.id.action_menu_unsync:
-                if (CustomUtility.isInternetOn()) {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
 
                     syncOfflineData();
 
@@ -198,7 +198,7 @@ public class OfflineDataReg extends AppCompatActivity {
             @Override
             public void run() {
 
-                if (CustomUtility.isInternetOn()) {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
 
                     ((Activity) context).runOnUiThread(new Runnable() {
                         public void run() {

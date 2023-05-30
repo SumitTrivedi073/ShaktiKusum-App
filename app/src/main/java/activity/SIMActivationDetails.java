@@ -57,7 +57,7 @@ import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-public class SIMActivationDetails extends AppCompatActivity {
+public class SIMActivationDetails extends BaseActivity {
     Context context;
     private Toolbar mToolbar;
     public static final int BITMAP_SAMPLE_SIZE = 6;
@@ -212,7 +212,7 @@ public class SIMActivationDetails extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (CustomUtility.isInternetOn()) {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
 
                     saveData();
                 }
@@ -430,7 +430,7 @@ public class SIMActivationDetails extends AppCompatActivity {
 
                 String invoiceno = invoice_number.getText().toString();
 
-                if(CustomUtility.isInternetOn()) {
+                if(CustomUtility.isInternetOn(getApplicationContext())) {
 
                     if (invoiceno != null && !TextUtils.isEmpty(invoiceno) && !invoiceno.equals("")) {
 
@@ -835,7 +835,7 @@ public class SIMActivationDetails extends AppCompatActivity {
                                             if (sim_old_photo_text != null && !sim_old_photo_text.equals("")) {
                                                 if (sim_new_photo_text != null && !sim_new_photo_text.equals("")) {
                                                     if (drive_photo_text != null && !drive_photo_text.equals("")) {
-                                                        if (CustomUtility.isInternetOn()) {
+                                                        if (CustomUtility.isInternetOn(getApplicationContext())) {
 
                                                             SimCardBean simCardBean = new SimCardBean(pernr, pernr_type,
                                                                     enq_docno,

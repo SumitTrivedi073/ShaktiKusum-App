@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-import activity.BaseActivity;
 import activity.CustomProgressDialog;
 import bean.ImageModel;
 
@@ -180,8 +179,8 @@ public class CustomUtility {
         }
     }
 
-    public static boolean isInternetOn() {
-        ConnectivityManager connectivity = (ConnectivityManager) BaseActivity.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
+    public static boolean isInternetOn(Context context) {
+        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity != null) {
             NetworkInfo[] info = connectivity.getAllNetworkInfo();
             if (info != null) {

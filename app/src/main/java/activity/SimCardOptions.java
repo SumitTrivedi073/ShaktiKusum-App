@@ -3,20 +3,17 @@ package activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.shaktipumplimited.shaktikusum.R;
 
 import database.DatabaseHelper;
 
-public class SimCardOptions extends AppCompatActivity {
+public class SimCardOptions extends BaseActivity {
     Context context;
     private Toolbar mToolbar;
 

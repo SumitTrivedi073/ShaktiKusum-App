@@ -4,13 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.Request;
@@ -30,34 +28,15 @@ import utility.dialog4;
 import webservice.WebURL;
 
 
-public class DeviceStatusActivity extends AppCompatActivity  {
+public class DeviceStatusActivity extends BaseActivity  {
 
     Context mContext;
     dialog4 yourDialog;
 
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            String mString = (String) msg.obj;
-            Toast.makeText(DeviceStatusActivity.this, mString, Toast.LENGTH_LONG).show();
-
-        }
-    };
-
-    Handler mHandler1 = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            String mString = (String) msg.obj;
-            Toast.makeText(DeviceStatusActivity.this, mString, Toast.LENGTH_LONG).show();
-
-        }
-    };
     private ProgressDialog progressDialog;
     private DeviceStatusActivity activity;
     TextView deviceno,cust_nam,custphno,operatornam,deviceonline,motorstatus;
-    String deviceno_txt,cust_nam_txt,custphno_txt,operatornam_txt,msg_txt;
-    String controller = "";
-    boolean isDeviceOnline,isMotorStatus;
+
 
 
     @Override
@@ -128,10 +107,8 @@ public class DeviceStatusActivity extends AppCompatActivity  {
             public void onResponse(JSONObject  response) {
                 CustomUtility.hideProgressDialog(DeviceStatusActivity.this);
 
-
-
                 if(!response.toString().isEmpty()) {
-
+                    Log.e("response======>",response.toString());
                     DeviceDetailModel deviceDetailModel = new Gson().fromJson(response.toString(),DeviceDetailModel.class);
                             if(deviceDetailModel!=null && deviceDetailModel.getResponse()!=null && String.valueOf(deviceDetailModel.getStatus()).equals("true")) {
 

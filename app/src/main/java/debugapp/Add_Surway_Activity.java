@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import activity.BaseActivity;
 import database.DatabaseHelper;
 
 import com.shaktipumplimited.DamageMissBean.DamageMissResponse;
@@ -71,7 +72,7 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.os.Environment.getExternalStorageDirectory;
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
-public class Add_Surway_Activity extends AppCompatActivity {
+public class Add_Surway_Activity extends BaseActivity {
 
     double inst_latitude_double,
             inst_longitude_double;
@@ -882,7 +883,7 @@ Intent mIntent ;
             public void onClick(View view) {
 
                 if(intiValidationCheck()) {
-                    if (CustomUtility.isInternetOn()) {
+                    if (CustomUtility.isInternetOn(getApplicationContext())) {
 
                         new SyncDAMAGEMISSData().execute();
 

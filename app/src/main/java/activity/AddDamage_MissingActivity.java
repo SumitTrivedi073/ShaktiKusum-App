@@ -65,7 +65,7 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.os.Environment.getExternalStorageDirectory;
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
-public class AddDamage_MissingActivity extends AppCompatActivity {
+public class AddDamage_MissingActivity extends BaseActivity {
 
     String imageStoragePath, enq_docno, photo1_text, photo2_text, photo3_text, photo4_text, photo5_text, photo6_text, photo7_text, photo8_text;
     String photo1_text2, photo1_text3, photo1_text4, photo1_text5;
@@ -664,7 +664,7 @@ public class AddDamage_MissingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (intiValidationCheck()) {
-                    if (CustomUtility.isInternetOn()) {
+                    if (CustomUtility.isInternetOn(getApplicationContext())) {
                         new SyncDAMAGEMISSData().execute();
                     } else {
                         Toast.makeText(getApplicationContext(), "No internet Connection....", Toast.LENGTH_SHORT).show();
