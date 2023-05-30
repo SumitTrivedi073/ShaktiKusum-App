@@ -55,6 +55,7 @@ public abstract class  BaseActivity extends AppCompatActivity {
             Log.e("broadcastReceive====>","true");
            Intent intent1 = new Intent(getApplicationContext(),SwVersionCheckActivity.class);
             startActivity(intent1);
+            finish();
 
         }
     };
