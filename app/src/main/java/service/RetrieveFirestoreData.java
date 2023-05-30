@@ -58,7 +58,6 @@ public class RetrieveFirestoreData extends Service {
                 }
 
                 if (snapshot != null && snapshot.exists()) {
-                    Log.d(TAG, "Current data: " + snapshot.getData());
                     AppConfig appConfig = snapshot.toObject(AppConfig.class);
 
                     if (appConfig != null) {

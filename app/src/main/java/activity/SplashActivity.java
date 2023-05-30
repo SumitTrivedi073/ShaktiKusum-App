@@ -70,17 +70,13 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot != null && documentSnapshot.exists()) {
-                    Log.d(TAG, "Current data: " + documentSnapshot.getData());
-                    Log.d(TAG, "Current data: " + documentSnapshot.getData().get("minKusumAppVersion"));
-                    AppConfig appConfig = documentSnapshot.toObject(AppConfig.class);
+                     AppConfig appConfig = documentSnapshot.toObject(AppConfig.class);
 
                     if (appConfig != null) {
                         try {
                             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
                             if (pInfo != null && appConfig.getMinKusumAppVersion() != null
                                     && !appConfig.getMinKusumAppVersion().toString().isEmpty()) {
-                                Log.e("versionCode", String.valueOf(pInfo.versionCode));
-                                Log.e("MinDriverAppVersion", String.valueOf(appConfig.getMinKusumAppVersion()));
 
                                 if (pInfo.versionCode < Integer.parseInt(appConfig.getMinKusumAppVersion())) {
                                     CustomUtility.setSharedPreference(getApplicationContext(), Constant.APPURL,appConfig.getKusumAppUrl());
