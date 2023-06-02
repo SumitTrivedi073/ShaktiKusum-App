@@ -37,7 +37,6 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.os.BuildCompat;
 
@@ -501,14 +500,14 @@ public class InstallationInitial extends BaseActivity {
 
         });
 
-        if (CustomUtility.isInternetOn(getApplicationContext())) {
+        //if (CustomUtility.isInternetOn(getApplicationContext())) {
             labeledSwitch.setOnToggledListener((toggleableView, isOn) -> {
                 Intent intent = new Intent(mContext, DeviceStatusActivity.class);
                 startActivity(intent);
             });
-        } else {
+       /* } else {
             Toast.makeText(mContext, "Please Connect to internet...", Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 
     void startScanner(int scanID) {
