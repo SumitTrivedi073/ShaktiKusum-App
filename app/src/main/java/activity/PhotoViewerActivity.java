@@ -35,7 +35,7 @@ public class PhotoViewerActivity extends BaseActivity {
 
     private void Init() {
         showImg = findViewById(R.id.showImg);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

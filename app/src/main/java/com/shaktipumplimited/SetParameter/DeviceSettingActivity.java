@@ -105,9 +105,9 @@ int mReadAllCounterValue = 0;
 
     RelativeLayout rlvMainDynamicViewID;
 
-    private int edtValue = 0;
+    private final int edtValue = 0;
     private float edtValueFloat = 0;
-    private String old_data = "1";
+    private final String old_data = "1";
 
     float mTotalTimeFloatData;
     char mCRCFinalValue;
@@ -151,9 +151,9 @@ String mMaterialCode;
         // mToolbar = (Toolbar) findViewById(R.id.toolbar);
         rlvGetAllViewID = findViewById(R.id.rlvGetAllViewID);
         rlvSetAllViewID = findViewById(R.id.rlvSetAllViewID);
-        lvlBackIconViewID = (LinearLayout) findViewById(R.id.lvlBackIconViewID);
+        lvlBackIconViewID = findViewById(R.id.lvlBackIconViewID);
        // imgRefreshiconID = (ImageView) findViewById(R.id.imgRefreshiconID);
-        imgBluetoothiconID = (ImageView) findViewById(R.id.imgBluetoothiconID);
+        imgBluetoothiconID = findViewById(R.id.imgBluetoothiconID);
 
         mContext = this;
         mActivity = this;
@@ -186,7 +186,7 @@ String mMaterialCode;
     }
 
     private void initView() {
-        lvlMainParentLayoutID = (LinearLayout) findViewById(R.id.lvlMainParentLayoutID);
+        lvlMainParentLayoutID = findViewById(R.id.lvlMainParentLayoutID);
 
 
 
@@ -258,7 +258,7 @@ String mMaterialCode;
                     }
 
                     char[] datar = new char[4];
-                    int a = Float.floatToIntBits((float) edtValueFloat);
+                    int a = Float.floatToIntBits(edtValueFloat);
                     // int a= (int) edtValueFloat;
                     datar[0] = (char) (a & 0x000000FF);
                     datar[1] = (char) ((a & 0x0000FF00) >> 8);
@@ -422,7 +422,7 @@ String mMaterialCode;
                         counterValue = 0;
                         char[] datar = new char[4];
                         // int a=Float.floatToIntBits((float) edtValue);
-                        int a = Float.floatToIntBits((float) edtValueFloat);
+                        int a = Float.floatToIntBits(edtValueFloat);
                         datar[0] = (char) (a & 0x000000FF);
                         datar[1] = (char) ((a & 0x0000FF00) >> 8);
                         datar[2] = (char) ((a & 0x00FF0000) >> 16);
@@ -612,7 +612,7 @@ String mMaterialCode;
 
             cardViewAddDynamicViewID = new CardView(this);
             CardView.LayoutParams cardViewAddDynamicViewIDoutparams12 = new CardView.LayoutParams
-                    ((int) CardView.LayoutParams.MATCH_PARENT, (int) CardView.LayoutParams.WRAP_CONTENT);
+                    (CardView.LayoutParams.MATCH_PARENT, CardView.LayoutParams.WRAP_CONTENT);
             //cardViewAddDynamicViewIDoutparams12.setMarginEnd((int) getResources().getDimension(R.dimen._1sdp));
             cardViewAddDynamicViewIDoutparams12.setMarginEnd((int) getResources().getDimension(R.dimen._1sdp));
             cardViewAddDynamicViewIDoutparams12.setMarginStart((int) getResources().getDimension(R.dimen._1sdp));
@@ -626,7 +626,7 @@ String mMaterialCode;
 
             rlvMainDynamicViewID = new RelativeLayout(this);
             RelativeLayout.LayoutParams rlvMainDynamicViewIDParam = new RelativeLayout.LayoutParams
-                    ((int) RelativeLayout.LayoutParams.WRAP_CONTENT, (int) getResources().getDimension(R.dimen._50sdp));
+                    (RelativeLayout.LayoutParams.WRAP_CONTENT, (int) getResources().getDimension(R.dimen._50sdp));
 
             //  rlvMainDynamicViewIDParam.setMargins(10, 5, 10, 5);
             rlvMainDynamicViewIDParam.setMargins((int) getResources().getDimension(R.dimen._1sdp), (int) getResources().getDimension(R.dimen._1sdp), (int) getResources().getDimension(R.dimen._1sdp), (int) getResources().getDimension(R.dimen._1sdp));
@@ -636,7 +636,7 @@ String mMaterialCode;
             // cardViewAddDynamicViewID.addView(rlvMainDynamicViewID);
 
             iv_sub_linearlayout12 = new RelativeLayout(this);
-            RelativeLayout.LayoutParams iv_outparams12 = new RelativeLayout.LayoutParams((int) RelativeLayout.LayoutParams.MATCH_PARENT, (int) RelativeLayout.LayoutParams.MATCH_PARENT);
+            RelativeLayout.LayoutParams iv_outparams12 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
             iv_outparams12.setMarginEnd((int) getResources().getDimension(R.dimen._1sdp));
             iv_outparams12.setMarginStart((int) getResources().getDimension(R.dimen._1sdp));
             iv_outparams12.setMargins((int) getResources().getDimension(R.dimen._1sdp), (int) getResources().getDimension(R.dimen._1sdp), (int) getResources().getDimension(R.dimen._1sdp), (int) getResources().getDimension(R.dimen._1sdp));
@@ -646,7 +646,7 @@ String mMaterialCode;
 
             TextView txtPeraNameID = new TextView(this);
             RelativeLayout.LayoutParams txtFromTextHeadParam = new RelativeLayout.LayoutParams
-                    ((int) RelativeLayout.LayoutParams.WRAP_CONTENT, (int) RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    (RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             //txtFromTextHeadParam.setMarginStart(20);
             // txtFromTextHeadParam.setMargins(0, 5, 0, 5);
             txtFromTextHeadParam.addRule(RelativeLayout.CENTER_HORIZONTAL);
@@ -664,7 +664,7 @@ String mMaterialCode;
 
             RelativeLayout rlvMainViewLayoutIN = new RelativeLayout(this);
             RelativeLayout.LayoutParams rlvMainParamIN = new RelativeLayout.LayoutParams
-                    ((int) RelativeLayout.LayoutParams.MATCH_PARENT, (int) getResources().getDimension(R.dimen._45sdp));
+                    (RelativeLayout.LayoutParams.MATCH_PARENT, (int) getResources().getDimension(R.dimen._45sdp));
             rlvMainParamIN.setMargins((int) getResources().getDimension(R.dimen._1sdp), (int) getResources().getDimension(R.dimen._1sdp), (int) getResources().getDimension(R.dimen._1sdp), (int) getResources().getDimension(R.dimen._1sdp));
             rlvMainParamIN.addRule(RelativeLayout.BELOW, txtPeraNameID.getId());
             rlvMainViewLayoutIN.setLayoutParams(rlvMainParamIN);
@@ -672,7 +672,7 @@ String mMaterialCode;
 
             TextView txtGetID = new TextView(this);
             RelativeLayout.LayoutParams txtGetIDParam = new RelativeLayout.LayoutParams
-                    ((int) (int) getResources().getDimension(R.dimen._60sdp),  (int) getResources().getDimension(R.dimen._45sdp));
+                    ((int) getResources().getDimension(R.dimen._60sdp),  (int) getResources().getDimension(R.dimen._45sdp));
             //txtGetIDParam.setMarginStart(20);
             // txtGetIDParam.setMargins(0, 0, 0, 0);
             txtGetIDParam.addRule(RelativeLayout.ALIGN_PARENT_START);
@@ -709,7 +709,7 @@ String mMaterialCode;
                         System.out.println("mTotalTime==>>vvv=offset=>>" + edtValueFloat);
 
                         char[] datar = new char[4];
-                        int a = Float.floatToIntBits((float) edtValueFloat);
+                        int a = Float.floatToIntBits(edtValueFloat);
                         //  int a= (int) edtValueFloat;
                         datar[0] = (char) (a & 0x000000FF);
                         datar[1] = (char) ((a & 0x0000FF00) >> 8);
@@ -787,7 +787,7 @@ String mMaterialCode;
                                     System.out.println("mTotalTime==>>vvv=offset=>>" + edtValueFloat);
 
                                     char[] datar = new char[4];
-                                    int a = Float.floatToIntBits((float) edtValueFloat);
+                                    int a = Float.floatToIntBits(edtValueFloat);
                                     //  int a= (int) edtValueFloat;
                                     datar[0] = (char) (a & 0x000000FF);
                                     datar[1] = (char) ((a & 0x0000FF00) >> 8);
@@ -906,7 +906,7 @@ String mMaterialCode;
                                 //changeButtonVisibility(true, 1.0f, holder);
                                 char[] datar = new char[4];
                                 // int a=Float.floatToIntBits((float) edtValue);
-                                int a = Float.floatToIntBits((float) edtValueFloat);
+                                int a = Float.floatToIntBits(edtValueFloat);
                                 datar[0] = (char) (a & 0x000000FF);
                                 datar[1] = (char) ((a & 0x0000FF00) >> 8);
                                 datar[2] = (char) ((a & 0x00FF0000) >> 16);
@@ -984,7 +984,7 @@ String mMaterialCode;
                                         //changeButtonVisibility(true, 1.0f, holder);
                                         char[] datar = new char[4];
                                         // int a=Float.floatToIntBits((float) edtValue);
-                                        int a = Float.floatToIntBits((float) edtValueFloat);
+                                        int a = Float.floatToIntBits(edtValueFloat);
                                         datar[0] = (char) (a & 0x000000FF);
                                         datar[1] = (char) ((a & 0x0000FF00) >> 8);
                                         datar[2] = (char) ((a & 0x00FF0000) >> 16);
@@ -1048,7 +1048,7 @@ String mMaterialCode;
             });
             RelativeLayout rlvEDITLayout = new RelativeLayout(this);
             RelativeLayout.LayoutParams rlvEDITParam = new RelativeLayout.LayoutParams
-                    ((int) RelativeLayout.LayoutParams.MATCH_PARENT, (int) (int) getResources().getDimension(R.dimen._45sdp));
+                    (RelativeLayout.LayoutParams.MATCH_PARENT, (int) getResources().getDimension(R.dimen._45sdp));
             //rlvEDITParam.setMargins(130, 1, 130, 1);
             //rlvEDITParam.addRule(RelativeLayout.LEFT_OF, txtGetID.getId());
             // rlvEDITParam.addRule(RelativeLayout.RIGHT_OF, txtSetID.getId());
@@ -1063,7 +1063,7 @@ String mMaterialCode;
 
             EditText edtValueID = new EditText(this);
             RelativeLayout.LayoutParams edtValueIDParam = new RelativeLayout.LayoutParams
-                    ((int) RelativeLayout.LayoutParams.MATCH_PARENT, (int) RelativeLayout.LayoutParams.MATCH_PARENT);
+                    (RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
             //edtValueIDParam.setMarginStart(20);
             edtValueIDParam.addRule(RelativeLayout.ALIGN_PARENT_START);
           //  edtValueIDParam.setMargins((int) getResources().getDimension(R.dimen._1sdp), (int) getResources().getDimension(R.dimen._1sdp), (int) getResources().getDimension(R.dimen._3sdp), (int) getResources().getDimension(R.dimen._1sdp));
@@ -1278,7 +1278,7 @@ String mMaterialCode;
                 }
 
                 char[] datar = new char[4];
-                int a = Float.floatToIntBits((float) edtValueFloat);
+                int a = Float.floatToIntBits(edtValueFloat);
                 // int a= (int) edtValueFloat;
                 datar[0] = (char) (a & 0x000000FF);
                 datar[1] = (char) ((a & 0x0000FF00) >> 8);
@@ -1644,7 +1644,7 @@ String mMaterialCode;
                     counterValue = 0;
                     char[] datar = new char[4];
                     // int a=Float.floatToIntBits((float) edtValue);
-                    int a = Float.floatToIntBits((float) edtValueFloat);
+                    int a = Float.floatToIntBits(edtValueFloat);
                     datar[0] = (char) (a & 0x000000FF);
                     datar[1] = (char) ((a & 0x0000FF00) >> 8);
                     datar[2] = (char) ((a & 0x00FF0000) >> 16);
@@ -1855,7 +1855,7 @@ String mMaterialCode;
         int crc = 0xFFFF;
         int pos = 0, i = 0;
         for (pos = 0; pos < len; pos++) {
-            crc ^= (int) buf[pos];    // XOR byte into least sig. byte of crc
+            crc ^= buf[pos];    // XOR byte into least sig. byte of crc
 
             for (i = 8; i != 0; i--) {    // Loop over each bit
                 if ((crc & 0x0001) != 0) {      // If the LSB is set

@@ -11,17 +11,17 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.List;
 
 import debugapp.Bean.SurweyListResponse;
-import com.shaktipumplimited.shaktikusum.R;
 
 
 public class SurweyListAdapter extends RecyclerView.Adapter<SurweyListAdapter.ViewHolder> {
 
-    private Context mContext;
-    private List<SurweyListResponse> mSurweyListResponse;
+    private final Context mContext;
+    private final List<SurweyListResponse> mSurweyListResponse;
     private List<Boolean> mLrInvoiceSelectionCheck;
 
 

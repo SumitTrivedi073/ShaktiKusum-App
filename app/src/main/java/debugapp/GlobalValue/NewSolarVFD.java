@@ -34,8 +34,11 @@ public class NewSolarVFD {
     public static final String LOGIN_VK_PAGE = "login.htm";
     public static final String SAVE_VK_PAGE = BASE_URL_VK1 +"save_installation.htm";
     public static final String UPDATE_IBASE_VK_PAGE = BASE_URL_VK1 +"new_serial_no_update.htm";
-    public static final String SIM_STATUS_VK_PAGE = "sim_actiavtion_status.htm";
+    public static final String SIM_STATUS_VK_PAGE = BASE_URL_VK1 +"sim_actiavtion_status.htm";
+
     public static final String RMS_VALIDAION_OPTION_API = "rms_validation.htm";
+
+    public static final String saveDebugData = BASE_URL_VK +"save.htm";
 
 
     //*************** organisation login ********************* //

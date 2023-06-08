@@ -99,19 +99,19 @@ public class ActivityRejectSite extends BaseActivity {
         version = WebURL.APP_VERSION_CODE;
         device_name = CustomUtility.getDeviceName();
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView = (RecyclerView) findViewById(R.id.emp_list);
+        recyclerView = findViewById(R.id.emp_list);
 
         // Locate the EditText in listview_main.xml
-        editsearch = (EditText) findViewById(R.id.search);
+        editsearch = findViewById(R.id.search);
 
 
-        lin1 = (LinearLayout) findViewById(R.id.lin1);
-        lin2 = (LinearLayout) findViewById(R.id.lin2);
+        lin1 = findViewById(R.id.lin1);
+        lin2 = findViewById(R.id.lin2);
 
 
         // Capture Text in EditText
@@ -279,7 +279,7 @@ public class ActivityRejectSite extends BaseActivity {
                             );
 
 
-                    if (db.isRecordExist(db.TABLE_REJECTION_LIST, db.KEY_BILL_NO, bill_no)) {
+                    if (db.isRecordExist(DatabaseHelper.TABLE_REJECTION_LIST, DatabaseHelper.KEY_BILL_NO, bill_no)) {
                         db.updateRejectListData(bill_no, rejectListBean);
                     } else {
                         db.insertRejectListData(bill_no, rejectListBean);

@@ -21,7 +21,8 @@ import debugapp.PendingFeedback;
 
 public class PendingFeedbackAdapter extends RecyclerView.Adapter<PendingFeedbackAdapter.ViewHolder> implements Filterable {
     Context mContext;
-    private List<PendingFeedback.Response> pendingFeedbackList,arSearch;
+    private List<PendingFeedback.Response> pendingFeedbackList;
+    private final List<PendingFeedback.Response> arSearch;
     private SendOTPListner sendOTPListener;
 
     TextView noDataFound;

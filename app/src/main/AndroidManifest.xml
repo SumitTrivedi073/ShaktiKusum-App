@@ -50,7 +50,8 @@
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme"
         android:usesCleartextTraffic="true"
-        tools:targetApi="q">
+        tools:targetApi="tiramisu"
+        android:dataExtractionRules="@xml/data_extraction_rules">
         <activity
             android:name="activity.SwVersionCheckActivity"
             android:exported="false" />

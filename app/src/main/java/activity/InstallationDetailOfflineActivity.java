@@ -17,9 +17,6 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
@@ -174,7 +171,7 @@ public class InstallationDetailOfflineActivity extends BaseActivity {
         tvSync.setText(installationOfflineBean.getSync());//
         tvContactNo.setText(installationOfflineBean.getContactNo());//
 
-        if (db.isRecordExist(db.TABLE_OFFLINE_SUBMITTED_LIST, db.KEY_OFFLINE_BILL_NO, installationOfflineBean.getVbeln())) {
+        if (db.isRecordExist(DatabaseHelper.TABLE_OFFLINE_SUBMITTED_LIST, DatabaseHelper.KEY_OFFLINE_BILL_NO, installationOfflineBean.getVbeln())) {
             SubmitOfflineDataInput submitOfflineDataInput = db.getInstallationOfflineSubmittedData(installationOfflineBean.getVbeln());
             photo1_text = submitOfflineDataInput.getOffPhoto();
             if (photo1_text == null || photo1_text.isEmpty()) {
@@ -191,7 +188,7 @@ public class InstallationDetailOfflineActivity extends BaseActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.MyDialogTheme);
         builder.setTitle("Add Photo!");
         builder.setItems(items, (dialog, item) -> {
-            boolean result = customUtility.checkPermission(mContext);
+            boolean result = CustomUtility.checkPermission(mContext);
             if (items[item].equals("Take Photo")) {
                 if (result) {
                     openCamera(name);
@@ -241,7 +238,7 @@ public class InstallationDetailOfflineActivity extends BaseActivity {
         deliveryDeliveredInput.setUserId(installationOfflineBean.getUserId());
         deliveryDeliveredInput.setRegisno(installationOfflineBean.getRegisno());
         deliveryDeliveredInput.setOffPhoto(photo1_text);
-        if (db.isRecordExist(db.TABLE_OFFLINE_SUBMITTED_LIST, db.KEY_OFFLINE_BILL_NO, installationOfflineBean.getVbeln())) {
+        if (db.isRecordExist(DatabaseHelper.TABLE_OFFLINE_SUBMITTED_LIST, DatabaseHelper.KEY_OFFLINE_BILL_NO, installationOfflineBean.getVbeln())) {
             db.insertInstallationOfflineSubmittedData(deliveryDeliveredInput, false, "");
         } else {
             db.insertInstallationOfflineSubmittedData(deliveryDeliveredInput, true, installationOfflineBean.getVbeln());

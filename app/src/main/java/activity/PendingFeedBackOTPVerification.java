@@ -122,7 +122,7 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
         CustomUtility.showProgressDialogue(PendingFeedBackOTPVerification.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.SendOTPToServer + mainObject.toString(), null, new Response.Listener<JSONObject>() {
+                WebURL.SendOTPToServer + mainObject, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
                 CustomUtility.hideProgressDialog(PendingFeedBackOTPVerification.this);

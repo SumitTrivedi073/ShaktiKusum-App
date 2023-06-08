@@ -11,20 +11,21 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.shaktipumplimited.shaktikusum.R;
+
 import java.util.ArrayList;
 
 import bean.RegistrationBean;
 import database.DatabaseHelper;
-import com.shaktipumplimited.shaktikusum.R;
 
 
 public class Adapter_offline_reg_list extends RecyclerView.Adapter<Adapter_offline_reg_list.HomeCategoryViewHolder> {
     View.OnClickListener onclick_listener;
     DatabaseHelper db;
 
-    private Context context;
+    private final Context context;
 
-    private ArrayList<RegistrationBean> responseList;
+    private final ArrayList<RegistrationBean> responseList;
 
 
     public Adapter_offline_reg_list(Context context, ArrayList<RegistrationBean> responseList) {

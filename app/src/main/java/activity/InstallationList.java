@@ -138,17 +138,17 @@ import webservice.WebURL;
         version = BuildConfig.VERSION_NAME;
         device_name = CustomUtility.getDeviceName();
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView = (RecyclerView) findViewById(R.id.emp_list);
+        recyclerView = findViewById(R.id.emp_list);
 
         // Locate the EditText in listview_main.xml
-        editsearch = (EditText) findViewById(R.id.search);
-        lin1 = (LinearLayout) findViewById(R.id.lin1);
-        lin2 = (LinearLayout) findViewById(R.id.lin2);
+        editsearch = findViewById(R.id.search);
+        lin1 = findViewById(R.id.lin1);
+        lin2 = findViewById(R.id.lin2);
         // Capture Text in EditText
         editsearch.addTextChangedListener(new TextWatcher() {
 
@@ -225,7 +225,7 @@ import webservice.WebURL;
             }
         }*/
 
-        if (db.getcount(db.TABLE_INSTALLATION_LIST)) {
+        if (db.getcount(DatabaseHelper.TABLE_INSTALLATION_LIST)) {
             installationBeans = new ArrayList<InstallationListBean>();
             installationBeans = db.getInstallationListData(user_id);
             Log.e("SIZE", "&&&&" + installationBeans.size());
@@ -389,7 +389,7 @@ import webservice.WebURL;
                             simha2,
                             sync,
                             CONTACT_NO);
-                    if (db.isRecordExist(db.TABLE_INSTALLATION_LIST, db.KEY_ENQ_DOC, bill_no)) {
+                    if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_LIST, DatabaseHelper.KEY_ENQ_DOC, bill_no)) {
                         db.updateInstallationListData(bill_no, installationBean);
                     } else {
                         db.insertInstallationListData(bill_no, installationBean);

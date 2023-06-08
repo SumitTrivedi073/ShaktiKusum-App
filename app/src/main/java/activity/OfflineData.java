@@ -39,13 +39,13 @@ public class OfflineData extends BaseActivity {
         version = WebURL.APP_VERSION_CODE;
         device_name = CustomUtility.getDeviceName();
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        regis_data = (TextView) findViewById(R.id.regis_data);
-        inst_data = (TextView) findViewById(R.id.inst_data);
+        regis_data = findViewById(R.id.regis_data);
+        inst_data = findViewById(R.id.inst_data);
 
 
         regis_data.setOnClickListener(new View.OnClickListener() {

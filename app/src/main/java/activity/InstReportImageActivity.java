@@ -168,7 +168,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
         recyclerview = findViewById(R.id.recyclerview);
 
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

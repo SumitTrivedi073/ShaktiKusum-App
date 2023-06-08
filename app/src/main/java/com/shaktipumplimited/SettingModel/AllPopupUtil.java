@@ -41,10 +41,10 @@ public class AllPopupUtil {
        //dialog.setTitle("");
        dialog.setCancelable(false);
        // set the custom dialog components - text, image and button
-       TextView txtBTHeadingTopID = (TextView) dialog.findViewById(R.id.txtBTHeadingTopID);
+       TextView txtBTHeadingTopID = dialog.findViewById(R.id.txtBTHeadingTopID);
 
-       TextView txtBTDisableBTNID = (TextView) dialog.findViewById(R.id.txtBTDisableBTNID);
-       TextView txtBTEnableBTNID = (TextView) dialog.findViewById(R.id.txtBTEnableBTNID);
+       TextView txtBTDisableBTNID = dialog.findViewById(R.id.txtBTDisableBTNID);
+       TextView txtBTEnableBTNID = dialog.findViewById(R.id.txtBTEnableBTNID);
 
 
        // if button is clicked, close the custom dialog
@@ -82,10 +82,10 @@ public class AllPopupUtil {
        //dialog.setTitle("");
        dialog.setCancelable(false);
        // set the custom dialog components - text, image and button
-       TextView txtBTHeadingTopID = (TextView) dialog.findViewById(R.id.txtBTHeadingTopID);
+       TextView txtBTHeadingTopID = dialog.findViewById(R.id.txtBTHeadingTopID);
 
-       TextView txtBTDisableBTNID = (TextView) dialog.findViewById(R.id.txtBTDisableBTNID);
-       TextView txtBTEnableBTNID = (TextView) dialog.findViewById(R.id.txtBTEnableBTNID);
+       TextView txtBTDisableBTNID = dialog.findViewById(R.id.txtBTDisableBTNID);
+       TextView txtBTEnableBTNID = dialog.findViewById(R.id.txtBTEnableBTNID);
 
 
        // if button is clicked, close the custom dialog
@@ -150,11 +150,11 @@ public class AllPopupUtil {
 
         final TextView txtInternetPopUpID, txtBluetoothPopUpID, txtOkayPopUpID;
         // set the custom dialog components - text, image and button
-        TextView txtBTHeadingTopID = (TextView) dialog.findViewById(R.id.txtBTHeadingTopID);
+        TextView txtBTHeadingTopID = dialog.findViewById(R.id.txtBTHeadingTopID);
 
-         txtBluetoothPopUpID = (TextView) dialog.findViewById(R.id.txtBluetoothPopUpID);
-         txtInternetPopUpID = (TextView) dialog.findViewById(R.id.txtInternetPopUpID);
-         txtOkayPopUpID = (TextView) dialog.findViewById(R.id.txtOkayPopUpID);
+         txtBluetoothPopUpID = dialog.findViewById(R.id.txtBluetoothPopUpID);
+         txtInternetPopUpID = dialog.findViewById(R.id.txtInternetPopUpID);
+         txtOkayPopUpID = dialog.findViewById(R.id.txtOkayPopUpID);
 
         // ImageView image = (ImageView) dialog.findViewById(R.id.image);
         // image.setImageResource(R.drawable.ic_launcher);

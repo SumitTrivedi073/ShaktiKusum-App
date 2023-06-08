@@ -83,18 +83,18 @@ public class SimOfflineData extends BaseActivity {
 
         dataHelper = new DatabaseHelper(context);
         loginBean = new LoginBean();
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Sim Card Offline Data");
 
-        recyclerView = (RecyclerView) findViewById(R.id.emp_list);
+        recyclerView = findViewById(R.id.emp_list);
 
         dataHelper = new DatabaseHelper(context);
 
-        lin1 = (LinearLayout) findViewById(R.id.lin1);
-        lin2 = (LinearLayout) findViewById(R.id.lin2);
+        lin1 = findViewById(R.id.lin1);
+        lin2 = findViewById(R.id.lin2);
 
 
 
@@ -209,9 +209,9 @@ public class SimOfflineData extends BaseActivity {
                     final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
                     param1_invc.add(new BasicNameValuePair("sim_change_data", String.valueOf(ja_invc_data)));
                     Log.e("DATA", "$$$$" + param1_invc.size());
-                    Log.e("DATA", "$$$$" + param1_invc.toString());
+                    Log.e("DATA", "$$$$" + param1_invc);
 
-                    System.out.println(param1_invc.toString());
+                    System.out.println(param1_invc);
 
                     try {
 

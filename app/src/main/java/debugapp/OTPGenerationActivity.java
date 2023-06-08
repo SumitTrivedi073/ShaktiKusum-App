@@ -55,9 +55,9 @@ public class OTPGenerationActivity extends AppCompatActivity {
         baseRequest = new BaseRequest(this);
 
         lvlOTPMianID = findViewById(R.id.lvlOTPMianID);
-        txtOTPID = (TextView) findViewById(R.id.txtOTPID);
-        txtPODID = (TextView) findViewById(R.id.txtPODID);
-        txtSimNumberID = (TextView) findViewById(R.id.txtSimNumberID);
+        txtOTPID = findViewById(R.id.txtOTPID);
+        txtPODID = findViewById(R.id.txtPODID);
+        txtSimNumberID = findViewById(R.id.txtSimNumberID);
         edtOTPID = findViewById(R.id.edtOTPID);
         edtINSTNmaeID = findViewById(R.id.edtINSTNmaeID);
         edtINSTNumberID = findViewById(R.id.edtINSTNumberID);

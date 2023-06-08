@@ -1,5 +1,9 @@
 package activity;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.os.Environment.getExternalStorageDirectory;
+import static android.os.Environment.getExternalStoragePublicDirectory;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -34,9 +38,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+
+import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -64,12 +69,6 @@ import utility.CameraUtils;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
-
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.os.Environment.getExternalStorageDirectory;
-import static android.os.Environment.getExternalStoragePublicDirectory;
-
-import com.shaktipumplimited.shaktikusum.R;
 
 public class SurveyActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
     public static final int RC_FILE_PICKER_PERM = 321;
@@ -224,35 +223,35 @@ public class SurveyActivity extends BaseActivity implements EasyPermissions.Perm
         current_date = simpleDateFormat.format(new Date());
 
 
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        photo1 = (TextView) findViewById(R.id.photo1);
-        photo2 = (TextView) findViewById(R.id.photo2);
-        photo3 = (TextView) findViewById(R.id.photo3);
+        photo1 = findViewById(R.id.photo1);
+        photo2 = findViewById(R.id.photo2);
+        photo3 = findViewById(R.id.photo3);
 
 
-        submit = (TextView) findViewById(R.id.btn_submit);
-        reg_no = (TextView) findViewById(R.id.reg_no);
+        submit = findViewById(R.id.btn_submit);
+        reg_no = findViewById(R.id.reg_no);
 
-        cust_nm = (TextView) findViewById(R.id.cust_nm);
+        cust_nm = findViewById(R.id.cust_nm);
 
-        contact = (TextView) findViewById(R.id.con_no);
-        state = (TextView) findViewById(R.id.state);
-        distrct = (TextView) findViewById(R.id.distrct);
-        address1 = (TextView) findViewById(R.id.addrs);
+        contact = findViewById(R.id.con_no);
+        state = findViewById(R.id.state);
+        distrct = findViewById(R.id.distrct);
+        address1 = findViewById(R.id.addrs);
 
 
-        spinner_wtr_reso = (Spinner) findViewById(R.id.spinner_wtr_reso);
+        spinner_wtr_reso = findViewById(R.id.spinner_wtr_reso);
 
-        borewell_size = (EditText) findViewById(R.id.borewell_size);
-        borwell_depth = (EditText) findViewById(R.id.borwell_depth);
-        cbl_length = (EditText) findViewById(R.id.cbl_length);
-        surf_head = (EditText) findViewById(R.id.surf_head);
-        len_dia_dis_pip = (EditText) findViewById(R.id.len_dia_dis_pip);
+        borewell_size = findViewById(R.id.borewell_size);
+        borwell_depth = findViewById(R.id.borwell_depth);
+        cbl_length = findViewById(R.id.cbl_length);
+        surf_head = findViewById(R.id.surf_head);
+        len_dia_dis_pip = findViewById(R.id.len_dia_dis_pip);
 
         setData();
 
@@ -854,10 +853,10 @@ public class SurveyActivity extends BaseActivity implements EasyPermissions.Perm
             // TODO perform some logging or show user feedback
             return null;
         } else {
-            String[] projection = {String.valueOf(MediaStore.Images.Media.DATA)};
+            String[] projection = {MediaStore.Images.Media.DATA};
 
-            Cursor cursor1 = ((Activity) mContext).getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{image_id}, null);
-            Cursor cursor2 = ((Activity) mContext).getContentResolver().query(uri, projection, null, null, null);
+            Cursor cursor1 = mContext.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{image_id}, null);
+            Cursor cursor2 = mContext.getContentResolver().query(uri, projection, null, null, null);
 
             Log.e("CUR1", "&&&&" + cursor1);
             Log.e("CUR2", "&&&&" + cursor2);
@@ -917,7 +916,7 @@ public class SurveyActivity extends BaseActivity implements EasyPermissions.Perm
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                boolean result = customUtility.checkPermission(mContext);
+                boolean result = CustomUtility.checkPermission(mContext);
                 if (items[item].equals("Take Photo")) {
 
                     if (result) {
@@ -962,7 +961,7 @@ public class SurveyActivity extends BaseActivity implements EasyPermissions.Perm
                     len_dia_dis_pip_txt
             );
 
-            if (dataHelper.isRecordExist(dataHelper.TABLE_SURVEY_PUMP_DATA, dataHelper.KEY_BILL_NO, survy_bill_no)) {
+            if (dataHelper.isRecordExist(DatabaseHelper.TABLE_SURVEY_PUMP_DATA, DatabaseHelper.KEY_BILL_NO, survy_bill_no)) {
                 dataHelper.updateSurveyData(survy_bill_no, surveyBean);
             } else {
                 dataHelper.insertSurveyData(survy_bill_no, surveyBean);
@@ -1016,7 +1015,7 @@ public class SurveyActivity extends BaseActivity implements EasyPermissions.Perm
                     len_dia_dis_pip_txt
             );
 
-            if (dataHelper.isRecordExist(dataHelper.TABLE_SURVEY_PUMP_DATA, dataHelper.KEY_BILL_NO, survy_bill_no)) {
+            if (dataHelper.isRecordExist(DatabaseHelper.TABLE_SURVEY_PUMP_DATA, DatabaseHelper.KEY_BILL_NO, survy_bill_no)) {
                 dataHelper.updateSurveyData(survy_bill_no, surveyBean);
             } else {
                 dataHelper.insertSurveyData(survy_bill_no, surveyBean);
@@ -1194,9 +1193,9 @@ public class SurveyActivity extends BaseActivity implements EasyPermissions.Perm
 
             final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
             param1_invc.add(new BasicNameValuePair("survey", String.valueOf(ja_invc_data)));
-            Log.e("DATA", "$$$$" + param1_invc.toString());
+            Log.e("DATA", "$$$$" + param1_invc);
 
-            System.out.println(param1_invc.toString());
+            System.out.println(param1_invc);
 
             try {
 
@@ -1216,7 +1215,7 @@ public class SurveyActivity extends BaseActivity implements EasyPermissions.Perm
                     JSONArray ja = new JSONArray(obj1);
 
 
-                    Log.e("OUTPUT2", "&&&&" + ja.toString());
+                    Log.e("OUTPUT2", "&&&&" + ja);
 
                     for (int i = 0; i < ja.length(); i++) {
 

@@ -18,7 +18,7 @@ public class UpdateActivity extends BaseActivity {
         setContentView(R.layout.activity_update);
 
 
-        tv_click = (TextView) findViewById(R.id.textClick);
+        tv_click = findViewById(R.id.textClick);
         tv_click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

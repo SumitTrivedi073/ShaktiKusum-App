@@ -265,7 +265,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         onBackPressed();
     }
 
-    public Bitmap saveImageWithTimeStamp( byte data[]) {
+    public Bitmap saveImageWithTimeStamp(byte[] data) {
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inMutable = true;
@@ -352,6 +352,6 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         }
 
         // Create a media file name
-        return dir.getPath() + File.separator + "IMG_"+  String.valueOf(Calendar.getInstance().getTimeInMillis()) +".jpg";
+        return dir.getPath() + File.separator + "IMG_"+ Calendar.getInstance().getTimeInMillis() +".jpg";
     }
 }

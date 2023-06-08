@@ -64,7 +64,7 @@ public class RetrieveFirestoreData extends Service {
                         try {
                             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
                             if (pInfo != null && appConfig.getMinKusumAppVersion() != null
-                                    && !appConfig.getMinKusumAppVersion().toString().isEmpty()) {
+                                    && !appConfig.getMinKusumAppVersion().isEmpty()) {
 
                                 if (pInfo.versionCode < Integer.parseInt(appConfig.getMinKusumAppVersion())) {
                                     CustomUtility.setSharedPreference(getApplicationContext(), Constant.APPURL, appConfig.getKusumAppUrl());

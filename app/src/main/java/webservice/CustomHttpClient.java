@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class CustomHttpClient {
@@ -46,10 +47,10 @@ public class CustomHttpClient {
         if (mHttpClient == null) {
             mHttpClient = new DefaultHttpClient();
 
-            final HttpParams params = (HttpParams) mHttpClient.getParams();
+            final HttpParams params = mHttpClient.getParams();
             HttpConnectionParams.setConnectionTimeout(params, HTTP_TIMEOUT);
             HttpConnectionParams.setSoTimeout(params, HTTP_TIMEOUT);
-            ConnManagerParams.setTimeout((HttpParams) params, HTTP_TIMEOUT);
+            ConnManagerParams.setTimeout(params, HTTP_TIMEOUT);
         }
         return mHttpClient;
     }
@@ -61,7 +62,7 @@ public class CustomHttpClient {
             HttpPost request = new HttpPost(url);
             HttpResponse response = client.execute(request);
             in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-            StringBuffer sb = new StringBuffer("");
+            StringBuffer sb = new StringBuffer();
             String line = "";
             String NL = System.getProperty("line.separator");
             while ((line = in.readLine()) != null) {
@@ -108,7 +109,7 @@ public class CustomHttpClient {
 
             in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
-            StringBuffer sb = new StringBuffer("");
+            StringBuffer sb = new StringBuffer();
 
             String line = "";
 
@@ -242,7 +243,7 @@ public class CustomHttpClient {
             HttpResponse response = client.execute(request);*/
 
             int TIMEOUT_MILLISEC = 150000; // = 12 seconds
-            HttpParams httpParams = (HttpParams) new BasicHttpParams();
+            HttpParams httpParams = new BasicHttpParams();
             HttpConnectionParams.setConnectionTimeout(httpParams,
                     TIMEOUT_MILLISEC);
             HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_MILLISEC);
@@ -268,7 +269,7 @@ public class CustomHttpClient {
 
             InputStream is = httpResponse.getEntity().getContent();
             reader = new BufferedReader(new InputStreamReader(
-                    is, "iso-8859-1"), 8);
+                    is, StandardCharsets.ISO_8859_1), 8);
 
             StringBuilder sb = new StringBuilder();
 
@@ -336,7 +337,7 @@ public class CustomHttpClient {
 
             in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
-            StringBuffer sb = new StringBuffer("");
+            StringBuffer sb = new StringBuffer();
 
             String line = "";
 
@@ -395,9 +396,9 @@ public class CustomHttpClient {
             HttpEntity httpEntity = response.getEntity();
             is = httpEntity.getContent();
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(is, "iso-8859-1"), 8);
+            BufferedReader in = new BufferedReader(new InputStreamReader(is, StandardCharsets.ISO_8859_1), 8);
 
-            StringBuffer sb = new StringBuffer("");
+            StringBuffer sb = new StringBuffer();
             String line = "";
 
             while ((line = in.readLine()) != null) {
@@ -408,7 +409,7 @@ public class CustomHttpClient {
             String result = sb.toString();
             return result;
         } catch (Exception e) {
-            return new String("Exception: " + e.getMessage());
+            return "Exception: " + e.getMessage();
         }
     }
 }

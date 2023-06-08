@@ -56,16 +56,16 @@ public class DeviceStatusActivity extends BaseActivity  {
     }
 
     private void Init() {
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        deviceno = (TextView) findViewById(R.id.device_no);
-        cust_nam = (TextView) findViewById(R.id.cust_nam);
-        custphno = (TextView) findViewById(R.id.cust_mb);
-        operatornam = (TextView) findViewById(R.id.operator);
-        deviceonline = (TextView) findViewById(R.id.dev_status);
-        motorstatus = (TextView) findViewById(R.id.motr_stats);
+        deviceno = findViewById(R.id.device_no);
+        cust_nam = findViewById(R.id.cust_nam);
+        custphno = findViewById(R.id.cust_mb);
+        operatornam = findViewById(R.id.operator);
+        deviceonline = findViewById(R.id.dev_status);
+        motorstatus = findViewById(R.id.motr_stats);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -89,8 +89,13 @@ public class DeviceStatusActivity extends BaseActivity  {
 
     public void searchWord(String textString) {
 
-        if (!textString.equals("")) {
-           getDeviceDetail(textString);
+        if (!textString.isEmpty()) {
+            if(CustomUtility.isInternetOn(getApplicationContext())){
+                getDeviceDetail(textString);
+            }else {
+                CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection),getApplicationContext());
+            }
+
         } else {
             Toast.makeText(mContext, "Please Enter Controller Id.", Toast.LENGTH_SHORT).show();
         }
@@ -122,7 +127,7 @@ public class DeviceStatusActivity extends BaseActivity  {
                                     custphno.setText(deviceDetailModel.getResponse().getCustomerPhoneNo());
                                 }
                                 if(deviceDetailModel.getResponse().getOperatorName()!=null && !deviceDetailModel.getResponse().getOperatorName().isEmpty()) {
-                                    operatornam.setText(deviceDetailModel.getResponse().getOperatorName().toString());
+                                    operatornam.setText(deviceDetailModel.getResponse().getOperatorName());
                                 }
 
                                 if(deviceDetailModel.getResponse().getIsLogin()) {

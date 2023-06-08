@@ -487,7 +487,7 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
                                                                                 amt, pdf, "1"
                                                                         );
 
-                                                                        if (dataHelper.isRecordExist(dataHelper.TABLE_REGISTRATION, dataHelper.KEY_ENQ_DOC, enq_docno)) {
+                                                                        if (dataHelper.isRecordExist(DatabaseHelper.TABLE_REGISTRATION, DatabaseHelper.KEY_ENQ_DOC, enq_docno)) {
                                                                             dataHelper.updateRegistrationData(enq_docno, registrationBean);
                                                                         } else {
                                                                             dataHelper.insertRegistrationData(enq_docno, registrationBean);
@@ -515,7 +515,7 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
                                                                             );
 
 
-                                                                            if (dataHelper.isRecordExist(dataHelper.TABLE_REGISTRATION, dataHelper.KEY_ENQ_DOC, enq_docno)) {
+                                                                            if (dataHelper.isRecordExist(DatabaseHelper.TABLE_REGISTRATION, DatabaseHelper.KEY_ENQ_DOC, enq_docno)) {
                                                                                 dataHelper.updateRegistrationData(enq_docno, registrationBean);
                                                                             } else {
                                                                                 dataHelper.insertRegistrationData(enq_docno, registrationBean);
@@ -761,9 +761,9 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
 
             final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
             param1_invc.add(new BasicNameValuePair("registration", String.valueOf(ja_invc_data)));
-            Log.e("DATA", "$$$$" + param1_invc.toString());
+            Log.e("DATA", "$$$$" + param1_invc);
 
-            System.out.println(param1_invc.toString());
+            System.out.println(param1_invc);
 
             try {
 
@@ -783,7 +783,7 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
                     JSONArray ja = new JSONArray(obj1);
 
 
-                    Log.e("OUTPUT2", "&&&&" + ja.toString());
+                    Log.e("OUTPUT2", "&&&&" + ja);
 
                     for (int i = 0; i < ja.length(); i++) {
 

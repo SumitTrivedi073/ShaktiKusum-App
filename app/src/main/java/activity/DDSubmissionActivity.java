@@ -189,22 +189,22 @@ public class DDSubmissionActivity extends BaseActivity {
         installationBean = db.getInstallationData(CustomUtility.getSharedPreferences(mContext, "userid"), "");
 
 
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        photo1 = (TextView) findViewById(R.id.photo1);
-        remark = (EditText) findViewById(R.id.remark);
-        submit = (TextView) findViewById(R.id.btn_submit);
-        reg_no = (TextView) findViewById(R.id.reg_no);
-        benef_id = (TextView) findViewById(R.id.benef_id);
-        cust_nm = (TextView) findViewById(R.id.cust_nm);
-        address = (TextView) findViewById(R.id.address);
-        contact = (TextView) findViewById(R.id.cnt_no);
-        aadhar = (TextView) findViewById(R.id.aadhar_no);
-        inst_location = (ImageView) findViewById(R.id.loaction);
+        photo1 = findViewById(R.id.photo1);
+        remark = findViewById(R.id.remark);
+        submit = findViewById(R.id.btn_submit);
+        reg_no = findViewById(R.id.reg_no);
+        benef_id = findViewById(R.id.benef_id);
+        cust_nm = findViewById(R.id.cust_nm);
+        address = findViewById(R.id.address);
+        contact = findViewById(R.id.cnt_no);
+        aadhar = findViewById(R.id.aadhar_no);
+        inst_location = findViewById(R.id.loaction);
         geoIndigation = findViewById(R.id.geoIndigation);
 
         setData();
@@ -844,9 +844,9 @@ public class DDSubmissionActivity extends BaseActivity {
 
             final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
             param1_invc.add(new BasicNameValuePair("dd_collection", String.valueOf(ja_invc_data)));
-            Log.e("DATA", "$$$$" + param1_invc.toString());
+            Log.e("DATA", "$$$$" + param1_invc);
 
-            System.out.println(param1_invc.toString());
+            System.out.println(param1_invc);
 
             try {
 
@@ -866,7 +866,7 @@ public class DDSubmissionActivity extends BaseActivity {
                     JSONArray ja = new JSONArray(obj1);
 
 
-                    Log.e("OUTPUT2", "&&&&" + ja.toString());
+                    Log.e("OUTPUT2", "&&&&" + ja);
 
                     for (int i = 0; i < ja.length(); i++) {
 

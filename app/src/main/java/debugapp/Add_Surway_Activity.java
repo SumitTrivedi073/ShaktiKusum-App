@@ -1,5 +1,9 @@
 package debugapp;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.os.Environment.getExternalStorageDirectory;
+import static android.os.Environment.getExternalStoragePublicDirectory;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -35,8 +39,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+
+import com.shaktipumplimited.DamageMissBean.DamageMissResponse;
+import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -54,23 +60,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import activity.BaseActivity;
-import database.DatabaseHelper;
-
-import com.shaktipumplimited.DamageMissBean.DamageMissResponse;
-import activity.CameraActivity;
 import activity.CameraActivitySurvey;
 import activity.GPSTracker;
 import activity.ImageManager;
-import com.shaktipumplimited.shaktikusum.R;
 import activity.ShowDocument;
+import database.DatabaseHelper;
 import utility.CameraUtils;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
-
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.os.Environment.getExternalStorageDirectory;
-import static android.os.Environment.getExternalStoragePublicDirectory;
 
 public class Add_Surway_Activity extends BaseActivity {
 
@@ -356,9 +354,9 @@ Intent mIntent ;
         imgPhotoID4= findViewById(R.id.imgPhotoID4);
         imgPhotoID5= findViewById(R.id.imgPhotoID5);*/
 
-        photo1 = (TextView) findViewById(R.id.photo1);
-        photo2 = (TextView) findViewById(R.id.photo2);
-        photo3 = (TextView) findViewById(R.id.photo3);
+        photo1 = findViewById(R.id.photo1);
+        photo2 = findViewById(R.id.photo2);
+        photo3 = findViewById(R.id.photo3);
 
 
         getConnTypeValue1();
@@ -1499,10 +1497,10 @@ Intent mIntent ;
             // TODO perform some logging or show user feedback
             return null;
         } else {
-            String[] projection = {String.valueOf(MediaStore.Images.Media.DATA)};
+            String[] projection = {MediaStore.Images.Media.DATA};
 
-            Cursor cursor1 = ((Activity) context).getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{image_id}, null);
-            Cursor cursor2 = ((Activity) context).getContentResolver().query(uri, projection, null, null, null);
+            Cursor cursor1 = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{image_id}, null);
+            Cursor cursor2 = context.getContentResolver().query(uri, projection, null, null, null);
 
             Log.e("CUR1", "&&&&" + cursor1);
             Log.e("CUR2", "&&&&" + cursor2);
@@ -1645,9 +1643,9 @@ Intent mIntent ;
             final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
           //  param1_invc.add(new BasicNameValuePair("installation", String.valueOf(ja_invc_data)));
             param1_invc.add(new BasicNameValuePair("survey", String.valueOf(ja_invc_data)));
-            Log.e("DATA", "$$$$" + param1_invc.toString());
+            Log.e("DATA", "$$$$" + param1_invc);
 
-            System.out.println(param1_invc.toString());
+            System.out.println(param1_invc);
 
             try {
 
@@ -1667,7 +1665,7 @@ Intent mIntent ;
                     JSONArray ja = new JSONArray(obj1);
 
 
-                    Log.e("OUTPUT2", "&&&&" + ja.toString());
+                    Log.e("OUTPUT2", "&&&&" + ja);
 
                     for (int i = 0; i < ja.length(); i++) {
 

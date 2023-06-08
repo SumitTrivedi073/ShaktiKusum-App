@@ -52,7 +52,7 @@ public class CustomUtility {
     public static Context appContext;
     static boolean connected;
     static long  mLastClickTime;
-    private static String PREFERENCE = "DealLizard";
+    private static final String PREFERENCE = "DealLizard";
     String current_date, current_time;
     Calendar calander = null;
     SimpleDateFormat simpleDateFormat = null;
@@ -360,6 +360,13 @@ public class CustomUtility {
 
 
     public static void deleteArrayList(Context context,String name){
+        SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.remove(name).apply();
+
+    }
+
+    public static void removeValueFromSharedPref(Context context,String name){
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.remove(name).apply();

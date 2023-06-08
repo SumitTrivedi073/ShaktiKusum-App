@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 public class UtilMethod {
 
     private  static Context context;
-    private static String PREFERENCE = "DealLizard";
+    private static final String PREFERENCE = "DealLizard";
 
     public static String getDeviceName() {
         String manufacturer = Build.MANUFACTURER;
@@ -279,10 +279,7 @@ public class UtilMethod {
     public static boolean isStringNullOrBlank(String str) {
         if (str == null) {
             return true;
-        } else if (str.equals("null") || str.equals("")) {
-            return true;
-        }
-        return false;
+        } else return str.equals("null") || str.equals("");
     }
 
     public static void showToast(String message, Context ctx) {

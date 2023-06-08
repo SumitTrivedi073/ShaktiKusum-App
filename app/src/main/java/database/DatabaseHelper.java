@@ -1128,6 +1128,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_SIM_REPLACMENT_DATA, where, null);
     }
 
+
+
     public void insertSimCardData(String key, SimCardBean simCardBean) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
@@ -3331,6 +3333,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void deleteAuditImages(String billNo){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String where = "";
+        where = KEY_SITE_AUDIT_BILL_NO + "='" + billNo + "'";
+        if(CustomUtility.doesTableExist(db,CREATE_TABLE_SITE_AUDIT_IMAGES)) {
+            db.delete(CREATE_TABLE_SITE_AUDIT_IMAGES, where, null);
+        }
+    }
+
+
     public void deleteRejectListData() {
         SQLiteDatabase db = this.getWritableDatabase();
         if(CustomUtility.doesTableExist(db,TABLE_REJECTION_LIST)) {
@@ -3610,11 +3622,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
         cursor.close();
-        if (result != null && !result.isEmpty()) {
-            return true;
-        } else {
-            return false;
-        }
+        return result != null && !result.isEmpty();
     }
 
     public boolean checkRecord(String tablename, String field1, String value1,
@@ -3798,11 +3806,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(count, null);
         cursor.moveToFirst();
         int icount = cursor.getInt(0);
-        if (icount > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return icount > 0;
     }
 
     public void insertInstallationImage( String name,String path, boolean isSelected, String billNo ) {
@@ -3877,6 +3881,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return siteAuditImages;
     }
 
+    public void deleteInstallationImages(String billNo){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String where = "";
+        where = KEY_INSTALLATION_BILL_NO + "='" + billNo + "'";
+        if(CustomUtility.doesTableExist(db,TABLE_INSTALLATION_IMAGE_DATA)) {
+            db.delete(TABLE_INSTALLATION_IMAGE_DATA, where, null);
+        }
+    }
+
+
+    public void deleteUnloadingImages(String billNo){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String where = "";
+        where = KEY_UNLOADING_BILL_NO + "='" + billNo + "'";
+        if(CustomUtility.doesTableExist(db,TABLE_UNLOADING_IMAGE_DATA)) {
+            db.delete(TABLE_UNLOADING_IMAGE_DATA, where, null);
+        }
+    }
 
     public ArrayList<ImageModel> getAllInstallationImages() {
         ArrayList<ImageModel> installationImages = new ArrayList<ImageModel>();
@@ -3905,6 +3927,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return installationImages;
     }
+
 
 
     public void insertUnloadingImage( String name ,String path,boolean isSelected,  String billNo ) {

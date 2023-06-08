@@ -44,8 +44,8 @@ public class CameraActivitySurvey extends BaseActivity {
             inst_longitude_double;
     private SimpleDateFormat sdf;
     private SimpleDateFormat sdf1;
-    private Handler handler = new Handler();
-    private Runnable runnableSetDateText = new Runnable() {
+    private final Handler handler = new Handler();
+    private final Runnable runnableSetDateText = new Runnable() {
         @SuppressLint("SetTextI18n")
         @Override
         public void run() {
@@ -91,8 +91,8 @@ public class CameraActivitySurvey extends BaseActivity {
         }
 
 
-        txtData = (TextView) findViewById(R.id.txtDate);
-        image = (ImageView) findViewById(R.id.sw);
+        txtData = findViewById(R.id.txtDate);
+        image = findViewById(R.id.sw);
         sdf = new SimpleDateFormat(Config.TIME_STAMP_FORMAT_DATE, Locale.getDefault());
         sdf1 = new SimpleDateFormat(Config.TIME_STAMP_FORMAT_TIME, Locale.getDefault());
         txtData.setText("Latitude: "+lat+"\n"+"Longitude: "+lng+"\n"+"Date: "+sdf.format(new Date())+" "+"Time: "+sdf1.format(new Date()));
@@ -131,7 +131,7 @@ public class CameraActivitySurvey extends BaseActivity {
             Log.e("jisunLog", "Failed camera open");
         } else {
 
-            FrameLayout layoutPreview = (FrameLayout) findViewById(R.id.layoutPreview);
+            FrameLayout layoutPreview = findViewById(R.id.layoutPreview);
             if (preview != null) {
                 layoutPreview.removeView(preview);
                 preview = null;
@@ -238,8 +238,8 @@ public class CameraActivitySurvey extends BaseActivity {
                 camera.startPreview();
 
             } catch (RuntimeException ex) {
-                Toast.makeText(this, "camera_not_found ] " + ex.getMessage().toString(), Toast.LENGTH_LONG).show();
-                Log.d(Config.TAG, "camera_not_found ] " + ex.getMessage().toString());
+                Toast.makeText(this, "camera_not_found ] " + ex.getMessage(), Toast.LENGTH_LONG).show();
+                Log.d(Config.TAG, "camera_not_found ] " + ex.getMessage());
             }
         }
 

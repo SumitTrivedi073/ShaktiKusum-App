@@ -13,8 +13,8 @@ import java.io.IOException;
  */
 
 public class CameraPreview extends SurfaceView implements Callback {
-    private SurfaceHolder mHolder;
-    private Camera mCamera;
+    private final SurfaceHolder mHolder;
+    private final Camera mCamera;
 
     public CameraPreview(Context context, Camera camera) {
         super(context);

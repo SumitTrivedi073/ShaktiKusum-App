@@ -52,12 +52,12 @@ public class ShowDocument2 extends BaseActivity {
             data = bundle.getString("data");
 
         //Toolbar code
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        imageView = (ImageView) findViewById(R.id.imageView);
+        imageView = findViewById(R.id.imageView);
 
         Log.e("DOCNO","&&&&"+docno);
         Log.e("KEY","&&&&"+key);

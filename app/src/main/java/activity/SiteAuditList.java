@@ -113,19 +113,19 @@ public class SiteAuditList extends BaseActivity {
         version = WebURL.APP_VERSION_CODE;
         device_name = CustomUtility.getDeviceName();
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView = (RecyclerView) findViewById(R.id.emp_list);
+        recyclerView = findViewById(R.id.emp_list);
 
         // Locate the EditText in listview_main.xml
-        editsearch = (EditText) findViewById(R.id.search);
+        editsearch = findViewById(R.id.search);
 
 
-        lin1 = (LinearLayout) findViewById(R.id.lin1);
-        lin2 = (LinearLayout) findViewById(R.id.lin2);
+        lin1 = findViewById(R.id.lin1);
+        lin2 = findViewById(R.id.lin2);
 
         // Capture Text in EditText
         editsearch.addTextChangedListener(new TextWatcher() {
@@ -323,7 +323,7 @@ public class SiteAuditList extends BaseActivity {
                             beneficiary);
 
 
-                    if (db.isRecordExist(db.TABLE_AUDITSITE_LIST, db.KEY_ENQ_DOC, bill_no)) {
+                    if (db.isRecordExist(DatabaseHelper.TABLE_AUDITSITE_LIST, DatabaseHelper.KEY_ENQ_DOC, bill_no)) {
                         db.updateAuditSiteListData(bill_no, installationBean);
                     } else {
                         db.insertAuditSiteListData(bill_no, installationBean);

@@ -1,14 +1,11 @@
 package activity;
 
-import static android.os.Environment.getExternalStoragePublicDirectory;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Message;
 import android.os.StrictMode;
 import android.text.TextUtils;
@@ -169,7 +166,7 @@ public class SiteAuditInitial extends BaseActivity {
         }
 
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -280,7 +277,7 @@ public class SiteAuditInitial extends BaseActivity {
                 wrkmn_qlty_remark
         );
 
-        if (db.isRecordExist(db.TABLE_AUDIT_PUMP_DATA, db.KEY_BILL_NO, billno)) {
+        if (db.isRecordExist(DatabaseHelper.TABLE_AUDIT_PUMP_DATA, DatabaseHelper.KEY_BILL_NO, billno)) {
             db.updateAuditData(billno, auditSiteBean);
         } else {
             db.insertAuditData(billno, auditSiteBean);
@@ -318,7 +315,7 @@ public class SiteAuditInitial extends BaseActivity {
                     wrkmn_qlty_remark
             );
 
-            if (db.isRecordExist(db.TABLE_AUDIT_PUMP_DATA, db.KEY_BILL_NO, billno)) {
+            if (db.isRecordExist(DatabaseHelper.TABLE_AUDIT_PUMP_DATA, DatabaseHelper.KEY_BILL_NO, billno)) {
                 db.updateAuditData(billno, auditSiteBean);
             } else {
                 db.insertAuditData(billno, auditSiteBean);
@@ -397,7 +394,7 @@ public class SiteAuditInitial extends BaseActivity {
                     wrkmn_qlty_remark
             );
 
-            if (db.isRecordExist(db.TABLE_AUDIT_PUMP_DATA, db.KEY_BILL_NO, billno)) {
+            if (db.isRecordExist(DatabaseHelper.TABLE_AUDIT_PUMP_DATA, DatabaseHelper.KEY_BILL_NO, billno)) {
                 db.updateAuditData(billno, auditSiteBean);
             } else {
                 db.insertAuditData(billno, auditSiteBean);
@@ -428,11 +425,11 @@ public class SiteAuditInitial extends BaseActivity {
         auddate = siteaudit_date.getText().toString();
 
         // find the radiobutton by returned id
-        radioButton1 = (RadioButton) findViewById(selectedId1);
-        radioButton2 = (RadioButton) findViewById(selectedId2);
-        radioButton3 = (RadioButton) findViewById(selectedId3);
-        radioButton4 = (RadioButton) findViewById(selectedId4);
-        radioButton5 = (RadioButton) findViewById(selectedId5);
+        radioButton1 = findViewById(selectedId1);
+        radioButton2 = findViewById(selectedId2);
+        radioButton3 = findViewById(selectedId3);
+        radioButton4 = findViewById(selectedId4);
+        radioButton5 = findViewById(selectedId5);
 
         if(radioButton1 != null)
         {
@@ -457,24 +454,24 @@ public class SiteAuditInitial extends BaseActivity {
 
     public void getLayout() {
 
-        save = (TextView) findViewById(R.id.save);
+        save = findViewById(R.id.save);
 
-        siterating = (RatingBar) findViewById(R.id.ratingBar);
+        siterating = findViewById(R.id.ratingBar);
 
-        siteaudit_date = (EditText) findViewById(R.id.siteaudit_date);
+        siteaudit_date = findViewById(R.id.siteaudit_date);
 
-        foud_rea_txt = (EditText) findViewById(R.id.foud_rea_txt);
-        stru_rea_txt = (EditText) findViewById(R.id.stru_rea_txt);
-        drvcb_txt = (EditText) findViewById(R.id.drvcb_txt);
-        laer_txt = (EditText) findViewById(R.id.laer_txt);
-        wrk_txt = (EditText) findViewById(R.id.wrk_txt);
+        foud_rea_txt = findViewById(R.id.foud_rea_txt);
+        stru_rea_txt = findViewById(R.id.stru_rea_txt);
+        drvcb_txt = findViewById(R.id.drvcb_txt);
+        laer_txt = findViewById(R.id.laer_txt);
+        wrk_txt = findViewById(R.id.wrk_txt);
 
 
-        radioGroup1 = (RadioGroup) findViewById(R.id.radioGroup1);
-        radioGroup2 = (RadioGroup) findViewById(R.id.radioGroup2);
-        radioGroup3 = (RadioGroup) findViewById(R.id.radioGroup3);
-        radioGroup4 = (RadioGroup) findViewById(R.id.radioGroup4);
-        radioGroup5 = (RadioGroup) findViewById(R.id.radioGroup5);
+        radioGroup1 = findViewById(R.id.radioGroup1);
+        radioGroup2 = findViewById(R.id.radioGroup2);
+        radioGroup3 = findViewById(R.id.radioGroup3);
+        radioGroup4 = findViewById(R.id.radioGroup4);
+        radioGroup5 = findViewById(R.id.radioGroup5);
 
       /*  fou_ok = (RadioButton) findViewById(R.id.fou_ok);
         fou_notok = (RadioButton) findViewById(R.id.fou_notok);
@@ -706,9 +703,9 @@ public class SiteAuditInitial extends BaseActivity {
 
             final ArrayList<NameValuePair> param1_invc = new ArrayList<>();
             param1_invc.add(new BasicNameValuePair("site_audit_data", String.valueOf(ja_invc_data)));
-            Log.e("DATA", "$$$$" + param1_invc.toString());
+            Log.e("DATA", "$$$$" + param1_invc);
 
-            System.out.println(param1_invc.toString());
+            System.out.println(param1_invc);
 
             try {
 
@@ -728,7 +725,7 @@ public class SiteAuditInitial extends BaseActivity {
                     JSONArray ja = new JSONArray(obj1);
 
 
-                    Log.e("OUTPUT2", "&&&&" + ja.toString());
+                    Log.e("OUTPUT2", "&&&&" + ja);
 
                     for (int i = 0; i < ja.length(); i++) {
 
@@ -747,13 +744,13 @@ public class SiteAuditInitial extends BaseActivity {
                             Log.e("DOCNO", "&&&&" + billno);
                             db.deleteAuditData(billno);
                             db.deleteAuditSiteListData1(billno);
+                            db.deleteAuditImages(billno);
+                           // deleteDirectory(new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/AUD/" + billno));
 
-                            deleteDirectory(new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/AUD/" + billno));
-
-                            CustomUtility.setSharedPreference(context, billno + "PHOTO_1", "");
+                            /*CustomUtility.setSharedPreference(context, billno + "PHOTO_1", "");
                             CustomUtility.setSharedPreference(context, billno + "PHOTO_2", "");
                             CustomUtility.setSharedPreference(context, billno + "PHOTO_3", "");
-                            CustomUtility.setSharedPreference(context, billno + "PHOTO_4", "");
+                            CustomUtility.setSharedPreference(context, billno + "PHOTO_4", "");*/
 
 
                             progressDialog.dismiss();

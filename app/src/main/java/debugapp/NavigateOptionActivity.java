@@ -49,9 +49,9 @@ public class NavigateOptionActivity extends BaseActivity {
         mContext = this;
 
         baseRequest = new BaseRequest(this);
-        txtTransportID = (TextView) findViewById(R.id.txtTransportID);
-        txtPODID = (TextView) findViewById(R.id.txtPODID);
-        txtSimNumberID = (TextView) findViewById(R.id.txtSimNumberID);
+        txtTransportID = findViewById(R.id.txtTransportID);
+        txtPODID = findViewById(R.id.txtPODID);
+        txtSimNumberID = findViewById(R.id.txtSimNumberID);
         edtPutCommandID = findViewById(R.id.edtPutCommandID);
 
         txtPODID.setOnClickListener(new View.OnClickListener() {
