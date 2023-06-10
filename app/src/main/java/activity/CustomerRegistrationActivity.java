@@ -1,5 +1,8 @@
 package activity;
 
+import static android.os.Environment.getExternalStoragePublicDirectory;
+import static debugapp.GlobalValue.Constant.RegistrationImage;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +26,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -45,14 +51,6 @@ import database.DatabaseHelper;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
-
-import static android.os.Environment.getExternalStoragePublicDirectory;
-
-import static debugapp.GlobalValue.Constant.RegistrationImage;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.shaktipumplimited.shaktikusum.R;
 
 
 public class CustomerRegistrationActivity extends AppCompatActivity {
@@ -265,7 +263,7 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (CustomUtility.isInternetOn()) {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
 
                     saveData();
                 } else {
@@ -480,7 +478,7 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
                                                         if (branchname != null && !branchname.equals("")) {
                                                             if (ifsccode != null && !ifsccode.equals("")) {
                                                                 if (amt != null && !amt.equals("")) {
-                                                                    if (CustomUtility.isInternetOn()) {
+                                                                    if (CustomUtility.isInternetOn(getApplicationContext())) {
 
 
                                                                         RegistrationBean registrationBean = new RegistrationBean(enq_docno, pernr, project_no,
@@ -489,7 +487,7 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
                                                                                 amt, pdf, "1"
                                                                         );
 
-                                                                        if (dataHelper.isRecordExist(dataHelper.TABLE_REGISTRATION, dataHelper.KEY_ENQ_DOC, enq_docno)) {
+                                                                        if (dataHelper.isRecordExist(DatabaseHelper.TABLE_REGISTRATION, DatabaseHelper.KEY_ENQ_DOC, enq_docno)) {
                                                                             dataHelper.updateRegistrationData(enq_docno, registrationBean);
                                                                         } else {
                                                                             dataHelper.insertRegistrationData(enq_docno, registrationBean);
@@ -517,7 +515,7 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
                                                                             );
 
 
-                                                                            if (dataHelper.isRecordExist(dataHelper.TABLE_REGISTRATION, dataHelper.KEY_ENQ_DOC, enq_docno)) {
+                                                                            if (dataHelper.isRecordExist(DatabaseHelper.TABLE_REGISTRATION, DatabaseHelper.KEY_ENQ_DOC, enq_docno)) {
                                                                                 dataHelper.updateRegistrationData(enq_docno, registrationBean);
                                                                             } else {
                                                                                 dataHelper.insertRegistrationData(enq_docno, registrationBean);
@@ -763,9 +761,9 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
 
             final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
             param1_invc.add(new BasicNameValuePair("registration", String.valueOf(ja_invc_data)));
-            Log.e("DATA", "$$$$" + param1_invc.toString());
+            Log.e("DATA", "$$$$" + param1_invc);
 
-            System.out.println(param1_invc.toString());
+            System.out.println(param1_invc);
 
             try {
 
@@ -785,7 +783,7 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
                     JSONArray ja = new JSONArray(obj1);
 
 
-                    Log.e("OUTPUT2", "&&&&" + ja.toString());
+                    Log.e("OUTPUT2", "&&&&" + ja);
 
                     for (int i = 0; i < ja.length(); i++) {
 

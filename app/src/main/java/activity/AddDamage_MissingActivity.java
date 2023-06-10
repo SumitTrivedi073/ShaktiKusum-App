@@ -65,7 +65,7 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.os.Environment.getExternalStorageDirectory;
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
-public class AddDamage_MissingActivity extends AppCompatActivity {
+public class AddDamage_MissingActivity extends BaseActivity {
 
     String imageStoragePath, enq_docno, photo1_text, photo2_text, photo3_text, photo4_text, photo5_text, photo6_text, photo7_text, photo8_text;
     String photo1_text2, photo1_text3, photo1_text4, photo1_text5;
@@ -262,16 +262,16 @@ public class AddDamage_MissingActivity extends AppCompatActivity {
         rlvPhotoID4 = findViewById(R.id.rlvPhotoID4);
         rlvPhotoID5 = findViewById(R.id.rlvPhotoID5);
 
-        photo1 = (TextView) findViewById(R.id.photo1);
-        photo1_2 = (TextView) findViewById(R.id.photo1_2);
-        photo1_3 = (TextView) findViewById(R.id.photo1_3);
-        photo1_4 = (TextView) findViewById(R.id.photo1_4);
-        photo1_5 = (TextView) findViewById(R.id.photo1_5);
+        photo1 = findViewById(R.id.photo1);
+        photo1_2 = findViewById(R.id.photo1_2);
+        photo1_3 = findViewById(R.id.photo1_3);
+        photo1_4 = findViewById(R.id.photo1_4);
+        photo1_5 = findViewById(R.id.photo1_5);
 
-        photo2 = (TextView) findViewById(R.id.photo2);
-        photo3 = (TextView) findViewById(R.id.photo3);
-        photo4 = (TextView) findViewById(R.id.photo4);
-        photo5 = (TextView) findViewById(R.id.photo5);
+        photo2 = findViewById(R.id.photo2);
+        photo3 = findViewById(R.id.photo3);
+        photo4 = findViewById(R.id.photo4);
+        photo5 = findViewById(R.id.photo5);
 
         getConnTypeValue();
 
@@ -298,7 +298,7 @@ public class AddDamage_MissingActivity extends AppCompatActivity {
         initClickEvent();
         initClickEventSpinner();
 
-        if (db.isRecordExist(db.TABLE_DAMAGE_MISS_COMPLAIN, db.KEY_BILL_NO, billnoN)) {
+        if (db.isRecordExist(DatabaseHelper.TABLE_DAMAGE_MISS_COMPLAIN, DatabaseHelper.KEY_BILL_NO, billnoN)) {
 
             mDamageMissResponse = db.getDamageMissData(billnoN);
             int spinnerPosition1 = dataAdapter_conntype1.getPosition(mDamageMissResponse.getMDropdownValue1());
@@ -514,7 +514,7 @@ public class AddDamage_MissingActivity extends AppCompatActivity {
             photo5_text = "";
         }
 
-        if (db.isRecordExist(db.TABLE_DAMAGE_MISS_COMPLAIN, db.KEY_BILL_NO, billnoN)) {
+        if (db.isRecordExist(DatabaseHelper.TABLE_DAMAGE_MISS_COMPLAIN, DatabaseHelper.KEY_BILL_NO, billnoN)) {
             db.updatedDamageMissData(mDamageMissResponse);
         } else {
             db.insertDamageMissData(mDamageMissResponse);
@@ -664,7 +664,7 @@ public class AddDamage_MissingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (intiValidationCheck()) {
-                    if (CustomUtility.isInternetOn()) {
+                    if (CustomUtility.isInternetOn(getApplicationContext())) {
                         new SyncDAMAGEMISSData().execute();
                     } else {
                         Toast.makeText(getApplicationContext(), "No internet Connection....", Toast.LENGTH_SHORT).show();
@@ -760,7 +760,7 @@ public class AddDamage_MissingActivity extends AppCompatActivity {
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                boolean result = customUtility.checkPermission(context);
+                boolean result = CustomUtility.checkPermission(context);
                 if (items[item].equals("Take Photo")) {
                     if (result) {
                         openCamera(name);
@@ -1285,9 +1285,9 @@ public class AddDamage_MissingActivity extends AppCompatActivity {
         if (uri == null) {
             return null;
         } else {
-            String[] projection = {String.valueOf(MediaStore.Images.Media.DATA)};
-            Cursor cursor1 = ((Activity) context).getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{image_id}, null);
-            Cursor cursor2 = ((Activity) context).getContentResolver().query(uri, projection, null, null, null);
+            String[] projection = {MediaStore.Images.Media.DATA};
+            Cursor cursor1 = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{image_id}, null);
+            Cursor cursor2 = context.getContentResolver().query(uri, projection, null, null, null);
             if (cursor1 == null && cursor2 == null) {
                 return null;
             } else {
@@ -1387,7 +1387,7 @@ public class AddDamage_MissingActivity extends AppCompatActivity {
 
             final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
             param1_invc.add(new BasicNameValuePair("create_complaint", String.valueOf(ja_invc_data)));
-            System.out.println(param1_invc.toString());
+            System.out.println(param1_invc);
             try {
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
                 StrictMode.setThreadPolicy(policy);

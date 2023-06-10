@@ -34,14 +34,14 @@ import webservice.WebURL;
 
 
 public class BaseRequest extends BaseRequestParser {
-    private Context mContext;
-    private ApiInterface apiInterface;
+    private final Context mContext;
+    private final ApiInterface apiInterface;
     private ApiInterface apiInterface1;
     private RequestReciever requestReciever;
-    private boolean runInBackground = false;
-    private Dialog dialog;
+    private final boolean runInBackground = false;
+    private final Dialog dialog;
     private   ProgressDialog progress;
-    private View loaderView = null;
+    private final View loaderView = null;
     private int APINumber_ = 1;
 
 
@@ -54,7 +54,7 @@ public class BaseRequest extends BaseRequestParser {
                 ApiClient.getClientIMEI().create(ApiInterface.class);*/
 
         dialog = getProgressesDialog(context);
-        progress = (ProgressDialog) getProgressesDialog1(context);
+        progress = getProgressesDialog1(context);
     }
 
     public void setBaseRequestListner(RequestReciever requestListner) {
@@ -67,7 +67,7 @@ public class BaseRequest extends BaseRequestParser {
         public void onResponse(@NonNull Call<JsonElement> call, Response<JsonElement> response) {
             String responseServer = "";
             if (null != response.body()) {
-                JsonElement jsonElement = (JsonElement) response.body();
+                JsonElement jsonElement = response.body();
                 if (null != jsonElement) {
                     responseServer = jsonElement.toString();
                 }
@@ -116,7 +116,7 @@ public class BaseRequest extends BaseRequestParser {
         public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
             String responseServer = "";
             if (null != response.body()) {
-                JsonElement jsonElement = (JsonElement) response.body();
+                JsonElement jsonElement = response.body();
                 if (null != jsonElement) {
                     responseServer = jsonElement.toString();
                 }
@@ -154,7 +154,7 @@ public class BaseRequest extends BaseRequestParser {
 
         APINumber_ = APINumber;
        // showLoader();
-        String baseURL = ApiClient.getClient().baseUrl().toString() + remainingURL;
+        String baseURL = ApiClient.getClient().baseUrl() + remainingURL;
         System.out.println("jsonObject_GRAPH==>>"+baseURL);
 
         Call<JsonElement> call = apiInterface.postData(baseURL, jsonObject);
@@ -165,7 +165,7 @@ public class BaseRequest extends BaseRequestParser {
     public void callAPIPostDebugApp(final int APINumber, JsonObject jsonObject, String remainingURL) {
         APINumber_ = APINumber;
         // showLoader();
-        String baseURL = ApiClient.getClientDebugApp().baseUrl().toString() + remainingURL;
+        String baseURL = ApiClient.getClientDebugApp().baseUrl() + remainingURL;
         System.out.println("VikasVV1==>" + baseURL);
         Call<JsonElement> call = apiInterface.postData(baseURL, jsonObject);
         call.enqueue(responseCallback);
@@ -192,7 +192,7 @@ public class BaseRequest extends BaseRequestParser {
         APINumber_ = APINumber;
 
        showLoader();
-        String baseURL = ApiClient.getClient().baseUrl().toString() + remainingURL;
+        String baseURL = ApiClient.getClient().baseUrl() + remainingURL;
         if (!baseURL.endsWith("?")) {
             baseURL = baseURL + "?";
         }
@@ -277,7 +277,7 @@ public class BaseRequest extends BaseRequestParser {
         APINumber_ = APINumber;
 
       // showLoader();
-        String baseURL = ApiClientIMEI.getClientIMEI().baseUrl().toString() + remainingURL;
+        String baseURL = ApiClientIMEI.getClientIMEI().baseUrl() + remainingURL;
         if (!baseURL.endsWith("?")) {
             baseURL = baseURL + "?";
         }
@@ -327,8 +327,8 @@ public class BaseRequest extends BaseRequestParser {
                 } else {
                     Log.i("BaseReq",
                             inout + " : "
-                                    + response.substring((i - 1) * chunkSize,
-                                    response.length()));
+                                    + response.substring((i - 1) * chunkSize
+                            ));
                 }
             }
         } else {

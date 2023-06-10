@@ -14,16 +14,6 @@
         android:background="@color/blue_fb">
 
 
-        <!-- <ImageView
-             android:id="@+id/imgHeaderID"
-             android:layout_width="@dimen/_50sdp"
-             android:layout_height="@dimen/_50sdp"
-             android:paddingStart="@dimen/_5sdp"
-             android:paddingTop="@dimen/_15sdp"
-             android:paddingEnd="@dimen/_20sdp"
-             android:paddingBottom="@dimen/_15sdp"
-             android:src="@drawable/icn_back" />-->
-
         <RelativeLayout
             android:id="@+id/rlvBackViewID"
             android:layout_width="@dimen/_40sdp"

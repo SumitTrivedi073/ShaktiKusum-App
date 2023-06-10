@@ -44,7 +44,7 @@ import static android.os.Environment.getExternalStoragePublicDirectory;
 import com.shaktipumplimited.shaktikusum.R;
 
 
-public class OfflineDataReg extends AppCompatActivity {
+public class OfflineDataReg extends BaseActivity {
     Context context;
 
     DatabaseHelper db;
@@ -116,17 +116,17 @@ public class OfflineDataReg extends AppCompatActivity {
 
         device_name = CustomUtility.getDeviceName();
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView = (RecyclerView) findViewById(R.id.emp_list);
+        recyclerView = findViewById(R.id.emp_list);
 
         db = new DatabaseHelper(context);
 
-        lin1 = (LinearLayout) findViewById(R.id.lin1);
-        lin2 = (LinearLayout) findViewById(R.id.lin2);
+        lin1 = findViewById(R.id.lin1);
+        lin2 = findViewById(R.id.lin2);
 
         registrationBeans = new ArrayList<RegistrationBean>();
 
@@ -179,7 +179,7 @@ public class OfflineDataReg extends AppCompatActivity {
                 onBackPressed();
                 return true;
             case R.id.action_menu_unsync:
-                if (CustomUtility.isInternetOn()) {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
 
                     syncOfflineData();
 
@@ -198,7 +198,7 @@ public class OfflineDataReg extends AppCompatActivity {
             @Override
             public void run() {
 
-                if (CustomUtility.isInternetOn()) {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
 
                     ((Activity) context).runOnUiThread(new Runnable() {
                         public void run() {
@@ -326,10 +326,10 @@ public class OfflineDataReg extends AppCompatActivity {
                     param1_invc.add(new BasicNameValuePair("registration", String.valueOf(ja_invc_data)));
 
                     Log.e("DATA", "$$$$" + param1_invc.size());
-                    Log.e("DATA", "$$$$" + param1_invc.toString());
+                    Log.e("DATA", "$$$$" + param1_invc);
 
 
-                    System.out.println(param1_invc.toString());
+                    System.out.println(param1_invc);
 
                     try {
                         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();

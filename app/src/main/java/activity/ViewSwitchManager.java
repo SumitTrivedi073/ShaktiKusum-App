@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Created by jspark on 2016-03-23.
  */
 public class ViewSwitchManager {
-    private ArrayList<ViewSwitchGroup> viewList = new ArrayList<>();
+    private final ArrayList<ViewSwitchGroup> viewList = new ArrayList<>();
     private int selectedIndex = -1;
 
     public ViewSwitchManager() {

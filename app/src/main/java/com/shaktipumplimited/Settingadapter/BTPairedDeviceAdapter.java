@@ -23,7 +23,7 @@ import webservice.WebURL;
 
 public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAdapter.ViewHolder> {
 
-    private Context mContext;
+    private final Context mContext;
 
     private List mDeviceNameList;
     private List mDeviceMACAddressList;
@@ -115,10 +115,10 @@ public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAd
             super(v);
 
 
-            txtDeviceNoID = (TextView) v.findViewById(R.id.txtDeviceNoID);
-            txtBTNameID = (TextView) v.findViewById(R.id.txtBTNameID);
-            txtBTMACAddressID = (TextView) v.findViewById(R.id.txtBTMACAddressID);
-            cardMainViewMyNotifyID = (CardView) v.findViewById(R.id.cardMainViewMyNotifyID);
+            txtDeviceNoID = v.findViewById(R.id.txtDeviceNoID);
+            txtBTNameID = v.findViewById(R.id.txtBTNameID);
+            txtBTMACAddressID = v.findViewById(R.id.txtBTMACAddressID);
+            cardMainViewMyNotifyID = v.findViewById(R.id.cardMainViewMyNotifyID);
 
         }
     }

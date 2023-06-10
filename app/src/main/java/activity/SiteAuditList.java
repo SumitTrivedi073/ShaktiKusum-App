@@ -17,11 +17,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 
 import com.shaktipumplimited.shaktikusum.R;
 
@@ -43,7 +41,7 @@ import webservice.CustomHttpClient;
 import webservice.WebURL;
 
 
-public class SiteAuditList extends AppCompatActivity {
+public class SiteAuditList extends BaseActivity {
     public String bill_no = "";
     public String gst_bill_no = "";
     public String bill_date = "";
@@ -115,19 +113,19 @@ public class SiteAuditList extends AppCompatActivity {
         version = WebURL.APP_VERSION_CODE;
         device_name = CustomUtility.getDeviceName();
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView = (RecyclerView) findViewById(R.id.emp_list);
+        recyclerView = findViewById(R.id.emp_list);
 
         // Locate the EditText in listview_main.xml
-        editsearch = (EditText) findViewById(R.id.search);
+        editsearch = findViewById(R.id.search);
 
 
-        lin1 = (LinearLayout) findViewById(R.id.lin1);
-        lin2 = (LinearLayout) findViewById(R.id.lin2);
+        lin1 = findViewById(R.id.lin1);
+        lin2 = findViewById(R.id.lin2);
 
         // Capture Text in EditText
         editsearch.addTextChangedListener(new TextWatcher() {
@@ -205,7 +203,7 @@ public class SiteAuditList extends AppCompatActivity {
 
     public void searchWord(String textState,String textDistrict,String textvendorno) {
 
-        if (CustomUtility.isInternetOn()) {
+        if (CustomUtility.isInternetOn(getApplicationContext())) {
             if (!textState.equals("")) {
                 if (!textDistrict.equals("")) {
                     if (!textvendorno.equals("")) {
@@ -325,7 +323,7 @@ public class SiteAuditList extends AppCompatActivity {
                             beneficiary);
 
 
-                    if (db.isRecordExist(db.TABLE_AUDITSITE_LIST, db.KEY_ENQ_DOC, bill_no)) {
+                    if (db.isRecordExist(DatabaseHelper.TABLE_AUDITSITE_LIST, DatabaseHelper.KEY_ENQ_DOC, bill_no)) {
                         db.updateAuditSiteListData(bill_no, installationBean);
                     } else {
                         db.insertAuditSiteListData(bill_no, installationBean);

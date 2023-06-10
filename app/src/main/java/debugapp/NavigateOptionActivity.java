@@ -10,24 +10,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-
+import com.shaktipumplimited.SetParameter.PairedDeviceActivity;
+import com.shaktipumplimited.retrofit.BaseRequest;
+import com.shaktipumplimited.retrofit.RequestReciever;
+import com.shaktipumplimited.shaktikusum.R;
 
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import activity.BaseActivity;
 import debugapp.GlobalValue.AllPopupUtil;
 import debugapp.GlobalValue.Constant;
 import debugapp.GlobalValue.NewSolarVFD;
-import com.shaktipumplimited.SetParameter.PairedDeviceActivity;
-import com.shaktipumplimited.retrofit.BaseRequest;
-import com.shaktipumplimited.retrofit.RequestReciever;
-import com.shaktipumplimited.shaktikusum.R;
 
-public class NavigateOptionActivity extends AppCompatActivity {
+public class NavigateOptionActivity extends BaseActivity {
 
     // Splash screen timer
     Context context;
@@ -51,9 +49,9 @@ public class NavigateOptionActivity extends AppCompatActivity {
         mContext = this;
 
         baseRequest = new BaseRequest(this);
-        txtTransportID = (TextView) findViewById(R.id.txtTransportID);
-        txtPODID = (TextView) findViewById(R.id.txtPODID);
-        txtSimNumberID = (TextView) findViewById(R.id.txtSimNumberID);
+        txtTransportID = findViewById(R.id.txtTransportID);
+        txtPODID = findViewById(R.id.txtPODID);
+        txtSimNumberID = findViewById(R.id.txtSimNumberID);
         edtPutCommandID = findViewById(R.id.edtPutCommandID);
 
         txtPODID.setOnClickListener(new View.OnClickListener() {

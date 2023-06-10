@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -38,7 +37,7 @@ import debugapp.VerificationCodeModel;
 import utility.CustomUtility;
 import webservice.WebURL;
 
-public class PendingFeedBackOTPVerification extends AppCompatActivity {
+public class PendingFeedBackOTPVerification extends BaseActivity {
 
     Toolbar mToolbar;
     LinearLayout resendLinear;
@@ -123,7 +122,7 @@ public class PendingFeedBackOTPVerification extends AppCompatActivity {
         CustomUtility.showProgressDialogue(PendingFeedBackOTPVerification.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.SendOTPToServer + mainObject.toString(), null, new Response.Listener<JSONObject>() {
+                WebURL.SendOTPToServer + mainObject, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
                 CustomUtility.hideProgressDialog(PendingFeedBackOTPVerification.this);

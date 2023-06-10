@@ -19,7 +19,7 @@ import java.util.List;
 import bean.ImageModel;
 
 public class ImageSelectionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<ImageModel> imageModelList;
+    private final List<ImageModel> imageModelList;
     Context mcontext;
     private ImageSelectionListener docSelectionListener;
 

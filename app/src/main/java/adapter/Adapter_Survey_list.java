@@ -14,21 +14,21 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.shaktipumplimited.shaktikusum.R;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import activity.SurveyActivity;
 import bean.SurveyListBean;
 import database.DatabaseHelper;
-
-import com.shaktipumplimited.shaktikusum.R;
-import activity.SurveyActivity;
 
 
 public class Adapter_Survey_list extends RecyclerView.Adapter<Adapter_Survey_list.HomeCategoryViewHolder> {
     DatabaseHelper db;
-    private Context context;
-    private ArrayList<SurveyListBean> responseList;
+    private final Context context;
+    private final ArrayList<SurveyListBean> responseList;
     private List<SurveyListBean> SearchesList = null;
 
 

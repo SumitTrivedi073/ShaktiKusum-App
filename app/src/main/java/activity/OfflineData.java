@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.shaktipumplimited.shaktikusum.R;
@@ -19,7 +18,7 @@ import utility.CustomUtility;
 import webservice.WebURL;
 
 
-public class OfflineData extends AppCompatActivity {
+public class OfflineData extends BaseActivity {
     Context context;
 
     DatabaseHelper db;
@@ -40,13 +39,13 @@ public class OfflineData extends AppCompatActivity {
         version = WebURL.APP_VERSION_CODE;
         device_name = CustomUtility.getDeviceName();
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        regis_data = (TextView) findViewById(R.id.regis_data);
-        inst_data = (TextView) findViewById(R.id.inst_data);
+        regis_data = findViewById(R.id.regis_data);
+        inst_data = findViewById(R.id.inst_data);
 
 
         regis_data.setOnClickListener(new View.OnClickListener() {

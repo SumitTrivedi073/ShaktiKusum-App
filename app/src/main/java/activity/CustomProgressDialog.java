@@ -17,7 +17,7 @@ import com.shaktipumplimited.shaktikusum.R;
  */
 public class CustomProgressDialog extends ProgressDialog {
     private TextView progressMessage;
-    private  String mMessage;
+    private final String mMessage;
 
 
     public CustomProgressDialog(Context context) {

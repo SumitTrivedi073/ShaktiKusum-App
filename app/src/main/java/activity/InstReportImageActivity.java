@@ -50,7 +50,7 @@ import utility.CustomUtility;
 
 
 @BuildCompat.PrereleaseSdkCheck
-public class InstReportImageActivity extends AppCompatActivity implements ImageSelectionAdapter.ImageSelectionListener {
+public class InstReportImageActivity extends BaseActivity implements ImageSelectionAdapter.ImageSelectionListener {
 
 
     private static final int REQUEST_CODE_PERMISSION = 101;
@@ -168,7 +168,7 @@ public class InstReportImageActivity extends AppCompatActivity implements ImageS
         recyclerview = findViewById(R.id.recyclerview);
 
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

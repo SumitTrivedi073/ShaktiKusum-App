@@ -28,8 +28,8 @@ public class Adapter_reject_list extends RecyclerView.Adapter<Adapter_reject_lis
     View.OnClickListener onclick_listener;
     DatabaseHelper db;
     RejectListBean rejectListBean;
-    private Context context;
-    private ArrayList<RejectListBean> responseList;
+    private final Context context;
+    private final ArrayList<RejectListBean> responseList;
     private List<RejectListBean> SearchesList = null;
 
 

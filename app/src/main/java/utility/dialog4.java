@@ -12,10 +12,10 @@ import webservice.WebURL;
 
 public class dialog4 extends Dialog {
 
-    private DeviceStatusActivity activity;
+    private final DeviceStatusActivity activity;
     private Button search, cancel;
     private EditText text;
-    private dialog4 thisDialog;
+    private final dialog4 thisDialog;
 
     public dialog4(DeviceStatusActivity context) {
         super(context);
@@ -39,10 +39,10 @@ public class dialog4 extends Dialog {
 
     private void initalize() {
         // TODO Auto-generated method stub
-        text = (EditText) findViewById(R.id.text);
+        text = findViewById(R.id.text);
         text.setText(WebURL.mDEvice_Number_CHECK);
-        search = (Button) findViewById(R.id.search);
-        cancel = (Button) findViewById(R.id.cancel);
+        search = findViewById(R.id.search);
+        cancel = findViewById(R.id.cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
 
             @Override

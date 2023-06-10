@@ -4,13 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.Request;
@@ -30,34 +28,15 @@ import utility.dialog4;
 import webservice.WebURL;
 
 
-public class DeviceStatusActivity extends AppCompatActivity  {
+public class DeviceStatusActivity extends BaseActivity  {
 
     Context mContext;
     dialog4 yourDialog;
 
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            String mString = (String) msg.obj;
-            Toast.makeText(DeviceStatusActivity.this, mString, Toast.LENGTH_LONG).show();
-
-        }
-    };
-
-    Handler mHandler1 = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            String mString = (String) msg.obj;
-            Toast.makeText(DeviceStatusActivity.this, mString, Toast.LENGTH_LONG).show();
-
-        }
-    };
     private ProgressDialog progressDialog;
     private DeviceStatusActivity activity;
     TextView deviceno,cust_nam,custphno,operatornam,deviceonline,motorstatus;
-    String deviceno_txt,cust_nam_txt,custphno_txt,operatornam_txt,msg_txt;
-    String controller = "";
-    boolean isDeviceOnline,isMotorStatus;
+
 
 
     @Override
@@ -77,16 +56,16 @@ public class DeviceStatusActivity extends AppCompatActivity  {
     }
 
     private void Init() {
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        deviceno = (TextView) findViewById(R.id.device_no);
-        cust_nam = (TextView) findViewById(R.id.cust_nam);
-        custphno = (TextView) findViewById(R.id.cust_mb);
-        operatornam = (TextView) findViewById(R.id.operator);
-        deviceonline = (TextView) findViewById(R.id.dev_status);
-        motorstatus = (TextView) findViewById(R.id.motr_stats);
+        deviceno = findViewById(R.id.device_no);
+        cust_nam = findViewById(R.id.cust_nam);
+        custphno = findViewById(R.id.cust_mb);
+        operatornam = findViewById(R.id.operator);
+        deviceonline = findViewById(R.id.dev_status);
+        motorstatus = findViewById(R.id.motr_stats);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -110,8 +89,13 @@ public class DeviceStatusActivity extends AppCompatActivity  {
 
     public void searchWord(String textString) {
 
-        if (!textString.equals("")) {
-           getDeviceDetail(textString);
+        if (!textString.isEmpty()) {
+            if(CustomUtility.isInternetOn(getApplicationContext())){
+                getDeviceDetail(textString);
+            }else {
+                CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection),getApplicationContext());
+            }
+
         } else {
             Toast.makeText(mContext, "Please Enter Controller Id.", Toast.LENGTH_SHORT).show();
         }
@@ -128,10 +112,8 @@ public class DeviceStatusActivity extends AppCompatActivity  {
             public void onResponse(JSONObject  response) {
                 CustomUtility.hideProgressDialog(DeviceStatusActivity.this);
 
-
-
                 if(!response.toString().isEmpty()) {
-
+                    Log.e("response======>",response.toString());
                     DeviceDetailModel deviceDetailModel = new Gson().fromJson(response.toString(),DeviceDetailModel.class);
                             if(deviceDetailModel!=null && deviceDetailModel.getResponse()!=null && String.valueOf(deviceDetailModel.getStatus()).equals("true")) {
 
@@ -145,7 +127,7 @@ public class DeviceStatusActivity extends AppCompatActivity  {
                                     custphno.setText(deviceDetailModel.getResponse().getCustomerPhoneNo());
                                 }
                                 if(deviceDetailModel.getResponse().getOperatorName()!=null && !deviceDetailModel.getResponse().getOperatorName().isEmpty()) {
-                                    operatornam.setText(deviceDetailModel.getResponse().getOperatorName().toString());
+                                    operatornam.setText(deviceDetailModel.getResponse().getOperatorName());
                                 }
 
                                 if(deviceDetailModel.getResponse().getIsLogin()) {

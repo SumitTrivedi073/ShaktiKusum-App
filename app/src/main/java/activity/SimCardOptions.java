@@ -3,20 +3,17 @@ package activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.shaktipumplimited.shaktikusum.R;
 
 import database.DatabaseHelper;
 
-public class SimCardOptions extends AppCompatActivity {
+public class SimCardOptions extends BaseActivity {
     Context context;
     private Toolbar mToolbar;
 
@@ -36,14 +33,14 @@ public class SimCardOptions extends AppCompatActivity {
         db = new DatabaseHelper(context);
 
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Sim Card Replacement");
 
-        sim_card_rep = (TextView) findViewById(R.id.sim_card_rep);
-        offline_data = (TextView) findViewById(R.id.offline_data);
+        sim_card_rep = findViewById(R.id.sim_card_rep);
+        offline_data = findViewById(R.id.offline_data);
 
         sim_card_rep.setOnClickListener(new View.OnClickListener() {
             @Override

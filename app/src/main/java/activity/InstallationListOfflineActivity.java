@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +33,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 import adapter.InstallationOfflineAdapter;
 import bean.BTResonseData;
 import bean.InstallationOfflineBean;
@@ -44,37 +44,37 @@ import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-public class InstallationListOfflineActivity extends AppCompatActivity {
-    private String bill_no = "";
-    private String gst_bill_no = "";
-    private String bill_date = "";
-    private String disp_date = "";
-    private String kunnr = "";
-    private String name = "";
-    private String fathname = "";
-    private String state = "";
-    private String state_txt = "";
-    private String district = "";
-    private String district_txt = "";
-    private String address = "";
-    private String contactno = "";
-    private String controller = "";
-    private String motor = "";
-    private String simno = "";
-    private String pump = "";
-    private String regisno = "";
-    private String projectno = "";
-    private String loginno = "";
-    private String module_qty = "";
-    private String sync = "";
-    private String CONTACT_NO = "";
-    private String simha2 = "";
-    private String set_matno = "";
-    private String villagetehsil = "";
-    private String village = "";
-    private String tehsil = "";
-    private String rec_no = "";
-    private String beneficiary = "";
+public class InstallationListOfflineActivity extends BaseActivity {
+    private final String bill_no = "";
+    private final String gst_bill_no = "";
+    private final String bill_date = "";
+    private final String disp_date = "";
+    private final String kunnr = "";
+    private final String name = "";
+    private final String fathname = "";
+    private final String state = "";
+    private final String state_txt = "";
+    private final String district = "";
+    private final String district_txt = "";
+    private final String address = "";
+    private final String contactno = "";
+    private final String controller = "";
+    private final String motor = "";
+    private final String simno = "";
+    private final String pump = "";
+    private final String regisno = "";
+    private final String projectno = "";
+    private final String loginno = "";
+    private final String module_qty = "";
+    private final String sync = "";
+    private final String CONTACT_NO = "";
+    private final String simha2 = "";
+    private final String set_matno = "";
+    private final String villagetehsil = "";
+    private final String village = "";
+    private final String tehsil = "";
+    private final String rec_no = "";
+    private final String beneficiary = "";
     private Context mContext;
     private DatabaseHelper db;
 //    private String MUserId = "";
@@ -85,7 +85,7 @@ public class InstallationListOfflineActivity extends AppCompatActivity {
     private LinearLayout lin1, lin2;
     private RecyclerView recyclerView;
     private InstallationOfflineAdapter adapterInstallationList;
-    private List<String> enq_docno = new ArrayList<>();
+    private final List<String> enq_docno = new ArrayList<>();
     private EditText editsearch;
     private ArrayList<InstallationOfflineBean> installationOfflineBeanList;
     private InstallationOfflineBean installationOfflineBean;
@@ -106,15 +106,15 @@ public class InstallationListOfflineActivity extends AppCompatActivity {
         mBTResonseDataList = new ArrayList<>();
         progressDialog = new ProgressDialog(mContext);
         user_id = CustomUtility.getSharedPreferences(mContext, "userid");
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        recyclerView = (RecyclerView) findViewById(R.id.emp_list);
+        recyclerView = findViewById(R.id.emp_list);
 
-        editsearch = (EditText) findViewById(R.id.search);
-        lin1 = (LinearLayout) findViewById(R.id.lin1);
-        lin2 = (LinearLayout) findViewById(R.id.lin2);
+        editsearch = findViewById(R.id.search);
+        lin1 = findViewById(R.id.lin1);
+        lin2 = findViewById(R.id.lin2);
 
         editsearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -140,7 +140,7 @@ public class InstallationListOfflineActivity extends AppCompatActivity {
         });
         submitOfflineSubmittedData();
 
-//        if (CustomUtility.isInternetOn()) {
+//        if (CustomUtility.isInternetOn(getApplicationContext())) {
 //            if (db.getcount(db.TABLE_INSTALLATION_OFFLINE_LIST)) {
 //                installationOfflineBeanList = new ArrayList<InstallationOfflineBean>();
 //                installationOfflineBeanList = db.getInstallationOfflineListData(user_id);
@@ -222,7 +222,7 @@ public class InstallationListOfflineActivity extends AppCompatActivity {
         new Thread() {
             public void run() {
                 try {
-                    if (CustomUtility.isInternetOn()) {
+                    if (CustomUtility.isInternetOn(getApplicationContext())) {
                         for (int i = 0; i < submitOfflineDataInputLst.size(); i++) {
                             JSONArray ja_invc_data = new JSONArray();
                             JSONObject jsonObj = new JSONObject();
@@ -326,7 +326,7 @@ public class InstallationListOfflineActivity extends AppCompatActivity {
                     Gson gson = new Gson();
                     installationOfflineBean = gson.fromJson(String.valueOf(jo), InstallationOfflineBean.class);
                     installationOfflineBean.setUserID(CustomUtility.getSharedPreferences(mContext, "userid"));
-                    if (db.isRecordExist(db.TABLE_INSTALLATION_LIST, db.KEY_ENQ_DOC, bill_no)) {
+                    if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_LIST, DatabaseHelper.KEY_ENQ_DOC, bill_no)) {
                         db.updateInstallationOfflineListData(bill_no, installationOfflineBean);
                     } else {
                         db.insertInstallationOfflineListData(installationOfflineBean);

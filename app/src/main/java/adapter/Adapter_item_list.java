@@ -4,18 +4,20 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.shaktipumplimited.shaktikusum.R;
+
 import java.util.ArrayList;
-import bean.ItemNameBean;
-import database.DatabaseHelper;
+
 import activity.CustomerRegistrationActivity;
 import activity.DDSubmissionActivity;
 import activity.DeptDocSubActivity;
@@ -23,8 +25,9 @@ import activity.GovtOffVisitActivity;
 import activity.InstallationList;
 import activity.InstallationListOfflineActivity;
 import activity.OffSubDocActivity;
-import com.shaktipumplimited.shaktikusum.R;
 import activity.SurveyList;
+import bean.ItemNameBean;
+import database.DatabaseHelper;
 import utility.CustomUtility;
 
 public class Adapter_item_list extends RecyclerView.Adapter<Adapter_item_list.HomeCategoryViewHolder> {
@@ -32,9 +35,9 @@ public class Adapter_item_list extends RecyclerView.Adapter<Adapter_item_list.Ho
     DatabaseHelper db;
     String item_id = "";
 
-    private Context context;
+    private final Context context;
 
-    private ArrayList<ItemNameBean> responseList;
+    private final ArrayList<ItemNameBean> responseList;
 
     public Adapter_item_list(Context context, ArrayList<ItemNameBean> responseList, View.OnClickListener onclick_listener) {
         this.context = context;

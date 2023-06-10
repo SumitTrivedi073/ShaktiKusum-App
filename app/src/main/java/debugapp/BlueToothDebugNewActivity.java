@@ -37,7 +37,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.android.volley.Request;
@@ -63,6 +62,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -82,6 +82,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import activity.BaseActivity;
 import activity.GPSTracker;
 import bean.BTResonseData;
 import bean.DeviceDetailModel;
@@ -102,13 +103,19 @@ import retrofit2.Callback;
 import utility.CustomUtility;
 import webservice.WebURL;
 
-public class BlueToothDebugNewActivity extends AppCompatActivity {
+public class BlueToothDebugNewActivity extends BaseActivity {
+    private static final CellStyle cs = null;
     private static boolean success = false;
     private static Workbook wb = null;
-    private static CellStyle cs = null;
     private static Sheet sheet1 = null;
     private static Row row;
     private static Cell c = null;
+    private final String MDeviceId = "null";
+    private final String MLoginType = "null";
+    private final String allCammand = "AT+CPIN?";
+    //private String []  AllCommandArray ={"AT+CPIN?\r\n","AT+GSN\r\n","AT+CIMI\r\n","AT+QINISTAT\r\n","AT+CSQ\r\n","AT+CREG?\r\n","AT+CGREG?\r\n","AT+CGDCONT?\r\n","AT+QICSGP?\r\n"};
+    private final String[] AllCommandArray = {"AT+GSN\r\n", "AT+CIMI\r\n", "AT+QINISTAT\r\n", "AT+CSQ\r\n", "AT+CREG?\r\n", "AT+CGREG?\r\n", "AT+CGDCONT?\r\n", "AT+QICSGP?\r\n"};
+    private final boolean mBoolflagCheck = false;
     int latLenght;
     int longLenght;
     BluetoothSocket btSocket;
@@ -125,18 +132,13 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
     /////////////////day
     /////////////this is for months
     int[] mTotalTime;
-
     int pp = 1;
-
     String RMS_ORG_D_F = "";
-
     String mCheckExtraction = "No";
     String AllTextSTR = "";
     int mIntCheckDeviceType = 0;
     int mIntCheckDeviceTypeFirst = 0;
-
     int jk = 0;
-
     RelativeLayout rlvBackViewID;
     int kkkkkk;
     String kkkkkk1;
@@ -209,24 +211,16 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
     };
     private String mModelType, mBtNameHead, mDeviceType, mBtMacAddressHead;
     private String MUserId = "null";
-    private final String MDeviceId = "null";
-    private final String MLoginType = "null";
     // private ImageView imgSendTextID;
     private RelativeLayout rlvSendButtonID;
     private ImageView imgBTShareFILEID;
     private ImageView imgBTSyncFILEID;
     private ImageView imgBTUploadFILEID;
-    private final String allCammand = "AT+CPIN?";
-    //private String []  AllCommandArray ={"AT+CPIN?\r\n","AT+GSN\r\n","AT+CIMI\r\n","AT+QINISTAT\r\n","AT+CSQ\r\n","AT+CREG?\r\n","AT+CGREG?\r\n","AT+CGDCONT?\r\n","AT+QICSGP?\r\n"};
-    private final String[] AllCommandArray = {"AT+GSN\r\n", "AT+CIMI\r\n", "AT+QINISTAT\r\n", "AT+CSQ\r\n", "AT+CREG?\r\n", "AT+CGREG?\r\n", "AT+CGDCONT?\r\n", "AT+QICSGP?\r\n"};
     private boolean flag;
     private int mLengthCount;
-
-    private  String headerLenghtMonth = "";
-
+    private String headerLenghtMonth = "";
     private List<String> mMonthHeaderList;
     private boolean mBoolflag = false;
-    private final boolean mBoolflagCheck = false;
     private RelativeLayout rlvLoadingViewID;
     private TextView txtHeadingLabelID;
     private String MEmpType = "null";
@@ -250,11 +244,8 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         mCheckNetworkValue = 0;
         mCheckServerConnectivityValue = 0;
         mCheckCableOKValue = 0;
-
         INVOICE_NO_B = Constant.BILL_NUMBER_UNIC;
-
         Constant.Bluetooth_Activity_Navigation1 = 1;
-
         versionName = BuildConfig.VERSION_NAME;
         pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         editor = pref.edit();
@@ -284,25 +275,24 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         txtLatID = findViewById(R.id.txtLatID);
 
 
-        rlvLoadingViewID = (RelativeLayout) findViewById(R.id.rlvLoadingViewID);
-        txtHeadingLabelID = (TextView) findViewById(R.id.txtHeadingLabelID);
-        scrlViewID = (ScrollView) findViewById(R.id.scrlViewID);
-        rlvSendButtonID = (RelativeLayout) findViewById(R.id.rlvSendButtonID);
-        imgBTShareFILEID = (ImageView) findViewById(R.id.imgBTShareFILEID);
-        imgBTSyncFILEID = (ImageView) findViewById(R.id.imgBTSyncFILEID);
-        imgBTUploadFILEID = (ImageView) findViewById(R.id.imgBTUploadFILEID);
+        rlvLoadingViewID = findViewById(R.id.rlvLoadingViewID);
+        txtHeadingLabelID = findViewById(R.id.txtHeadingLabelID);
+        scrlViewID = findViewById(R.id.scrlViewID);
+        rlvSendButtonID = findViewById(R.id.rlvSendButtonID);
+        imgBTShareFILEID = findViewById(R.id.imgBTShareFILEID);
+        imgBTSyncFILEID = findViewById(R.id.imgBTSyncFILEID);
+        imgBTUploadFILEID = findViewById(R.id.imgBTUploadFILEID);
 
-        rlvBackViewID = (RelativeLayout) findViewById(R.id.rlvBackViewID);
-        rlvBT_S1_ID = (RelativeLayout) findViewById(R.id.rlvBT_S1_ID);
-        rlvBT_S2_ID = (RelativeLayout) findViewById(R.id.rlvBT_S2_ID);
-        rlvBT_7_ID = (RelativeLayout) findViewById(R.id.rlvBT_7_ID);
-        rlvBT_7_ID_save = (RelativeLayout) findViewById(R.id.rlvBT_7_ID_save);
-        rlvBT_8_ID_SimUpdated = (RelativeLayout) findViewById(R.id.rlvBT_8_ID_SimUpdated);
-        rlvBT_8_ID = (RelativeLayout) findViewById(R.id.rlvBT_8_ID);
-        rlvBT_9_ID = (RelativeLayout) findViewById(R.id.rlvBT_9_ID);
-
-        lvlMainTextContainerID = (LinearLayout) findViewById(R.id.lvlMainTextContainerID);
-        edtPutCommandID = (EditText) findViewById(R.id.edtPutCommandID);
+        rlvBackViewID = findViewById(R.id.rlvBackViewID);
+        rlvBT_S1_ID = findViewById(R.id.rlvBT_S1_ID);
+        rlvBT_S2_ID = findViewById(R.id.rlvBT_S2_ID);
+        rlvBT_7_ID = findViewById(R.id.rlvBT_7_ID);
+        rlvBT_7_ID_save = findViewById(R.id.rlvBT_7_ID_save);
+        rlvBT_8_ID_SimUpdated = findViewById(R.id.rlvBT_8_ID_SimUpdated);
+        rlvBT_8_ID = findViewById(R.id.rlvBT_8_ID);
+        rlvBT_9_ID = findViewById(R.id.rlvBT_9_ID);
+        lvlMainTextContainerID = findViewById(R.id.lvlMainTextContainerID);
+        edtPutCommandID = findViewById(R.id.edtPutCommandID);
         mIntCheckDeviceType = 0;
 
 
@@ -314,7 +304,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         changeButtonVisibilityRLV(true, 0.5f, rlvBT_S2_ID);
         changeButtonVisibilityRLV(false, 0.5f, rlvBT_7_ID_save);
         setClickEventListner();
-       getGpsLocation();
+        getGpsLocation();
 
     }
 
@@ -337,10 +327,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
                 mIntCheckDeviceType = 1;
                 mIntCheckDeviceTypeFirst = 2;
-                //finish();
-               /* changeButtonVisibilityRLV(true, 0.5f, rlvBT_S2_ID);
-                changeButtonVisibilityRLV(true, 1.0f, rlvBT_S1_ID);*/
-
                 changeButtonVisibilityRLV(true, 0.5f, rlvBT_S1_ID);
                 changeButtonVisibilityRLV(false, 1.0f, rlvBT_S2_ID);
 
@@ -424,32 +410,17 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                     mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
 
                     if (UtilMethod.isOnline(mContext)) {
-
                         if (mSimDetailsInfoResponse.size() > 0)
                             mSimDetailsInfoResponse.clear();
-
                         mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
-
-                        WebURL.CHECK_FINAL_ALL_OK = 1;
-                        WebURL.BT_DEBUG_CHECK = 1;
-                        Constant.DBUG_PER_OFLINE = "";//PER_OFLINE
-
-                        new SyncInstallationData1().execute();
-
+                        SubmitData();
                     } else {
-                        long iiii = mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO, SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC, SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID, MUserId, RMS_STATUS, RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB, RMS_DEBUG_EXTRN, RMS_SERVER_DOWN, RMS_ORG_D_F, true);
-
-                        System.out.println("iiii=inserted=>>" + iiii);
-                        Toast.makeText(mContext, "Data save in loacl Data base", Toast.LENGTH_SHORT).show();
-
-                        //  finish();
-
+                        saveDataLocaly();
                     }
 
 
                     WebURL.BT_DEVICE_NAME = "";
                     WebURL.BT_DEVICE_MAC_ADDRESS = "";
-
                     Constant.BT_DEVICE_NAME = "";
                     Constant.BT_DEVICE_MAC_ADDRESS = "";
                     finish();
@@ -465,7 +436,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         rlvBT_7_ID_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
                 mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
 
@@ -482,7 +452,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 lvlMainTextContainerID.addView(getTextViewTT(pp, ":DEBUG M66#"));
-
                 AllCommomSTRContainer = AllCommomSTRContainer + "\n :DEBUG M66#";
 
                 if (mIntCheckDeviceType == 0) {
@@ -500,12 +469,8 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mCheckButtonclick = 1;
-
-
                 if (UtilMethod.isOnline(mContext)) {
-                    // checkRMSAPIStatus();
-
-                     SyncRMSCHECKDATAAPI();
+                    SyncRMSCHECKDATAAPI();
                 } else {
                     Toast.makeText(mContext, "Please check internet connections.", Toast.LENGTH_SHORT).show();
                 }
@@ -520,7 +485,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                 mMyUDID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");//////////////this is fixed for blue tooth deviceee data
                 mBoolflag = false;
                 mPostionFinal = 0;
-
 
                 RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
                 checkFirstTimeOlineStstus = 1;
@@ -538,8 +502,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                         }, 2 * 100);
                     }
                 });
-
-
             }
         });
 
@@ -548,9 +510,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
             public void onClick(View v) {
                 pp++;
                 if (!edtPutCommandID.getText().toString().isEmpty()) {
-                    //  getTextViewTT(pp, edtPutCommandID.getText().toString());
                     lvlMainTextContainerID.addView(getTextViewTT(pp, edtPutCommandID.getText().toString()));
-                    //AllTextSTR = AllTextSTR +"\n"+edtPutCommandID.getText().toString();
 
                     AllCommomSTRContainer = AllCommomSTRContainer + "\n" + edtPutCommandID.getText().toString();
                     new BluetoothCommunicationForDebugStartType().execute(edtPutCommandID.getText().toString() + "\r\n", edtPutCommandID.getText().toString(), "Start");
@@ -578,6 +538,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
     }
 
+
     private void sendDataToServer() {
 
 
@@ -587,9 +548,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                 if (mSimDetailsInfoResponse.size() > 0)
                     mSimDetailsInfoResponse.clear();
 
-
                 mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
-
 
                 if (SER_CONNECT.equalsIgnoreCase("Connected")) {
                     if (RMS_STATUS.equalsIgnoreCase("YES")) {
@@ -598,7 +557,8 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                             WebURL.BT_DEBUG_CHECK = 1;
                             Constant.DBUG_PER_OFLINE = "";//PER_OFLINE
 
-                            new SyncInstallationData1().execute();
+                            // new SyncInstallationData1().execute();
+                            SubmitData();
                         } else {
                             WebURL.BT_DEBUG_CHECK = 0;
                             Toast.makeText(mContext, "Debug data not properly please try again.", Toast.LENGTH_SHORT).show();
@@ -608,9 +568,10 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                             WebURL.BT_DEBUG_CHECK = 1;
                             Constant.DBUG_PER_OFLINE = "X";//PER_OFLINE
                             if (checkFirstTimeOlineStstus != 0) {
-                                new SyncInstallationData1().execute();
+                                // new SyncInstallationData1().execute();
+                                SubmitData();
                             } else {
-                                Toast.makeText(mContext, "Please debug first and try again.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, "Please data extract first than submit.", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             WebURL.BT_DEBUG_CHECK = 0;
@@ -623,9 +584,10 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                         Constant.DBUG_PER_OFLINE = "X";//PER_OFLINE
 
                         if (checkFirstTimeOlineStstus != 0) {
-                            new SyncInstallationData1().execute();
+                            //  new SyncInstallationData1().execute();
+                            SubmitData();
                         } else {
-                            Toast.makeText(mContext, "Please debug first and try again.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "Please data extract first than submit.", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         WebURL.BT_DEBUG_CHECK = 0;
@@ -638,14 +600,20 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
 
         } else {
-            long iiii = mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO, SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC, SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID, MUserId, RMS_STATUS, RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB, RMS_DEBUG_EXTRN, RMS_SERVER_DOWN, RMS_ORG_D_F, true);
-
-            System.out.println("iiii=inserted=>>" + iiii);
-            Toast.makeText(mContext, "Data save in loacl Data base", Toast.LENGTH_SHORT).show();
-
-            finish();
-
+            if (checkFirstTimeOlineStstus != 0) {
+            saveDataLocaly();
+            } else {
+                Toast.makeText(mContext, "Please data extract first than submit.", Toast.LENGTH_SHORT).show();
+            }
         }
+    }
+
+    private void saveDataLocaly() {
+        mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO, SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC, SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID, MUserId, RMS_STATUS, RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB, RMS_DEBUG_EXTRN, RMS_SERVER_DOWN, RMS_ORG_D_F, true);
+        onBackPressed();
+        Toast.makeText(mContext, "Data save in loacl Data base", Toast.LENGTH_SHORT).show();
+
+
     }
 
     private void SaveImage(String filename) {
@@ -768,19 +736,14 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         params.setMargins(5, 0, 5, 20);
         tv.setLayoutParams(params);
         tv.setId(id);
-        // tv.setText(title.toUpperCase());
-        tv.setText(title);
+         tv.setText(title);
         tv.setTextColor(getResources().getColor(R.color.green));
 
         tv.setTextSize((int) getResources().getDimension(R.dimen._9ssp));
-        // tv.setBackgroundColor(getResources().getColor(R.color.black));
         tv.setGravity(Gravity.START);
 
-        // tv.setWidth(200);
-        // tv.setOnClickListener(this);
         return tv;
     }
-    //float sizeInPixels = getResources().getDimension(R.dimen.my_value);
 
     private TextView getTextViewTTpp(int id, String title) {
         TextView tv = new TextView(this);
@@ -856,12 +819,9 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
         JsonObject jsonObject = new JsonObject();
         try {
-            ////Put input parameter here
             jsonObject.addProperty("DeviceNo", mBtNameHead);
             jsonObject.addProperty("Content", AllCommomSTRContainerIN);
-            //  jsonObject.addProperty("fcmToken", NewSolarVFD.FCM_TOKEN);
-            //  jsonObject.addProperty("imei", NewSolarVFD.IMEI_NUMBER);
-            System.out.println("RMSVIKAS   Content=" + AllCommomSTRContainerIN + ", DeviceNo=" + mBtNameHead);
+              System.out.println("RMSVIKAS   Content=" + AllCommomSTRContainerIN + ", DeviceNo=" + mBtNameHead);
         } catch (Exception e) {
             baseRequest.hideLoader();
             e.printStackTrace();
@@ -926,37 +886,8 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
-        mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
-        mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
-
-        if (UtilMethod.isOnline(mContext)) {
-
-            if (mSimDetailsInfoResponse.size() > 0)
-                mSimDetailsInfoResponse.clear();
-
-            mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
-
-            WebURL.CHECK_FINAL_ALL_OK = 1;
-            WebURL.BT_DEBUG_CHECK = 1;
-            Constant.DBUG_PER_OFLINE = "";//PER_OFLINE
-
-            new SyncInstallationData1().execute();
-        } else {
-            mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO, SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC, SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID, MUserId, RMS_STATUS, RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB, RMS_DEBUG_EXTRN, RMS_SERVER_DOWN, RMS_ORG_D_F, true);
-
-
-            Toast.makeText(mContext, "Data save in loacl Data base", Toast.LENGTH_SHORT).show();
-
-            //  finish();
-
-        }
-
-        if (flag) {
-            finish();
-        } else {
-            super.onBackPressed();
-        }
+        super.onBackPressed();
+        finish();
     }
 
     private void callCheckSimDataPackAPI(int mSignalStrength, int mNetworkConnect, int mServerConnect) {
@@ -984,7 +915,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
 
                             AllCommomSTRContainer = AllCommomSTRContainer + " :\nSim  Status :" + mSimStatus;
-                             lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nSim  Status : " + mSimStatus));
+                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nSim  Status : " + mSimStatus));
 
                             if (mSignalStrength == 1 && mNetworkConnect == 1 && mServerConnect == 1) {
                                 AllCommomSTRContainer = AllCommomSTRContainer + " :\n Data Pack : Activate";
@@ -1025,11 +956,11 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                     Toast.makeText(mContext, "Please check internet connections.", Toast.LENGTH_SHORT).show();
 
                                 }
-                                    }
+                            }
                         });
 
                     } else {
-                         baseRequest.hideLoader();
+                        baseRequest.hideLoader();
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -1041,7 +972,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                 } else {
                                     Toast.makeText(mContext, "Please check internet connections.", Toast.LENGTH_SHORT).show();
                                 }
-                              }
+                            }
                         });
 
 
@@ -1064,7 +995,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                         if (UtilMethod.isOnline(mContext)) {
                             // checkRMSAPIStatus();
 
-                             SyncRMSCHECKDATAAPI();
+                            SyncRMSCHECKDATAAPI();
                         } else {
                             Toast.makeText(mContext, "Please check internet connections.", Toast.LENGTH_SHORT).show();
 
@@ -1088,9 +1019,9 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         wordsByKey.put("device", DEVICE_NO);// DEVICE_NO = sssM[0];
 
 
-        if (DEVICE_NO!=null&& !DEVICE_NO.isEmpty() &&!DEVICE_NO.equals(ControllerSerialNumber+"-0")) {
+        if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")) {
             ShowAlertResponse();
-        }else {
+        } else {
             CustomUtility.ShowToast("Not able to read Device Serial Number", getApplicationContext());
         }
         baseRequest.callAPIGETDebugApp(1, wordsByKey, NewSolarVFD.SIM_STATUS_VK_PAGE);/////
@@ -1109,7 +1040,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside(false);
         alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        if(!isFinishing()) {
+        if (!isFinishing()) {
             alertDialog.show();
         }
         CircleImageView user_img = layout.findViewById(R.id.user_img);
@@ -1145,12 +1076,12 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
     public void GetProfileUpdate_Task(String deviceno, String type, String len, String filePath) {
 
         if (UtilMethod.isOnline(mContext)) {
-              baseRequest.showLoader();
+            baseRequest.showLoader();
             // rlvLoadingViewID.setVisibility(View.GONE);
             ApiInterface apiService = ApiClient.getClientFileUpload().create(ApiInterface.class);
             RequestBody fbody;
             MultipartBody.Part body = null;
-            Log.e("fileActualPath", "& " +filePath);
+            Log.e("fileActualPath", "& " + filePath);
             if (!UtilMethod.isStringNullOrBlank(filePath)) {
                 file = new File(filePath);
                 // fbody = RequestBody.create(MediaType.parse("xls/*"), file);
@@ -1168,20 +1099,14 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                 public void onResponse(@NonNull Call<ProfileUpdateModel> call, @NonNull retrofit2.Response<ProfileUpdateModel> response) {
                     try {
                         ProfileUpdateModel dashResponse = response.body();
-
+                        baseRequest.hideLoader();
                         Log.e("status", "** " + dashResponse);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
 
-                                if (dashResponse.getStatus().equalsIgnoreCase("true")) {
-                                    Toast.makeText(mContext, dashResponse.getMessage(), Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(mContext, dashResponse.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                                baseRequest.hideLoader();
-                            }
-                        });
+                        if (dashResponse.getStatus().equalsIgnoreCase("true")) {
+                            Toast.makeText(mContext, dashResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(mContext, dashResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
 
                     } catch (Exception e) {
                         baseRequest.hideLoader();
@@ -1195,11 +1120,11 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                         rlvLoadingViewID.setVisibility(View.GONE);
                         Toast.makeText(mContext, "File upload faild.", Toast.LENGTH_SHORT).show();
                         baseRequest.hideLoader();
-                        Log.e("Error====>",t.getMessage());
+                        Log.e("Error====>", t.getMessage());
                     } catch (Exception e) {
                         rlvLoadingViewID.setVisibility(View.GONE);
                         e.printStackTrace();
-                        Log.e("Error====>",t.getMessage());
+                        Log.e("Error====>", t.getMessage());
                     }
                 }
             });
@@ -1216,11 +1141,11 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.user_pr_infor);
         dialog.setCancelable(true);
 
-         TextView txtTitleID = (TextView) dialog.findViewById(R.id.txtTitleID);
-        EditText edtMobileInstallerID = (EditText) dialog.findViewById(R.id.edtMobileInstallerID);
-        EditText edtNameInstallerID = (EditText) dialog.findViewById(R.id.edtNameInstallerID);
+        TextView txtTitleID = dialog.findViewById(R.id.txtTitleID);
+        EditText edtMobileInstallerID = dialog.findViewById(R.id.edtMobileInstallerID);
+        EditText edtNameInstallerID = dialog.findViewById(R.id.edtNameInstallerID);
 
-        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        Button dialogButton = dialog.findViewById(R.id.dialogButtonOK);
 
         // if button is clicked, close the custom dialog
         dialogButton.setOnClickListener(new View.OnClickListener() {
@@ -1243,7 +1168,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                     CustomUtility.setSharedPreference(mContext, "InstallerName", mInstallerName);
                     CustomUtility.setSharedPreference(mContext, "InstallerMOB", mInstallerMOB);
 
-                    Toast.makeText(mContext, "User Information insterted successfully!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "User Information inserted successfully!", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 }
 
@@ -1262,132 +1187,153 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class BluetoothCommunicationForDEVICE_INFO extends AsyncTask<String, Void, Boolean>  // UI thread
-    {
-        public int RetryCount = 0;
+    private void SubmitData() {
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObj = new JSONObject();
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mMyUDID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-            baseRequest.showLoader();
+        try {
+            String MOB_NAME = UtilMethod.getSharedPreferences(mContext, "MOBName");
+            String MOB_API_NAME = UtilMethod.getSharedPreferences(mContext, "MOBversionAPI");
+            String MOB_VERSION_NAME = UtilMethod.getSharedPreferences(mContext, "MOBversionRelease");
+
+            jsonObj.put("MOB_NAME", MOB_NAME);
+
+            jsonObj.put("MOB_API_NAME", MOB_API_NAME);
+            jsonObj.put("MOB_VERSION_NAME", MOB_VERSION_NAME);
+
+            jsonObj.put("DEVICE_NO", DEVICE_NO);
+            jsonObj.put("SIGNL_STREN", SIGNL_STREN);
+            jsonObj.put("SIM", SIM);
+            jsonObj.put("NET_REG", NET_REG);
+            jsonObj.put("SER_CONNECT", SER_CONNECT);
+            jsonObj.put("CAB_CONNECT", CAB_CONNECT);
+            jsonObj.put("LATITUDE", LATITUDE);
+            jsonObj.put("LANGITUDE", LANGITUDE);
+            jsonObj.put("MOBILE", MOBILE);
+            jsonObj.put("IMEI", IMEI);
+            jsonObj.put("DONGAL_ID", DONGAL_ID);
+            jsonObj.put("KUNNR", MUserId);
+            jsonObj.put("EmpType", MEmpType);
+            jsonObj.put("RMS_STATUS", RMS_STATUS);
+            jsonObj.put("RMS_CURRENT_ONLINE_STATUS", RMS_CURRENT_ONLINE_STATUS);
+            jsonObj.put("RMS_LAST_ONLINE_DATE", RMS_LAST_ONLINE_DATE);
+            jsonObj.put("RMS_APP_VERSION", mAppName + " - " + WebURL.APP_VERSION_CODE);
+            jsonObj.put("RMS_PROJECT_CODE", project_no);
+
+            jsonObj.put("DEBUG_UNAME ", mInstallerName);
+            jsonObj.put("DEBUG_UMOB", mInstallerMOB);
+
+            jsonObj.put("SIM_SR_NO", SIM_SR_NO);
+
+            jsonObj.put("DEBUG_EXTRN", mInstallerMOB);
+
+            jsonObj.put("INVOICE_NO", INVOICE_NO_B);
+
+            jsonObj.put("DBUG_EXTRN_STATUS", RMS_DEBUG_EXTRN);
+            jsonObj.put("RMS_SERVER_STATUS", RMS_SERVER_DOWN);
+
+            jsonArray.put(jsonObj);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+        Log.e("URL=====>", NewSolarVFD.saveDebugData + "?action=" + jsonArray);
+        final ArrayList<NameValuePair> param1 = new ArrayList<NameValuePair>();
+        param1.add(new BasicNameValuePair("action", String.valueOf(jsonArray)));
+        showProgressDialogue();
+        try {
+            Log.e("SendDataToSap====>", String.valueOf(param1));
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
+            StrictMode.setThreadPolicy(policy);
 
-        @SuppressLint("MissingPermission")
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-        @Override
-        protected Boolean doInBackground(String... requests) //while the progress dialog is shown, the connection is done in background
-        {
-            try {
-                if (btSocket != null) {
-                    if (btSocket.isConnected()) {
-                    } else {
-                        myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
-                        //   BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(mBtMacAddressHead);//connects to the device's address and checks if it's available
-                        BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(Constant.BT_DEVICE_MAC_ADDRESS);//connects to the device's address and checks if it's available
-                        if (ActivityCompat.checkSelfPermission(BlueToothDebugNewActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
-                            Boolean TODO = null;
-                            return TODO;
-                        }
-                        btSocket = dispositivo.createRfcommSocketToServiceRecord(mMyUDID);//create a RFCOMM (SPP) connection
-                        myBluetooth.cancelDiscovery();
-                    }
+            String obj2 = CustomHttpClient.executeHttpPost1(NewSolarVFD.saveDebugData, param1);
+
+            if (!obj2.isEmpty()) {
+
+
+                JSONObject jsonObject = new JSONObject(obj2);
+                Log.e("Response=====>", jsonObject.toString());
+
+
+                String mStatus = jsonObject.getString("status");
+                if (mStatus.equals("true")) {
+                    stopProgressDialogue();
+                    mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
+                    mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
+
+                    if (mSimDetailsInfoResponse.size() > 0)
+                        mSimDetailsInfoResponse.clear();
+
+                    mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
+                    // WebURL.CHECK_FINAL_ALL_OK = 1;
+                    //     WebURL.BT_DEBUG_CHECK = 1;
+                    // Constant.DBUG_PER_OFLINE = "";//PER_OFLINE
+                    Constant.BT_DEVICE_NAME = "";
+                    Constant.BT_DEVICE_MAC_ADDRESS = "";
+
+
+                    onBackPressed();
                 } else {
-                    myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
-                    //   BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(mBtMacAddressHead);//connects to the device's address and checks if it's available
-                    BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(Constant.BT_DEVICE_MAC_ADDRESS);//connects to the device's address and checks if it's available
-                    btSocket = dispositivo.createRfcommSocketToServiceRecord(mMyUDID);//create a RFCOMM (SPP) connection
-                    myBluetooth.cancelDiscovery();
+                    stopProgressDialogue();
+                    CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
                 }
 
-                if (!btSocket.isConnected())
-                    btSocket.connect();//start connection
-                if (btSocket.isConnected()) {
-                    byte[] STARTRequest = requests[0].getBytes(StandardCharsets.US_ASCII);
-                    try {
-                        btSocket.getOutputStream().write(STARTRequest);
-                        sleep(1000);
-                        iStream = btSocket.getInputStream();
-                        while (true) {
-                            try {
-                                kkkkkk1 = (char) iStream.read() + "";
-                                AllTextSTR = AllTextSTR + kkkkkk1;
-                                // AllTextSTR = AllTextSTR.replaceAll("[\r]", "");
-                                // AllTextSTR = AllTextSTR.replaceAll("[\n]", "");
-                                if (iStream.available() == 0) {
-                                    break;
-                                }
-                            } catch (IOException e) {
-                                baseRequest.hideLoader();
-                                e.printStackTrace();
-                                break;
-                            }
-                            //ssssss = ssssss + () kkkkkk1;
-                        }
 
-                    } catch (InterruptedException e1) {
-                        baseRequest.hideLoader();
-                        e1.printStackTrace();
-                    }
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ///addHeadersMonths();
-                            try {
-                                String[] sssM = AllTextSTR.split(",");
-
-                                for (int i = 0; i < sssM.length; i++) {
-
-                                    pp++;
-
-                                    AllCommomSTRContainer = AllCommomSTRContainer + " :\n" + sssM[i];
-                                    lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\n" + sssM[i]));
-
-                                }
-
-                            } catch (Exception exception) {
-                                exception.printStackTrace();
-                            }
-
-                            baseRequest.hideLoader();
-                            AllTextSTR = "";
-                        }
-                    });
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                baseRequest.hideLoader();
-                // btSocket = null;
-                //   Toast.makeText(mActivity, "BT Connection lost..", Toast.LENGTH_SHORT).show();
-                // myBluetooth.disable();
-                return false;
             }
-
-            baseRequest.hideLoader();
-            return false;
-        }
-
-        @SuppressLint("SetTextI18n")
-        @Override
-        protected void onPostExecute(Boolean result) //after the doInBackground, it checks if everything went fine
-        {
-            super.onPostExecute(result);
-            pp++;
-            baseRequest.hideLoader();
-
-            scrlViewID.fullScroll(View.FOCUS_DOWN);
-
+        } catch (Exception e) {
+            saveDataLocaly();
+            stopProgressDialogue();
+            e.printStackTrace();
         }
     }
+
+    public void showProgressDialogue() {
+        progressDialog.setMessage(getResources().getString(R.string.sendingDataServer));
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+    }
+
+    public void stopProgressDialogue() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+    }
+
+    public void SyncRMSCHECKDATAAPI() {
+        CustomUtility.showProgressDialogue(BlueToothDebugNewActivity.this);
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                WebURL.DEVICE_DETAILS + "?DeviceNo=" + DEVICE_NO, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                CustomUtility.hideProgressDialog(BlueToothDebugNewActivity.this);
+                baseRequest.hideLoader();
+
+
+                if (!response.toString().isEmpty()) {
+
+                    DeviceDetailModel deviceDetailModel = new Gson().fromJson(response.toString(), DeviceDetailModel.class);
+                    if (deviceDetailModel != null && deviceDetailModel.getResponse() != null && String.valueOf(deviceDetailModel.getStatus()).equals("true")) {
+
+
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                baseRequest.hideLoader();
+                CustomUtility.hideProgressDialog(BlueToothDebugNewActivity.this);
+                if (error.getMessage() != null && !error.getMessage().isEmpty()) {
+                    CustomUtility.ShowToast(error.getMessage(), BlueToothDebugNewActivity.this);
+
+                }
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+    }
+
 
     private class BluetoothCommunicationForDebugCheckDevice extends AsyncTask<String, Void, Boolean>  // UI thread
     {
@@ -1858,7 +1804,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
 
                             AllTextSTR = "";
-                         }
+                        }
                     });
                 }
             } catch (Exception e) {
@@ -1970,7 +1916,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                 exception.printStackTrace();
                             }
 
-                              AllTextSTR = "";
+                            AllTextSTR = "";
                         }
                     });
                 }
@@ -2129,7 +2075,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                     if (i == 0) {
 
                                         DEVICE_NO = sssM[0];
-                                       AllCommomSTRContainer = AllCommomSTRContainer + " :\n Device No :" + sssM[0];
+                                        AllCommomSTRContainer = AllCommomSTRContainer + " :\n Device No :" + sssM[0];
                                         lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDevice No : " + sssM[0]));
                                     } else if (i == 1) {
                                         String[] ssSubIn1 = sssM[1].split("-");
@@ -2354,6 +2300,8 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         }
     }
 
+    ///// data extraction
+
     @SuppressLint("StaticFieldLeak")
     private class BluetoothCommunicationForDebugM66ShimhaTwo extends AsyncTask<String, Void, Boolean>  // UI thread
     {
@@ -2445,221 +2393,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            ///addHeadersMonths();
-                           /* try {
-
-                                String [] sssM = AllTextSTR.split(",");
-
-                                for (int i = 0; i < sssM.length; i++) {
-
-                                    pp++;
-
-                                    if(i == 0)
-                                    {
-                                       // DEVICE_NO=sssM[0];
-                                        DEVICE_NO = sssM[0];
-                                        AllCommomSTRContainer = AllCommomSTRContainer + " :\n Device No :" + sssM[0] ;
-                                        //AllCommomSTRContainer = AllCommomSTRContainer + " :\n " + AllTextSTR +"\n";
-                                        lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDevice No : " + sssM[0]));
-                                    }
-                                    else  if(i == 1)
-                                    {
-                                        String [] ssSubIn1 = sssM[1].split("-");
-
-                                        mCheckSignelValue = 1;
-                                        SIGNL_STREN = ssSubIn1[1];
-                                        AllCommomSTRContainer = AllCommomSTRContainer + " :\n Signal Strength :" + ssSubIn1[1];
-                                        lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nSignal Strength : " + ssSubIn1[1]));
-
-                                     */
-                           /*   if(Integer.parseInt(ssSubIn1[1]) > 7 && Integer.parseInt(ssSubIn1[1]) < 32)
-                                        {
-                                            mCheckSignelValue = 1;
-                                            SIGNL_STREN = ssSubIn1[1];
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Signal Strength :" + ssSubIn1[1];
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nSignal Strength : " + ssSubIn1[1]));
-                                        }
-                                        else
-                                        {
-                                            mCheckSignelValue = 0;
-                                            SIGNL_STREN = "0";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Signal Strength : 0";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nSignal Strength : 0"));
-                                        }*/
-                           /*
-                                    }
-                                    else  if(i == 2)
-                                    {
-                                        String [] ssSubIn1 = sssM[2].split("-");
-
-                                        if(Integer.parseInt(ssSubIn1[1]) == 0)
-                                        {
-                                            SIM = "Not inserted";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n SIM :  Not inserted";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nSIM :  Not inserted"));
-                                        }
-                                        else
-                                        {
-                                            SIM = "Inserted";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n SIM :  Inserted";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nSIM :  Inserted"));
-                                        }
-                                    } else  if(i == 3)
-                                    {
-                                        String [] ssSubIn1 = sssM[3].split("-");
-
-                                        if(Integer.parseInt(ssSubIn1[1]) == 0)
-                                        {
-                                            mCheckNetworkValue =0;
-                                            NET_REG = "Not registered";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Network Registration:  Not registered";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nNetwork Registration:  Not registered"));
-                                        }
-                                        else
-                                        {
-                                            mCheckNetworkValue = 1;
-                                            NET_REG = "Registered";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Network Registration:  Registered";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nNetwork Registration: Registered"));
-                                        }
-                                    }
-                                    else  if(i == 4)
-                                    {
-                                        String [] ssSubIn1 = sssM[4].split("-");
-
-                                        if(Integer.parseInt(ssSubIn1[1]) == 0)
-                                        {
-                                            mCheckServerConnectivityValue =0;
-                                            SER_CONNECT = "Not connected";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Server connectivity:  Not connected";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nServer connectivity:  Not connected"));
-                                        }
-                                        else
-                                        {
-                                            mCheckServerConnectivityValue =1;
-                                            SER_CONNECT = "Connected";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Server connectivity:  Connected";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nServer connectivity: Connected."));
-                                        }
-                                    }
-                                    else  if(i == 5)
-                                    {
-                                        String [] ssSubIn1 = sssM[5].split("-");
-
-                                        if(Integer.parseInt(ssSubIn1[1]) == 0)
-                                        {
-                                            mCheckCableOKValue = 0;
-                                            CAB_CONNECT = "Not working";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n FRC cable connectivity:  Not working";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nFRC cable connectivity:  Not working"));
-                                        }
-                                        else
-                                        {
-                                            mCheckCableOKValue = 1;
-                                            CAB_CONNECT = "Ok";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n FRC cable connectivity: Ok";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nFRC cable connectivity: Ok"));
-                                        }
-                                    }
-                                    else  if(i == 6)
-                                    {
-                                        String [] ssSubIn2 = sssM[6].split("-");
-
-                                        if(!ssSubIn2[1].equalsIgnoreCase("")) {
-                                            System.out.println("LATITUDE==>>"+ssSubIn2[1]);
-                                            LATITUDE = ssSubIn2[1];
-
-                                            if(LATITUDE.equalsIgnoreCase("1.00000000"))
-                                            {
-                                                --i;
-                                                --pp;
-                                            }
-                                            else
-                                            {
-                                                AllCommomSTRContainer = AllCommomSTRContainer + " :\n Latitude: " + ssSubIn2[1];
-                                                lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nLatitude: " + ssSubIn2[1]));
-                                            }
-                                          //  AllCommomSTRContainer = AllCommomSTRContainer + " :\n Latitude: " + ssSubIn2[1];
-                                         //   lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nLatitude: " + ssSubIn2[1]));
-                                        }
-                                        else {
-                                            LATITUDE = "Not Available";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Latitude: Not Available";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nLatitude: Not Available"));
-                                        }
-                                    }
-                                    else  if(i == 7)
-                                    {
-                                        String [] ssSubIn3 = sssM[7].split("-");
-
-                                        if(!ssSubIn3[1].equalsIgnoreCase("")) {
-                                            LANGITUDE = ssSubIn3[1];
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Longitude: " + ssSubIn3[1];
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nLongitude: " + ssSubIn3[1]));
-                                        }
-                                        else {
-                                            LANGITUDE = "Not Available";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Longitude: Not Available ";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nLongitude: Not Available"));
-                                        }
-                                    }
-                                    else  if(i == 8)
-                                    {
-                                        String [] ssSubIn1 = sssM[8].split("-");
-
-                                        if(!ssSubIn1[1].equalsIgnoreCase(""))
-                                        {
-                                            MOBILE = ssSubIn1[1];
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Mobile Number:"+ssSubIn1[1];
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nMobile Number:"+ssSubIn1[1]));
-                                        }
-                                        else
-                                        {
-                                            MOBILE = "Not Available";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Mobile Number: Not Available";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nMobile Number: Not Available"));
-                                        }
-                                    }
-                                    else  if(i == 9)
-                                    {
-                                        String [] ssSubIn1 = sssM[9].split("-");
-
-                                        if(!ssSubIn1[1].equalsIgnoreCase(""))
-                                        {
-                                            IMEI = ssSubIn1[1];
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n IMEI:"+ssSubIn1[1];
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nIMEI:"+ssSubIn1[1]));
-                                        }
-                                        else
-                                        {
-                                            IMEI = "Not Available";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n IMEI: Not Available";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nIMEI: Not Available"));
-                                        }
-                                    }
-                                    else  if(i == 10)
-                                    {
-                                        String [] ssSubIn1 = sssM[10].split("-");
-
-                                        if(!ssSubIn1[1].equalsIgnoreCase(""))
-                                        {
-                                            DONGAL_ID=ssSubIn1[1];
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id:"+ssSubIn1[1];
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:"+ssSubIn1[1]));
-                                        }
-                                        else
-                                        {
-                                            DONGAL_ID ="Not Available";
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id: Not Available"));
-                                        }
-                                    }
-
-                                }
-
-                            } catch (Exception exception) {
-                                exception.printStackTrace();
-                            }*/
 
 
                             try {
@@ -2842,7 +2575,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                         if (i == 0) {
 
                                             DEVICE_NO = sssM[0];
-                                             AllCommomSTRContainer = AllCommomSTRContainer + " :\n Device No :" + sssM[0];
+                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Device No :" + sssM[0];
                                             lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDevice No : " + sssM[0]));
                                         } else if (i == 1) {
                                             String[] ssSubIn1 = sssM[1].split("-");
@@ -3321,7 +3054,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                 }
 
                 if (!btSocket.isConnected())
-                btSocket.connect();//start connection
+                    btSocket.connect();//start connection
                 if (btSocket.isConnected()) {
                     byte[] STARTRequest = requests[0].getBytes(StandardCharsets.US_ASCII);
                     try {
@@ -3381,8 +3114,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
             scrlViewID.fullScroll(View.FOCUS_DOWN);
         }
     }
-
-    ///// data extraction
 
     private class SyncDebugDataFromLocal extends AsyncTask<String, String, String> {
 
@@ -3561,184 +3292,14 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
         }
     }
 
-    private class SyncInstallationData1 extends AsyncTask<String, String, String> {
-        ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog = new ProgressDialog(mContext);
-            progressDialog = ProgressDialog.show(mContext, "", "Sending Data to server..please wait !");
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            String docno_sap = null;
-            String invc_done = null;
-            String obj2 = null;
-            JSONArray ja_invc_data = new JSONArray();
-            JSONObject jsonObj = new JSONObject();
-            try {
-                String MOB_NAME = UtilMethod.getSharedPreferences(mContext, "MOBName");
-                String MOB_API_NAME = UtilMethod.getSharedPreferences(mContext, "MOBversionAPI");
-                String MOB_VERSION_NAME = UtilMethod.getSharedPreferences(mContext, "MOBversionRelease");
-
-                jsonObj.put("MOB_NAME", MOB_NAME);
-
-                jsonObj.put("MOB_API_NAME", MOB_API_NAME);
-                jsonObj.put("MOB_VERSION_NAME", MOB_VERSION_NAME);
-
-                jsonObj.put("DEVICE_NO", DEVICE_NO);
-                jsonObj.put("SIGNL_STREN", SIGNL_STREN);
-                jsonObj.put("SIM", SIM);
-                jsonObj.put("NET_REG", NET_REG);
-                jsonObj.put("SER_CONNECT", SER_CONNECT);
-                jsonObj.put("CAB_CONNECT", CAB_CONNECT);
-                jsonObj.put("LATITUDE", LATITUDE);
-                jsonObj.put("LANGITUDE", LANGITUDE);
-                jsonObj.put("MOBILE", MOBILE);
-                jsonObj.put("IMEI", IMEI);
-                jsonObj.put("DONGAL_ID", DONGAL_ID);
-                jsonObj.put("KUNNR", MUserId);
-                jsonObj.put("EmpType", MEmpType);
-                jsonObj.put("RMS_STATUS", RMS_STATUS);
-                jsonObj.put("RMS_CURRENT_ONLINE_STATUS", RMS_CURRENT_ONLINE_STATUS);
-                jsonObj.put("RMS_LAST_ONLINE_DATE", RMS_LAST_ONLINE_DATE);
-                jsonObj.put("RMS_APP_VERSION", mAppName + " - " + WebURL.APP_VERSION_CODE);
-                jsonObj.put("RMS_PROJECT_CODE", project_no);
-
-                jsonObj.put("DEBUG_UNAME ", mInstallerName);
-                jsonObj.put("DEBUG_UMOB", mInstallerMOB);
-
-                jsonObj.put("SIM_SR_NO", SIM_SR_NO);
-
-                jsonObj.put("DEBUG_EXTRN", mInstallerMOB);
-
-                jsonObj.put("INVOICE_NO", INVOICE_NO_B);
-
-                jsonObj.put("DBUG_EXTRN_STATUS", RMS_DEBUG_EXTRN);
-                jsonObj.put("RMS_SERVER_STATUS", RMS_SERVER_DOWN);
-
-                ja_invc_data.put(jsonObj);
-
-            } catch (Exception e) {
-                progressDialog.dismiss();
-                Toast.makeText(mContext, "No internet connection!!\n\nData save in local storage", Toast.LENGTH_SHORT).show();
-                mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO, SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC, SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID, MUserId, RMS_STATUS, RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB, RMS_DEBUG_EXTRN, RMS_SERVER_DOWN, RMS_ORG_D_F, true);
-
-                e.printStackTrace();
-            }
-
-
-            final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
-            param1_invc.add(new BasicNameValuePair("action", String.valueOf(ja_invc_data)));///array name lr_save
-            Log.e("DATA", "$$$$" + param1_invc);
-
-            Log.e("DebugDiagnosis===>", param1_invc.toString());
-
-            try {
-
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
-                StrictMode.setThreadPolicy(policy);
-
-                //obj2 = CustomHttpClient.executeHttpPost1(WebURL.SAVE_INSTALLATION_DATA, param1_invc);
-                obj2 = CustomHttpClient.executeHttpPost1(NewSolarVFD.SAVE_VK_PAGE, param1_invc);
-
-                Log.e("OUTPUT1", "&&&&" + obj2);
-
-                if (!obj2.isEmpty()) {
-                    progressDialog.dismiss();
-                    JSONObject object = new JSONObject(obj2);
-                    String mStatus = object.getString("status");
-                    final String mMessage = object.getString("message");
-                    String jo11 = object.getString("response");
-                    System.out.println("jo11==>>" + jo11);
-                    if (mStatus.equalsIgnoreCase("true")) {
-                        Message msg = new Message();
-                        msg.obj = "Data Submitted Successfully...";
-                        mHandler.sendMessage(msg);
-                        dialog.dismiss();
-                        progressDialog.dismiss();
-                        Constant.BT_DEVICE_NAME = "";
-                        Constant.BT_DEVICE_MAC_ADDRESS = "";
-                        finish();
-
-                    } else {
-                        mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO, SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC, SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID, MUserId, RMS_STATUS, RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB, RMS_DEBUG_EXTRN, RMS_SERVER_DOWN, RMS_ORG_D_F, true);
-
-                        Message msg = new Message();
-                        msg.obj = "Data Not Submitted, Please try After Sometime.";
-                        mHandler.sendMessage(msg);
-                        dialog.dismiss();
-                        progressDialog.dismiss();
-
-                    }
-                }
-
-            } catch (Exception e) {
-
-                e.printStackTrace();
-                progressDialog.dismiss();
-            }
-
-            return obj2;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            // write display tracks logic here
-
-            dialog.dismiss();
-            progressDialog.dismiss();  // dismiss dialog
-
-
-        }
-    }
-
-
-    public void SyncRMSCHECKDATAAPI(){
-        CustomUtility.showProgressDialogue(BlueToothDebugNewActivity.this);
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                WebURL.DEVICE_DETAILS +"?DeviceNo="+DEVICE_NO, null, new Response.Listener<JSONObject >() {
-            @Override
-            public void onResponse(JSONObject  response) {
-                CustomUtility.hideProgressDialog(BlueToothDebugNewActivity.this);
-                baseRequest.hideLoader();
-
-
-                if(!response.toString().isEmpty()) {
-
-                    DeviceDetailModel deviceDetailModel = new Gson().fromJson(response.toString(),DeviceDetailModel.class);
-                    if(deviceDetailModel!=null && deviceDetailModel.getResponse()!=null && String.valueOf(deviceDetailModel.getStatus()).equals("true")) {
-
-
-                    }
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                baseRequest.hideLoader();
-                CustomUtility.hideProgressDialog(BlueToothDebugNewActivity.this);
-                if(error.getMessage()!=null && !error.getMessage().isEmpty()) {
-                    CustomUtility.ShowToast(error.getMessage(),BlueToothDebugNewActivity.this);
-
-                }
-            }
-        });
-        requestQueue.add(jsonObjectRequest);
-    }
-
     @SuppressLint("StaticFieldLeak")
     private class BluetoothCommunicationGetMonthParameter extends AsyncTask<String, Void, Boolean>  // UI thread
     {
+        private final String override = null;
         public int RetryCount = 0;
         private String response;
         private int bytesRead;
         private String condition;
-        private final String override = null;
 
         @Override
         protected void onPreExecute() {
@@ -3784,7 +3345,6 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                 }*/
                 if (!btSocket.isConnected())
                     btSocket.connect();//start connection
-
 
 
                 if (btSocket.isConnected()) {
@@ -4040,7 +3600,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                     ex.printStackTrace();
                                 }
                             }
-                             break;
+                            break;
                         }
                         //  if((mDay == 255) && (mMonth == 255) && (mYear == 255) && (mHour == 255) && (mMinut == 255) && (mStatus == 255))
                         if (((mDay == 255) && (mMonth == 255) && (mYear == 255)) || ((mDay == 0) && (mMonth == 0) && (mYear == 0))) {
@@ -4073,7 +3633,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                                 }
                             }
                             mBoolflag = true;
-                         } else {
+                        } else {
                             if (mPostionFinal == 0) {
                                 //New Workbook
                                 wb = new HSSFWorkbook();
@@ -4308,10 +3868,10 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
 
                     try {
 
-                        if(Build.VERSION.SDK_INT >= 30) {
+                        if (Build.VERSION.SDK_INT >= 30) {
                             //only api 21 above
                             filePath = "/storage/emulated/0/Documents/ShaktiKusumExtractionFile/Month_" + mBtNameHead + ".xls";//Month_26-0018-0-18-03-19-0.xls";
-                        }else{
+                        } else {
                             //only api 21 down
                             filePath = "/storage/emulated/0/ShaktiKusumExtractionFile/Month_" + mBtNameHead + ".xls";//Month_26-0018-0-18-03-19-0.xls";
                         }
@@ -4324,7 +3884,7 @@ public class BlueToothDebugNewActivity extends AppCompatActivity {
                         String[] mDataNameString = filePath.split("ShaktiKusumExtractionFile/");
                         String[] mDataNameString1 = mDataNameString[1].split(".xls");
                         String[] mDataNameString2 = mDataNameString1[0].split("_");
-                        GetProfileUpdate_Task(mDataNameString2[1], mDataNameString2[0], headerLenghtMonth,filePath);
+                        GetProfileUpdate_Task(mDataNameString2[1], mDataNameString2[0], headerLenghtMonth, filePath);
                         dialog.dismiss();
                     } catch (Exception e) {
                         baseRequest.hideLoader();

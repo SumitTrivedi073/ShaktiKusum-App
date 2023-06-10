@@ -36,7 +36,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -63,7 +62,7 @@ import webservice.CustomHttpClient;
 import webservice.WebURL;
 
 
-public class UnloadInstReportImageActivity extends AppCompatActivity implements ImageSelectionAdapter.ImageSelectionListener {
+public class UnloadInstReportImageActivity extends BaseActivity implements ImageSelectionAdapter.ImageSelectionListener {
 
     private static final int REQUEST_CODE_PERMISSION = 101;
     private static final int PICK_FROM_FILE = 102;
@@ -186,7 +185,7 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
         remarkEdt = findViewById(R.id.edtRemarkVKID);
         btnSave = findViewById(R.id.btnSave);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -506,8 +505,8 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
             Log.e("Param====>", ja_invc_data.toString());
             final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
             param1_invc.add(new BasicNameValuePair("unloading", String.valueOf(ja_invc_data)));
-            Log.e("DATA", "$$$$" + param1_invc.toString());
-            System.out.println("param1_invc_vihu==>>" + param1_invc.toString());
+            Log.e("DATA", "$$$$" + param1_invc);
+            System.out.println("param1_invc_vihu==>>" + param1_invc);
             try {
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
                 StrictMode.setThreadPolicy(policy);
@@ -519,14 +518,14 @@ public class UnloadInstReportImageActivity extends AppCompatActivity implements 
                     JSONObject object = new JSONObject(obj2);
                     String obj1 = object.getString("data_return");
                     JSONArray ja = new JSONArray(obj1);
-                    Log.e("OUTPUT2", "&&&&" + ja.toString());
+                    Log.e("OUTPUT2", "&&&&" + ja);
                     for (int i = 0; i < ja.length(); i++) {
                         JSONObject jo = ja.getJSONObject(i);
                         docno_sap = jo.getString("mdocno");
                         invc_done = jo.getString("return");
                         if (invc_done.equalsIgnoreCase("Y")) {
 
-
+                            databaseHelper.deleteUnloadingImages(billNo);
                             showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
                             NewSolarVFD.CHECK_DATA_UNOLAD = 0;
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);

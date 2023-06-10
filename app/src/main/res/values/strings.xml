@@ -222,4 +222,10 @@
     <string name="Please_Structure_Assembly_photo">Please select Structure Assembly Photo</string>
     <string name="Please_LA_and_Earthing_Photo">Please select LA and Earthing Photo</string>
     <string name="Please_MISC_Photo">Please select MISC Photo</string>
+    <string name="kusum_app_updation">Latest Shakti Kusum App are available please update first and enjoy</string>
+    <string name="sim_insertMsg">Please insert new sim  on drive side and try again for network check</string>
+    <string name="verigyCustomerOTP">Please varify customer OTP</string>
+    <string name="insertThirdSim">Please Insert third Sim and try again</string>
+    <string name="insertSecondSim">Please Insert Second Sim and try again</string>
+    <string name="sendingDataServer">Sending data to server</string>
 </resources>

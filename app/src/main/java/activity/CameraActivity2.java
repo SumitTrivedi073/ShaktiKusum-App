@@ -7,10 +7,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
@@ -25,13 +23,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.shaktipumplimited.shaktikusum.R;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -42,7 +40,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class CameraActivity2 extends AppCompatActivity implements SurfaceHolder.Callback, android.hardware.Camera.PictureCallback {
+import utility.CustomUtility;
+
+public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callback, android.hardware.Camera.PictureCallback {
     private static final String TIME_STAMP_FORMAT_DATE = "dd.mm.yyyy";
     private static final String TIME_STAMP_FORMAT_TIME = "h:mm a";
     private static final String GALLERY_DIRECTORY_NAME_COMMON = "SurfaceCamera";
@@ -103,21 +103,35 @@ public class CameraActivity2 extends AppCompatActivity implements SurfaceHolder.
                         {
                             Geocoder geocoder = new Geocoder(CameraActivity2.this,Locale.getDefault());
                             try {
-                                List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
+                                if(CustomUtility.isInternetOn(getApplicationContext())) {
+                                    List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 
-                                latitudetxt = String.valueOf(addresses.get(0).getLatitude());
-                                longitudetxt = String.valueOf(addresses.get(0).getLongitude());
-                                addresstxt = addresses.get(0).getAddressLine(0).substring(0,35);
-                                state = addresses.get(0).getAdminArea();
-                                postalcode = addresses.get(0).getPostalCode();
-                                country = addresses.get(0).getCountryName();
-                                getDate = new SimpleDateFormat(TIME_STAMP_FORMAT_DATE, Locale.getDefault());
-                                getTime = new SimpleDateFormat(TIME_STAMP_FORMAT_TIME, Locale.getDefault());
+                                    latitudetxt = String.valueOf(addresses.get(0).getLatitude());
+                                    longitudetxt = String.valueOf(addresses.get(0).getLongitude());
+                                    addresstxt = addresses.get(0).getAddressLine(0).substring(0, 35);
+                                    state = addresses.get(0).getAdminArea();
+                                    postalcode = addresses.get(0).getPostalCode();
+                                    country = addresses.get(0).getCountryName();
+                                    getDate = new SimpleDateFormat(TIME_STAMP_FORMAT_DATE, Locale.getDefault());
+                                    getTime = new SimpleDateFormat(TIME_STAMP_FORMAT_TIME, Locale.getDefault());
 
 
-                                display.setText(" Latitude : " + latitudetxt + "\n" + " Longitude : " + longitudetxt+ "\n" + " Address : " + addresstxt +","
-                                        + state+ " " + postalcode+ "," +country +"\n"+"Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
-                                +"\n" + "Customer: " + customer_name);
+                                    display.setText(" Latitude : " + latitudetxt + "\n" + " Longitude : " + longitudetxt + "\n" + " Address : " + addresstxt + ","
+                                            + state + " " + postalcode + "," + country + "\n" + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
+                                            + "\n" + "Customer: " + customer_name);
+                                }else {
+
+                                    latitudetxt = String.valueOf(location.getLatitude());
+                                    longitudetxt = String.valueOf(location.getLongitude());
+                                    getDate = new SimpleDateFormat(TIME_STAMP_FORMAT_DATE, Locale.getDefault());
+                                    getTime = new SimpleDateFormat(TIME_STAMP_FORMAT_TIME, Locale.getDefault());
+
+
+                                        display.setText(" Latitude : " + latitudetxt + "\n" + " Longitude : " + longitudetxt + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
+                                                + "\n" + "Customer: " + customer_name);
+
+
+                                }
 
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
@@ -251,7 +265,7 @@ public class CameraActivity2 extends AppCompatActivity implements SurfaceHolder.
         onBackPressed();
     }
 
-    public Bitmap saveImageWithTimeStamp( byte data[]) {
+    public Bitmap saveImageWithTimeStamp(byte[] data) {
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inMutable = true;
@@ -338,6 +352,6 @@ public class CameraActivity2 extends AppCompatActivity implements SurfaceHolder.
         }
 
         // Create a media file name
-        return dir.getPath() + File.separator + "IMG_"+  String.valueOf(Calendar.getInstance().getTimeInMillis()) +".jpg";
+        return dir.getPath() + File.separator + "IMG_"+ Calendar.getInstance().getTimeInMillis() +".jpg";
     }
 }
