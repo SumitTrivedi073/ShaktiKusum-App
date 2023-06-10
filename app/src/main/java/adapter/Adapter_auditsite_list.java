@@ -15,21 +15,22 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.shaktipumplimited.shaktikusum.R;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import activity.SiteAuditInitial;
 import bean.SiteAuditListBean;
 import database.DatabaseHelper;
-import com.shaktipumplimited.shaktikusum.R;
-import activity.SiteAuditInitial;
 import utility.CustomUtility;
 
 
 public class Adapter_auditsite_list extends RecyclerView.Adapter<Adapter_auditsite_list.HomeCategoryViewHolder> {
     DatabaseHelper db;
-    private Context context;
-    private ArrayList<SiteAuditListBean> responseList;
+    private final Context context;
+    private final ArrayList<SiteAuditListBean> responseList;
     private List<SiteAuditListBean> SearchesList = null;
     String pernr,billno;
 

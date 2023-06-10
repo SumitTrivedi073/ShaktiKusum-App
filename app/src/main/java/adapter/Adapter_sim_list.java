@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,12 +16,13 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.shaktipumplimited.shaktikusum.R;
+
 import java.util.ArrayList;
 
+import activity.SIMActivationDetails;
 import bean.SimCardBean;
 import database.DatabaseHelper;
-import com.shaktipumplimited.shaktikusum.R;
-import activity.SIMActivationDetails;
 import utility.CustomUtility;
 
 
@@ -36,7 +36,7 @@ public class Adapter_sim_list extends RecyclerView.Adapter<Adapter_sim_list.Home
     String amc_cmc = "";
 
     CustomUtility customUtility = new CustomUtility();
-    private Context context;
+    private final Context context;
     android.os.Handler mHandler = new android.os.Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -44,7 +44,7 @@ public class Adapter_sim_list extends RecyclerView.Adapter<Adapter_sim_list.Home
             Toast.makeText(context, mString, Toast.LENGTH_LONG).show();
         }
     };
-    private ArrayList<SimCardBean> responseList;
+    private final ArrayList<SimCardBean> responseList;
 
 
     public Adapter_sim_list(Context context, ArrayList<SimCardBean> responseList, View.OnClickListener onclick_listener) {

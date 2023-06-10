@@ -1,5 +1,9 @@
 package activity;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.os.Environment.getExternalStorageDirectory;
+import static android.os.Environment.getExternalStoragePublicDirectory;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,9 +35,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+
+import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -62,14 +67,8 @@ import utility.dialog3;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
-import static android.os.Environment.getExternalStorageDirectory;
-import static android.os.Environment.getExternalStoragePublicDirectory;
 
-import com.shaktipumplimited.shaktikusum.R;
-
-
-public class GovtOffVisitActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
+public class GovtOffVisitActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
     public static final int RC_FILE_PICKER_PERM = 321;
     public static final int BITMAP_SAMPLE_SIZE = 6;
     public static final int MEDIA_TYPE_IMAGE = 1;
@@ -187,21 +186,21 @@ public class GovtOffVisitActivity extends AppCompatActivity implements EasyPermi
         current_date = simpleDateFormat.format(new Date());
 
 
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        photo1 = (TextView) findViewById(R.id.photo1);
-        remark = (EditText) findViewById(R.id.remark);
-        submit = (TextView) findViewById(R.id.btn_submit);
-        reg_no = (TextView) findViewById(R.id.reg_no);
-        benef_id = (TextView) findViewById(R.id.benef_id);
-        cust_nm = (TextView) findViewById(R.id.cust_nm);
-        address = (TextView) findViewById(R.id.address);
-        contact = (TextView) findViewById(R.id.cnt_no);
-        aadhar = (TextView) findViewById(R.id.aadhar_no);
+        photo1 = findViewById(R.id.photo1);
+        remark = findViewById(R.id.remark);
+        submit = findViewById(R.id.btn_submit);
+        reg_no = findViewById(R.id.reg_no);
+        benef_id = findViewById(R.id.benef_id);
+        cust_nm = findViewById(R.id.cust_nm);
+        address = findViewById(R.id.address);
+        contact = findViewById(R.id.cnt_no);
+        aadhar = findViewById(R.id.aadhar_no);
 
         //setData();
         photo1.setVisibility(View.GONE);
@@ -718,10 +717,10 @@ public class GovtOffVisitActivity extends AppCompatActivity implements EasyPermi
             // TODO perform some logging or show user feedback
             return null;
         } else {
-            String[] projection = {String.valueOf(MediaStore.Images.Media.DATA)};
+            String[] projection = {MediaStore.Images.Media.DATA};
 
-            Cursor cursor1 = ((Activity) mContext).getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{image_id}, null);
-            Cursor cursor2 = ((Activity) mContext).getContentResolver().query(uri, projection, null, null, null);
+            Cursor cursor1 = mContext.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{image_id}, null);
+            Cursor cursor2 = mContext.getContentResolver().query(uri, projection, null, null, null);
 
             Log.e("CUR1", "&&&&" + cursor1);
             Log.e("CUR2", "&&&&" + cursor2);
@@ -780,7 +779,7 @@ public class GovtOffVisitActivity extends AppCompatActivity implements EasyPermi
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                boolean result = customUtility.checkPermission(mContext);
+                boolean result = CustomUtility.checkPermission(mContext);
                 if (items[item].equals("Take Photo")) {
 
                     if (result) {
@@ -831,11 +830,8 @@ public class GovtOffVisitActivity extends AppCompatActivity implements EasyPermi
     public void setFlag(String key) {
 
         Log.e("FLAG", "&&&" + key);
-        photo1_flag = false;
 
-        if (DatabaseHelper.KEY_PHOTO1.equals(key)) {
-            photo1_flag = true;
-        }
+        photo1_flag = DatabaseHelper.KEY_PHOTO1.equals(key);
 
     }
 
@@ -1059,9 +1055,9 @@ public class GovtOffVisitActivity extends AppCompatActivity implements EasyPermi
 
             final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
             param1_invc.add(new BasicNameValuePair("gov_officer", String.valueOf(ja_invc_data)));
-            Log.e("DATA", "$$$$" + param1_invc.toString());
+            Log.e("DATA", "$$$$" + param1_invc);
 
-            System.out.println(param1_invc.toString());
+            System.out.println(param1_invc);
 
             try {
 
@@ -1081,7 +1077,7 @@ public class GovtOffVisitActivity extends AppCompatActivity implements EasyPermi
                     JSONArray ja = new JSONArray(obj1);
 
 
-                    Log.e("OUTPUT2", "&&&&" + ja.toString());
+                    Log.e("OUTPUT2", "&&&&" + ja);
 
                     for (int i = 0; i < ja.length(); i++) {
 

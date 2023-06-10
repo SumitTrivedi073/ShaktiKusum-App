@@ -56,7 +56,7 @@ public class SiteAudit extends AppCompatActivity implements MediaController.Medi
         list_district_inst = new ArrayList<String>();
         list_tehsil_inst   = new ArrayList<String>();
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -211,10 +211,10 @@ public class SiteAudit extends AppCompatActivity implements MediaController.Medi
 
     public void getLayout() {
 
-        save = (TextView) findViewById(R.id.btn_submit);
-        vendor_no = (EditText) findViewById(R.id.vendor_no);
-        spinner_state = (Spinner) findViewById(R.id.spinner_state);
-        spinner_district = (Spinner) findViewById(R.id.spinner_district);
+        save = findViewById(R.id.btn_submit);
+        vendor_no = findViewById(R.id.vendor_no);
+        spinner_state = findViewById(R.id.spinner_state);
+        spinner_district = findViewById(R.id.spinner_district);
 
 
     }

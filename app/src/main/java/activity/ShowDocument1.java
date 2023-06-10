@@ -4,13 +4,11 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.shaktipumplimited.shaktikusum.R;
@@ -18,7 +16,7 @@ import com.shaktipumplimited.shaktikusum.R;
 import database.DatabaseHelper;
 
 
-public class ShowDocument1 extends AppCompatActivity {
+public class ShowDocument1 extends BaseActivity {
 
     Context context;
     String string_image = "";
@@ -71,14 +69,14 @@ public class ShowDocument1 extends AppCompatActivity {
         }
 
         //Toolbar code
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(string_title);
 
 
-        imageView = (ImageView) findViewById(R.id.imageView);
+        imageView = findViewById(R.id.imageView);
 
 
         string_image = data;

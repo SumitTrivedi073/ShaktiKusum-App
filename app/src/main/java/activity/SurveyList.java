@@ -16,11 +16,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 
 import com.shaktipumplimited.shaktikusum.R;
 
@@ -41,7 +39,7 @@ import webservice.CustomHttpClient;
 import webservice.WebURL;
 
 
-public class SurveyList extends AppCompatActivity {
+public class SurveyList extends BaseActivity {
     public String ben_id = "";
     public String custnam = "";
     public String contctno = "";
@@ -94,19 +92,19 @@ public class SurveyList extends AppCompatActivity {
         //version = BuildConfig.VERSION_NAME;
         device_name = CustomUtility.getDeviceName();
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView = (RecyclerView) findViewById(R.id.emp_list);
+        recyclerView = findViewById(R.id.emp_list);
 
         // Locate the EditText in listview_main.xml
-        editsearch = (EditText) findViewById(R.id.search);
+        editsearch = findViewById(R.id.search);
 
 
-        lin1 = (LinearLayout) findViewById(R.id.lin1);
-        lin2 = (LinearLayout) findViewById(R.id.lin2);
+        lin1 = findViewById(R.id.lin1);
+        lin2 = findViewById(R.id.lin2);
 
 
         // Capture Text in EditText
@@ -145,7 +143,7 @@ public class SurveyList extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if (CustomUtility.isInternetOn()) {
+        if (CustomUtility.isInternetOn(getApplicationContext())) {
 
             recyclerView.setAdapter(null);
             db.deleteSurveyListData();
@@ -270,7 +268,7 @@ public class SurveyList extends AppCompatActivity {
                             address_txt);
 
 
-                    if (db.isRecordExist(db.TABLE_SURVEY_LIST, db.KEY_ENQ_DOC, ben_id)) {
+                    if (db.isRecordExist(DatabaseHelper.TABLE_SURVEY_LIST, DatabaseHelper.KEY_ENQ_DOC, ben_id)) {
                         db.updateSurveyListData(ben_id, surveyListBean);
                     } else {
                         db.insertSurveyListData(ben_id, surveyListBean);

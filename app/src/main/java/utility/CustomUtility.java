@@ -38,8 +38,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
-import activity.BaseActivity;
 import activity.CustomProgressDialog;
 import bean.ImageModel;
 
@@ -52,7 +52,7 @@ public class CustomUtility {
     public static Context appContext;
     static boolean connected;
     static long  mLastClickTime;
-    private static String PREFERENCE = "DealLizard";
+    private static final String PREFERENCE = "DealLizard";
     String current_date, current_time;
     Calendar calander = null;
     SimpleDateFormat simpleDateFormat = null;
@@ -179,8 +179,8 @@ public class CustomUtility {
         }
     }
 
-    public static boolean isInternetOn() {
-        ConnectivityManager connectivity = (ConnectivityManager) BaseActivity.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
+    public static boolean isInternetOn(Context context) {
+        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity != null) {
             NetworkInfo[] info = connectivity.getAllNetworkInfo();
             if (info != null) {
@@ -306,7 +306,10 @@ public class CustomUtility {
     }
 
     public static boolean isValidMobile(String phone) {
-        return android.util.Patterns.PHONE.matcher(phone).matches();
+        if(!Pattern.matches("[a-zA-Z]+", phone)) {
+            return phone.length() > 9 && phone.length() <= 13;
+        }
+        return false;
     }
 
     public String getCurrentDate() {
@@ -357,6 +360,13 @@ public class CustomUtility {
 
 
     public static void deleteArrayList(Context context,String name){
+        SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.remove(name).apply();
+
+    }
+
+    public static void removeValueFromSharedPref(Context context,String name){
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.remove(name).apply();

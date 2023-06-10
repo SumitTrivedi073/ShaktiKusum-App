@@ -27,7 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class CameraActivity extends Activity {
+public class CameraActivity extends BaseActivity {
 
     private static final int REQUEST_CODE_CHANGE_SETTING = 1;
     private static final int TIME_STAMP_UPDATE_INTERVAL = 1000;
@@ -41,9 +41,9 @@ public class CameraActivity extends Activity {
     double inst_latitude_double, inst_longitude_double;
     private SimpleDateFormat sdf;
     private SimpleDateFormat sdf1;
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
 
-    private Runnable runnableSetDateText = new Runnable() {
+    private final Runnable runnableSetDateText = new Runnable() {
         @Override
         public void run() {
             txtData.setText("Latitude: " + lat + "\n" + "Longitude: " + lng + "\n" + "Date: " + sdf.format(new Date()) + " " + "Time: " + sdf1.format(new Date()) + "\n" + "Customer Name: " + cust_name);
@@ -91,8 +91,8 @@ public class CameraActivity extends Activity {
             name = (String) savedInstanceState.getSerializable("name");
         }
 
-        txtData = (TextView) findViewById(R.id.txtDate);
-        image = (ImageView) findViewById(R.id.sw);
+        txtData = findViewById(R.id.txtDate);
+        image = findViewById(R.id.sw);
         sdf = new SimpleDateFormat(Config.TIME_STAMP_FORMAT_DATE, Locale.getDefault());
         sdf1 = new SimpleDateFormat(Config.TIME_STAMP_FORMAT_TIME, Locale.getDefault());
         if(null!=billNo){
@@ -126,7 +126,7 @@ public class CameraActivity extends Activity {
         if (camera == null) {
             Log.e("jisunLog", "Failed camera open");
         } else {
-            FrameLayout layoutPreview = (FrameLayout) findViewById(R.id.layoutPreview);
+            FrameLayout layoutPreview = findViewById(R.id.layoutPreview);
             if (preview != null) {
                 layoutPreview.removeView(preview);
                 preview = null;
@@ -210,8 +210,8 @@ public class CameraActivity extends Activity {
                 params.setRotation(setCameraDisplayOrientation(this, cameraFacing, camera));
                 camera.startPreview();
             } catch (RuntimeException ex) {
-                Toast.makeText(this, "camera_not_found ] " + ex.getMessage().toString(), Toast.LENGTH_LONG).show();
-                Log.d(Config.TAG, "camera_not_found ] " + ex.getMessage().toString());
+                Toast.makeText(this, "camera_not_found ] " + ex.getMessage(), Toast.LENGTH_LONG).show();
+                Log.d(Config.TAG, "camera_not_found ] " + ex.getMessage());
             }
         }
         return camera;

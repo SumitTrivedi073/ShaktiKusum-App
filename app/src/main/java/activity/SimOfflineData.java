@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.StrictMode;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,11 +17,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 
 import com.shaktipumplimited.shaktikusum.R;
 
@@ -46,7 +43,7 @@ import webservice.CustomHttpClient;
 import webservice.WebURL;
 
 
-public class SimOfflineData extends AppCompatActivity {
+public class SimOfflineData extends BaseActivity {
 
     Context context;
     private Toolbar mToolbar;
@@ -86,18 +83,18 @@ public class SimOfflineData extends AppCompatActivity {
 
         dataHelper = new DatabaseHelper(context);
         loginBean = new LoginBean();
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Sim Card Offline Data");
 
-        recyclerView = (RecyclerView) findViewById(R.id.emp_list);
+        recyclerView = findViewById(R.id.emp_list);
 
         dataHelper = new DatabaseHelper(context);
 
-        lin1 = (LinearLayout) findViewById(R.id.lin1);
-        lin2 = (LinearLayout) findViewById(R.id.lin2);
+        lin1 = findViewById(R.id.lin1);
+        lin2 = findViewById(R.id.lin2);
 
 
 
@@ -123,7 +120,7 @@ public class SimOfflineData extends AppCompatActivity {
                 return true;
             case R.id.action_sync_offline:
 
-                if (CustomUtility.isInternetOn()) {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
 
                    new SIMData().execute();
                 }
@@ -212,9 +209,9 @@ public class SimOfflineData extends AppCompatActivity {
                     final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
                     param1_invc.add(new BasicNameValuePair("sim_change_data", String.valueOf(ja_invc_data)));
                     Log.e("DATA", "$$$$" + param1_invc.size());
-                    Log.e("DATA", "$$$$" + param1_invc.toString());
+                    Log.e("DATA", "$$$$" + param1_invc);
 
-                    System.out.println(param1_invc.toString());
+                    System.out.println(param1_invc);
 
                     try {
 

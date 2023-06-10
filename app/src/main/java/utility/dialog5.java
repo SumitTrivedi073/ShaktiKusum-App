@@ -21,9 +21,9 @@ import activity.SiteAuditList;
 
 public class dialog5 extends Dialog {
 
-    private SiteAuditList activity;
+    private final SiteAuditList activity;
     private TextView search, cancel;
-    private dialog5 thisDialog;
+    private final dialog5 thisDialog;
     DatabaseHelper db;
     EditText vendor_no;
 
@@ -151,11 +151,11 @@ public class dialog5 extends Dialog {
 
     private void initalize() {
         // TODO Auto-generated method stub
-        vendor_no = (EditText) findViewById(R.id.vendor_no);
-        spinner_state = (Spinner) findViewById(R.id.spinner_state);
-        spinner_district = (Spinner) findViewById(R.id.spinner_district);
-        search = (TextView) findViewById(R.id.btn_submit);
-        cancel = (TextView) findViewById(R.id.btn_cancel);
+        vendor_no = findViewById(R.id.vendor_no);
+        spinner_state = findViewById(R.id.spinner_state);
+        spinner_district = findViewById(R.id.spinner_district);
+        search = findViewById(R.id.btn_submit);
+        cancel = findViewById(R.id.btn_cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
 
             @Override

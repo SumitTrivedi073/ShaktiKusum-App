@@ -185,7 +185,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
         recyclerview = findViewById(R.id.recyclerview);
         saveBtn = findViewById(R.id.saveBtn);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -216,11 +216,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                 boolean validate = true;
                 if (imageArrayList.size() > 0) {
                     for (int i = 0; i < imageArrayList.size(); i++) {
-                        if (!imageArrayList.get(i).isImageSelected()) {
-                            validate = true;
-                        } else {
-                            validate = false;
-                        }
+                        validate = !imageArrayList.get(i).isImageSelected();
                     }
                     if (validate) {
                         CustomUtility.showToast(RejectInstRepImgActivity.this, getResources().getString(R.string.selectAllImages));
@@ -574,9 +570,9 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
             final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
             param1_invc.add(new BasicNameValuePair("reject_installation", String.valueOf(ja_invc_data)));
-            Log.e("DATA", "$$$$" + param1_invc.toString());
+            Log.e("DATA", "$$$$" + param1_invc);
 
-            System.out.println(param1_invc.toString());
+            System.out.println(param1_invc);
 
             try {
 
@@ -596,7 +592,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                     JSONArray ja = new JSONArray(obj1);
 
 
-                    Log.e("OUTPUT2", "&&&&" + ja.toString());
+                    Log.e("OUTPUT2", "&&&&" + ja);
 
                     for (int i = 0; i < ja.length(); i++) {
 

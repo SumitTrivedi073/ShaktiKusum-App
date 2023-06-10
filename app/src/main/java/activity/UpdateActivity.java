@@ -6,12 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.shaktipumplimited.shaktikusum.R;
 
 
-public class UpdateActivity extends AppCompatActivity {
+public class UpdateActivity extends BaseActivity {
     TextView tv_click;
 
     @Override
@@ -20,7 +18,7 @@ public class UpdateActivity extends AppCompatActivity {
         setContentView(R.layout.activity_update);
 
 
-        tv_click = (TextView) findViewById(R.id.textClick);
+        tv_click = findViewById(R.id.textClick);
         tv_click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

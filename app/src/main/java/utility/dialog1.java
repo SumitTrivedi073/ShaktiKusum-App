@@ -11,10 +11,10 @@ import com.shaktipumplimited.shaktikusum.R;
 
 public class dialog1 extends Dialog {
 
-    private DeptDocSubActivity activity;
+    private final DeptDocSubActivity activity;
     private Button search, cancel;
     private EditText text;
-    private dialog1 thisDialog;
+    private final dialog1 thisDialog;
 
     public dialog1(DeptDocSubActivity context) {
         super(context);
@@ -38,9 +38,9 @@ public class dialog1 extends Dialog {
 
     private void initalize() {
         // TODO Auto-generated method stub
-        text = (EditText) findViewById(R.id.text);
-        search = (Button) findViewById(R.id.search);
-        cancel = (Button) findViewById(R.id.cancel);
+        text = findViewById(R.id.text);
+        search = findViewById(R.id.search);
+        cancel = findViewById(R.id.cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
 
             @Override

@@ -15,11 +15,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -29,15 +29,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import activity.BaseActivity;
 import debugapp.Bean.SurweyListResponse;
-
-import com.shaktipumplimited.shaktikusum.R;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
 
-public class ActivitySurveyList extends AppCompatActivity {
+public class ActivitySurveyList extends BaseActivity {
     private Context mContext;
     private Context context;
     boolean connected = false;

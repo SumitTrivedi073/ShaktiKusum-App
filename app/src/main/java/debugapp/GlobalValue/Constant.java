@@ -39,6 +39,8 @@ public class Constant {
 
     public static  String PersonName = "PersonName";
     public static  String PersonNumber = "PersonNumber";
+    public static  String SwVersionConfig = "SwVersionConfig";
+    public static  String APPURL = "APPURL";
 
 
 

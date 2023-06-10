@@ -25,9 +25,10 @@ import java.util.Set;
 import com.shaktipumplimited.Settingadapter.BTPairedDeviceAdapter;
 import com.shaktipumplimited.shaktikusum.R;
 
+import activity.BaseActivity;
 import debugapp.GlobalValue.Constant;
 
-public class PairedDeviceActivity extends AppCompatActivity {
+public class PairedDeviceActivity extends BaseActivity {
 
 
     private Context mContext;
@@ -55,10 +56,10 @@ public class PairedDeviceActivity extends AppCompatActivity {
     private void initView() {
 
 
-        rlvBackViewID = (RelativeLayout) findViewById(R.id.rlvBackViewID);
+        rlvBackViewID = findViewById(R.id.rlvBackViewID);
 
-        rclSettingListViewID = (RecyclerView) findViewById(R.id.rclSettingListViewID);
-        txtPairedDeviceListID = (TextView) findViewById(R.id.txtPairedDeviceListID);
+        rclSettingListViewID = findViewById(R.id.rclSettingListViewID);
+        txtPairedDeviceListID = findViewById(R.id.txtPairedDeviceListID);
 
         lLayout = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
         rclSettingListViewID.setNestedScrollingEnabled(false);

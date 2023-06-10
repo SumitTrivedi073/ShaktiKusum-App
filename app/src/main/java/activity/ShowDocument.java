@@ -1,5 +1,7 @@
 package activity;
 
+import static android.os.Environment.getExternalStoragePublicDirectory;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,18 +11,15 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import com.shaktipumplimited.shaktikusum.R;
 
 import java.io.File;
 
 import database.DatabaseHelper;
 
-import static android.os.Environment.getExternalStoragePublicDirectory;
-
-import com.shaktipumplimited.shaktikusum.R;
-
-public class ShowDocument extends AppCompatActivity {
+public class ShowDocument extends BaseActivity {
 
     Context context;
 
@@ -53,13 +52,13 @@ public class ShowDocument extends AppCompatActivity {
         Log.e("KEY", "&&&&" + key);
         Log.e("data", "&&&&" + data);
 
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        imageView = (ImageView) findViewById(R.id.imageView);
+        imageView = findViewById(R.id.imageView);
 
         if (docno != null) {
 

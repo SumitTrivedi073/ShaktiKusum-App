@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Message;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -26,13 +25,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.shaktipumplimited.shaktikusum.R;
-
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -57,7 +54,7 @@ import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-public class SIMActivationDetails extends AppCompatActivity {
+public class SIMActivationDetails extends BaseActivity {
     Context context;
     private Toolbar mToolbar;
     public static final int BITMAP_SAMPLE_SIZE = 6;
@@ -128,7 +125,7 @@ public class SIMActivationDetails extends AppCompatActivity {
 
         }
         //Toolbar code
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -212,7 +209,7 @@ public class SIMActivationDetails extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (CustomUtility.isInternetOn()) {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
 
                     saveData();
                 }
@@ -330,21 +327,21 @@ public class SIMActivationDetails extends AppCompatActivity {
 
     public void getLayout(){
 
-        doc_date = (EditText) findViewById(R.id.doc_date);
+        doc_date = findViewById(R.id.doc_date);
 
-        cust_name = (EditText) findViewById(R.id.cust_name);
-        cust_mobile = (EditText) findViewById(R.id.cust_mobile_no);
-        cust_address = (EditText) findViewById(R.id.cust_address);
-        device_no = (EditText) findViewById(R.id.device_no);
-        ext_sim_no = (EditText) findViewById(R.id.sim_card_old);
-        new_sim_no = (EditText) findViewById(R.id.sim_card_new);
+        cust_name = findViewById(R.id.cust_name);
+        cust_mobile = findViewById(R.id.cust_mobile_no);
+        cust_address = findViewById(R.id.cust_address);
+        device_no = findViewById(R.id.device_no);
+        ext_sim_no = findViewById(R.id.sim_card_old);
+        new_sim_no = findViewById(R.id.sim_card_new);
 
-        ext_sim_photo = (TextView) findViewById(R.id.sim_card_old_photo);
-        new_sim_photo = (TextView) findViewById(R.id.sim_card_new_photo);
-        drive_photo = (TextView) findViewById(R.id.drive_photo);
+        ext_sim_photo = findViewById(R.id.sim_card_old_photo);
+        new_sim_photo = findViewById(R.id.sim_card_new_photo);
+        drive_photo = findViewById(R.id.drive_photo);
 
-        save = (TextView) findViewById(R.id.save);
-        scan = (ImageView) findViewById(R.id.view_img_one);
+        save = findViewById(R.id.save);
+        scan = findViewById(R.id.view_img_one);
 
 
     }
@@ -404,12 +401,12 @@ public class SIMActivationDetails extends AppCompatActivity {
         // Setting Dialog Title
         dialog.setTitle("Get Device No.");
 
-       final EditText invoice_number = (EditText) dialog.findViewById(R.id.invoice_number);
+       final EditText invoice_number = dialog.findViewById(R.id.invoice_number);
 
         // On pressing Settings button
-        TextView dialogButton = (TextView) dialog.findViewById(R.id.ok_txt);
+        TextView dialogButton = dialog.findViewById(R.id.ok_txt);
 
-        ImageView mCancel = (ImageView) dialog.findViewById(R.id.icn_cancel);
+        ImageView mCancel = dialog.findViewById(R.id.icn_cancel);
 
 
         mCancel.setOnClickListener(new View.OnClickListener() {
@@ -430,7 +427,7 @@ public class SIMActivationDetails extends AppCompatActivity {
 
                 String invoiceno = invoice_number.getText().toString();
 
-                if(CustomUtility.isInternetOn()) {
+                if(CustomUtility.isInternetOn(getApplicationContext())) {
 
                     if (invoiceno != null && !TextUtils.isEmpty(invoiceno) && !invoiceno.equals("")) {
 
@@ -835,7 +832,7 @@ public class SIMActivationDetails extends AppCompatActivity {
                                             if (sim_old_photo_text != null && !sim_old_photo_text.equals("")) {
                                                 if (sim_new_photo_text != null && !sim_new_photo_text.equals("")) {
                                                     if (drive_photo_text != null && !drive_photo_text.equals("")) {
-                                                        if (CustomUtility.isInternetOn()) {
+                                                        if (CustomUtility.isInternetOn(getApplicationContext())) {
 
                                                             SimCardBean simCardBean = new SimCardBean(pernr, pernr_type,
                                                                     enq_docno,
@@ -1211,9 +1208,9 @@ public class SIMActivationDetails extends AppCompatActivity {
 
             final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
             param1_invc.add(new BasicNameValuePair("sim_change_data", String.valueOf(ja_invc_data)));
-            Log.e("DATA", "$$$$" + param1_invc.toString());
+            Log.e("DATA", "$$$$" + param1_invc);
 
-            System.out.println(param1_invc.toString());
+            System.out.println(param1_invc);
 
             try {
 
@@ -1228,7 +1225,7 @@ public class SIMActivationDetails extends AppCompatActivity {
 
                     JSONArray ja = new JSONArray(obj2);
 
-                    Log.e("OUTPUT2","&&&&"+ja.toString());
+                    Log.e("OUTPUT2","&&&&"+ ja);
 
                     for (int i = 0; i < ja.length(); i++) {
 

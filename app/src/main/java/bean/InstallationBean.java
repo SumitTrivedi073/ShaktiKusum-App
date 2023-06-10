@@ -424,6 +424,51 @@ public class InstallationBean {
     public void setBeneficiaryNo(String beneficiaryNo) {
         BeneficiaryNo = beneficiaryNo;
     }
+
+    @Override
+    public String toString() {
+        return "InstallationBean{" +
+                "pernr='" + pernr + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", project_no='" + project_no + '\'' +
+                ", login_no='" + login_no + '\'' +
+                ", inst_bill_no='" + inst_bill_no + '\'' +
+                ", inst_date='" + inst_date + '\'' +
+                ", bill_date='" + bill_date + '\'' +
+                ", delay_reason='" + delay_reason + '\'' +
+                ", rms_data_status='" + rms_data_status + '\'' +
+                ", customer_name='" + customer_name + '\'' +
+                ", fathers_name='" + fathers_name + '\'' +
+                ", mobile_no='" + mobile_no + '\'' +
+                ", state_ins_id='" + state_ins_id + '\'' +
+                ", state_ins_txt='" + state_ins_txt + '\'' +
+                ", district_ins_id='" + district_ins_id + '\'' +
+                ", district_ins_txt='" + district_ins_txt + '\'' +
+                ", tehsil_ins='" + tehsil_ins + '\'' +
+                ", village_ins='" + village_ins + '\'' +
+                ", address_ins='" + address_ins + '\'' +
+                ", make_ins='" + make_ins + '\'' +
+                ", solarpanel_wattage='" + solarpanel_wattage + '\'' +
+                ", solarpanel_stand_ins_quantity='" + solarpanel_stand_ins_quantity + '\'' +
+                ", total_watt='" + total_watt + '\'' +
+                ", inst_hp='" + inst_hp + '\'' +
+                ", no_of_module_qty='" + no_of_module_qty + '\'' +
+                ", no_of_module_value='" + no_of_module_value + '\'' +
+                ", module_total_plate_watt='" + module_total_plate_watt + '\'' +
+                ", solar_motor_model_details='" + solar_motor_model_details + '\'' +
+                ", smmd_sno='" + smmd_sno + '\'' +
+                ", splar_pump_model_details='" + splar_pump_model_details + '\'' +
+                ", spmd_sno='" + spmd_sno + '\'' +
+                ", solar_controller_model='" + solar_controller_model + '\'' +
+                ", scm_sno='" + scm_sno + '\'' +
+                ", simoprator='" + simoprator + '\'' +
+                ", conntype='" + conntype + '\'' +
+                ", simcard_num='" + simcard_num + '\'' +
+                ", regis_no='" + regis_no + '\'' +
+                ", BeneficiaryNo='" + BeneficiaryNo + '\'' +
+                '}';
+    }
 }
 
 

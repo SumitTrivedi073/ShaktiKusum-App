@@ -15,18 +15,17 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
-    <uses-permission android:name="android.permission.ACCESS_MTP"
+    <uses-permission
+        android:name="android.permission.ACCESS_MTP"
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
-
     <uses-permission
         android:name="com.google.android.gms.permission.AD_ID"
         tools:node="remove" />
@@ -37,7 +36,7 @@
     <uses-feature android:name="android.hardware.location.gps" />
 
     <application
-        android:name="activity.BaseActivity"
+        android:name="activity.AppApplication"
         android:allowBackup="true"
         android:configChanges="orientation"
         android:enableOnBackInvokedCallback="true"
@@ -51,8 +50,11 @@
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme"
         android:usesCleartextTraffic="true"
-        tools:targetApi="q">
-
+        tools:targetApi="tiramisu"
+        android:dataExtractionRules="@xml/data_extraction_rules">
+        <activity
+            android:name="activity.SwVersionCheckActivity"
+            android:exported="false" />
         <activity
             android:name="activity.PhotoViewerActivity"
             android:exported="false" />
@@ -247,6 +249,21 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
+        <service
+            android:name="service.RetrieveFirestoreData"
+            android:enabled="true"
+            android:exported="false"
+            android:stopWithTask="true" />
+
+        <receiver
+            android:name="receiver.FirestoreBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

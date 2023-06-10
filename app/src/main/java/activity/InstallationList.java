@@ -16,12 +16,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.os.BuildCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 
 import com.shaktipumplimited.shaktikusum.R;
 
@@ -46,7 +44,7 @@ import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-@BuildCompat.PrereleaseSdkCheck public class InstallationList extends AppCompatActivity {
+@BuildCompat.PrereleaseSdkCheck public class InstallationList extends BaseActivity {
     public String bill_no = "";
     public String gst_bill_no = "";
     public String bill_date = "";
@@ -140,17 +138,17 @@ import webservice.WebURL;
         version = BuildConfig.VERSION_NAME;
         device_name = CustomUtility.getDeviceName();
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView = (RecyclerView) findViewById(R.id.emp_list);
+        recyclerView = findViewById(R.id.emp_list);
 
         // Locate the EditText in listview_main.xml
-        editsearch = (EditText) findViewById(R.id.search);
-        lin1 = (LinearLayout) findViewById(R.id.lin1);
-        lin2 = (LinearLayout) findViewById(R.id.lin2);
+        editsearch = findViewById(R.id.search);
+        lin1 = findViewById(R.id.lin1);
+        lin2 = findViewById(R.id.lin2);
         // Capture Text in EditText
         editsearch.addTextChangedListener(new TextWatcher() {
 
@@ -178,7 +176,7 @@ import webservice.WebURL;
                 // TODO Auto-generated method stub
             }
         });
-        /*if (CustomUtility.isInternetOn()) {
+        /*if (CustomUtility.isInternetOn(getApplicationContext())) {
             if (db.getcount(db.TABLE_INSTALLATION_LIST)) {
                 installationBeans = new ArrayList<InstallationListBean>();
                 installationBeans = db.getInstallationListData(user_id);
@@ -227,7 +225,7 @@ import webservice.WebURL;
             }
         }*/
 
-        if (db.getcount(db.TABLE_INSTALLATION_LIST)) {
+        if (db.getcount(DatabaseHelper.TABLE_INSTALLATION_LIST)) {
             installationBeans = new ArrayList<InstallationListBean>();
             installationBeans = db.getInstallationListData(user_id);
             Log.e("SIZE", "&&&&" + installationBeans.size());
@@ -278,7 +276,7 @@ import webservice.WebURL;
                 onBackPressed();
                 return true;
             case R.id.action_menu_unsync:
-                if (CustomUtility.isInternetOn()) {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
                     recyclerView.setAdapter(null);
                     db.deleteInstallationListData();
                     NewSolarVFD.CHECK_DATA_UNOLAD = 0;
@@ -289,7 +287,7 @@ import webservice.WebURL;
                 return true;
 
             case R.id.action_menu_unloading:
-                if (CustomUtility.isInternetOn()) {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
                     recyclerView.setAdapter(null);
                     // db.deleteInstallationListData();
 
@@ -391,7 +389,7 @@ import webservice.WebURL;
                             simha2,
                             sync,
                             CONTACT_NO);
-                    if (db.isRecordExist(db.TABLE_INSTALLATION_LIST, db.KEY_ENQ_DOC, bill_no)) {
+                    if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_LIST, DatabaseHelper.KEY_ENQ_DOC, bill_no)) {
                         db.updateInstallationListData(bill_no, installationBean);
                     } else {
                         db.insertInstallationListData(bill_no, installationBean);

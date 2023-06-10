@@ -36,8 +36,8 @@ import webservice.WebURL;
     View.OnClickListener onclick_listener;
     DatabaseHelper db;
     InstallationBean installationBean;
-    private Context context;
-    private ArrayList<InstallationListBean> responseList;
+    private final Context context;
+    private final ArrayList<InstallationListBean> responseList;
     private List<InstallationListBean> SearchesList = null;
     String pernr, billno;
 //    private boolean isOffline;
@@ -169,10 +169,11 @@ import webservice.WebURL;
 
             InstallationBean param_invc = new InstallationBean();
             param_invc = db.getInstallationData(pernr, billno);
-            if (param_invc!=null &&(!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude())) && (!TextUtils.isEmpty(param_invc.getSolarpanel_wattage())) && (!TextUtils.isEmpty(param_invc.getNo_of_module_value()))) {
+            Log.e("param_invc===>",CustomUtility.getSharedPreferences(context, "INSTSYNC" + billno));
+            if ((!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude())) && (!TextUtils.isEmpty(param_invc.getSolarpanel_wattage())) && (!TextUtils.isEmpty(param_invc.getNo_of_module_value()))) {
                 holder.status.setImageResource(R.drawable.icn_yellow);
             }
-            if (param_invc!=null && !TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude()) && CustomUtility.getSharedPreferences(context, "INSTSYNC" + billno).equalsIgnoreCase("1") && !TextUtils.isEmpty(param_invc.getSolarpanel_wattage()) && !TextUtils.isEmpty(param_invc.getNo_of_module_value())) {
+            if ( !TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude()) && CustomUtility.getSharedPreferences(context, "INSTSYNC" + billno).equalsIgnoreCase("1") && !TextUtils.isEmpty(param_invc.getSolarpanel_wattage()) && !TextUtils.isEmpty(param_invc.getNo_of_module_value())) {
                 holder.status.setImageResource(R.drawable.right_mark_icn_green);
             }
         } catch (Exception e) {
@@ -216,7 +217,7 @@ import webservice.WebURL;
             gst_bill_no = itemView.findViewById(R.id.gst_bill_no);
             ben_no = itemView.findViewById(R.id.benf_no);
             status = itemView.findViewById(R.id.status);
-            icon = (ImageView) itemView.findViewById(R.id.icon);
+            icon = itemView.findViewById(R.id.icon);
             cardView = itemView.findViewById(R.id.card_view);
         }
     }

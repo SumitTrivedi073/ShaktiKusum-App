@@ -66,7 +66,7 @@ public class ImageManager {
             if (Config.getSharedPreferenceString(context, Config.PREF_KEY_PICTURE_SIZE_LIST).isEmpty()) {
                 StringBuilder sb = new StringBuilder();
                 for (Camera.Size size : validPictureSizeList) {
-                    sb.append(size.width).append("x").append(Integer.toString(size.height)).append("|");
+                    sb.append(size.width).append("x").append(size.height).append("|");
                 }
                 Config.putSharedPreference(context, Config.PREF_KEY_PICTURE_SIZE_LIST, sb.toString());
             }
@@ -187,7 +187,7 @@ public class ImageManager {
         return dir.getPath() + File.separator + "IMG_"+ name + "." + "jpg";
     }
 
-    public static Bitmap saveImageWithTimeStamp(Context context, byte data[], int offset, int length, float textSize,String lat,String lng,String cust_name) {
+    public static Bitmap saveImageWithTimeStamp(Context context, byte[] data, int offset, int length, float textSize, String lat, String lng, String cust_name) {
 
       /*  Bitmap src = BitmapFactory.decodeByteArray(data, offset, length);
 

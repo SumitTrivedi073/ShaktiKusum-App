@@ -33,7 +33,6 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.os.BuildCompat;
 
@@ -86,158 +85,50 @@ import webservice.CustomHttpClient;
 import webservice.WebURL;
 
 @BuildCompat.PrereleaseSdkCheck
-public class InstallationInitial extends AppCompatActivity {
+public class InstallationInitial extends BaseActivity {
 
+
+    public static final String GALLERY_DIRECTORY_NAME = "ShaktiKusum";
     private DatabaseHelperTeacher mDatabaseHelperTeacher;
     List<SimDetailsInfoResponse> mSimDetailsInfoResponse;
-    Context mContext;
-    DatabaseHelper db;
-    TextView save;
-    InstallationBean installationBean;
-    LabeledSwitch labeledSwitch;
-    int index_simoprator;
-    int index_conntype;
-    Spinner spinner_simoprator, spinner_conntype;
-    List<String> list_simoprator = null;
-    List<String> list_conntype = null;
-    String pernr = "";
-    String project_no = "";
-    String project_no1 = "";
-    String MUserId = "";
-    String login_no = "";
-    String customer_name = "";
-    String installation_date = "";
-    String address_ins = "";
-    String make_ins = "";
-    String tehsil_ins = "";
-    String village_ins = "";
-    String mobile_no_ins = "";
-    String solarpanel_wattage = "";
-    String no_of_module = "";
-    String total_watt = "";
-    String solarpanel_stand_ins_quantity = "";
-    String module_total_plate_watt = "";
-    String smmd_sno = "";
-    String solar_motor_model_details = "";
-    String splar_pump_model_details = "";
-    String spmd_sno = "";
-    String simcard_num = "";
-    String solar_controller_model = "";
-    String scm_sno = "";
-    String inst_latitude = "";
-    String inst_longitude = "";
-    String module_ser_no = "";
-    String inst_bill_no = "";
-    String inst_bill_date = "";
-    String inst_delay_reason = "";
-    String hp = "";
-    String current_date = "";
-    String simoprator_text = "";
-    String conntype_text = "";
-    int id = 0;
-    double inst_latitude_double,
-            inst_longitude_double;
-    String no_of_module_value = "";
-    String rmsdata_status = "";
-    EditText inst_date = null;
-    EditText bill_date = null;
-    ImageView inst_location = null;
-    ImageView img_scn_one = null;
-    ImageView img_scn_two = null;
-    ImageView img_scn_three = null;
-    ImageView img_scn_four = null;
-    ImageView geoIndigation = null;
-    EditText bill_no = null;
-    EditText cust_name = null;
-    EditText borewellstatus = null;
-    EditText reasontxt = null;
-    EditText inst_address = null;
-    EditText inst_make = null;
-    EditText inst_village = null;
-    EditText inst_state = null;
-    EditText inst_district = null;
-    EditText inst_tehsil = null;
-    EditText inst_mob_no = null;
-    EditText inst_panel_stand_qty = null;
-    EditText inst_panel_watt = null;
-    EditText inst_total_watt = null;
-    EditText inst_module_total_plate_watt = null;
-    EditText inst_no_of_module = null;
-    EditText inst_module_ser_no = null;
-    EditText inst_motor_model = null;
-    EditText inst_motor_ser = null;
-    EditText inst_pump_model = null;
-    EditText inst_pump_ser = null;
-    EditText inst_controller_model = null;
-    EditText inst_controller_ser = null;
-    EditText inst_simcard_num = null;
-    SimpleDateFormat simpleDateFormat;
-    EditText inst_hp = null;
-    EditText inst_fathers_name = null;
-    LinearLayout reason = null;
     ArrayAdapter<String> dataAdapter_simoprator;
     ArrayAdapter<String> dataAdapter_conntype;
-    public static final String GALLERY_DIRECTORY_NAME = "ShaktiKusum";
-    String billno = "";
-    String set_matno = "";
-    String simha2 = "";
-    String kunnr = "";
-    String gstbillno = "";
-    String billdate = "";
-    String dispdate = "";
-    String name = "";
-    String state = "";
-    String city = "";
-    String controller = "";
-    String motor = "";
-    String pump = "";
-    String state_txt = "";
-    String city_txt = "";
-    String address = "";
-    String make = "";
-    String custname = "";
-    String fathname = "";
-    String simno = "";
-    String regisno = "";
-    String projectno = "";
-    String loginno = "";
-    String moduleqty = "";
-    String mobileno = "";
-    String tehvillage = "";
-    String borewellstatus1 = "";
-    String DeviceStatus = "";
-    String CUS_CONTACT_NO = "", BeneficiaryNo = "";
-    int currentScannerFor = -1;
+    List<String> list_simoprator = new ArrayList<>();
+    List<String> list_conntype = new ArrayList<>();
     ArrayList<String> scannedDeviceNo = new ArrayList<>();
-    String mDriveSerialNo = "";
-    String mMotorSerialNo = "";
-    String mPumpSerialNo = "";
-
-    private int value;
-    private LinearLayout moduleOneLL;
-    Boolean your_date_is_outdated = false;
-    String delay;
-    private TextView txtDebugAppID;
-    private TextView txtLatIDD;
-    private TextView txtLongIDD;
-    private TextView txtIBaseUpdateID;
-
-    private String mMOBNUM_1, mMOBNUM_2, mMOBNUM_3;
-    private String mORG_OTP_VALUE;
-    private String mORG_CONTACT_NO;
-
-    private String MEmpType = "null";
-    String mAppName = "KUSUM";
-
-    int vkp = 0;
-    String mInstallerMOB = "";
-    String mInstallerName = "";
-    String RMS_SERVER_DOWN = "";
-    String RMS_DEBUG_EXTRN = "";
-    String DEVICE_NO, SIGNL_STREN, INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "", SIM_SR_NO = "", SIM = "",
-            RMS_STATUS = "",
-            RMS_LAST_ONLINE_DATE = "", RMS_CURRENT_ONLINE_STATUS = "";
     List<BTResonseData> mBTResonseDataList;
+
+    Context mContext;
+    DatabaseHelper db;
+    TextView save, txtDebugAppID, txtLatIDD, txtLongIDD, txtIBaseUpdateID, inst_controller_ser;
+    InstallationBean installationBean;
+    LabeledSwitch labeledSwitch;
+    int index_simoprator, index_conntype, id = 0, vkp = 0, currentScannerFor = -1, value;
+    Spinner spinner_simoprator, spinner_conntype;
+
+    String pernr = "", project_no = "", project_no1 = "", MUserId = "", login_no = "", customer_name = "", installation_date = "", address_ins = "", make_ins = "", tehsil_ins = "",
+            village_ins = "", mobile_no_ins = "", solarpanel_wattage = "", no_of_module = "", total_watt = "", solarpanel_stand_ins_quantity = "", module_total_plate_watt = "",
+            smmd_sno = "", solar_motor_model_details = "", splar_pump_model_details = "", spmd_sno = "", simcard_num = "", solar_controller_model = "", scm_sno = "", inst_latitude = "",
+            inst_longitude = "", module_ser_no = "", inst_bill_no = "", inst_bill_date = "", inst_delay_reason = "", hp = "", current_date = "", simoprator_text = "", conntype_text = "", billno = "",
+            set_matno = "", simha2 = "", kunnr = "", gstbillno = "", billdate = "", dispdate = "", name = "", state = "", city = "", controller = "", motor = "", pump = "", state_txt = "",
+            city_txt = "", address = "", make = "", custname = "", fathname = "", simno = "", regisno = "", projectno = "", loginno = "", moduleqty = "", mobileno = "", tehvillage = "",
+            borewellstatus1 = "", DeviceStatus = "", CUS_CONTACT_NO = "", BeneficiaryNo = "", no_of_module_value = "", rmsdata_status = "", mMOBNUM_1, mMOBNUM_2, mMOBNUM_3, mORG_OTP_VALUE,
+            mORG_CONTACT_NO, MEmpType = "null", mAppName = "KUSUM", mInstallerMOB = "", mInstallerName = "", RMS_SERVER_DOWN = "", RMS_DEBUG_EXTRN = "", DEVICE_NO, SIGNL_STREN,
+            INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "", SIM_SR_NO = "", SIM = "", RMS_STATUS = "", RMS_LAST_ONLINE_DATE = "", RMS_CURRENT_ONLINE_STATUS = "",
+
+    mDriveSerialNo = "", mMotorSerialNo = "", mPumpSerialNo = "", delay;
+    EditText inst_date, bill_date, bill_no, cust_name, borewellstatus, reasontxt, inst_address, inst_make, inst_village,
+            inst_state, inst_district, inst_tehsil, inst_mob_no, inst_panel_stand_qty, inst_panel_watt, inst_total_watt, inst_module_total_plate_watt, inst_no_of_module, inst_module_ser_no,
+            inst_motor_model, inst_motor_ser, inst_pump_model, inst_pump_ser, inst_controller_model, inst_simcard_num, inst_hp, inst_fathers_name;
+
+    double inst_latitude_double, inst_longitude_double;
+    SimpleDateFormat simpleDateFormat;
+
+    ImageView inst_location, img_scn_one, img_scn_two, img_scn_three, img_scn_four, geoIndigation;
+
+    LinearLayout reason, moduleOneLL;
+
+    Boolean your_date_is_outdated = false, mStatusBool = false;
     BaseRequest baseRequest;
     private Dialog dialog;
 
@@ -279,6 +170,7 @@ public class InstallationInitial extends AppCompatActivity {
         WebURL.BT_DEBUG_CHECK = 0;
         Constant.BILL_NUMBER_UNIC = "";
         Bundle extras = getIntent().getExtras();
+        pernr = CustomUtility.getSharedPreferences(mContext, "userid");
         billno = extras.getString("bill_no");
         set_matno = extras.getString("set_matno");
         simha2 = extras.getString("simha2");
@@ -329,7 +221,7 @@ public class InstallationInitial extends AppCompatActivity {
         mSimDetailsInfoResponse = new ArrayList<>();
         CustomUtility.setSharedPreference(mContext, "SYNCLIST", "0");
 
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -384,7 +276,7 @@ public class InstallationInitial extends AppCompatActivity {
         @SuppressLint("SimpleDateFormat") DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         Date date = null;
         try {
-            date = (Date) formatter.parse(output);
+            date = formatter.parse(output);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -533,7 +425,7 @@ public class InstallationInitial extends AppCompatActivity {
 
             Log.e("RMS", "Device Status DeviceOnline===>" + DeviceStatus);
 
-            if (CustomUtility.isInternetOn()) {
+            if (CustomUtility.isInternetOn(getApplicationContext())) {
                 if (mBTResonseDataList.size() > 0)
                     mBTResonseDataList.clear();
                 mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(controller);
@@ -565,15 +457,44 @@ public class InstallationInitial extends AppCompatActivity {
                     RMS_SERVER_DOWN = "Working Fine";
                     System.out.println("VikasVIHU==>>" + mBTResonseDataList.get(vkp).getDEVICENO());
                     CustomUtility.showProgressDialogue(InstallationInitial.this);
-                    new SyncDebugDataFromLocal().execute();
+
+                      new SyncDebugDataFromLocal().execute();
 
                 } else {
-                    Log.e("DeviceStatus",DeviceStatus);
+
+                    InstallationBean param_invc = new InstallationBean();
+                    param_invc = db.getInstallationData(pernr, billno);
+                    Log.e("param_invc", param_invc.getLatitude());
+                    if ((!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude())) && (!TextUtils.isEmpty(param_invc.getSolarpanel_wattage())) && (!TextUtils.isEmpty(param_invc.getNo_of_module_value()))) {
+                        saveData();
+                    } else {
+                        if (!TextUtils.isEmpty(DeviceStatus)) {
+                            if (isControllerIDScan) {
+                                if (isDebug) {
+                                    saveData();
+                                } else {
+                                    CustomUtility.ShowToast("Please debug first than proceed!", getApplicationContext());
+                                }
+                            } else {
+                                CustomUtility.ShowToast("Please Scan Controller ID first!", getApplicationContext());
+                            }
+                        } else {
+                            CustomUtility.ShowToast("Please get RMS Device Status.", getApplicationContext());
+                        }
+                    }
+                }
+            } else {
+                InstallationBean param_invc = new InstallationBean();
+                param_invc = db.getInstallationData(pernr, billno);
+                Log.e("param_invc2", param_invc.getLatitude());
+                if (param_invc != null && (!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude())) && (!TextUtils.isEmpty(param_invc.getSolarpanel_wattage())) && (!TextUtils.isEmpty(param_invc.getNo_of_module_value()))) {
+                    saveData();
+                } else {
                     if (!TextUtils.isEmpty(DeviceStatus)) {
                         if (isControllerIDScan) {
                             if (isDebug) {
                                 saveData();
-                            }else {
+                            } else {
                                 CustomUtility.ShowToast("Please debug first than proceed!", getApplicationContext());
                             }
                         } else {
@@ -581,36 +502,20 @@ public class InstallationInitial extends AppCompatActivity {
                         }
                     } else {
                         CustomUtility.ShowToast("Please get RMS Device Status.", getApplicationContext());
-                    }
-                }
-            } else {
-                if (!TextUtils.isEmpty(DeviceStatus)) {
-                    if (isControllerIDScan) {
-                        if (isDebug) {
-                            saveData();
-                        }else {
-                            CustomUtility.ShowToast("Please debug first than proceed!", getApplicationContext());
-                        }
-                    } else {
-                        CustomUtility.ShowToast("Please Scan Controller ID first!", getApplicationContext());
-                    }
-                } else {
-                    CustomUtility.ShowToast("Please get RMS Device Status.", getApplicationContext());
 
+                    }
                 }
             }
-
-
         });
 
-        if (CustomUtility.isInternetOn()) {
-            labeledSwitch.setOnToggledListener((toggleableView, isOn) -> {
-                Intent intent = new Intent(mContext, DeviceStatusActivity.class);
-                startActivity(intent);
-            });
-        } else {
+        //if (CustomUtility.isInternetOn(getApplicationContext())) {
+        labeledSwitch.setOnToggledListener((toggleableView, isOn) -> {
+            Intent intent = new Intent(mContext, DeviceStatusActivity.class);
+            startActivity(intent);
+        });
+       /* } else {
             Toast.makeText(mContext, "Please Connect to internet...", Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 
     void startScanner(int scanID) {
@@ -679,7 +584,7 @@ public class InstallationInitial extends AppCompatActivity {
                     break;
             }
             if (!alreadySet) {
-                EditText edit_O = (EditText) moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
+                EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
 
                 if (scannedDeviceNo.size() > 0) {
                     if (!scannedDeviceNo.contains(scanContent)) {
@@ -788,7 +693,7 @@ public class InstallationInitial extends AppCompatActivity {
             case R.id.act_comp_attach_image:
 
                 borewellstatus1 = CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno);
-                DeviceStatus = CustomUtility.getSharedPreferences(mContext, "DeviceStatus");
+
 
                 if (!TextUtils.isEmpty(DeviceStatus)) {
 
@@ -822,7 +727,7 @@ public class InstallationInitial extends AppCompatActivity {
 
     private void ViewInflate(int value, int new_value) {
 
-        String arr[] = no_of_module_value.split(",");
+        String[] arr = no_of_module_value.split(",");
 
         moduleOneLL.removeAllViews();
 
@@ -961,7 +866,7 @@ public class InstallationInitial extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     public void saveData() {
 
-        if (CustomUtility.isInternetOn()) {
+        if (CustomUtility.isInternetOn(getApplicationContext())) {
             //GET DATA
             getData();
 
@@ -971,62 +876,24 @@ public class InstallationInitial extends AppCompatActivity {
 
                 mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
             }
-
-            InstallationBean installationBean = new InstallationBean(pernr,
-                    project_no,
-                    login_no,
-                    inst_latitude,
-                    inst_longitude,
-                    inst_bill_no,
-                    installation_date,
-                    inst_bill_date,
-                    inst_delay_reason,
-                    rmsdata_status,
-                    customer_name,
-                    fathname,
-                    mobileno,
-                    state,
-                    state_txt,
-                    city,
-                    city_txt,
-                    tehsil_ins,
-                    village_ins,
-                    address,
-                    make,
-                    solarpanel_wattage,
-                    solarpanel_stand_ins_quantity,
-                    total_watt,
-                    hp,
-                    no_of_module,
-                    no_of_module_value,
-                    module_total_plate_watt,
-                    solar_motor_model_details,
-                    smmd_sno,
-                    splar_pump_model_details,
-                    spmd_sno,
-                    solar_controller_model,
-                    scm_sno,
-                    simoprator_text,
-                    conntype_text,
-                    simcard_num,
-                    regisno,
-                    BeneficiaryNo
+            borewellstatus1 = CustomUtility.getSharedPreferences(this, "borewellstatus" + billno);
+            InstallationBean installationBean = new InstallationBean(pernr, project_no, login_no, inst_latitude, inst_longitude, inst_bill_no, installation_date, inst_bill_date,
+                    inst_delay_reason, rmsdata_status, customer_name, fathname, mobileno, state, state_txt, city, city_txt, tehsil_ins, village_ins, address, make, solarpanel_wattage,
+                    solarpanel_stand_ins_quantity, total_watt, hp, no_of_module, no_of_module_value, module_total_plate_watt, solar_motor_model_details, smmd_sno, splar_pump_model_details,
+                    spmd_sno, solar_controller_model, scm_sno, simoprator_text, conntype_text, simcard_num, regisno, BeneficiaryNo
             );
 
-            if (db.isRecordExist(db.TABLE_INSTALLATION_PUMP_DATA, db.KEY_BILL_NO, inst_bill_no)) {
+            if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_PUMP_DATA, DatabaseHelper.KEY_BILL_NO, inst_bill_no)) {
                 db.updateInstallationData(inst_bill_no, installationBean);
 
             } else {
                 db.insertInstallationData(inst_bill_no, installationBean);
             }
 
-            String arr[] = no_of_module_value.split(",");
-            int no_of_module_value1 = Integer.parseInt(no_of_module);
+          /*
+           Because there is no use of "DEBUG_CHECK_IN_KUSUM" in app so that'swhy lokesh shivde sir and Sumit trivedi commented it
 
-            borewellstatus1 = CustomUtility.getSharedPreferences(this, "borewellstatus" + billno);
-
-
-            if (WebURL.DEBUG_CHECK_IN_KUSUM.equalsIgnoreCase("ON")) {
+           if (WebURL.DEBUG_CHECK_IN_KUSUM.equalsIgnoreCase("ON")) {
                 if (reason.getVisibility() == View.VISIBLE) {
 
                     if (inst_latitude != null && !inst_latitude.equals("") && inst_longitude != null && !inst_longitude.equals("") && !inst_longitude.equals("0.0") && !inst_latitude.equals("0.0")) {
@@ -1049,148 +916,157 @@ public class InstallationInitial extends AppCompatActivity {
                                                                                     Toast.makeText(mContext, "Please Enter all module serial no.", Toast.LENGTH_SHORT).show();
                                                                                 }
                                                                             }
-                                                                            if (inst_make != null && !inst_make.equals("")) {
+                                                                            if (inst_make != null && !inst_make.toString().isEmpty()) {
                                                                                 if (!TextUtils.isEmpty(borewellstatus1)) {
-                                                                                    if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
-                                                                                        //  simha2
-                                                                                        if (project_no1.equalsIgnoreCase("0201") || project_no1.equalsIgnoreCase("201") || project_no1.equalsIgnoreCase("0202") || project_no1.equalsIgnoreCase("202") || project_no1.equalsIgnoreCase("0108") || project_no1.equalsIgnoreCase("108") || project_no1.equalsIgnoreCase("0203") || project_no1.equalsIgnoreCase("203")) {
-                                                                                            if (imageList.size() > 0) {
-                                                                                                new SyncInstallationData().execute();
-                                                                                            } else {
-                                                                                                CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
-                                                                                            }
-                                                                                        } else {
 
-                                                                                            if (WebURL.CHECK_FINAL_ALL_OK == 1) {
-                                                                                                if (imageList.size() > 0) {
-                                                                                                    new SyncInstallationData().execute();
-                                                                                                } else {
-                                                                                                    CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
-                                                                                                }
-                                                                                            } else if (mSimDetailsInfoResponse.size() >= 3) {
-                                                                                                if (imageList.size() > 0) {
-                                                                                                    new SyncInstallationData().execute();
-                                                                                                } else {
-                                                                                                    CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
-                                                                                                }
-                                                                                            } else {
-                                                                                                if (WebURL.BT_DEBUG_CHECK == 1) {
+                                                                                     if(!DeviceStatus.isEmpty()) {
+                                                                                         if (DeviceStatus.equals(getResources().getString(R.string.online))) {
+                                                                                             if (imageList.size() > 0) {
+                                                                                                 CustomUtility.ShowToast("SaveData1", getApplicationContext());
+                                                                                                 //  new SyncInstallationData().execute();
+                                                                                             } else {
+                                                                                                 CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                                                                                             }
+                                                                                         } else {
+                                                                                             if(mSimDetailsInfoResponse.size()>=1){
+                                                                                                 if(mSimDetailsInfoResponse.size()>= 2) {
+                                                                                                     if (mSimDetailsInfoResponse.size() >= 3) {
+
+
+                                                                                                         if (imageList.size() > 0) {
+                                                                                                             CustomUtility.ShowToast("SaveData2", getApplicationContext());
+                                                                                                             //  new SyncInstallationData().execute();
+                                                                                                         } else {
+                                                                                                             CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                                                                                                         }
+
+                                                                                                     } else {
+                                                                                                         CustomUtility.ShowToast(getResources().getString(R.string.insertThirdSim), getApplicationContext());
+                                                                                                     }
+                                                                                                 }else {
+                                                                                                     CustomUtility.ShowToast(getResources().getString(R.string.insertSecondSim),getApplicationContext());
+                                                                                                 }
+                                                                                             }else {
+                                                                                                 CustomUtility.ShowToast(getResources().getString(R.string.sim_insertMsg), getApplicationContext());
+
+                                                                                             }
+                                                                                         }
+                                                                                     }  else {
+                                                                                    Toast.makeText(mContext, "Please get RMS Device Status.", Toast.LENGTH_SHORT).show();
+                                                                                }
+
+                                                                                } else {
+                                                                                    Toast.makeText(mContext, "Please Select Borewell Status.", Toast.LENGTH_SHORT).show();
+                                                                                }
+                                                                            } else {
+                                                                                Toast.makeText(mContext, "Please Enter Make", Toast.LENGTH_SHORT).show();
+                                                                            }
+                                                                        } else {
+                                                                            Toast.makeText(mContext, "Please Enter all module serial no.", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    } else {
+                                                                        Toast.makeText(mContext, "Please Enter Controller Serial No.", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                } else {
+                                                                    Toast.makeText(mContext, "Please Enter Pump Serial No.", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            } else {
+                                                                Toast.makeText(mContext, "Please Enter Motor Serial No.", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        } else {
+                                                            Toast.makeText(mContext, "Please Enter Total Module Plate Watt", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    } else {
+                                                        Toast.makeText(mContext, "Please Enter Total Plate Watt", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                } else {
+                                                    Toast.makeText(mContext, "Please Select Connection Type", Toast.LENGTH_SHORT).show();
+                                                }
+                                            } else {
+                                                Toast.makeText(mContext, "Please Enter Total Watt.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        } else {
+                                            Toast.makeText(mContext, "Please Enter Solar Panel Stand Quantity.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        Toast.makeText(mContext, "Please Enter HP.", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    Toast.makeText(mContext, "Please Solar Panel Wattage.", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(mContext, "Please Enter Installation Delay Reason.", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(mContext, "Please Enter Bill No.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else {
+                        Toast.makeText(mContext, "Please Take Latitude and Longitude", Toast.LENGTH_SHORT).show();
+                    }
+                    // Its visible
+                }
+                else {
+                    // Either gone or invisible
+                    if (inst_latitude != null && !inst_latitude.equals("") && inst_longitude != null && !inst_longitude.equals("") && !inst_longitude.equals("0.0") && !inst_latitude.equals("0.0")) {
+                        if (inst_bill_no != null && !inst_bill_no.equals("")) {
+                            if (solarpanel_wattage != null && !solarpanel_wattage.equals("")) {
+                                if (hp != null && !hp.equals("")) {
+                                    if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
+                                        if (total_watt != null && !total_watt.equals("")) {
+                                            if (conntype_text != null && !conntype_text.equals("")) {
+                                                if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
+                                                    if (module_total_plate_watt != null && !module_total_plate_watt.equals("")) {
+                                                        if (smmd_sno != null && !smmd_sno.equals("")) {
+                                                            if (spmd_sno != null && !spmd_sno.equals("")) {
+                                                                if (scm_sno != null && !scm_sno.equals("")) {
+                                                                    if (arr.length == no_of_module_value1) {
+
+                                                                        for (int i = 0; i < arr.length - 1; i++) {
+                                                                            if (arr[i].equalsIgnoreCase("")) {
+                                                                                Toast.makeText(mContext, "Please Enter all module serial no.", Toast.LENGTH_SHORT).show();
+                                                                            }
+                                                                        }
+                                                                        if (inst_make != null && !inst_make.equals("")) {
+                                                                            if (!TextUtils.isEmpty(borewellstatus1)) {
+                                                                                if(!DeviceStatus.isEmpty()) {
+                                                                                    if ( DeviceStatus.equals(getResources().getString(R.string.online))) {
+                                                                                        if (imageList.size() > 0) {
+                                                                                            CustomUtility.ShowToast("SaveData3", getApplicationContext());
+                                                                                            //   new SyncInstallationData().execute();
+                                                                                        } else {
+                                                                                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                                                                                        }
+                                                                                    } else {
+                                                                                        if(mSimDetailsInfoResponse.size()>=1){
+                                                                                            if(mSimDetailsInfoResponse.size()>= 2) {
+                                                                                                if (mSimDetailsInfoResponse.size() >= 3) {
+
+
                                                                                                     if (imageList.size() > 0) {
-                                                                                                        new SyncInstallationData().execute();
+                                                                                                        CustomUtility.ShowToast("SaveData4", getApplicationContext());
+                                                                                                        //  new SyncInstallationData().execute();
                                                                                                     } else {
                                                                                                         CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
                                                                                                     }
+
                                                                                                 } else {
-                                                                                                    Toast.makeText(mContext, "Please debug first then submit", Toast.LENGTH_SHORT).show();
+                                                                                                    CustomUtility.ShowToast(getResources().getString(R.string.insertThirdSim), getApplicationContext());
                                                                                                 }
+                                                                                            }else {
+                                                                                                CustomUtility.ShowToast(getResources().getString(R.string.insertSecondSim),getApplicationContext());
                                                                                             }
-                                                                                        }
+                                                                                        }else {
+                                                                                            CustomUtility.ShowToast(getResources().getString(R.string.sim_insertMsg), getApplicationContext());
 
-                                                                                    } else {
-                                                                                        Toast.makeText(mContext, "Please Select Photos", Toast.LENGTH_SHORT).show();
-                                                                                    }
-                                                                                } else {
-                                                                                    Toast.makeText(mContext, "Please Select Borewell Status.", Toast.LENGTH_SHORT).show();
-                                                                                }
-                                                                            } else {
-                                                                                Toast.makeText(mContext, "Please Enter Make", Toast.LENGTH_SHORT).show();
-                                                                            }
-                                                                        } else {
-                                                                            Toast.makeText(mContext, "Please Enter all module serial no.", Toast.LENGTH_SHORT).show();
-                                                                        }
-                                                                    } else {
-                                                                        Toast.makeText(mContext, "Please Enter Controller Serial No.", Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                } else {
-                                                                    Toast.makeText(mContext, "Please Enter Pump Serial No.", Toast.LENGTH_SHORT).show();
-                                                                }
-                                                            } else {
-                                                                Toast.makeText(mContext, "Please Enter Motor Serial No.", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        } else {
-                                                            Toast.makeText(mContext, "Please Enter Total Module Plate Watt", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    } else {
-                                                        Toast.makeText(mContext, "Please Enter Total Plate Watt", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                } else {
-                                                    Toast.makeText(mContext, "Please Select Connection Type", Toast.LENGTH_SHORT).show();
-                                                }
-                                            } else {
-                                                Toast.makeText(mContext, "Please Enter Total Watt.", Toast.LENGTH_SHORT).show();
-                                            }
-                                        } else {
-                                            Toast.makeText(mContext, "Please Enter Solar Panel Stand Quantity.", Toast.LENGTH_SHORT).show();
-                                        }
-                                    } else {
-                                        Toast.makeText(mContext, "Please Enter HP.", Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
-                                    Toast.makeText(mContext, "Please Solar Panel Wattage.", Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                Toast.makeText(mContext, "Please Enter Installation Delay Reasom.", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(mContext, "Please Enter Bill No.", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Toast.makeText(mContext, "Please Take Latitude and Longitude", Toast.LENGTH_SHORT).show();
-                    }
-                    // Its visible
-                } else {
-                    // Either gone or invisible
-                    if (inst_latitude != null && !inst_latitude.equals("") && inst_longitude != null && !inst_longitude.equals("") && !inst_longitude.equals("0.0") && !inst_latitude.equals("0.0")) {
-                        if (inst_bill_no != null && !inst_bill_no.equals("")) {
-                            /*if (rmsdata_status != null && !rmsdata_status.equals("")) {*/
-                            if (solarpanel_wattage != null && !solarpanel_wattage.equals("")) {
-                                if (hp != null && !hp.equals("")) {
-                                    if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
-                                        if (total_watt != null && !total_watt.equals("")) {
-                                            if (conntype_text != null && !conntype_text.equals("")) {
-                                                if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
-                                                    if (module_total_plate_watt != null && !module_total_plate_watt.equals("")) {
-                                                        if (smmd_sno != null && !smmd_sno.equals("")) {
-                                                            if (spmd_sno != null && !spmd_sno.equals("")) {
-                                                                if (scm_sno != null && !scm_sno.equals("")) {
-                                                                    if (arr.length == no_of_module_value1) {
-
-                                                                        for (int i = 0; i < arr.length - 1; i++) {
-                                                                            if (arr[i].equalsIgnoreCase("")) {
-                                                                                Toast.makeText(mContext, "Please Enter all module serial no.", Toast.LENGTH_SHORT).show();
-                                                                            }
-                                                                        }
-                                                                        if (inst_make != null && !inst_make.equals("")) {
-                                                                            if (!TextUtils.isEmpty(borewellstatus1)) {
-                                                                                if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
-                                                                                    //   new SyncInstallationData().execute();
-                                                                                    if (project_no1.equalsIgnoreCase("0201") || project_no1.equalsIgnoreCase("201") || project_no1.equalsIgnoreCase("0202") || project_no1.equalsIgnoreCase("202") || project_no1.equalsIgnoreCase("0108") || project_no1.equalsIgnoreCase("108") || project_no1.equalsIgnoreCase("0203") || project_no1.equalsIgnoreCase("203")) {
-                                                                                        if (imageList.size() > 0) {
-                                                                                            new SyncInstallationData().execute();
-                                                                                        } else {
-                                                                                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
-                                                                                        }
-                                                                                    } else {
-
-                                                                                        if (WebURL.CHECK_FINAL_ALL_OK == 1) {
-                                                                                            if (imageList.size() > 0) {
-                                                                                                new SyncInstallationData().execute();
-                                                                                            } else {
-                                                                                                CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
-                                                                                            }
-                                                                                        } else if (mSimDetailsInfoResponse.size() >= 3) {
-                                                                                            if (imageList.size() > 0) {
-                                                                                                new SyncInstallationData().execute();
-                                                                                            } else {
-                                                                                                CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
-                                                                                            }
-                                                                                        } else {
-                                                                                            Toast.makeText(mContext, "Please insert new sim and try again!", Toast.LENGTH_SHORT).show();
                                                                                         }
                                                                                     }
-                                                                                } else {
-                                                                                    Toast.makeText(mContext, "Please Select Photos", Toast.LENGTH_SHORT).show();
+                                                                                }else {
+                                                                                    Toast.makeText(mContext, "Please get RMS Device Status.", Toast.LENGTH_SHORT).show();
                                                                                 }
+
+
+
                                                                             } else {
                                                                                 Toast.makeText(mContext, "Please Select Borewell Status", Toast.LENGTH_SHORT).show();
                                                                             }
@@ -1230,255 +1106,175 @@ public class InstallationInitial extends AppCompatActivity {
                             } else {
                                 Toast.makeText(mContext, "Please Solar Panel Wattage.", Toast.LENGTH_SHORT).show();
                             }
-                   /* } else {
-                        Toast.makeText(mContext, "Please Get RMS DATA STATUS.", Toast.LENGTH_SHORT).show();
-                    }*/
+
                         } else {
                             Toast.makeText(mContext, "Please Enter Bill No.", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(mContext, "Please Take Latitude and Longitude", Toast.LENGTH_SHORT).show();
                     }
+                }
+            } */
+
+            //   else {
+            if (reason.getVisibility() == View.VISIBLE) {
+                if (!reasontxt.getText().toString().isEmpty()) {
+                    saveDataValidation();
+                } else {
+                    CustomUtility.ShowToast("Please Enter Installation Delay Reason.", getApplicationContext());
                 }
             } else {
-                if (reason.getVisibility() == View.VISIBLE) {
-
-                    if (inst_latitude != null && !inst_latitude.equals("") && inst_longitude != null && !inst_longitude.equals("") && !inst_longitude.equals("0.0") && !inst_latitude.equals("0.0")) {
-                        if (inst_bill_no != null && !inst_bill_no.equals("")) {
-                            if (inst_delay_reason != null && !inst_delay_reason.equals("")) {
-                                if (solarpanel_wattage != null && !solarpanel_wattage.equals("")) {
-                                    if (hp != null && !hp.equals("")) {
-                                        if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
-                                            if (total_watt != null && !total_watt.equals("")) {
-                                                if (conntype_text != null && !conntype_text.equals("")) {
-                                                    if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
-                                                        //   if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
-                                                        if (module_total_plate_watt != null && !module_total_plate_watt.equals("")) {
-                                                            if (smmd_sno != null && !smmd_sno.equals("")) {
-                                                                if (spmd_sno != null && !spmd_sno.equals("")) {
-                                                                    if (scm_sno != null && !scm_sno.equals("")) {
-                                                                        if (arr.length == no_of_module_value1) {
-                                                                            for (int i = 0; i < arr.length - 1; i++) {
-                                                                                if (arr[i].equalsIgnoreCase("")) {
-                                                                                    Toast.makeText(mContext, "Please Enter all module serial no.", Toast.LENGTH_SHORT).show();
-                                                                                }
-                                                                            }
-                                                                            if (inst_make != null && !inst_make.equals("")) {
-                                                                                if (!TextUtils.isEmpty(borewellstatus1)) {
-                                                                                    if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
-                                                                                        //  simha2
-
-                                                                                        if (imageList.size() > 0) {
-                                                                                            new SyncInstallationData().execute();
-                                                                                        } else {
-                                                                                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
-                                                                                        }
-
-                                                                                    } else {
-                                                                                        Toast.makeText(mContext, "Please Select Photos", Toast.LENGTH_SHORT).show();
-                                                                                    }
-                                                                                } else {
-                                                                                    Toast.makeText(mContext, "Please Select Borewell Status.", Toast.LENGTH_SHORT).show();
-                                                                                }
-                                                                            } else {
-                                                                                Toast.makeText(mContext, "Please Enter Make", Toast.LENGTH_SHORT).show();
-                                                                            }
-                                                                        } else {
-                                                                            Toast.makeText(mContext, "Please Enter all module serial no.", Toast.LENGTH_SHORT).show();
-                                                                        }
-                                                                    } else {
-                                                                        Toast.makeText(mContext, "Please Enter Controller Serial No.", Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                } else {
-                                                                    Toast.makeText(mContext, "Please Enter Pump Serial No.", Toast.LENGTH_SHORT).show();
-                                                                }
-                                                            } else {
-                                                                Toast.makeText(mContext, "Please Enter Motor Serial No.", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        } else {
-                                                            Toast.makeText(mContext, "Please Enter Total Module Plate Watt", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    } else {
-                                                        Toast.makeText(mContext, "Please Enter Total Plate Watt", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                } else {
-                                                    Toast.makeText(mContext, "Please Select Connection Type", Toast.LENGTH_SHORT).show();
-                                                }
-                                            } else {
-                                                Toast.makeText(mContext, "Please Enter Total Watt.", Toast.LENGTH_SHORT).show();
-                                            }
-                                        } else {
-                                            Toast.makeText(mContext, "Please Enter Solar Panel Stand Quantity.", Toast.LENGTH_SHORT).show();
-                                        }
-                                    } else {
-                                        Toast.makeText(mContext, "Please Enter HP.", Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
-                                    Toast.makeText(mContext, "Please Solar Panel Wattage.", Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                Toast.makeText(mContext, "Please Enter Installation Delay Reasom.", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(mContext, "Please Enter Bill No.", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Toast.makeText(mContext, "Please Take Latitude and Longitude", Toast.LENGTH_SHORT).show();
-                    }
-                    // Its visible
-                } else {
-                    // Either gone or invisible
-                    if (inst_latitude != null && !inst_latitude.equals("") && inst_longitude != null && !inst_longitude.equals("") && !inst_longitude.equals("0.0") && !inst_latitude.equals("0.0")) {
-                        if (inst_bill_no != null && !inst_bill_no.equals("")) {
-                            /*if (rmsdata_status != null && !rmsdata_status.equals("")) {*/
-                            if (solarpanel_wattage != null && !solarpanel_wattage.equals("")) {
-                                if (hp != null && !hp.equals("")) {
-                                    if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
-                                        if (total_watt != null && !total_watt.equals("")) {
-                                            if (conntype_text != null && !conntype_text.equals("")) {
-                                                if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
-                                                    if (module_total_plate_watt != null && !module_total_plate_watt.equals("")) {
-                                                        if (smmd_sno != null && !smmd_sno.equals("")) {
-                                                            if (spmd_sno != null && !spmd_sno.equals("")) {
-                                                                if (scm_sno != null && !scm_sno.equals("")) {
-                                                                    if (arr.length == no_of_module_value1) {
-
-                                                                        for (int i = 0; i < arr.length - 1; i++) {
-                                                                            if (arr[i].equalsIgnoreCase("")) {
-                                                                                Toast.makeText(mContext, "Please Enter all module serial no.", Toast.LENGTH_SHORT).show();
-                                                                            }
-                                                                        }
-                                                                        if (inst_make != null && !inst_make.equals("")) {
-                                                                            if (!TextUtils.isEmpty(borewellstatus1)) {
-                                                                                if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
-
-                                                                                    if (project_no1.equalsIgnoreCase("0201") || project_no1.equalsIgnoreCase("201") || project_no1.equalsIgnoreCase("0202") || project_no1.equalsIgnoreCase("202") || project_no1.equalsIgnoreCase("0108") || project_no1.equalsIgnoreCase("108") || project_no1.equalsIgnoreCase("0203") || project_no1.equalsIgnoreCase("203")) {
-                                                                                        if (imageList.size() > 0) {
-                                                                                            new SyncInstallationData().execute();
-                                                                                        } else {
-                                                                                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
-                                                                                        }
-                                                                                    } else {
-
-
-                                                                                        if (imageList.size() > 0) {
-                                                                                            new SyncInstallationData().execute();
-                                                                                        } else {
-                                                                                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
-                                                                                        }
-
-                                                                                    }
-                                                                                } else {
-                                                                                    Toast.makeText(mContext, "Please Select Photos", Toast.LENGTH_SHORT).show();
-                                                                                }
-                                                                            } else {
-                                                                                Toast.makeText(mContext, "Please Select Borewell Status", Toast.LENGTH_SHORT).show();
-                                                                            }
-                                                                        } else {
-                                                                            Toast.makeText(mContext, "Please Enter Make", Toast.LENGTH_SHORT).show();
-                                                                        }
-                                                                    } else {
-                                                                        Toast.makeText(mContext, "Please Enter all module serial no.", Toast.LENGTH_SHORT).show();
-                                                                    }
-                                                                } else {
-                                                                    Toast.makeText(mContext, "Please Enter Controller Serial No.", Toast.LENGTH_SHORT).show();
-                                                                }
-                                                            } else {
-                                                                Toast.makeText(mContext, "Please Enter Pump Serial No.", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        } else {
-                                                            Toast.makeText(mContext, "Please Enter Motor Serial No.", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    } else {
-                                                        Toast.makeText(mContext, "Please Enter Total Module Plate Watt", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                } else {
-                                                    Toast.makeText(mContext, "Please Enter Total Plate Watt", Toast.LENGTH_SHORT).show();
-                                                }
-                                            } else {
-                                                Toast.makeText(mContext, "Please Select Connection Type", Toast.LENGTH_SHORT).show();
-                                            }
-                                        } else {
-                                            Toast.makeText(mContext, "Please Enter Total Watt.", Toast.LENGTH_SHORT).show();
-                                        }
-                                    } else {
-                                        Toast.makeText(mContext, "Please Enter Solar Panel Stand Quantity.", Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
-                                    Toast.makeText(mContext, "Please Enter HP.", Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                Toast.makeText(mContext, "Please Solar Panel Wattage.", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(mContext, "Please Enter Bill No.", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Toast.makeText(mContext, "Please Take Latitude and Longitude", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
+                saveDataValidation();
             }
+
+            // }
 
 
         } else {
             Toast.makeText(mContext, "Please Connect to Internet, Your Data is Save to Offline Mode...", Toast.LENGTH_SHORT).show();
-            //GET DATA
+
             getData();
-
-            InstallationBean installationBean = new InstallationBean(pernr,
-                    project_no,
-                    login_no,
-                    inst_latitude,
-                    inst_longitude,
-                    inst_bill_no,
-                    installation_date,
-                    inst_bill_date,
-                    inst_delay_reason,
-                    rmsdata_status,
-                    customer_name,
-                    fathname,
-                    mobileno,
-                    state,
-                    state_txt,
-                    city,
-                    city_txt,
-                    tehsil_ins,
-                    village_ins,
-                    address,
-                    make,
-                    solarpanel_wattage,
-                    solarpanel_stand_ins_quantity,
-                    total_watt,
-                    hp,
-                    no_of_module,
-                    no_of_module_value,
-                    module_total_plate_watt,
-                    solar_motor_model_details,
-                    smmd_sno,
-                    splar_pump_model_details,
-                    spmd_sno,
-                    solar_controller_model,
-                    scm_sno,
-                    simoprator_text,
-                    conntype_text,
-                    simcard_num,
-                    regisno, BeneficiaryNo
-
+            InstallationBean installationBean = new InstallationBean(pernr, project_no, login_no, inst_latitude, inst_longitude, inst_bill_no, installation_date, inst_bill_date,
+                    inst_delay_reason, rmsdata_status, customer_name, fathname, mobileno, state, state_txt, city, city_txt, tehsil_ins, village_ins, address, make, solarpanel_wattage,
+                    solarpanel_stand_ins_quantity, total_watt, hp, no_of_module, no_of_module_value, module_total_plate_watt, solar_motor_model_details, smmd_sno, splar_pump_model_details,
+                    spmd_sno, solar_controller_model, scm_sno, simoprator_text, conntype_text, simcard_num, regisno, BeneficiaryNo
             );
 
-            if (db.isRecordExist(db.TABLE_INSTALLATION_PUMP_DATA, db.KEY_BILL_NO, inst_bill_no)) {
+            if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_PUMP_DATA, DatabaseHelper.KEY_BILL_NO, inst_bill_no)) {
                 db.updateInstallationData(inst_bill_no, installationBean);
             } else {
                 db.insertInstallationData(inst_bill_no, installationBean);
             }
-
             Intent intent = new Intent(mContext, InstallationList.class);
             startActivity(intent);
             finish();
 
         }
 
+    }
+
+    private void saveDataValidation() {
+        String[] arr = no_of_module_value.split(",");
+        int no_of_module_value1 = Integer.parseInt(no_of_module);
+
+        if (inst_latitude != null && !inst_latitude.equals("") && inst_longitude != null && !inst_longitude.equals("") && !inst_longitude.equals("0.0") && !inst_latitude.equals("0.0")) {
+            if (inst_bill_no != null && !inst_bill_no.equals("")) {
+                if (inst_delay_reason != null && !inst_delay_reason.equals("")) {
+                    if (solarpanel_wattage != null && !solarpanel_wattage.equals("")) {
+                        if (hp != null && !hp.equals("")) {
+                            if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
+                                if (total_watt != null && !total_watt.equals("")) {
+                                    if (conntype_text != null && !conntype_text.equals("")) {
+                                        if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
+                                            //   if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
+                                            if (module_total_plate_watt != null && !module_total_plate_watt.equals("")) {
+                                                if (smmd_sno != null && !smmd_sno.equals("")) {
+                                                    if (spmd_sno != null && !spmd_sno.equals("")) {
+                                                        if (scm_sno != null && !scm_sno.equals("")) {
+                                                            if (arr.length == no_of_module_value1) {
+                                                                for (int i = 0; i < arr.length - 1; i++) {
+                                                                    if (arr[i].equalsIgnoreCase("")) {
+                                                                        Toast.makeText(mContext, "Please Enter all module serial no.", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                }
+                                                                if (inst_make != null && !inst_make.equals("")) {
+                                                                    if (!TextUtils.isEmpty(borewellstatus1)) {
+                                                                                   /* if (CustomUtility.getSharedPreferences(mContext, "INSTSYNC" + billno).equalsIgnoreCase("1")) {
+                                                                                        //  simha2
+
+                                                                                        if (imageList.size() > 0) {
+                                                                                            new SyncInstallationData().execute();
+                                                                                        } else {
+                                                                                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                                                                                        }
+
+                                                                                    } else {
+                                                                                        Toast.makeText(mContext, "Please Select Photos", Toast.LENGTH_SHORT).show();
+                                                                                    }*/
+                                                                        if (!DeviceStatus.isEmpty()) {
+
+                                                                            if (DeviceStatus.equals(getResources().getString(R.string.online))) {
+                                                                                if (imageList.size() > 0) {
+                                                                                    new SyncInstallationData().execute();
+
+                                                                                } else {
+                                                                                    CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                                                                                }
+                                                                            } else {
+                                                                                if (mSimDetailsInfoResponse.size() >= 1) {
+                                                                                    if (mSimDetailsInfoResponse.size() >= 2) {
+                                                                                        if (mSimDetailsInfoResponse.size() >= 3) {
+
+
+                                                                                            if (imageList.size() > 0) {
+                                                                                                new SyncInstallationData().execute();
+                                                                                            } else {
+                                                                                                CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                                                                                            }
+
+                                                                                        } else {
+                                                                                            CustomUtility.ShowToast(getResources().getString(R.string.insertThirdSim), getApplicationContext());
+                                                                                        }
+                                                                                    } else {
+                                                                                        CustomUtility.ShowToast(getResources().getString(R.string.insertSecondSim), getApplicationContext());
+                                                                                    }
+                                                                                } else {
+                                                                                    CustomUtility.ShowToast(getResources().getString(R.string.sim_insertMsg), getApplicationContext());
+
+                                                                                }
+                                                                            }
+                                                                        } else {
+                                                                            Toast.makeText(mContext, "Please get RMS Device Status.", Toast.LENGTH_SHORT).show();
+                                                                        }
+
+                                                                    } else {
+                                                                        Toast.makeText(mContext, "Please Select Borewell Status.", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                } else {
+                                                                    Toast.makeText(mContext, "Please Enter Make", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            } else {
+                                                                Toast.makeText(mContext, "Please Enter all module serial no.", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        } else {
+                                                            Toast.makeText(mContext, "Please Enter Controller Serial No.", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    } else {
+                                                        Toast.makeText(mContext, "Please Enter Pump Serial No.", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                } else {
+                                                    Toast.makeText(mContext, "Please Enter Motor Serial No.", Toast.LENGTH_SHORT).show();
+                                                }
+                                            } else {
+                                                Toast.makeText(mContext, "Please Enter Total Module Plate Watt", Toast.LENGTH_SHORT).show();
+                                            }
+                                        } else {
+                                            Toast.makeText(mContext, "Please Enter Total Plate Watt", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        Toast.makeText(mContext, "Please Select Connection Type", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    Toast.makeText(mContext, "Please Enter Total Watt.", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(mContext, "Please Enter Solar Panel Stand Quantity.", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(mContext, "Please Enter HP.", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(mContext, "Please Solar Panel Wattage.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(mContext, "Please Enter Installation Delay Reason.", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(mContext, "Please Enter Bill No.", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(mContext, "Please Take Latitude and Longitude", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -1496,10 +1292,10 @@ public class InstallationInitial extends AppCompatActivity {
 
         );
 
-        if (db.isRecordExist(db.TABLE_INSTALLATION_PUMP_DATA, db.KEY_BILL_NO, inst_bill_no)) {
+        if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_PUMP_DATA, DatabaseHelper.KEY_BILL_NO, inst_bill_no)) {
             db.updateInstallationData(inst_bill_no, installationBean);
         } else {
-            db.   insertInstallationData(inst_bill_no, installationBean);
+            db.insertInstallationData(inst_bill_no, installationBean);
         }
 
     }
@@ -1556,59 +1352,59 @@ public class InstallationInitial extends AppCompatActivity {
         txtIBaseUpdateID = findViewById(R.id.txtIBaseUpdateID);
 
 
-        save = (TextView) findViewById(R.id.save);
+        save = findViewById(R.id.save);
 
-        geoIndigation = (ImageView) findViewById(R.id.geoIndigation);
-        inst_location = (ImageView) findViewById(R.id.loaction);
+        geoIndigation = findViewById(R.id.geoIndigation);
+        inst_location = findViewById(R.id.loaction);
 
-        borewellstatus = (EditText) findViewById(R.id.borewellstatus);
-        reasontxt = (EditText) findViewById(R.id.reason_txt);
-        reason = (LinearLayout) findViewById(R.id.reason);
+        borewellstatus = findViewById(R.id.borewellstatus);
+        reasontxt = findViewById(R.id.reason_txt);
+        reason = findViewById(R.id.reason);
 
 
-        inst_date = (EditText) findViewById(R.id.Installation_date);
-        bill_date = (EditText) findViewById(R.id.bill_date);
-        bill_no = (EditText) findViewById(R.id.Billing_no);
-        cust_name = (EditText) findViewById(R.id.Customer_name);
+        inst_date = findViewById(R.id.Installation_date);
+        bill_date = findViewById(R.id.bill_date);
+        bill_no = findViewById(R.id.Billing_no);
+        cust_name = findViewById(R.id.Customer_name);
 
-        inst_address = (EditText) findViewById(R.id.address);
-        inst_make = (EditText) findViewById(R.id.make);
-        inst_state = (EditText) findViewById(R.id.state);
-        inst_district = (EditText) findViewById(R.id.district);
-        inst_village = (EditText) findViewById(R.id.village);
-        inst_tehsil = (EditText) findViewById(R.id.tehsil);
-        inst_hp = (EditText) findViewById(R.id.inst_hp);
-        inst_mob_no = (EditText) findViewById(R.id.mobile_no);
-        inst_panel_stand_qty = (EditText) findViewById(R.id.sp_stand_install);
-        inst_panel_watt = (EditText) findViewById(R.id.solar_panel_wattage);
-        inst_fathers_name = (EditText) findViewById(R.id.fathers_name);
+        inst_address = findViewById(R.id.address);
+        inst_make = findViewById(R.id.make);
+        inst_state = findViewById(R.id.state);
+        inst_district = findViewById(R.id.district);
+        inst_village = findViewById(R.id.village);
+        inst_tehsil = findViewById(R.id.tehsil);
+        inst_hp = findViewById(R.id.inst_hp);
+        inst_mob_no = findViewById(R.id.mobile_no);
+        inst_panel_stand_qty = findViewById(R.id.sp_stand_install);
+        inst_panel_watt = findViewById(R.id.solar_panel_wattage);
+        inst_fathers_name = findViewById(R.id.fathers_name);
 
-        inst_total_watt = (EditText) findViewById(R.id.total_watts);
-        inst_no_of_module = (EditText) findViewById(R.id.module_serial_no);
-        inst_module_total_plate_watt = (EditText) findViewById(R.id.module_total_plate_watt);
+        inst_total_watt = findViewById(R.id.total_watts);
+        inst_no_of_module = findViewById(R.id.module_serial_no);
+        inst_module_total_plate_watt = findViewById(R.id.module_total_plate_watt);
 
-        inst_motor_model = (EditText) findViewById(R.id.sm_Model_Details_one);
-        inst_motor_ser = (EditText) findViewById(R.id.s_no_one);
-        img_scn_one = (ImageView) findViewById(R.id.img_scn_one);
+        inst_motor_model = findViewById(R.id.sm_Model_Details_one);
+        inst_motor_ser = findViewById(R.id.s_no_one);
+        img_scn_one = findViewById(R.id.img_scn_one);
 
-        inst_pump_model = (EditText) findViewById(R.id.sm_Model_Details_two);
-        inst_pump_ser = (EditText) findViewById(R.id.s_no_two);
-        img_scn_two = (ImageView) findViewById(R.id.img_scn_two);
+        inst_pump_model = findViewById(R.id.sm_Model_Details_two);
+        inst_pump_ser = findViewById(R.id.s_no_two);
+        img_scn_two = findViewById(R.id.img_scn_two);
 
-        inst_controller_model = (EditText) findViewById(R.id.sm_Model_Details_three);
-        inst_controller_ser = (EditText) findViewById(R.id.s_no_three);
-        img_scn_three = (ImageView) findViewById(R.id.img_scn_three);
+        inst_controller_model = findViewById(R.id.sm_Model_Details_three);
+        inst_controller_ser = findViewById(R.id.s_no_three);
+        img_scn_three = findViewById(R.id.img_scn_three);
 
-        spinner_simoprator = (Spinner) findViewById(R.id.spinner_simoprator);
-        spinner_conntype = (Spinner) findViewById(R.id.spinner_conntype);
+        spinner_simoprator = findViewById(R.id.spinner_simoprator);
+        spinner_conntype = findViewById(R.id.spinner_conntype);
 
-        img_scn_four = (ImageView) findViewById(R.id.img_scn_four);
+        img_scn_four = findViewById(R.id.img_scn_four);
 
-        inst_simcard_num = (EditText) findViewById(R.id.s_no_four);
+        inst_simcard_num = findViewById(R.id.s_no_four);
 
-        moduleOneLL = (LinearLayout) findViewById(R.id.layout_one);
+        moduleOneLL = findViewById(R.id.layout_one);
 
-        inst_module_ser_no = (EditText) findViewById(R.id.module_serial_no);
+        inst_module_ser_no = findViewById(R.id.module_serial_no);
 
         labeledSwitch = findViewById(R.id.switchview);
 
@@ -1678,7 +1474,7 @@ public class InstallationInitial extends AppCompatActivity {
         inst_pump_ser.setText(pump);
 
         WebURL.mDEvice_Number_CHECK = controller;
-        inst_controller_ser.setText(controller);
+        inst_controller_ser.setText("7E-0200-0-22-03-23");
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {
             spinner_simoprator.setSelection(db.getPosition(spinner_simoprator, installationBean.getSimoprator()));
@@ -1713,9 +1509,9 @@ public class InstallationInitial extends AppCompatActivity {
         final Dialog dialog = new Dialog(mContext);
         dialog.setContentView(R.layout.simupdate_popup);
         dialog.setCancelable(true);
-        TextView txtTitleID = (TextView) dialog.findViewById(R.id.txtTitleID);
-        EditText edtSimNumberIDID = (EditText) dialog.findViewById(R.id.edtSimNumberIDID);
-        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        TextView txtTitleID = dialog.findViewById(R.id.txtTitleID);
+        EditText edtSimNumberIDID = dialog.findViewById(R.id.edtSimNumberIDID);
+        Button dialogButton = dialog.findViewById(R.id.dialogButtonOK);
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1735,14 +1531,14 @@ public class InstallationInitial extends AppCompatActivity {
     private void ibaseUpdateFormPopup() {
         dialog.setContentView(R.layout.ibase_update_form_popup);
         dialog.setCancelable(true);
-        TextView txtTitleID = (TextView) dialog.findViewById(R.id.txtTitleID);
-        EditText edtDriveSerialNoID = (EditText) dialog.findViewById(R.id.edtDriveSerialNoID);
-        EditText edtMotorSerialNoID = (EditText) dialog.findViewById(R.id.edtMotorSerialNoID);
-        TextView edtPumpSerialNoID = (TextView) dialog.findViewById(R.id.edtPumpSerialNoID);
+        TextView txtTitleID = dialog.findViewById(R.id.txtTitleID);
+        EditText edtDriveSerialNoID = dialog.findViewById(R.id.edtDriveSerialNoID);
+        EditText edtMotorSerialNoID = dialog.findViewById(R.id.edtMotorSerialNoID);
+        TextView edtPumpSerialNoID = dialog.findViewById(R.id.edtPumpSerialNoID);
 
         edtPumpSerialNoID.setText(pump);
 
-        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+        Button dialogButton = dialog.findViewById(R.id.dialogButtonOK);
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1751,7 +1547,7 @@ public class InstallationInitial extends AppCompatActivity {
                 mMotorSerialNo = edtMotorSerialNoID.getText().toString().trim();
                 mPumpSerialNo = edtPumpSerialNoID.getText().toString().trim();
 
-                if (CustomUtility.isInternetOn()) {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
                     dialog.dismiss();
                     serverIbaseUpdateFunctions();
                 } else {
@@ -1866,7 +1662,7 @@ public class InstallationInitial extends AppCompatActivity {
 
             final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
             param1_invc.add(new BasicNameValuePair("action", String.valueOf(ja_invc_data)));///array name lr_save
-            Log.e("DATA", "$$$$" + param1_invc.toString());
+            Log.e("DATA", "$$$$" + param1_invc);
 
             System.out.println(param1_invc);
 
@@ -1965,7 +1761,11 @@ public class InstallationInitial extends AppCompatActivity {
 
         retriveArrayList();
 
-        Log.e("labeledSwitch", String.valueOf(labeledSwitch.isEnabled()));
+        if (CustomUtility.getSharedPreferences(mContext, "DeviceStatus") != null &&
+                !CustomUtility.getSharedPreferences(mContext, "DeviceStatus").isEmpty()) {
+            DeviceStatus = CustomUtility.getSharedPreferences(mContext, "DeviceStatus");
+            Log.e("DeviceStatus", DeviceStatus);
+        }
     }
 
     private void retriveArrayList() {
@@ -2148,9 +1948,8 @@ public class InstallationInitial extends AppCompatActivity {
                 jsonObj.put("dbug_ofline", Constant.DBUG_PER_OFLINE);
                 jsonObj.put("app_version", WebURL.APP_VERSION_CODE);
 
-                jsonObj.put("LOGIN_NAME", CustomUtility.getSharedPreferences(getApplicationContext(),Constant.PersonName));
-                jsonObj.put("LOGIN_CONT",  CustomUtility.getSharedPreferences(getApplicationContext(),Constant.PersonNumber));
-
+                jsonObj.put("LOGIN_NAME", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonName));
+                jsonObj.put("LOGIN_CONT", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonNumber));
 
 
                 System.out.println("only_text_jsonObj==>>" + jsonObj);
@@ -2202,9 +2001,9 @@ public class InstallationInitial extends AppCompatActivity {
 
             final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
             param1_invc.add(new BasicNameValuePair("installation", String.valueOf(ja_invc_data)));
-            Log.e("DATA", "$$$$" + param1_invc.toString());
+            Log.e("DATA", "$$$$" + param1_invc);
 
-            System.out.println("param1_invc_vihu==>>" + param1_invc.toString());
+            System.out.println("param1_invc_vihu==>>" + param1_invc);
             try {
 
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
@@ -2222,7 +2021,7 @@ public class InstallationInitial extends AppCompatActivity {
 
                     JSONArray ja = new JSONArray(obj1);
 
-                    Log.e("OUTPUT2", "&&&&" + ja.toString());
+                    Log.e("OUTPUT2", "&&&&" + ja);
 
                     for (int i = 0; i < ja.length(); i++) {
 
@@ -2326,7 +2125,8 @@ public class InstallationInitial extends AppCompatActivity {
                 if (!res.toString().isEmpty()) {
                     VerificationCodeModel verificationCodeModel = new Gson().fromJson(res.toString(), VerificationCodeModel.class);
                     if (verificationCodeModel.getStatus().equals("Success")) {
-
+                        CustomUtility.removeValueFromSharedPref(getApplicationContext(), "DeviceStatus");
+                        databaseHelper.deleteInstallationImages(billNo);
                         ShowAlertResponse(generatedVerificationCode, ContactNo, Hp, beneficiaryNo, billNo);
                     }
 
@@ -2378,4 +2178,6 @@ public class InstallationInitial extends AppCompatActivity {
         });
 
     }
+
+
 }

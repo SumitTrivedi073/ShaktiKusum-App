@@ -1,18 +1,16 @@
 package activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.appcompat.widget.Toolbar;
+
 import com.shaktipumplimited.shaktikusum.R;
 
-public class PhotoViewerActivity extends AppCompatActivity {
+public class PhotoViewerActivity extends BaseActivity {
 
      ImageView showImg;
      Toolbar mToolbar;
@@ -37,7 +35,7 @@ public class PhotoViewerActivity extends AppCompatActivity {
 
     private void Init() {
         showImg = findViewById(R.id.showImg);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

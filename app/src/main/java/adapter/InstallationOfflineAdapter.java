@@ -24,8 +24,8 @@ import utility.CustomUtility;
 public class InstallationOfflineAdapter extends RecyclerView.Adapter<InstallationOfflineAdapter.HomeCategoryViewHolder> {
     View.OnClickListener onclick_listener;
     DatabaseHelper db;
-    private Context context;
-    private ArrayList<InstallationOfflineBean> responseList;
+    private final Context context;
+    private final ArrayList<InstallationOfflineBean> responseList;
     private List<InstallationOfflineBean> SearchesList = null;
     String pernr, billno;
 
@@ -130,7 +130,7 @@ public class InstallationOfflineAdapter extends RecyclerView.Adapter<Installatio
             gst_bill_no = itemView.findViewById(R.id.gst_bill_no);
             ben_no = itemView.findViewById(R.id.benf_no);
             status = itemView.findViewById(R.id.status);
-            icon = (ImageView) itemView.findViewById(R.id.icon);
+            icon = itemView.findViewById(R.id.icon);
             cardView = itemView.findViewById(R.id.card_view);
         }
     }
