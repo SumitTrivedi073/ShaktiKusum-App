@@ -100,7 +100,7 @@ public class InstallationInitial extends BaseActivity {
 
     Context mContext;
     DatabaseHelper db;
-    TextView save, txtDebugAppID, txtLatIDD, txtLongIDD, txtIBaseUpdateID,inst_controller_ser;
+    TextView save, txtDebugAppID, txtLatIDD, txtLongIDD, txtIBaseUpdateID, inst_controller_ser;
     InstallationBean installationBean;
     LabeledSwitch labeledSwitch;
     int index_simoprator, index_conntype, id = 0, vkp = 0, currentScannerFor = -1, value;
@@ -117,14 +117,14 @@ public class InstallationInitial extends BaseActivity {
             INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "", SIM_SR_NO = "", SIM = "", RMS_STATUS = "", RMS_LAST_ONLINE_DATE = "", RMS_CURRENT_ONLINE_STATUS = "",
 
     mDriveSerialNo = "", mMotorSerialNo = "", mPumpSerialNo = "", delay;
-    EditText inst_date, bill_date, bill_no, cust_name , borewellstatus, reasontxt, inst_address, inst_make, inst_village,
-            inst_state, inst_district , inst_tehsil, inst_mob_no, inst_panel_stand_qty, inst_panel_watt, inst_total_watt, inst_module_total_plate_watt, inst_no_of_module , inst_module_ser_no ,
-            inst_motor_model, inst_motor_ser, inst_pump_model, inst_pump_ser, inst_controller_model,  inst_simcard_num, inst_hp, inst_fathers_name;
+    EditText inst_date, bill_date, bill_no, cust_name, borewellstatus, reasontxt, inst_address, inst_make, inst_village,
+            inst_state, inst_district, inst_tehsil, inst_mob_no, inst_panel_stand_qty, inst_panel_watt, inst_total_watt, inst_module_total_plate_watt, inst_no_of_module, inst_module_ser_no,
+            inst_motor_model, inst_motor_ser, inst_pump_model, inst_pump_ser, inst_controller_model, inst_simcard_num, inst_hp, inst_fathers_name;
 
     double inst_latitude_double, inst_longitude_double;
     SimpleDateFormat simpleDateFormat;
 
-    ImageView inst_location , img_scn_one, img_scn_two, img_scn_three, img_scn_four, geoIndigation;
+    ImageView inst_location, img_scn_one, img_scn_two, img_scn_three, img_scn_four, geoIndigation;
 
     LinearLayout reason, moduleOneLL;
 
@@ -457,14 +457,14 @@ public class InstallationInitial extends BaseActivity {
                     RMS_SERVER_DOWN = "Working Fine";
                     System.out.println("VikasVIHU==>>" + mBTResonseDataList.get(vkp).getDEVICENO());
                     CustomUtility.showProgressDialogue(InstallationInitial.this);
-                    CustomUtility.ShowToast("SaveData9",getApplicationContext());
-                  //  new SyncDebugDataFromLocal().execute();
+
+                      new SyncDebugDataFromLocal().execute();
 
                 } else {
 
                     InstallationBean param_invc = new InstallationBean();
                     param_invc = db.getInstallationData(pernr, billno);
-                    Log.e("param_invc",param_invc.getLatitude());
+                    Log.e("param_invc", param_invc.getLatitude());
                     if ((!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude())) && (!TextUtils.isEmpty(param_invc.getSolarpanel_wattage())) && (!TextUtils.isEmpty(param_invc.getNo_of_module_value()))) {
                         saveData();
                     } else {
@@ -486,7 +486,7 @@ public class InstallationInitial extends BaseActivity {
             } else {
                 InstallationBean param_invc = new InstallationBean();
                 param_invc = db.getInstallationData(pernr, billno);
-                Log.e("param_invc2",param_invc.getLatitude());
+                Log.e("param_invc2", param_invc.getLatitude());
                 if (param_invc != null && (!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude())) && (!TextUtils.isEmpty(param_invc.getSolarpanel_wattage())) && (!TextUtils.isEmpty(param_invc.getNo_of_module_value()))) {
                     saveData();
                 } else {
@@ -1127,7 +1127,7 @@ public class InstallationInitial extends BaseActivity {
                 saveDataValidation();
             }
 
-       // }
+            // }
 
 
         } else {
@@ -1191,25 +1191,23 @@ public class InstallationInitial extends BaseActivity {
                                                                                     } else {
                                                                                         Toast.makeText(mContext, "Please Select Photos", Toast.LENGTH_SHORT).show();
                                                                                     }*/
-                                                                        if(!DeviceStatus.isEmpty()) {
+                                                                        if (!DeviceStatus.isEmpty()) {
 
                                                                             if (DeviceStatus.equals(getResources().getString(R.string.online))) {
                                                                                 if (imageList.size() > 0) {
-                                                                                        CustomUtility.ShowToast("SaveData1", getApplicationContext());
-                                                                                        // new SyncInstallationData().execute();
+                                                                                    new SyncInstallationData().execute();
 
                                                                                 } else {
                                                                                     CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
                                                                                 }
                                                                             } else {
-                                                                                if(mSimDetailsInfoResponse.size()>=1){
-                                                                                    if(mSimDetailsInfoResponse.size()>= 2) {
+                                                                                if (mSimDetailsInfoResponse.size() >= 1) {
+                                                                                    if (mSimDetailsInfoResponse.size() >= 2) {
                                                                                         if (mSimDetailsInfoResponse.size() >= 3) {
 
 
                                                                                             if (imageList.size() > 0) {
-                                                                                                CustomUtility.ShowToast("SaveData2", getApplicationContext());
-                                                                                                //  new SyncInstallationData().execute();
+                                                                                                new SyncInstallationData().execute();
                                                                                             } else {
                                                                                                 CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
                                                                                             }
@@ -1217,15 +1215,15 @@ public class InstallationInitial extends BaseActivity {
                                                                                         } else {
                                                                                             CustomUtility.ShowToast(getResources().getString(R.string.insertThirdSim), getApplicationContext());
                                                                                         }
-                                                                                    }else {
-                                                                                        CustomUtility.ShowToast(getResources().getString(R.string.insertSecondSim),getApplicationContext());
+                                                                                    } else {
+                                                                                        CustomUtility.ShowToast(getResources().getString(R.string.insertSecondSim), getApplicationContext());
                                                                                     }
-                                                                                }else {
+                                                                                } else {
                                                                                     CustomUtility.ShowToast(getResources().getString(R.string.sim_insertMsg), getApplicationContext());
 
                                                                                 }
                                                                             }
-                                                                        }else {
+                                                                        } else {
                                                                             Toast.makeText(mContext, "Please get RMS Device Status.", Toast.LENGTH_SHORT).show();
                                                                         }
 
@@ -1763,10 +1761,10 @@ public class InstallationInitial extends BaseActivity {
 
         retriveArrayList();
 
-          if(CustomUtility.getSharedPreferences(mContext, "DeviceStatus")!=null &&
+        if (CustomUtility.getSharedPreferences(mContext, "DeviceStatus") != null &&
                 !CustomUtility.getSharedPreferences(mContext, "DeviceStatus").isEmpty()) {
             DeviceStatus = CustomUtility.getSharedPreferences(mContext, "DeviceStatus");
-            Log.e("DeviceStatus",DeviceStatus);
+            Log.e("DeviceStatus", DeviceStatus);
         }
     }
 
@@ -2127,8 +2125,8 @@ public class InstallationInitial extends BaseActivity {
                 if (!res.toString().isEmpty()) {
                     VerificationCodeModel verificationCodeModel = new Gson().fromJson(res.toString(), VerificationCodeModel.class);
                     if (verificationCodeModel.getStatus().equals("Success")) {
-                         CustomUtility.removeValueFromSharedPref(getApplicationContext(),"DeviceStatus");
-                         databaseHelper.deleteInstallationImages(billNo);
+                        CustomUtility.removeValueFromSharedPref(getApplicationContext(), "DeviceStatus");
+                        databaseHelper.deleteInstallationImages(billNo);
                         ShowAlertResponse(generatedVerificationCode, ContactNo, Hp, beneficiaryNo, billNo);
                     }
 
