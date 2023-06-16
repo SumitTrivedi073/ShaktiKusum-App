@@ -456,6 +456,7 @@ import webservice.WebURL;
             param.add(new BasicNameValuePair("PROJECT_NO", CustomUtility.getSharedPreferences(context, "projectid")));
             param.add(new BasicNameValuePair("PROJECT_LOGIN_NO", CustomUtility.getSharedPreferences(context, "loginid")));
             String login_selec = null;
+            Log.e("param====>",param.toString());
             try {
                 login_selec = CustomHttpClient.executeHttpPost1(WebURL.INSTALLATION_UNLOAD1, param);
                 System.out.println("unload List =>" + WebURL.INSTALLATION_UNLOAD1);

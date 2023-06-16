@@ -163,6 +163,7 @@ import webservice.WebURL;
                         intent.putExtra("vbeln", responseList.get(position).getBillno());
                         intent.putExtra("cust_name", custname);
                         intent.putExtra("userid", pernr);
+                        intent.putExtra("moduleqty", responseList.get(position).getModuleqty());
                         context.startActivity(intent);
                     }
             });

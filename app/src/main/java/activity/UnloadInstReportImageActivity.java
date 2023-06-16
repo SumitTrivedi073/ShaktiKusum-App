@@ -26,6 +26,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +44,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
@@ -68,8 +73,13 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     private static final int PICK_FROM_FILE = 102;
     List<ImageModel> imageArrayList = new ArrayList<>();
     List<ImageModel> imageList = new ArrayList<>();
+
+    ArrayList<String> scannedDeviceNo = new ArrayList<>();
     RecyclerView recyclerview;
-    TextView remarkEdt;
+    EditText remarkEdt;
+    TextView module_serial_no;
+
+    LinearLayout moduleOneLL;
 
     Button btnSave;
     AlertDialog alertDialog;
@@ -78,7 +88,8 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
     List<String> itemNameList = new ArrayList<>();
 
-    String customerName, beneficiary, regNO, projectNo, userID, billNo;
+    String customerName, beneficiary, regNO, projectNo, userID, billNo,moduleqty;
+    int value,currentScannerFor = -1;
 
     Toolbar mToolbar;
 
@@ -183,6 +194,9 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     private void Init() {
         recyclerview = findViewById(R.id.recyclerview);
         remarkEdt = findViewById(R.id.edtRemarkVKID);
+        module_serial_no = findViewById(R.id.module_serial_no);
+        moduleOneLL = findViewById(R.id.layout_one);
+
         btnSave = findViewById(R.id.btnSave);
 
         mToolbar = findViewById(R.id.toolbar);
@@ -201,10 +215,22 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         customerName = bundle.getString("cust_name");
         userID = bundle.getString("userid");
         billNo = bundle.getString("vbeln");
+        moduleqty = "2";
 
         beneficiary = WebURL.BenificiaryNo_Con;
         regNO = WebURL.RegNo_Con;
         projectNo = WebURL.ProjectNo_Con;
+
+        module_serial_no.setText(moduleqty);
+
+        moduleqty = GetDataOne();
+        if (moduleqty.length() != 0 && !moduleqty.equals("0")) {
+            value = Integer.parseInt(moduleqty);
+
+            ViewInflate(value, value);
+        } else {
+            moduleOneLL.setVisibility(View.GONE);
+        }
 
     }
 
@@ -400,34 +426,35 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         if (resultCode == RESULT_CANCELED) {
             return;
         }
-        switch (requestCode) {
-
-            case PICK_FROM_FILE:
-                try {
-                    Uri mImageCaptureUri = data.getData();
-                    String path = getPath(UnloadInstReportImageActivity.this, mImageCaptureUri); // From Gallery
-                    if (path == null) {
-                        path = mImageCaptureUri.getPath(); // From File Manager
-                    }
-                    Log.e("Activity", "PathHolder22= " + path);
-                    String filename = path.substring(path.lastIndexOf("/") + 1);
-                    String file;
-                    if (filename.indexOf(".") > 0) {
-                        file = filename.substring(0, filename.lastIndexOf("."));
-                    } else {
-                        file = "";
-                    }
-                    if (TextUtils.isEmpty(file)) {
-                        Toast.makeText(UnloadInstReportImageActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
-                    } else {
-                        UpdateArrayList(path);
-
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+        if (requestCode == PICK_FROM_FILE) {
+            try {
+                Uri mImageCaptureUri = data.getData();
+                String path = getPath(UnloadInstReportImageActivity.this, mImageCaptureUri); // From Gallery
+                if (path == null) {
+                    path = mImageCaptureUri.getPath(); // From File Manager
                 }
-                break;
+                Log.e("Activity", "PathHolder22= " + path);
+                String filename = path.substring(path.lastIndexOf("/") + 1);
+                String file;
+                if (filename.indexOf(".") > 0) {
+                    file = filename.substring(0, filename.lastIndexOf("."));
+                } else {
+                    file = "";
+                }
+                if (TextUtils.isEmpty(file)) {
+                    Toast.makeText(UnloadInstReportImageActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
+                } else {
+                    UpdateArrayList(path);
 
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (scanningResult != null) {
+            setDataToViewFromScanner(scanningResult);
         }
 
     }
@@ -565,6 +592,100 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             }
         });
     }
+    private void ViewInflate(int value, int new_value) {
 
+        String[] arr = moduleqty.split(",");
+
+        moduleOneLL.removeAllViews();
+
+        for (int i = 0; i < new_value; i++) {
+            View child_grid = LayoutInflater.from(getApplicationContext()).inflate(R.layout.view_for_normal, null);
+            LinearLayout layout_s = child_grid.findViewById(R.id.sublayout_second);
+            LinearLayout layout_f = child_grid.findViewById(R.id.sublayout_first);
+            LinearLayout layout_f_inner = layout_f.findViewById(R.id.sublayout_first_inner);
+            EditText edit = layout_f_inner.findViewById(R.id.view_edit_one);
+            final ImageView scan = layout_f_inner.findViewById(R.id.view_img_one);
+            scan.setId(i);
+
+            scan.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int id = v.getId();
+                    startScanner(id);
+                }
+            });
+
+            try {
+                if (arr.length > 0) {
+                    edit.setText(arr[i]);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            layout_s.setVisibility(View.GONE);
+            moduleOneLL.setVisibility(View.VISIBLE);
+            moduleOneLL.addView(child_grid);
+
+        }
+    }
+
+    void startScanner(int scanID) {
+        currentScannerFor = scanID;
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+        integrator.setPrompt("Scan a QRCode");
+        integrator.setCameraId(0);
+        integrator.setBeepEnabled(true);// Use a specific camera of the device
+        integrator.setBarcodeImageEnabled(true);
+        integrator.initiateScan();
+    }
+
+
+    void setDataToViewFromScanner(IntentResult scanningResult) {
+        try {
+            String scanContent = scanningResult.getContents();
+            String scanFormat = scanningResult.getFormatName();
+
+            Toast.makeText(getApplicationContext(), scanFormat + scanContent, Toast.LENGTH_SHORT);
+            boolean alreadySet = false;
+            if (!alreadySet) {
+                EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
+
+                if (scannedDeviceNo.size() > 0) {
+                    if (!scannedDeviceNo.contains(scanContent)) {
+                        edit_O.setText(scanContent);
+                        scannedDeviceNo.add(scanContent);
+                    } else {
+                        CustomUtility.ShowToast("Already Done",getApplicationContext());
+
+                    }
+                } else {
+                    edit_O.setText(scanContent);
+                    scannedDeviceNo.add(scanContent);
+                }
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String GetDataOne() {
+        String finalValue = "";
+        if (!module_serial_no.getText().toString().trim().equals("0")) {
+
+            for (int i = 0; i < moduleOneLL.getChildCount(); i++) {
+                EditText edit_O = moduleOneLL.getChildAt(i).findViewById(R.id.view_edit_one);
+                if (edit_O.getVisibility() == View.VISIBLE) {
+                    String s1 = edit_O.getText().toString().trim();
+                    finalValue += s1 + ",";
+                }
+            }
+        } else {
+            finalValue = "";
+        }
+        return finalValue;
+    }
 }
 

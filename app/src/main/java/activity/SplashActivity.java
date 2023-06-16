@@ -65,39 +65,40 @@ public class SplashActivity extends AppCompatActivity {
 
     private void retriveFirestoreData() {
 
-        appConfigRef = FirebaseFirestore.getInstance().collection("Setting").document("AppConfig");
-      appConfigRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot != null && documentSnapshot.exists()) {
-                     AppConfig appConfig = documentSnapshot.toObject(AppConfig.class);
+        if(CustomUtility.isInternetOn(getApplicationContext())) {
+            appConfigRef = FirebaseFirestore.getInstance().collection("Setting").document("AppConfig");
+            appConfigRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        AppConfig appConfig = documentSnapshot.toObject(AppConfig.class);
 
-                    if (appConfig != null) {
-                        try {
-                            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-                            if (pInfo != null && appConfig.getMinKusumAppVersion() != null
-                                    && !appConfig.getMinKusumAppVersion().isEmpty()) {
+                        if (appConfig != null) {
+                            try {
+                                PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                                if (pInfo != null && appConfig.getMinKusumAppVersion() != null
+                                        && !appConfig.getMinKusumAppVersion().isEmpty()) {
 
-                                if (pInfo.versionCode < Integer.parseInt(appConfig.getMinKusumAppVersion())) {
-                                    CustomUtility.setSharedPreference(getApplicationContext(), Constant.APPURL,appConfig.getKusumAppUrl());
-                                    Intent intent = new Intent(SplashActivity.this,SwVersionCheckActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }else {
-                                    CheckLoginStatus();
+                                    if (pInfo.versionCode < Integer.parseInt(appConfig.getMinKusumAppVersion())) {
+                                        CustomUtility.setSharedPreference(getApplicationContext(), Constant.APPURL, appConfig.getKusumAppUrl());
+                                        Intent intent = new Intent(SplashActivity.this, SwVersionCheckActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    } else {
+                                        CheckLoginStatus();
+                                    }
                                 }
+                            } catch (Exception exception) {
+                                exception.printStackTrace();
                             }
-                        } catch (Exception exception) {
-                            exception.printStackTrace();
                         }
+
+                    } else {
+                        Log.d(TAG, "Current data: null");
                     }
-
-                } else {
-                    Log.d(TAG, "Current data: null");
                 }
-            }
-        });
-
+            });
+        }
     }
 
     @Override
