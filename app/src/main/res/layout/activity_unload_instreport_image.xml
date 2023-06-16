@@ -9,87 +9,99 @@
 
     <include layout="@layout/toolbar" />
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
 
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="@dimen/_10sdp">
-
-                <TextView
-                    style="@style/wrap_text_medatory"
-                    android:text="Panel Module Qty"
-                    android:textColor="@color/colorAccent" />
-
-                <TextView
-                    android:id="@+id/module_serial_no"
-                    android:layout_width="100dp"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:background="@drawable/black_border_text"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/wrap_text_medatory"
+                        android:text="Panel Module Qty"
+                        android:textColor="@color/colorAccent" />
+
+                    <TextView
+                        android:id="@+id/module_serial_no"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:background="@drawable/black_border_text"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/size_mid16" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_one"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:text="* Remark"
                     android:textColor="@color/black"
-                    android:gravity="center"
-                    android:textSize="@dimen/size_mid16" />
+                    android:textSize="@dimen/_16ssp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/edtRemarkVKID"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_100sdp"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:gravity="start"
+                    android:background="@drawable/popup_relative"
+                    android:hint="Enter Remark"
+                    android:imeOptions="actionDone"
+                    android:padding="@dimen/_10sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_16ssp"
+                    android:textStyle="normal" />
+
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="@dimen/_150sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/_30sdp"
+                    android:background="@drawable/rounded_shape"
+                    android:text="@string/btn_save_dsr"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp" />
+
 
             </LinearLayout>
-            <LinearLayout
-                android:id="@+id/layout_one"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
 
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_15sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:text="* Remark"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_16ssp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/edtRemarkVKID"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_15sdp"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:background="@android:color/transparent"
-                android:hint="Enter Remark"
-                android:padding="@dimen/_10sdp"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_16ssp"
-                android:textStyle="normal"
-                android:imeOptions="actionDone"/>
-
-            <Button
-                android:id="@+id/btnSave"
-                android:layout_width="@dimen/_150sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/_30sdp"
-                android:background="@drawable/rounded_shape"
-                android:text="@string/btn_save_dsr"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp" />
-
-
-        </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
 
 </LinearLayout>

@@ -77,7 +77,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     ArrayList<String> scannedDeviceNo = new ArrayList<>();
     RecyclerView recyclerview;
     EditText remarkEdt;
-    TextView module_serial_no;
+    TextView inst_module_ser_no;
 
     LinearLayout moduleOneLL;
 
@@ -85,11 +85,12 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     AlertDialog alertDialog;
     int selectedIndex;
     ImageSelectionAdapter customAdapter;
+    boolean isSubmit = false;
 
     List<String> itemNameList = new ArrayList<>();
 
-    String customerName, beneficiary, regNO, projectNo, userID, billNo,moduleqty;
-    int value,currentScannerFor = -1;
+    String customerName, beneficiary, regNO, projectNo, userID, billNo, moduleqty, no_of_module_value;
+    int value, currentScannerFor = -1;
 
     Toolbar mToolbar;
 
@@ -194,7 +195,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     private void Init() {
         recyclerview = findViewById(R.id.recyclerview);
         remarkEdt = findViewById(R.id.edtRemarkVKID);
-        module_serial_no = findViewById(R.id.module_serial_no);
+        inst_module_ser_no = findViewById(R.id.module_serial_no);
         moduleOneLL = findViewById(R.id.layout_one);
 
         btnSave = findViewById(R.id.btnSave);
@@ -215,27 +216,29 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         customerName = bundle.getString("cust_name");
         userID = bundle.getString("userid");
         billNo = bundle.getString("vbeln");
-        moduleqty = "2";
+        moduleqty = bundle.getString("moduleqty");
 
         beneficiary = WebURL.BenificiaryNo_Con;
         regNO = WebURL.RegNo_Con;
         projectNo = WebURL.ProjectNo_Con;
 
-        module_serial_no.setText(moduleqty);
+        inst_module_ser_no.setText(moduleqty);
+        no_of_module_value = GetDataOne();
 
-        moduleqty = GetDataOne();
-        if (moduleqty.length() != 0 && !moduleqty.equals("0")) {
-            value = Integer.parseInt(moduleqty);
-
-            ViewInflate(value, value);
-        } else {
-            moduleOneLL.setVisibility(View.GONE);
+        if (!TextUtils.isEmpty(moduleqty)) {
+            if (moduleqty.length() != 0 && !moduleqty.equals("0")) {
+                value = Integer.parseInt(moduleqty);
+                ViewInflate(value);
+            }
         }
+
 
     }
 
     private void listner() {
         btnSave.setOnClickListener(view -> {
+              String noOfModules ="";
+
             if (imageArrayList != null && imageArrayList.size() > 0) {
                 if (!imageArrayList.get(0).isImageSelected()) {
                     CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectLR_photo));
@@ -246,7 +249,38 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                 } else if (remarkEdt.getText().toString().isEmpty()) {
                     CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
                 } else {
-                    new SyncInstallationData().execute();
+
+
+                    if (!inst_module_ser_no.getText().toString().trim().equals("0")) {
+
+                        for (int i = 0; i < moduleOneLL.getChildCount(); i++) {
+                            EditText edit_O = moduleOneLL.getChildAt(i).findViewById(R.id.view_edit_one);
+
+                            if (edit_O.getText().toString().isEmpty()) {
+                                CustomUtility.ShowToast(getResources().getString(R.string.enter_allModuleSrno), getApplicationContext());
+                             isSubmit = false;
+                            } else {
+                                isSubmit = true;
+                                if(noOfModules.isEmpty()) {
+                                    noOfModules = edit_O.getText().toString();
+                                }else {
+                                    noOfModules= noOfModules+","+edit_O.getText().toString();
+                                }
+
+                            }
+
+                        }
+                    }
+                    if (CustomUtility.isInternetOn(getApplicationContext())) {
+                        if (isSubmit) {
+                            Log.e("noOfModules====>",noOfModules);
+                           new SyncInstallationData().execute();
+                        }
+                    } else {
+                        CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection), getApplicationContext());
+                    }
+
+
                 }
             } else {
                 CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.select_image));
@@ -592,10 +626,10 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             }
         });
     }
-    private void ViewInflate(int value, int new_value) {
 
-        String[] arr = moduleqty.split(",");
+    private void ViewInflate(int new_value) {
 
+        String[] arr = no_of_module_value.split(",");
         moduleOneLL.removeAllViews();
 
         for (int i = 0; i < new_value; i++) {
@@ -627,6 +661,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             moduleOneLL.setVisibility(View.VISIBLE);
             moduleOneLL.addView(child_grid);
 
+
         }
     }
 
@@ -657,7 +692,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                         edit_O.setText(scanContent);
                         scannedDeviceNo.add(scanContent);
                     } else {
-                        CustomUtility.ShowToast("Already Done",getApplicationContext());
+                        CustomUtility.ShowToast("Already Done", getApplicationContext());
 
                     }
                 } else {
@@ -673,14 +708,16 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
     public String GetDataOne() {
         String finalValue = "";
-        if (!module_serial_no.getText().toString().trim().equals("0")) {
+        if (!inst_module_ser_no.getText().toString().trim().equals("0")) {
 
-            for (int i = 0; i < moduleOneLL.getChildCount(); i++) {
-                EditText edit_O = moduleOneLL.getChildAt(i).findViewById(R.id.view_edit_one);
-                if (edit_O.getVisibility() == View.VISIBLE) {
-                    String s1 = edit_O.getText().toString().trim();
-                    finalValue += s1 + ",";
+            for (int i = 0; i < Integer.parseInt(inst_module_ser_no.getText().toString()); i++) {
+                if (finalValue.isEmpty()) {
+                    finalValue = ",";
+                } else {
+                    finalValue = finalValue + ",";
                 }
+
+
             }
         } else {
             finalValue = "";
