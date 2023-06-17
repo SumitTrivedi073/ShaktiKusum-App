@@ -33,7 +33,7 @@ public class InstallationListBean {
             set_matno,
             simha2,
             sync,
-            CONTACT_NO;
+            CONTACT_NO,noOfModule;
 //    streetName;
 
     public InstallationListBean() {}
@@ -67,7 +67,8 @@ public class InstallationListBean {
                                 String set_matno_text,
                                 String simha2_text,
                                 String sync_text,
-                                String mCONTACT_NO
+                                String mCONTACT_NO,
+                                 String NoOfModule
     ) {
         enqdoc = enqdoc_text;
         pernr = pernr_text;
@@ -99,6 +100,7 @@ public class InstallationListBean {
         simha2 = simha2_text;
         sync = sync_text;
         CONTACT_NO = mCONTACT_NO;
+        noOfModule = NoOfModule;
     }
 
     public String getCUS_CONTACT_NO() {
@@ -341,11 +343,11 @@ public class InstallationListBean {
         this.moduleqty = moduleqty;
     }
 
-//    public String getStreeName(){
-//        return  streetName;
-//    }
-//
-//    public void setStreetName(String streetName){
-//        this.streetName = streetName;
-//    }
+    public String getNoOfModule() {
+        return noOfModule;
+    }
+
+    public void setNoOfModule(String noOfModule) {
+        this.noOfModule = noOfModule;
+    }
 }

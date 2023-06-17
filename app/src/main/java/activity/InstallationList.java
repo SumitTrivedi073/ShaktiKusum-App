@@ -67,7 +67,7 @@ import webservice.WebURL;
     public String loginno = "";
     public String module_qty = "";
     public String sync = "";
-    public String CONTACT_NO = "";
+    public String CONTACT_NO = "",inst_no_of_module_value="";
     public String simha2 = "";
     public String set_matno = "";
     public String villagetehsil = "";
@@ -317,6 +317,8 @@ import webservice.WebURL;
             String login_selec = null;
             try {
                 login_selec = CustomHttpClient.executeHttpPost1(WebURL.INSTALLATION, param);
+
+                Log.e("URL====>",WebURL.INSTALLATION+""+param.toString());
                 JSONObject object = new JSONObject(login_selec);
                 String obj1 = object.getString("installation_data");
                 JSONArray ja = new JSONArray(obj1);
@@ -359,6 +361,8 @@ import webservice.WebURL;
                     set_matno = jo.getString("set_matno");
                     CONTACT_NO = jo.getString("contact_no");
 
+                    inst_no_of_module_value = jo.getString("inst_no_of_module_value");
+
                     installationBean = new InstallationListBean(bill_no,
                             CustomUtility.getSharedPreferences(context, "userid"),
                             name,
@@ -388,7 +392,8 @@ import webservice.WebURL;
                             set_matno,
                             simha2,
                             sync,
-                            CONTACT_NO);
+                            CONTACT_NO,
+                            inst_no_of_module_value);
                     if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_LIST, DatabaseHelper.KEY_ENQ_DOC, bill_no)) {
                         db.updateInstallationListData(bill_no, installationBean);
                     } else {
@@ -502,7 +507,7 @@ import webservice.WebURL;
                     simha2 = jo.getString("simha2");
                     set_matno = jo.getString("set_matno");
                     CONTACT_NO = jo.getString("contact_no");
-
+                    inst_no_of_module_value = jo.getString("inst_no_of_module_value");
                     installationBean = new InstallationListBean(bill_no,
                             CustomUtility.getSharedPreferences(context, "userid"),
                             name,
@@ -529,7 +534,7 @@ import webservice.WebURL;
                             set_matno,
                             simha2,
                             sync,
-                            CONTACT_NO);
+                            CONTACT_NO,inst_no_of_module_value);
 
                     InstallationListBean installationBean = new InstallationListBean();
                     installationBean.setPernr(CustomUtility.getSharedPreferences(context, "userid"));
@@ -562,7 +567,7 @@ import webservice.WebURL;
                     installationBean.setSet_matno(set_matno);
                     installationBean.setSimha2(simha2);
                     installationBean.setCUS_CONTACT_NO(CONTACT_NO);
-
+                    installationBean.setNoOfModule(inst_no_of_module_value);
                     installationBeans.add(installationBean);
                 }
 

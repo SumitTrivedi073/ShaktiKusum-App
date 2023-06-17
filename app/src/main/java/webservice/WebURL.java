@@ -34,7 +34,7 @@ public class WebURL {
     public static final String DASHBOARD_DATA = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/dashboard.htm";
     public static final String REGISTRATION_DATA = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/save_registration.htm";
     public static final String INSTALLATION_DATA = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/save_installation.htm";
-    public static final String INSTALLATION_DATA_UNLOAD = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/unload_image_save.htm";
+    public static final String INSTALLATION_DATA_UNLOAD = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/unload_image_save1.htm";
     public static final String DAMAGE_MISS_DATA = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/create_complaint.htm";
     public static final String SAVE_SURVEY_DATA = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/save_survey.htm";
     public static final String INSTALLATION = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/installation.htm";

@@ -89,7 +89,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
     List<String> itemNameList = new ArrayList<>();
 
-    String customerName, beneficiary, regNO, projectNo, userID, billNo, moduleqty, no_of_module_value;
+    String customerName, beneficiary, regNO, projectNo, userID, billNo, moduleqty, no_of_module_value,noOfModules ="";;
     int value, currentScannerFor = -1;
 
     Toolbar mToolbar;
@@ -237,7 +237,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
     private void listner() {
         btnSave.setOnClickListener(view -> {
-              String noOfModules ="";
+
 
             if (imageArrayList != null && imageArrayList.size() > 0) {
                 if (!imageArrayList.get(0).isImageSelected()) {
@@ -273,7 +273,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                     }
                     if (CustomUtility.isInternetOn(getApplicationContext())) {
                         if (isSubmit) {
-                            Log.e("noOfModules====>",noOfModules);
+
                            new SyncInstallationData().execute();
                         }
                     } else {
@@ -555,10 +555,21 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                 jsonObj.put("unload_remark", remarkEdt.getText().toString().trim());
                 jsonObj.put("customer_name ", customerName);
                 jsonObj.put("project_login_no ", CustomUtility.getSharedPreferences(UnloadInstReportImageActivity.this, "loginid"));
-                System.out.println("only_text_jsonObj==>>" + jsonObj);
-                jsonObj.put("unld_photo1", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(0).getImagePath()));
-                jsonObj.put("unld_photo2", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(1).getImagePath()));
-                jsonObj.put("unld_photo3", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(2).getImagePath()));
+                jsonObj.put("inst_no_of_module_value ", noOfModules);
+
+
+                if (imageArrayList.size() > 0) {
+
+                    if (imageArrayList.get(0).isImageSelected()) {
+                        jsonObj.put("unld_photo1", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(0).getImagePath()));
+                    }
+                    if (1 < imageArrayList.size() && imageArrayList.get(1).isImageSelected()) {
+                        jsonObj.put("unld_photo2", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(1).getImagePath()));
+                    }
+                    if (2 < imageArrayList.size() && imageArrayList.get(2).isImageSelected()) {
+                        jsonObj.put("unld_photo3", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(2).getImagePath()));
+                    }
+                }
                 ja_invc_data.put(jsonObj);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -568,7 +579,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             param1_invc.add(new BasicNameValuePair("unloading", String.valueOf(ja_invc_data)));
             Log.e("DATA", "$$$$" + param1_invc);
             System.out.println("param1_invc_vihu==>>" + param1_invc);
-            try {
+          try {
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
                 StrictMode.setThreadPolicy(policy);
                 obj2 = CustomHttpClient.executeHttpPost1(WebURL.INSTALLATION_DATA_UNLOAD, param1_invc);
