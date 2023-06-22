@@ -1189,7 +1189,7 @@ public class InstallationInitial extends BaseActivity {
                                                                                     }*/
                                                                         if (!DeviceStatus.isEmpty()) {
 
-                                                                            if (DeviceStatus.equals(getResources().getString(R.string.offline))) {
+                                                                            if (DeviceStatus.equals(getResources().getString(R.string.online))) {
                                                                                 if (imageList.size() > 0) {
                                                                                     new SyncInstallationData().execute();
 
@@ -1478,7 +1478,7 @@ public class InstallationInitial extends BaseActivity {
         inst_pump_ser.setText(pump);
 
         WebURL.mDEvice_Number_CHECK = controller;
-        inst_controller_ser.setText("7E-0200-0-22-03-23");
+        inst_controller_ser.setText(controller);
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {
             spinner_simoprator.setSelection(db.getPosition(spinner_simoprator, installationBean.getSimoprator()));

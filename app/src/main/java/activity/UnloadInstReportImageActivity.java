@@ -575,7 +575,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                 e.printStackTrace();
             }
             Log.e("Param====>", ja_invc_data.toString());
-            final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
+            final ArrayList<NameValuePair> param1_invc = new ArrayList<>();
             param1_invc.add(new BasicNameValuePair("unloading", String.valueOf(ja_invc_data)));
             Log.e("DATA", "$$$$" + param1_invc);
             System.out.println("param1_invc_vihu==>>" + param1_invc);

@@ -507,7 +507,6 @@ import webservice.WebURL;
                     simha2 = jo.getString("simha2");
                     set_matno = jo.getString("set_matno");
                     CONTACT_NO = jo.getString("contact_no");
-                    inst_no_of_module_value = jo.getString("inst_no_of_module_value");
                     installationBean = new InstallationListBean(bill_no,
                             CustomUtility.getSharedPreferences(context, "userid"),
                             name,
@@ -534,7 +533,7 @@ import webservice.WebURL;
                             set_matno,
                             simha2,
                             sync,
-                            CONTACT_NO,inst_no_of_module_value);
+                            CONTACT_NO,"");
 
                     InstallationListBean installationBean = new InstallationListBean();
                     installationBean.setPernr(CustomUtility.getSharedPreferences(context, "userid"));
