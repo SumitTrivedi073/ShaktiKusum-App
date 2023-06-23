@@ -13,9 +13,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.os.StrictMode;
 import android.provider.Settings;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -199,7 +197,6 @@ public class InstallationInitial extends BaseActivity {
         BeneficiaryNo = extras.getString("BeneficiaryNo");
         try {
             Constant.BILL_NUMBER_UNIC = billno;
-            // WebURL.mSettingCheckValue = simha2;
             String[] custnmStr = name.split("S/O", 2);
             custname = custnmStr[0];
             String Custfathname = custnmStr[1];
@@ -349,7 +346,7 @@ public class InstallationInitial extends BaseActivity {
 
         setData();
 
-        inst_module_ser_no.addTextChangedListener(new TextWatcher() {
+   /*     inst_module_ser_no.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -372,8 +369,8 @@ public class InstallationInitial extends BaseActivity {
                 }
             }
         });
-
-        if (!TextUtils.isEmpty(inst_module_ser_no.getText().toString().trim())) {
+*/
+       /* if (!TextUtils.isEmpty(inst_module_ser_no.getText().toString().trim())) {
             module_ser_no = inst_module_ser_no.getText().toString().trim();
             if (module_ser_no.length() != 0 && !module_ser_no.equals("0")) {
                 value = Integer.parseInt(module_ser_no);
@@ -381,7 +378,7 @@ public class InstallationInitial extends BaseActivity {
             } else {
                 moduleOneLL.setVisibility(View.GONE);
             }
-        }
+        }*/
 
         img_scn_one.setOnClickListener(v -> {
             id = 1000;
@@ -508,14 +505,12 @@ public class InstallationInitial extends BaseActivity {
             }
         });
 
-        //if (CustomUtility.isInternetOn(getApplicationContext())) {
+
         labeledSwitch.setOnToggledListener((toggleableView, isOn) -> {
             Intent intent = new Intent(mContext, DeviceStatusActivity.class);
             startActivity(intent);
         });
-       /* } else {
-            Toast.makeText(mContext, "Please Connect to internet...", Toast.LENGTH_SHORT).show();
-        }*/
+
     }
 
     void startScanner(int scanID) {
@@ -728,7 +723,7 @@ public class InstallationInitial extends BaseActivity {
     private void ViewInflate(int value, int new_value) {
 
         String[] arr = no_of_module_value.split(",");
-
+       Log.e("no_of_module_value2",no_of_module_value);
         moduleOneLL.removeAllViews();
 
         for (int i = 0; i < new_value; i++) {
@@ -750,8 +745,9 @@ public class InstallationInitial extends BaseActivity {
 
             try {
                 if (arr.length > 0) {
+                    if(i<arr.length){
                     edit.setText(arr[i]);
-                }
+                }}
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1159,7 +1155,7 @@ public class InstallationInitial extends BaseActivity {
 
         if (inst_latitude != null && !inst_latitude.equals("") && inst_longitude != null && !inst_longitude.equals("") && !inst_longitude.equals("0.0") && !inst_latitude.equals("0.0")) {
             if (inst_bill_no != null && !inst_bill_no.equals("")) {
-                if (inst_delay_reason != null && !inst_delay_reason.equals("")) {
+
                     if (solarpanel_wattage != null && !solarpanel_wattage.equals("")) {
                         if (hp != null && !hp.equals("")) {
                             if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
@@ -1266,9 +1262,7 @@ public class InstallationInitial extends BaseActivity {
                     } else {
                         Toast.makeText(mContext, "Please Solar Panel Wattage.", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(mContext, "Please Enter Installation Delay Reason.", Toast.LENGTH_SHORT).show();
-                }
+
             } else {
                 Toast.makeText(mContext, "Please Enter Bill No.", Toast.LENGTH_SHORT).show();
             }
@@ -1460,9 +1454,19 @@ public class InstallationInitial extends BaseActivity {
         inst_make.setText(installationBean.getMake_ins());
 
         if (!TextUtils.isEmpty(installationBean.getNo_of_module_qty())) {
+            Log.e("No_of_module_qty",installationBean.getNo_of_module_qty());
             no_of_module_value = installationBean.getNo_of_module_value();
             if (installationBean.getNo_of_module_qty().length() != 0 && !installationBean.getNo_of_module_qty().equals("0")) {
                 value = Integer.parseInt(installationBean.getNo_of_module_qty());
+                ViewInflate(value, value);
+            }
+        }else {
+
+            no_of_module_value = GetDataModule();
+            Log.e("no_of_module_value1",no_of_module_value);
+            module_ser_no = inst_module_ser_no.getText().toString().trim();
+            if (module_ser_no.length() != 0 && !module_ser_no.equals("0")) {
+                value = Integer.parseInt(module_ser_no);
                 ViewInflate(value, value);
             }
         }
@@ -1474,7 +1478,7 @@ public class InstallationInitial extends BaseActivity {
         inst_pump_ser.setText(pump);
 
         WebURL.mDEvice_Number_CHECK = controller;
-        inst_controller_ser.setText("7E-0200-0-22-03-23");
+        inst_controller_ser.setText(controller);
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {
             spinner_simoprator.setSelection(db.getPosition(spinner_simoprator, installationBean.getSimoprator()));
@@ -1483,6 +1487,18 @@ public class InstallationInitial extends BaseActivity {
             spinner_conntype.setSelection(db.getPosition(spinner_conntype, installationBean.getConntype()));
         }
     }
+
+    public String GetDataModule() {
+        String finalValue = "";
+        if (!inst_module_ser_no.getText().toString().trim().equals("0")) {
+
+            finalValue = getIntent().getStringExtra("NoOfModule");
+        } else {
+            finalValue = "";
+        }
+        return finalValue;
+    }
+
 
     public void getSimTypeValue() {
         list_simoprator.add("Select SIM Operator");

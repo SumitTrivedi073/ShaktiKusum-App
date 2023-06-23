@@ -91,6 +91,7 @@ import webservice.WebURL;
                 holder.ben_no.setText(responseList.get(position).getBeneficiary());
             }
 
+
             holder.status.setImageResource(R.drawable.red_icn);
 
             holder.cardView.setOnClickListener(view -> {
@@ -127,6 +128,7 @@ import webservice.WebURL;
                             extras.putString("moduleqty", responseList.get(position).getModuleqty());
                             extras.putString("CUS_CONTACT_NO", responseList.get(position).getCUS_CONTACT_NO());
                             extras.putString("BeneficiaryNo", responseList.get(position).getBeneficiary());
+                            extras.putString("NoOfModule", responseList.get(position).getNoOfModule());
                             in.putExtras(extras);
                             context.startActivity(in);
                         }
@@ -163,6 +165,7 @@ import webservice.WebURL;
                         intent.putExtra("vbeln", responseList.get(position).getBillno());
                         intent.putExtra("cust_name", custname);
                         intent.putExtra("userid", pernr);
+                        intent.putExtra("moduleqty", responseList.get(position).getModuleqty());
                         context.startActivity(intent);
                     }
             });

@@ -3574,11 +3574,8 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
                             File file = new File(UtilMethod.commonDocumentDirPath("ShaktiKusumExtractionFile"), "Month_" + mBtNameHead + ".xls");
 
-                            // File file = new File(mContext.getExternalFilesDir(null), "Month_" + mBtNameHead + ".xls");
-                            // File file = new File(mContext.getExternalFilesDir(null), "Month_" + mBtNameHead + ".xlsx");
                             FileOutputStream os = null;
                             System.out.println("vikas--4==>4");
-                            //baseRequest.hideLoader();
                             try {
                                 os = new FileOutputStream(file);
                                 wb.write(os);
@@ -3596,23 +3593,15 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                         os.close();
                                 } catch (Exception ex) {
                                     System.out.println("vikas--5==>5");
-                                    // baseRequest.hideLoader();
                                     ex.printStackTrace();
                                 }
                             }
                             break;
                         }
-                        //  if((mDay == 255) && (mMonth == 255) && (mYear == 255) && (mHour == 255) && (mMinut == 255) && (mStatus == 255))
                         if (((mDay == 255) && (mMonth == 255) && (mYear == 255)) || ((mDay == 0) && (mMonth == 0) && (mYear == 0))) {
-                            // File file = new File(mContext.getExternalFilesDir(null), "Month_" + mBtNameHead + ".xlsx");
 
                             File file = new File(UtilMethod.commonDocumentDirPath("ShaktiKusumExtractionFile"), "Month_" + mBtNameHead + ".xls");
-
-                            //  File file = new File(mContext.getExternalFilesDir(null), "Month_" + mBtNameHead + ".xls");
                             FileOutputStream os = null;
-                            //  File file = new File(mContext.getExternalFilesDir(null), "Month" + mBtNameHead + ".xls");
-                            //   FileOutputStream os = null;
-                            //    baseRequest.hideLoader();
                             try {
                                 os = new FileOutputStream(file);
                                 wb.write(os);
@@ -3635,29 +3624,19 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                             mBoolflag = true;
                         } else {
                             if (mPostionFinal == 0) {
-                                //New Workbook
                                 wb = new HSSFWorkbook();
-                                //Cell style for header row
-                               /* cs = wb.createCellStyle();
-                                cs.setFillForegroundColor(HSSFColor.LIME.index);
-                                cs.setFillPattern(HSSFCellStyle.NO_FILL);*/
-                                //New Sheet
                                 sheet1 = wb.createSheet("myOrder");
                                 row = sheet1.createRow(0);
 
                                 for (int k = 0; k < mMonthHeaderList.size(); k++) {
-
                                     String[] mStringSplitStart = mMonthHeaderList.get(k).split("-");
-
                                     sheet1.setColumnWidth(k, (10 * 200));
                                     c = row.createCell(k);
-
                                     c.setCellValue(mStringSplitStart[0]);
                                     c.setCellStyle(cs);
                                 }
 
                                 row = sheet1.createRow(mPostionFinal + 1);
-
                                 c = row.createCell(0);
                                 c.setCellValue("" + mDay);
                                 c.setCellStyle(cs);
@@ -3683,46 +3662,29 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                 c.setCellStyle(cs);
 
                                 try {
-                                    //  for (int j = 3; j < mLengthCount; j++)
                                     for (int j = 6; j < mMonthHeaderList.size(); j++) {
-                                        //     fTotalEnergy = Float.intBitsToFloat(mDayDataList.get(i)[j]);
-
-
                                         String[] mStringSplitStart = mMonthHeaderList.get(j).split("-");
                                         int mmIntt = 1;
                                         mmIntt = Integer.parseInt(mStringSplitStart[1]);
-
                                         try {
-
                                             if (mmIntt == 1) {
-
-
                                                 sheet1.setColumnWidth(j, (10 * 200));
                                                 fFrequency = mTotalTime[j];
 
                                                 c = row.createCell(j);
                                                 c.setCellValue("" + fFrequency);
                                                 c.setCellStyle(cs);
-
-                                                // tr.addView(getTextView(counter, ((mTotalTime[i] / mmIntt)) + "", Color.BLACK, Typeface.NORMAL, ContextCompat.getColor(this, R.color.white)));
                                             } else {
-
-
                                                 sheet1.setColumnWidth(j, (10 * 200));
                                                 fFrequency = mTotalTime[j];
 
                                                 float mmValue = (((float) mTotalTime[j]) / ((float) mmIntt));
-
                                                 c = row.createCell(j);
-                                                // c.setCellValue("" + fFrequency);
                                                 c.setCellValue("" + mmValue);
                                                 c.setCellStyle(cs);
-
-                                                //  tr.addView(getTextView(counter, ( (((float)mTotalTime[i]) / ((float)mmIntt))) + "", Color.BLACK, Typeface.NORMAL, ContextCompat.getColor(this, R.color.white)));
                                             }
 
                                         } catch (Exception e) {
-                                            //   baseRequest.hideLoader();
                                             e.printStackTrace();
                                         }
 
@@ -3730,13 +3692,11 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                     }
                                 } catch (NumberFormatException e) {
                                     e.printStackTrace();
-                                    //      baseRequest.hideLoader();
                                 }
 
 
                             } else {
-                                // cs.setFillPattern(HSSFCellStyle.NO_FILL);
-                                row = sheet1.createRow(mPostionFinal + 1);
+                               row = sheet1.createRow(mPostionFinal + 1);
 
                                 c = row.createCell(0);
                                 c.setCellValue("" + mDay);
@@ -3849,16 +3809,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
         @SuppressLint("SetTextI18n")
         @Override
-        protected void onPostExecute(Boolean result) //after the doInBackground, it checks if everything went fine
-        {
-            // baseRequest.hideLoader();
-          /*  runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-                    rlvLoadingViewID.setVisibility(View.GONE);
-                }
-            });*/
+        protected void onPostExecute(Boolean result) {
 
             super.onPostExecute(result);
             runOnUiThread(new Runnable() {
@@ -3869,15 +3820,11 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                     try {
 
                         if (Build.VERSION.SDK_INT >= 30) {
-                            //only api 21 above
                             filePath = "/storage/emulated/0/Documents/ShaktiKusumExtractionFile/Month_" + mBtNameHead + ".xls";//Month_26-0018-0-18-03-19-0.xls";
                         } else {
-                            //only api 21 down
-                            filePath = "/storage/emulated/0/ShaktiKusumExtractionFile/Month_" + mBtNameHead + ".xls";//Month_26-0018-0-18-03-19-0.xls";
+                           filePath = "/storage/emulated/0/ShaktiKusumExtractionFile/Month_" + mBtNameHead + ".xls";//Month_26-0018-0-18-03-19-0.xls";
                         }
 
-                       /* File file = new File(UtilMethod.commonDocumentDirPath("ShaktiKusumExtractionFile"), "Month_" + mBtNameHead + ".xls");
-                        filePath = file.getAbsolutePath();*/
 
                         Log.d("filePath", filePath);
                         // String[] mDataNameString = filePath.split("files/");

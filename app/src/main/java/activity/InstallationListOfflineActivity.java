@@ -294,35 +294,7 @@ public class InstallationListOfflineActivity extends BaseActivity {
                 JSONArray ja = new JSONArray(obj1);
                 for (int j = 0; j < ja.length(); j++) {
                     JSONObject jo = ja.getJSONObject(j);
-//                    bill_no = jo.getString("vbeln");
-//                    gst_bill_no = jo.getString("gst_inv_no");
-//                    bill_date = jo.getString("fkdat");
-//                    disp_date = jo.getString("dispatch_date");
-//                    kunnr = jo.getString("kunnr");
-//                    name = jo.getString("name");
-//                    fathname = name ;
-//                    tehsil = jo.getString("ort02");
-//                    village = tehsil;
-//                    state = jo.getString("regio");
-//                    district = jo.getString("cityc");
-//                    state_txt = jo.getString("regio_txt");
-//                    district_txt = jo.getString("cityc_txt");
-//                    address = jo.getString("address");
-//                    contactno = jo.getString("mobile");
-//                    controller = jo.getString("controller_sernr");
-//                    motor = jo.getString("motor_sernr");
-//                    simno = jo.getString("simno");
-////                    simmob
-//                    beneficiary = jo.getString("beneficiary");
-//                    pump = jo.getString("pump_sernr");
-//                    regisno = jo.getString("regisno");
-//                    projectno = jo.getString("project_no");
-//                    loginno = jo.getString("process_no");
-//                    module_qty = jo.getString("module_qty");
-//                    sync = jo.getString("sync");
-//                    simha2 = jo.getString("simha2");
-//                    set_matno = jo.getString("set_matno");
-//                    CONTACT_NO = jo.getString("contact_no");
+
                     Gson gson = new Gson();
                     installationOfflineBean = gson.fromJson(String.valueOf(jo), InstallationOfflineBean.class);
                     installationOfflineBean.setUserID(CustomUtility.getSharedPreferences(mContext, "userid"));
