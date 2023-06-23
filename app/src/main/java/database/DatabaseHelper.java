@@ -75,6 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //fields name
     public static final String KEY_ENQ_DOC = "enq_doc";
+    public static final String KEY_No_OF_Module = "inst_no_of_module_value";
     public static final String KEY_USERMOB = "person_mob";
     public static final String KEY_USERID = "userid";
     public static final String KEY_USERNAME = "username";
@@ -837,6 +838,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_SET_MATNO + " TEXT,"
             + KEY_SIMHA2 + " TEXT,"
             + KEY_CUS_CONTACT_NO + " TEXT,"
+            + KEY_PANEL_MODULE_SER_NO + " TEXT,"
             + KEY_ADD1 + " TEXT,"
             + KEY_ADD2 + " TEXT,"
             + KEY_ADD3 + " TEXT,"
@@ -1571,6 +1573,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_SET_MATNO, installationBean.getSet_matno());
             values.put(KEY_SIMHA2, installationBean.getSimha2());
             values.put(KEY_CUS_CONTACT_NO, installationBean.getCUS_CONTACT_NO());
+            values.put(KEY_PANEL_MODULE_SER_NO, installationBean.getNoOfModule());
             long i = db.insert(TABLE_INSTALLATION_LIST, null, values);
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
@@ -1617,6 +1620,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_ADD2, installationOfflineBean.getRegisno());
             values.put(KEY_ADD5, installationOfflineBean.getModuleQty());
             values.put(KEY_SYNC, installationOfflineBean.getSync());
+
             long i = db.insert(TABLE_INSTALLATION_OFFLINE_LIST, null, values);
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
@@ -1909,6 +1913,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_SET_MATNO, installationBean.getSet_matno());
             values.put(KEY_SIMHA2, installationBean.getSimha2());
             values.put(KEY_CUS_CONTACT_NO, installationBean.getCUS_CONTACT_NO());
+            values.put(KEY_PANEL_MODULE_SER_NO, installationBean.getNoOfModule());
             where = KEY_ENQ_DOC + "='" + enqdoc + "'";
             i = db.update(TABLE_INSTALLATION_LIST, values, where, null);
             db.setTransactionSuccessful();
@@ -2828,6 +2833,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         installationBean.setSet_matno(cursor.getString(cursor.getColumnIndex(KEY_SET_MATNO)));
                         installationBean.setSimha2(cursor.getString(cursor.getColumnIndex(KEY_SIMHA2)));
                         installationBean.setCUS_CONTACT_NO(cursor.getString(cursor.getColumnIndex(KEY_CUS_CONTACT_NO)));
+                        installationBean.setNoOfModule(cursor.getString(cursor.getColumnIndex(KEY_PANEL_MODULE_SER_NO)));
+
                         list_document.add(installationBean);
                         cursor.moveToNext();
                     }

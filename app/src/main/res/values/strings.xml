@@ -228,4 +228,5 @@
     <string name="insertThirdSim">Please Insert third Sim and try again</string>
     <string name="insertSecondSim">Please Insert Second Sim and try again</string>
     <string name="sendingDataServer">Sending data to server</string>
+    <string name="enter_allModuleSrno">Please Enter all module serial no.</string>
 </resources>
