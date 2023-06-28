@@ -13,6 +13,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -87,7 +88,6 @@ import activity.GPSTracker;
 import bean.BTResonseData;
 import bean.DeviceDetailModel;
 import bean.ProfileUpdateModel;
-import ch.acra.acra.BuildConfig;
 import de.hdodenhof.circleimageview.CircleImageView;
 import debugapp.Bean.SimDetailsInfoResponse;
 import debugapp.GlobalValue.Constant;
@@ -187,7 +187,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     String mvMinute;
     String mvNo_of_Start;
     String filePath;
-    String versionName;
+
     String mAppName = "KUSUM";
     String project_no = "";
     File file;
@@ -223,7 +223,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     private boolean mBoolflag = false;
     private RelativeLayout rlvLoadingViewID;
     private TextView txtHeadingLabelID;
-    private String MEmpType = "null";
+    private String MEmpType = "null",version;
     private String ControllerSerialNumber;
     private int mCheckButtonclick = 0;
 
@@ -246,7 +246,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         mCheckCableOKValue = 0;
         INVOICE_NO_B = Constant.BILL_NUMBER_UNIC;
         Constant.Bluetooth_Activity_Navigation1 = 1;
-        versionName = BuildConfig.VERSION_NAME;
+
         pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         editor = pref.edit();
         project_no = CustomUtility.getSharedPreferences(mContext, "projectid");
@@ -296,16 +296,24 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         mIntCheckDeviceType = 0;
 
 
-        if (WebURL.APP_VERSION_CODE.equalsIgnoreCase("0")) {
-            WebURL.APP_VERSION_CODE = "5.3";
-        }
+
 
         changeButtonVisibilityRLV(true, 0.5f, rlvBT_S1_ID);
         changeButtonVisibilityRLV(true, 0.5f, rlvBT_S2_ID);
         changeButtonVisibilityRLV(false, 0.5f, rlvBT_7_ID_save);
         setClickEventListner();
         getGpsLocation();
+        try {
+            PackageManager manager = getPackageManager();
+            PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
+            version = info.versionName;
 
+            Log.e("version=====>",version);
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("versionErrpr====>",e.getMessage());
+            throw new RuntimeException(e);
+
+        }
     }
 
     private void setClickEventListner() {
@@ -1217,7 +1225,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             jsonObj.put("RMS_STATUS", RMS_STATUS);
             jsonObj.put("RMS_CURRENT_ONLINE_STATUS", RMS_CURRENT_ONLINE_STATUS);
             jsonObj.put("RMS_LAST_ONLINE_DATE", RMS_LAST_ONLINE_DATE);
-            jsonObj.put("RMS_APP_VERSION", mAppName + " - " + WebURL.APP_VERSION_CODE);
+            jsonObj.put("RMS_APP_VERSION", mAppName + " - " + version);
             jsonObj.put("RMS_PROJECT_CODE", project_no);
 
             jsonObj.put("DEBUG_UNAME ", mInstallerName);
@@ -3156,7 +3164,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                 jsonObj.put("RMS_STATUS", RMS_STATUS);
                 jsonObj.put("RMS_CURRENT_ONLINE_STATUS", RMS_CURRENT_ONLINE_STATUS);
                 jsonObj.put("RMS_LAST_ONLINE_DATE", RMS_LAST_ONLINE_DATE);
-                jsonObj.put("RMS_APP_VERSION", mAppName + " - " + WebURL.APP_VERSION_CODE);
+                jsonObj.put("RMS_APP_VERSION", mAppName + " - " + version);
                 jsonObj.put("RMS_PROJECT_CODE", project_no);
                 jsonObj.put("DEBUG_UNAME ", mInstallerName);
                 jsonObj.put("DEBUG_UMOB", mInstallerMOB);

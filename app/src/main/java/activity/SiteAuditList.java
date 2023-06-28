@@ -71,7 +71,7 @@ public class SiteAuditList extends BaseActivity {
     Context context;
     DatabaseHelper db;
     dialog5 yourDialog;
-    String version, device_name, user_id;
+    String  device_name, user_id;
     LinearLayout lin1, lin2;
     RecyclerView recyclerView;
     Adapter_auditsite_list adapter_auditsite_list;
@@ -109,8 +109,6 @@ public class SiteAuditList extends BaseActivity {
         yourDialog.show();
 
 
-        //version = BuildConfig.VERSION_NAME;
-        version = WebURL.APP_VERSION_CODE;
         device_name = CustomUtility.getDeviceName();
 
         mToolbar = findViewById(R.id.toolbar);

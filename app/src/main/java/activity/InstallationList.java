@@ -3,6 +3,8 @@ package activity;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Message;
@@ -36,7 +38,6 @@ import adapter.Adapter_Installation_list;
 import adapter.Adapter_Unload_Installation_list;
 import bean.BTResonseData;
 import bean.InstallationListBean;
-import ch.acra.acra.BuildConfig;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.NewSolarVFD;
 import debugapp.localDB.DatabaseHelperTeacher;
@@ -135,7 +136,17 @@ import webservice.WebURL;
         user_id = CustomUtility.getSharedPreferences(context, "userid");
 
 
-        version = BuildConfig.VERSION_NAME;
+        try {
+            PackageManager manager = getPackageManager();
+            PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
+            version = info.versionName;
+            Log.e("version=====>",version);
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("versionErrpr====>",e.getMessage());
+            throw new RuntimeException(e);
+
+        }
+
         device_name = CustomUtility.getDeviceName();
 
         mToolbar = findViewById(R.id.toolbar);

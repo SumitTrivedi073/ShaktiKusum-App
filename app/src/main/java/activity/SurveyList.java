@@ -54,7 +54,7 @@ public class SurveyList extends BaseActivity {
     Context context;
     DatabaseHelper db;
 
-    String version, device_name, user_id;
+    String device_name, user_id;
     LinearLayout lin1, lin2;
     RecyclerView recyclerView;
     Adapter_Survey_list adapter_survey_list;
@@ -88,8 +88,7 @@ public class SurveyList extends BaseActivity {
         user_id = CustomUtility.getSharedPreferences(context, "userid");
 
 
-        version = WebURL.APP_VERSION_CODE;
-        //version = BuildConfig.VERSION_NAME;
+
         device_name = CustomUtility.getDeviceName();
 
         mToolbar = findViewById(R.id.toolbar);

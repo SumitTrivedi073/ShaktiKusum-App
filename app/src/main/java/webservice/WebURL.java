@@ -3,8 +3,7 @@ package webservice;
 
 public class WebURL {
     public  static int SERVER_CONNECTIVITY_OK = 0;
-    public  static String APP_VERSION_CODE = "0";
-    public  static int CHECK_FINAL_ALL_OK = 0;
+   public  static int CHECK_FINAL_ALL_OK = 0;
     public  static int CHECK_FOR_WORK_WITH_BT_OR_IN = 0;
     public  static String mSettingCheckValue = "0";
     public  static String mDEvice_Number_CHECK = "";

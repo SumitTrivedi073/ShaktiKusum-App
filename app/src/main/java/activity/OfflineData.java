@@ -15,7 +15,6 @@ import com.shaktipumplimited.shaktikusum.R;
 
 import database.DatabaseHelper;
 import utility.CustomUtility;
-import webservice.WebURL;
 
 
 public class OfflineData extends BaseActivity {
@@ -23,7 +22,7 @@ public class OfflineData extends BaseActivity {
 
     DatabaseHelper db;
 
-    String doc_no, version, device_name;
+    String  device_name;
     private Toolbar mToolbar;
     private TextView regis_data, inst_data;
 
@@ -34,9 +33,6 @@ public class OfflineData extends BaseActivity {
         setContentView(R.layout.activity_offline_data);
         context = this;
 
-
-        //version = BuildConfig.VERSION_NAME;
-        version = WebURL.APP_VERSION_CODE;
         device_name = CustomUtility.getDeviceName();
 
         mToolbar = findViewById(R.id.toolbar);

@@ -7,6 +7,8 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -112,7 +114,7 @@ public class InstallationInitial extends BaseActivity {
             city_txt = "", address = "", make = "", custname = "", fathname = "", simno = "", regisno = "", projectno = "", loginno = "", moduleqty = "", mobileno = "", tehvillage = "",
             borewellstatus1 = "", DeviceStatus = "", CUS_CONTACT_NO = "", BeneficiaryNo = "", no_of_module_value = "", rmsdata_status = "", mMOBNUM_1, mMOBNUM_2, mMOBNUM_3, mORG_OTP_VALUE,
             mORG_CONTACT_NO, MEmpType = "null", mAppName = "KUSUM", mInstallerMOB = "", mInstallerName = "", RMS_SERVER_DOWN = "", RMS_DEBUG_EXTRN = "", DEVICE_NO, SIGNL_STREN,
-            INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "", SIM_SR_NO = "", SIM = "", RMS_STATUS = "", RMS_LAST_ONLINE_DATE = "", RMS_CURRENT_ONLINE_STATUS = "",
+            INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "", SIM_SR_NO = "", SIM = "", RMS_STATUS = "", RMS_LAST_ONLINE_DATE = "", RMS_CURRENT_ONLINE_STATUS = "",version="",
 
     mDriveSerialNo = "", mMotorSerialNo = "", mPumpSerialNo = "", delay;
     EditText inst_date, bill_date, bill_no, cust_name, borewellstatus, reasontxt, inst_address, inst_make, inst_village,
@@ -140,7 +142,7 @@ public class InstallationInitial extends BaseActivity {
     };
 
     List<ImageModel> imageList = new ArrayList<>();
-    boolean isBaseUpdate = false, isControllerIDScan = false, isDebug = false;
+    boolean isBaseUpdate = false, isControllerIDScan = true, isDebug = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,9 +162,19 @@ public class InstallationInitial extends BaseActivity {
 
         baseRequest = new BaseRequest(this);
 
-        if (WebURL.APP_VERSION_CODE.equalsIgnoreCase("0")) {
-            WebURL.APP_VERSION_CODE = "5.3";
+
+        try {
+            PackageManager manager = getPackageManager();
+            PackageInfo  info = manager.getPackageInfo(getPackageName(), 0);
+             version = info.versionName;
+            Log.e("version=====>",version);
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("versionErrpr====>",e.getMessage());
+            throw new RuntimeException(e);
+
         }
+
+
 
         mBTResonseDataList = new ArrayList<>();
         WebURL.BT_DEBUG_CHECK = 0;
@@ -1478,7 +1490,7 @@ public class InstallationInitial extends BaseActivity {
         inst_pump_ser.setText(pump);
 
         WebURL.mDEvice_Number_CHECK = controller;
-        inst_controller_ser.setText(controller);
+        inst_controller_ser.setText("7F-0135-0-13-06-23");
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {
             spinner_simoprator.setSelection(db.getPosition(spinner_simoprator, installationBean.getSimoprator()));
@@ -1658,7 +1670,7 @@ public class InstallationInitial extends BaseActivity {
                 jsonObj.put("RMS_STATUS", RMS_STATUS);
                 jsonObj.put("RMS_CURRENT_ONLINE_STATUS", RMS_CURRENT_ONLINE_STATUS);
                 jsonObj.put("RMS_LAST_ONLINE_DATE", RMS_LAST_ONLINE_DATE);
-                jsonObj.put("RMS_APP_VERSION", mAppName + " - " + WebURL.APP_VERSION_CODE);
+                jsonObj.put("RMS_APP_VERSION", mAppName + " - " + version);
                 jsonObj.put("RMS_PROJECT_CODE", project_no);
                 jsonObj.put("DEBUG_UNAME ", mInstallerName);
                 jsonObj.put("DEBUG_UMOB", mInstallerMOB);
@@ -1962,7 +1974,7 @@ public class InstallationInitial extends BaseActivity {
                 jsonObj.put("dbug_mob_3 ", Constant.DBUG_MOB_3);
                 jsonObj.put("dbug_ofline", Constant.DBUG_PER_OFLINE);
                 jsonObj.put("dbug_ofline", Constant.DBUG_PER_OFLINE);
-                jsonObj.put("app_version", WebURL.APP_VERSION_CODE);
+                jsonObj.put("app_version", version);
 
                 jsonObj.put("LOGIN_NAME", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonName));
                 jsonObj.put("LOGIN_CONT", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonNumber));

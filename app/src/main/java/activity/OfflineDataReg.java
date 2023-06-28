@@ -1,5 +1,7 @@
 package activity;
 
+import static android.os.Environment.getExternalStoragePublicDirectory;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -16,10 +18,11 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -39,17 +42,13 @@ import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-import static android.os.Environment.getExternalStoragePublicDirectory;
-
-import com.shaktipumplimited.shaktikusum.R;
-
 
 public class OfflineDataReg extends BaseActivity {
     Context context;
 
     DatabaseHelper db;
 
-    String doc_no, version, device_name;
+    String  device_name;
     LinearLayout lin1, lin2;
     RecyclerView recyclerView;
     public static final String GALLERY_DIRECTORY_NAME = "ShaktiKusum";
@@ -110,9 +109,6 @@ public class OfflineDataReg extends BaseActivity {
 
         db = new DatabaseHelper(context);
 
-
-       // version = BuildConfig.VERSION_NAME;
-        version = WebURL.APP_VERSION_CODE;
 
         device_name = CustomUtility.getDeviceName();
 

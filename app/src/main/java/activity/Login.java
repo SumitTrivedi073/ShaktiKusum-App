@@ -19,6 +19,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -72,7 +73,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bean.LoginBean;
-import ch.acra.acra.BuildConfig;
 import database.DatabaseHelper;
 import debugapp.OTPGenerationActivity;
 import utility.CustomUtility;
@@ -88,8 +88,8 @@ public class Login extends AppCompatActivity {
     private static final int REQUEST_CODE_PERMISSION = 2;
     Spinner spinner_login_type, spinner_project_type;
     ProgressDialog progressBar;
-    int index, index1;
-    String username, password, login, userid, usertype, spinner_login_type_text, spinner_project_type_text, spinner_proj_id, spinner_login_id;
+    int index, index1,versionCode;
+    String username, password, login, userid, usertype, spinner_login_type_text, spinner_project_type_text, spinner_proj_id, spinner_login_id,version;
     List<String> list = null;
     List<String> projectlist = null;
     List<String> loginlist = null;
@@ -400,6 +400,17 @@ public class Login extends AppCompatActivity {
 
     private void serverLogin() {
 
+        try {
+            PackageManager manager = getPackageManager();
+            PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
+            version = info.versionName;
+            versionCode = info.versionCode;
+            Log.e("version=====>",version);
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("versionErrpr====>",e.getMessage());
+            throw new RuntimeException(e);
+
+        }
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
         StrictMode.setThreadPolicy(policy);
 
@@ -412,9 +423,9 @@ public class Login extends AppCompatActivity {
         param.add(new BasicNameValuePair("project_no", CustomUtility.getSharedPreferences(context, "projectid")));
         param.add(new BasicNameValuePair("project_login_no", CustomUtility.getSharedPreferences(context, "loginid")));
         param.add(new BasicNameValuePair("DEVICE_NAME", CustomUtility.getDeviceName()));
-        param.add(new BasicNameValuePair("APP_VERSION", BuildConfig.VERSION_NAME));
+        param.add(new BasicNameValuePair("APP_VERSION", version));
         param.add(new BasicNameValuePair("API", String.valueOf(Build.VERSION.SDK_INT)));
-        param.add(new BasicNameValuePair("API_VERSION", Build.VERSION.RELEASE));
+        param.add(new BasicNameValuePair("API_VERSION", String.valueOf(versionCode)));
 
 //******************************************************************************************/
 /*                   server connection

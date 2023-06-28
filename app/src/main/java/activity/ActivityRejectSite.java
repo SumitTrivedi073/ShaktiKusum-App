@@ -95,8 +95,7 @@ public class ActivityRejectSite extends BaseActivity {
         user_id = CustomUtility.getSharedPreferences(context, "userid");
 
 
-       //version = BuildConfig.VERSION_NAME;
-        version = WebURL.APP_VERSION_CODE;
+
         device_name = CustomUtility.getDeviceName();
 
         mToolbar = findViewById(R.id.toolbar);

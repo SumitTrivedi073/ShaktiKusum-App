@@ -137,8 +137,6 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
-        //versionName = BuildConfig.VERSION_NAME;
-        versionName = WebURL.APP_VERSION_CODE;
         getGpsLocation();
         getlayout();
         getAccTypeValue();
@@ -398,28 +396,7 @@ public class CustomerRegistrationActivity extends AppCompatActivity {
                 onBackPressed();
                 return true;
             case R.id.act_comp_attach_image:
-           /*     if(SDK_INT >= 30) {
-                    if (!Environment.isExternalStorageManager()) {
-                        Snackbar.make(findViewById(android.R.id.content), "Permission needed!", Snackbar.LENGTH_INDEFINITE)
-                                .setAction("Settings", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
 
-                                        try {
-                                            Uri uri = Uri.parse("package:" + shakti.shaktipumps.shaktikusum.BuildConfig.APPLICATION_ID);
-                                            Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri);
-                                            startActivity(intent);
-                                        } catch (Exception ex) {
-                                            Intent intent = new Intent();
-                                            intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                                            startActivity(intent);
-                                        }
-                                    }
-                                })
-                                .show();
-                    }
-                }
-                else {*/
                     Intent intent = new Intent(getApplicationContext(), RegReportImageActivity.class);
                     intent.putExtra("reg_id", CustomUtility.getSharedPreferences(context, "enqdocid"));
                     intent.putExtra("cust_nm", cust_name.getText().toString());

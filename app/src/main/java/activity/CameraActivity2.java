@@ -106,19 +106,23 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
                                 if(CustomUtility.isInternetOn(getApplicationContext())) {
                                     List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 
-                                    latitudetxt = String.valueOf(addresses.get(0).getLatitude());
-                                    longitudetxt = String.valueOf(addresses.get(0).getLongitude());
-                                    addresstxt = addresses.get(0).getAddressLine(0).substring(0, 35);
-                                    state = addresses.get(0).getAdminArea();
-                                    postalcode = addresses.get(0).getPostalCode();
-                                    country = addresses.get(0).getCountryName();
-                                    getDate = new SimpleDateFormat(TIME_STAMP_FORMAT_DATE, Locale.getDefault());
-                                    getTime = new SimpleDateFormat(TIME_STAMP_FORMAT_TIME, Locale.getDefault());
+                                    if(!addresses.isEmpty()) {
+                                        latitudetxt = String.valueOf(addresses.get(0).getLatitude());
+                                        longitudetxt = String.valueOf(addresses.get(0).getLongitude());
+                                        if (addresses.get(0).getAddressLine(0) != null && !addresses.get(0).getAddressLine(0).isEmpty()) {
+                                            addresstxt = addresses.get(0).getAddressLine(0);
+                                        }
+                                        state = addresses.get(0).getAdminArea();
+                                        postalcode = addresses.get(0).getPostalCode();
+                                        country = addresses.get(0).getCountryName();
+                                        getDate = new SimpleDateFormat(TIME_STAMP_FORMAT_DATE, Locale.getDefault());
+                                        getTime = new SimpleDateFormat(TIME_STAMP_FORMAT_TIME, Locale.getDefault());
 
 
-                                    display.setText(" Latitude : " + latitudetxt + "\n" + " Longitude : " + longitudetxt + "\n" + " Address : " + addresstxt + ","
-                                            + state + " " + postalcode + "," + country + "\n" + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
-                                            + "\n" + "Customer: " + customer_name);
+                                        display.setText(" Latitude : " + latitudetxt + "\n" + " Longitude : " + longitudetxt + "\n" + " Address : " + addresstxt + ","
+                                                + state + " " + postalcode + "," + country + "\n" + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
+                                                + "\n" + "Customer: " + customer_name);
+                                    }
                                 }else {
 
                                     latitudetxt = String.valueOf(location.getLatitude());
