@@ -99,7 +99,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             location.getLastLocation()
                     .addOnSuccessListener(location -> {
-                        if(location != null)
+                        if(location != null&& !String.valueOf(location.getLatitude()).isEmpty() && !String.valueOf(location.getLongitude()).isEmpty())
                         {
                             Geocoder geocoder = new Geocoder(CameraActivity2.this,Locale.getDefault());
                             try {
@@ -142,8 +142,8 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
                             }
                         }
                     });
-        } else
-        {
+        }
+        else {
             askpermission();
         }
     }

@@ -142,7 +142,7 @@ public class InstallationInitial extends BaseActivity {
     };
 
     List<ImageModel> imageList = new ArrayList<>();
-    boolean isBaseUpdate = false, isControllerIDScan = true, isDebug = false;
+    boolean isBaseUpdate = false, isControllerIDScan = false, isDebug = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
