@@ -1028,11 +1028,9 @@ public class InstallationInitial extends BaseActivity {
                 }
         }
         if (isSubmit ) {
-
-            CustomUtility.ShowToast("Installation Submitted Successfully", this);
-
+            new SyncInstallationData().execute();
         }else {
-            CustomUtility.ShowToast("Installation Not Submitted", this);
+            CustomUtility.ShowToast("Installation Not Submitted,Remove duplicate module Number", this);
         }
 
 
