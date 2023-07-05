@@ -55,7 +55,9 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import adapter.ImageSelectionAdapter;
 import bean.ImageModel;
@@ -88,8 +90,9 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     boolean isSubmit = false;
 
     List<String> itemNameList = new ArrayList<>();
-
-    String customerName, beneficiary, regNO, projectNo, userID, billNo, moduleqty, no_of_module_value,noOfModules ="";;
+    List<String> listOfModules = new ArrayList<>();
+    String customerName, beneficiary, regNO, projectNo, userID, billNo, moduleqty, no_of_module_value, noOfModules = "";
+    ;
     int value, currentScannerFor = -1;
 
     Toolbar mToolbar;
@@ -250,7 +253,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                     CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
                 } else {
 
-
+                    Set<String> set = new HashSet<>();
                     if (!inst_module_ser_no.getText().toString().trim().equals("0")) {
 
                         for (int i = 0; i < moduleOneLL.getChildCount(); i++) {
@@ -258,23 +261,37 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
                             if (edit_O.getText().toString().isEmpty()) {
                                 CustomUtility.ShowToast(getResources().getString(R.string.enter_allModuleSrno), getApplicationContext());
-                             isSubmit = false;
+                                isSubmit = false;
                             } else {
-                                isSubmit = true;
-                                if(noOfModules.isEmpty()) {
-                                    noOfModules = edit_O.getText().toString();
-                                }else {
-                                    noOfModules= noOfModules+","+edit_O.getText().toString();
-                                }
+                                if (set.contains(edit_O.getText().toString())) {
+                                    isSubmit = false;
+                                    CustomUtility.ShowToast(edit_O.getText().toString() + getResources().getString(R.string.moduleMultipleTime), this);
+                                    Log.e(edit_O.getText().toString(), " is duplicated");
+                                    break;
+                                } else {
+                                    set.add(edit_O.getText().toString());
 
+                                }
+                            }
+                        }
+                        noOfModules = "";
+                        for (String ele : set) {
+                            if (noOfModules.isEmpty()) {
+                                noOfModules = ele;
+                            } else {
+                                noOfModules = noOfModules + "," + ele;
                             }
 
                         }
+                        if (set.size() == moduleOneLL.getChildCount()) {
+                            isSubmit = true;
+                        }
+
+
                     }
                     if (CustomUtility.isInternetOn(getApplicationContext())) {
                         if (isSubmit) {
-
-                           new SyncInstallationData().execute();
+                            new SyncInstallationData().execute();
                         }
                     } else {
                         CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection), getApplicationContext());
@@ -579,7 +596,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             param1_invc.add(new BasicNameValuePair("unloading", String.valueOf(ja_invc_data)));
             Log.e("DATA", "$$$$" + param1_invc);
             System.out.println("param1_invc_vihu==>>" + param1_invc);
-          try {
+            try {
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
                 StrictMode.setThreadPolicy(policy);
                 obj2 = CustomHttpClient.executeHttpPost1(WebURL.INSTALLATION_DATA_UNLOAD, param1_invc);
