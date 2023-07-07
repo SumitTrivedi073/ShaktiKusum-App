@@ -43,7 +43,7 @@ import java.util.Locale;
 import utility.CustomUtility;
 
 public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callback, android.hardware.Camera.PictureCallback {
-    private static final String TIME_STAMP_FORMAT_DATE = "dd.mm.yyyy";
+    private static final String TIME_STAMP_FORMAT_DATE = "dd.MM.yyyy";
     private static final String TIME_STAMP_FORMAT_TIME = "h:mm a";
     private static final String GALLERY_DIRECTORY_NAME_COMMON = "SurfaceCamera";
     private SurfaceHolder surfaceHolder;
