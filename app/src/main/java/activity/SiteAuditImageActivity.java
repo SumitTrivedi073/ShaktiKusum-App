@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -89,8 +88,7 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
         enq_docno= bundle.getString("billno");
         cust_nm= bundle.getString("custnm");
 
-        Log.e("enq_docno",""+enq_docno);
-        SetAdapter();
+         SetAdapter();
         listner();
     }
 
@@ -140,7 +138,6 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
 
         //Create Table
         imageList = db.getAllAuditSiteImages();
-        Log.e("ImageList===>" , " " + imageList.get(0).getBillNo());
 
         if (itemNameList.size() > 0 && imageList != null && imageList.size() > 0) {
 
@@ -179,7 +176,6 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
                     if (result.getData() != null && result.getData().getExtras() != null) {
 
                         Bundle bundle = result.getData().getExtras();
-                        Log.e("bundle====>", bundle.get("data").toString());
                         UpdateArrayList(bundle.get("data").toString());
                     }
                 }
@@ -239,7 +235,6 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
                     if (path == null) {
                         path = mImageCaptureUri.getPath(); // From File Manager
                     }
-                    Log.e("Activity", "PathHolder22= " + path);
                     String filename = path.substring(path.lastIndexOf("/") + 1);
                     String file;
                     if (filename.indexOf(".") > 0) {
@@ -276,8 +271,6 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
         Cursor cursor1 = mContext.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, MediaStore.Images.Media._ID + " = ? ", new String[]{image_id}, null);
         Cursor cursor2 =  mContext.getContentResolver().query(uri, projection, null, null, null);
 
-        Log.e("CUR1", "&&&&" + cursor1);
-        Log.e("CUR2", "&&&&" + cursor2);
 
         if (cursor1 == null && cursor2 == null) {
             return null;
@@ -310,7 +303,6 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
 
     public void setFlag(String key) {
 
-        Log.e("FLAG", "&&&" + key);
         photo1_flag = false;
         photo2_flag = false;
         photo3_flag = false;
@@ -362,7 +354,6 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
 
     private void selectImage(String value) {
 
-        Log.e("select==>", "status"+value);
 
         LayoutInflater inflater = (LayoutInflater) SiteAuditImageActivity.this.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
