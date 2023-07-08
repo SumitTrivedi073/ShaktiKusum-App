@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.hardware.Camera;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -43,7 +44,7 @@ import java.util.Locale;
 import utility.CustomUtility;
 
 public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callback, android.hardware.Camera.PictureCallback {
-    private static final String TIME_STAMP_FORMAT_DATE = "dd.mm.yyyy";
+    private static final String TIME_STAMP_FORMAT_DATE = "dd.MM.yyyy";
     private static final String TIME_STAMP_FORMAT_TIME = "h:mm a";
     private static final String GALLERY_DIRECTORY_NAME_COMMON = "SurfaceCamera";
     private SurfaceHolder surfaceHolder;
@@ -99,7 +100,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             location.getLastLocation()
                     .addOnSuccessListener(location -> {
-                        if(location != null)
+                        if(location != null&& !String.valueOf(location.getLatitude()).isEmpty() && !String.valueOf(location.getLongitude()).isEmpty())
                         {
                             Geocoder geocoder = new Geocoder(CameraActivity2.this,Locale.getDefault());
                             try {
@@ -142,8 +143,8 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
                             }
                         }
                     });
-        } else
-        {
+        }
+        else {
             askpermission();
         }
     }
@@ -208,10 +209,30 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         try {
             camera.setPreviewDisplay(surfaceHolder);
             camera.startPreview();
+            setCamFocusMode();
             safeToTakePicture = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    private void setCamFocusMode(){
+
+        if(null == camera) {
+            return;
+        }
+
+        /* Set Auto focus */
+        Camera.Parameters parameters = camera.getParameters();
+        List<String> focusModes = parameters.getSupportedFocusModes();
+        if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+        } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
+            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+        }
+
+        camera.setParameters(parameters);
     }
 
     @Override

@@ -329,8 +329,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         if (dataHelper.getItemData() != null && dataHelper.getItemData().size() > 0) {
         itemNameBeans = dataHelper.getItemData();
-        ItemNameBean itemNameBean = new ItemNameBean("000","Installation Offline");
-        itemNameBeans.add(itemNameBean);
+        /*ItemNameBean itemNameBean = new ItemNameBean("000","Installation Offline");
+        itemNameBeans.add(itemNameBean);*/
 
 
             lin1.setVisibility(View.VISIBLE);

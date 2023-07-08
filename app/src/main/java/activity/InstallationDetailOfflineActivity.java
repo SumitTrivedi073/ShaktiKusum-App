@@ -206,7 +206,7 @@ public class InstallationDetailOfflineActivity extends BaseActivity {
             File file = new File(ImageManager.getMediaFilePath(type, name, WebURL.CUSTOMERID_ID));
             imageStoragePath = file.getAbsolutePath();
             Log.e("PATH", "&&&" + imageStoragePath);
-            Intent i = new Intent(mContext, CameraActivity.class);
+            Intent i = new Intent(mContext, CameraActivity2.class);
             i.putExtra("lat", String.valueOf(inst_latitude_double));
             i.putExtra("lng", String.valueOf(inst_longitude_double));
             i.putExtra("inst_id", installationOfflineBean.getUserId());
