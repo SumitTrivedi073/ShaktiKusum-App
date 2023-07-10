@@ -434,9 +434,20 @@ public class InstallationInitial extends BaseActivity {
                     RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
                     RMS_SERVER_DOWN = "Working Fine";
                     System.out.println("VikasVIHU==>>" + mBTResonseDataList.get(vkp).getDEVICENO());
-                    CustomUtility.showProgressDialogue(InstallationInitial.this);
 
-                      new SyncDebugDataFromLocal().execute();
+                    if (!TextUtils.isEmpty(DeviceStatus)) {
+                        if (isControllerIDScan) {
+                            if (isDebug) {
+                                saveData();
+                            } else {
+                                CustomUtility.ShowToast("Please debug first than proceed!", getApplicationContext());
+                            }
+                        } else {
+                            CustomUtility.ShowToast("Please Scan Controller ID first!", getApplicationContext());
+                        }
+                    } else {
+                        CustomUtility.ShowToast("Please get RMS Device Status.", getApplicationContext());
+                    }
 
                 } else {
 
