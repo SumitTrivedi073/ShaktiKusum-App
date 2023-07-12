@@ -39,7 +39,7 @@ public abstract class  BaseActivity extends AppCompatActivity {
 
             if (!RetrieveFirestoreData.isServiceRunning) {
                 Intent intent = new Intent(getApplicationContext(), RetrieveFirestoreData.class);
-                startService(intent);
+                getApplicationContext().startService(intent);
             }
         }
 
