@@ -28,7 +28,7 @@ import com.shaktipumplimited.shaktikusum.R;
 import org.json.JSONObject;
 
 import adapter.SurveyListAdapter;
-import debugapp.PendingFeedback;
+import bean.SurveyListModel;
 import utility.CustomUtility;
 import webservice.WebURL;
 
@@ -62,12 +62,19 @@ public class KusumCSurveyListActivty extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getResources().getString(R.string.sitesurvey_C));
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if(CustomUtility.isInternetOn(getApplicationContext())) {
             getSurveyList();
         }else {
             CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection),getApplicationContext());
         }
     }
+
     private void listner() {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,6 +133,9 @@ public class KusumCSurveyListActivty extends AppCompatActivity {
             public void onClick(View v) {
 
                 searchUser.onActionViewCollapsed();
+                if (surveyListAdapter != null) {
+                    surveyListAdapter.getFilter().filter("");
+                }
             }
         });
 
@@ -136,18 +146,20 @@ public class KusumCSurveyListActivty extends AppCompatActivity {
     private void getSurveyList() {
         CustomUtility.showProgressDialogue(KusumCSurveyListActivty.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
+        Log.e("URL====>",WebURL.GET_SURVEY_API +"?project_no="+CustomUtility.getSharedPreferences(getApplicationContext(), "projectid")+"&userid="+CustomUtility.getSharedPreferences(getApplicationContext(), "userid")+"&project_login_no=01");
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.PendingFeedback +"?project_no="+CustomUtility.getSharedPreferences(getApplicationContext(), "projectid")+"&userid="+CustomUtility.getSharedPreferences(getApplicationContext(), "userid")+"&project_login_no=01", null, new Response.Listener<JSONObject>() {
+                WebURL.GET_SURVEY_API +"?project_no="+CustomUtility.getSharedPreferences(getApplicationContext(), "projectid")+"&userid="+CustomUtility.getSharedPreferences(getApplicationContext(), "userid")+"&project_login_no=01", null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject  response) {
                 CustomUtility.hideProgressDialog(KusumCSurveyListActivty.this);
 
 
                 if(response.toString()!=null && !response.toString().isEmpty()) {
-                    PendingFeedback pendingFeedback = new Gson().fromJson(response.toString(), PendingFeedback.class);
-                    if(pendingFeedback.getStatus().equals("true")) {
+                    SurveyListModel surveyListModel = new Gson().fromJson(response.toString(), SurveyListModel.class);
+                    if(surveyListModel.getStatus().equals("true")) {
 
-                        surveyListAdapter = new SurveyListAdapter(getApplicationContext(),pendingFeedback.getResponse(),noDataFound);
+                        surveyListAdapter = new SurveyListAdapter(getApplicationContext(),surveyListModel.getResponse(),noDataFound);
                         pendingFeedbackList.setHasFixedSize(true);
                         pendingFeedbackList.setAdapter(surveyListAdapter);
 

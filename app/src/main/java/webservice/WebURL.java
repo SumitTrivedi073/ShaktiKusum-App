@@ -39,8 +39,7 @@ public class WebURL {
     public static final String INSTALLATION = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/installation.htm";
     public static final String INSTALLATION_UNLOAD = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/unloading_list.htm";
     public static final String INSTALLATION_UNLOAD1 = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/unloading_list.htm";
-    public static final String SURVEY = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/get_survey.htm";
-    public static final String SURVEY_DATA = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/save_survey.htm";
+
     public static final String DD_SUB_DATA = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/save_app_data.htm";
     public static final String BENF_DETAILS = BASEURL+"/sap(bD1lbiZjPTkwMA==)/bc/bsp/sap/zmapp_solar_pro/get_data.htm";
     public static final String REJECT_DATA = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/reject_data.htm";
@@ -64,5 +63,8 @@ public class WebURL {
     public static final String SendOTPToServer =  BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/save_feedback.htm?feedback=";
 
 
-    //https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/pending_feedback_list.htm?project_no=1022&userid=0000700810&project_login_no=01
+ public static final String KusumCSurvey =  BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/save_survey.htm";
+
+
+ //https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/pending_feedback_list.htm?project_no=1022&userid=0000700810&project_login_no=01
 }

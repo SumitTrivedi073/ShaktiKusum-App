@@ -42,6 +42,8 @@ public class Constant {
     public static  String SwVersionConfig = "SwVersionConfig";
     public static  String APPURL = "APPURL";
 
+    public static String SurveyData ="SurveyData";
+
 
 
 

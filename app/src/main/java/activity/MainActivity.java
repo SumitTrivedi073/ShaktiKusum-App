@@ -155,7 +155,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         });
 
         SurveySiteC.setOnClickListener(v -> {
-            Intent mIntent = new Intent(context, KusumCSurveyFormActivity.class);
+            Intent mIntent = new Intent(context, KusumCSurveyListActivty.class);
             startActivity(mIntent);
         });
 

@@ -229,33 +229,33 @@
     <string name="cropPatternArea">Crop Pattern Area</string>
     <string name="entercropPatternArea">Enter Crop Pattern Area</string>
     <string name="typesofirrigation">Types of irrigation installed</string>
-    <string name="isSouthFacingShadow">Is south facing sjadow free land available at site for installtion of solar pump</string>
+    <string name="isSouthFacingShadow">Is south facing shadow free land available at site for installation of solar pump</string>
     <string name="existingPumpSetDetails">Existing Pump Set Details</string>
     <string name="electricConnectionType">electric Connection Type</string>
     <string name="electricConnectionIdentificationNo">electric Connection Identification No.</string>
     <string name="enter_electricConnectionIdentificationNo">Enter electric Connection Identification No</string>
     <string name="pumpsetrating">Pump Set Ratings</string>
-    <string name="enter_pumpsetrating">Enter Pump Set Rating</string>
+    <string name="select_pumpsetrating">Select Pump Set Rating</string>
     <string name="pumpsetmake">Pump Set Make</string>
     <string name="enter_pumpsetmake">Enter pump set make</string>
     <string name="existingPumpSetElectricParameter">Existing Pump Set Electric Parameter</string>
     <string name="phasevoltage">Phase Voltage</string>
-    <string name="voltageV1Volt">Voltage (V1) (Y-N) Volt</string>
-    <string name="voltageV2Volt">Voltage (V2) (Y-N) Volt</string>
-    <string name="voltageV3Volt">Voltage (V3) (B-N) Volt</string>
+    <string name="voltageV1Volt">Enter Voltage (V1) (Y-N) Volt</string>
+    <string name="voltageV2Volt">Enter Voltage (V2) (Y-N) Volt</string>
+    <string name="voltageV3Volt">Enter Voltage (V3) (B-N) Volt</string>
     <string name="linevoltage">Line Voltage</string>
 
-    <string name="linevoltageV1Volt">Voltage (V1) (R-Y) Volt</string>
-    <string name="linevoltageV2Volt">Voltage (V2) (Y-B) Volt</string>
-    <string name="linevoltageV3Volt">Voltage (V3) (B-R) Volt</string>
-    <string name="current1Amp">Current(I1) Amp</string>
-    <string name="current2Amp">Current(I2) Amp</string>
-    <string name="current3Amp">Current(I3) Amp</string>
-    <string name="frequencyHz">frequency Hz</string>
-    <string name="powerFactor1">Power Factor (PF-1)</string>
-    <string name="powerFactor2">Power Factor (PF-2)</string>
-    <string name="powerFactor3">Power Factor (PF-3)</string>
-    <string name="diameterOfBorwell">Diameter Of Borewell</string>
+    <string name="linevoltageV1Volt">Enter Voltage (V1) (R-Y) Volt</string>
+    <string name="linevoltageV2Volt">Enter Voltage (V2) (Y-B) Volt</string>
+    <string name="linevoltageV3Volt">Enter Voltage (V3) (B-R) Volt</string>
+    <string name="current1Amp">Enter Current(I1) Amp</string>
+    <string name="current2Amp">Enter Current(I2) Amp</string>
+    <string name="current3Amp">Enter Current(I3) Amp</string>
+    <string name="frequencyHz">Enter frequency Hz</string>
+    <string name="powerFactor1">Enter Power Factor (PF-1)</string>
+    <string name="powerFactor2">Enter Power Factor (PF-2)</string>
+    <string name="powerFactor3">Enter Power Factor (PF-3)</string>
+    <string name="diameterOfBorwell"> Diameter Of Borewell</string>
     <string name="enter_diameterOfBorwell">Enter Diameter Of Borwell (inches)</string>
     <string name="depthOfBorwell">Depth Of Borewell</string>
     <string name="enter_depthOfBorewell">Enter Depth Of Borewell (Meter)</string>
@@ -267,12 +267,26 @@
     <string name="enter_deliveryOfPumpSet">Enter Delivery Of Pump Set Installed (inches)</string>
     <string name="distanceFromProposedSolarPlantLocation">Distance From Proposed Solar Plant Location To Pole</string>
     <string name="enter_distanceFromProposedSolarPlantLocation">Enter Distance From Proposed Solar Plant Location To Pole</string>
-    <string name="kusumSurveyform">Kusum (C) Survey Form</string>
+    <string name="kusumSurveyform">Kusum © Survey Form</string>
     <string name="watersourcephotograpth">water source photograpth with farmer/Beneficiary</string>
     <string name="transformer">Transformer</string>
-    <string name="attechformphoto1">Attech form photo1</string>
-    <string name="attechformphoto2">Attech form photo2</string>
+    <string name="attechformphoto1">Attach form photo1</string>
+    <string name="attechformphoto2">Attach form photo2</string>
     <string name="attachimages">Attach Images</string>
+    <string name="submit_feedback">Submit Feedback</string>
+    <string name="enter_LatLng">Enter Latitude and longitude of current address</string>
+    <string name="selectCategoty">Please Select Category</string>
+    <string name="selectSourceOfWater">Select Source Of Water</string>
+    <string name="selectInternetConnectivity">Select Internet Connectivity</string>
+    <string name="selectTypesOfIrrigation">Select Type sOf Irrigation</string>
+    <string name="selectSouthfacingShadow">Select South facing Shadow</string>
+    <string name="selectElectricConnectionType">Select Electric Connection Type</string>
+    <string name="typeOfPump">Type Of Pump</string>
+    <string name="selectTypeOfPump">Select Type Of Pump</string>
+    <string name="attechWaterSourcePhoto">Please Attech Water Source Photo</string>
+    <string name="attechTransformerPhoto">Please Attech Transformer Photo</string>
+    <string name="attechFormPhoto">Please Attech Form Photo</string>
+    <string name="enter_valid_contact_number">Please enter valid contact number</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>
@@ -321,6 +335,15 @@
         <item>3G</item>
         <item>4G</item>
         <item>Not Available</item>
+    </string-array>
+
+    <string-array name="pumpRating">
+        <item>Select Pump Rating</item>
+        <item>3 HP</item>
+        <item>5 HP</item>
+        <item>7.5 HP</item>
+        <item>10 HP</item>
+
     </string-array>
 
     <string-array name="irrigationInstalled">

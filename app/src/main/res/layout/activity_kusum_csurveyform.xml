@@ -137,6 +137,7 @@
                     android:textSize="@dimen/_12sdp" />
 
                 <EditText
+                    android:id="@+id/addressExt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
@@ -246,36 +247,7 @@
                 </RelativeLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-condensed-medium"
-                    android:text="@string/sourceofWaterDegits"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/_12sdp" />
-
-                <EditText
-                    android:id="@+id/sourceofWaterExt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:background="@drawable/edt_bg_shape"
-                    android:hint="@string/enterSourceOfWater"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:padding="@dimen/_10sdp"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
-
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -482,7 +454,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-condensed-medium"
-                    android:text="@string/electricConnectionType"
+                    android:text="@string/typeOfPump"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/_12sdp" />
 
@@ -516,20 +488,19 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/_12sdp" />
 
-                <EditText
-                    android:id="@+id/pumpSetRatingExt"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
                     android:background="@drawable/edt_bg_shape"
-                    android:hint="@string/enter_pumpsetrating"
-                    android:imeOptions="actionNext"
-                    android:inputType="numberDecimal"
-                    android:maxLines="1"
+                    android:layout_marginTop="@dimen/_5sdp">
+                <Spinner
+                    android:id="@+id/pumpSetRatingSpinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner_bg"
                     android:padding="@dimen/_10sdp"
-                    android:singleLine="true"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
+                    android:entries="@array/pumpRating"/>
+                </RelativeLayout>
 
             </LinearLayout>
 
@@ -548,6 +519,7 @@
                     android:textSize="@dimen/_12sdp" />
 
                 <EditText
+                    android:id="@+id/pumpMakeEXT"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
@@ -756,6 +728,53 @@
                     android:layout_marginTop="@dimen/_5sdp"
                     android:background="@drawable/edt_bg_shape"
                     android:hint="@string/frequencyHz"
+                    android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1"
+                    android:padding="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp" />
+
+                <EditText
+                    android:id="@+id/powerFactor1Ext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@drawable/edt_bg_shape"
+                    android:hint="@string/powerFactor1"
+                    android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1"
+                    android:padding="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp" />
+
+
+                <EditText
+                    android:id="@+id/powerFactor2Ext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@drawable/edt_bg_shape"
+                    android:hint="@string/powerFactor2"
+                    android:imeOptions="actionNext"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1"
+                    android:padding="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp" />
+
+
+                <EditText
+                    android:id="@+id/powerFactor3Ext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@drawable/edt_bg_shape"
+                    android:hint="@string/powerFactor3"
                     android:imeOptions="actionNext"
                     android:inputType="numberDecimal"
                     android:maxLines="1"

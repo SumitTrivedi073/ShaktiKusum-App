@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -38,8 +37,9 @@ public abstract class  BaseActivity extends AppCompatActivity {
         if (databaseHelper.getLogin() &&  CustomUtility.getSharedPreferences(getApplicationContext(), "CHECK_OTP_VERIFED").equals("Y"))  {
 
             if (!RetrieveFirestoreData.isServiceRunning) {
-                Intent intent = new Intent(getApplicationContext(), RetrieveFirestoreData.class);
-                getApplicationContext().startService(intent);
+                Intent intent = new Intent(BaseActivity.this, RetrieveFirestoreData.class);
+                BaseActivity.this.startService(intent);
+
             }
         }
 
@@ -52,7 +52,6 @@ public abstract class  BaseActivity extends AppCompatActivity {
                 alertDialog.dismiss();
                 alertDialog = null;
             }
-            Log.e("broadcastReceive====>","true");
            Intent intent1 = new Intent(getApplicationContext(),SwVersionCheckActivity.class);
             startActivity(intent1);
             finish();

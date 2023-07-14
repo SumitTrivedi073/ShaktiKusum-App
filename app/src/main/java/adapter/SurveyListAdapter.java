@@ -2,6 +2,7 @@ package adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,19 +16,20 @@ import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import debugapp.PendingFeedback;
+import activity.KusumCSurveyFormActivity;
+import bean.SurveyListModel;
+import debugapp.GlobalValue.Constant;
 
 public class SurveyListAdapter extends RecyclerView.Adapter<SurveyListAdapter.ViewHolder> implements Filterable {
     Context mContext;
-    private List<PendingFeedback.Response> SurveyList;
-    private final List<PendingFeedback.Response> arSearch;
-    private SendOTPListner sendOTPListener;
+    private List<SurveyListModel.Response> SurveyList;
+    private final List<SurveyListModel.Response> arSearch;
+
 
     TextView noDataFound;
 
-    public SurveyListAdapter(Context context, List<PendingFeedback.Response> listdata, TextView noDataFound) {
+    public SurveyListAdapter(Context context, List<SurveyListModel.Response> listdata, TextView noDataFound) {
         SurveyList = listdata;
         mContext = context;
         this.arSearch = new ArrayList<>();
@@ -40,42 +42,28 @@ public class SurveyListAdapter extends RecyclerView.Adapter<SurveyListAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View listItem = layoutInflater.inflate(R.layout.pending_feedback_item, parent, false);
+        View listItem = layoutInflater.inflate(R.layout.survey_list_item, parent, false);
         return new ViewHolder(listItem);
     }
     @SuppressLint("DefaultLocale")
     @Override
     public void onBindViewHolder(ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        final PendingFeedback.Response response = SurveyList.get(position);
+        final SurveyListModel.Response response = SurveyList.get(position);
         holder.customerName.setText(response.getCustomerName());
-        holder.mobileNumber.setText(response.getContactNo());
+        holder.mobileNumber.setText(response.getMobile());
         holder.beneficiaryNo.setText("Beneficiary No:- "+response.getBeneficiary());
-        holder.billNo.setText("Bill No:- "+response.getVbeln());
 
-      holder.sendOTP.setOnClickListener(new View.OnClickListener() {
-          @Override
-           public void onClick(View view) {
-              Random random = new Random();
-              String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
-              sendOTPListener.sendOtpListener(SurveyList,position, generatedVerificationCode);
-
-           }
-       });
-
+        holder.surveyFormBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, KusumCSurveyFormActivity.class);
+                intent.putExtra(Constant.SurveyData,response);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent);
+            }
+        });
 
     }
-    public void SendOTP(SendOTPListner response) {
-        try {
-            sendOTPListener = response;
-        } catch (ClassCastException e) {
-            e.printStackTrace();
-        }
-    }
-    public interface SendOTPListner {
-        void sendOtpListener(List<PendingFeedback.Response> SurveyList, int position ,String generatedVerificationCode);
-
-    }
-
 
     @Override
     public int getItemCount() {
@@ -85,15 +73,15 @@ public class SurveyListAdapter extends RecyclerView.Adapter<SurveyListAdapter.Vi
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView customerName,mobileNumber,beneficiaryNo,sendOTP,billNo;
+        public TextView customerName,mobileNumber,beneficiaryNo,surveyFormBtn;
 
         public ViewHolder(View itemView) {
             super(itemView);
             customerName = itemView.findViewById(R.id.customerName);
             mobileNumber = itemView.findViewById(R.id.mobileNumber);
             beneficiaryNo = itemView.findViewById(R.id.beneficiaryNo);
-            sendOTP = itemView.findViewById(R.id.sendOTP);
-            billNo = itemView.findViewById(R.id.billNo);
+            surveyFormBtn = itemView.findViewById(R.id.surveyFormBtn);
+
         }
     }
 
@@ -106,13 +94,13 @@ public class SurveyListAdapter extends RecyclerView.Adapter<SurveyListAdapter.Vi
                 if (charString.isEmpty()) {
                     SurveyList = arSearch;
                 } else {
-                    List<PendingFeedback.Response> filteredList = new ArrayList<>();
-                    for (PendingFeedback.Response row : arSearch) {
+                    List<SurveyListModel.Response> filteredList = new ArrayList<>();
+                    for (SurveyListModel.Response row : arSearch) {
 
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
-                        if (row.getCustomerName().toLowerCase().contains(charString.toLowerCase())||row.getContactNo().toLowerCase().contains(charString.toLowerCase())
-                        ||row.getBeneficiary().toLowerCase().contains(charString.toLowerCase())||row.getVbeln().toLowerCase().contains(charString.toLowerCase())) {
+                        if (row.getCustomerName().toLowerCase().contains(charString.toLowerCase())||row.getMobile().toLowerCase().contains(charString.toLowerCase())
+                        ||row.getBeneficiary().toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(row);
                         }
                     }
@@ -127,7 +115,7 @@ public class SurveyListAdapter extends RecyclerView.Adapter<SurveyListAdapter.Vi
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                SurveyList = (ArrayList<PendingFeedback.Response>) filterResults.values;
+                SurveyList = (ArrayList<SurveyListModel.Response>) filterResults.values;
                 if (SurveyList.size()>0){
                     noDataFound.setVisibility(View.GONE);
                 }else {
