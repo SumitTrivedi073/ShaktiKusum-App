@@ -78,7 +78,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private final Handler progressBarHandler = new Handler();
     ProgressDialog progressBar;
 
-    CardView cardSurveySiteID;
+    CardView cardSurveySiteID,SurveySiteC;
 
     TextView pendingFeedback;
 
@@ -138,7 +138,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         lin2 =  findViewById(R.id.lin2);
 
         flvViewFlipperID =  findViewById(R.id.flvViewFlipperID);
-
+        SurveySiteC =  findViewById(R.id.SurveySiteC);
         flvViewFlipperID.setFlipInterval(3000); //set 1 seconds for interval time
         flvViewFlipperID.startFlipping();
 
@@ -151,6 +151,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         cardSurveySiteID.setOnClickListener(v -> {
             Intent mIntent = new Intent(context, ActivitySurveyList.class);
+            startActivity(mIntent);
+        });
+
+        SurveySiteC.setOnClickListener(v -> {
+            Intent mIntent = new Intent(context, KusumCSurveyListActivty.class);
             startActivity(mIntent);
         });
 
@@ -302,6 +307,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 dataHelper.deleteInstallationImages();
                 dataHelper.deleteSiteAuditImages();
                 dataHelper.deleteUnloadingImages();
+                dataHelper.deletekusumCImages();
+                dataHelper.deleteKusumCSurveyFrom();
                 CustomUtility.clearSharedPrefrences(context);
 
                 Intent intent = new Intent(context, Login.class);
@@ -321,7 +328,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void onResume() {
         super.onResume();
-
     }
 
     @SuppressLint("NotifyDataSetChanged")

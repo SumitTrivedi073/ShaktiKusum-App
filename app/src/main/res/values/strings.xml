@@ -122,26 +122,6 @@
     <string name="borewell_depth">Borewell Depth</string>
     <string name="size_of_borewell">Size of Borewell</string>
     <string name="contact_no">Contact No.</string>
-    <string-array name="nav_drawer_labels">
-        <item>@string/nav_item_home</item>
-        <item>@string/nav_item_offline_data</item>
-        <item>@string/nav_item_iv_curve</item>
-        <item>@string/nav_item_controller_datasheet</item>
-        <item>@string/nav_item_lr_submit</item>
-        <item>@string/nav_item_invoice</item>
-        <!--<item>@string/nav_item_attendance</item>
-        <item>@string/nav_item_emp_portal</item>-->
-
-    </string-array>
-    <string-array name="shakti_file">
-        <item>Price List</item>
-        <item>Leaflet</item>
-        <item>Policy</item>
-        <item>Catalog</item>
-        <item>Check List</item>
-        <item>JDs</item>
-    </string-array>
-
 
     <string name="Get_text">Get</string>
     <string name="Set_text">Set</string>
@@ -231,4 +211,172 @@
     <string name="sendingDataServer">Sending data to server</string>
     <string name="enter_allModuleSrno">Please Enter all module serial no.</string>
     <string name="moduleMultipleTime">Module No. are entered multiple times, please change it</string>
+    <string name="sitesurvey_B">Site Survey Kusum (B)</string>
+    <string name="sitesurvey_C">Site Survey kusum (C)</string>
+    <string name="farmer_name">Farmer Name</string>
+    <string name="application_no">Application No.</string>
+    <string name="nameofvillage">Name of village, block and district</string>
+    <string name="enter_contact_number">Enter Contact Number</string>
+    <string name="enter_farmar_name">Enter Farmar Name</string>
+    <string name="enter_application_number">Enter Application Number</string>
+    <string name="enter_name_of_village_block_and_district">Enter name of village, block and district</string>
+    <string name="currentlocation">Current Location</string>
+    <string name="category">Category</string>
+    <string name="sourceofWater">Source of Water</string>
+    <string name="internetConnectivityType">Internet Connectivity Type</string>
+    <string name="sourceofWaterDegits">Source of Water Degits</string>
+    <string name="enterSourceOfWater">Enter Source Of Water digits in inches</string>
+    <string name="cropPatternArea">Crop Pattern Area</string>
+    <string name="entercropPatternArea">Enter Crop Pattern Area</string>
+    <string name="typesofirrigation">Types of irrigation installed</string>
+    <string name="isSouthFacingShadow">Is south facing shadow free land available at site for installation of solar pump</string>
+    <string name="existingPumpSetDetails">Existing Pump Set Details</string>
+    <string name="electricConnectionType">electric Connection Type</string>
+    <string name="electricConnectionIdentificationNo">electric Connection Identification No.</string>
+    <string name="enter_electricConnectionIdentificationNo">Enter electric Connection Identification No</string>
+    <string name="pumpsetrating">Pump Set Ratings</string>
+    <string name="select_pumpsetrating">Select Pump Set Rating</string>
+    <string name="pumpsetmake">Pump Set Make</string>
+    <string name="enter_pumpsetmake">Enter pump set make</string>
+    <string name="existingPumpSetElectricParameter">Existing Pump Set Electric Parameter</string>
+    <string name="phasevoltage">Phase Voltage</string>
+    <string name="voltageV1Volt">Enter Voltage (V1) (Y-N) Volt</string>
+    <string name="voltageV2Volt">Enter Voltage (V2) (Y-N) Volt</string>
+    <string name="voltageV3Volt">Enter Voltage (V3) (B-N) Volt</string>
+    <string name="linevoltage">Line Voltage</string>
+
+    <string name="linevoltageV1Volt">Enter Voltage (V1) (R-Y) Volt</string>
+    <string name="linevoltageV2Volt">Enter Voltage (V2) (Y-B) Volt</string>
+    <string name="linevoltageV3Volt">Enter Voltage (V3) (B-R) Volt</string>
+    <string name="current1Amp">Enter Current(I1) Amp</string>
+    <string name="current2Amp">Enter Current(I2) Amp</string>
+    <string name="current3Amp">Enter Current(I3) Amp</string>
+    <string name="frequencyHz">Enter frequency Hz</string>
+    <string name="powerFactor1">Enter Power Factor (PF-1)</string>
+    <string name="powerFactor2">Enter Power Factor (PF-2)</string>
+    <string name="powerFactor3">Enter Power Factor (PF-3)</string>
+    <string name="diameterOfBorwell"> Diameter Of Borewell</string>
+    <string name="enter_diameterOfBorwell">Enter Diameter Of Borwell (inches)</string>
+    <string name="depthOfBorwell">Depth Of Borewell</string>
+    <string name="enter_depthOfBorewell">Enter Depth Of Borewell (Meter)</string>
+    <string name="depthOfPumpSet">Depth Of Pump Set Installed</string>
+    <string name="enter_depthOfPumpSet">Enter Depth Of Pump Set Installed (Meter)</string>
+    <string name="dischargeOfPumpSet">Discharge Of Pump Set</string>
+    <string name="enter_dischargeOfPumpSet">Enter Discharge Of Pump Set Installed (LPM)</string>
+    <string name="deliveryOfPumpSet">Delivery Of Pump Set</string>
+    <string name="enter_deliveryOfPumpSet">Enter Delivery Of Pump Set Installed (inches)</string>
+    <string name="distanceFromProposedSolarPlantLocation">Distance From Proposed Solar Plant Location To Pole</string>
+    <string name="enter_distanceFromProposedSolarPlantLocation">Enter Distance From Proposed Solar Plant Location To Pole</string>
+    <string name="kusumSurveyform">Kusum © Survey Form</string>
+    <string name="watersourcephotograpth">water source photograpth with farmer/Beneficiary</string>
+    <string name="transformer">Transformer</string>
+    <string name="attechformphoto1">Attach form photo1</string>
+    <string name="attechformphoto2">Attach form photo2</string>
+    <string name="attachimages">Attach Images</string>
+    <string name="submit_feedback">Submit Feedback</string>
+    <string name="enter_LatLng">Enter Latitude and longitude of current address</string>
+    <string name="selectCategoty">Please Select Category</string>
+    <string name="selectSourceOfWater">Select Source Of Water</string>
+    <string name="selectInternetConnectivity">Select Internet Connectivity</string>
+    <string name="selectTypesOfIrrigation">Select Type sOf Irrigation</string>
+    <string name="selectSouthfacingShadow">Select South facing Shadow</string>
+    <string name="selectElectricConnectionType">Select Electric Connection Type</string>
+    <string name="typeOfPump">Type Of Pump</string>
+    <string name="selectTypeOfPump">Select Type Of Pump</string>
+    <string name="attechWaterSourcePhoto">Please Attach Water Source Photo</string>
+    <string name="attechTransformerPhoto">Please Attach Transformer Photo</string>
+    <string name="attechFormPhoto">Please Attach Form Photo</string>
+    <string name="enter_valid_contact_number">Please enter valid contact number</string>
+    <string name="dataSavedOffline">your data saved in offline mode please re-submit when you have a internet connetion!</string>
+
+    <string-array name="nav_drawer_labels">
+        <item>@string/nav_item_home</item>
+        <item>@string/nav_item_offline_data</item>
+        <item>@string/nav_item_iv_curve</item>
+        <item>@string/nav_item_controller_datasheet</item>
+        <item>@string/nav_item_lr_submit</item>
+        <item>@string/nav_item_invoice</item>
+        <!--<item>@string/nav_item_attendance</item>
+        <item>@string/nav_item_emp_portal</item>-->
+
+    </string-array>
+    <string-array name="shakti_file">
+        <item>Price List</item>
+        <item>Leaflet</item>
+        <item>Policy</item>
+        <item>Catalog</item>
+        <item>Check List</item>
+        <item>JDs</item>
+    </string-array>
+
+
+    <string-array name="categorySpinner">
+        <item>Select Category</item>
+        <item>individual farmer</item>
+        <item>Water user associations(WUA)</item>
+        <item>Farmer Producer Organisations(FPO)</item>
+        <item>Primary agriculture credit societies(PACS)</item>
+        <item>Cluster based irrigation system</item>
+
+    </string-array>
+
+
+    <string-array name="sourceOfWater">
+        <item>Select source of water</item>
+        <item>Bore well</item>
+        <item>Pond</item>
+        <item>River</item>
+        <item>Canal water</item>
+        <item>Open well</item>
+    </string-array>
+
+    <string-array name="internetConnectivity">
+        <item>Select internet connectivity type</item>
+        <item>GPRS</item>
+        <item>EDGE</item>
+        <item>2G</item>
+        <item>3G</item>
+        <item>4G</item>
+        <item>Not Available</item>
+    </string-array>
+
+    <string-array name="pumpRating">
+        <item>Select Pump Rating</item>
+        <item>3 HP</item>
+        <item>5 HP</item>
+        <item>7.5 HP</item>
+        <item>10 HP</item>
+
+    </string-array>
+
+    <string-array name="irrigationInstalled">
+        <item>Select type of irrigation installed</item>
+        <item>UGPL</item>
+        <item>Sprinkler</item>
+        <item>Drip</item>
+        <item>Flood</item>
+
+    </string-array>
+
+    <string-array name="yesNoSpinner">
+        <item>Select option for south facing shadow</item>
+        <item>Yes</item>
+        <item>No</item>
+
+    </string-array>
+
+    <string-array name="electricConnectionType">
+        <item>Select electric Connection Type</item>
+        <item>3P,3W</item>
+        <item>3P,4W</item>
+        <item>Other</item>
+
+    </string-array>
+    <string-array name="typeOfPump">
+        <item>Select type of pump</item>
+        <item>Surface</item>
+        <item>Submersible</item>
+
+    </string-array>
+
 </resources>

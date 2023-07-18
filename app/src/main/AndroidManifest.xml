@@ -52,6 +52,14 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu"
         android:dataExtractionRules="@xml/data_extraction_rules">
+
+
+        <activity
+            android:name="activity.KusumCSurveyFormActivity"
+            android:exported="false" />
+        <activity
+            android:name="activity.KusumCSurveyListActivty"
+            android:exported="false" />
         <activity
             android:name="activity.SwVersionCheckActivity"
             android:exported="false" />
@@ -197,14 +205,6 @@
         <activity
             android:name="activity.SIMActivationDetails"
             android:label="Sim Activation Details"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="activity.SurveyList"
-            android:label="Survey List"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="activity.SurveyActivity"
-            android:label="Survey Details"
             android:screenOrientation="portrait" />
         <activity
             android:name="activity.DeviceStatusActivity"

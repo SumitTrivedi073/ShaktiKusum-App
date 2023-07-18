@@ -45,7 +45,7 @@ import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-@BuildCompat.PrereleaseSdkCheck public class InstallationList extends BaseActivity {
+public class InstallationList extends BaseActivity {
     public String bill_no = "";
     public String gst_bill_no = "";
     public String bill_date = "";

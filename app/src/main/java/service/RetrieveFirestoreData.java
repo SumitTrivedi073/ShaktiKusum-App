@@ -30,7 +30,9 @@ public class RetrieveFirestoreData extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate called");
-        getFirestoreDatabaseReferance();
+        if(CustomUtility.isInternetOn(getApplicationContext())) {
+            getFirestoreDatabaseReferance();
+        }
         isServiceRunning = true;
     }
 
