@@ -182,7 +182,7 @@ public class SiteAuditInitial extends BaseActivity {
             public void onClick(View v) {
 
                 saveData();
-                // find which radioButton is checked by id
+
             }
         });
 
@@ -472,17 +472,6 @@ public class SiteAuditInitial extends BaseActivity {
         radioGroup3 = findViewById(R.id.radioGroup3);
         radioGroup4 = findViewById(R.id.radioGroup4);
         radioGroup5 = findViewById(R.id.radioGroup5);
-
-      /*  fou_ok = (RadioButton) findViewById(R.id.fou_ok);
-        fou_notok = (RadioButton) findViewById(R.id.fou_notok);
-        stru_ok = (RadioButton) findViewById(R.id.stru_ok);
-        stru_notok = (RadioButton) findViewById(R.id.stru_notok);
-        drvcb_ok = (RadioButton) findViewById(R.id.drvcb_ok);
-        drvcb_notok = (RadioButton) findViewById(R.id.drvcb_notok);
-        laer_ok = (RadioButton) findViewById(R.id.laer_ok);
-        laer_notok = (RadioButton) findViewById(R.id.laer_notok);
-        wrk_ok = (RadioButton) findViewById(R.id.wrk_ok);
-        wrk_notok = (RadioButton) findViewById(R.id.wrk_notok);*/
 
 
     }

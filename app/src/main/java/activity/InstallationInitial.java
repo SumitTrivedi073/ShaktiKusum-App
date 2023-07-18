@@ -176,8 +176,6 @@ public class InstallationInitial extends BaseActivity {
 
         }
 
-
-
         mBTResonseDataList = new ArrayList<>();
         WebURL.BT_DEBUG_CHECK = 0;
         Constant.BILL_NUMBER_UNIC = "";
@@ -251,6 +249,7 @@ public class InstallationInitial extends BaseActivity {
             if (mBluetoothAdapter.isEnabled()) {
                 if (AllPopupUtil.pairedDeviceListGloable(mContext)) {
                     if (WebURL.BT_DEVICE_NAME.equalsIgnoreCase("") || WebURL.BT_DEVICE_MAC_ADDRESS.equalsIgnoreCase("")) {
+                        isDebug = true;
                         isDebug = true;
                         Intent intent = new Intent(mContext, PairedDeviceActivity.class);
                         intent.putExtra(Constant.ControllerSerialNumber, inst_controller_ser.getText().toString().trim());
@@ -1099,7 +1098,6 @@ public class InstallationInitial extends BaseActivity {
         make = inst_make.getText().toString();
         module_total_plate_watt = inst_module_total_plate_watt.getText().toString();
 
-
         no_of_module = inst_no_of_module.getText().toString();
         no_of_module_value = GetDataOne();
         solar_motor_model_details = inst_motor_model.getText().toString();
@@ -1117,10 +1115,8 @@ public class InstallationInitial extends BaseActivity {
 
     public void getLayout() {
 
-
         txtDebugAppID = findViewById(R.id.txtDebugAppID);
         txtIBaseUpdateID = findViewById(R.id.txtIBaseUpdateID);
-
 
         save = findViewById(R.id.save);
 

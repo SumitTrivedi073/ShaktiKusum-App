@@ -283,10 +283,11 @@
     <string name="selectElectricConnectionType">Select Electric Connection Type</string>
     <string name="typeOfPump">Type Of Pump</string>
     <string name="selectTypeOfPump">Select Type Of Pump</string>
-    <string name="attechWaterSourcePhoto">Please Attech Water Source Photo</string>
-    <string name="attechTransformerPhoto">Please Attech Transformer Photo</string>
-    <string name="attechFormPhoto">Please Attech Form Photo</string>
+    <string name="attechWaterSourcePhoto">Please Attach Water Source Photo</string>
+    <string name="attechTransformerPhoto">Please Attach Transformer Photo</string>
+    <string name="attechFormPhoto">Please Attach Form Photo</string>
     <string name="enter_valid_contact_number">Please enter valid contact number</string>
+    <string name="dataSavedOffline">your data saved in offline mode please re-submit when you have a internet connetion!</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>
@@ -318,6 +319,8 @@
         <item>Cluster based irrigation system</item>
 
     </string-array>
+
+
     <string-array name="sourceOfWater">
         <item>Select source of water</item>
         <item>Bore well</item>

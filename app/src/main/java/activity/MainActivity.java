@@ -307,6 +307,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 dataHelper.deleteInstallationImages();
                 dataHelper.deleteSiteAuditImages();
                 dataHelper.deleteUnloadingImages();
+                dataHelper.deletekusumCImages();
+                dataHelper.deleteKusumCSurveyFrom();
                 CustomUtility.clearSharedPrefrences(context);
 
                 Intent intent = new Intent(context, Login.class);
@@ -326,7 +328,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void onResume() {
         super.onResume();
-
     }
 
     @SuppressLint("NotifyDataSetChanged")
