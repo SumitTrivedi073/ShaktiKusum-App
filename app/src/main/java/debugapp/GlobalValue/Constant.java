@@ -43,6 +43,9 @@ public class Constant {
     public static  String APPURL = "APPURL";
 
     public static String SurveyData ="SurveyData";
+    public static String surveyList ="surveyList";
+
+    public static String currentDate = "currentDate";
 
 
 
