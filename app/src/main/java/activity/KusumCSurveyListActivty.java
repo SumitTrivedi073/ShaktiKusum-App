@@ -23,12 +23,18 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
 import adapter.SurveyListAdapter;
 import bean.SurveyListModel;
+import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;
 import webservice.WebURL;
 
@@ -40,6 +46,8 @@ public class KusumCSurveyListActivty extends AppCompatActivity {
     SearchView searchUser;
     RelativeLayout searchRelative;
     SurveyListAdapter surveyListAdapter;
+
+    List<SurveyListModel.Response> surveyList = new ArrayList<>();
 
 
     @Override
@@ -69,10 +77,27 @@ public class KusumCSurveyListActivty extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(CustomUtility.isInternetOn(getApplicationContext())) {
-            getSurveyList();
+            if(CustomUtility.getSharedPreferences(KusumCSurveyListActivty.this,Constant.currentDate)!=null
+            && !CustomUtility.getSharedPreferences(KusumCSurveyListActivty.this,Constant.currentDate).isEmpty()
+                    &&CustomUtility.getSharedPreferences(KusumCSurveyListActivty.this,Constant.currentDate).equals(CustomUtility.getCurrentDate())) {
+
+                getDataFromLocal();
+            }else {
+                getSurveyList();
+            }
         }else {
-            CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection),getApplicationContext());
+           getDataFromLocal();
         }
+    }
+
+    private void getDataFromLocal() {
+        String json = CustomUtility.getSharedPreferences(KusumCSurveyListActivty.this, Constant.surveyList);
+        Type type = new TypeToken<ArrayList<SurveyListModel.Response>>() {}.getType();
+
+        surveyList = new Gson().fromJson(json, type);
+
+            setAdapter();
+
     }
 
     private void listner() {
@@ -147,7 +172,7 @@ public class KusumCSurveyListActivty extends AppCompatActivity {
         CustomUtility.showProgressDialogue(KusumCSurveyListActivty.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         Log.e("URL====>",WebURL.GET_SURVEY_API +"?project_no="+CustomUtility.getSharedPreferences(getApplicationContext(), "projectid")+"&userid="+CustomUtility.getSharedPreferences(getApplicationContext(), "userid")+"&project_login_no=01");
-
+        surveyList = new ArrayList<>();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.GET_SURVEY_API +"?project_no="+CustomUtility.getSharedPreferences(getApplicationContext(), "projectid")+"&userid="+CustomUtility.getSharedPreferences(getApplicationContext(), "userid")+"&project_login_no=01", null, new Response.Listener<JSONObject>() {
             @Override
@@ -158,13 +183,12 @@ public class KusumCSurveyListActivty extends AppCompatActivity {
                 if(response.toString()!=null && !response.toString().isEmpty()) {
                     SurveyListModel surveyListModel = new Gson().fromJson(response.toString(), SurveyListModel.class);
                     if(surveyListModel.getStatus().equals("true")) {
+                        surveyList = surveyListModel.getResponse();
+                        CustomUtility.setSharedPreference(KusumCSurveyListActivty.this,Constant.currentDate,CustomUtility.getCurrentDate());
+                        CustomUtility.saveSurveyArrayList(KusumCSurveyListActivty.this,surveyList, Constant.surveyList);
+                         setAdapter();
 
-                        surveyListAdapter = new SurveyListAdapter(getApplicationContext(),surveyListModel.getResponse(),noDataFound);
-                        pendingFeedbackList.setHasFixedSize(true);
-                        pendingFeedbackList.setAdapter(surveyListAdapter);
 
-                        noDataFound.setVisibility(View.GONE);
-                        pendingFeedbackList.setVisibility(View.VISIBLE);
                     }else {
                         noDataFound.setVisibility(View.VISIBLE);
                         pendingFeedbackList.setVisibility(View.GONE);
@@ -191,6 +215,19 @@ public class KusumCSurveyListActivty extends AppCompatActivity {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,  // maxNumRetries = 0 means no retry
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(jsonObjectRequest);
+    }
+
+    private void setAdapter() {
+        if(surveyList!=null&& surveyList.size()>0) {
+            surveyListAdapter = new SurveyListAdapter(getApplicationContext(), surveyList, noDataFound);
+            pendingFeedbackList.setHasFixedSize(true);
+            pendingFeedbackList.setAdapter(surveyListAdapter);
+            noDataFound.setVisibility(View.GONE);
+            pendingFeedbackList.setVisibility(View.VISIBLE);
+        }else {
+            noDataFound.setVisibility(View.VISIBLE);
+            pendingFeedbackList.setVisibility(View.GONE);
+        }
     }
 
     @Override

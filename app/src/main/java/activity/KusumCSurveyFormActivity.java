@@ -47,7 +47,6 @@ import java.util.List;
 
 import adapter.ImageSelectionAdapter;
 import bean.ImageModel;
-import bean.InstallationBean;
 import bean.KusumCSurveyBean;
 import bean.SurveyListModel;
 import database.DatabaseHelper;
@@ -683,7 +682,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
 
 
             if (CustomUtility.isInternetOn(getApplicationContext())) {
-               // new  submitSurveyForm().execute();
+              new  submitSurveyForm().execute();
             } else {
                 CustomUtility.ShowToast(getResources().getString(R.string.dataSavedOffline), getApplicationContext());
 
@@ -699,6 +698,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
                         powerFactor2Ext.getText().toString().trim(), powerFactor3Ext.getText().toString().trim(), BorwellDiameterExt.getText().toString().trim(), BorwellDepthExt.getText().toString().trim(),
                         pumpSetDepthExt.getText().toString().trim(), pumpSetDischargeExt.getText().toString().trim(), pumpSetDeliveryExt.getText().toString().trim(), distanceFromProposedSolarPlantExt.getText().toString().trim(),
                         imageArrayList.get(0).getImagePath(), imageArrayList.get(1).getImagePath(), imageArrayList.get(2).getImagePath(), imageArrayList.get(3).getImagePath());
+
 
                 if (db.isRecordExist(DatabaseHelper.TABLE_KUSUMCSURVEYFORM, DatabaseHelper.KEY_APPLICANT_NO, applicationNumberExt.getText().toString().trim())) {
                     db.updateKusumCSurveyform(applicationNumberExt.getText().toString().trim(), kusumCSurveyBean);
@@ -808,12 +808,16 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
                         invc_done = jo.getString("return");
                         if (invc_done.equalsIgnoreCase("Y")) {
 
-                            showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
 
                             if (db.isRecordExist(DatabaseHelper.TABLE_KUSUMCSURVEYFORM, DatabaseHelper.KEY_APPLICANT_NO, applicationNumberExt.getText().toString().trim())) {
                                 db.deleteKusumCSurveyFrom();
                             }
-                           finish();
+                            CustomUtility.deleteArrayList(getApplicationContext(),Constant.surveyList);
+                            CustomUtility.removeValueFromSharedPref(getApplicationContext(),Constant.currentDate);
+
+                            showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
+
+                            finish();
 
                         } else if (invc_done.equalsIgnoreCase("N")) {
                             showingMessage(getResources().getString(R.string.dataNotSubmitted));

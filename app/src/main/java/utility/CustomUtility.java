@@ -42,6 +42,7 @@ import java.util.regex.Pattern;
 
 import activity.CustomProgressDialog;
 import bean.ImageModel;
+import bean.SurveyListModel;
 
 /**
  * Created by Administrator on 1/3/2017.
@@ -53,9 +54,9 @@ public class CustomUtility {
     static boolean connected;
     static long  mLastClickTime;
     private static final String PREFERENCE = "DealLizard";
-    String current_date, current_time;
+    public static   String current_date, current_time;
     Calendar calander = null;
-    SimpleDateFormat simpleDateFormat = null;
+    public static  SimpleDateFormat simpleDateFormat = null;
     @SuppressLint("StaticFieldLeak")
     public static CustomProgressDialog progressDialog;
 
@@ -292,6 +293,15 @@ public class CustomUtility {
         editor.commit();
     }
 
+    public static void saveSurveyArrayList(Context context, List<SurveyListModel.Response> surveyList, String name) {
+        SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(surveyList);
+        editor.putString(name, json);
+        editor.commit();
+    }
+
     public static void showToast(Context context, String message) {
 
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show();
@@ -312,7 +322,7 @@ public class CustomUtility {
         return false;
     }
 
-    public String getCurrentDate() {
+    public static String getCurrentDate() {
         simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         current_date = simpleDateFormat.format(new Date());
         return current_date.trim();
