@@ -1,11 +1,11 @@
 package debugapp;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -39,7 +39,7 @@ public class SurweyListAdapter extends RecyclerView.Adapter<SurweyListAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
 
         holder.txtMaterialCodeValueID.setText(mSurweyListResponse.get(position).getBeneficiary());
         holder.txtDecriptionValueID.setText(mSurweyListResponse.get(position).getCustomerName());
@@ -57,9 +57,7 @@ public class SurweyListAdapter extends RecyclerView.Adapter<SurweyListAdapter.Vi
                 intent.putExtra("Lifnr", mSurweyListResponse.get(position).getLifnr());
                 intent.putExtra("CitycTxt", mSurweyListResponse.get(position).getAddress());
                 intent.putExtra("ApplicantName", mSurweyListResponse.get(position).getCustomerName());
-
                 intent.putExtra("RegistraionNo", mSurweyListResponse.get(position).getRegisno());
-
                 intent.putExtra("regio_txt", mSurweyListResponse.get(position).getAddress()+" "+mSurweyListResponse.get(position).getCitycTxt()+" "+mSurweyListResponse.get(position).getRegioTxt());
 
                 mContext.startActivity(intent);
@@ -70,28 +68,20 @@ public class SurweyListAdapter extends RecyclerView.Adapter<SurweyListAdapter.Vi
 
     @Override
     public int getItemCount() {
-        // return galleryModelsList.size();
-        if (mSurweyListResponse != null && mSurweyListResponse.size() > 0)
+         if (mSurweyListResponse != null && mSurweyListResponse.size() > 0)
             return mSurweyListResponse.size();
         else
             return 0;
-       //  return 5;
+
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
-
-    ImageView imgCheckBoxImageID;
-       // public TextView txtTRLRValueID, txtTRNameValueID, txtMOBNumberValueID, txtLRDateValueID,txtSAPBillValueID, txtTRBLDValueID, txtGSTBillValueID;
         public TextView txtMaterialCodeValueID, txtDecriptionValueID, txtQuentityValueID, txtPriceValueID;
 
-
-        public RelativeLayout rlvNotifyItemMainViewID, rlvMainItemViewID;
+        public RelativeLayout rlvMainItemViewID;
 
         public ViewHolder(View v) {
-
             super(v);
-
             rlvMainItemViewID =  v.findViewById(R.id.rlvMainItemViewID);
             txtMaterialCodeValueID =  v.findViewById(R.id.txtMaterialCodeValueID);
             txtDecriptionValueID =  v.findViewById(R.id.txtDecriptionValueID);
@@ -100,22 +90,6 @@ public class SurweyListAdapter extends RecyclerView.Adapter<SurweyListAdapter.Vi
 
           }
     }
-
-
-
-
-/*
-
-    android.os.Handler mHandler = new android.os.Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            String mString = (String) msg.obj;
-            Toast.makeText(mContext, mString, Toast.LENGTH_LONG).show();
-        }
-    };
-*/
-
-
 }
 
 

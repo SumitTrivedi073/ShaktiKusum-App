@@ -49,9 +49,9 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         mContext = this;
-
         databaseHelper = new DatabaseHelper(SplashActivity.this);
-        FirebaseApp.initializeApp(this);
+
+
 
 
     }
@@ -66,6 +66,7 @@ public class SplashActivity extends AppCompatActivity {
     private void retriveFirestoreData() {
 
         if(CustomUtility.isInternetOn(getApplicationContext())) {
+           FirebaseApp.initializeApp(this);
             appConfigRef = FirebaseFirestore.getInstance().collection("Setting").document("AppConfig");
             appConfigRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
@@ -98,6 +99,8 @@ public class SplashActivity extends AppCompatActivity {
                     }
                 }
             });
+        }else {
+            CheckLoginStatus();
         }
     }
 
@@ -110,24 +113,21 @@ public class SplashActivity extends AppCompatActivity {
 
     private void CheckLoginStatus() {
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (databaseHelper.getLogin() && CustomUtility.getSharedPreferences(mContext, "CHECK_OTP_VERIFED").equals("Y")) {
-                    Intent intent = new Intent(mContext, MainActivity.class);
+        new Handler().postDelayed(() -> {
+            if (databaseHelper.getLogin() && CustomUtility.getSharedPreferences(mContext, "CHECK_OTP_VERIFED").equals("Y")) {
+                Intent intent = new Intent(mContext, MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
+                    loginSelection();
+                } else {
+                    Intent intent = new Intent(mContext, Login.class);
                     startActivity(intent);
                     finish();
-                } else {
-                    if (CustomUtility.isInternetOn(getApplicationContext())) {
-                        loginSelection();
-                    } else {
-                        Intent intent = new Intent(mContext, Login.class);
-                        startActivity(intent);
-                        finish();
-                    }
                 }
-
             }
+
         }, 3000);
 
     }

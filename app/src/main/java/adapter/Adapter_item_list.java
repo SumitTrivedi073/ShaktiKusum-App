@@ -25,7 +25,6 @@ import activity.GovtOffVisitActivity;
 import activity.InstallationList;
 import activity.InstallationListOfflineActivity;
 import activity.OffSubDocActivity;
-import activity.SurveyList;
 import bean.ItemNameBean;
 import database.DatabaseHelper;
 import utility.CustomUtility;
@@ -124,11 +123,11 @@ public class Adapter_item_list extends RecyclerView.Adapter<Adapter_item_list.Ho
                         CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
                         Intent intent = new Intent(context, DeptDocSubActivity.class);
                         context.startActivity(intent);
-                    } else if (responseList.get(position).getItem_id().equalsIgnoreCase("017")) {
+                    } /*else if (responseList.get(position).getItem_id().equalsIgnoreCase("017")) {
                         CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
                         Intent intent = new Intent(context, SurveyList.class);
                         context.startActivity(intent);
-                    }
+                    }*/
                 }
             });
         } catch (Exception e) {
