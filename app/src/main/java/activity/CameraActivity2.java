@@ -15,6 +15,9 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -293,8 +296,20 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     public Bitmap saveImageWithTimeStamp(byte[] data) {
 
         BitmapFactory.Options options = new BitmapFactory.Options();
+        DisplayMetrics metrics;
+        Display display = getWindowManager().getDefaultDisplay();
+        String value = String.valueOf(getResources().getDisplayMetrics().densityDpi)+"====>"+
+                getResources().getDisplayMetrics().scaledDensity+"======>"+
+                getResources().getDisplayMetrics().widthPixels+"======>"+
+                getResources().getDisplayMetrics().xdpi+"======>"+
+                getResources().getDisplayMetrics().ydpi;;
+        Log.e("Screen", "Display====>" + display.getHeight() + " " + display.getWidth());
+
+        Log.e("Screen", "Density====>" + value);
         options.inMutable = true;
         Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length, options);
+
+
 
         bmp = rotateBitmap(bmp);
         SimpleDateFormat sdf = new SimpleDateFormat(TIME_STAMP_FORMAT_DATE, Locale.getDefault());
@@ -306,7 +321,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         Canvas canvas = new Canvas(bmp);
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setTextSize(110);
+
         int color = ContextCompat.getColor(CameraActivity2.this, R.color.colorPrimaryDark);
         paint.setColor(color);
         paint.setFakeBoldText(true);
@@ -318,7 +333,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         // draw text to the Canvas center
 
         float height = paint.measureText("yY");
-        float width = paint.measureText("Date: "+date+"\n"+"Time: "+time);
+        float width = paint.measureText("Date: "+date+"\n"+"Time: "+ time);
         float startXPosition = (bmp.getWidth() - width);
         float startYPosition = (bmp.getHeight() - height);
 
@@ -331,10 +346,21 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
 
         String text4 = "Customer Name: "+customer_name;
 
-        canvas.drawText(text , startXPosition - 1250, startYPosition - 600, paint);
-        canvas.drawText(text1, startXPosition - 1250, startYPosition - 450, paint);
-        canvas.drawText(text2+" "+text3 , startXPosition - 1250, startYPosition - 300, paint);
-        canvas.drawText(text4, startXPosition - 1250, startYPosition - 150, paint);
+        if (display.getWidth() < 600){
+            paint.setTextSize(20);
+            canvas.drawText(text , startXPosition - 250, startYPosition - 100, paint);
+            canvas.drawText(text1, startXPosition - 250, startYPosition -  80, paint);
+            canvas.drawText(text2+" "+text3 , startXPosition - 250, startYPosition -  60, paint);
+            canvas.drawText(text4, startXPosition - 250, startYPosition -  40, paint);
+        }else {
+            paint.setTextSize(110);
+            canvas.drawText(text , startXPosition - 2550, startYPosition - 600, paint);
+            canvas.drawText(text1, startXPosition - 2550, startYPosition - 450, paint);
+            canvas.drawText(text2+" "+text3 , startXPosition - 2550, startYPosition - 300, paint);
+            canvas.drawText(text4, startXPosition - 2550, startYPosition - 150, paint);
+        }
+
+
 
         return bmp;
     }
