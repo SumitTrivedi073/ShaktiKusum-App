@@ -15,7 +15,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.SurfaceHolder;
@@ -279,7 +278,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     }
     private void releaseCamera() {
         if (camera != null) {
-            camera.stopPreview();
+           // camera.stopPreview();
             camera.release();
             camera = null;
         }
@@ -296,20 +295,10 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     public Bitmap saveImageWithTimeStamp(byte[] data) {
 
         BitmapFactory.Options options = new BitmapFactory.Options();
-        DisplayMetrics metrics;
         Display display = getWindowManager().getDefaultDisplay();
-        String value = String.valueOf(getResources().getDisplayMetrics().densityDpi)+"====>"+
-                getResources().getDisplayMetrics().scaledDensity+"======>"+
-                getResources().getDisplayMetrics().widthPixels+"======>"+
-                getResources().getDisplayMetrics().xdpi+"======>"+
-                getResources().getDisplayMetrics().ydpi;;
-        Log.e("Screen", "Display====>" + display.getHeight() + " " + display.getWidth());
 
-        Log.e("Screen", "Density====>" + value);
         options.inMutable = true;
         Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length, options);
-
-
 
         bmp = rotateBitmap(bmp);
         SimpleDateFormat sdf = new SimpleDateFormat(TIME_STAMP_FORMAT_DATE, Locale.getDefault());
@@ -346,13 +335,27 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
 
         String text4 = "Customer Name: "+customer_name;
 
+        Log.e("Display_width====>", String.valueOf(display.getWidth()));
+
         if (display.getWidth() < 600){
-            paint.setTextSize(20);
-            canvas.drawText(text , startXPosition - 250, startYPosition - 100, paint);
-            canvas.drawText(text1, startXPosition - 250, startYPosition -  80, paint);
-            canvas.drawText(text2+" "+text3 , startXPosition - 250, startYPosition -  60, paint);
-            canvas.drawText(text4, startXPosition - 250, startYPosition -  40, paint);
-        }else {
+            paint.setTextSize(70);
+            canvas.drawText(text , startXPosition - 1050, startYPosition - 600, paint);
+            canvas.drawText(text1, startXPosition - 1050, startYPosition -  500, paint);
+            canvas.drawText(text2+" "+text3 , startXPosition - 1050, startYPosition -  400, paint);
+            canvas.drawText(text4, startXPosition - 1050, startYPosition -  300, paint);
+        }else if (display.getWidth() >= 600 && display.getWidth() < 725){
+            paint.setTextSize(110);
+            canvas.drawText(text , startXPosition - 2250, startYPosition - 600, paint);
+            canvas.drawText(text1, startXPosition - 2250, startYPosition -  450, paint);
+            canvas.drawText(text2+" "+text3 , startXPosition - 2250, startYPosition -  300, paint);
+            canvas.drawText(text4, startXPosition - 2250, startYPosition -  150, paint);
+        }else if (display.getWidth() >= 725 && display.getWidth() < 1080){
+            paint.setTextSize(80);
+            canvas.drawText(text , startXPosition - 1250, startYPosition - 600, paint);
+            canvas.drawText(text1, startXPosition - 1250, startYPosition -  450, paint);
+            canvas.drawText(text2+" "+text3 , startXPosition - 1250, startYPosition -  300, paint);
+            canvas.drawText(text4, startXPosition - 1250, startYPosition -  150, paint);
+        }else if (display.getWidth() >= 1080){
             paint.setTextSize(110);
             canvas.drawText(text , startXPosition - 2550, startYPosition - 600, paint);
             canvas.drawText(text1, startXPosition - 2550, startYPosition - 450, paint);
