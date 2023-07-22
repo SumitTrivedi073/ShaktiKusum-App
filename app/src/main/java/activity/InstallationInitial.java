@@ -714,7 +714,6 @@ public class InstallationInitial extends BaseActivity {
     private void ViewInflate(int value, int new_value) {
 
         String[] arr = no_of_module_value.split(",");
-       Log.e("no_of_module_value2",no_of_module_value);
         moduleOneLL.removeAllViews();
 
         for (int i = 0; i < new_value; i++) {
@@ -1370,11 +1369,15 @@ public class InstallationInitial extends BaseActivity {
                     final String mMessage = object.getString("message");
                     if (mStatus.equalsIgnoreCase("true")) {
                         isBaseUpdate = true;
-                        CustomUtility.showToast(getApplicationContext(), "I-base Update Successfully!");
 
+                        Message msg = new Message();
+                        msg.obj = mMessage;
+                        mHandler2.sendMessage(msg);
                     } else {
                         isBaseUpdate = false;
-                        CustomUtility.showToast(getApplicationContext(), "I-base Not Update Successfully!");
+                        Message msg = new Message();
+                        msg.obj = mMessage;
+                        mHandler2.sendMessage(msg);
                     }
 
                 } catch (Exception e) {

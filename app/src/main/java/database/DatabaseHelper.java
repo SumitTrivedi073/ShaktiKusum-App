@@ -505,7 +505,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             //String selectQuery = "SELECT  *  FROM " + TABLE_REGISTRATION + " WHERE " + KEY_PERNR + " = '" + user_id + "'" + "AND " + KEY_ENQ_DOC + " = '" + enq_docno + "'";
             String selectQuery = "SELECT  *  FROM " + TABLE_DAMAGE_MISS_COMPLAIN + " WHERE " + KEY_BILL_NO + " = '" + mBillNo + "'";
             Cursor cursor = db.rawQuery(selectQuery, null);
-            Log.e("CURSORCOUNT", "&&&&123" + cursor.getCount() + " " + selectQuery);
             if (cursor.getCount() > 0) {
                 if (cursor.moveToFirst()) {
                     while (!cursor.isAfterLast()) {
@@ -1493,8 +1492,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String selectQuery = "SELECT  *  FROM " + TABLE_SETTING_PARAMETER_LIST + " WHERE " + KEY_MATERIAL_CODE + " = '" + userid + "'";
 
             Cursor cursor = db.rawQuery(selectQuery, null);
-
-            Log.e("CURSORCOUNT", "&&&&123" + cursor.getCount() + " " + selectQuery);
 
             if (cursor.getCount() > 0) {
                 if (cursor.moveToFirst()) {
@@ -3693,8 +3690,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             String selectQuery = "SELECT  *  FROM " + TABLE_INSTALLATION_PUMP_DATA + " WHERE " + KEY_PERNR + " = '" + user_id + "'" + "AND " + KEY_BILL_NO + " = '" + bill_no + "'";
             Cursor cursor = db.rawQuery(selectQuery, null);
-            Log.e("CURSORCOUNT", "&&&&123" + cursor.getCount() + " " + selectQuery);
-            if (cursor.getCount() > 0) {
+           if (cursor.getCount() > 0) {
                 if (cursor.moveToFirst()) {
                     while (!cursor.isAfterLast()) {
                         installationBean = new InstallationBean();

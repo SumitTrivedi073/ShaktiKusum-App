@@ -125,7 +125,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
 
                                         display.setText("Latitude : " + latitudetxt + "\n" + " Longitude : " + longitudetxt + "\n" + " Address : " + addresstxt + ","
                                                 + state + " " + postalcode + "," + country + "\n" + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
-                                                + "\n" + "Customer: "+"Sumit Omprakash Trivedi=====Sumit Omprakash Trivedi");
+                                                + "\n" + "Customer: "+customer_name);
 
                                          canvasText = "Latitude : " + latitudetxt + "\n" + "Longitude : " + longitudetxt + "\n" +"Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
                                                 + "\n" + "Customer: "+customer_name;
