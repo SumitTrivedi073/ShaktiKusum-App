@@ -1226,7 +1226,6 @@ public class InstallationInitial extends BaseActivity {
         inst_make.setText(installationBean.getMake_ins());
 
         if (!TextUtils.isEmpty(installationBean.getNo_of_module_qty())) {
-            Log.e("No_of_module_qty",installationBean.getNo_of_module_qty());
             no_of_module_value = installationBean.getNo_of_module_value();
             if (installationBean.getNo_of_module_qty().length() != 0 && !installationBean.getNo_of_module_qty().equals("0")) {
                 value = Integer.parseInt(installationBean.getNo_of_module_qty());
@@ -1235,7 +1234,7 @@ public class InstallationInitial extends BaseActivity {
         }else {
 
             no_of_module_value = GetDataModule();
-            Log.e("no_of_module_value1",no_of_module_value);
+
             module_ser_no = inst_module_ser_no.getText().toString().trim();
             if (module_ser_no.length() != 0 && !module_ser_no.equals("0")) {
                 value = Integer.parseInt(module_ser_no);
