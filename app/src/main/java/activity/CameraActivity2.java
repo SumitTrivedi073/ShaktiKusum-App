@@ -123,12 +123,10 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
                                         getTime = new SimpleDateFormat(TIME_STAMP_FORMAT_TIME, Locale.getDefault());
 
 
-                                        display.setText("Latitude : " + latitudetxt + "\n" + " Longitude : " + longitudetxt + "\n" + " Address : " + addresstxt + ","
+                                        display.setText("Latitude : " + latitudetxt + "\n" + "Longitude : " + longitudetxt + "\n" + "Address : " + addresstxt + ","
                                                 + state + " " + postalcode + "," + country + "\n" + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
                                                 + "\n" + "Customer: "+customer_name);
 
-                                         canvasText = "Latitude : " + latitudetxt + "\n" + "Longitude : " + longitudetxt + "\n" +"Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
-                                                + "\n" + "Customer: "+customer_name;
                                     }
                                 }else {
 
@@ -138,11 +136,9 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
                                     getTime = new SimpleDateFormat(TIME_STAMP_FORMAT_TIME, Locale.getDefault());
 
 
-                                        display.setText(" Latitude : " + latitudetxt + "\n" + " Longitude : " + longitudetxt + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
+                                        display.setText(" Latitude : " + latitudetxt + "\n" + "Longitude : " + longitudetxt + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
                                                 + "\n" + "Customer: " + customer_name);
 
-                                    canvasText = "Latitude : " + latitudetxt + "\n" + " Longitude : " + longitudetxt + "\n" +"Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
-                                            + "\n" + "Customer: " + customer_name;
 
                                 }
 
@@ -307,17 +303,16 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length, options);
 
         bmp = rotateBitmap(bmp);
-        SimpleDateFormat sdf = new SimpleDateFormat(TIME_STAMP_FORMAT_DATE, Locale.getDefault());
-        SimpleDateFormat sdf1 = new SimpleDateFormat(TIME_STAMP_FORMAT_TIME, Locale.getDefault());
-         Canvas canvas = new Canvas(bmp);
+        Canvas canvas = new Canvas(bmp);
         TextPaint mTextPaint=new TextPaint();
-        int color = ContextCompat.getColor(CameraActivity2.this, R.color.colorPrimaryDark);
+        int color = ContextCompat.getColor(CameraActivity2.this, R.color.black);
         mTextPaint.setColor(color);
         mTextPaint.setFakeBoldText(true);
         mTextPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+
         mTextPaint.setTextSize(70);
-        StaticLayout mTextLayout = new StaticLayout(canvasText, mTextPaint, canvas.getWidth(),
+        StaticLayout mTextLayout = new StaticLayout(display.getText().toString().trim(), mTextPaint, canvas.getWidth(),
                 Layout.Alignment.ALIGN_NORMAL, 1.0f, 1.0f, true);
 
         canvas.save();
