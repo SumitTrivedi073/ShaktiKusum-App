@@ -79,7 +79,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import debugapp.Bean.SimDetailsInfoResponse;
 import debugapp.GlobalValue.Constant;
 import debugapp.GlobalValue.NewSolarVFD;
-import debugapp.GlobalValue.UtilMethod;
 import debugapp.VerificationCodeModel;
 import debugapp.localDB.DatabaseHelperTeacher;
 import utility.CustomUtility;
@@ -169,8 +168,7 @@ public class InstallationInitial extends BaseActivity {
             PackageManager manager = getPackageManager();
             PackageInfo  info = manager.getPackageInfo(getPackageName(), 0);
              version = info.versionName;
-            Log.e("version=====>",version);
-        } catch (PackageManager.NameNotFoundException e) {
+         } catch (PackageManager.NameNotFoundException e) {
             Log.e("versionErrpr====>",e.getMessage());
             throw new RuntimeException(e);
 
@@ -714,7 +712,6 @@ public class InstallationInitial extends BaseActivity {
     private void ViewInflate(int value, int new_value) {
 
         String[] arr = no_of_module_value.split(",");
-       Log.e("no_of_module_value2",no_of_module_value);
         moduleOneLL.removeAllViews();
 
         for (int i = 0; i < new_value; i++) {
@@ -1226,7 +1223,6 @@ public class InstallationInitial extends BaseActivity {
         inst_make.setText(installationBean.getMake_ins());
 
         if (!TextUtils.isEmpty(installationBean.getNo_of_module_qty())) {
-            Log.e("No_of_module_qty",installationBean.getNo_of_module_qty());
             no_of_module_value = installationBean.getNo_of_module_value();
             if (installationBean.getNo_of_module_qty().length() != 0 && !installationBean.getNo_of_module_qty().equals("0")) {
                 value = Integer.parseInt(installationBean.getNo_of_module_qty());
@@ -1235,7 +1231,7 @@ public class InstallationInitial extends BaseActivity {
         }else {
 
             no_of_module_value = GetDataModule();
-            Log.e("no_of_module_value1",no_of_module_value);
+
             module_ser_no = inst_module_ser_no.getText().toString().trim();
             if (module_ser_no.length() != 0 && !module_ser_no.equals("0")) {
                 value = Integer.parseInt(module_ser_no);
@@ -1371,14 +1367,19 @@ public class InstallationInitial extends BaseActivity {
                     final String mMessage = object.getString("message");
                     if (mStatus.equalsIgnoreCase("true")) {
                         isBaseUpdate = true;
-                        CustomUtility.showToast(getApplicationContext(), "I-base Update Successfully!");
 
+                        Message msg = new Message();
+                        msg.obj = mMessage;
+                        mHandler2.sendMessage(msg);
                     } else {
                         isBaseUpdate = false;
-                        CustomUtility.showToast(getApplicationContext(), "I-base Not Update Successfully!");
+                        Message msg = new Message();
+                        msg.obj = mMessage;
+                        mHandler2.sendMessage(msg);
                     }
 
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     isBaseUpdate = false;
                     e.printStackTrace();
                     CustomUtility.hideProgressDialog(InstallationInitial.this);
@@ -1386,161 +1387,6 @@ public class InstallationInitial extends BaseActivity {
             }
 
         }.start();
-    }
-
-    private class SyncDebugDataFromLocal extends AsyncTask<String, String, String> {
-
-        @Override
-        protected void onPreExecute() {
-
-            CustomUtility.showProgressDialogue(InstallationInitial.this);
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
-        @Override
-        protected String doInBackground(String... params) {
-
-            String docno_sap = null;
-            String invc_done = null;
-            String obj2 = null;
-            JSONArray ja_invc_data = new JSONArray();
-            JSONObject jsonObj = new JSONObject();
-            try {
-                String MOB_NAME = UtilMethod.getSharedPreferences(mContext, "MOBName");
-                String MOB_API_NAME = UtilMethod.getSharedPreferences(mContext, "MOBversionAPI");
-                String MOB_VERSION_NAME = UtilMethod.getSharedPreferences(mContext, "MOBversionRelease");
-
-                jsonObj.put("MOB_NAME", MOB_NAME);
-                jsonObj.put("MOB_API_NAME", MOB_API_NAME);
-                jsonObj.put("MOB_VERSION_NAME", MOB_VERSION_NAME);
-                jsonObj.put("INVOICE_NO", INVOICE_NO_B);
-                jsonObj.put("DEVICE_NO", DEVICE_NO);
-                jsonObj.put("SIGNL_STREN", SIGNL_STREN);
-                jsonObj.put("SIM", SIM);
-                jsonObj.put("NET_REG", NET_REG);
-                jsonObj.put("SER_CONNECT", SER_CONNECT);
-                jsonObj.put("CAB_CONNECT", CAB_CONNECT);
-                jsonObj.put("LATITUDE", LATITUDE);
-                jsonObj.put("LANGITUDE", LANGITUDE);
-                jsonObj.put("MOBILE", MOBILE);
-                jsonObj.put("IMEI", IMEI);
-                jsonObj.put("DONGAL_ID", DONGAL_ID);
-                jsonObj.put("KUNNR", MUserId);
-                jsonObj.put("EmpType", MEmpType);
-                jsonObj.put("RMS_STATUS", RMS_STATUS);
-                jsonObj.put("RMS_CURRENT_ONLINE_STATUS", RMS_CURRENT_ONLINE_STATUS);
-                jsonObj.put("RMS_LAST_ONLINE_DATE", RMS_LAST_ONLINE_DATE);
-                jsonObj.put("RMS_APP_VERSION", mAppName + " - " + version);
-                jsonObj.put("RMS_PROJECT_CODE", project_no);
-                jsonObj.put("DEBUG_UNAME ", mInstallerName);
-                jsonObj.put("DEBUG_UMOB", mInstallerMOB);
-
-                jsonObj.put("DBUG_EXTRN_STATUS", RMS_DEBUG_EXTRN);
-                jsonObj.put("RMS_SERVER_STATUS", RMS_SERVER_DOWN);
-
-                ja_invc_data.put(jsonObj);
-
-            } catch (Exception e) {
-                CustomUtility.hideProgressDialog(InstallationInitial.this);
-                Toast.makeText(mContext, "No internet connection!!", Toast.LENGTH_SHORT).show();
-                // mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO,SIGNL_STREN,SIM,NET_REG,SER_CONNECT,CAB_CONNECT,LATITUDE,LANGITUDE,MOBILE,IMEI,DONGAL_ID,MUserId,true);
-
-                e.printStackTrace();
-            }
-
-            final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
-            param1_invc.add(new BasicNameValuePair("action", String.valueOf(ja_invc_data)));///array name lr_save
-            Log.e("DATA", "$$$$" + param1_invc);
-
-            System.out.println(param1_invc);
-
-            try {
-
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
-                StrictMode.setThreadPolicy(policy);
-                //obj2 = CustomHttpClient.executeHttpPost1(WebURL.SAVE_INSTALLATION_DATA, param1_invc);
-                obj2 = debugapp.GlobalValue.CustomHttpClient.executeHttpPost1(NewSolarVFD.SAVE_VK_PAGE, param1_invc);
-
-                Log.e("OUTPUT1", "&&&&" + obj2);
-
-                if (!obj2.isEmpty()) {
-                    CustomUtility.hideProgressDialog(InstallationInitial.this);
-                    JSONObject object = new JSONObject(obj2);
-                    String mStatus = object.getString("status");
-                    final String mMessage = object.getString("message");
-                    String jo11 = object.getString("response");
-                    System.out.println("jo11==>>" + jo11);
-                    if (mStatus.equals("true")) {
-                        Random random = new Random();
-                        @SuppressLint("DefaultLocale") String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
-
-                        runOnUiThread(() -> {
-                            CustomUtility.clearSharedPrefrences(mContext);
-                            if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
-                                sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
-                            } else {
-
-                                Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }
-                        });
-
-
-                    }
-                } else {
-                    CustomUtility.hideProgressDialog(InstallationInitial.this);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                CustomUtility.hideProgressDialog(InstallationInitial.this);
-
-            }
-            return obj2;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            try {
-                vkp++;
-                if (vkp < mBTResonseDataList.size()) {
-                    DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
-                    SIGNL_STREN = mBTResonseDataList.get(vkp).getSIGNLSTREN();
-                    String[] mStrArry = SIGNL_STREN.split("###");
-                    SIGNL_STREN = mStrArry[0];
-                    INVOICE_NO_B = mStrArry[1];
-
-                    SIM = mBTResonseDataList.get(vkp).getSIM();
-                    String[] mStrArrySim = SIM.split("###");
-                    SIM = mStrArrySim[0];
-                    SIM_SR_NO = mStrArrySim[1];
-
-                    NET_REG = mBTResonseDataList.get(vkp).getNETREG();
-                    SER_CONNECT = mBTResonseDataList.get(vkp).getSERCONNECT();
-                    CAB_CONNECT = mBTResonseDataList.get(vkp).getCABCONNECT();
-                    LATITUDE = mBTResonseDataList.get(vkp).getLATITUDE();
-                    LANGITUDE = mBTResonseDataList.get(vkp).getLANGITUDE();
-                    MOBILE = mBTResonseDataList.get(vkp).getMOBILE();
-                    IMEI = mBTResonseDataList.get(vkp).getIMEI();
-                    DONGAL_ID = mBTResonseDataList.get(vkp).getDONGALID();
-                    RMS_STATUS = mBTResonseDataList.get(vkp).getRMS_STATUS();
-                    RMS_CURRENT_ONLINE_STATUS = mBTResonseDataList.get(vkp).getRMS_CURRENT_ONLINE_STATUS();
-                    RMS_LAST_ONLINE_DATE = mBTResonseDataList.get(vkp).getRMS_LAST_ONLINE_DATE();
-                    mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
-                    mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
-                    RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
-                    RMS_SERVER_DOWN = "Working Fine";
-                    new SyncDebugDataFromLocal().execute();
-                } else {
-                    mDatabaseHelperTeacher.deleteAllDataFromTable();
-                    CustomUtility.hideProgressDialog(InstallationInitial.this);
-
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     @Override
