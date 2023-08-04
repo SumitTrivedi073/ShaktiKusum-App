@@ -56,24 +56,31 @@
 
         <activity
             android:name="activity.KusumCSurveyFormActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name="activity.KusumCSurveyListActivty"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name="activity.SwVersionCheckActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name="activity.PhotoViewerActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name="activity.CameraActivity2"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name="activity.PendingFeedBackOTPVerification"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name="activity.PendingFeedbackActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name="activity.AddDamage_MissingActivity"

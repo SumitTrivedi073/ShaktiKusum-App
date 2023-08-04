@@ -1272,12 +1272,10 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                         mSimDetailsInfoResponse.clear();
 
                     mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
-                    // WebURL.CHECK_FINAL_ALL_OK = 1;
-                    //     WebURL.BT_DEBUG_CHECK = 1;
-                    // Constant.DBUG_PER_OFLINE = "";//PER_OFLINE
+
                     Constant.BT_DEVICE_NAME = "";
                     Constant.BT_DEVICE_MAC_ADDRESS = "";
-
+                    CustomUtility.ShowToast(getResources().getString(R.string.dataSubmittedSuccessfully), getApplicationContext());
 
                     onBackPressed();
                 } else {
