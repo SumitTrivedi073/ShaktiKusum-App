@@ -286,7 +286,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/space_large25"
             android:layout_marginBottom="40dp"
-            android:background="@layout/rounded_corner_blue"
+            android:background="@drawable/rounded_corner_blue"
             android:gravity="center"
             android:padding="@dimen/space_mid10"
             android:text="@string/submit"
