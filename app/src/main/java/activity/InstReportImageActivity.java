@@ -37,6 +37,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.os.BuildCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.ArrayList;
@@ -64,11 +66,13 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
 
     List<String> itemNameList = new ArrayList<>();
 
-    String customerName, enqDocno, status;
+    String customerName, enqDocno, status,latitude = "",longitude = "";
 
     Toolbar mToolbar;
 
     boolean isBackPressed = false,isUpdate = false;
+
+    FusedLocationProviderClient location;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -164,9 +168,10 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
     }
 
     private void Init() {
+
+        location = LocationServices.getFusedLocationProviderClient(this);
+
         recyclerview = findViewById(R.id.recyclerview);
-
-
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -223,6 +228,8 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
             imageModel.setImagePath("");
             imageModel.setImageSelected(false);
             imageModel.setBillNo("");
+            imageModel.setLatitude("");
+            imageModel.setLongitude("");
             imageArrayList.add(imageModel);
         }
 
@@ -242,6 +249,8 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
                             imageModel.setImagePath(imageList.get(i).getImagePath());
                             imageModel.setImageSelected(true);
                             imageModel.setBillNo(imageList.get(i).getBillNo());
+                            imageModel.setLatitude(imageList.get(i).getLatitude());
+                            imageModel.setLongitude(imageList.get(i).getLongitude());
                             imageArrayList.set(j, imageModel);
                         }
                     }
@@ -363,7 +372,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
 
                             Bundle bundle = result.getData().getExtras();
                             Log.e("bundle====>", bundle.get("data").toString());
-                            UpdateArrayList(bundle.get("data").toString());
+                            UpdateArrayList(bundle.get("data").toString(),"0");
 
                         }
 
@@ -398,7 +407,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
                     if (TextUtils.isEmpty(file)) {
                         Toast.makeText(InstReportImageActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
                     } else {
-                        UpdateArrayList(path);
+                        UpdateArrayList(path,"1");
 
                     }
                 } catch (Exception e) {
@@ -410,28 +419,57 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
 
     }
 
-    private void UpdateArrayList(String path) {
+    private void UpdateArrayList(String path, String value) {
+        if(value.equals("0")) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                location.getLastLocation()
+                        .addOnSuccessListener(location -> {
+                            if (location != null && !String.valueOf(location.getLatitude()).isEmpty() && !String.valueOf(location.getLongitude()).isEmpty()) {
 
-        ImageModel imageModel = new ImageModel();
-        imageModel.setName(imageArrayList.get(selectedIndex).getName());
-        imageModel.setImagePath(path);
-        imageModel.setImageSelected(true);
-        imageModel.setBillNo(enqDocno);
-        imageArrayList.set(selectedIndex, imageModel);
+                                latitude = String.valueOf(location.getLatitude());
+                                longitude = String.valueOf(location.getLongitude());
+                                ImageModel imageModel = new ImageModel();
+                                imageModel.setName(imageArrayList.get(selectedIndex).getName());
+                                imageModel.setImagePath(path);
+                                imageModel.setImageSelected(true);
+                                imageModel.setBillNo(enqDocno);
+
+                                imageModel.setLatitude(latitude);
+                                imageModel.setLongitude(longitude);
+                                imageArrayList.set(selectedIndex, imageModel);
+
+                                addupdateDatabase(path);
+                            }
+                        });
+            }
+            customAdapter.notifyDataSetChanged();
+
+        }else {
+            ImageModel imageModel = new ImageModel();
+            imageModel.setName(imageArrayList.get(selectedIndex).getName());
+            imageModel.setImagePath(path);
+            imageModel.setImageSelected(true);
+            imageModel.setBillNo(enqDocno);
+
+            imageModel.setLatitude(latitude);
+            imageModel.setLongitude(longitude);
+            imageArrayList.set(selectedIndex, imageModel);
+
+            addupdateDatabase(path);
+    }
+    }
+
+    private void addupdateDatabase(String path) {
 
         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 
-            if( isUpdate){
-                db.updateRecordAlternate(imageArrayList.get(selectedIndex).getName(), path,
-                      true,  enqDocno);
-            }else {
-                db.insertInstallationImage(imageArrayList.get(selectedIndex).getName(), path,
-                      true,  enqDocno);
-            }
-
-
-        customAdapter.notifyDataSetChanged();
-
+        if (isUpdate) {
+            db.updateRecordAlternate(imageArrayList.get(selectedIndex).getName(), path,
+                    true, enqDocno, latitude, longitude);
+        } else {
+            db.insertInstallationImage(imageArrayList.get(selectedIndex).getName(), path,
+                    true, enqDocno, latitude, longitude);
+        }
 
     }
 

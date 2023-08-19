@@ -1586,47 +1586,58 @@ public class InstallationInitial extends BaseActivity {
                 jsonObj.put("LOGIN_CONT", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonNumber));
 
 
-                System.out.println("only_text_jsonObj==>>" + jsonObj);
-
                 if (imageList.size() > 0) {
 
                     if (imageList.get(0).isImageSelected()) {
                         jsonObj.put("PHOTO1", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(0).getImagePath()));
+                        jsonObj.put("LatLng1", imageList.get(0).getLatitude()+","+imageList.get(0).getLongitude());
                     }
                     if (1 < imageList.size() && imageList.get(1).isImageSelected()) {
                         jsonObj.put("PHOTO2", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(1).getImagePath()));
+                        jsonObj.put("LatLng2", imageList.get(1).getLatitude()+","+imageList.get(1).getLongitude());
                     }
                     if (2 < imageList.size() && imageList.get(2).isImageSelected()) {
                         jsonObj.put("PHOTO3", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(2).getImagePath()));
+                        jsonObj.put("LatLng3", imageList.get(2).getLatitude()+","+imageList.get(2).getLongitude());
                     }
                     if (3 < imageList.size() && imageList.get(3).isImageSelected()) {
                         jsonObj.put("PHOTO4", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(3).getImagePath()));
+                        jsonObj.put("LatLng4", imageList.get(3).getLatitude()+","+imageList.get(3).getLongitude());
                     }
                     if (4 < imageList.size() && imageList.get(4).isImageSelected()) {
                         jsonObj.put("PHOTO5", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(4).getImagePath()));
+                        jsonObj.put("LatLng5", imageList.get(4).getLatitude()+","+imageList.get(4).getLongitude());
                     }
                     if (5 < imageList.size() && imageList.get(5).isImageSelected()) {
                         jsonObj.put("PHOTO6", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(5).getImagePath()));
+                        jsonObj.put("LatLng6", imageList.get(5).getLatitude()+","+imageList.get(5).getLongitude());
                     }
                     if (6 < imageList.size() && imageList.get(6).isImageSelected()) {
                         jsonObj.put("PHOTO7", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(6).getImagePath()));
+                        jsonObj.put("LatLng7", imageList.get(6).getLatitude()+","+imageList.get(6).getLongitude());
                     }
                     if (7 < imageList.size() && imageList.get(7).isImageSelected()) {
                         jsonObj.put("PHOTO8", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(7).getImagePath()));
+                        jsonObj.put("LatLng8", imageList.get(7).getLatitude()+","+imageList.get(7).getLongitude());
+                    }
                     }
                     if (8 < imageList.size() && imageList.get(8).isImageSelected()) {
                         jsonObj.put("PHOTO9", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(8).getImagePath()));
+                        jsonObj.put("LatLng9", imageList.get(8).getLatitude()+","+imageList.get(8).getLongitude());
                     }
                     if (9 < imageList.size() && imageList.get(9).isImageSelected()) {
                         jsonObj.put("PHOTO10", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(9).getImagePath()));
+                        jsonObj.put("LatLng10", imageList.get(9).getLatitude()+","+imageList.get(9).getLongitude());
                     }
                     if (10 < imageList.size() && imageList.get(10).isImageSelected()) {
                         jsonObj.put("PHOTO11", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(10).getImagePath()));
+                        jsonObj.put("LatLng11", imageList.get(10).getLatitude()+","+imageList.get(10).getLongitude());
                     }
                     if (11 < imageList.size() && imageList.get(11).isImageSelected()) {
                         jsonObj.put("PHOTO12", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(11).getImagePath()));
+                        jsonObj.put("LatLng12", imageList.get(11).getLatitude()+","+imageList.get(11).getLongitude());
                     }
-                }
+
                 ja_invc_data.put(jsonObj);
 
             } catch (Exception e) {

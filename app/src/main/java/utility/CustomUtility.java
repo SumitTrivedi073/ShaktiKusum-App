@@ -417,4 +417,14 @@ public class CustomUtility {
         return false;
     }
 
+    public static boolean checkLocationPermission(final Context context) {
+        int currentAPIVersion = Build.VERSION.SDK_INT;
+        if (currentAPIVersion >= Build.VERSION_CODES.TIRAMISU) {
+            return (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED);
+
+        } else {
+            return true;
+        }
+    }
+
 }
