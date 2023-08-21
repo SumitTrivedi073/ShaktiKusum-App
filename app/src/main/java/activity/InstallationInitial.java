@@ -247,8 +247,6 @@ public class InstallationInitial extends BaseActivity {
             if (mBluetoothAdapter.isEnabled()) {
                 if (AllPopupUtil.pairedDeviceListGloable(mContext)) {
                     if (WebURL.BT_DEVICE_NAME.equalsIgnoreCase("") || WebURL.BT_DEVICE_MAC_ADDRESS.equalsIgnoreCase("")) {
-                        isDebug = true;
-                        isDebug = true;
                         Intent intent = new Intent(mContext, PairedDeviceActivity.class);
                         intent.putExtra(Constant.ControllerSerialNumber, inst_controller_ser.getText().toString().trim());
                         startActivity(intent);
@@ -434,7 +432,9 @@ public class InstallationInitial extends BaseActivity {
 
                     if (!TextUtils.isEmpty(DeviceStatus)) {
                         if (isControllerIDScan) {
-                            if (isDebug) {
+                            if (CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice)!=null
+                                    && !CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice).isEmpty()
+                                    && CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice).equals("true")) {
                                 saveData();
                             } else {
                                 CustomUtility.ShowToast("Please debug first than proceed!", getApplicationContext());
@@ -456,7 +456,9 @@ public class InstallationInitial extends BaseActivity {
                     } else {
                         if (!TextUtils.isEmpty(DeviceStatus)) {
                             if (isControllerIDScan) {
-                                if (isDebug) {
+                                if (CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice)!=null
+                                        && !CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice).isEmpty()
+                                        && CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice).equals("true")) {
                                     saveData();
                                 } else {
                                     CustomUtility.ShowToast("Please debug first than proceed!", getApplicationContext());
@@ -478,7 +480,9 @@ public class InstallationInitial extends BaseActivity {
                 } else {
                     if (!TextUtils.isEmpty(DeviceStatus)) {
                         if (isControllerIDScan) {
-                            if (isDebug) {
+                            if (CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice)!=null
+                            && !CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice).isEmpty()
+                                    && CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice).equals("true")) {
                                 saveData();
                             } else {
                                 CustomUtility.ShowToast("Please debug first than proceed!", getApplicationContext());
@@ -1191,13 +1195,6 @@ public class InstallationInitial extends BaseActivity {
 
         rmsdata_status = installationBean.getRms_data_status();
 
-       /* Log.e("RMSDATA", "&&&&" + rmsdata_status);
-
-        if (rmsdata_status.equalsIgnoreCase("true")) {
-            labeledSwitch.setOn(true);
-        } else if (rmsdata_status.equalsIgnoreCase("false")) {
-            labeledSwitch.setOn(false);
-        }*/
 
         simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
         current_date = simpleDateFormat.format(new Date());

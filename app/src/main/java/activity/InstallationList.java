@@ -39,6 +39,7 @@ import adapter.Adapter_Unload_Installation_list;
 import bean.BTResonseData;
 import bean.InstallationListBean;
 import database.DatabaseHelper;
+import debugapp.GlobalValue.Constant;
 import debugapp.GlobalValue.NewSolarVFD;
 import debugapp.localDB.DatabaseHelperTeacher;
 import utility.CustomUtility;
@@ -268,6 +269,7 @@ public class InstallationList extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
+        CustomUtility.removeValueFromSharedPref(mContext, Constant.isDebugDevice);
     }
 
     @Override

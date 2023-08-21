@@ -617,6 +617,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     }
 
     private void saveDataLocaly() {
+        CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice,"true");
         mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO, SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC, SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID, MUserId, RMS_STATUS, RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB, RMS_DEBUG_EXTRN, RMS_SERVER_DOWN, RMS_ORG_D_F, true);
         onBackPressed();
         Toast.makeText(mContext, "Data save in loacl Data base", Toast.LENGTH_SHORT).show();
@@ -1249,7 +1250,6 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         param1.add(new BasicNameValuePair("action", String.valueOf(jsonArray)));
         showProgressDialogue();
         try {
-            Log.e("SendDataToSap====>", String.valueOf(param1));
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
             StrictMode.setThreadPolicy(policy);
 
@@ -1268,6 +1268,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                     mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
                     mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
 
+                    CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice,"true");
                     if (mSimDetailsInfoResponse.size() > 0)
                         mSimDetailsInfoResponse.clear();
 
@@ -3211,6 +3212,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                     if (mStatus.equalsIgnoreCase("true")) {
                         if ((vkp + 1) == mBTResonseDataList.size()) {
                             Message msg = new Message();
+                            CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice,"true");
                             msg.obj = "Data Submitted Successfully...";
                             mHandler.sendMessage(msg);
                             dialog.dismiss();

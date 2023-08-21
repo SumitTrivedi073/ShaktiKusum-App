@@ -65,9 +65,9 @@ public class PairedDeviceActivity extends BaseActivity {
         rclSettingListViewID.setNestedScrollingEnabled(false);
         rclSettingListViewID.setLayoutManager(lLayout);
 
-       if( getIntent().getExtras()!=null){
-           ControllerSerialNumber = getIntent().getStringExtra(Constant.ControllerSerialNumber);
-       }
+        if (getIntent().getExtras() != null) {
+            ControllerSerialNumber = getIntent().getStringExtra(Constant.ControllerSerialNumber);
+        }
 
         try {
             bAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -118,6 +118,16 @@ public class PairedDeviceActivity extends BaseActivity {
         if (bAdapter == null) {
             Toast.makeText(getApplicationContext(), "Bluetooth Not Supported", Toast.LENGTH_SHORT).show();
         } else {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             Set<BluetoothDevice> pairedDevices = bAdapter.getBondedDevices();
             List mDeviceNameList = new ArrayList();
             List mDeviceMACAddressList = new ArrayList();

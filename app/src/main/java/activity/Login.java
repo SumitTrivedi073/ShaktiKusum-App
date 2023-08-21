@@ -602,7 +602,7 @@ public class Login extends AppCompatActivity {
                         progressBarHandler.post(() -> progressBar.setProgress(progressBarStatus));
 
                         // Get State search help Data
-                        getStateData(Login.this);
+                        getStateData(Login.this,spinner_proj_id);
                         progressBarStatus = 100;
 
                         // Updating the progress bar
@@ -633,12 +633,12 @@ public class Login extends AppCompatActivity {
 
     }
 
-    public void getStateData(Context context) {
+    public void getStateData(Context context, String spinner_proj_id) {
 
         DatabaseHelper dataHelper = new DatabaseHelper(context);
 
         final ArrayList<NameValuePair> param = new ArrayList<>();
-
+        param.add(new BasicNameValuePair("project", spinner_proj_id));
         try {
 
             String obj = CustomHttpClient.executeHttpPost1(WebURL.STATE_DATA, param);
@@ -648,6 +648,7 @@ public class Login extends AppCompatActivity {
             dataHelper.deleteStateSearchHelpData();
 
             for (int i = 0; i < ja_state.length(); i++) {
+
 
                 JSONObject jo_state = ja_state.getJSONObject(i);
 

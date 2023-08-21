@@ -40,8 +40,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.safetynet.SafetyNet;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.shaktipumplimited.shaktikusum.R;
 
 import java.io.File;

@@ -47,6 +47,8 @@ public class Constant {
 
     public static String currentDate = "currentDate";
 
+    public static String isDebugDevice = "DebugDevice";
+
 
 
 
