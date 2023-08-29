@@ -53,14 +53,9 @@ public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAd
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        // holder.rlvHomeMainView.getLayoutParams().width = Validation.getDeviceHeightWidth(mContext, true)/2;
-        //  holder.rlvHomeMainView.getLayoutParams().height = Validation.getDeviceHeightWidth(mContext, false)/3+30;
 
-        //changeButtonVisibility(false,0.5f, holder);
         holder.txtBTNameID.setText("Name: "+mDeviceNameList.get(position).toString());
         holder.txtBTMACAddressID.setText("MAC Address: "+mDeviceMACAddressList.get(position).toString());
-
-
 
 
 

@@ -771,8 +771,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         tv.setBackgroundColor(getResources().getColor(R.color.black));
         tv.setGravity(Gravity.START);
 
-        // tv.setWidth(200);
-        // tv.setOnClickListener(this);
+
         return tv;
     }
 
@@ -1112,6 +1111,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                         Log.e("status", "** " + dashResponse);
 
                         if (dashResponse.getStatus().equalsIgnoreCase("true")) {
+
                             Toast.makeText(mContext, dashResponse.getMessage(), Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(mContext, dashResponse.getMessage(), Toast.LENGTH_SHORT).show();
@@ -1323,7 +1323,12 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                     DeviceDetailModel deviceDetailModel = new Gson().fromJson(response.toString(), DeviceDetailModel.class);
                     if (deviceDetailModel != null && deviceDetailModel.getResponse() != null && String.valueOf(deviceDetailModel.getStatus()).equals("true")) {
 
-
+                        Log.e("DebugCompleted","true");
+                        if (CustomUtility.getSharedPreferences(mContext, "DeviceStatus") != null &&
+                                !CustomUtility.getSharedPreferences(mContext, "DeviceStatus").isEmpty() &&
+                                CustomUtility.getSharedPreferences(mContext,"DeviceStatus").equals(getResources().getString(R.string.online))) {
+                            CustomUtility.setSharedPreference(mContext,Constant.isDebugDevice,"true");
+                        }
                     }
                 }
             }
@@ -1464,10 +1469,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                         @Override
                         public void run() {
                             lvlMainTextContainerID.addView(getTextViewTT(pp, ":DEBUG M66#"));
-
                             AllCommomSTRContainer = AllCommomSTRContainer + "\n :DEBUG M66#";
-
-
                             if (mIntCheckDeviceType == 0) {
                                 new BluetoothCommunicationForDebugM66().execute(":DEBUG M66#", ":DEBUG M66#", "START");
                             } else if (mIntCheckDeviceType == 2) {
@@ -2773,8 +2775,9 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                     try {
                         WebURL.SERVER_CONNECTIVITY_OK = mCheckServerConnectivityValue;
 
-                        callCheckSimDataPackAPI(mCheckSignelValue, mCheckNetworkValue, mCheckServerConnectivityValue);
 
+
+                        callCheckSimDataPackAPI(mCheckSignelValue, mCheckNetworkValue, mCheckServerConnectivityValue);
                         changeButtonVisibilityRLV(true, 1.0f, rlvBT_7_ID_save);
 
                     } catch (Exception exception) {

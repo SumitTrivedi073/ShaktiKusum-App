@@ -18,6 +18,8 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -78,6 +80,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     public int TIME_INTERVAL = 30  * 1000;
     private LocationRequest locationRequest;
 
+
     private GoogleApiClient mGoogleApiClient;
     private FusedLocationProviderClient fusedLocationClient;
 
@@ -118,6 +121,8 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         if (save != null) {
             Intent intent = new Intent();
             intent.putExtra("data", save);
+            intent.putExtra("latitude", latitudetxt);
+            intent.putExtra("longitude", longitudetxt);
             setResult(RESULT_OK, intent);
             finish();
         } else {
@@ -151,7 +156,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     private void setupSurfaceHolder() {
         setViewVisibility(R.id.startBtn, View.VISIBLE);
         setViewVisibility(R.id.surfaceView, View.VISIBLE);
-        setViewVisibility(R.id.layoutPreview, View.VISIBLE);
+        setViewVisibility(R.id.layoutPreview,View.VISIBLE);
 
         surfaceHolder = surfaceView.getHolder();
         surfaceHolder.addCallback(this);
@@ -161,7 +166,19 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     private void setBtnClick() {
         Button startBtn = findViewById(R.id.startBtn);
         if (startBtn != null) {
-            startBtn.setOnClickListener(view -> captureImage());
+            startBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    captureImage();
+
+                    startBtn.setEnabled(false);
+
+                    //enable button after 1000 millisecond
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        startBtn.setEnabled(true);
+                    }, 5000);
+                }
+            });
         }
     }
 
@@ -178,8 +195,8 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
 
     private void startCamera() {
 
-        camera = android.hardware.Camera.open(0);
-        camera.setDisplayOrientation(90);
+            camera = android.hardware.Camera.open(0);
+            camera.setDisplayOrientation(90);
 
         try {
             camera.setPreviewDisplay(surfaceHolder);
@@ -192,9 +209,9 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     }
 
 
-    private void setCamFocusMode() {
+    private void setCamFocusMode(){
 
-        if (null == camera) {
+        if(null == camera) {
             return;
         }
 
@@ -240,19 +257,18 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         releaseCamera();
     }
-
     @Override
-    protected void onPause() {
+    protected void onPause()
+    {
         super.onPause();
         if (camera != null) {
             camera.stopPreview();
             camera.release();
         }
     }
-
     private void releaseCamera() {
         if (camera != null) {
-            // camera.stopPreview();
+
             camera.release();
             camera = null;
         }
@@ -262,7 +278,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     public void onPictureTaken(byte[] bytes, android.hardware.Camera camera) {
 
         bitmap = saveImageWithTimeStamp(bytes);
-        save = saveFile(bitmap, customer_name.trim(), customer_name.trim());
+        save = saveFile(bitmap,customer_name.trim(),customer_name.trim());
         onBackPressed();
     }
 
@@ -276,7 +292,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
 
         bmp = rotateBitmap(bmp);
         Canvas canvas = new Canvas(bmp);
-        TextPaint mTextPaint = new TextPaint();
+        TextPaint mTextPaint=new TextPaint();
         int color = ContextCompat.getColor(CameraActivity2.this, R.color.black);
         mTextPaint.setColor(color);
         mTextPaint.setFakeBoldText(true);
@@ -288,7 +304,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
                 Layout.Alignment.ALIGN_NORMAL, 1.0f, 1.0f, true);
 
         canvas.save();
-        canvas.translate(0f, bmp.getHeight() - mTextLayout.getHeight() - 0.0f);
+        canvas.translate(0f,bmp.getHeight() - mTextLayout.getHeight() - 0.0f);
         mTextLayout.draw(canvas);
         canvas.restore();
 
@@ -297,11 +313,11 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     }
 
     public static File saveFile(Bitmap bitmap, String type, String name) {
-        File file = new File(getMediaFilePath(type, name));
+        File file = new File(getMediaFilePath(type,name));
         try {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(file));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+          e.printStackTrace();
         }
         return file;
     }
@@ -310,7 +326,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     private static Bitmap rotateBitmap(Bitmap source) {
         Matrix matrix = new Matrix();
         matrix.postRotate((float) 90);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+       return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 
     @Override
@@ -334,7 +350,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         }
 
         // Create a media file name
-        return dir.getPath() + File.separator + "IMG_" + Calendar.getInstance().getTimeInMillis() + ".jpg";
+        return dir.getPath() + File.separator + "IMG_"+ Calendar.getInstance().getTimeInMillis() +".jpg";
     }
 
 
@@ -364,17 +380,6 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
                         display.setText("Latitude : " + latitudetxt + "\n" + "Longitude : " + longitudetxt + "\n" + "Address : " + addresstxt + ","
                                 + state + " " + postalcode + "," + country + "\n" + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
                                 + "\n" + "Customer: " + customer_name);
-
-
-                        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                        String city = addresses.get(0).getLocality();
-                        String state = addresses.get(0).getAdminArea();
-                        String country = addresses.get(0).getCountryName();
-                        String postalCode = addresses.get(0).getPostalCode();
-                        String knownName = addresses.get(0).getFeatureName();
-
-
-                        Log.e("Address=======>",address+"  city=====>"+city+"  state=====>"+state+"  country=====>"+country+"  postalCode=====>"+postalCode+"  knownName=====>"+knownName);
 
                     }
                 } else {
@@ -428,8 +433,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     public void onConnected(@Nullable Bundle bundle) {
         boolean granted =
                 CustomUtility.checkLocationPermission(this);
-        Log.e("granted======>", String.valueOf(granted));// runtimePermis is granted
-        if (granted) {
+         if (granted) {
                  startLocationUpdates();
     }
     }

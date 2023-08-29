@@ -37,8 +37,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.os.BuildCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.ArrayList;
@@ -71,8 +69,6 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
     Toolbar mToolbar;
 
     boolean isBackPressed = false,isUpdate = false;
-
-    FusedLocationProviderClient location;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -168,10 +164,9 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
     }
 
     private void Init() {
-
-        location = LocationServices.getFusedLocationProviderClient(this);
-
         recyclerview = findViewById(R.id.recyclerview);
+
+
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -371,8 +366,8 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
                         if (result.getData() != null && result.getData().getExtras() != null) {
 
                             Bundle bundle = result.getData().getExtras();
-                            Log.e("bundle====>", bundle.get("data").toString());
-                            UpdateArrayList(bundle.get("data").toString(),"0");
+                            Log.e("bundle====>", bundle.get("data").toString()+"latitude=====>"+latitude+"longitude========>"+longitude);
+                            UpdateArrayList(bundle.get("data").toString(),"0",bundle.get("latitude").toString(),bundle.get("longitude").toString());
 
                         }
 
@@ -407,7 +402,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
                     if (TextUtils.isEmpty(file)) {
                         Toast.makeText(InstReportImageActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
                     } else {
-                        UpdateArrayList(path,"1");
+                        UpdateArrayList(path,"1", latitude, longitude);
 
                     }
                 } catch (Exception e) {
@@ -419,47 +414,29 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
 
     }
 
-    private void UpdateArrayList(String path, String value) {
+    private void UpdateArrayList(String path, String value, String latitude, String longitude) {
+
+        ImageModel imageModel = new ImageModel();
+        imageModel.setName(imageArrayList.get(selectedIndex).getName());
+        imageModel.setImagePath(path);
+        imageModel.setImageSelected(true);
+        imageModel.setBillNo(enqDocno);
         if(value.equals("0")) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                location.getLastLocation()
-                        .addOnSuccessListener(location -> {
-                            if (location != null && !String.valueOf(location.getLatitude()).isEmpty() && !String.valueOf(location.getLongitude()).isEmpty()) {
-
-                                latitude = String.valueOf(location.getLatitude());
-                                longitude = String.valueOf(location.getLongitude());
-                                ImageModel imageModel = new ImageModel();
-                                imageModel.setName(imageArrayList.get(selectedIndex).getName());
-                                imageModel.setImagePath(path);
-                                imageModel.setImageSelected(true);
-                                imageModel.setBillNo(enqDocno);
-
-                                imageModel.setLatitude(latitude);
-                                imageModel.setLongitude(longitude);
-                                imageArrayList.set(selectedIndex, imageModel);
-
-                                addupdateDatabase(path);
-                            }
-                        });
-            }
-            customAdapter.notifyDataSetChanged();
-
-        }else {
-            ImageModel imageModel = new ImageModel();
-            imageModel.setName(imageArrayList.get(selectedIndex).getName());
-            imageModel.setImagePath(path);
-            imageModel.setImageSelected(true);
-            imageModel.setBillNo(enqDocno);
-
             imageModel.setLatitude(latitude);
             imageModel.setLongitude(longitude);
             imageArrayList.set(selectedIndex, imageModel);
+            addupdateDatabase(path,latitude,longitude);
+        }else {
+            imageModel.setLatitude("");
+            imageModel.setLongitude("");
+            imageArrayList.set(selectedIndex, imageModel);
+            addupdateDatabase(path,"","");
+        }
+        customAdapter.notifyDataSetChanged();
 
-            addupdateDatabase(path);
-    }
     }
 
-    private void addupdateDatabase(String path) {
+    private void addupdateDatabase(String path, String latitude, String longitude) {
 
         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 
