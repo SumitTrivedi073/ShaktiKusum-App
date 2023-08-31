@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.OptIn;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.os.BuildCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,7 +47,7 @@ import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-public class InstallationList extends BaseActivity {
+@BuildCompat.PrereleaseSdkCheck public class InstallationList extends BaseActivity {
     public String bill_no = "";
     public String gst_bill_no = "";
     public String bill_date = "";
@@ -118,7 +119,7 @@ public class InstallationList extends BaseActivity {
 
     @SuppressLint("WrongConstant")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void  onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_installation_list);
@@ -141,9 +142,8 @@ public class InstallationList extends BaseActivity {
             PackageManager manager = getPackageManager();
             PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
             version = info.versionName;
-            Log.e("version=====>",version);
+
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e("versionErrpr====>",e.getMessage());
             throw new RuntimeException(e);
 
         }

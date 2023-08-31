@@ -166,6 +166,7 @@ import webservice.WebURL;
                         intent.putExtra("cust_name", custname);
                         intent.putExtra("userid", pernr);
                         intent.putExtra("moduleqty", responseList.get(position).getModuleqty());
+                        intent.putExtra("mobile", responseList.get(position).getCUS_CONTACT_NO());
                         context.startActivity(intent);
                     }
             });

@@ -4266,6 +4266,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+
+
     public void deleteUnloadingImages(String billNo){
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
