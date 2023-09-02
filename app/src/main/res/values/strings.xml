@@ -288,6 +288,7 @@
     <string name="attechFormPhoto">Please Attach Form Photo</string>
     <string name="enter_valid_contact_number">Please enter valid contact number</string>
     <string name="dataSavedOffline">your data saved in offline mode please re-submit when you have a internet connetion!</string>
+    <string name="savedInLocalDatabase">Your Data Saved in local Database, please check your internet connection and try again!</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

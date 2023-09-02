@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/popup_relative"
+    android:layout_margin="@dimen/_5sdp"
     android:orientation="vertical">
 
     <TextView
@@ -10,18 +12,24 @@
         android:padding="5dp"
         android:text="Enter Controller id"
         android:textColor="@color/gray"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:fontFamily="sans-serif-condensed-medium"/>
 
     <EditText
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text" />
+        android:inputType="text"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_14sdp"
+        android:layout_margin="@dimen/_10sdp"
+        android:fontFamily="sans-serif-condensed-medium"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:weightSum="2">
 
         <Button
@@ -29,14 +37,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Search" />
+            android:text="Search"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12sdp"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:background="@drawable/rounded_corner_blue"/>
 
         <Button
             android:id="@+id/cancel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Cancel" />
+            android:text="Cancel"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12sdp"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:background="@drawable/gray_round_corner"/>
     </LinearLayout>
 
 

@@ -44,7 +44,7 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
     TextView countdownTxt, resend_btn, verifyOTP;
     EditText et_verification_code;
 
-    String verificationCode,contactNumber,vblen,Hp,beneficiary;
+    String verificationCode, contactNumber, vblen, Hp, beneficiary;
     AlertDialog alertDialog;
 
     @Override
@@ -69,10 +69,10 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getResources().getString(R.string.otpVerification));
 
-        contactNumber =   getIntent().getStringExtra(Constant.PendingFeedbackContact);
-        vblen =   getIntent().getStringExtra(Constant.PendingFeedbackVblen);
-        Hp =    getIntent().getStringExtra(Constant.PendingFeedbackHp);
-        beneficiary =   getIntent().getStringExtra(Constant.PendingFeedbackBeneficiary);
+        contactNumber = getIntent().getStringExtra(Constant.PendingFeedbackContact);
+        vblen = getIntent().getStringExtra(Constant.PendingFeedbackVblen);
+        Hp = getIntent().getStringExtra(Constant.PendingFeedbackHp);
+        beneficiary = getIntent().getStringExtra(Constant.PendingFeedbackBeneficiary);
         verificationCode = getIntent().getStringExtra(Constant.VerificationCode);
         countDownTimer();
     }
@@ -99,17 +99,17 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
             public void onClick(View view) {
                 if (et_verification_code.getText().toString().isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please Enter Verification Code", Toast.LENGTH_LONG).show();
-                } else if (!verificationCode.equals(et_verification_code.getText().toString())){
+                } else if (!verificationCode.equals(et_verification_code.getText().toString())) {
                     Toast.makeText(getApplicationContext(), "Please Enter Correct Verification Code", Toast.LENGTH_LONG).show();
-                }else {
-                         saveOtpToServer(vblen,et_verification_code.getText().toString());
+                } else {
+                    saveOtpToServer(vblen, et_verification_code.getText().toString());
                 }
             }
         });
     }
 
     private void saveOtpToServer(String vbeln, String ver_otp) {
-       /* https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/save_feedback.htm?feedback={"vbeln":"1234",
+       /* https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/save_feedback.htm?    ={"vbeln":"1234",
         "ver_otp":"1234"}*/
         JSONObject mainObject = new JSONObject();
         try {
@@ -130,7 +130,7 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
 
                 if (!res.toString().isEmpty()) {
 
-                        ShowAlertResponse("1");
+                    ShowAlertResponse("1");
 
                 }
 
@@ -151,11 +151,11 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
-    private void sendVerificationCodeAPI( String generatedVerificationCode) {
+    private void sendVerificationCodeAPI(String generatedVerificationCode) {
         CustomUtility.showProgressDialogue(PendingFeedBackOTPVerification.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.SendOTP + "&mobiles=" +contactNumber+
+                WebURL.SendOTP + "&mobiles=" + contactNumber +
                         "&message=आप अपने खेत में शक्ति पम्प्स (इंडिया) लिमिटेड द्वारा स्थापित " + Hp + " एचपी रेटिंग सोलर पंप सेट के लिए लाभार्थी आईडी " + beneficiary + " के संदर्भ में यह संदेश प्राप्त कर रहे हैं।" +
                         " यह संदेश केवल आपकी प्रतिक्रिया के उद्देश्य से है शक्ति पंप्स इंस्टालर को सत्यपान कोड साझा करके आप निम्नलिखित की पुष्टि कर रहे हैं 1) आप स्थापना की गुणवत्ता से संतुष्ट हैं" +
                         " 2) आप सोलर पंप सेट के प्रदर्शन से संतुष्ट हैं 3) इंस्टॉलर ने किसी भी प्रकार की सामग्री या स्थापना कार्य के लिए कोई राशि नहीं ली हैं यदि उपरोक्त सभी तीन कथन सही हैं, " +
@@ -167,7 +167,7 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
                 CustomUtility.hideProgressDialog(PendingFeedBackOTPVerification.this);
 
 
-                if ( !res.toString().isEmpty()) {
+                if (!res.toString().isEmpty()) {
                     VerificationCodeModel verificationCodeModel = new Gson().fromJson(res.toString(), VerificationCodeModel.class);
                     if (verificationCodeModel.getStatus().equals("Success")) {
 
@@ -211,22 +211,22 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
         TextView OK_txt = layout.findViewById(R.id.OK_txt);
         TextView title_txt = layout.findViewById(R.id.title_txt);
 
-        if(value.equals("0")) {
+        if (value.equals("0")) {
             title_txt.setText(getResources().getString(R.string.otp_send_successfully));
-        }else {
+        } else {
             title_txt.setText(getResources().getString(R.string.verificationCodeMatched));
         }
 
         OK_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(value.equals("0")) {
+                if (value.equals("0")) {
                     alertDialog.dismiss();
                     countDownTimer();
-                }else {
+                } else {
                     alertDialog.dismiss();
-                    Intent intent = new Intent(PendingFeedBackOTPVerification.this,MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Intent intent = new Intent(PendingFeedBackOTPVerification.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 }
             }

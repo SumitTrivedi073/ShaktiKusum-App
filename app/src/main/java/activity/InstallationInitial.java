@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
 import android.provider.Settings;
@@ -54,6 +55,7 @@ import com.shaktipumplimited.shaktikusum.R;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
@@ -77,8 +79,10 @@ import bean.InstallationBean;
 import database.DatabaseHelper;
 import de.hdodenhof.circleimageview.CircleImageView;
 import debugapp.Bean.SimDetailsInfoResponse;
+import debugapp.BlueToothDebugNewActivity;
 import debugapp.GlobalValue.Constant;
 import debugapp.GlobalValue.NewSolarVFD;
+import debugapp.GlobalValue.UtilMethod;
 import debugapp.VerificationCodeModel;
 import debugapp.localDB.DatabaseHelperTeacher;
 import utility.CustomUtility;
@@ -144,6 +148,16 @@ public class InstallationInitial extends BaseActivity {
 
     List<ImageModel> imageList = new ArrayList<>();
     boolean isBaseUpdate = false, isControllerIDScan = false, isDebug = false,isSubmit= false;
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            String mString = (String) msg.obj;
+            Toast.makeText(mContext, mString, Toast.LENGTH_LONG).show();
+
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -396,8 +410,6 @@ public class InstallationInitial extends BaseActivity {
 
             DeviceStatus = CustomUtility.getSharedPreferences(mContext, "DeviceStatus");
 
-            Log.e("RMS", "Device Status DeviceOnline===>" + DeviceStatus);
-
             if (CustomUtility.isInternetOn(getApplicationContext())) {
                 if (mBTResonseDataList.size() > 0)
                     mBTResonseDataList.clear();
@@ -430,7 +442,6 @@ public class InstallationInitial extends BaseActivity {
                     RMS_SERVER_DOWN = "Working Fine";
                     System.out.println("VikasVIHU==>>" + mBTResonseDataList.get(vkp).getDEVICENO());
 
-                    if (!TextUtils.isEmpty(DeviceStatus)) {
                         if (isControllerIDScan) {
                             if (CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice)!=null
                                     && !CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice).isEmpty()
@@ -442,9 +453,7 @@ public class InstallationInitial extends BaseActivity {
                         } else {
                             CustomUtility.ShowToast("Please Scan Controller ID first!", getApplicationContext());
                         }
-                    } else {
-                        CustomUtility.ShowToast("Please get RMS Device Status.", getApplicationContext());
-                    }
+
 
                 } else {
 
@@ -454,7 +463,7 @@ public class InstallationInitial extends BaseActivity {
                     if ((!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude())) && (!TextUtils.isEmpty(param_invc.getSolarpanel_wattage())) && (!TextUtils.isEmpty(param_invc.getNo_of_module_value()))) {
                         saveData();
                     } else {
-                        if (!TextUtils.isEmpty(DeviceStatus)) {
+
                             if (isControllerIDScan) {
                                 if (CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice)!=null
                                         && !CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice).isEmpty()
@@ -466,9 +475,7 @@ public class InstallationInitial extends BaseActivity {
                             } else {
                                 CustomUtility.ShowToast("Please Scan Controller ID first!", getApplicationContext());
                             }
-                        } else {
-                            CustomUtility.ShowToast("Please get RMS Device Status.", getApplicationContext());
-                        }
+
                     }
                 }
             } else {
@@ -478,7 +485,7 @@ public class InstallationInitial extends BaseActivity {
                 if (param_invc != null && (!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude())) && (!TextUtils.isEmpty(param_invc.getSolarpanel_wattage())) && (!TextUtils.isEmpty(param_invc.getNo_of_module_value()))) {
                     saveData();
                 } else {
-                    if (!TextUtils.isEmpty(DeviceStatus)) {
+
                         if (isControllerIDScan) {
                             if (CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice)!=null
                             && !CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice).isEmpty()
@@ -490,10 +497,7 @@ public class InstallationInitial extends BaseActivity {
                         } else {
                             CustomUtility.ShowToast("Please Scan Controller ID first!", getApplicationContext());
                         }
-                    } else {
-                        CustomUtility.ShowToast("Please get RMS Device Status.", getApplicationContext());
 
-                    }
                 }
             }
         });
@@ -682,9 +686,6 @@ public class InstallationInitial extends BaseActivity {
 
                 borewellstatus1 = CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno);
 
-
-                if (!TextUtils.isEmpty(DeviceStatus)) {
-
                     if (!TextUtils.isEmpty(borewellstatus1)) {
                         //  if(!rmsdata_status.isEmpty()) {
                         Intent intent = new Intent(InstallationInitial.this, InstReportImageActivity.class);
@@ -698,9 +699,7 @@ public class InstallationInitial extends BaseActivity {
                     } else {
                         Toast.makeText(mContext, "Please Select Borewell Status", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(mContext, "Please get RMS Device Status.", Toast.LENGTH_SHORT).show();
-                }
+
                 return true;
 
         }
@@ -769,6 +768,7 @@ public class InstallationInitial extends BaseActivity {
         alertDialog.setSingleChoiceItems(items, checkedItem, (dialog, which) -> {
             switch (which) {
                 case 0:
+                    borewellstatus1 = items[0];
                     borewellstatus.setText(items[0]);
                     CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, items[0]);
                     CustomUtility.setSharedPreference(mContext, "borewellstatus", "1");
@@ -776,6 +776,7 @@ public class InstallationInitial extends BaseActivity {
                     dialog.dismiss();
                     break;
                 case 1:
+                    borewellstatus1 = items[1];
                     borewellstatus.setText(items[1]);
                     CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, items[1]);
                     CustomUtility.setSharedPreference(mContext, "borewellstatus", "2");
@@ -783,6 +784,7 @@ public class InstallationInitial extends BaseActivity {
                     dialog.dismiss();
                     break;
                 case 2:
+                    borewellstatus1 = items[2];
                     borewellstatus.setText(items[2]);
                     CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, items[2]);
                     CustomUtility.setSharedPreference(mContext, "borewellstatus", "3");
@@ -841,7 +843,8 @@ public class InstallationInitial extends BaseActivity {
                 CustomUtility.ShowToast("Lat Long not captured, Please try again.", mContext);
             } else {
 
-
+                inst_latitude = String.valueOf(inst_latitude_double);
+                inst_longitude = String.valueOf(inst_longitude_double);
                 geoIndigation.setImageDrawable(getResources().getDrawable(R.drawable.right_mark_icn_green));
                 CustomUtility.ShowToast("Latitude:-" + inst_latitude_double + "     " + "Longitude:-" + inst_longitude_double, mContext);
 
@@ -851,31 +854,9 @@ public class InstallationInitial extends BaseActivity {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
+
     public void saveData() {
 
-
-       if (CustomUtility.isInternetOn(getApplicationContext())) {
-            getData();
-            if (!Constant.DBUG_MOB_1.equalsIgnoreCase("")) {
-                if (mSimDetailsInfoResponse.size() > 0)
-                    mSimDetailsInfoResponse.clear();
-
-                mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
-            }
-            borewellstatus1 = CustomUtility.getSharedPreferences(this, "borewellstatus" + billno);
-            InstallationBean installationBean = new InstallationBean(pernr, project_no, login_no, inst_latitude, inst_longitude, inst_bill_no, installation_date, inst_bill_date,
-                    inst_delay_reason, rmsdata_status, customer_name, fathname, mobileno, state, state_txt, city, city_txt, tehsil_ins, village_ins, address, make, solarpanel_wattage,
-                    solarpanel_stand_ins_quantity, total_watt, hp, no_of_module, no_of_module_value, module_total_plate_watt, solar_motor_model_details, smmd_sno, splar_pump_model_details,
-                    spmd_sno, solar_controller_model, scm_sno, simoprator_text, conntype_text, simcard_num, regisno, BeneficiaryNo
-            );
-
-            if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_PUMP_DATA, DatabaseHelper.KEY_BILL_NO, inst_bill_no)) {
-                db.updateInstallationData(inst_bill_no, installationBean);
-
-            } else {
-                db.insertInstallationData(inst_bill_no, installationBean);
-            }
             if (reason.getVisibility() == View.VISIBLE) {
                 if (!reasontxt.getText().toString().isEmpty()) {
                     saveDataValidation();
@@ -886,33 +867,17 @@ public class InstallationInitial extends BaseActivity {
                 saveDataValidation();
             }
 
-        } else {
-            Toast.makeText(mContext, "Please Connect to Internet, Your Data is Save to Offline Mode...", Toast.LENGTH_SHORT).show();
 
-            getData();
-            InstallationBean installationBean = new InstallationBean(pernr, project_no, login_no, inst_latitude, inst_longitude, inst_bill_no, installation_date, inst_bill_date,
-                    inst_delay_reason, rmsdata_status, customer_name, fathname, mobileno, state, state_txt, city, city_txt, tehsil_ins, village_ins, address, make, solarpanel_wattage,
-                    solarpanel_stand_ins_quantity, total_watt, hp, no_of_module, no_of_module_value, module_total_plate_watt, solar_motor_model_details, smmd_sno, splar_pump_model_details,
-                    spmd_sno, solar_controller_model, scm_sno, simoprator_text, conntype_text, simcard_num, regisno, BeneficiaryNo
-            );
-
-            if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_PUMP_DATA, DatabaseHelper.KEY_BILL_NO, inst_bill_no)) {
-                db.updateInstallationData(inst_bill_no, installationBean);
-            } else {
-                db.insertInstallationData(inst_bill_no, installationBean);
-            }
-            Intent intent = new Intent(mContext, InstallationList.class);
-            startActivity(intent);
-            finish();
-
-        }
 
     }
 
     private void saveDataValidation() {
+        getData();
+        int no_of_module_value1 = 0;
         String[] arr = no_of_module_value.split(",");
-        int no_of_module_value1 = Integer.parseInt(no_of_module);
-
+        if (!no_of_module.isEmpty()) {
+             no_of_module_value1 = Integer.parseInt(no_of_module);
+        }
         if (inst_latitude != null && !inst_latitude.equals("") && inst_longitude != null && !inst_longitude.equals("") && !inst_longitude.equals("0.0") && !inst_latitude.equals("0.0")) {
             if (inst_bill_no != null && !inst_bill_no.equals("")) {
 
@@ -948,6 +913,10 @@ public class InstallationInitial extends BaseActivity {
                                                                                     CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
                                                                                 }
                                                                             } else {
+
+                                                                                if (mSimDetailsInfoResponse.size() > 0)
+                                                                                    mSimDetailsInfoResponse.clear();
+                                                                                mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
                                                                                 if (mSimDetailsInfoResponse.size() >= 1) {
                                                                                     if (mSimDetailsInfoResponse.size() >= 2) {
                                                                                         if (mSimDetailsInfoResponse.size() >= 3) {
@@ -1024,6 +993,9 @@ public class InstallationInitial extends BaseActivity {
     }
 
     private void saveInstalltion() {
+
+
+        SaveInLocalDataBase();
         String[] arr = no_of_module_value.split(",");
         Set<String> set = new HashSet<>();
         for (int i = 0; i < arr.length; i++) {
@@ -1039,12 +1011,91 @@ public class InstallationInitial extends BaseActivity {
                 }
         }
         if (isSubmit ) {
-            new SyncInstallationData().execute();
+             if(CustomUtility.isInternetOn(getApplicationContext())) {
+                 DebugAndInstalltionDataSUbmitted();
+             }else {
+                 CustomUtility.ShowToast(getResources().getString(R.string.savedInLocalDatabase),mContext);
+                 Intent intent = new Intent(mContext, InstallationList.class);
+                 startActivity(intent);
+                 finish();
+             }
+
         }else {
             CustomUtility.ShowToast("Installation Not Submitted,Remove duplicate module Number", this);
         }
 
 
+    }
+
+    private void SaveInLocalDataBase() {
+        getData();
+        if (!Constant.DBUG_MOB_1.equalsIgnoreCase("")) {
+            if (mSimDetailsInfoResponse.size() > 0)
+                mSimDetailsInfoResponse.clear();
+
+            mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
+        }
+
+        borewellstatus1 = CustomUtility.getSharedPreferences(this, "borewellstatus" + billno);
+        InstallationBean installationBean = new InstallationBean(pernr, project_no, login_no, inst_latitude, inst_longitude, inst_bill_no, installation_date, inst_bill_date,
+                inst_delay_reason, rmsdata_status, customer_name, fathname, mobileno, state, state_txt, city, city_txt, tehsil_ins, village_ins, address, make, solarpanel_wattage,
+                solarpanel_stand_ins_quantity, total_watt, hp, no_of_module, no_of_module_value, module_total_plate_watt, solar_motor_model_details, smmd_sno, splar_pump_model_details,
+                spmd_sno, solar_controller_model, scm_sno, simoprator_text, conntype_text, simcard_num, regisno, BeneficiaryNo
+        );
+
+        if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_PUMP_DATA, DatabaseHelper.KEY_BILL_NO, inst_bill_no)) {
+            db.updateInstallationData(inst_bill_no, installationBean);
+
+        } else {
+            db.insertInstallationData(inst_bill_no, installationBean);
+        }
+
+    }
+
+    private void DebugAndInstalltionDataSUbmitted() {
+        if (mBTResonseDataList.size() > 0)
+            mBTResonseDataList.clear();
+        mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABT();
+
+
+        if (mBTResonseDataList.size() > 0) {
+
+            DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
+
+            SIGNL_STREN = mBTResonseDataList.get(vkp).getSIGNLSTREN();
+            String[] mStrArrySignal = SIGNL_STREN.split("###");
+            SIGNL_STREN = mStrArrySignal[0];
+            INVOICE_NO_B = mStrArrySignal[1];
+
+            SIM = mBTResonseDataList.get(vkp).getSIM();
+            String[] mStrArrySim = SIM.split("###");
+            if(mStrArrySim.length>0){
+            SIM = mStrArrySim[0];
+        }
+            if(mStrArrySim.length>1) {
+                SIM_SR_NO = mStrArrySim[1];
+            }
+            NET_REG = mBTResonseDataList.get(vkp).getNETREG();
+            SER_CONNECT = mBTResonseDataList.get(vkp).getSERCONNECT();
+            CAB_CONNECT = mBTResonseDataList.get(vkp).getCABCONNECT();
+            LATITUDE = mBTResonseDataList.get(vkp).getLATITUDE();
+            LANGITUDE = mBTResonseDataList.get(vkp).getLANGITUDE();
+            MOBILE = mBTResonseDataList.get(vkp).getMOBILE();
+            IMEI = mBTResonseDataList.get(vkp).getIMEI();
+            DONGAL_ID = mBTResonseDataList.get(vkp).getDONGALID();
+            RMS_STATUS = mBTResonseDataList.get(vkp).getRMS_STATUS();
+            RMS_CURRENT_ONLINE_STATUS = mBTResonseDataList.get(vkp).getRMS_CURRENT_ONLINE_STATUS();
+            RMS_LAST_ONLINE_DATE = mBTResonseDataList.get(vkp).getRMS_LAST_ONLINE_DATE();
+
+            mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
+            mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
+            RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
+            RMS_SERVER_DOWN = "Working Fine";
+
+            SubmitDebugData();
+        }else{
+            CustomUtility.ShowToast("Please Debug and try again!", mContext);
+        }
     }
 
 
@@ -1202,6 +1253,7 @@ public class InstallationInitial extends BaseActivity {
 
         bill_date.setText(billdate);
         bill_no.setText(billno);
+        inst_bill_no = billno;
         cust_name.setText(custname);
         inst_fathers_name.setText(fathname);
         inst_mob_no.setText(mobileno);
@@ -1243,7 +1295,7 @@ public class InstallationInitial extends BaseActivity {
         inst_pump_ser.setText(pump);
 
         WebURL.mDEvice_Number_CHECK = controller;
-        inst_controller_ser.setText(controller);
+        inst_controller_ser.setText("7F-0135-0-13-06-23");
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {
             spinner_simoprator.setSelection(db.getPosition(spinner_simoprator, installationBean.getSimoprator()));
@@ -1395,6 +1447,12 @@ public class InstallationInitial extends BaseActivity {
         if (CustomUtility.getSharedPreferences(mContext, "DeviceStatus") != null &&
                 !CustomUtility.getSharedPreferences(mContext, "DeviceStatus").isEmpty()) {
             DeviceStatus = CustomUtility.getSharedPreferences(mContext, "DeviceStatus");
+
+            if(DeviceStatus.equals(getResources().getString(R.string.online))){
+             labeledSwitch.setOn(true);
+            }else {
+                labeledSwitch.setOn(false);
+            }
         }
     }
 
@@ -1428,9 +1486,96 @@ public class InstallationInitial extends BaseActivity {
         return String.format("%04d", number);
     }
 
-    private class SyncInstallationData extends AsyncTask<String, String, String> {
+    private void SubmitDebugData() {
+        CustomUtility.showProgressDialogue(InstallationInitial.this);
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObj = new JSONObject();
 
-        ProgressDialog progressDialog;
+        try {
+            String MOB_NAME = CustomUtility.currentVersionName();
+            String MOB_API_NAME = CustomUtility.currentVersionAPI();
+            String MOB_VERSION_NAME = String.valueOf(Build.VERSION.SDK_INT);
+            jsonObj.put("MOB_NAME", MOB_NAME);
+            jsonObj.put("MOB_API_NAME", MOB_API_NAME);
+            jsonObj.put("MOB_VERSION_NAME", MOB_VERSION_NAME);
+            jsonObj.put("DEVICE_NO", DEVICE_NO);
+            jsonObj.put("SIGNL_STREN", SIGNL_STREN);
+            jsonObj.put("SIM", SIM);
+            jsonObj.put("NET_REG", NET_REG);
+            jsonObj.put("SER_CONNECT", SER_CONNECT);
+            jsonObj.put("CAB_CONNECT", CAB_CONNECT);
+            jsonObj.put("LATITUDE", LATITUDE);
+            jsonObj.put("LANGITUDE", LANGITUDE);
+            jsonObj.put("MOBILE", MOBILE);
+            jsonObj.put("IMEI", IMEI);
+            jsonObj.put("DONGAL_ID", DONGAL_ID);
+            jsonObj.put("KUNNR", MUserId);
+            jsonObj.put("EmpType", MEmpType);
+            jsonObj.put("RMS_STATUS", RMS_STATUS);
+            jsonObj.put("RMS_CURRENT_ONLINE_STATUS", RMS_CURRENT_ONLINE_STATUS);
+            jsonObj.put("RMS_LAST_ONLINE_DATE", RMS_LAST_ONLINE_DATE);
+            jsonObj.put("RMS_APP_VERSION", mAppName + " - " + version);
+            jsonObj.put("RMS_PROJECT_CODE", project_no);
+            jsonObj.put("DEBUG_UNAME ", mInstallerName);
+            jsonObj.put("DEBUG_UMOB", mInstallerMOB);
+            jsonObj.put("SIM_SR_NO", SIM_SR_NO);
+            jsonObj.put("DEBUG_EXTRN", mInstallerMOB);
+            jsonObj.put("INVOICE_NO", INVOICE_NO_B);
+            jsonObj.put("DBUG_EXTRN_STATUS", RMS_DEBUG_EXTRN);
+            jsonObj.put("RMS_SERVER_STATUS", RMS_SERVER_DOWN);
+
+            jsonArray.put(jsonObj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.e("URL=====>", NewSolarVFD.saveDebugData + "?action=" + jsonArray);
+        final ArrayList<NameValuePair> param1 = new ArrayList<NameValuePair>();
+        param1.add(new BasicNameValuePair("action", String.valueOf(jsonArray)));
+
+        try {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
+            StrictMode.setThreadPolicy(policy);
+
+            String obj2 = debugapp.GlobalValue.CustomHttpClient.executeHttpPost1(NewSolarVFD.saveDebugData, param1);
+
+            if (!obj2.isEmpty()) {
+
+
+                JSONObject jsonObject = new JSONObject(obj2);
+                Log.e("Response=====>", jsonObject.toString());
+
+
+                String mStatus = jsonObject.getString("status");
+                if (mStatus.equals("true")) {
+
+                    mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
+                    mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
+
+                    CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice, "true");
+                    if (mSimDetailsInfoResponse.size() > 0)
+                        mSimDetailsInfoResponse.clear();
+
+                    mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
+                    CustomUtility.hideProgressDialog(InstallationInitial.this);
+                    Constant.BT_DEVICE_NAME = "";
+                    Constant.BT_DEVICE_MAC_ADDRESS = "";
+                  //  CustomUtility.ShowToast(getResources().getString(R.string.dataSubmittedSuccessfully), getApplicationContext());
+
+                    new SyncInstallationData().execute();
+
+                } else {
+                    CustomUtility.hideProgressDialog(InstallationInitial.this);
+                    CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
+                }
+
+
+            }
+        } catch (Exception e) {
+            CustomUtility.hideProgressDialog(InstallationInitial.this);
+            e.printStackTrace();
+        }
+    }
+    private class SyncInstallationData extends AsyncTask<String, String, String> {
 
         @Override
         protected void onPreExecute() {
@@ -1709,6 +1854,8 @@ public class InstallationInitial extends BaseActivity {
                         }
 
                     }
+
+                    mDatabaseHelperTeacher.deleteAllDataFromTable();
                 }
 
             } catch (Exception e) {
