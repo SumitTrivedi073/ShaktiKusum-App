@@ -918,6 +918,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_SIMHA2 + " TEXT,"
             + KEY_CUS_CONTACT_NO + " TEXT,"
             + KEY_PANEL_MODULE_SER_NO + " TEXT,"
+            + KEY_HP + " TEXT,"
             + KEY_ADD1 + " TEXT,"
             + KEY_ADD2 + " TEXT,"
             + KEY_ADD3 + " TEXT,"
@@ -1655,6 +1656,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_SIMHA2, installationBean.getSimha2());
             values.put(KEY_CUS_CONTACT_NO, installationBean.getCUS_CONTACT_NO());
             values.put(KEY_PANEL_MODULE_SER_NO, installationBean.getNoOfModule());
+            values.put(KEY_HP, installationBean.getHP());
             long i = db.insert(TABLE_INSTALLATION_LIST, null, values);
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
@@ -1995,6 +1997,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_SIMHA2, installationBean.getSimha2());
             values.put(KEY_CUS_CONTACT_NO, installationBean.getCUS_CONTACT_NO());
             values.put(KEY_PANEL_MODULE_SER_NO, installationBean.getNoOfModule());
+            values.put(KEY_HP, installationBean.getHP());
             where = KEY_ENQ_DOC + "='" + enqdoc + "'";
             i = db.update(TABLE_INSTALLATION_LIST, values, where, null);
             db.setTransactionSuccessful();
@@ -3061,7 +3064,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         installationBean.setSimha2(cursor.getString(cursor.getColumnIndex(KEY_SIMHA2)));
                         installationBean.setCUS_CONTACT_NO(cursor.getString(cursor.getColumnIndex(KEY_CUS_CONTACT_NO)));
                         installationBean.setNoOfModule(cursor.getString(cursor.getColumnIndex(KEY_PANEL_MODULE_SER_NO)));
-
+                        installationBean.setHP(cursor.getString(cursor.getColumnIndex(KEY_HP)));
                         list_document.add(installationBean);
                         cursor.moveToNext();
                     }

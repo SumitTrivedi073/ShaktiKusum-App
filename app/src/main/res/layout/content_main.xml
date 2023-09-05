@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -95,8 +96,7 @@
                 android:orientation="vertical"
                 android:padding="4dp">
 
-                <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                <androidx.cardview.widget.CardView
                     android:id="@+id/cardSurveySiteID"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40sdp"
@@ -118,8 +118,7 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                <androidx.cardview.widget.CardView
                     android:id="@+id/SurveySiteC"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40sdp"
@@ -140,8 +139,8 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/pendingFeedback"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40sdp"
                     android:layout_margin="@dimen/_5sdp"
@@ -150,7 +149,7 @@
                     card_view:cardElevation="@dimen/_5sdp">
 
                     <TextView
-                        android:id="@+id/pendingFeedback"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Pending Feedback "
@@ -161,6 +160,29 @@
                         android:fontFamily="@font/open_sans_bold" />
 
                 </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/pendingUnloadingVerification"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:src="@color/blue_fb"
+                    card_view:cardCornerRadius="@dimen/_5sdp"
+                    card_view:cardElevation="@dimen/_5sdp">
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pending Unloading Verification "
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_gravity="start|center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_14sdp"
+                        android:fontFamily="@font/open_sans_bold" />
+
+                </androidx.cardview.widget.CardView>
+
 
                 <LinearLayout
                     android:id="@+id/lin1"

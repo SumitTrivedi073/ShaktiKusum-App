@@ -33,15 +33,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import adapter.PendingFeedbackAdapter;
+import adapter.PendingUnloadVerificationAdapter;
 import debugapp.GlobalValue.Constant;
 import debugapp.PendingFeedback;
+import debugapp.UnloadingFeedbackModel;
 import debugapp.VerificationCodeModel;
 import utility.CustomUtility;
 import webservice.WebURL;
 
-public class PendingFeedbackActivity extends BaseActivity implements PendingFeedbackAdapter.SendOTPListner{
+public class PendingUnloadVerificationActivity extends BaseActivity implements PendingUnloadVerificationAdapter.SendOTPListner{
 
     private  RecyclerView pendingFeedbackList;
     private Toolbar mToolbar;
@@ -52,7 +52,7 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
 
     SearchView searchUser;
 
-    PendingFeedbackAdapter pendingFeedbackAdapter;
+    PendingUnloadVerificationAdapter pendingUnloadVerificationAdapter;
 
     RelativeLayout searchRelative;
 
@@ -76,9 +76,9 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getResources().getString(R.string.pendingFeedback));
+        getSupportActionBar().setTitle(getResources().getString(R.string.pendingUnloadingVerification));
         if(CustomUtility.isInternetOn(getApplicationContext())) {
-            getPendingFeedbackList();
+            getUnloadingFeedbackList();
         }else {
             CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection),getApplicationContext());
         }
@@ -118,9 +118,9 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
         searchUser.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (pendingFeedbackAdapter != null) {
+                if (pendingUnloadVerificationAdapter != null) {
                     if(!query.isEmpty()) {
-                        pendingFeedbackAdapter.getFilter().filter(query);
+                        pendingUnloadVerificationAdapter.getFilter().filter(query);
                     }}
 
                 return false;
@@ -128,9 +128,9 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (pendingFeedbackAdapter != null) {
+                if (pendingUnloadVerificationAdapter != null) {
                     if(!newText.isEmpty()) {
-                        pendingFeedbackAdapter.getFilter().filter(newText);
+                        pendingUnloadVerificationAdapter.getFilter().filter(newText);
                     }
                 }
                 return false;
@@ -148,26 +148,30 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
     }
 
 
-
-    private void getPendingFeedbackList() {
-        CustomUtility.showProgressDialogue(PendingFeedbackActivity.this);
+/* param.add(new BasicNameValuePair("USERID", CustomUtility.getSharedPreferences(context, "userid")));
+            param.add(new BasicNameValuePair("PROJECT_NO", CustomUtility.getSharedPreferences(context, "projectid")));
+            param.add(new BasicNameValuePair("PROJECT_LOGIN_NO", CustomUtility.getSharedPreferences(context, "loginid")));*/
+    private void getUnloadingFeedbackList() {
+        CustomUtility.showProgressDialogue(PendingUnloadVerificationActivity.this);
         pendingFeedbacks = new ArrayList<>();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        Log.e("URL========>",WebURL.unloading_list_verification_pend +"?project_no="+CustomUtility.getSharedPreferences(getApplicationContext(), "projectid")+"&userid="+CustomUtility.getSharedPreferences(getApplicationContext(), "userid")+"&project_login_no=01");
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.PendingFeedback +"?project_no="+CustomUtility.getSharedPreferences(getApplicationContext(), "projectid")+"&userid="+CustomUtility.getSharedPreferences(getApplicationContext(), "userid")+"&project_login_no=01", null, new Response.Listener<JSONObject >() {
+                WebURL.unloading_list_verification_pend +"?project_no="+CustomUtility.getSharedPreferences(getApplicationContext(), "projectid")+"&userid="+CustomUtility.getSharedPreferences(getApplicationContext(), "userid")+"&project_login_no=01", null, new Response.Listener<JSONObject >() {
             @Override
             public void onResponse(JSONObject  response) {
-                CustomUtility.hideProgressDialog(PendingFeedbackActivity.this);
+                CustomUtility.hideProgressDialog(PendingUnloadVerificationActivity.this);
 
 
                 if(response.toString()!=null && !response.toString().isEmpty()) {
-                    PendingFeedback pendingFeedback = new Gson().fromJson(response.toString(), PendingFeedback.class);
-                    if(pendingFeedback.getStatus().equals("true")) {
+                    UnloadingFeedbackModel pendingFeedback = new Gson().fromJson(response.toString(), UnloadingFeedbackModel.class);
+                    if(pendingFeedback.getInstallationData()!=null && pendingFeedback.getInstallationData().size()>0) {
 
-                         pendingFeedbackAdapter = new PendingFeedbackAdapter(getApplicationContext(),pendingFeedback.getResponse(),noDataFound);
+                         pendingUnloadVerificationAdapter = new PendingUnloadVerificationAdapter(getApplicationContext(),pendingFeedback.getInstallationData(),noDataFound);
                         pendingFeedbackList.setHasFixedSize(true);
-                        pendingFeedbackList.setAdapter(pendingFeedbackAdapter);
-                        pendingFeedbackAdapter.SendOTP(PendingFeedbackActivity.this);
+                        pendingFeedbackList.setAdapter(pendingUnloadVerificationAdapter);
+                        pendingUnloadVerificationAdapter.SendOTP(PendingUnloadVerificationActivity.this);
                         noDataFound.setVisibility(View.GONE);
                         pendingFeedbackList.setVisibility(View.VISIBLE);
                     }else {
@@ -184,7 +188,7 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                CustomUtility.hideProgressDialog(PendingFeedbackActivity.this);
+                CustomUtility.hideProgressDialog(PendingUnloadVerificationActivity.this);
                 noDataFound.setVisibility(View.VISIBLE);
                 pendingFeedbackList.setVisibility(View.GONE);
                 Log.e("error", String.valueOf(error));
@@ -206,30 +210,27 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
     }
 
     @Override
-    public void sendOtpListener(List<PendingFeedback.Response> pendingFeedbackList,int position, String generatedVerificationCode) {
+    public void sendOtpListener(List<UnloadingFeedbackModel.InstallationDatum> datumList,int position, String generatedVerificationCode) {
 
-        if(CustomUtility.isValidMobile(pendingFeedbackList.get(position).getContactNo())) {
-            sendVerificationCodeAPI(pendingFeedbackList.get(position),generatedVerificationCode);
+        if(CustomUtility.isValidMobile(datumList.get(position).getContactNo())) {
+            sendVerificationCodeAPI(datumList.get(position),generatedVerificationCode);
         }else {
-            CustomUtility.ShowToast(getResources().getString(R.string.mobile_number_not_valid), PendingFeedbackActivity.this);
+            CustomUtility.ShowToast(getResources().getString(R.string.mobile_number_not_valid), PendingUnloadVerificationActivity.this);
         }
 
     }
 
-    private void sendVerificationCodeAPI(PendingFeedback.Response response, String generatedVerificationCode) {
-        CustomUtility.showProgressDialogue(PendingFeedbackActivity.this);
+    private void sendVerificationCodeAPI(UnloadingFeedbackModel.InstallationDatum response, String generatedVerificationCode) {
+        CustomUtility.showProgressDialogue(PendingUnloadVerificationActivity.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.SendOTP +"&mobiles="+response.getContactNo()+
-                        "&message=आप अपने खेत में शक्ति पम्प्स (इंडिया) लिमिटेड द्वारा स्थापित "+response.getHp()+" एचपी रेटिंग सोलर पंप सेट के लिए लाभार्थी आईडी "+response.getBeneficiary()+" के संदर्भ में यह संदेश प्राप्त कर रहे हैं।" +
-                        " यह संदेश केवल आपकी प्रतिक्रिया के उद्देश्य से है शक्ति पंप्स इंस्टालर को सत्यपान कोड साझा करके आप निम्नलिखित की पुष्टि कर रहे हैं 1) आप स्थापना की गुणवत्ता से संतुष्ट हैं" +
-                        " 2) आप सोलर पंप सेट के प्रदर्शन से संतुष्ट हैं 3) इंस्टॉलर ने किसी भी प्रकार की सामग्री या स्थापना कार्य के लिए कोई राशि नहीं ली हैं यदि उपरोक्त सभी तीन कथन सही हैं, " +
-                        "तो कृपया अपने सोलर पम्प सेट की 5 वर्ष की सेवा को सक्रिय करने के लिए इंस्टॉलर के साथ सत्यपान कोड "+generatedVerificationCode+" साझा करें।:&sender=SHAKTl&route=2&country=91&DLT_TE_ID=1707167928540679513&unicode=1",
+                WebURL.SendOTP + "&mobiles=" +response.getContactNo() +
+                        "&message=प्रिय ग्राहक, आपको (shakti energy solution private limited pithampur) द्वारा "+response.getHp() +"HP का पूरा सिस्टम आपके कस्टमर -आय डी "+ response.getBeneficiary() +" के तहत भेज दिया गया है। यदि भेजा गया सिस्टम सफलतापूर्वक आपको पूरा प्राप्त हुआ है तो (shakti energy solution private limited pithampur) द्वारा अधिकृत इंस्टॉलेशन टीम को OTP-"+ generatedVerificationCode +" शेयर कर पुष्टि करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169347351235207",
 
                 null, new Response.Listener<JSONObject >() {
             @Override
             public void onResponse(JSONObject  res) {
-                CustomUtility.hideProgressDialog(PendingFeedbackActivity.this);
+                CustomUtility.hideProgressDialog(PendingUnloadVerificationActivity.this);
 
 
                 if(res.toString()!=null && !res.toString().isEmpty()) {
@@ -245,9 +246,9 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                CustomUtility.hideProgressDialog(PendingFeedbackActivity.this);
+                CustomUtility.hideProgressDialog(PendingUnloadVerificationActivity.this);
                 Log.e("error", String.valueOf(error));
-                Toast.makeText(PendingFeedbackActivity.this, error.getMessage(),
+                Toast.makeText(PendingUnloadVerificationActivity.this, error.getMessage(),
                         Toast.LENGTH_LONG).show();
             }
         });
@@ -259,12 +260,12 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
     }
 
 
-    private void ShowAlertResponse(PendingFeedback.Response response, String generatedVerificationCode) {
-        LayoutInflater inflater = (LayoutInflater) PendingFeedbackActivity.this
+    private void ShowAlertResponse(UnloadingFeedbackModel.InstallationDatum response, String generatedVerificationCode) {
+        LayoutInflater inflater = (LayoutInflater) PendingUnloadVerificationActivity.this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.send_successfully_layout,
                 null);
-        final AlertDialog.Builder builder = new AlertDialog.Builder(PendingFeedbackActivity.this, R.style.MyDialogTheme);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(PendingUnloadVerificationActivity.this, R.style.MyDialogTheme);
 
         builder.setView(layout);
         builder.setCancelable(false);
@@ -283,14 +284,14 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
-                Intent intent = new Intent(PendingFeedbackActivity.this, PendingFeedBackOTPVerification.class);
+                Intent intent = new Intent(PendingUnloadVerificationActivity.this, PendingFeedBackOTPVerification.class);
                 intent.putExtra(Constant.PendingFeedbackContact,response.getContactNo());
                 intent.putExtra(Constant.PendingFeedbackVblen,response.getVbeln());
                 intent.putExtra(Constant.PendingFeedbackHp,response.getHp());
                 intent.putExtra(Constant.PendingFeedbackBeneficiary,response.getBeneficiary());
                 intent.putExtra(Constant.VerificationCode,generatedVerificationCode);
                 intent.putExtra(Constant.regisno,response.getRegisno());
-                intent.putExtra(Constant.isUnloading ,"false");
+                intent.putExtra(Constant.isUnloading ,"true");
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
 

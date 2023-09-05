@@ -128,6 +128,7 @@
     <string name="Set_edt_scan">Scan or Enter material number</string>
     <string name="Scan_Device">Scan Device</string>
     <string name="pendingFeedback">Pending Feedback</string>
+    <string name="pendingUnloadingVerification">Pending Unloading Verification</string>
     <string name="otpVerification">Installation Verification</string>
     <string name="Loading">loading…</string>
     <string name="verify">Verify</string>

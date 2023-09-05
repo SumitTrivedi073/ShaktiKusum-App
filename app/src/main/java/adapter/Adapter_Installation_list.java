@@ -28,6 +28,7 @@ import activity.UnloadInstReportImageActivity;
 import bean.InstallationBean;
 import bean.InstallationListBean;
 import database.DatabaseHelper;
+import debugapp.GlobalValue.Constant;
 import debugapp.GlobalValue.NewSolarVFD;
 import utility.CustomUtility;
 import webservice.WebURL;
@@ -129,6 +130,7 @@ import webservice.WebURL;
                             extras.putString("CUS_CONTACT_NO", responseList.get(position).getCUS_CONTACT_NO());
                             extras.putString("BeneficiaryNo", responseList.get(position).getBeneficiary());
                             extras.putString("NoOfModule", responseList.get(position).getNoOfModule());
+                            extras.putString("HP", responseList.get(position).getHP());
                             in.putExtras(extras);
                             context.startActivity(in);
                         }
@@ -167,6 +169,8 @@ import webservice.WebURL;
                         intent.putExtra("userid", pernr);
                         intent.putExtra("moduleqty", responseList.get(position).getModuleqty());
                         intent.putExtra("mobile", responseList.get(position).getCUS_CONTACT_NO());
+                        intent.putExtra("HP", responseList.get(position).getHP());
+                        intent.putExtra(Constant.regisno, responseList.get(position).getRegisno());
                         context.startActivity(intent);
                     }
             });

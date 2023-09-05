@@ -100,9 +100,8 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
     List<String> itemNameList = new ArrayList<>();
     List<String> listOfModules = new ArrayList<>();
-    String customerName, beneficiary, regNO, projectNo, userID, billNo, moduleqty,custMobile,
-            no_of_module_value, noOfModules = "";
-    ;
+    String customerName, beneficiary, regNO, projectNo, userID, billNo, moduleqty,custMobile,regisno,
+            no_of_module_value, noOfModules = "",Hp;
     int value, currentScannerFor = -1;
 
     Toolbar mToolbar;
@@ -231,7 +230,8 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         billNo = bundle.getString("vbeln");
         moduleqty = bundle.getString("moduleqty");
         custMobile = bundle.getString("mobile");
-
+        regisno = bundle.getString(Constant.regisno);
+        Hp = bundle.getString("HP");
         beneficiary = WebURL.BenificiaryNo_Con;
         regNO = WebURL.RegNo_Con;
         projectNo = WebURL.ProjectNo_Con;
@@ -628,9 +628,6 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                             databaseHelper.deleteUnloadingImages(billNo);
                             showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
                             NewSolarVFD.CHECK_DATA_UNOLAD = 0;
-                           /* Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                            finish();*/
 
                            Random random = new Random();
                             String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
@@ -638,7 +635,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                             runOnUiThread(() -> {
                                 if (CustomUtility.isValidMobile(custMobile)) {
 
-                                    sendVerificationCodeAPI(generatedVerificationCode, custMobile, "12.5 HP", beneficiary);
+                                    sendVerificationCodeAPI(generatedVerificationCode, custMobile, Hp, beneficiary);
 
                                 } else {
                                     Intent intent = new Intent(UnloadInstReportImageActivity.this, PendingFeedbackActivity.class);
@@ -784,7 +781,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.SendOTP + "&mobiles=" + ContactNo +
-                        "&message=प्रिय ग्राहक, आपको (shakti energy solution private limited pithampur) द्वारा 5 HP का पूरा सिस्टम आपके कस्टमर -आय डी "+ beneficiaryNo +" के तहत भेज दिया गया है। यदि भेजा गया सिस्टम सफलतापूर्वक आपको पूरा प्राप्त हुआ है तो (shakti energy solution private limited pithampur) द्वारा अधिकृत इंस्टॉलेशन टीम को OTP-"+ generatedVerificationCode +" शेयर कर पुष्टि करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169347351235207",
+                        "&message=प्रिय ग्राहक, आपको (shakti energy solution private limited pithampur) द्वारा "+ Hp+ "का पूरा सिस्टम आपके कस्टमर -आय डी "+ beneficiaryNo +" के तहत भेज दिया गया है। यदि भेजा गया सिस्टम सफलतापूर्वक आपको पूरा प्राप्त हुआ है तो (shakti energy solution private limited pithampur) द्वारा अधिकृत इंस्टॉलेशन टीम को OTP-"+ generatedVerificationCode +" शेयर कर पुष्टि करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169347351235207",
 
 
                 /*प्रिय ग्राहक, आपको  (shakti energy solution private limited pithampur)
@@ -843,6 +840,8 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             intent.putExtra(Constant.PendingFeedbackHp, Hp);
             intent.putExtra(Constant.PendingFeedbackBeneficiary, beneficiaryNo);
             intent.putExtra(Constant.VerificationCode, generatedVerificationCode);
+            intent.putExtra(Constant.regisno, regisno);
+            intent.putExtra(Constant.isUnloading ,"true");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();

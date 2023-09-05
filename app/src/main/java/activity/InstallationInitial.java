@@ -1936,7 +1936,7 @@ public class InstallationInitial extends BaseActivity {
             intent.putExtra(Constant.PendingFeedbackHp, Hp);
             intent.putExtra(Constant.PendingFeedbackBeneficiary, beneficiaryNo);
             intent.putExtra(Constant.VerificationCode, generatedVerificationCode);
-
+            intent.putExtra(Constant.isUnloading ,"false");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
