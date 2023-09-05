@@ -28,7 +28,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -254,13 +253,13 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         dialog = new Dialog(mContext);
         mBtNameHead = getIntent().getStringExtra("BtNameHead");
         mBtMacAddressHead = getIntent().getStringExtra("BtMacAddressHead");
+
         progressDialog = new ProgressDialog(mContext);
         mBTResonseDataList = new ArrayList<>();
         mMonthHeaderList = new ArrayList<>();
         mSimDetailsInfoResponse = new ArrayList<>();
         if (getIntent().getExtras() != null) {
             ControllerSerialNumber = getIntent().getStringExtra(Constant.ControllerSerialNumber);
-            Log.e("ControllerSerialNumber=======>", ControllerSerialNumber);
         }
 
         try {
@@ -270,7 +269,6 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         txtLongID = findViewById(R.id.txtLongID);
         txtLatID = findViewById(R.id.txtLatID);
@@ -815,7 +813,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     private void callCheckSimDataPackAPI(int mSignalStrength, int mNetworkConnect, int mServerConnect) {
 
         Map<String, String> wordsByKey = new HashMap<>();
-        wordsByKey.put("device", DEVICE_NO);// DEVICE_NO = sssM[0];
+        wordsByKey.put("device", ControllerSerialNumber + "-0");// DEVICE_NO = sssM[0];
         baseRequest.callAPIGETDebugApp(1, wordsByKey, NewSolarVFD.SIM_STATUS_VK_PAGE);/////
         baseRequest.showLoader();
         baseRequest.setBaseRequestListner(new RequestReciever() {
@@ -925,6 +923,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         OK_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                CustomUtility.setSharedPreference(getApplicationContext(), "DeviceStatus", getResources().getString(R.string.offline));
                 alertDialog.dismiss();
                 finish();
             }
@@ -1005,50 +1004,6 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             baseRequest.hideLoader();
             Toast.makeText(mContext, "Please check internet connection.", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void InstallerInfoUpdatePopup() {
-
-        final Dialog dialog = new Dialog(mContext);
-        dialog.setContentView(R.layout.user_pr_infor);
-        dialog.setCancelable(true);
-
-        TextView txtTitleID = dialog.findViewById(R.id.txtTitleID);
-        EditText edtMobileInstallerID = dialog.findViewById(R.id.edtMobileInstallerID);
-        EditText edtNameInstallerID = dialog.findViewById(R.id.edtNameInstallerID);
-
-        Button dialogButton = dialog.findViewById(R.id.dialogButtonOK);
-
-        // if button is clicked, close the custom dialog
-        dialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String mMobileInstallerID = edtMobileInstallerID.getText().toString().trim();
-                String mNameInstallerID = edtNameInstallerID.getText().toString().trim();
-
-                if (mNameInstallerID.equalsIgnoreCase("")) {
-
-                    Toast.makeText(mContext, "Please enter your name", Toast.LENGTH_SHORT).show();
-                } else if (mMobileInstallerID.equalsIgnoreCase("")) {
-
-                    Toast.makeText(mContext, "Please enter your mobile number", Toast.LENGTH_SHORT).show();
-                } else {
-
-                    mInstallerMOB = mMobileInstallerID;
-                    mInstallerName = mNameInstallerID;
-
-                    CustomUtility.setSharedPreference(mContext, "InstallerName", mInstallerName);
-                    CustomUtility.setSharedPreference(mContext, "InstallerMOB", mInstallerMOB);
-
-                    Toast.makeText(mContext, "User Information inserted successfully!", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                }
-
-            }
-        });
-
-        dialog.show();
-
     }
 
     @Override
@@ -1798,14 +1753,20 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             scrlViewID.fullScroll(View.FOCUS_DOWN);
             baseRequest.hideLoader();
 
-            if (CustomUtility.isInternetOn(getApplicationContext())) {
-                Log.e("NetworkAvailable=========>", "true");
-                callCheckSimDataPackAPI(mCheckSignelValue, mCheckNetworkValue, mCheckServerConnectivityValue);
-
+             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")) {
+                ShowAlertResponse();
             } else {
-                Log.e("NetworkAvailable=========>", "false");
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
+                    Log.e("NetworkAvailable=========>", "true");
+                    callCheckSimDataPackAPI(mCheckSignelValue, mCheckNetworkValue, mCheckServerConnectivityValue);
+
+                } else {
+                    Log.e("NetworkAvailable=========>", "false");
+                }
+                changeButtonVisibilityRLV(true, 1.0f, rlvBT_7_ID_save);
             }
-            changeButtonVisibilityRLV(true, 1.0f, rlvBT_7_ID_save);
+
+
         }
 
     }
@@ -2111,37 +2072,25 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         protected void onPostExecute(Boolean result) //after the doInBackground, it checks if everything went fine
         {
             super.onPostExecute(result);
-
             pp++;
             scrlViewID.fullScroll(View.FOCUS_DOWN);
-
             baseRequest.hideLoader();
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        WebURL.SERVER_CONNECTIVITY_OK = mCheckServerConnectivityValue;
+            WebURL.SERVER_CONNECTIVITY_OK = mCheckServerConnectivityValue;
 
-
-                        if (CustomUtility.isInternetOn(getApplicationContext())) {
-                            Log.e("NetworkAvailable3333========>", "true");
-                            callCheckSimDataPackAPI(mCheckSignelValue, mCheckNetworkValue, mCheckServerConnectivityValue);
-                        } else {
-                            Log.e("NetworkAvailable3333=========>", "false");
-                            Toast.makeText(mContext, "Please check internet connections.", Toast.LENGTH_SHORT).show();
-                        }
-                        changeButtonVisibilityRLV(true, 1.0f, rlvBT_7_ID_save);
-
-
-                    } catch (Exception exception) {
-                        exception.printStackTrace();
-                    }
-
-
+             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")) {
+                ShowAlertResponse();
+            } else {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
+                    Log.e("NetworkAvailable3333========>", "true");
+                    callCheckSimDataPackAPI(mCheckSignelValue, mCheckNetworkValue, mCheckServerConnectivityValue);
+                } else {
+                    Log.e("NetworkAvailable3333=========>", "false");
+                    Toast.makeText(mContext, "Please check internet connections.", Toast.LENGTH_SHORT).show();
                 }
-            });
-
+                changeButtonVisibilityRLV(true, 1.0f, rlvBT_7_ID_save);
+            }
         }
+
     }
 
     ///// data extraction
@@ -2585,7 +2534,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
             WebURL.SERVER_CONNECTIVITY_OK = mCheckServerConnectivityValue;
 
-            if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")) {
+              if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")) {
                 ShowAlertResponse();
             } else {
                 if (CustomUtility.isInternetOn(getApplicationContext())) {
@@ -2768,6 +2717,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
                     } catch (InterruptedException e1) {
                         baseRequest.hideLoader();
+                        CustomUtility.ShowToast(getResources().getString(R.string.pleasetryAgain),mContext);
                         e1.printStackTrace();
                     }
 
@@ -2775,6 +2725,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             } catch (Exception e) {
                 e.printStackTrace();
                 baseRequest.hideLoader();
+                CustomUtility.ShowToast(getResources().getString(R.string.pleasetryAgain),mContext);
                 return false;
             }
             return false;
@@ -3061,7 +3012,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                         } else {
                             if (sheet1 == null) {
                                 wb = new HSSFWorkbook();
-                                wb.createSheet(ControllerSerialNumber  + ".xls");
+                                wb.createSheet(ControllerSerialNumber + ".xls");
                             }
                             try {
                                 FileOutputStream os = new FileOutputStream(dirName);

@@ -3,7 +3,6 @@ package activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -49,7 +48,6 @@ import com.google.zxing.integration.android.IntentResult;
 import com.shaktipumplimited.SetParameter.PairedDeviceActivity;
 import com.shaktipumplimited.SettingModel.AllPopupUtil;
 import com.shaktipumplimited.retrofit.BaseRequest;
-import com.shaktipumplimited.retrofit.RequestReciever;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
@@ -64,11 +62,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
@@ -79,10 +75,8 @@ import bean.InstallationBean;
 import database.DatabaseHelper;
 import de.hdodenhof.circleimageview.CircleImageView;
 import debugapp.Bean.SimDetailsInfoResponse;
-import debugapp.BlueToothDebugNewActivity;
 import debugapp.GlobalValue.Constant;
 import debugapp.GlobalValue.NewSolarVFD;
-import debugapp.GlobalValue.UtilMethod;
 import debugapp.VerificationCodeModel;
 import debugapp.localDB.DatabaseHelperTeacher;
 import utility.CustomUtility;
@@ -1349,16 +1343,36 @@ public class InstallationInitial extends BaseActivity {
             @Override
             public void onClick(View v) {
                 String mSimNumberData = edtSimNumberIDID.getText().toString().trim();
-                if (mSimNumberData.equalsIgnoreCase("")) {
+                if (mSimNumberData.isEmpty()) {
                     Toast.makeText(mContext, "Please enter sim number", Toast.LENGTH_SHORT).show();
                 } else {
-                    long iiii = mDatabaseHelperTeacher.insertSimInfoData(controller, mSimNumberData, Constant.BILL_NUMBER_UNIC, Constant.BILL_NUMBER_UNIC, MUserId, true);
-                    Toast.makeText(mContext, "Sim number insterted successfully!", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
+                    List<SimDetailsInfoResponse> simArraylist = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
+                    if(simArraylist.size()>0){
+
+                               for (int i=0; i<simArraylist.size(); i++){
+
+                                   if(!simArraylist.get(i).getDEVICENOSIMMOB().equals(mSimNumberData)){
+                                       addSimIntoDatabse(mSimNumberData,dialog);
+                                   }else {
+                                       CustomUtility.ShowToast("Sim number already added, please try to add another number.",InstallationInitial.this);
+                                   }
+                               }
+
+                    }else {
+                       addSimIntoDatabse(mSimNumberData, dialog);
+
+                    }
+
                 }
             }
         });
         dialog.show();
+    }
+
+    private void addSimIntoDatabse(String mSimNumberData, Dialog dialog) {
+        long iiii = mDatabaseHelperTeacher.insertSimInfoData(controller, mSimNumberData, Constant.BILL_NUMBER_UNIC, Constant.BILL_NUMBER_UNIC, MUserId, true);
+        Toast.makeText(mContext, "Sim number insterted successfully!", Toast.LENGTH_SHORT).show();
+        dialog.dismiss();
     }
 
     private void ibaseUpdateFormPopup() {

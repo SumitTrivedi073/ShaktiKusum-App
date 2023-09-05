@@ -18,7 +18,7 @@ public class dialog4 extends Dialog {
 
     private final DeviceStatusActivity activity;
     private Button search, cancel;
-    private EditText text;
+    private TextView text;
     private final dialog4 thisDialog;
 
     public dialog4(DeviceStatusActivity context) {
