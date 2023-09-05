@@ -493,7 +493,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         rlvBT_9_ID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dirName = getMediaFilePath("Data Extract", "Month" + ControllerSerialNumber + "_" + Calendar.getInstance().getTimeInMillis() + ".xls");
+                dirName = getMediaFilePath("", "Month_" + ControllerSerialNumber + ".xls");
 
                 if (!dirName.isEmpty()) {
                     if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
@@ -3061,7 +3061,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                         } else {
                             if (sheet1 == null) {
                                 wb = new HSSFWorkbook();
-                                wb.createSheet(ControllerSerialNumber + "_" + Calendar.getInstance().getTimeInMillis() + ".xls");
+                                wb.createSheet(ControllerSerialNumber  + ".xls");
                             }
                             try {
                                 FileOutputStream os = new FileOutputStream(dirName);
@@ -3082,7 +3082,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
                             if (sheet1 == null) {
                                 wb = new HSSFWorkbook();
-                                wb.createSheet(ControllerSerialNumber + "_" + Calendar.getInstance().getTimeInMillis() + ".xls");
+                                wb.createSheet(ControllerSerialNumber + ".xls");
                             }
                             try {
                                 FileOutputStream os = new FileOutputStream(dirName);
