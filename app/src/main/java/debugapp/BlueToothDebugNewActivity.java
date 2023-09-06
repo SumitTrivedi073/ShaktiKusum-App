@@ -38,6 +38,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 
 import com.android.volley.Request;
@@ -109,12 +110,6 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     private static Sheet sheet1 = null;
     private static Row row;
     private static Cell c = null;
-    private final String MDeviceId = "null";
-    private final String MLoginType = "null";
-    private final String allCammand = "AT+CPIN?";
-    //private String []  AllCommandArray ={"AT+CPIN?\r\n","AT+GSN\r\n","AT+CIMI\r\n","AT+QINISTAT\r\n","AT+CSQ\r\n","AT+CREG?\r\n","AT+CGREG?\r\n","AT+CGDCONT?\r\n","AT+QICSGP?\r\n"};
-    private final String[] AllCommandArray = {"AT+GSN\r\n", "AT+CIMI\r\n", "AT+QINISTAT\r\n", "AT+CSQ\r\n", "AT+CREG?\r\n", "AT+CGREG?\r\n", "AT+CGDCONT?\r\n", "AT+QICSGP?\r\n"};
-    private final boolean mBoolflagCheck = false;
     int latLenght;
     int longLenght;
     BluetoothSocket btSocket;
@@ -175,12 +170,6 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     int mvDay = 0;
     int mvMonth = 0;
     int mvYear = 0;
-    int mvHournew = 0;
-    int mvMinutenew = 0;
-    String mvFaultnew = "";
-    float fvTotalEnergy = 0;
-    float fvTotalFlow = 0;
-    float fvTotalTime = 0;
     int mmCount = 0;
     String mvHour;
     String mvMinute;
@@ -223,8 +212,9 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     private RelativeLayout rlvLoadingViewID;
     private TextView txtHeadingLabelID;
     private String MEmpType = "null", version;
-    private String ControllerSerialNumber;
+    private String ControllerSerialNumber,debugDataExtract;
     private static Cell cell = null;
+    CardView submitBtnCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -260,6 +250,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         mSimDetailsInfoResponse = new ArrayList<>();
         if (getIntent().getExtras() != null) {
             ControllerSerialNumber = getIntent().getStringExtra(Constant.ControllerSerialNumber);
+            debugDataExtract = getIntent().getStringExtra(Constant.debugDataExtract);
         }
 
         try {
@@ -292,12 +283,19 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         rlvBT_9_ID = findViewById(R.id.rlvBT_9_ID);
         lvlMainTextContainerID = findViewById(R.id.lvlMainTextContainerID);
         edtPutCommandID = findViewById(R.id.edtPutCommandID);
+        submitBtnCard = findViewById(R.id.submitBtnCard);
         mIntCheckDeviceType = 0;
 
 
         changeButtonVisibilityRLV(true, 0.5f, rlvBT_S1_ID);
         changeButtonVisibilityRLV(true, 0.5f, rlvBT_S2_ID);
         changeButtonVisibilityRLV(false, 0.5f, rlvBT_7_ID_save);
+
+        if(debugDataExtract.equals("true")){
+            submitBtnCard.setVisibility(View.GONE);
+            imgBTShareFILEID.setVisibility(View.GONE);
+            imgBTSyncFILEID.setVisibility(View.GONE);
+        }
         setClickEventListner();
         getGpsLocation();
         try {
@@ -379,19 +377,6 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
 
                 try {
-                   /* mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
-                    mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
-
-                    if (UtilMethod.isOnline(mContext)) {
-                        if (mSimDetailsInfoResponse.size() > 0)
-                            mSimDetailsInfoResponse.clear();
-                        mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
-                        SubmitData();
-                    } else {
-                        saveDataLocaly();
-                    }*/
-
-
                     WebURL.BT_DEVICE_NAME = "";
                     WebURL.BT_DEVICE_MAC_ADDRESS = "";
                     Constant.BT_DEVICE_NAME = "";
@@ -1753,7 +1738,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             scrlViewID.fullScroll(View.FOCUS_DOWN);
             baseRequest.hideLoader();
 
-             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")) {
+             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0") && debugDataExtract.equals("false")) {
                 ShowAlertResponse();
             } else {
                 if (CustomUtility.isInternetOn(getApplicationContext())) {
@@ -2077,7 +2062,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             baseRequest.hideLoader();
             WebURL.SERVER_CONNECTIVITY_OK = mCheckServerConnectivityValue;
 
-             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")) {
+             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")&& debugDataExtract.equals("false")) {
                 ShowAlertResponse();
             } else {
                 if (CustomUtility.isInternetOn(getApplicationContext())) {
@@ -2534,7 +2519,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
             WebURL.SERVER_CONNECTIVITY_OK = mCheckServerConnectivityValue;
 
-              if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")) {
+              if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")&& debugDataExtract.equals("false")) {
                 ShowAlertResponse();
             } else {
                 if (CustomUtility.isInternetOn(getApplicationContext())) {
@@ -2725,7 +2710,10 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             } catch (Exception e) {
                 e.printStackTrace();
                 baseRequest.hideLoader();
-                CustomUtility.ShowToast(getResources().getString(R.string.pleasetryAgain),mContext);
+
+                Message mess = new Message();
+                mess.obj = getResources().getString(R.string.pleasetryAgain);
+                mHandler.sendMessage(mess);
                 return false;
             }
             return false;

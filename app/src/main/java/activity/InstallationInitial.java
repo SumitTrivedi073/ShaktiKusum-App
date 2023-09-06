@@ -257,6 +257,7 @@ public class InstallationInitial extends BaseActivity {
                     if (WebURL.BT_DEVICE_NAME.equalsIgnoreCase("") || WebURL.BT_DEVICE_MAC_ADDRESS.equalsIgnoreCase("")) {
                         Intent intent = new Intent(mContext, PairedDeviceActivity.class);
                         intent.putExtra(Constant.ControllerSerialNumber, inst_controller_ser.getText().toString().trim());
+                        intent.putExtra(Constant.debugDataExtract, "false");
                         startActivity(intent);
                     }
                 } else {

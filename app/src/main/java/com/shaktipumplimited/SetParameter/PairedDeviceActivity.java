@@ -27,6 +27,7 @@ import com.shaktipumplimited.shaktikusum.R;
 
 import activity.BaseActivity;
 import debugapp.GlobalValue.Constant;
+import utility.CustomUtility;
 
 public class PairedDeviceActivity extends BaseActivity {
 
@@ -42,7 +43,7 @@ public class PairedDeviceActivity extends BaseActivity {
 
     private BluetoothAdapter bAdapter = BluetoothAdapter.getDefaultAdapter();
 
-    String ControllerSerialNumber;
+    String ControllerSerialNumber,debugDataExtract;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +62,10 @@ public class PairedDeviceActivity extends BaseActivity {
         rclSettingListViewID = findViewById(R.id.rclSettingListViewID);
         txtPairedDeviceListID = findViewById(R.id.txtPairedDeviceListID);
 
-        lLayout = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
-        rclSettingListViewID.setNestedScrollingEnabled(false);
-        rclSettingListViewID.setLayoutManager(lLayout);
 
         if (getIntent().getExtras() != null) {
             ControllerSerialNumber = getIntent().getStringExtra(Constant.ControllerSerialNumber);
+            debugDataExtract = getIntent().getStringExtra(Constant.debugDataExtract);
         }
 
         try {
@@ -114,7 +113,7 @@ public class PairedDeviceActivity extends BaseActivity {
     }
 
     private void pairedDeviceList() {
-
+        CustomUtility.showProgressDialogue(PairedDeviceActivity.this);
         if (bAdapter == null) {
             Toast.makeText(getApplicationContext(), "Bluetooth Not Supported", Toast.LENGTH_SHORT).show();
         } else {
@@ -132,12 +131,13 @@ public class PairedDeviceActivity extends BaseActivity {
                 if (recyclerViewAdapter != null)
                     recyclerViewAdapter = null;
 
-                recyclerViewAdapter = new BTPairedDeviceAdapter(mContext, mDeviceNameList,mDeviceMACAddressList,ControllerSerialNumber);
-
+                recyclerViewAdapter = new BTPairedDeviceAdapter(mContext, mDeviceNameList,mDeviceMACAddressList,ControllerSerialNumber,debugDataExtract);
+                rclSettingListViewID.setHasFixedSize(true);
                 rclSettingListViewID.setAdapter(recyclerViewAdapter);
+                CustomUtility.hideProgressDialog(PairedDeviceActivity.this);
             }
-            else
-            {
+            else {
+                CustomUtility.hideProgressDialog(PairedDeviceActivity.this);
                 Toast.makeText(getApplicationContext(), "No Paired Bluetooth Devices Found.", Toast.LENGTH_LONG).show();
             }
         }

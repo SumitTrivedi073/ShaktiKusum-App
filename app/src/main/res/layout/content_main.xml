@@ -183,6 +183,50 @@
 
                 </androidx.cardview.widget.CardView>
 
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/checkRMSStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:src="@color/blue_fb"
+                    card_view:cardCornerRadius="@dimen/_5sdp"
+                    card_view:cardElevation="@dimen/_5sdp">
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Check RMS Status"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_gravity="start|center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_14sdp"
+                        android:fontFamily="@font/open_sans_bold" />
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/debugDataExtract"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:src="@color/blue_fb"
+                    card_view:cardCornerRadius="@dimen/_5sdp"
+                    card_view:cardElevation="@dimen/_5sdp">
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Debug and Data Extraction"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:layout_gravity="start|center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_14sdp"
+                        android:fontFamily="@font/open_sans_bold" />
+
+                </androidx.cardview.widget.CardView>
+
 
                 <LinearLayout
                     android:id="@+id/lin1"

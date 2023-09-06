@@ -396,7 +396,7 @@ android:visibility="gone"
 
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35sdp"
-            android:id="@+id/cardOneYearID22"
+            android:id="@+id/submitBtnCard"
             android:background="@android:color/transparent"
             android:elevation="@dimen/_15sdp"
             android:layout_weight="1"
@@ -408,6 +408,7 @@ android:visibility="gone"
                 android:id="@+id/rlvBT_7_ID_save"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+
                 android:background="@drawable/blue_btn_round">
 
                 <TextView

@@ -3,6 +3,7 @@ package activity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -12,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,6 +39,8 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
 import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.tasks.Task;
+import com.shaktipumplimited.SetParameter.PairedDeviceActivity;
+import com.shaktipumplimited.SettingModel.AllPopupUtil;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
@@ -51,12 +55,13 @@ import bean.ItemNameBean;
 import bean.LoginBean;
 import database.DatabaseHelper;
 import debugapp.ActivitySurveyList;
+import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
 @SuppressWarnings("resource")
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private static DatabaseHelper dataHelper;
     private AppUpdateManager appUpdateManager;
@@ -78,7 +83,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private final Handler progressBarHandler = new Handler();
     ProgressDialog progressBar;
 
-    CardView cardSurveySiteID,SurveySiteC,pendingFeedback,pendingUnloadingVerification;
+    CardView cardSurveySiteID,SurveySiteC,pendingFeedback,pendingUnloadingVerification,checkRMSStatus,debugDataExtract;
 
 
 
@@ -137,7 +142,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         pendingUnloadingVerification = findViewById(R.id.pendingUnloadingVerification);
         lin1 =  findViewById(R.id.lin1);
         lin2 =  findViewById(R.id.lin2);
-
+        checkRMSStatus = findViewById(R.id.checkRMSStatus);
+        debugDataExtract= findViewById(R.id.debugDataExtract);
         flvViewFlipperID =  findViewById(R.id.flvViewFlipperID);
         SurveySiteC =  findViewById(R.id.SurveySiteC);
         flvViewFlipperID.setFlipInterval(3000); //set 1 seconds for interval time
@@ -150,27 +156,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             Toast.makeText(context, "Please Connect to Internet", Toast.LENGTH_SHORT).show();
         }
 
-        cardSurveySiteID.setOnClickListener(v -> {
-            Intent mIntent = new Intent(context, ActivitySurveyList.class);
-            startActivity(mIntent);
-        });
+        cardSurveySiteID.setOnClickListener(this);
+        SurveySiteC.setOnClickListener(this);
+        pendingFeedback.setOnClickListener(this);
+        pendingUnloadingVerification.setOnClickListener(this);
 
-        SurveySiteC.setOnClickListener(v -> {
-            Intent mIntent = new Intent(context, KusumCSurveyListActivty.class);
-            startActivity(mIntent);
-        });
+        checkRMSStatus.setOnClickListener(this);
 
-        pendingFeedback.setOnClickListener(view -> {
-            Intent mIntent = new Intent(context, PendingFeedbackActivity.class);
-            startActivity(mIntent);
-        });
-        pendingUnloadingVerification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent mIntent = new Intent(context, PendingUnloadVerificationActivity.class);
-                startActivity(mIntent);
-            }
-        });
+        debugDataExtract.setOnClickListener(this);
 
         appUpdateManager = AppUpdateManagerFactory.create(getApplicationContext());
         checkUpdate();
@@ -343,9 +336,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         if (dataHelper.getItemData() != null && dataHelper.getItemData().size() > 0) {
         itemNameBeans = dataHelper.getItemData();
-        /*ItemNameBean itemNameBean = new ItemNameBean("000","Installation Offline");
-        itemNameBeans.add(itemNameBean);*/
-
 
             lin1.setVisibility(View.VISIBLE);
             lin2.setVisibility(View.GONE);
@@ -361,6 +351,61 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         } else {
             lin1.setVisibility(View.GONE);
             lin2.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.cardSurveySiteID:
+                Intent mIntent = new Intent(context, ActivitySurveyList.class);
+                startActivity(mIntent);
+                break;
+
+            case R.id.SurveySiteC:
+                Intent mIntent1 = new Intent(context, KusumCSurveyListActivty.class);
+                startActivity(mIntent1);
+                break;
+
+
+            case R.id.pendingFeedback:
+                Intent mIntent2 = new Intent(context, PendingFeedbackActivity.class);
+                startActivity(mIntent2);
+                break;
+
+
+            case R.id.pendingUnloadingVerification:
+                Intent mIntent3 = new Intent(context, PendingUnloadVerificationActivity.class);
+                startActivity(mIntent3);
+                break;
+
+
+            case R.id.checkRMSStatus:
+                Intent mIntent4 = new Intent(context, CheckRMSActivity.class);
+                startActivity(mIntent4);
+                break;
+
+            case R.id.debugDataExtract:
+                WebURL.BT_DEVICE_NAME = "";
+                WebURL.BT_DEVICE_MAC_ADDRESS = "";
+                Constant.Bluetooth_Activity_Navigation = 1;///Debug
+
+                BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                if (mBluetoothAdapter.isEnabled()) {
+                    if (AllPopupUtil.pairedDeviceListGloable(context)) {
+                        if (WebURL.BT_DEVICE_NAME.equalsIgnoreCase("") || WebURL.BT_DEVICE_MAC_ADDRESS.equalsIgnoreCase("")) {
+                            Intent intent = new Intent(context, PairedDeviceActivity.class);
+                            intent.putExtra(Constant.ControllerSerialNumber, "");
+                            intent.putExtra(Constant.debugDataExtract, "true");
+                            startActivity(intent);
+                        }
+                    } else {
+                        startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
+                    }
+                } else {
+                    startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
+                }
+                break;
         }
     }
 

@@ -55,6 +55,11 @@
 
 
         <activity
+            android:name="activity.CheckRMSActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+
+        <activity
             android:name="activity.PendingUnloadVerificationActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
