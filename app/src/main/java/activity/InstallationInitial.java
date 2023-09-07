@@ -83,7 +83,7 @@ import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-@BuildCompat.PrereleaseSdkCheck
+
 public class InstallationInitial extends BaseActivity {
 
 

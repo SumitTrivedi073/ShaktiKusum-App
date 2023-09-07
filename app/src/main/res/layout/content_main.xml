@@ -96,8 +96,11 @@
                 android:orientation="vertical"
                 android:padding="4dp">
 
+
+
+
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cardSurveySiteID"
+                    android:id="@+id/pendingInstallationVerification"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40sdp"
                     android:layout_margin="@dimen/_5sdp"
@@ -105,59 +108,29 @@
                     card_view:cardCornerRadius="@dimen/_5sdp"
                     card_view:cardElevation="@dimen/_5sdp">
 
-                        <TextView
-                            android:id="@+id/item_txt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/sitesurvey_B"
-                             android:layout_gravity="start|center"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="@dimen/_14sdp"
-                            android:layout_marginLeft="@dimen/_10sdp"
-                             android:fontFamily="@font/open_sans_bold" />
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal"
+                       android:layout_gravity="center">
 
-                </androidx.cardview.widget.CardView>
+                       <ImageView
+                           android:id="@+id/icon_img"
+                           android:layout_width="@dimen/_30sdp"
+                           android:layout_height="@dimen/_30sdp"
+                           android:layout_margin="@dimen/_5sdp"
+                           android:src="@mipmap/verification_pending"/>
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/SurveySiteC"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_40sdp"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:src="@color/blue_fb"
-                    card_view:cardCornerRadius="@dimen/_5sdp"
-                    card_view:cardElevation="@dimen/_5sdp">
+                       <TextView
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sitesurvey_C"
-                        android:layout_gravity="start|center"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="@dimen/_14sdp"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:fontFamily="@font/open_sans_bold" />
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/pendingFeedback"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_40sdp"
-                    android:layout_margin="@dimen/_5sdp"
-                    android:src="@color/blue_fb"
-                    card_view:cardCornerRadius="@dimen/_5sdp"
-                    card_view:cardElevation="@dimen/_5sdp">
-
-                    <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Pending Feedback "
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_gravity="start|center"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="@dimen/_14sdp"
-                        android:fontFamily="@font/open_sans_bold" />
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:text="Pending Installtion Verification"
+                           android:layout_gravity="start|center"
+                           android:textColor="@color/colorPrimary"
+                           android:textSize="@dimen/_14sdp"
+                           android:fontFamily="@font/open_sans_bold" />
+                   </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
 
@@ -169,17 +142,26 @@
                     android:src="@color/blue_fb"
                     card_view:cardCornerRadius="@dimen/_5sdp"
                     card_view:cardElevation="@dimen/_5sdp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center">
 
+                    <ImageView
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:src="@mipmap/verification_pending"/>
                     <TextView
-
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Pending Unloading Verification "
-                        android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_gravity="start|center"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/_14sdp"
                         android:fontFamily="@font/open_sans_bold" />
+                    </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
 
@@ -192,16 +174,26 @@
                     card_view:cardCornerRadius="@dimen/_5sdp"
                     card_view:cardElevation="@dimen/_5sdp">
 
-                    <TextView
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center">
 
+                    <ImageView
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:src="@mipmap/solar_device"/>
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Check RMS Status"
-                        android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_gravity="start|center"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/_14sdp"
                         android:fontFamily="@font/open_sans_bold" />
+                    </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
 
@@ -214,16 +206,27 @@
                     card_view:cardCornerRadius="@dimen/_5sdp"
                     card_view:cardElevation="@dimen/_5sdp">
 
-                    <TextView
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center">
 
+                    <ImageView
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:src="@mipmap/solar_dongle"/>
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Debug and Data Extraction"
-                        android:layout_marginLeft="@dimen/_10sdp"
-                        android:layout_gravity="start|center"
+                       android:layout_gravity="start|center"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/_14sdp"
                         android:fontFamily="@font/open_sans_bold" />
+
+                    </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
 
@@ -240,7 +243,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:nestedScrollingEnabled="true"
-                        android:divider="@color/cardview_light_background" />
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
                 </LinearLayout>
 
                 <LinearLayout

@@ -1,12 +1,15 @@
 package bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 12/30/2016.
  */
-public class InstallationListBean {
+public class InstallationListBean implements Serializable {
     public String enqdoc, pernr, customer_name, father_name, billno, kunnr, gstbillno, billdate, dispdate,
             state, statetxt, city, citytxt, tehsil, village, contact_no, controller, motor, pump, regisno,
-            projectno, loginno, moduleqty, address, simno, beneficiary, set_matno, simha2, sync, CONTACT_NO, noOfModule, HP;
+            projectno, loginno, moduleqty, address, simno, beneficiary, set_matno, simha2, sync, CONTACT_NO, noOfModule, HP,
+            pump_ser,motor_ser,controller_ser;
 
 
     public InstallationListBean() {
@@ -17,39 +20,42 @@ public class InstallationListBean {
                                 String city_text, String tehsil_text, String village_text, String contact_no_text, String controller_text, String motor_text,
                                 String pump_text, String regisno_text, String projectno_text, String loginno_text, String moduleqty_text, String address_text,
                                 String simno_text, String beneficiary_text, String set_matno_text, String simha2_text, String sync_text,
-                                String mCONTACT_NO, String NoOfModule, String hp) {
-        enqdoc = enqdoc_text;
-        pernr = pernr_text;
-        customer_name = customer_name_text;
-        father_name = father_name_text;
-        billno = bill_no_text;
-        kunnr = kunnr_text;
-        gstbillno = gstbill_no_text;
-        billdate = bill_date_text;
-        dispdate = disp_date_text;
-        state = stateid;
-        statetxt = state_text;
-        city = cityid;
-        citytxt = city_text;
-        tehsil = tehsil_text;
-        village = village_text;
-        contact_no = contact_no_text;
-        controller = controller_text;
-        motor = motor_text;
-        pump = pump_text;
-        regisno = regisno_text;
-        projectno = projectno_text;
-        loginno = loginno_text;
-        moduleqty = moduleqty_text;
-        address = address_text;
-        simno = simno_text;
-        beneficiary = beneficiary_text;
-        set_matno = set_matno_text;
-        simha2 = simha2_text;
-        sync = sync_text;
-        CONTACT_NO = mCONTACT_NO;
-        noOfModule = NoOfModule;
-        HP = hp;
+                                String mCONTACT_NO, String NoOfModule, String hp, String pump_ser, String motor_ser, String controller_ser) {
+        this.enqdoc = enqdoc_text;
+        this.pernr = pernr_text;
+        this.customer_name = customer_name_text;
+        this.father_name = father_name_text;
+        this.billno = bill_no_text;
+        this.kunnr = kunnr_text;
+        this.gstbillno = gstbill_no_text;
+        this.billdate = bill_date_text;
+        this.dispdate = disp_date_text;
+        this.state = stateid;
+        this.statetxt = state_text;
+        this.city = cityid;
+        this.citytxt = city_text;
+        this.tehsil = tehsil_text;
+        this.village = village_text;
+        this.contact_no = contact_no_text;
+        this.controller = controller_text;
+        this.motor = motor_text;
+        this. pump = pump_text;
+        this.regisno = regisno_text;
+        this. projectno = projectno_text;
+        this. loginno = loginno_text;
+        this. moduleqty = moduleqty_text;
+        this. address = address_text;
+        this. simno = simno_text;
+        this. beneficiary = beneficiary_text;
+        this.set_matno = set_matno_text;
+        this.simha2 = simha2_text;
+        this.sync = sync_text;
+        this.CONTACT_NO = mCONTACT_NO;
+        this.noOfModule = NoOfModule;
+        this.HP = hp;
+        this.pump_ser = pump_ser;
+        this.motor_ser = motor_ser;
+        this.controller_ser = controller_ser;
     }
 
     public String getCUS_CONTACT_NO() {
@@ -314,5 +320,29 @@ public class InstallationListBean {
 
     public void setHP(String HP) {
         this.HP = HP;
+    }
+
+    public String getPump_ser() {
+        return pump_ser;
+    }
+
+    public void setPump_ser(String pump_ser) {
+        this.pump_ser = pump_ser;
+    }
+
+    public String getMotor_ser() {
+        return motor_ser;
+    }
+
+    public void setMotor_ser(String motor_ser) {
+        this.motor_ser = motor_ser;
+    }
+
+    public String getController_ser() {
+        return controller_ser;
+    }
+
+    public void setController_ser(String controller_ser) {
+        this.controller_ser = controller_ser;
     }
 }

@@ -37,6 +37,8 @@ public class Constant {
 
     public static String regisno = "regisno";
 
+    public static String unloadingData = "unloadingData";
+
     public static String debugDataExtract = "debugDataExtract";
 
 }

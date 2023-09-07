@@ -195,6 +195,7 @@
     <string name="capture">Capture</string>
     <string name="Click_Again">Click Again</string>
     <string name="cant_proceed">Your not able to proceed with this device because Drive Number are not matched.Please Update the I-Base first</string>
+    <string name="driveNumberNotMatched">Your not able to proceed with this device because Drive Number are not matched.</string>
     <string name="siteAuditImages">Site Audit Images</string>
     <string name="foundation_photo">Foundation Photo</string>
     <string name="Structure_Assembly_photo">Structure Assembly Photo</string>
@@ -213,7 +214,7 @@
     <string name="enter_allModuleSrno">Please Enter all module serial no.</string>
     <string name="moduleMultipleTime">Module No. are entered multiple times, please change it</string>
     <string name="sitesurvey_B">Site Survey Kusum (B)</string>
-    <string name="sitesurvey_C">Site Survey kusum (C)</string>
+    <string name="sitesurvey_C">Survey</string>
     <string name="farmer_name">Farmer Name</string>
     <string name="application_no">Application No.</string>
     <string name="nameofvillage">Name of village, block and district</string>
@@ -292,6 +293,8 @@
     <string name="savedInLocalDatabase">Your Data Saved in local Database, please check your internet connection and try again!</string>
     <string name="pleasetryAgain">Please try again</string>
     <string name="pairedDevice">Please make sure device is paired or connected via bluetooth!</string>
+    <string name="unloading_material">Unloading Material List</string>
+    <string name="routeplan">Route Plan List</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

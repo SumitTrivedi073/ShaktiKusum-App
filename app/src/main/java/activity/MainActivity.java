@@ -83,7 +83,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private final Handler progressBarHandler = new Handler();
     ProgressDialog progressBar;
 
-    CardView cardSurveySiteID,SurveySiteC,pendingFeedback,pendingUnloadingVerification,checkRMSStatus,debugDataExtract;
+    CardView pendingFeedback,pendingUnloadingVerification,checkRMSStatus,debugDataExtract;
 
 
 
@@ -96,9 +96,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         context = this;
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        recyclerView = findViewById(R.id.item_list);
+        pendingFeedback = findViewById(R.id.pendingInstallationVerification);
+        pendingUnloadingVerification = findViewById(R.id.pendingUnloadingVerification);
+        lin1 =  findViewById(R.id.lin1);
+        lin2 =  findViewById(R.id.lin2);
+        checkRMSStatus = findViewById(R.id.checkRMSStatus);
+        debugDataExtract= findViewById(R.id.debugDataExtract);
+        flvViewFlipperID =  findViewById(R.id.flvViewFlipperID);
+
+        flvViewFlipperID.setFlipInterval(3000); //set 1 seconds for interval time
+        flvViewFlipperID.startFlipping();
+
 
         dataHelper = new DatabaseHelper(context);
-
         PackageManager pm = getApplicationContext().getPackageManager();
         String pkgName = getApplicationContext().getPackageName();
         PackageInfo pkgInfo = null;
@@ -113,11 +124,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         LoginBean loginBean = new LoginBean();
 
         emp_type = loginBean.getUsertype();
-
-        Log.e("EMP", "&&&" + emp_type);
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-
         navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -129,25 +136,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         TextView username =  headerView.findViewById(R.id.user_name);
         TextView appversion =  headerView.findViewById(R.id.app_version);
         TextView projname =  headerView.findViewById(R.id.proj_name);
-
         username.setText(CustomUtility.getSharedPreferences(context, "username"));
         projname.setText(CustomUtility.getSharedPreferences(context, "projectname"));
         appversion.setText("Version " + versionName);
         CustomUtility.setSharedPreference(context, "CHECK_OTP_VERIFED", "Y");
-
-
-        cardSurveySiteID = findViewById(R.id.cardSurveySiteID);
-        recyclerView = findViewById(R.id.item_list);
-        pendingFeedback = findViewById(R.id.pendingFeedback);
-        pendingUnloadingVerification = findViewById(R.id.pendingUnloadingVerification);
-        lin1 =  findViewById(R.id.lin1);
-        lin2 =  findViewById(R.id.lin2);
-        checkRMSStatus = findViewById(R.id.checkRMSStatus);
-        debugDataExtract= findViewById(R.id.debugDataExtract);
-        flvViewFlipperID =  findViewById(R.id.flvViewFlipperID);
-        SurveySiteC =  findViewById(R.id.SurveySiteC);
-        flvViewFlipperID.setFlipInterval(3000); //set 1 seconds for interval time
-        flvViewFlipperID.startFlipping();
 
         if (CustomUtility.isInternetOn(getApplicationContext())) {
             new Dashboard().execute();
@@ -156,15 +148,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             Toast.makeText(context, "Please Connect to Internet", Toast.LENGTH_SHORT).show();
         }
 
-        cardSurveySiteID.setOnClickListener(this);
-        SurveySiteC.setOnClickListener(this);
+
         pendingFeedback.setOnClickListener(this);
         pendingUnloadingVerification.setOnClickListener(this);
-
         checkRMSStatus.setOnClickListener(this);
-
         debugDataExtract.setOnClickListener(this);
-
         appUpdateManager = AppUpdateManagerFactory.create(getApplicationContext());
         checkUpdate();
     }
@@ -323,8 +311,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
-
-
     @SuppressLint("WrongConstant")
     @Override
     protected void onResume() {
@@ -341,10 +327,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             lin2.setVisibility(View.GONE);
 
             adapter_item_list = new Adapter_item_list(context, itemNameBeans, onclick);
-
-            LinearLayoutManager layoutManagerSubCategory = new LinearLayoutManager(context);
-            layoutManagerSubCategory.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerView.setLayoutManager(layoutManagerSubCategory);
+            recyclerView.setHasFixedSize(true);
             recyclerView.setAdapter(adapter_item_list);
             adapter_item_list.notifyDataSetChanged();
 
@@ -357,18 +340,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.cardSurveySiteID:
-                Intent mIntent = new Intent(context, ActivitySurveyList.class);
-                startActivity(mIntent);
-                break;
-
-            case R.id.SurveySiteC:
-                Intent mIntent1 = new Intent(context, KusumCSurveyListActivty.class);
-                startActivity(mIntent1);
-                break;
-
-
-            case R.id.pendingFeedback:
+            case R.id.pendingInstallationVerification:
                 Intent mIntent2 = new Intent(context, PendingFeedbackActivity.class);
                 startActivity(mIntent2);
                 break;
@@ -426,6 +398,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             param.add(new BasicNameValuePair("PROJECT_NO", CustomUtility.getSharedPreferences(context, "projectid")));
             param.add(new BasicNameValuePair("PROJECT_LOGIN_NO", CustomUtility.getSharedPreferences(context, "loginid")));
             String login_selec = null, project_no, process_no , process_nm ;
+            Log.e("DashboardURL========>",WebURL.DASHBOARD_DATA +param.toString());
             try {
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
                 StrictMode.setThreadPolicy(policy);

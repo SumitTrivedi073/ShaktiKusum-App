@@ -33,15 +33,13 @@ import debugapp.GlobalValue.NewSolarVFD;
 import utility.CustomUtility;
 import webservice.WebURL;
 
-@BuildCompat.PrereleaseSdkCheck public class Adapter_Installation_list extends RecyclerView.Adapter<Adapter_Installation_list.HomeCategoryViewHolder> {
-    View.OnClickListener onclick_listener;
+public class Adapter_Installation_list extends RecyclerView.Adapter<Adapter_Installation_list.HomeCategoryViewHolder> {
     DatabaseHelper db;
-    InstallationBean installationBean;
     private final Context context;
     private final ArrayList<InstallationListBean> responseList;
     private List<InstallationListBean> SearchesList = null;
     String pernr, billno;
-//    private boolean isOffline;
+
 
     public Adapter_Installation_list(Context context, ArrayList<InstallationListBean> responseList) {
         this.context = context;
@@ -49,7 +47,7 @@ import webservice.WebURL;
         db = new DatabaseHelper(context);
         this.SearchesList = new ArrayList<InstallationListBean>();
         this.SearchesList.addAll(responseList);
-//        this.isOffline = isOffline;
+
     }
 
     @Override
@@ -164,13 +162,17 @@ import webservice.WebURL;
                             e.printStackTrace();
                         }
                         Intent intent = new Intent(context, UnloadInstReportImageActivity.class);
-                        intent.putExtra("vbeln", responseList.get(position).getBillno());
+                        intent.putExtra(Constant.unloadingData,responseList.get(position));
+                        /* intent.putExtra("vbeln", responseList.get(position).getBillno());
                         intent.putExtra("cust_name", custname);
                         intent.putExtra("userid", pernr);
                         intent.putExtra("moduleqty", responseList.get(position).getModuleqty());
                         intent.putExtra("mobile", responseList.get(position).getCUS_CONTACT_NO());
                         intent.putExtra("HP", responseList.get(position).getHP());
-                        intent.putExtra(Constant.regisno, responseList.get(position).getRegisno());
+                        intent.putExtra("HP", responseList.get(position).getHP());
+                        intent.putExtra("HP", responseList.get(position).getHP());
+                        intent.putExtra("HP", responseList.get(position).getHP());
+                        intent.putExtra(Constant.regisno, responseList.get(position).getRegisno());*/
                         context.startActivity(intent);
                     }
             });

@@ -55,6 +55,14 @@
 
 
         <activity
+            android:name="activity.RoutePlanActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity
+            android:name="activity.UnloadList"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity
             android:name="activity.CheckRMSActivity"
             android:screenOrientation="portrait"
             android:exported="false" />
