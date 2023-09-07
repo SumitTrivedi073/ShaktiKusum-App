@@ -65,9 +65,9 @@ public class PairedDeviceActivity extends BaseActivity {
         rclSettingListViewID.setNestedScrollingEnabled(false);
         rclSettingListViewID.setLayoutManager(lLayout);
 
-       if( getIntent().getExtras()!=null){
-           ControllerSerialNumber = getIntent().getStringExtra(Constant.ControllerSerialNumber);
-       }
+        if (getIntent().getExtras() != null) {
+            ControllerSerialNumber = getIntent().getStringExtra(Constant.ControllerSerialNumber);
+        }
 
         try {
             bAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -118,6 +118,7 @@ public class PairedDeviceActivity extends BaseActivity {
         if (bAdapter == null) {
             Toast.makeText(getApplicationContext(), "Bluetooth Not Supported", Toast.LENGTH_SHORT).show();
         } else {
+
             Set<BluetoothDevice> pairedDevices = bAdapter.getBondedDevices();
             List mDeviceNameList = new ArrayList();
             List mDeviceMACAddressList = new ArrayList();
@@ -126,14 +127,11 @@ public class PairedDeviceActivity extends BaseActivity {
                     String devicename = device.getName();
                     String macAddress = device.getAddress();
                     mDeviceNameList.add(devicename);
-                    //  mDeviceNameList.add("Name: "+devicename);
-                    // mDeviceMACAddressList.add("MAC Address: "+macAddress);
-                    mDeviceMACAddressList.add(macAddress);
+                     mDeviceMACAddressList.add(macAddress);
                 }
                 if (recyclerViewAdapter != null)
                     recyclerViewAdapter = null;
 
-                // recyclerViewAdapter = new HomeOrderAdapter("sss",getActivity());
                 recyclerViewAdapter = new BTPairedDeviceAdapter(mContext, mDeviceNameList,mDeviceMACAddressList,ControllerSerialNumber);
 
                 rclSettingListViewID.setAdapter(recyclerViewAdapter);

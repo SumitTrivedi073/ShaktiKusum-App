@@ -258,7 +258,7 @@ public class BaseRequest extends BaseRequestParser {
         APINumber_ = APINumber;
 
         //  showLoader();
-        String baseURL = NewSolarVFD.BASE_URL_VK + remainingURL;
+        String baseURL = remainingURL;
 
         if (!baseURL.endsWith("?")) {
             baseURL = baseURL + "?";

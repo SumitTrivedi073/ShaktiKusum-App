@@ -264,6 +264,7 @@ public class SiteAuditList extends BaseActivity {
             param.add(new BasicNameValuePair("stateid", stateId));
             param.add(new BasicNameValuePair("districtid", districtId));
             param.add(new BasicNameValuePair("userid", userid));
+            param.add(new BasicNameValuePair("project",CustomUtility.getSharedPreferences(context,"projectid")));
 
             String login_selec = null;
 

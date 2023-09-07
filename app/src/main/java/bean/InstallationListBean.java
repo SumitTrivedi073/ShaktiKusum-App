@@ -4,72 +4,20 @@ package bean;
  * Created by Administrator on 12/30/2016.
  */
 public class InstallationListBean {
-    public String enqdoc,
-            pernr,
-            customer_name,
-            father_name,
-            billno,
-            kunnr,
-            gstbillno,
-            billdate,
-            dispdate,
-            state,
-            statetxt,
-            city,
-            citytxt,
-            tehsil,
-            village,
-            contact_no,
-            controller,
-            motor,
-            pump,
-            regisno,
-            projectno,
-            loginno,
-            moduleqty,
-            address,
-            simno,
-            beneficiary,
-            set_matno,
-            simha2,
-            sync,
-            CONTACT_NO,noOfModule;
-//    streetName;
+    public String enqdoc, pernr, customer_name, father_name, billno, kunnr, gstbillno, billdate, dispdate,
+            state, statetxt, city, citytxt, tehsil, village, contact_no, controller, motor, pump, regisno,
+            projectno, loginno, moduleqty, address, simno, beneficiary, set_matno, simha2, sync, CONTACT_NO, noOfModule, HP;
 
-    public InstallationListBean() {}
 
-    public InstallationListBean(String enqdoc_text,
-                                String pernr_text,
-                                String customer_name_text,
-                                String father_name_text,
-                                String bill_no_text,
-                                String kunnr_text,
-                                String gstbill_no_text,
-                                String bill_date_text,
-                                String disp_date_text,
-                                String stateid,
-                                String state_text,
-                                String cityid,
-                                String city_text,
-                                String tehsil_text,
-                                String village_text,
-                                String contact_no_text,
-                                String controller_text,
-                                String motor_text,
-                                String pump_text,
-                                String regisno_text,
-                                String projectno_text,
-                                String loginno_text,
-                                String moduleqty_text,
-                                String address_text,
-                                String simno_text,
-                                String beneficiary_text,
-                                String set_matno_text,
-                                String simha2_text,
-                                String sync_text,
-                                String mCONTACT_NO,
-                                 String NoOfModule
-    ) {
+    public InstallationListBean() {
+    }
+
+    public InstallationListBean(String enqdoc_text, String pernr_text, String customer_name_text, String father_name_text, String bill_no_text, String kunnr_text,
+                                String gstbill_no_text, String bill_date_text, String disp_date_text, String stateid, String state_text, String cityid,
+                                String city_text, String tehsil_text, String village_text, String contact_no_text, String controller_text, String motor_text,
+                                String pump_text, String regisno_text, String projectno_text, String loginno_text, String moduleqty_text, String address_text,
+                                String simno_text, String beneficiary_text, String set_matno_text, String simha2_text, String sync_text,
+                                String mCONTACT_NO, String NoOfModule, String hp) {
         enqdoc = enqdoc_text;
         pernr = pernr_text;
         customer_name = customer_name_text;
@@ -101,6 +49,7 @@ public class InstallationListBean {
         sync = sync_text;
         CONTACT_NO = mCONTACT_NO;
         noOfModule = NoOfModule;
+        HP = hp;
     }
 
     public String getCUS_CONTACT_NO() {
@@ -349,5 +298,21 @@ public class InstallationListBean {
 
     public void setNoOfModule(String noOfModule) {
         this.noOfModule = noOfModule;
+    }
+
+    public String getCONTACT_NO() {
+        return CONTACT_NO;
+    }
+
+    public void setCONTACT_NO(String CONTACT_NO) {
+        this.CONTACT_NO = CONTACT_NO;
+    }
+
+    public String getHP() {
+        return HP;
+    }
+
+    public void setHP(String HP) {
+        this.HP = HP;
     }
 }

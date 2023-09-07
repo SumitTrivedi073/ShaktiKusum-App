@@ -114,13 +114,9 @@ public class dialog5 extends Dialog {
                             index1 = arg0.getSelectedItemPosition();
                             spinner_district_txt = spinner_district.getSelectedItem().toString();
                             if (!spinner_district_txt.equalsIgnoreCase("Select District") && !TextUtils.isEmpty(spinner_district_txt)) {
-
                                 spinner_districtid = db.getStateDistrictValue(DatabaseHelper.KEY_DISTRICT, spinner_district_txt);
-
                                 CustomUtility.setSharedPreference(activity, "districtid", spinner_districtid);
                                 CustomUtility.setSharedPreference(activity, "districttext", spinner_district_txt);
-
-                                Log.e("ID1", "&&&" + spinner_districtid);
                             } else {
                                 Toast.makeText(activity, "Please Select District.", Toast.LENGTH_SHORT).show();
                                 CustomUtility.setSharedPreference(activity, "districtid", "");

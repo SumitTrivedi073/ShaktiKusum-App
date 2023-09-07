@@ -3,9 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp"
+    android:padding="@dimen/_5sdp"
     android:textColor="@color/colorAccent"
-    android:textSize="@dimen/size_small15"></TextView>
+    android:background="@color/white"
+    android:text="@string/aadhar_no"
+    android:fontFamily="sans-serif-condensed-medium"
+    android:textSize="@dimen/size_small15"/>
 
 

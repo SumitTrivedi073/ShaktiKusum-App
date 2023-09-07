@@ -79,7 +79,7 @@ import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-@SuppressWarnings({"ResultOfMethodCallIgnored", "resource"})
+
 public class Login extends AppCompatActivity {
 
     private AppUpdateManager appUpdateManager;
@@ -149,16 +149,14 @@ public class Login extends AppCompatActivity {
         projectlist.clear();
         projectlist = dataHelper.getList(DatabaseHelper.KEY_PROJ_TXT, null);
 
-        // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<>(context, R.layout.spinner_item_center, projectlist);
-
-        // Drop down layout style - list view with radio button
-        dataAdapter1.setDropDownViewResource(R.layout.spinner_item_center);
-
-        // attaching data adapter to spinner
-        spinner_project_type.setAdapter(dataAdapter1);
+         ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<>(context, R.layout.spinner_item_center, projectlist);
+         dataAdapter1.setDropDownViewResource(R.layout.spinner_item_center);
+         spinner_project_type.setAdapter(dataAdapter1);
 
 
+
+
+        getUserTypeValue();
         spinner_project_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -170,22 +168,11 @@ public class Login extends AppCompatActivity {
                 if (!spinner_project_type_text.equalsIgnoreCase("Select project type") && !TextUtils.isEmpty(spinner_project_type_text)) {
                     loginlist.clear();
                     loginlist = dataHelper.getList(DatabaseHelper.KEY_LOGIN_TXT, spinner_project_type_text);
-
-                    Log.e("spinner_project_type_text1==","list"+ loginlist);
-                    // Creating adapter for spinner
                     ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(context, R.layout.spinner_item_center, loginlist);
-
-                    // Drop down layout style - list view with radio button
                     dataAdapter.setDropDownViewResource(R.layout.spinner_item_center);
-
-                    // attaching data adapter to spinner
                     spinner_login_type.setAdapter(dataAdapter);
-
                     spinner_proj_id = dataHelper.getProjLoginValue(DatabaseHelper.KEY_PROJ_ID, spinner_project_type_text);
-
                     CustomUtility.setSharedPreference(context, "projectid", spinner_proj_id);
-
-                    System.out.println("spinner_proj_id==>>"+spinner_proj_id);
 
                     String projnametxt = spinner_project_type.getSelectedItem().toString();
 
@@ -257,8 +244,7 @@ public class Login extends AppCompatActivity {
                 }
 
         });
-        getUserTypeValue();
-        //InappUpdate
+
         appUpdateManager = AppUpdateManagerFactory.create(getApplicationContext());
         checkUpdate();
 
@@ -368,12 +354,6 @@ public class Login extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
-
     public String getJson() {
         String json = null;
         try {
@@ -393,10 +373,6 @@ public class Login extends AppCompatActivity {
         }
         return json;
     }
-
-    /**********************************************************************************************
-     *                Server Login
-     *********************************************************************************************/
 
     private void serverLogin() {
 
@@ -506,10 +482,6 @@ public class Login extends AppCompatActivity {
         }).start();
     }
 
-    /**********************************************************************************************
-     *                Validating form
-     *********************************************************************************************/
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private void submitForm() {
 
         if (!validateName()) {
@@ -570,6 +542,11 @@ public class Login extends AppCompatActivity {
         list.add("Shakti Employee");
         list.add("Shakti Partner");
         list.add("Other");
+
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(context, R.layout.spinner_item_center, list);
+        dataAdapter.setDropDownViewResource(R.layout.spinner_item_center);
+        spinner_login_type.setAdapter(dataAdapter);
     }
 
     private boolean validateType() {
@@ -625,7 +602,7 @@ public class Login extends AppCompatActivity {
                         progressBarHandler.post(() -> progressBar.setProgress(progressBarStatus));
 
                         // Get State search help Data
-                        getStateData(Login.this);
+                        getStateData(Login.this,spinner_proj_id);
                         progressBarStatus = 100;
 
                         // Updating the progress bar
@@ -656,12 +633,12 @@ public class Login extends AppCompatActivity {
 
     }
 
-    public void getStateData(Context context) {
+    public void getStateData(Context context, String spinner_proj_id) {
 
         DatabaseHelper dataHelper = new DatabaseHelper(context);
 
         final ArrayList<NameValuePair> param = new ArrayList<>();
-
+        param.add(new BasicNameValuePair("project", spinner_proj_id));
         try {
 
             String obj = CustomHttpClient.executeHttpPost1(WebURL.STATE_DATA, param);
@@ -671,6 +648,7 @@ public class Login extends AppCompatActivity {
             dataHelper.deleteStateSearchHelpData();
 
             for (int i = 0; i < ja_state.length(); i++) {
+
 
                 JSONObject jo_state = ja_state.getJSONObject(i);
 
@@ -691,7 +669,6 @@ public class Login extends AppCompatActivity {
         }
 
     }
-
 
     private class MyTextWatcher implements TextWatcher {
 
@@ -715,7 +692,6 @@ public class Login extends AppCompatActivity {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private boolean checkPermission() {
         int FineLocation = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_FINE_LOCATION);
         int CoarseLocation = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_COARSE_LOCATION);

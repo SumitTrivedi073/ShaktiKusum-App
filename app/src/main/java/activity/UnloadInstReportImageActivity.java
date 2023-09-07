@@ -44,6 +44,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.shaktipumplimited.shaktikusum.R;
@@ -57,13 +63,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import adapter.ImageSelectionAdapter;
 import bean.ImageModel;
 import bean.InstallationBean;
 import database.DatabaseHelper;
+import debugapp.GlobalValue.Constant;
 import debugapp.GlobalValue.NewSolarVFD;
+import debugapp.VerificationCodeModel;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
@@ -91,8 +100,8 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
     List<String> itemNameList = new ArrayList<>();
     List<String> listOfModules = new ArrayList<>();
-    String customerName, beneficiary, regNO, projectNo, userID, billNo, moduleqty, no_of_module_value, noOfModules = "";
-    ;
+    String customerName, beneficiary, regNO, projectNo, userID, billNo, moduleqty,custMobile,regisno,
+            no_of_module_value, noOfModules = "",Hp;
     int value, currentScannerFor = -1;
 
     Toolbar mToolbar;
@@ -220,7 +229,9 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         userID = bundle.getString("userid");
         billNo = bundle.getString("vbeln");
         moduleqty = bundle.getString("moduleqty");
-
+        custMobile = bundle.getString("mobile");
+        regisno = bundle.getString(Constant.regisno);
+        Hp = bundle.getString("HP");
         beneficiary = WebURL.BenificiaryNo_Con;
         regNO = WebURL.RegNo_Con;
         projectNo = WebURL.ProjectNo_Con;
@@ -617,9 +628,21 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                             databaseHelper.deleteUnloadingImages(billNo);
                             showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
                             NewSolarVFD.CHECK_DATA_UNOLAD = 0;
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                            finish();
+
+                           Random random = new Random();
+                            String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
+
+                            runOnUiThread(() -> {
+                                if (CustomUtility.isValidMobile(custMobile)) {
+
+                                    sendVerificationCodeAPI(generatedVerificationCode, custMobile, Hp, beneficiary);
+
+                                } else {
+                                    Intent intent = new Intent(UnloadInstReportImageActivity.this, PendingFeedbackActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
 
                         } else if (invc_done.equalsIgnoreCase("N")) {
                             showingMessage(getResources().getString(R.string.dataNotSubmitted));
@@ -752,5 +775,80 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         }
         return finalValue;
     }
+
+    private void sendVerificationCodeAPI(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo) {
+        CustomUtility.showProgressDialogue(UnloadInstReportImageActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                WebURL.SendOTP + "&mobiles=" + ContactNo +
+                        "&message=प्रिय ग्राहक, आपको (shakti energy solution private limited pithampur) द्वारा "+ Hp+ "का पूरा सिस्टम आपके कस्टमर -आय डी "+ beneficiaryNo +" के तहत भेज दिया गया है। यदि भेजा गया सिस्टम सफलतापूर्वक आपको पूरा प्राप्त हुआ है तो (shakti energy solution private limited pithampur) द्वारा अधिकृत इंस्टॉलेशन टीम को OTP-"+ generatedVerificationCode +" शेयर कर पुष्टि करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169347351235207",
+
+
+                /*प्रिय ग्राहक, आपको  (shakti energy solution private limited pithampur)
+                 द्वारा 12.5 HP का पूरा सिस्टम आपके कस्टमर -आय डी SWPS/2022/00009895 के तहत भेज दिया गया है।
+                  यदि भेजा गया सिस्टम सफलतापूर्वक आपको पूरा प्राप्त हुआ है तो  (shakti energy solution private limited pithampur)
+                   द्वारा अधिकृत इंस्टॉलेशन टीम को OTP-1234  शेयर कर पुष्टि करे।*/
+                null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                CustomUtility.hideProgressDialog(UnloadInstReportImageActivity.this);
+
+
+                if (!res.toString().isEmpty()) {
+                    VerificationCodeModel verificationCodeModel = new Gson().fromJson(res.toString(), VerificationCodeModel.class);
+                    if (verificationCodeModel.getStatus().equals("Success")) {
+                         databaseHelper.deleteInstallationImages(billNo);
+                        ShowAlertResponse(generatedVerificationCode, ContactNo, Hp, beneficiaryNo, billNo);
+                    }
+
+                }
+
+            }
+        }, error -> {
+            CustomUtility.hideProgressDialog(UnloadInstReportImageActivity.this);
+            Log.e("error", String.valueOf(error));
+            Toast.makeText(UnloadInstReportImageActivity.this, error.getMessage(),
+                    Toast.LENGTH_LONG).show();
+        });
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    private void ShowAlertResponse(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo, String billNo) {
+        LayoutInflater inflater = (LayoutInflater) UnloadInstReportImageActivity.this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.send_successfully_layout,
+                null);
+        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(UnloadInstReportImageActivity.this, R.style.MyDialogTheme);
+
+        builder.setView(layout);
+        builder.setCancelable(false);
+        android.app.AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        alertDialog.show();
+
+
+        TextView OK_txt = layout.findViewById(R.id.OK_txt);
+        TextView title_txt = layout.findViewById(R.id.title_txt);
+
+        title_txt.setText(getResources().getString(R.string.otp_send_successfully));
+
+        OK_txt.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            Intent intent = new Intent(UnloadInstReportImageActivity.this, PendingFeedBackOTPVerification.class);
+            intent.putExtra(Constant.PendingFeedbackContact, ContactNo);
+            intent.putExtra(Constant.PendingFeedbackHp, Hp);
+            intent.putExtra(Constant.PendingFeedbackBeneficiary, beneficiaryNo);
+            intent.putExtra(Constant.VerificationCode, generatedVerificationCode);
+            intent.putExtra(Constant.regisno, regisno);
+            intent.putExtra(Constant.isUnloading ,"true");
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+
+        });
+
+    }
+
 }
 

@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.OptIn;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.os.BuildCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -39,13 +40,14 @@ import adapter.Adapter_Unload_Installation_list;
 import bean.BTResonseData;
 import bean.InstallationListBean;
 import database.DatabaseHelper;
+import debugapp.GlobalValue.Constant;
 import debugapp.GlobalValue.NewSolarVFD;
 import debugapp.localDB.DatabaseHelperTeacher;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-public class InstallationList extends BaseActivity {
+@BuildCompat.PrereleaseSdkCheck public class InstallationList extends BaseActivity {
     public String bill_no = "";
     public String gst_bill_no = "";
     public String bill_date = "";
@@ -68,7 +70,7 @@ public class InstallationList extends BaseActivity {
     public String loginno = "";
     public String module_qty = "";
     public String sync = "";
-    public String CONTACT_NO = "",inst_no_of_module_value="";
+    public String CONTACT_NO = "",inst_no_of_module_value="",HP;
     public String simha2 = "";
     public String set_matno = "";
     public String villagetehsil = "";
@@ -117,7 +119,7 @@ public class InstallationList extends BaseActivity {
 
     @SuppressLint("WrongConstant")
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void  onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_installation_list);
@@ -140,9 +142,8 @@ public class InstallationList extends BaseActivity {
             PackageManager manager = getPackageManager();
             PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
             version = info.versionName;
-            Log.e("version=====>",version);
+
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e("versionErrpr====>",e.getMessage());
             throw new RuntimeException(e);
 
         }
@@ -268,6 +269,7 @@ public class InstallationList extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
+        CustomUtility.removeValueFromSharedPref(mContext, Constant.isDebugDevice);
     }
 
     @Override
@@ -404,7 +406,7 @@ public class InstallationList extends BaseActivity {
                             simha2,
                             sync,
                             CONTACT_NO,
-                            inst_no_of_module_value);
+                            inst_no_of_module_value,HP);
                     if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_LIST, DatabaseHelper.KEY_ENQ_DOC, bill_no)) {
                         db.updateInstallationListData(bill_no, installationBean);
                     } else {
@@ -518,6 +520,7 @@ public class InstallationList extends BaseActivity {
                     simha2 = jo.getString("simha2");
                     set_matno = jo.getString("set_matno");
                     CONTACT_NO = jo.getString("contact_no");
+                    HP = jo.getString("hp");
                     installationBean = new InstallationListBean(bill_no,
                             CustomUtility.getSharedPreferences(context, "userid"),
                             name,
@@ -544,7 +547,7 @@ public class InstallationList extends BaseActivity {
                             set_matno,
                             simha2,
                             sync,
-                            CONTACT_NO,"");
+                            CONTACT_NO,"",HP);
 
                     InstallationListBean installationBean = new InstallationListBean();
                     installationBean.setPernr(CustomUtility.getSharedPreferences(context, "userid"));
@@ -578,6 +581,7 @@ public class InstallationList extends BaseActivity {
                     installationBean.setSimha2(simha2);
                     installationBean.setCUS_CONTACT_NO(CONTACT_NO);
                     installationBean.setNoOfModule(inst_no_of_module_value);
+                    installationBean.setHP(HP);
                     installationBeans.add(installationBean);
                 }
 
