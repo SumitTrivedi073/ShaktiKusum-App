@@ -289,7 +289,8 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
                 intent.putExtra(Constant.PendingFeedbackHp,response.getHp());
                 intent.putExtra(Constant.PendingFeedbackBeneficiary,response.getBeneficiary());
                 intent.putExtra(Constant.VerificationCode,generatedVerificationCode);
-
+                intent.putExtra(Constant.regisno,response.getRegisno());
+                intent.putExtra(Constant.isUnloading ,"false");
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
 

@@ -78,9 +78,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private final Handler progressBarHandler = new Handler();
     ProgressDialog progressBar;
 
-    CardView cardSurveySiteID,SurveySiteC;
+    CardView cardSurveySiteID,SurveySiteC,pendingFeedback,pendingUnloadingVerification;
 
-    TextView pendingFeedback;
+
 
 
     @SuppressLint("SetTextI18n")
@@ -134,6 +134,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         cardSurveySiteID = findViewById(R.id.cardSurveySiteID);
         recyclerView = findViewById(R.id.item_list);
         pendingFeedback = findViewById(R.id.pendingFeedback);
+        pendingUnloadingVerification = findViewById(R.id.pendingUnloadingVerification);
         lin1 =  findViewById(R.id.lin1);
         lin2 =  findViewById(R.id.lin2);
 
@@ -162,6 +163,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         pendingFeedback.setOnClickListener(view -> {
             Intent mIntent = new Intent(context, PendingFeedbackActivity.class);
             startActivity(mIntent);
+        });
+        pendingUnloadingVerification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent(context, PendingUnloadVerificationActivity.class);
+                startActivity(mIntent);
+            }
         });
 
         appUpdateManager = AppUpdateManagerFactory.create(getApplicationContext());

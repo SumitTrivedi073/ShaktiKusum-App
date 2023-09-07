@@ -1,5 +1,7 @@
 package activity;
 
+import static com.google.android.gms.location.LocationServices.FusedLocationApi;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -13,11 +15,15 @@ import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -27,10 +33,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.shaktipumplimited.shaktikusum.R;
 
@@ -46,10 +56,13 @@ import java.util.Locale;
 
 import utility.CustomUtility;
 
-public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callback, android.hardware.Camera.PictureCallback {
+public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callback, Camera.PictureCallback, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks,
+        com.google.android.gms.location.LocationListener{
     private static final String TIME_STAMP_FORMAT_DATE = "dd.MM.yyyy";
     private static final String TIME_STAMP_FORMAT_TIME = "h:mm a";
     private static final String GALLERY_DIRECTORY_NAME_COMMON = "SurfaceCamera";
+
+    private static final String TAG = "LocationService";
     private SurfaceHolder surfaceHolder;
     private android.hardware.Camera camera;
     private boolean safeToTakePicture = false;
@@ -58,12 +71,18 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     private final static int RESULT_CODE = 100;
     private SurfaceView surfaceView;
     LinearLayout layoutpreview;
-    TextView display ;
-    FusedLocationProviderClient location;
-    String latitudetxt,longitudetxt,addresstxt,state,country,postalcode,customer_name,  canvasText;
-    SimpleDateFormat getDate,getTime;
+    TextView display;
+    // FusedLocationProviderClient location;
+    String latitudetxt, longitudetxt, addresstxt, state, country, postalcode, customer_name, canvasText;
+    SimpleDateFormat getDate, getTime;
     Bitmap bitmap;
     File save;
+    public int TIME_INTERVAL = 30  * 1000;
+    private LocationRequest locationRequest;
+
+
+    private GoogleApiClient mGoogleApiClient;
+    private FusedLocationProviderClient fusedLocationClient;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -77,18 +96,33 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         Bundle bundle = getIntent().getExtras();
         customer_name = bundle.getString("cust_name");
 
-        location = LocationServices.getFusedLocationProviderClient(this);
-        getlastLocation();
+        locationRequest = new LocationRequest();
+        locationRequest.setInterval(TIME_INTERVAL);
+        locationRequest.setFastestInterval(TIME_INTERVAL);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        buildApiCLient();
         setupSurfaceHolder();
 
+    }
+
+    private void buildApiCLient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
     }
 
     @Override
     public void onBackPressed() {
 
-        if(save != null) {
+        if (save != null) {
             Intent intent = new Intent();
-            intent.putExtra("data",save);
+            intent.putExtra("data", save);
+            intent.putExtra("latitude", latitudetxt);
+            intent.putExtra("longitude", longitudetxt);
             setResult(RESULT_OK, intent);
             finish();
         } else {
@@ -97,66 +131,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         super.onBackPressed();
     }
 
-    @SuppressLint("SetTextI18n")
-    private void getlastLocation() {
 
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            location.getLastLocation()
-                    .addOnSuccessListener(location -> {
-                        if(location != null&& !String.valueOf(location.getLatitude()).isEmpty() && !String.valueOf(location.getLongitude()).isEmpty())
-                        {
-                            Geocoder geocoder = new Geocoder(CameraActivity2.this,Locale.getDefault());
-                            try {
-                                if(CustomUtility.isInternetOn(getApplicationContext())) {
-                                    List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-
-                                    if(!addresses.isEmpty()) {
-                                        latitudetxt = String.valueOf(addresses.get(0).getLatitude());
-                                        longitudetxt = String.valueOf(addresses.get(0).getLongitude());
-                                        if (addresses.get(0).getAddressLine(0) != null && !addresses.get(0).getAddressLine(0).isEmpty()) {
-                                            addresstxt = addresses.get(0).getAddressLine(0);
-                                        }
-                                        state = addresses.get(0).getAdminArea();
-                                        postalcode = addresses.get(0).getPostalCode();
-                                        country = addresses.get(0).getCountryName();
-                                        getDate = new SimpleDateFormat(TIME_STAMP_FORMAT_DATE, Locale.getDefault());
-                                        getTime = new SimpleDateFormat(TIME_STAMP_FORMAT_TIME, Locale.getDefault());
-
-
-                                        display.setText("Latitude : " + latitudetxt + "\n" + "Longitude : " + longitudetxt + "\n" + "Address : " + addresstxt + ","
-                                                + state + " " + postalcode + "," + country + "\n" + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
-                                                + "\n" + "Customer: "+customer_name);
-
-                                    }
-                                }else {
-
-                                    latitudetxt = String.valueOf(location.getLatitude());
-                                    longitudetxt = String.valueOf(location.getLongitude());
-                                    getDate = new SimpleDateFormat(TIME_STAMP_FORMAT_DATE, Locale.getDefault());
-                                    getTime = new SimpleDateFormat(TIME_STAMP_FORMAT_TIME, Locale.getDefault());
-
-
-                                        display.setText(" Latitude : " + latitudetxt + "\n" + "Longitude : " + longitudetxt + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
-                                                + "\n" + "Customer: " + customer_name);
-
-
-                                }
-
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                    });
-        }
-        else {
-            askpermission();
-        }
-    }
-
-    private void askpermission() {
-        ActivityCompat.requestPermissions(CameraActivity2.this, new String[]
-                {Manifest.permission.ACCESS_FINE_LOCATION }, RESULT_CODE);
-    }
 
 
     @Override
@@ -170,6 +145,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
     private void setViewVisibility(int id, int visibility) {
         View view = findViewById(id);
         if (view != null) {
@@ -190,7 +166,19 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     private void setBtnClick() {
         Button startBtn = findViewById(R.id.startBtn);
         if (startBtn != null) {
-            startBtn.setOnClickListener(view -> captureImage());
+            startBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    captureImage();
+
+                    startBtn.setEnabled(false);
+
+                    //enable button after 1000 millisecond
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        startBtn.setEnabled(true);
+                    }, 5000);
+                }
+            });
         }
     }
 
@@ -280,7 +268,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     }
     private void releaseCamera() {
         if (camera != null) {
-           // camera.stopPreview();
+
             camera.release();
             camera = null;
         }
@@ -346,11 +334,11 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         super.onPointerCaptureChanged(hasCapture);
     }
 
-    public static String getMediaFilePath(String type,String name) {
+    public static String getMediaFilePath(String type, String name) {
 
         File root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), GALLERY_DIRECTORY_NAME_COMMON);
 
-        File dir = new File(root.getAbsolutePath() + "/SKAPP/"+ type ); //it is my root directory
+        File dir = new File(root.getAbsolutePath() + "/SKAPP/" + type); //it is my root directory
 
         try {
             if (!dir.exists()) {
@@ -363,5 +351,143 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
 
         // Create a media file name
         return dir.getPath() + File.separator + "IMG_"+ Calendar.getInstance().getTimeInMillis() +".jpg";
+    }
+
+
+    @SuppressLint("SetTextI18n")
+    private void getLastLocation(Location location) {
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            Geocoder geocoder = new Geocoder(CameraActivity2.this, Locale.getDefault());
+            try {
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
+                    List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
+                    if (!addresses.isEmpty()) {
+                        latitudetxt = String.valueOf(location.getLatitude());
+                        longitudetxt = String.valueOf(location.getLongitude());
+                        if (addresses.get(0).getAddressLine(0) != null && !addresses.get(0).getAddressLine(0).isEmpty()) {
+                            addresstxt = addresses.get(0).getAddressLine(0);
+                        }
+                        state = addresses.get(0).getAdminArea();
+                        postalcode = addresses.get(0).getPostalCode();
+                        country = addresses.get(0).getCountryName();
+                        getDate = new SimpleDateFormat(TIME_STAMP_FORMAT_DATE, Locale.getDefault());
+                        getTime = new SimpleDateFormat(TIME_STAMP_FORMAT_TIME, Locale.getDefault());
+
+
+                        display.setText("Latitude : " + latitudetxt + "\n" + "Longitude : " + longitudetxt + "\n" + "Address : " + addresstxt + ","
+                                + state + " " + postalcode + "," + country + "\n" + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
+                                + "\n" + "Customer: " + customer_name);
+
+                    }
+                } else {
+
+                    latitudetxt = String.valueOf(location.getLatitude());
+                    longitudetxt = String.valueOf(location.getLongitude());
+                    getDate = new SimpleDateFormat(TIME_STAMP_FORMAT_DATE, Locale.getDefault());
+                    getTime = new SimpleDateFormat(TIME_STAMP_FORMAT_TIME, Locale.getDefault());
+
+
+                    display.setText(" Latitude : " + latitudetxt + "\n" + "Longitude : " + longitudetxt + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
+                            + "\n" + "Customer: " + customer_name);
+
+
+                }
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+
+        } else {
+            askpermission();
+        }
+    }
+    @Override
+    public void onStart(){
+        super.onStart();
+        if(mGoogleApiClient!=null) {
+            mGoogleApiClient.connect();
+        }
+    }
+    @Override
+    public void onStop(){
+        if(mGoogleApiClient!=null) {
+            mGoogleApiClient.disconnect();
+        }
+        super.onStop();
+    }
+    private void askpermission() {
+        ActivityCompat.requestPermissions(CameraActivity2.this, new String[]
+                {Manifest.permission.ACCESS_FINE_LOCATION}, RESULT_CODE);
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        boolean granted =
+                CustomUtility.checkLocationPermission(this);
+         if (granted) {
+                 startLocationUpdates();
+    }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+
+        Log.i("currentLocation====>", "lat " + location.getLatitude());
+        Log.i("currentLocation===>", "lng " + location.getLongitude());
+        getLastLocation(location);
+    }
+
+    protected synchronized void startLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
+
+      /*  fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            // Logic to handle location object
+                            Log.e("location=====>", location.getLatitude()+"=========>"+location.getLongitude());
+                            getLastLocation(location);
+                        }
+                    }
+                });
+
+*/
     }
 }

@@ -314,11 +314,7 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
             int PU = 0;
             if (cursor.getCount() > 0) {
                 if (cursor.moveToFirst()) {
-                    //  for(PU = 0 ; PU < ccccc ; PU++)
-                    while (!cursor.isAfterLast()) {
-                        //cursor.moveToFirst();
-                        // id=cursor.getInt(0);
-                        // mKLPTotEnergyResponse = new KLPTotEnergyResponse();
+                   while (!cursor.isAfterLast()) {
                         mBTResonseData = new BTResonseData();
                         id = cursor.getString(cursor.getColumnIndex(LOGIN_KEY_ID));
                         mDEVICE_DEVICE_NO = cursor.getString(cursor.getColumnIndex(DEVICE_DEVICE_NO));
@@ -335,17 +331,6 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
                         mDEVICE_MUserId = cursor.getString(cursor.getColumnIndex(DEVICE_MUserId));
                         RMS_STATUS = cursor.getString(cursor.getColumnIndex(DEVICE_RMS_STATUS));
 
-                       // RMS_CURRENT_ONLINE_STATUS = cursor.getString(cursor.getColumnIndex(DEVICE_RMS_CURRENT_ONLINE_STATUS));
-                       // RMS_LAST_ONLINE_DATE = cursor.getString(cursor.getColumnIndex(DEVICE_RMS_LAST_ONLINE_DATE));
-
-                   //     mDEVICE_INS_MOBILE = cursor.getString(cursor.getColumnIndex(DEVICE_INS_MOBILE));
-                   //     mDEVICE_INS_NAME = cursor.getString(cursor.getColumnIndex(DEVICE_INS_NAME));
-
-                     //   RMS_DEBUG_EXTRN = cursor.getString(cursor.getColumnIndex(DEVICE_RMS_DEBUG_EXTRN));
-                      //  RMS_SERVER_DOWN = cursor.getString(cursor.getColumnIndex(DEVICE_RMS_SERVER_DOWN));
-                      //  RMS_ORG_D_F = cursor.getString(cursor.getColumnIndex(DEVICE_RMS_ORG_D_F));
-
-
                         mBTResonseData.setID(id);
                         mBTResonseData.setDEVICENO(mDEVICE_DEVICE_NO);
                         mBTResonseData.setSIGNLSTREN(mDEVICE_SIGNL_STREN);
@@ -361,20 +346,6 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
                         mBTResonseData.setKUNNR(mDEVICE_MUserId);
                         mBTResonseData.setRMS_STATUS(RMS_STATUS);
 
-                      //  mBTResonseData.setRMS_CURRENT_ONLINE_STATUS(RMS_CURRENT_ONLINE_STATUS);
-                     //   mBTResonseData.setRMS_LAST_ONLINE_DATE(RMS_LAST_ONLINE_DATE);
-
-                     //   mBTResonseData.setDEVICE_INS_NAME(mDEVICE_INS_NAME);
-                     //   mBTResonseData.setDEVICE_INS_MOBILE(mDEVICE_INS_MOBILE);
-
-                     //   mBTResonseData.setRMS_DEBUG_EXTRN(RMS_DEBUG_EXTRN);
-                     //   mBTResonseData.setRMS_SERVER_DOWN(RMS_SERVER_DOWN);
-                       // mBTResonseData.setRMS_ORG_D_F(RMS_ORG_D_F);
-
-
-                        //TestOne;
-                        //   TestTwo;
-                        //  Three;
                         mBTResonseDataList.add(mBTResonseData);
                         cursor.moveToNext();
                     }

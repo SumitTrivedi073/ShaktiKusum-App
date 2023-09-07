@@ -5,16 +5,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import activity.DeviceStatusActivity;
 import com.shaktipumplimited.shaktikusum.R;
+
+import org.w3c.dom.Text;
+
 import webservice.WebURL;
 
 public class dialog4 extends Dialog {
 
     private final DeviceStatusActivity activity;
     private Button search, cancel;
-    private EditText text;
+    private TextView text;
     private final dialog4 thisDialog;
 
     public dialog4(DeviceStatusActivity context) {

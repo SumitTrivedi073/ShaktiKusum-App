@@ -64,7 +64,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
 
     List<String> itemNameList = new ArrayList<>();
 
-    String customerName, enqDocno, status;
+    String customerName, enqDocno, status,latitude = "",longitude = "";
 
     Toolbar mToolbar;
 
@@ -223,6 +223,8 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
             imageModel.setImagePath("");
             imageModel.setImageSelected(false);
             imageModel.setBillNo("");
+            imageModel.setLatitude("");
+            imageModel.setLongitude("");
             imageArrayList.add(imageModel);
         }
 
@@ -242,6 +244,8 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
                             imageModel.setImagePath(imageList.get(i).getImagePath());
                             imageModel.setImageSelected(true);
                             imageModel.setBillNo(imageList.get(i).getBillNo());
+                            imageModel.setLatitude(imageList.get(i).getLatitude());
+                            imageModel.setLongitude(imageList.get(i).getLongitude());
                             imageArrayList.set(j, imageModel);
                         }
                     }
@@ -362,8 +366,8 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
                         if (result.getData() != null && result.getData().getExtras() != null) {
 
                             Bundle bundle = result.getData().getExtras();
-                            Log.e("bundle====>", bundle.get("data").toString());
-                            UpdateArrayList(bundle.get("data").toString());
+                            Log.e("bundle====>", bundle.get("data").toString()+"latitude=====>"+latitude+"longitude========>"+longitude);
+                            UpdateArrayList(bundle.get("data").toString(),"0",bundle.get("latitude").toString(),bundle.get("longitude").toString());
 
                         }
 
@@ -398,7 +402,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
                     if (TextUtils.isEmpty(file)) {
                         Toast.makeText(InstReportImageActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
                     } else {
-                        UpdateArrayList(path);
+                        UpdateArrayList(path,"1", latitude, longitude);
 
                     }
                 } catch (Exception e) {
@@ -410,28 +414,39 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
 
     }
 
-    private void UpdateArrayList(String path) {
+    private void UpdateArrayList(String path, String value, String latitude, String longitude) {
 
         ImageModel imageModel = new ImageModel();
         imageModel.setName(imageArrayList.get(selectedIndex).getName());
         imageModel.setImagePath(path);
         imageModel.setImageSelected(true);
         imageModel.setBillNo(enqDocno);
-        imageArrayList.set(selectedIndex, imageModel);
+        if(value.equals("0")) {
+            imageModel.setLatitude(latitude);
+            imageModel.setLongitude(longitude);
+            imageArrayList.set(selectedIndex, imageModel);
+            addupdateDatabase(path,latitude,longitude);
+        }else {
+            imageModel.setLatitude("");
+            imageModel.setLongitude("");
+            imageArrayList.set(selectedIndex, imageModel);
+            addupdateDatabase(path,"","");
+        }
+        customAdapter.notifyDataSetChanged();
+
+    }
+
+    private void addupdateDatabase(String path, String latitude, String longitude) {
 
         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 
-            if( isUpdate){
-                db.updateRecordAlternate(imageArrayList.get(selectedIndex).getName(), path,
-                      true,  enqDocno);
-            }else {
-                db.insertInstallationImage(imageArrayList.get(selectedIndex).getName(), path,
-                      true,  enqDocno);
-            }
-
-
-        customAdapter.notifyDataSetChanged();
-
+        if (isUpdate) {
+            db.updateRecordAlternate(imageArrayList.get(selectedIndex).getName(), path,
+                    true, enqDocno, latitude, longitude);
+        } else {
+            db.insertInstallationImage(imageArrayList.get(selectedIndex).getName(), path,
+                    true, enqDocno, latitude, longitude);
+        }
 
     }
 
