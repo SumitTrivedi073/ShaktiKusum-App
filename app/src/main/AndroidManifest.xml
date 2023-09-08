@@ -55,6 +55,17 @@
 
 
         <activity
+            android:name="activity.JointInspectionImageActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+
+        <activity
+            android:name="activity.DeptDocSubImageActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+
+
+        <activity
             android:name="activity.RoutePlanActivity"
             android:screenOrientation="portrait"
             android:exported="false" />

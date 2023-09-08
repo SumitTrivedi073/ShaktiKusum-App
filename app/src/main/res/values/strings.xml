@@ -295,6 +295,19 @@
     <string name="pairedDevice">Please make sure device is paired or connected via bluetooth!</string>
     <string name="unloading_material">Unloading Material List</string>
     <string name="routeplan">Route Plan List</string>
+    <string name="no_data_found">No Data Found</string>
+    <string name="correctPumpSr">Please enter correct pump serial number</string>
+    <string name="correctMotorSr">Please enter correct motor serial number</string>
+    <string name="correctControllerSr">Please enter correct controller serial number</string>
+    <string name="bill_no">Bill No.</string>
+    <string name="jsDocument1">Js Document 1</string>
+    <string name="jsDocument2">Js Document 2</string>
+    <string name="Document1">Document 1</string>
+    <string name="Document2">Document 2</string>
+    <string name="departmentSubm">Document Submission</string>
+    <string name="govtOfficeVisit">Govt. Officer Visit</string>
+    <string name="depatmentDocuments">Department Documents</string>
+    <string name="JointInspectionDoc">Joint Inspection Documents</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

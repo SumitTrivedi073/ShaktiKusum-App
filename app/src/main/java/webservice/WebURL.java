@@ -27,6 +27,7 @@ public class WebURL {
     public static String ProjectNo_Con, RegNo_Con, BenificiaryNo_Con;
 
     public static final String GET_SURVEY_API = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/get_survey.htm";
+
     public static final String VERSION_PAGE = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/app_version.htm";
     public static final String LOGIN_PAGE = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/login.htm";
     public static final String LOGIN_SELEC_PAGE = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/login_selection.htm";
@@ -37,6 +38,7 @@ public class WebURL {
     public static final String DAMAGE_MISS_DATA = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/create_complaint.htm";
     public static final String SAVE_SURVEY_DATA = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_survey.htm";
     public static final String INSTALLATION = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/installation.htm";
+
     public static final String INSTALLATION_UNLOAD = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/unloading_list.htm";
     public static final String INSTALLATION_UNLOAD1 = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/unloading_list.htm";
 
@@ -46,12 +48,12 @@ public class WebURL {
     public static final String REJECT_INSTALLATION = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_reject_installation.htm";
     public static final String SYNC_OFFLINE_DATA_TO_SAP = BASEURL + "/sap/bc/bsp/sap/zmapp_solar/sync_offline_data.htm";
     public static final String STATE_DATA = BASEURL + "/sap/bc/bsp/sap/zmapp_solar/state_data.htm";
+
     public static final String RMSDATA = "https://solar10.shaktisolarrms.com/Home/ValidDeviceData";
     public static final String INST_CMP = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/installation_cmp.htm";
     public static final String AUDIT_SITES = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_site_audit.htm";
     public static final String SERIAL_NUMBER = BASEURL + "/sap/bc/bsp/sap/zmapp_solar/get_serial_no.htm";
     public static final String DEVICE_DETAILS = "https://solar10.shaktisolarrms.com/Home/SAPOnlineDeviceDetails";
-
     public static final String INSTALLATION_DATA_OFFLINE = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/installation_offline_done.htm";
     public static final String INSTALLATION_OFFLINE_DATA_SUBMIT = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/image_save_for_offline_done.htm";
 
@@ -65,7 +67,19 @@ public class WebURL {
 
     public static final String KusumCSurvey = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_survey.htm";
 
- public static final String unloading_list_verification_pend = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/unloading_list_verification_pend.htm";
+    public static final String unloading_list_verification_pend = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/unloading_list_verification_pend.htm";
+
+    public static final String RoutePlanAPI = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/route_plan_list.htm";
+
+    public static final String saveRoutePlanAPI = BASEURL +"/sap/bc/bsp/sap/zmapp_solar_pro/route_plan_save.htm?route=";
+
+    public static final String jointInspectionAPI = BASEURL +"/sap/bc/bsp/sap/zmapp_solar_pro/joint_inspection.htm";
+
+    public static final String DocumentSubmissionListAPI = BASEURL +"/sap/bc/bsp/sap/zmapp_solar_pro/document_submission.htm";
+
+    public static final String saveJointInspectionAPI = BASEURL +"/sap/bc/bsp/sap/zmapp_solar_pro/joint_inspection_save.htm";
+
+    public static final String saveDeptDocSubmissionAPI = BASEURL +"/sap/bc/bsp/sap/zmapp_solar_pro/document_sub_save.htm";
 
     //https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/unloading_list_verification_pend.htm?project_no=1022&userid=0000700810&project_login_no=01
 }

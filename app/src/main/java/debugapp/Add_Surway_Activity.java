@@ -1010,7 +1010,7 @@ Intent mIntent ;
         builder.setTitle("Add Photo!");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int item) {
+            public void onClick(DialogInterface ialog, int item) {
                 boolean result = customUtility.checkPermission(context);
                 if (items[item].equals("Take Photo")) {
 

@@ -1,6 +1,5 @@
 package activity;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -9,6 +8,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -25,30 +25,30 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.shaktipumplimited.shaktikusum.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import adapter.PendingFeedbackAdapter;
-import debugapp.PendingFeedback;
+import adapter.RoutePlanAdapter;
+import debugapp.RoutePlanModel;
 import utility.CustomUtility;
 import webservice.WebURL;
 
-public class RoutePlanActivity extends BaseActivity implements PendingFeedbackAdapter.SendOTPListner {
+public class RoutePlanActivity extends BaseActivity implements RoutePlanAdapter.SelectRouteListner {
 
-    private  RecyclerView routePlanList;
+    private RecyclerView routePlanList;
     private Toolbar mToolbar;
-    ArrayList<PendingFeedback> pendingFeedbacks;
-    AlertDialog alertDialog;
-
-    TextView noDataFound;
-
+    List<RoutePlanModel.InstallationDatum> routePlanArrayList;
+    TextView noDataFound, submitBtn;
     SearchView searchUser;
-
-    PendingFeedbackAdapter pendingFeedbackAdapter;
-
+    RoutePlanAdapter routePlanAdapter;
     RelativeLayout searchRelative;
+    JSONArray jsonArray = null;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,36 +60,43 @@ public class RoutePlanActivity extends BaseActivity implements PendingFeedbackAd
 
     private void Init() {
         routePlanList = findViewById(R.id.routePlanList);
-        mToolbar =  findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         noDataFound = findViewById(R.id.noDataFound);
         searchUser = findViewById(R.id.searchUser);
         searchRelative = findViewById(R.id.searchRelative);
+        submitBtn = findViewById(R.id.submitBtn);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getResources().getString(R.string.routeplan));
-        if(CustomUtility.isInternetOn(getApplicationContext())) {
+
+        if (CustomUtility.isInternetOn(getApplicationContext())) {
             getRoutePlanList();
-        }else {
-            CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection),getApplicationContext());
+        } else {
+            CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection), getApplicationContext());
         }
     }
 
     private void listner() {
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
+        mToolbar.setNavigationOnClickListener(v -> onBackPressed());
+
+        searchRelative.setOnClickListener(v -> {
+            searchUser.setFocusableInTouchMode(true);
+            searchUser.requestFocus();
+            searchUser.onActionViewExpanded();
+
         });
 
-        searchRelative.setOnClickListener(new View.OnClickListener() {
+        submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchUser.setFocusableInTouchMode(true);
-                searchUser.requestFocus();
-                searchUser.onActionViewExpanded();
-
+                if (routePlanArrayList.size() > 0) {
+                    if (CustomUtility.isInternetOn(RoutePlanActivity.this)) {
+                        saveRoutePlanAPI();
+                    } else {
+                        CustomUtility.showToast(RoutePlanActivity.this, getResources().getString(R.string.check_internet_connection));
+                    }
+                }
             }
         });
 
@@ -109,19 +116,20 @@ public class RoutePlanActivity extends BaseActivity implements PendingFeedbackAd
         searchUser.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (pendingFeedbackAdapter != null) {
-                    if(!query.isEmpty()) {
-                        pendingFeedbackAdapter.getFilter().filter(query);
-                    }}
+                if (routePlanAdapter != null) {
+                    if (!query.isEmpty()) {
+                        routePlanAdapter.getFilter().filter(query);
+                    }
+                }
 
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (pendingFeedbackAdapter != null) {
-                    if(!newText.isEmpty()) {
-                        pendingFeedbackAdapter.getFilter().filter(newText);
+                if (routePlanAdapter != null) {
+                    if (!newText.isEmpty()) {
+                        routePlanAdapter.getFilter().filter(newText);
                     }
                 }
                 return false;
@@ -138,37 +146,69 @@ public class RoutePlanActivity extends BaseActivity implements PendingFeedbackAd
 
     }
 
+    @Override
+    public void selectRouteListener(RoutePlanModel.InstallationDatum routePlanList, int position) {
+        RoutePlanModel.InstallationDatum installationDatum = new RoutePlanModel.InstallationDatum();
+        if (!routePlanList.isChecked()) {
+            installationDatum.setProjectNo(routePlanList.getProjectNo());
+            installationDatum.setRegisno(routePlanList.getRegisno());
+            installationDatum.setProcessNo(routePlanList.getProcessNo());
+            installationDatum.setUserid(routePlanList.getUserid());
+            installationDatum.setBeneficiary(routePlanList.getBeneficiary());
+            installationDatum.setSiteAdrc(routePlanList.getSiteAdrc());
+            installationDatum.setExisPumpHp(routePlanList.getExisPumpHp());
+            installationDatum.setPumpAcDc(routePlanList.getPumpAcDc());
+            installationDatum.setChecked(true);
+            routePlanArrayList.set(position, installationDatum);
+        } else {
+            installationDatum.setProjectNo(routePlanList.getProjectNo());
+            installationDatum.setRegisno(routePlanList.getRegisno());
+            installationDatum.setProcessNo(routePlanList.getProcessNo());
+            installationDatum.setUserid(routePlanList.getUserid());
+            installationDatum.setBeneficiary(routePlanList.getBeneficiary());
+            installationDatum.setSiteAdrc(routePlanList.getSiteAdrc());
+            installationDatum.setExisPumpHp(routePlanList.getExisPumpHp());
+            installationDatum.setPumpAcDc(routePlanList.getPumpAcDc());
+            installationDatum.setChecked(false);
+            routePlanArrayList.set(position, installationDatum);
+        }
+
+    }
 
 
     private void getRoutePlanList() {
         CustomUtility.showProgressDialogue(RoutePlanActivity.this);
-        pendingFeedbacks = new ArrayList<>();
+        routePlanArrayList = new ArrayList<RoutePlanModel.InstallationDatum>();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.PendingFeedback +"?project_no="+CustomUtility.getSharedPreferences(getApplicationContext(), "projectid")+"&userid="+CustomUtility.getSharedPreferences(getApplicationContext(), "userid")+"&project_login_no=01", null, new Response.Listener<JSONObject>() {
+                WebURL.RoutePlanAPI + "?project_no=" + CustomUtility.getSharedPreferences(getApplicationContext(), "projectid") + "&userid=" + CustomUtility.getSharedPreferences(getApplicationContext(), "userid") + "&project_login_no=01", null, new Response.Listener<JSONObject>() {
+
             @Override
-            public void onResponse(JSONObject  response) {
+            public void onResponse(JSONObject response) {
                 CustomUtility.hideProgressDialog(RoutePlanActivity.this);
 
 
-                if(response.toString()!=null && !response.toString().isEmpty()) {
-                    PendingFeedback pendingFeedback = new Gson().fromJson(response.toString(), PendingFeedback.class);
-                    if(pendingFeedback.getStatus().equals("true")) {
-
-                        pendingFeedbackAdapter = new PendingFeedbackAdapter(getApplicationContext(),pendingFeedback.getResponse(),noDataFound);
+                if (response.toString() != null && !response.toString().isEmpty()) {
+                    RoutePlanModel routePlanModel = new Gson().fromJson(response.toString(), RoutePlanModel.class);
+                    if (routePlanModel.getInstallationData() != null && routePlanModel.getInstallationData().size() > 0) {
+                        routePlanArrayList = routePlanModel.getInstallationData();
+                        routePlanAdapter = new RoutePlanAdapter(getApplicationContext(), routePlanModel.getInstallationData(), noDataFound);
                         routePlanList.setHasFixedSize(true);
-                        routePlanList.setAdapter(pendingFeedbackAdapter);
-                        pendingFeedbackAdapter.SendOTP(RoutePlanActivity.this);
+                        routePlanList.setAdapter(routePlanAdapter);
+                        routePlanAdapter.SelectRoute(RoutePlanActivity.this);
                         noDataFound.setVisibility(View.GONE);
                         routePlanList.setVisibility(View.VISIBLE);
-                    }else {
+                        submitBtn.setVisibility(View.VISIBLE);
+                    } else {
                         noDataFound.setVisibility(View.VISIBLE);
                         routePlanList.setVisibility(View.GONE);
+                        submitBtn.setVisibility(View.GONE);
                     }
 
-                }else {
+                } else {
                     noDataFound.setVisibility(View.VISIBLE);
                     routePlanList.setVisibility(View.GONE);
+                    submitBtn.setVisibility(View.GONE);
                 }
 
             }
@@ -189,6 +229,63 @@ public class RoutePlanActivity extends BaseActivity implements PendingFeedbackAd
         requestQueue.add(jsonObjectRequest);
     }
 
+    private void saveRoutePlanAPI() {
+        if (routePlanArrayList.size() > 0) {
+            jsonArray = new JSONArray();
+            for (int i = 0; i < routePlanArrayList.size(); i++) {
+                if (routePlanArrayList.get(i).isChecked()) {
+                    JSONObject jsonObj = new JSONObject();
+                    try {
+                        jsonObj.put("project_no", routePlanArrayList.get(i).getProjectNo());
+                        jsonObj.put("regisno", routePlanArrayList.get(i).getRegisno());
+                        jsonObj.put("process_no", routePlanArrayList.get(i).getPumpAcDc());
+                        jsonObj.put("userid", routePlanArrayList.get(i).getUserid());
+                        jsonObj.put("beneficiary", routePlanArrayList.get(i).getBeneficiary());
+                        jsonObj.put("process_no", routePlanArrayList.get(i).getProcessNo());
+                        jsonArray.put(jsonObj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+
+                    }
+                }
+            }
+
+        }
+
+
+        CustomUtility.showProgressDialogue(RoutePlanActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                WebURL.saveRoutePlanAPI + jsonArray, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                CustomUtility.hideProgressDialog(RoutePlanActivity.this);
+
+
+                if (!res.toString().isEmpty()) {
+
+                    CustomUtility.showToast(RoutePlanActivity.this, getResources().getString(R.string.dataSubmittedSuccessfully));
+                    onBackPressed();
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                CustomUtility.hideProgressDialog(RoutePlanActivity.this);
+                Log.e("error", String.valueOf(error));
+                Toast.makeText(RoutePlanActivity.this, error.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,  // maxNumRetries = 0 means no retry
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(jsonObjectRequest);
+
+    }
 
     @Override
     public void onBackPressed() {
@@ -196,8 +293,5 @@ public class RoutePlanActivity extends BaseActivity implements PendingFeedbackAd
         finish();
     }
 
-    @Override
-    public void sendOtpListener(List<PendingFeedback.Response> pendingFeedbackList, int position, String generatedVerificationCode) {
 
-    }
 }

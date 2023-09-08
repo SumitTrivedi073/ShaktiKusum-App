@@ -13,19 +13,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.shaktipumplimited.shaktikusum.R;
-
 import java.util.ArrayList;
 
-import activity.CustomerRegistrationActivity;
-import activity.DDSubmissionActivity;
 import activity.DeptDocSubActivity;
 import activity.GovtOffVisitActivity;
-import activity.InstallationList;
-import activity.InstallationListOfflineActivity;
 import activity.KusumCSurveyListActivty;
-import activity.OffSubDocActivity;
 import activity.RoutePlanActivity;
 import activity.UnloadList;
 import bean.ItemNameBean;

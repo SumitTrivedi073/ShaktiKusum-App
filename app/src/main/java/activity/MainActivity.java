@@ -264,7 +264,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             Intent intent = new Intent(context, SimCardOptions.class);
             startActivity(intent);
         } else if (id == R.id.nav_devicestatus) {
-            Intent intent = new Intent(context, DeviceStatusActivity.class);
+            Intent intent = new Intent(context, CheckRMSActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_siteaudit) {
             if (CustomUtility.getSharedPreferences(context, "usertype").equalsIgnoreCase("02")) {

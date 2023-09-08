@@ -103,7 +103,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             no_of_module_value, noOfModules = "", Hp;
     int value, currentScannerFor = -1;
     Toolbar mToolbar;
-    boolean isUpdate = false, isPumpMotorController = false,isPumpMatched = false,isMotorMatched = false,isControllerMatched = false;
+    boolean isUpdate = false, isPumpMotorController = false;
     InstallationListBean installationListBean;
 
     @Override
@@ -272,6 +272,12 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                     CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectCustomerPhoto));
                 } else if (remarkEdt.getText().toString().isEmpty()) {
                     CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
+                } else if (pumpSerNo.getText().toString().isEmpty() && !pumpSerNo.getText().toString().equals(installationListBean.pump_ser)) {
+                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctPumpSr));
+                } else if (motorSerNo.getText().toString().isEmpty() && !motorSerNo.getText().toString().equals(installationListBean.motor_ser)) {
+                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctMotorSr));
+                } else if (controllerSerNo.getText().toString().isEmpty() && !controllerSerNo.getText().toString().equals(installationListBean.controller_ser)) {
+                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctControllerSr));
                 } else {
 
                     Set<String> set = new HashSet<>();
@@ -787,29 +793,15 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             } else {
                 switch (currentScannerFor) {
                     case 1000:
-                        if (scanContent.equals(pumpSerNo.getText().toString())) {
-                            pumpSerNo.setText(scanContent);
-                            isPumpMatched = true;
-                        } else {
-
-                            MatchControllerIDPopup();
-                        }
+                        pumpSerNo.setText(scanContent);
                         break;
                     case 2000:
-                        if (scanContent.equals(motorSerNo.getText().toString())) {
-                            motorSerNo.setText(scanContent);
-                            isMotorMatched = true;
-                        } else {
-                            MatchControllerIDPopup();
-                        }
+
+                        motorSerNo.setText(scanContent);
                         break;
                     case 3000:
-                        if (scanContent.equals(controllerSerNo.getText().toString())) {
-                            controllerSerNo.setText(scanContent);
-                            isControllerMatched = true;
-                        } else {
-                            MatchControllerIDPopup();
-                        }
+                        controllerSerNo.setText(scanContent);
+
 
                         break;
                 }

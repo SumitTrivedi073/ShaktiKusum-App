@@ -202,7 +202,6 @@ public class CustomUtility {
         try {
             SimpleDateFormat formate = new SimpleDateFormat("yyyy-MM-dd");
             Date mDate = formate.parse(date);
-//            SimpleDateFormat appFormate = newworkorder SimpleDateFormat("dd MMM, yyyy");
             SimpleDateFormat appFormate = new SimpleDateFormat("dd.MM.yyyy");
 
             formatedDate = appFormate.format(mDate);

@@ -41,4 +41,6 @@ public class Constant {
 
     public static String debugDataExtract = "debugDataExtract";
 
+    public static String JointInspection = "JointInspection";
+
 }

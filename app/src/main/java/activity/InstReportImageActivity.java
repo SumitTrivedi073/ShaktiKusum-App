@@ -70,7 +70,6 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
 
     boolean isBackPressed = false,isUpdate = false;
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +103,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+
     private boolean checkPermission() {
         int cameraPermission =
                 ContextCompat.checkSelfPermission(InstReportImageActivity.this, CAMERA);
