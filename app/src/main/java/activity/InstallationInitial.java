@@ -1006,7 +1006,7 @@ public class InstallationInitial extends BaseActivity {
         }
         if (isSubmit ) {
              if(CustomUtility.isInternetOn(getApplicationContext())) {
-                 DebugAndInstalltionDataSUbmitted();
+                 SubmitDebugData();
              }else {
                  CustomUtility.ShowToast(getResources().getString(R.string.savedInLocalDatabase),mContext);
                  Intent intent = new Intent(mContext, InstallationList.class);
@@ -1044,52 +1044,6 @@ public class InstallationInitial extends BaseActivity {
             db.insertInstallationData(inst_bill_no, installationBean);
         }
 
-    }
-
-    private void DebugAndInstalltionDataSUbmitted() {
-        if (mBTResonseDataList.size() > 0)
-            mBTResonseDataList.clear();
-        mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABT();
-
-
-        if (mBTResonseDataList.size() > 0) {
-
-            DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
-
-            SIGNL_STREN = mBTResonseDataList.get(vkp).getSIGNLSTREN();
-            String[] mStrArrySignal = SIGNL_STREN.split("###");
-            SIGNL_STREN = mStrArrySignal[0];
-            INVOICE_NO_B = mStrArrySignal[1];
-
-            SIM = mBTResonseDataList.get(vkp).getSIM();
-            String[] mStrArrySim = SIM.split("###");
-            if(mStrArrySim.length>0){
-            SIM = mStrArrySim[0];
-        }
-            if(mStrArrySim.length>1) {
-                SIM_SR_NO = mStrArrySim[1];
-            }
-            NET_REG = mBTResonseDataList.get(vkp).getNETREG();
-            SER_CONNECT = mBTResonseDataList.get(vkp).getSERCONNECT();
-            CAB_CONNECT = mBTResonseDataList.get(vkp).getCABCONNECT();
-            LATITUDE = mBTResonseDataList.get(vkp).getLATITUDE();
-            LANGITUDE = mBTResonseDataList.get(vkp).getLANGITUDE();
-            MOBILE = mBTResonseDataList.get(vkp).getMOBILE();
-            IMEI = mBTResonseDataList.get(vkp).getIMEI();
-            DONGAL_ID = mBTResonseDataList.get(vkp).getDONGALID();
-            RMS_STATUS = mBTResonseDataList.get(vkp).getRMS_STATUS();
-            RMS_CURRENT_ONLINE_STATUS = mBTResonseDataList.get(vkp).getRMS_CURRENT_ONLINE_STATUS();
-            RMS_LAST_ONLINE_DATE = mBTResonseDataList.get(vkp).getRMS_LAST_ONLINE_DATE();
-
-            mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
-            mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
-            RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
-            RMS_SERVER_DOWN = "Working Fine";
-
-            SubmitDebugData();
-        }else{
-            CustomUtility.ShowToast("Please Debug and try again!", mContext);
-        }
     }
 
 
