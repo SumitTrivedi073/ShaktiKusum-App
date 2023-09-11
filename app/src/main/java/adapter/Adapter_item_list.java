@@ -18,7 +18,9 @@ import java.util.ArrayList;
 
 import activity.DeptDocSubActivity;
 import activity.GovtOffVisitActivity;
+import activity.InstReportImageActivity;
 import activity.KusumCSurveyListActivty;
+import activity.RejectionInstallation;
 import activity.RoutePlanActivity;
 import activity.UnloadList;
 import bean.ItemNameBean;
@@ -114,7 +116,8 @@ public class Adapter_item_list extends RecyclerView.Adapter<Adapter_item_list.Ho
                     }
                     else if (responseList.get(position).getItem_id().equalsIgnoreCase("024")) {
                         CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
-
+                        Intent intent = new Intent(context, RejectionInstallation.class);
+                        context.startActivity(intent);
                     }
 /*if (responseList.get(position).getItem_id().equalsIgnoreCase("001")) {
                         CustomUtility.setSharedPreference(context, "enqdocid", "");

@@ -39,6 +39,7 @@
         android:name="activity.AppApplication"
         android:allowBackup="true"
         android:configChanges="orientation"
+        android:dataExtractionRules="@xml/data_extraction_rules"
         android:enableOnBackInvokedCallback="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:hardwareAccelerated="true"
@@ -50,67 +51,65 @@
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme"
         android:usesCleartextTraffic="true"
-        tools:targetApi="tiramisu"
-        android:dataExtractionRules="@xml/data_extraction_rules">
-
-
+        tools:targetApi="tiramisu">
+        <activity
+            android:name="activity.RejectInstallationImageActivity"
+            android:exported="false" />
+        <activity
+            android:name="activity.RejectionInstallation"
+            android:exported="false" />
         <activity
             android:name="activity.JointInspectionImageActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
-
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name="activity.DeptDocSubImageActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
-
-
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name="activity.RoutePlanActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name="activity.UnloadList"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name="activity.CheckRMSActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
-
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name="activity.PendingUnloadVerificationActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
-
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name="activity.KusumCSurveyFormActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name="activity.KusumCSurveyListActivty"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name="activity.SwVersionCheckActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name="activity.PhotoViewerActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name="activity.CameraActivity2"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name="activity.PendingFeedBackOTPVerification"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name="activity.PendingFeedbackActivity"
-            android:screenOrientation="portrait"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name="activity.AddDamage_MissingActivity"
             android:label="Add Complain"

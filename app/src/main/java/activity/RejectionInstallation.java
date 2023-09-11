@@ -1,4 +1,11 @@
 package activity;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -7,10 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -23,31 +27,32 @@ import com.shaktipumplimited.shaktikusum.R;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
-import adapter.jointInspectionAdapter;
-import bean.JointInspectionModel;
+import adapter.RejectionInstAdapter;
+import bean.RejectInstallationModel;
 import utility.CustomUtility;
 import webservice.WebURL;
 
+public class RejectionInstallation extends AppCompatActivity {
 
-public class GovtOffVisitActivity extends BaseActivity {
-    private RecyclerView jointInspectionList;
+    private RecyclerView rejectionInstList;
     private Toolbar mToolbar;
-    List<JointInspectionModel.InspectionDatum> jointInspectionArrayList;
+    List<RejectInstallationModel.RejectDatum> rejectionInstArrayList;
     TextView noDataFound;
     SearchView searchUser;
-    jointInspectionAdapter jointInspectionAdapter;
+    adapter.RejectionInstAdapter rejectionInstAdapter;
     RelativeLayout searchRelative;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ddsub_img);
+        setContentView(R.layout.activity_rejection_installation);
+
         Init();
         listner();
     }
 
     private void Init() {
-        jointInspectionList = findViewById(R.id.jointInspectionList);
+        rejectionInstList = findViewById(R.id.rejectInstalltionList);
         mToolbar = findViewById(R.id.toolbar);
         noDataFound = findViewById(R.id.noDataFound);
         searchUser = findViewById(R.id.searchUser);
@@ -55,14 +60,16 @@ public class GovtOffVisitActivity extends BaseActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getResources().getString(R.string.govtOfficeVisit));
+        getSupportActionBar().setTitle(getResources().getString(R.string.rejection));
 
         if (CustomUtility.isInternetOn(getApplicationContext())) {
-            getJointInspectionList();
+            getRejctionInstList();
         } else {
             CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection), getApplicationContext());
         }
     }
+
+
 
     private void listner() {
         mToolbar.setNavigationOnClickListener(v -> onBackPressed());
@@ -91,9 +98,9 @@ public class GovtOffVisitActivity extends BaseActivity {
         searchUser.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (jointInspectionAdapter != null) {
+                if (rejectionInstAdapter != null) {
                     if (!query.isEmpty()) {
-                        jointInspectionAdapter.getFilter().filter(query);
+                        rejectionInstAdapter.getFilter().filter(query);
                     }
                 }
 
@@ -102,9 +109,9 @@ public class GovtOffVisitActivity extends BaseActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (jointInspectionAdapter != null) {
+                if (rejectionInstAdapter != null) {
                     if (!newText.isEmpty()) {
-                        jointInspectionAdapter.getFilter().filter(newText);
+                        rejectionInstAdapter.getFilter().filter(newText);
                     }
                 }
                 return false;
@@ -121,37 +128,37 @@ public class GovtOffVisitActivity extends BaseActivity {
 
     }
 
-    private void getJointInspectionList() {
-        CustomUtility.showProgressDialogue(GovtOffVisitActivity.this);
-        jointInspectionArrayList = new ArrayList<JointInspectionModel.InspectionDatum>();
+    private void getRejctionInstList() {
+        CustomUtility.showProgressDialogue(RejectionInstallation.this);
+        rejectionInstArrayList = new ArrayList< >();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.jointInspectionAPI + "?project_no=" + CustomUtility.getSharedPreferences(getApplicationContext(), "projectid") + "&userid=" + CustomUtility.getSharedPreferences(getApplicationContext(), "userid") + "&project_login_no=01", null, new Response.Listener<JSONObject>() {
+                WebURL.rejectionInstalltionAPI + "?userid=0000800851&project_no=1092", null, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
-                CustomUtility.hideProgressDialog(GovtOffVisitActivity.this);
+                CustomUtility.hideProgressDialog(RejectionInstallation.this);
 
 
                 if (response.toString() != null && !response.toString().isEmpty()) {
-                    JointInspectionModel routePlanModel = new Gson().fromJson(response.toString(), JointInspectionModel.class);
-                    if (routePlanModel.getInspectionData() != null && routePlanModel.getInspectionData().size() > 0) {
-                        jointInspectionArrayList = routePlanModel.getInspectionData();
-                        jointInspectionAdapter = new jointInspectionAdapter(getApplicationContext(), routePlanModel.getInspectionData(),noDataFound);
-                        jointInspectionList.setHasFixedSize(true);
-                        jointInspectionList.setAdapter(jointInspectionAdapter);
+                    RejectInstallationModel rejectModelList = new Gson().fromJson(response.toString(), RejectInstallationModel.class);
+                    if (rejectModelList.getRejectionData() != null && rejectModelList.getRejectionData().size() > 0) {
+                        rejectionInstArrayList = rejectModelList.getRejectionData();
+                         rejectionInstAdapter = new RejectionInstAdapter(getApplicationContext(), rejectModelList.getRejectionData(),noDataFound);
+                        rejectionInstList.setHasFixedSize(true);
+                        rejectionInstList.setAdapter(rejectionInstAdapter);
                         noDataFound.setVisibility(View.GONE);
-                        jointInspectionList.setVisibility(View.VISIBLE);
+                        rejectionInstList.setVisibility(View.VISIBLE);
 
                     } else {
                         noDataFound.setVisibility(View.VISIBLE);
-                        jointInspectionList.setVisibility(View.GONE);
+                        rejectionInstList.setVisibility(View.GONE);
 
                     }
 
                 } else {
                     noDataFound.setVisibility(View.VISIBLE);
-                    jointInspectionList.setVisibility(View.GONE);
+                    rejectionInstList.setVisibility(View.GONE);
 
                 }
 
@@ -159,9 +166,9 @@ public class GovtOffVisitActivity extends BaseActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                CustomUtility.hideProgressDialog(GovtOffVisitActivity.this);
+                CustomUtility.hideProgressDialog(RejectionInstallation.this);
                 noDataFound.setVisibility(View.VISIBLE);
-                jointInspectionList.setVisibility(View.GONE);
+                rejectionInstList.setVisibility(View.GONE);
                 Log.e("error", String.valueOf(error));
 
             }
@@ -180,4 +187,3 @@ public class GovtOffVisitActivity extends BaseActivity {
     }
 
 }
-

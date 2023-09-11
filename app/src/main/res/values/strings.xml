@@ -122,6 +122,7 @@
     <string name="borewell_depth">Borewell Depth</string>
     <string name="size_of_borewell">Size of Borewell</string>
     <string name="contact_no">Contact No.</string>
+    <string name="project_no">Project No.</string>
 
     <string name="Get_text">Get</string>
     <string name="Set_text">Set</string>
@@ -163,6 +164,7 @@
     <string name="delayInstallation">IF DELAY INSTALLATION WITH REASON PHOTO</string>
     <string name="insideCOntroller">INSIDE IMEI NUMBER PHOTOS</string>
     <string name="outsideController">OUTSIDE CONTROLLER ID STIKER PHOTOS</string>
+    <string name="namePlate">NAME PLATE WITH FARMER</string>
 
     <string name="material_unloading_img">Material Unloading Images</string>
     <string name="installationImg">Installation Images</string>
@@ -306,8 +308,11 @@
     <string name="Document2">Document 2</string>
     <string name="departmentSubm">Document Submission</string>
     <string name="govtOfficeVisit">Govt. Officer Visit</string>
+    <string name="rejection">Reject Installation</string>
     <string name="depatmentDocuments">Department Documents</string>
     <string name="JointInspectionDoc">Joint Inspection Documents</string>
+
+
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

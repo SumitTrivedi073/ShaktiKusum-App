@@ -10,15 +10,12 @@ import static utility.FileUtils.getPath;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -32,7 +29,6 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -41,24 +37,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.shaktipumplimited.shaktikusum.R;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import adapter.ImageSelectionAdapter;
 import bean.ImageModel;
-import bean.InstallationBean;
-import bean.JointInspectionModel;
+import bean.RejectInstallationModel;
 import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;
-import webservice.CustomHttpClient;
-import webservice.WebURL;
 
-public class JointInspectionImageActivity extends BaseActivity implements ImageSelectionAdapter.ImageSelectionListener {
+public class RejectInstallationImageActivity extends BaseActivity implements ImageSelectionAdapter.ImageSelectionListener {
 
     private static final int REQUEST_CODE_PERMISSION = 101;
     private static final int PICK_FROM_FILE = 102;
@@ -68,23 +56,42 @@ public class JointInspectionImageActivity extends BaseActivity implements ImageS
     int selectedIndex;
     ImageSelectionAdapter customAdapter;
     List<String> itemNameList = new ArrayList<>();
-    String  enqDocno, latitude = "", longitude = "";
+    String enqDocno, latitude = "", longitude = "";
     Toolbar mToolbar;
     EditText remarkTxt;
 
     TextView submitBtn;
     boolean isUpdate = false;
-    JointInspectionModel.InspectionDatum inspectionDatum;
+
+
+    RejectInstallationModel.RejectDatum rejectDatum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_joint_inspection_image);
+        setContentView(R.layout.activity_reject_installation_image);
+        
         Init();
-        CheakPermissions();
+        cheakPermissions();
+        
+    }
+    
+    private void Init() {
+        recyclerview = findViewById(R.id.recyclerview);
+        remarkTxt = findViewById(R.id.remarkTxt);
+        submitBtn = findViewById(R.id.submitBtn);
+        mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbar.setTitle(getResources().getString(R.string.JointInspectionDoc));
+
+        retrieveValue();
+        SetAdapter();
+        listner();
     }
 
-    private void CheakPermissions() {
+    private void cheakPermissions() {
         if (checkPermission()) {
             SetAdapter();
         } else {
@@ -108,18 +115,17 @@ public class JointInspectionImageActivity extends BaseActivity implements ImageS
         }
     }
 
-
     private boolean checkPermission() {
         int cameraPermission =
-                ContextCompat.checkSelfPermission(JointInspectionImageActivity.this, CAMERA);
+                ContextCompat.checkSelfPermission(RejectInstallationImageActivity.this, CAMERA);
         int ReadMediaImages =
-                ContextCompat.checkSelfPermission(JointInspectionImageActivity.this, READ_MEDIA_IMAGES);
+                ContextCompat.checkSelfPermission(RejectInstallationImageActivity.this, READ_MEDIA_IMAGES);
         int ReadAudioImages =
-                ContextCompat.checkSelfPermission(JointInspectionImageActivity.this, READ_MEDIA_AUDIO);
+                ContextCompat.checkSelfPermission(RejectInstallationImageActivity.this, READ_MEDIA_AUDIO);
         int writeExternalStorage =
-                ContextCompat.checkSelfPermission(JointInspectionImageActivity.this, WRITE_EXTERNAL_STORAGE);
+                ContextCompat.checkSelfPermission(RejectInstallationImageActivity.this, WRITE_EXTERNAL_STORAGE);
         int ReadExternalStorage =
-                ContextCompat.checkSelfPermission(JointInspectionImageActivity.this, READ_EXTERNAL_STORAGE);
+                ContextCompat.checkSelfPermission(RejectInstallationImageActivity.this, READ_EXTERNAL_STORAGE);
 
         if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             return cameraPermission == PackageManager.PERMISSION_GRANTED && ReadMediaImages == PackageManager.PERMISSION_GRANTED
@@ -132,59 +138,12 @@ public class JointInspectionImageActivity extends BaseActivity implements ImageS
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-
-            case REQUEST_CODE_PERMISSION:
-
-                if (grantResults.length > 0) {
-                    if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        boolean ACCESSCAMERA = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                        boolean ReadMediaImages = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                        boolean ReadAudioImages = grantResults[2] == PackageManager.PERMISSION_GRANTED;
-
-                        if (!ACCESSCAMERA && !ReadMediaImages && !ReadAudioImages) {
-                            Toast.makeText(JointInspectionImageActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
-                        }
-                    } else {
-                        boolean ACCESSCAMERA = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                        boolean writeExternalStorage =
-                                grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                        boolean ReadExternalStorage =
-                                grantResults[2] == PackageManager.PERMISSION_GRANTED;
-
-                        if (!ACCESSCAMERA && !writeExternalStorage && !ReadExternalStorage) {
-                            Toast.makeText(JointInspectionImageActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
-                        }
-
-                    }
-                }
-
-                break;
-        }
-    }
-
-    private void Init() {
-        recyclerview = findViewById(R.id.recyclerview);
-        remarkTxt = findViewById(R.id.remarkTxt);
-        submitBtn = findViewById(R.id.submitBtn);
-        mToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mToolbar.setTitle(getResources().getString(R.string.JointInspectionDoc));
-
-        retrieveValue();
-        SetAdapter();
-        listner();
-    }
-
     private void retrieveValue() {
         if (getIntent().getExtras() != null) {
-            inspectionDatum = (JointInspectionModel.InspectionDatum) getIntent().getSerializableExtra(Constant.JointInspection);
+            rejectDatum = (RejectInstallationModel.RejectDatum) getIntent().getSerializableExtra(Constant.RejectInstallation);
+
+            Log.e("Image",rejectDatum.photos1);
+            Log.e("Image1",rejectDatum.photos3);
         }
     }
 
@@ -205,15 +164,15 @@ public class JointInspectionImageActivity extends BaseActivity implements ImageS
                 if (imageArrayList.size() > 0) {
 
                     if (!imageArrayList.get(0).isImageSelected() || !imageArrayList.get(1).isImageSelected()) {
-                        CustomUtility.showToast(JointInspectionImageActivity.this, getResources().getString(R.string.select_image));
+                        CustomUtility.showToast(RejectInstallationImageActivity.this, getResources().getString(R.string.select_image));
                     } else if (remarkTxt.getText().toString().isEmpty()) {
-                        CustomUtility.showToast(JointInspectionImageActivity.this, getResources().getString(R.string.writeRemark));
+                        CustomUtility.showToast(RejectInstallationImageActivity.this, getResources().getString(R.string.writeRemark));
                     } else {
-                       // SubmitJointInspectionAPI();
-                        new SubmitJointInspection().execute();
+                        // SubmitJointInspectionAPI();
+                       // new RejectInstallationImageActivity.SubmitJointInspection().execute();
                     }
                 } else {
-                    CustomUtility.showToast(JointInspectionImageActivity.this, getResources().getString(R.string.select_image));
+                    CustomUtility.showToast(RejectInstallationImageActivity.this, getResources().getString(R.string.select_image));
                 }
 
             }
@@ -221,12 +180,47 @@ public class JointInspectionImageActivity extends BaseActivity implements ImageS
     }
 
 
+
     private void SetAdapter() {
         imageArrayList = new ArrayList<>();
         itemNameList = new ArrayList<>();
-        itemNameList.add(getResources().getString(R.string.jsDocument1));
-        itemNameList.add(getResources().getString(R.string.jsDocument2));
+     /*   itemNameList.add(getResources().getString(R.string.jsDocument1));
+        itemNameList.add(getResources().getString(R.string.jsDocument2));*/
 
+        if (!rejectDatum.photos1.isEmpty()){
+            itemNameList.add(getResources().getString(R.string.photosOfCivilMaterial));
+        }  else if (!rejectDatum.photos2.isEmpty()){
+            itemNameList.add(getResources().getString(R.string.pannelModeuleFrontSide));
+
+        } else if (!rejectDatum.photos3.isEmpty()){
+            itemNameList.add(getResources().getString(R.string.controllerWithFormer));
+
+        } else if (!rejectDatum.photos4.isEmpty()){
+            itemNameList.add(getResources().getString(R.string.dischargeWithFormer));
+
+        } else if (!rejectDatum.photos5.isEmpty()){
+            itemNameList.add(getResources().getString(R.string.foundationWithFormer));
+
+        } else if (!rejectDatum.photos6.isEmpty()){
+            itemNameList.add(getResources().getString(R.string.earthingAndLighting));
+
+        } else if (!rejectDatum.photos7.isEmpty()){
+            itemNameList.add(getResources().getString(R.string.noDuesForm));
+
+        } else if (!rejectDatum.photos8.isEmpty()){
+            itemNameList.add(getResources().getString(R.string.noNetworkNoc));
+
+        } else if (!rejectDatum.photos9.isEmpty()){
+            itemNameList.add(getResources().getString(R.string.delayInstallation));
+
+        } else if (!rejectDatum.photos10.isEmpty()){
+            itemNameList.add(getResources().getString(R.string.insideCOntroller));
+
+        } else if (!rejectDatum.photos11.isEmpty()){
+            itemNameList.add(getResources().getString(R.string.outsideController));
+        } else if (!rejectDatum.photos12.isEmpty()){
+            itemNameList.add(getResources().getString(R.string.namePlate));
+        }
 
         for (int i = 0; i < itemNameList.size(); i++) {
             ImageModel imageModel = new ImageModel();
@@ -238,7 +232,7 @@ public class JointInspectionImageActivity extends BaseActivity implements ImageS
             imageModel.setLongitude("");
             imageArrayList.add(imageModel);
         }
-        customAdapter = new ImageSelectionAdapter(JointInspectionImageActivity.this, imageArrayList);
+        customAdapter = new ImageSelectionAdapter(RejectInstallationImageActivity.this, imageArrayList);
         recyclerview.setHasFixedSize(true);
         recyclerview.setAdapter(customAdapter);
         customAdapter.ImageSelection(this);
@@ -260,11 +254,11 @@ public class JointInspectionImageActivity extends BaseActivity implements ImageS
     }
 
     private void selectImage(String value) {
-        LayoutInflater inflater = (LayoutInflater) JointInspectionImageActivity.this.getSystemService(
+        LayoutInflater inflater = (LayoutInflater) RejectInstallationImageActivity.this.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.pick_img_layout, null);
         final AlertDialog.Builder builder =
-                new AlertDialog.Builder(JointInspectionImageActivity.this, R.style.MyDialogTheme);
+                new AlertDialog.Builder(RejectInstallationImageActivity.this, R.style.MyDialogTheme);
 
         builder.setView(layout);
         builder.setCancelable(true);
@@ -296,7 +290,7 @@ public class JointInspectionImageActivity extends BaseActivity implements ImageS
                 if (value.equals("0")) {
                     galleryIntent();
                 } else {
-                    Intent i_display_image = new Intent(JointInspectionImageActivity.this, PhotoViewerActivity.class);
+                    Intent i_display_image = new Intent(RejectInstallationImageActivity.this, PhotoViewerActivity.class);
                     i_display_image.putExtra("image_path", imageArrayList.get(selectedIndex).getImagePath());
                     startActivity(i_display_image);
                 }
@@ -332,8 +326,8 @@ public class JointInspectionImageActivity extends BaseActivity implements ImageS
 
     private void cameraIntent() {
 
-        camraLauncher.launch(new Intent(JointInspectionImageActivity.this, CameraActivity2.class)
-                .putExtra("cust_name", inspectionDatum.getName()));
+        camraLauncher.launch(new Intent(RejectInstallationImageActivity.this, CameraActivity2.class)
+                .putExtra("cust_name", rejectDatum.getCustomer_name()));
 
     }
 
@@ -366,7 +360,7 @@ public class JointInspectionImageActivity extends BaseActivity implements ImageS
             case PICK_FROM_FILE:
                 try {
                     Uri mImageCaptureUri = data.getData();
-                    String path = getPath(JointInspectionImageActivity.this, mImageCaptureUri); // From Gallery
+                    String path = getPath(RejectInstallationImageActivity.this, mImageCaptureUri); // From Gallery
                     if (path == null) {
                         path = mImageCaptureUri.getPath(); // From File Manager
                     }
@@ -379,7 +373,7 @@ public class JointInspectionImageActivity extends BaseActivity implements ImageS
                         file = "";
                     }
                     if (TextUtils.isEmpty(file)) {
-                        Toast.makeText(JointInspectionImageActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(RejectInstallationImageActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
                     } else {
                         UpdateArrayList(path, "1", latitude, longitude);
 
@@ -420,12 +414,12 @@ public class JointInspectionImageActivity extends BaseActivity implements ImageS
     }
 
 
-    private class SubmitJointInspection extends AsyncTask<String, String, String> {
+   /* private class SubmitJointInspection extends AsyncTask<String, String, String> {
         ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
-            progressDialog = new ProgressDialog(JointInspectionImageActivity.this);
+            progressDialog = new ProgressDialog(RejectInstallationImageActivity.this);
             progressDialog.setCancelable(false);
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setMessage("Sending Data to server..please wait !");
@@ -442,23 +436,23 @@ public class JointInspectionImageActivity extends BaseActivity implements ImageS
             JSONArray ja_invc_data = new JSONArray();
             JSONObject jsonObj = new JSONObject();
             try {
-                jsonObj.put("project_no", inspectionDatum.getProjectNo());
-                jsonObj.put("regisno", inspectionDatum.getRegisno());
-                jsonObj.put("process_no", inspectionDatum.getProcessNo());
-                jsonObj.put("userid", CustomUtility.getSharedPreferences(JointInspectionImageActivity.this, "userid"));
-                jsonObj.put("beneficiary", inspectionDatum.getBeneficiary());
-                jsonObj.put("vbeln", inspectionDatum.getVbeln());
+                jsonObj.put("project_no", rejectDatum.getProjectNo());
+                jsonObj.put("regisno", rejectDatum.getRegisno());
+                jsonObj.put("process_no", rejectDatum.getProcessNo());
+                jsonObj.put("userid", CustomUtility.getSharedPreferences(RejectInstallationImageActivity.this, "userid"));
+                jsonObj.put("beneficiary", rejectDatum.getBeneficiary());
+                jsonObj.put("vbeln", rejectDatum.getVbeln());
                 jsonObj.put("jnt_ins_remark", remarkTxt.getText().toString().trim());
-                jsonObj.put("customer_name", inspectionDatum.getName());
+                jsonObj.put("customer_name", rejectDatum.getName());
 
 
                 if (imageArrayList.size() > 0) {
 
                     if (imageArrayList.get(0).isImageSelected()) {
-                        jsonObj.put("doc1", CustomUtility.getBase64FromBitmap(JointInspectionImageActivity.this, imageArrayList.get(0).getImagePath()));
+                        jsonObj.put("doc1", CustomUtility.getBase64FromBitmap(RejectInstallationImageActivity.this, imageArrayList.get(0).getImagePath()));
                     }
                     if (1 < imageArrayList.size() && imageArrayList.get(1).isImageSelected()) {
-                        jsonObj.put("doc2", CustomUtility.getBase64FromBitmap(JointInspectionImageActivity.this, imageArrayList.get(1).getImagePath()));
+                        jsonObj.put("doc2", CustomUtility.getBase64FromBitmap(RejectInstallationImageActivity.this, imageArrayList.get(1).getImagePath()));
                     }
                 }
                 ja_invc_data.put(jsonObj);
@@ -498,7 +492,7 @@ public class JointInspectionImageActivity extends BaseActivity implements ImageS
                         }
                     }
                 } else {
-                    CustomUtility.showToast(JointInspectionImageActivity.this, getResources().getString(R.string.somethingWentWrong));
+                    CustomUtility.showToast(RejectInstallationImageActivity.this, getResources().getString(R.string.somethingWentWrong));
                     progressDialog.dismiss();
                 }
             } catch (Exception e) {
@@ -512,13 +506,13 @@ public class JointInspectionImageActivity extends BaseActivity implements ImageS
         protected void onPostExecute(String result) {
             progressDialog.dismiss();
         }
-    }
+    }*/
 
     private void showingMessage(String message) {
         runOnUiThread(new Runnable() {
             public void run() {
 
-                CustomUtility.showToast(JointInspectionImageActivity.this, message);
+                CustomUtility.showToast(RejectInstallationImageActivity.this, message);
 
             }
         });

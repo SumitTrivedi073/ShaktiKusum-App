@@ -75,11 +75,16 @@ public class WebURL {
 
     public static final String jointInspectionAPI = BASEURL +"/sap/bc/bsp/sap/zmapp_solar_pro/joint_inspection.htm";
 
+    public static final String rejectionInstalltionAPI = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/reject_data.htm";
+
     public static final String DocumentSubmissionListAPI = BASEURL +"/sap/bc/bsp/sap/zmapp_solar_pro/document_submission.htm";
 
     public static final String saveJointInspectionAPI = BASEURL +"/sap/bc/bsp/sap/zmapp_solar_pro/joint_inspection_save.htm";
 
     public static final String saveDeptDocSubmissionAPI = BASEURL +"/sap/bc/bsp/sap/zmapp_solar_pro/document_sub_save.htm";
+
+    private class Installtion {
+    }
 
     //https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/unloading_list_verification_pend.htm?project_no=1022&userid=0000700810&project_login_no=01
 }

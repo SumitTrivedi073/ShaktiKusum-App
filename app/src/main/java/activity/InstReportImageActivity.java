@@ -214,6 +214,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
         itemNameList.add(getResources().getString(R.string.delayInstallation));
         itemNameList.add(getResources().getString(R.string.insideCOntroller));
         itemNameList.add(getResources().getString(R.string.outsideController));
+        itemNameList.add(getResources().getString(R.string.namePlate));
 
 
         for (int i = 0; i < itemNameList.size(); i++) {
