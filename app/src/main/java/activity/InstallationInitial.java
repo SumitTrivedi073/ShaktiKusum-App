@@ -407,18 +407,27 @@ public class InstallationInitial extends BaseActivity {
             if (CustomUtility.isInternetOn(getApplicationContext())) {
                 if (mBTResonseDataList.size() > 0)
                     mBTResonseDataList.clear();
-                mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(controller);
+                mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(inst_controller_ser.getText().toString().trim()+"-0");
                 System.out.println("mBTResonseDataList.size()==>>" + mBTResonseDataList.size());
                 if (mBTResonseDataList.size() > 0) {
                     DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
                     SIGNL_STREN = mBTResonseDataList.get(vkp).getSIGNLSTREN();
                     String[] mStrArry = SIGNL_STREN.split("###");
-                    SIGNL_STREN = mStrArry[0];
-                    INVOICE_NO_B = mStrArry[1];
+                    if(mStrArry.length>0){
+                        SIGNL_STREN = mStrArry[0];
+                    }
+                    if(mStrArry.length>1) {
+                        INVOICE_NO_B = mStrArry[1];
+                    }
+
                     SIM = mBTResonseDataList.get(vkp).getSIM();
                     String[] mStrArrySim = SIM.split("###");
-                    SIM = mStrArrySim[0];
-                    SIM_SR_NO = mStrArrySim[1];
+                    if(mStrArrySim.length>0){
+                        SIM = mStrArrySim[0];
+                    }
+                    if(mStrArrySim.length>1) {
+                        SIM_SR_NO = mStrArrySim[1];
+                    }
                     NET_REG = mBTResonseDataList.get(vkp).getNETREG();
                     SER_CONNECT = mBTResonseDataList.get(vkp).getSERCONNECT();
                     CAB_CONNECT = mBTResonseDataList.get(vkp).getCABCONNECT();
@@ -436,13 +445,14 @@ public class InstallationInitial extends BaseActivity {
                     RMS_SERVER_DOWN = "Working Fine";
                     System.out.println("VikasVIHU==>>" + mBTResonseDataList.get(vkp).getDEVICENO());
 
+
                     saveDataValidation();
                 } else {
-                    saveData();
+                   saveData();
 
                 }
             } else {
-                saveData();
+               saveData();
             }
         });
 
@@ -596,7 +606,7 @@ public class InstallationInitial extends BaseActivity {
                 if (mBTResonseDataList.size() > 0)
                     mBTResonseDataList.clear();
 
-                mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(controller);
+                mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(inst_controller_ser.getText().toString().trim()+"-0");
 
                 if (mBTResonseDataList.size() > 0) {
                     simUpdatePopup();
@@ -1213,7 +1223,7 @@ public class InstallationInitial extends BaseActivity {
         inst_pump_ser.setText(pump);
 
         WebURL.mDEvice_Number_CHECK = controller;
-        inst_controller_ser.setText(controller);
+        inst_controller_ser.setText("7F-0135-0-13-06-23");
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {
             spinner_simoprator.setSelection(db.getPosition(spinner_simoprator, installationBean.getSimoprator()));

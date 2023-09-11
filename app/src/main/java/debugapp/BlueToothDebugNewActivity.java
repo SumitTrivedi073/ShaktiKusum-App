@@ -219,7 +219,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     private int mLengthCount;
     private String headerLenghtMonth = "";
     private List<String> mMonthHeaderList;
-    private boolean mBoolflag = false;
+    private boolean mBoolflag = false,isDataExtract= false;
     private RelativeLayout rlvLoadingViewID;
     private TextView txtHeadingLabelID;
     private String MEmpType = "null", version;
@@ -429,7 +429,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                 if (mSimDetailsInfoResponse.size() >= 3) {
 
 
-                                    if (checkFirstTimeOlineStstus != 0) {
+                                    if (isDataExtract) {
                                         WebURL.BT_DEBUG_CHECK = 1;
                                         Constant.DBUG_PER_OFLINE = "X";//PER_OFLINE
                                         CustomUtility.setSharedPreference(getApplicationContext(), "DeviceStatus", getResources().getString(R.string.offline));
@@ -1052,6 +1052,8 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             jsonObj.put("RMS_SERVER_STATUS", RMS_SERVER_DOWN);
 
             jsonArray.put(jsonObj);
+            mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO, SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC, SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID, MUserId, RMS_STATUS, RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB, RMS_DEBUG_EXTRN, RMS_SERVER_DOWN, RMS_ORG_D_F, true);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1079,10 +1081,6 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                     mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
 
                     CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice, "true");
-                    if (mSimDetailsInfoResponse.size() > 0)
-                        mSimDetailsInfoResponse.clear();
-
-                    mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
 
                     Constant.BT_DEVICE_NAME = "";
                     Constant.BT_DEVICE_MAC_ADDRESS = "";
@@ -2944,7 +2942,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                             try {
                                 System.out.println("vikas--3==>" + mCharOne + "" + mCharTwo);
                                 if ("TX".equalsIgnoreCase((char) mCharOne + "" + (char) mCharTwo)) {
-
+                                    isDataExtract = true;
                                     CustomUtility.hideProgressDialog(BlueToothDebugNewActivity.this);
                                     Message message = new Message();
                                     message.obj = "Data Extraction Completed!";

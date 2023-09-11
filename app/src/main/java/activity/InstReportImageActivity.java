@@ -367,7 +367,11 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
 
                             Bundle bundle = result.getData().getExtras();
                             Log.e("bundle====>", bundle.get("data").toString()+"latitude=====>"+latitude+"longitude========>"+longitude);
-                            UpdateArrayList(bundle.get("data").toString(),"0",bundle.get("latitude").toString(),bundle.get("longitude").toString());
+                            if(!bundle.get("latitude").toString().isEmpty() && !bundle.get("longitude").toString().isEmpty()) {
+                                UpdateArrayList(bundle.get("data").toString(), "0", bundle.get("latitude").toString(), bundle.get("longitude").toString());
+                            }else {
+                                CustomUtility.showToast(InstReportImageActivity.this, "Please Add Image Again!");
+                            }
 
                         }
 
