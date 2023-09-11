@@ -142,9 +142,9 @@ public class RejectionInstallation extends AppCompatActivity {
 
                 if (response.toString() != null && !response.toString().isEmpty()) {
                     RejectInstallationModel rejectModelList = new Gson().fromJson(response.toString(), RejectInstallationModel.class);
-                    if (rejectModelList.getRejectionData() != null && rejectModelList.getRejectionData().size() > 0) {
-                        rejectionInstArrayList = rejectModelList.getRejectionData();
-                         rejectionInstAdapter = new RejectionInstAdapter(getApplicationContext(), rejectModelList.getRejectionData(),noDataFound);
+                    if (rejectModelList.getRejectData() != null && rejectModelList.getRejectData().size() > 0) {
+                        rejectionInstArrayList = rejectModelList.getRejectData();
+                         rejectionInstAdapter = new RejectionInstAdapter(getApplicationContext(), rejectModelList.getRejectData(),noDataFound);
                         rejectionInstList.setHasFixedSize(true);
                         rejectionInstList.setAdapter(rejectionInstAdapter);
                         noDataFound.setVisibility(View.GONE);

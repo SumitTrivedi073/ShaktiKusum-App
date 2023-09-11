@@ -9,53 +9,112 @@ import java.util.List;
 public class RejectInstallationModel implements Serializable {
     @SerializedName("reject_data")
     @Expose
-    private List<RejectInstallationModel.RejectDatum> rejectData;
+    private List<RejectDatum> rejectData;
 
-    public List<RejectInstallationModel.RejectDatum> getRejectionData() {
+    public List<RejectDatum> getRejectData() {
         return rejectData;
     }
 
-    public void setInspectionData(List<RejectInstallationModel.RejectDatum> rejectData) {
+    public void setRejectData(List<RejectDatum> rejectData) {
         this.rejectData = rejectData;
     }
 
-    public class RejectDatum implements Serializable{
-        public String project_no;
-        public String regisno;
-        public String vbeln;
-        public String beneficiary;
-        public String customer_name;
-        public String photos1;
-        public String photos2;
-        public String photos3;
-        public String photos4;
-        public String photos5;
-        public String photos6;
-        public String photos7;
-        public String photos8;
-        public String photos9;
-        public String photos10;
-        public String photos11;
-        public String photos12;
-        public String remark1;
-        public String remark2;
-        public String remark3;
-        public String remark4;
-        public String remark5;
-        public String remark6;
-        public String remark7;
-        public String remark8;
-        public String remark9;
-        public String remark10;
-        public String remark11;
-        public String remark12;
+    public static class RejectDatum implements  Serializable{
 
-        public String getProject_no() {
-            return project_no;
+        @SerializedName("project_no")
+        @Expose
+        private String projectNo;
+        @SerializedName("regisno")
+        @Expose
+        private String regisno;
+        @SerializedName("vbeln")
+        @Expose
+        private String vbeln;
+        @SerializedName("beneficiary")
+        @Expose
+        private String beneficiary;
+        @SerializedName("customer_name")
+        @Expose
+        private String customerName;
+        @SerializedName("photos1")
+        @Expose
+        private String photos1;
+        @SerializedName("photos2")
+        @Expose
+        private String photos2;
+        @SerializedName("photos3")
+        @Expose
+        private String photos3;
+        @SerializedName("photos4")
+        @Expose
+        private String photos4;
+        @SerializedName("photos5")
+        @Expose
+        private String photos5;
+        @SerializedName("photos6")
+        @Expose
+        private String photos6;
+        @SerializedName("photos7")
+        @Expose
+        private String photos7;
+        @SerializedName("photos8")
+        @Expose
+        private String photos8;
+        @SerializedName("photos9")
+        @Expose
+        private String photos9;
+        @SerializedName("photos10")
+        @Expose
+        private String photos10;
+        @SerializedName("photos11")
+        @Expose
+        private String photos11;
+        @SerializedName("photos12")
+        @Expose
+        private String photos12;
+        @SerializedName("remark1")
+        @Expose
+        private String remark1;
+        @SerializedName("remark2")
+        @Expose
+        private String remark2;
+        @SerializedName("remark3")
+        @Expose
+        private String remark3;
+        @SerializedName("remark4")
+        @Expose
+        private String remark4;
+        @SerializedName("remark5")
+        @Expose
+        private String remark5;
+        @SerializedName("remark6")
+        @Expose
+        private String remark6;
+        @SerializedName("remark7")
+        @Expose
+        private String remark7;
+        @SerializedName("remark8")
+        @Expose
+        private String remark8;
+        @SerializedName("remark9")
+        @Expose
+        private String remark9;
+        @SerializedName("remark10")
+        @Expose
+        private String remark10;
+        @SerializedName("remark11")
+        @Expose
+        private String remark11;
+        @SerializedName("remark12")
+        @Expose
+        private String remark12;
+
+        public String getProjectNo() {
+            return projectNo;
         }
 
-        public void setProject_no(String project_no) {
-            this.project_no = project_no;
+        public void setProjectNo(String projectNo) {
+            this.projectNo = projectNo;
         }
 
         public String getRegisno() {
@@ -82,12 +141,12 @@ public class RejectInstallationModel implements Serializable {
             this.beneficiary = beneficiary;
         }
 
-        public String getCustomer_name() {
-            return customer_name;
+        public String getCustomerName() {
+            return customerName;
         }
 
-        public void setCustomer_name(String customer_name) {
-            this.customer_name = customer_name;
+        public void setCustomerName(String customerName) {
+            this.customerName = customerName;
         }
 
         public String getPhotos1() {
@@ -281,6 +340,7 @@ public class RejectInstallationModel implements Serializable {
         public void setRemark12(String remark12) {
             this.remark12 = remark12;
         }
+
     }
 
 }

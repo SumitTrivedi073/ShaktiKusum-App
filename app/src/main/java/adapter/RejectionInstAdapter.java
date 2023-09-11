@@ -53,11 +53,11 @@ public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 @Override
 public void onBindViewHolder(@NonNull final ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-        holder.custNameTxt.setText(responseList.get(position).getCustomer_name());
+        holder.custNameTxt.setText(responseList.get(position).getCustomerName());
         holder.billNoTxt.setText(responseList.get(position).getVbeln());
         holder.beneficiaryId.setText(responseList.get(position).getBeneficiary());
         holder.Regis.setText(responseList.get(position).getRegisno());
-        holder.projectNo.setText(responseList.get(position).getProject_no());
+        holder.projectNo.setText(responseList.get(position).getProjectNo());
          
 
         holder.item_card.setOnClickListener(v -> {

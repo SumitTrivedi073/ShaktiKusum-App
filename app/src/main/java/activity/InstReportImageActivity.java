@@ -48,7 +48,7 @@ import database.DatabaseHelper;
 import utility.CustomUtility;
 
 
-@BuildCompat.PrereleaseSdkCheck
+
 public class InstReportImageActivity extends BaseActivity implements ImageSelectionAdapter.ImageSelectionListener {
 
 
@@ -78,7 +78,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
         CheakPermissions();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+
     private void CheakPermissions() {
         if (checkPermission()) {
             SetAdapter();

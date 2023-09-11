@@ -142,8 +142,6 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
         if (getIntent().getExtras() != null) {
             rejectDatum = (RejectInstallationModel.RejectDatum) getIntent().getSerializableExtra(Constant.RejectInstallation);
 
-            Log.e("Image",rejectDatum.photos1);
-            Log.e("Image1",rejectDatum.photos3);
         }
     }
 
@@ -163,14 +161,7 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
 
                 if (imageArrayList.size() > 0) {
 
-                    if (!imageArrayList.get(0).isImageSelected() || !imageArrayList.get(1).isImageSelected()) {
-                        CustomUtility.showToast(RejectInstallationImageActivity.this, getResources().getString(R.string.select_image));
-                    } else if (remarkTxt.getText().toString().isEmpty()) {
-                        CustomUtility.showToast(RejectInstallationImageActivity.this, getResources().getString(R.string.writeRemark));
-                    } else {
-                        // SubmitJointInspectionAPI();
-                       // new RejectInstallationImageActivity.SubmitJointInspection().execute();
-                    }
+                    // new RejectInstallationImageActivity.SubmitJointInspection().execute();
                 } else {
                     CustomUtility.showToast(RejectInstallationImageActivity.this, getResources().getString(R.string.select_image));
                 }
@@ -187,38 +178,38 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
      /*   itemNameList.add(getResources().getString(R.string.jsDocument1));
         itemNameList.add(getResources().getString(R.string.jsDocument2));*/
 
-        if (!rejectDatum.photos1.isEmpty()){
+        if (!rejectDatum.getPhotos1().isEmpty()){
             itemNameList.add(getResources().getString(R.string.photosOfCivilMaterial));
-        }  else if (!rejectDatum.photos2.isEmpty()){
+        }  else if (!rejectDatum.getPhotos2().isEmpty()){
             itemNameList.add(getResources().getString(R.string.pannelModeuleFrontSide));
 
-        } else if (!rejectDatum.photos3.isEmpty()){
+        } else if (!rejectDatum.getPhotos3().isEmpty()){
             itemNameList.add(getResources().getString(R.string.controllerWithFormer));
 
-        } else if (!rejectDatum.photos4.isEmpty()){
+        } else if (!rejectDatum.getPhotos4().isEmpty()){
             itemNameList.add(getResources().getString(R.string.dischargeWithFormer));
 
-        } else if (!rejectDatum.photos5.isEmpty()){
+        } else if (!rejectDatum.getPhotos5().isEmpty()){
             itemNameList.add(getResources().getString(R.string.foundationWithFormer));
 
-        } else if (!rejectDatum.photos6.isEmpty()){
+        } else if (!rejectDatum.getPhotos6().isEmpty()){
             itemNameList.add(getResources().getString(R.string.earthingAndLighting));
 
-        } else if (!rejectDatum.photos7.isEmpty()){
+        } else if (!rejectDatum.getPhotos7().isEmpty()){
             itemNameList.add(getResources().getString(R.string.noDuesForm));
 
-        } else if (!rejectDatum.photos8.isEmpty()){
+        } else if (!rejectDatum.getPhotos8().isEmpty()){
             itemNameList.add(getResources().getString(R.string.noNetworkNoc));
 
-        } else if (!rejectDatum.photos9.isEmpty()){
+        } else if (!rejectDatum.getPhotos9().isEmpty()){
             itemNameList.add(getResources().getString(R.string.delayInstallation));
 
-        } else if (!rejectDatum.photos10.isEmpty()){
+        } else if (!rejectDatum.getPhotos10().isEmpty()){
             itemNameList.add(getResources().getString(R.string.insideCOntroller));
 
-        } else if (!rejectDatum.photos11.isEmpty()){
+        } else if (!rejectDatum.getPhotos11().isEmpty()){
             itemNameList.add(getResources().getString(R.string.outsideController));
-        } else if (!rejectDatum.photos12.isEmpty()){
+        } else if (!rejectDatum.getPhotos12().isEmpty()){
             itemNameList.add(getResources().getString(R.string.namePlate));
         }
 
@@ -327,7 +318,7 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
     private void cameraIntent() {
 
         camraLauncher.launch(new Intent(RejectInstallationImageActivity.this, CameraActivity2.class)
-                .putExtra("cust_name", rejectDatum.getCustomer_name()));
+                .putExtra("cust_name", rejectDatum.getCustomerName()));
 
     }
 
