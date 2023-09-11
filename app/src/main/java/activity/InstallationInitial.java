@@ -436,63 +436,13 @@ public class InstallationInitial extends BaseActivity {
                     RMS_SERVER_DOWN = "Working Fine";
                     System.out.println("VikasVIHU==>>" + mBTResonseDataList.get(vkp).getDEVICENO());
 
-                        if (isControllerIDScan) {
-                            if (CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice)!=null
-                                    && !CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice).isEmpty()
-                                    && CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice).equals("true")) {
-                                saveData();
-                            } else {
-                                CustomUtility.ShowToast("Please debug first than proceed!", getApplicationContext());
-                            }
-                        } else {
-                            CustomUtility.ShowToast("Please Scan Controller ID first!", getApplicationContext());
-                        }
-
-
+                    saveDataValidation();
                 } else {
+                    saveData();
 
-                    InstallationBean param_invc = new InstallationBean();
-                    param_invc = db.getInstallationData(pernr, billno);
-                    Log.e("param_invc", param_invc.getLatitude());
-                    if ((!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude())) && (!TextUtils.isEmpty(param_invc.getSolarpanel_wattage())) && (!TextUtils.isEmpty(param_invc.getNo_of_module_value()))) {
-                        saveData();
-                    } else {
-
-                            if (isControllerIDScan) {
-                                if (CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice)!=null
-                                        && !CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice).isEmpty()
-                                        && CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice).equals("true")) {
-                                    saveData();
-                                } else {
-                                    CustomUtility.ShowToast("Please debug first than proceed!", getApplicationContext());
-                                }
-                            } else {
-                                CustomUtility.ShowToast("Please Scan Controller ID first!", getApplicationContext());
-                            }
-
-                    }
                 }
             } else {
-                InstallationBean param_invc = new InstallationBean();
-                param_invc = db.getInstallationData(pernr, billno);
-                Log.e("param_invc2", param_invc.getLatitude());
-                if (param_invc != null && (!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude())) && (!TextUtils.isEmpty(param_invc.getSolarpanel_wattage())) && (!TextUtils.isEmpty(param_invc.getNo_of_module_value()))) {
-                    saveData();
-                } else {
-
-                        if (isControllerIDScan) {
-                            if (CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice)!=null
-                            && !CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice).isEmpty()
-                                    && CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice).equals("true")) {
-                                saveData();
-                            } else {
-                                CustomUtility.ShowToast("Please debug first than proceed!", getApplicationContext());
-                            }
-                        } else {
-                            CustomUtility.ShowToast("Please Scan Controller ID first!", getApplicationContext());
-                        }
-
-                }
+                saveData();
             }
         });
 
@@ -660,9 +610,6 @@ public class InstallationInitial extends BaseActivity {
 
                 return true;
             case R.id.act_comp_add_damage_complain:
-
-                //  Intent mIntent = new Intent(InstallationInitial.this, ScannedBarcodeActivity.class);
-                //
                 Intent mIntent = new Intent(InstallationInitial.this, AddDamage_MissingActivity.class);// original
                 Bundle extras = new Bundle();
                 extras.putString("bill_no", billno);///vbeln
@@ -850,16 +797,27 @@ public class InstallationInitial extends BaseActivity {
 
 
     public void saveData() {
+        InstallationBean param_invc = new InstallationBean();
+        param_invc = db.getInstallationData(pernr, billno);
+        Log.e("param_invc", param_invc.getLatitude());
+        if ((!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude())) && (!TextUtils.isEmpty(param_invc.getSolarpanel_wattage())) && (!TextUtils.isEmpty(param_invc.getNo_of_module_value()))) {
+            saveDataValidation();
+        } else {
 
-            if (reason.getVisibility() == View.VISIBLE) {
-                if (!reasontxt.getText().toString().isEmpty()) {
+            if (isControllerIDScan) {
+                if (CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice)!=null
+                        && !CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice).isEmpty()
+                        && CustomUtility.getSharedPreferences(mContext,Constant.isDebugDevice).equals("true")) {
                     saveDataValidation();
                 } else {
-                    CustomUtility.ShowToast("Please Enter Installation Delay Reason.", getApplicationContext());
+                    CustomUtility.ShowToast("Please debug first than proceed!", getApplicationContext());
                 }
             } else {
-                saveDataValidation();
+                CustomUtility.ShowToast("Please Scan Controller ID first!", getApplicationContext());
             }
+
+        }
+
 
 
 
@@ -1005,8 +963,20 @@ public class InstallationInitial extends BaseActivity {
                 }
         }
         if (isSubmit ) {
+
+
              if(CustomUtility.isInternetOn(getApplicationContext())) {
-                 SubmitDebugData();
+
+                 if (reason.getVisibility() == View.VISIBLE) {
+                     if (!reasontxt.getText().toString().isEmpty()) {
+                         SubmitDebugData();
+                     } else {
+                         CustomUtility.ShowToast("Please Enter Installation Delay Reason.", getApplicationContext());
+                     }
+                 } else {
+                     SubmitDebugData();
+                 }
+
              }else {
                  CustomUtility.ShowToast(getResources().getString(R.string.savedInLocalDatabase),mContext);
                  Intent intent = new Intent(mContext, InstallationList.class);
