@@ -2715,7 +2715,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
                     } catch (InterruptedException e1) {
                         baseRequest.hideLoader();
-                        CustomUtility.ShowToast(getResources().getString(R.string.pleasetryAgain),mContext);
+                    //    CustomUtility.ShowToast(getResources().getString(R.string.pleasetryAgain),mContext);
                         e1.printStackTrace();
                     }
 
@@ -2723,7 +2723,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             } catch (Exception e) {
                 e.printStackTrace();
                 baseRequest.hideLoader();
-                CustomUtility.ShowToast(getResources().getString(R.string.pleasetryAgain),mContext);
+             //   CustomUtility.ShowToast(getResources().getString(R.string.pleasetryAgain),mContext);
                 return false;
             }
             return false;

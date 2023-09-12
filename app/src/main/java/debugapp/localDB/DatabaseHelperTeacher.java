@@ -436,7 +436,7 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
 
       db.execSQL(CREATE_TABLE_DEVICE_INFO);
       db.execSQL(CREATE_TABLE_DEVICE_INFO_SIM);
-      db.execSQL(CREATE_TABLE_DEVICE_INFO);
+
 
     }
 

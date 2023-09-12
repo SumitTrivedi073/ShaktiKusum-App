@@ -77,7 +77,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     SimpleDateFormat getDate, getTime;
     Bitmap bitmap;
     File save;
-    public int TIME_INTERVAL = 30  * 1000;
+    public int TIME_INTERVAL =  1000;
     private LocationRequest locationRequest;
 
 
