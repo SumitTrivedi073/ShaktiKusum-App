@@ -292,6 +292,7 @@
     <string name="savedInLocalDatabase">Your Data Saved in local Database, please check your internet connection and try again!</string>
     <string name="pleasetryAgain">Please try again</string>
     <string name="fetching_location">Please wait we are fetching your location</string>
+    <string name="fileNotValid">File Not Valid</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

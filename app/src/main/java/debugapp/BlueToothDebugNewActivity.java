@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -100,6 +101,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import utility.CustomUtility;
+import utility.FileUtils;
 import webservice.WebURL;
 
 public class BlueToothDebugNewActivity extends BaseActivity {
@@ -186,7 +188,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     String mvMinute;
     String mvNo_of_Start;
     String filePath;
-
+    File selectedFile;
     String mAppName = "KUSUM", dirName = "";
     String project_no = "";
     File file;
@@ -2948,6 +2950,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                     message.obj = "Data Extraction Completed!";
                                     mHandler.sendMessage(message);
                                     mBoolflag = true;
+                                    sendFileToRMSServer();
                                     break;
                                 } else {
                                     if (mCharOne == 0 || mCharTwo == 0) {
@@ -3258,6 +3261,29 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         protected void onPostExecute(Boolean result) {
 
             super.onPostExecute(result);
+        }
+    }
+    void sendFileToRMSServer(){
+        Uri uri = Uri.parse(dirName);
+        String[] fileName = FileUtils.getPath(BlueToothDebugNewActivity.this, uri).split("/");
+        String finalFileName = fileName[fileName.length - 1];
+        filePath = FileUtils.getPath(BlueToothDebugNewActivity.this, uri);
+        Log.e("uri=========>", uri.toString());
+        Log.e("finalFileName=========>", finalFileName);
+        Log.e("filePath=========>", filePath);
+
+        if (finalFileName.contains(".xls")) {
+            selectedFile = new File(filePath);
+            Log.e("selectedFile=========>", selectedFile.getAbsolutePath() + "==========>" + selectedFile.length());
+
+            if(CustomUtility.isInternetOn(BlueToothDebugNewActivity.this)){
+              //  uploadFile();
+            }else {
+                CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection), BlueToothDebugNewActivity.this);
+            }
+
+        } else {
+            CustomUtility.ShowToast(getResources().getString(R.string.fileNotValid), getApplicationContext());
         }
     }
 
