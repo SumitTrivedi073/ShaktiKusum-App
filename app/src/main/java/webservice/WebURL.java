@@ -81,6 +81,8 @@ public class WebURL {
 
     public static final String saveJointInspectionAPI = BASEURL +"/sap/bc/bsp/sap/zmapp_solar_pro/joint_inspection_save.htm";
 
+    public static final String saveRejectImageAPI = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_rejected_installation.htm";
+
     public static final String saveDeptDocSubmissionAPI = BASEURL +"/sap/bc/bsp/sap/zmapp_solar_pro/document_sub_save.htm";
 
     private class Installtion {

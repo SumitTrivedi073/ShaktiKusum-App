@@ -2,7 +2,7 @@ package adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,11 +21,11 @@ import bean.RejectListBean;
 import database.DatabaseHelper;
 import com.shaktipumplimited.shaktikusum.R;
 import activity.RejectInstRepImgActivity;
-import utility.CustomUtility;
+
 
 
 public class Adapter_reject_list extends RecyclerView.Adapter<Adapter_reject_list.HomeCategoryViewHolder> {
-    View.OnClickListener onclick_listener;
+
     DatabaseHelper db;
     RejectListBean rejectListBean;
     private final Context context;

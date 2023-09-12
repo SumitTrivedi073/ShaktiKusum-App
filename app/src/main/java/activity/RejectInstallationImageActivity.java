@@ -10,12 +10,16 @@ import static utility.FileUtils.getPath;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,14 +41,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.shaktipumplimited.shaktikusum.R;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import adapter.ImageSelectionAdapter;
 import bean.ImageModel;
+import bean.InstallationBean;
 import bean.RejectInstallationModel;
 import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;
+import webservice.CustomHttpClient;
+import webservice.WebURL;
 
 public class RejectInstallationImageActivity extends BaseActivity implements ImageSelectionAdapter.ImageSelectionListener {
 
@@ -56,14 +68,13 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
     int selectedIndex;
     ImageSelectionAdapter customAdapter;
     List<String> itemNameList = new ArrayList<>();
+    List<String> positionList = new ArrayList<>();
     String enqDocno, latitude = "", longitude = "";
     Toolbar mToolbar;
     EditText remarkTxt;
-
     TextView submitBtn;
     boolean isUpdate = false;
-
-
+    String versionName = "0.0";
     RejectInstallationModel.RejectDatum rejectDatum;
 
     @Override
@@ -72,7 +83,7 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
         setContentView(R.layout.activity_reject_installation_image);
         
         Init();
-        cheakPermissions();
+        checkPermissions();
         
     }
     
@@ -84,20 +95,29 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mToolbar.setTitle(getResources().getString(R.string.JointInspectionDoc));
+        getSupportActionBar().setTitle(getResources().getString(R.string.rejectionImgae));
 
+        PackageManager pm = getApplicationContext().getPackageManager();
+        String pkgName = getApplicationContext().getPackageName();
+        PackageInfo pkgInfo = null;
+        try {
+            pkgInfo = pm.getPackageInfo(pkgName, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        assert pkgInfo != null;
+        versionName = String.valueOf(pkgInfo.versionName);
         retrieveValue();
         SetAdapter();
         listner();
     }
 
-    private void cheakPermissions() {
+    private void checkPermissions() {
         if (checkPermission()) {
             SetAdapter();
         } else {
             requestPermission();
         }
-
     }
 
     private void requestPermission() {
@@ -111,7 +131,6 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
                     new String[]{Manifest.permission.CAMERA,
                             Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     REQUEST_CODE_PERMISSION);
-
         }
     }
 
@@ -145,7 +164,6 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
         }
     }
 
-
     private void listner() {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,7 +179,15 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
 
                 if (imageArrayList.size() > 0) {
 
-                    // new RejectInstallationImageActivity.SubmitJointInspection().execute();
+                    for (int i = 0 ; i < imageArrayList.size() ; i++){
+                        if (!imageArrayList.get(i).isImageSelected() ) {
+                            CustomUtility.showToast(RejectInstallationImageActivity.this, getResources().getString(R.string.select_image));
+                        }
+                        else {
+                             new SubmitRejectImage().execute();
+                        }
+                    }
+
                 } else {
                     CustomUtility.showToast(RejectInstallationImageActivity.this, getResources().getString(R.string.select_image));
                 }
@@ -169,8 +195,6 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
             }
         });
     }
-
-
 
     private void SetAdapter() {
         imageArrayList = new ArrayList<>();
@@ -180,37 +204,40 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
 
         if (!rejectDatum.getPhotos1().isEmpty()){
             itemNameList.add(getResources().getString(R.string.photosOfCivilMaterial));
-        }  else if (!rejectDatum.getPhotos2().isEmpty()){
+            positionList.add(rejectDatum.getPhotos1());
+        }    if (!rejectDatum.getPhotos2().isEmpty()){
             itemNameList.add(getResources().getString(R.string.pannelModeuleFrontSide));
-
-        } else if (!rejectDatum.getPhotos3().isEmpty()){
+            positionList.add(rejectDatum.getPhotos2());
+        }   if (!rejectDatum.getPhotos3().isEmpty()){
             itemNameList.add(getResources().getString(R.string.controllerWithFormer));
-
-        } else if (!rejectDatum.getPhotos4().isEmpty()){
+            positionList.add(rejectDatum.getPhotos3());
+        }   if (!rejectDatum.getPhotos4().isEmpty()){
             itemNameList.add(getResources().getString(R.string.dischargeWithFormer));
-
-        } else if (!rejectDatum.getPhotos5().isEmpty()){
+            positionList.add(rejectDatum.getPhotos4());
+        }   if (!rejectDatum.getPhotos5().isEmpty()){
             itemNameList.add(getResources().getString(R.string.foundationWithFormer));
-
-        } else if (!rejectDatum.getPhotos6().isEmpty()){
+            positionList.add(rejectDatum.getPhotos5());
+        }   if (!rejectDatum.getPhotos6().isEmpty()){
             itemNameList.add(getResources().getString(R.string.earthingAndLighting));
-
-        } else if (!rejectDatum.getPhotos7().isEmpty()){
+            positionList.add(rejectDatum.getPhotos6());
+        }   if (!rejectDatum.getPhotos7().isEmpty()){
             itemNameList.add(getResources().getString(R.string.noDuesForm));
-
-        } else if (!rejectDatum.getPhotos8().isEmpty()){
+            positionList.add(rejectDatum.getPhotos7());
+        }   if (!rejectDatum.getPhotos8().isEmpty()){
             itemNameList.add(getResources().getString(R.string.noNetworkNoc));
-
-        } else if (!rejectDatum.getPhotos9().isEmpty()){
+            positionList.add(rejectDatum.getPhotos8());
+        }   if (!rejectDatum.getPhotos9().isEmpty()){
             itemNameList.add(getResources().getString(R.string.delayInstallation));
-
-        } else if (!rejectDatum.getPhotos10().isEmpty()){
+            positionList.add(rejectDatum.getPhotos9());
+        }   if (!rejectDatum.getPhotos10().isEmpty()){
             itemNameList.add(getResources().getString(R.string.insideCOntroller));
-
-        } else if (!rejectDatum.getPhotos11().isEmpty()){
+            positionList.add(rejectDatum.getPhotos10());
+        }   if (!rejectDatum.getPhotos11().isEmpty()){
             itemNameList.add(getResources().getString(R.string.outsideController));
-        } else if (!rejectDatum.getPhotos12().isEmpty()){
+            positionList.add(rejectDatum.getPhotos11());
+        }   if (!rejectDatum.getPhotos12().isEmpty()){
             itemNameList.add(getResources().getString(R.string.namePlate));
+            positionList.add(rejectDatum.getPhotos12());
         }
 
         for (int i = 0; i < itemNameList.size(); i++) {
@@ -221,8 +248,10 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
             imageModel.setBillNo("");
             imageModel.setLatitude("");
             imageModel.setLongitude("");
+            imageModel.setPoistion(Integer.parseInt(positionList.get(i)));
             imageArrayList.add(imageModel);
         }
+
         customAdapter = new ImageSelectionAdapter(RejectInstallationImageActivity.this, imageArrayList);
         recyclerview.setHasFixedSize(true);
         recyclerview.setAdapter(customAdapter);
@@ -241,7 +270,6 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
             isUpdate = false;
             selectImage("0");
         }
-
     }
 
     private void selectImage(String value) {
@@ -385,6 +413,7 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
         imageModel.setImagePath(path);
         imageModel.setImageSelected(true);
         imageModel.setBillNo(enqDocno);
+        imageModel.setPoistion(imageArrayList.get(selectedIndex).getPoistion());
         if (value.equals("0")) {
             imageModel.setLatitude(latitude);
             imageModel.setLongitude(longitude);
@@ -404,8 +433,7 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
         super.onPointerCaptureChanged(hasCapture);
     }
 
-
-   /* private class SubmitJointInspection extends AsyncTask<String, String, String> {
+    private class SubmitRejectImage extends AsyncTask<String, String, String> {
         ProgressDialog progressDialog;
 
         @Override
@@ -427,42 +455,44 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
             JSONArray ja_invc_data = new JSONArray();
             JSONObject jsonObj = new JSONObject();
             try {
+
                 jsonObj.put("project_no", rejectDatum.getProjectNo());
-                jsonObj.put("regisno", rejectDatum.getRegisno());
-                jsonObj.put("process_no", rejectDatum.getProcessNo());
-                jsonObj.put("userid", CustomUtility.getSharedPreferences(RejectInstallationImageActivity.this, "userid"));
+                jsonObj.put("project_login_no", "01");
+                jsonObj.put("app_version", versionName);
+                jsonObj.put("userid", "801113");
+            //    jsonObj.put("userid", CustomUtility.getSharedPreferences(RejectInstallationImageActivity.this, "userid"));
                 jsonObj.put("beneficiary", rejectDatum.getBeneficiary());
                 jsonObj.put("vbeln", rejectDatum.getVbeln());
-                jsonObj.put("jnt_ins_remark", remarkTxt.getText().toString().trim());
-                jsonObj.put("customer_name", rejectDatum.getName());
+                jsonObj.put("customer_name", rejectDatum.getCustomerName());
+                jsonObj.put("LatLng1", imageArrayList.get(0).getLatitude()+","+ imageArrayList.get(0).getLongitude());
+              
+                 if (imageArrayList.size() > 0) {
 
+                     for (int i = 0 ; i < imageArrayList.size() ; i++){
 
-                if (imageArrayList.size() > 0) {
-
-                    if (imageArrayList.get(0).isImageSelected()) {
-                        jsonObj.put("doc1", CustomUtility.getBase64FromBitmap(RejectInstallationImageActivity.this, imageArrayList.get(0).getImagePath()));
-                    }
-                    if (1 < imageArrayList.size() && imageArrayList.get(1).isImageSelected()) {
-                        jsonObj.put("doc2", CustomUtility.getBase64FromBitmap(RejectInstallationImageActivity.this, imageArrayList.get(1).getImagePath()));
-                    }
+                         Log.e("PositionSelected=========>", "PHOTO"+imageArrayList.get(i).getPoistion()+"==========>"+imageArrayList.get(i).getImagePath());
+                         jsonObj.put("PHOTO"+imageArrayList.get(i).getPoistion(), CustomUtility.getBase64FromBitmap(RejectInstallationImageActivity.this,imageArrayList.get(i).getImagePath()));
+                         //    jsonObj.put("photo"+imageArrayList.get(i).getPoistion(), CustomUtility.getBase64FromBitmap(RejectInstallationImageActivity.this,imageArrayList.get(i).getImagePath()));
+                     }
                 }
+
                 ja_invc_data.put(jsonObj);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             Log.e("Param====>", ja_invc_data.toString());
             final ArrayList<NameValuePair> param1_invc = new ArrayList<>();
-            param1_invc.add(new BasicNameValuePair("inspection", String.valueOf(ja_invc_data)));
+            param1_invc.add(new BasicNameValuePair("Reject", String.valueOf(ja_invc_data)));
             Log.e("DATA", "$$$$" + param1_invc);
             System.out.println("param1_invc_vihu==>>" + param1_invc);
             try {
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
                 StrictMode.setThreadPolicy(policy);
-                obj2 = CustomHttpClient.executeHttpPost1(WebURL.saveJointInspectionAPI, param1_invc);
+                obj2 = CustomHttpClient.executeHttpPost1(WebURL.saveRejectImageAPI, param1_invc);
                 Log.e("OUTPUT1", "&&&&" + obj2);
                 System.out.println("OUTPUT1==>>" + obj2);
                 progressDialog.dismiss();
-                if (!obj2.equalsIgnoreCase("")) {
+                if (!obj2.isEmpty()) {
                     JSONObject object = new JSONObject(obj2);
                     String obj1 = object.getString("data_return");
                     JSONArray ja = new JSONArray(obj1);
@@ -478,8 +508,6 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
                         } else if (invc_done.equalsIgnoreCase("N")) {
                             showingMessage(getResources().getString(R.string.dataNotSubmitted));
                             progressDialog.dismiss();
-
-
                         }
                     }
                 } else {
@@ -497,7 +525,7 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
         protected void onPostExecute(String result) {
             progressDialog.dismiss();
         }
-    }*/
+    }
 
     private void showingMessage(String message) {
         runOnUiThread(new Runnable() {
@@ -508,4 +536,5 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
             }
         });
     }
+
 }

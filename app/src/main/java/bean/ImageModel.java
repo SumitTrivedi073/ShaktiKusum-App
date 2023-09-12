@@ -3,6 +3,7 @@ package bean;
 public class ImageModel {
 
     String ID,name,ImagePath,billNo,latitude,longitude;
+    int position;
     boolean isImageSelected;
 
     public String getName() {
@@ -59,6 +60,14 @@ public class ImageModel {
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
+    }
+
+    public int getPoistion() {
+        return position;
+    }
+
+    public void setPoistion(int poistion) {
+        this.position = poistion;
     }
 }
 

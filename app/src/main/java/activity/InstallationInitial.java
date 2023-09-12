@@ -1748,27 +1748,28 @@ public class InstallationInitial extends BaseActivity {
                         jsonObj.put("LatLng8", imageList.get(7).getLatitude()+","+imageList.get(7).getLongitude());
                      //   jsonObj.put("photo_name8",imageList.get(7).getName());
                     }
-                    }
                     if (8 < imageList.size() && imageList.get(8).isImageSelected()) {
-                       jsonObj.put("PHOTO9", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(8).getImagePath()));
+                        jsonObj.put("PHOTO9", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(8).getImagePath()));
                         jsonObj.put("LatLng9", imageList.get(8).getLatitude()+","+imageList.get(8).getLongitude());
-                      //  jsonObj.put("photo_name9",imageList.get(8).getName());
+                        //  jsonObj.put("photo_name9",imageList.get(8).getName());
                     }
                     if (9 < imageList.size() && imageList.get(9).isImageSelected()) {
                         jsonObj.put("PHOTO10", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(9).getImagePath()));
                         jsonObj.put("LatLng10", imageList.get(9).getLatitude()+","+imageList.get(9).getLongitude());
-                      //  jsonObj.put("photo_name10",imageList.get(9).getName());
+                        //  jsonObj.put("photo_name10",imageList.get(9).getName());
                     }
                     if (10 < imageList.size() && imageList.get(10).isImageSelected()) {
                         jsonObj.put("PHOTO11", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(10).getImagePath()));
                         jsonObj.put("LatLng11", imageList.get(10).getLatitude()+","+imageList.get(10).getLongitude());
-                      //  jsonObj.put("photo_name11",imageList.get(10).getName());
+                        //  jsonObj.put("photo_name11",imageList.get(10).getName());
                     }
                     if (11 < imageList.size() && imageList.get(11).isImageSelected()) {
                         jsonObj.put("PHOTO12", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(11).getImagePath()));
                         jsonObj.put("LatLng12", imageList.get(11).getLatitude()+","+imageList.get(11).getLongitude());
-                     //      jsonObj.put("photo_name12",imageList.get(11).getName());
+                        //      jsonObj.put("photo_name12",imageList.get(11).getName());
                     }
+                    }
+
 
                 ja_invc_data.put(jsonObj);
 
