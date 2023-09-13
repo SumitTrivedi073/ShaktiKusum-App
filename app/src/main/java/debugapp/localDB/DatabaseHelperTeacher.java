@@ -33,11 +33,6 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
 
     private static final String LOGIN_KEY_ID = "id";
 
-
-
-
-
-
     /////////////////////////////device Status Nikola
     private static final String DEVICE_DEVICE_NO = "DEVICE_NO";
     private static final String DEVICE_SIGNL_STREN = "SIGNL_STREN";
@@ -125,33 +120,11 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
 
             System.out.println("insert_Data ==>"+insert);
         }
-        // Creating content values
 
-       // System.out.println("insert==>>"+insert);
-
-        //insert row in table
-        //long insert = db.insert(DEVICE_SAVE_SIM_INFO_NAME, null, values);
 
         return insert;
 
     }
-
-   /* public void deleteSimInfoData(String mBillNo) {
-        int deleteSim = 0;
-
-        Cursor cursor;
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        try {
-            db.execSQL("delete  from " + DEVICE_SAVE_SIM_INFO_NAME + " where " + DEVICE_NO_SIM_BILL + "='" + mBillNo+"'");
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-        }
-        // Creating content values
-
-    }*/
 
     public long deleteSimInfoData(String mBillNo)
     {
@@ -260,7 +233,10 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
     public long insertDeviceDebugInforData(String mDEVICE_DEVICE_NO, String mDEVICE_SIGNL_STREN, String mDEVICE_SIM, String mDEVICE_NET_REG, String mDEVICE_SER_CONNECT,
                                        String mDEVICE_CAB_CONNECT,
                                        String mDEVICE_LATITUDE, String mDEVICE_LANGITUDE, String mDEVICE_MOBILE,String mDEVICE_IMEI,
-                                       String mDEVICE_DONGAL_ID, String mDEVICE_MUserId,String RMS_STATUS, String RMS_CURRENT_ONLINE_STATUS, String RMS_LAST_ONLINE_DATE, String mDEVICE_INS_NAME, String mDEVICE_INS_MOBILE, String RMS_DEBUG_EXTRN,String RMS_SERVER_DOWN, String RMS_ORG_D_F, boolean mCheckFirst) {
+                                       String mDEVICE_DONGAL_ID, String mDEVICE_MUserId,String RMS_STATUS,
+                                           String RMS_CURRENT_ONLINE_STATUS, String RMS_LAST_ONLINE_DATE,
+                                           String mDEVICE_INS_NAME, String mDEVICE_INS_MOBILE,
+                                           String RMS_DEBUG_EXTRN,String RMS_SERVER_DOWN, String RMS_ORG_D_F, boolean mCheckFirst) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -377,8 +353,7 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
                 mDEVICE_DONGAL_ID,  mDEVICE_MUserId, RMS_STATUS, RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mDEVICE_INS_NAME, mDEVICE_INS_MOBILE, RMS_SERVER_DOWN, RMS_DEBUG_EXTRN, RMS_ORG_D_F;  boolean mCheckFirst;
         SQLiteDatabase db = this.getReadableDatabase();
         try {
-            // Cursor cursor = db.rawQuery("SELECT * FROM " + DEVICE_PARAMETER_TABLE_NAME +" where "+DEVICE_PARA_DEVICE_TYPE+"=?", new String[]{ DeviceType });
-            Cursor cursor = db.rawQuery("SELECT * FROM " + DEVICE_DEVICE_INFO_NAME +" WHERE DEVICE_NO ='" + mDeviceNo + "'", null);
+             Cursor cursor = db.rawQuery("SELECT * FROM " + DEVICE_DEVICE_INFO_NAME +" WHERE DEVICE_NO ='" + mDeviceNo + "'", null);
 
             if (cursor.getCount() > 0) {
                 if (cursor.moveToFirst()) {
@@ -462,6 +437,7 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
       db.execSQL(CREATE_TABLE_DEVICE_INFO);
       db.execSQL(CREATE_TABLE_DEVICE_INFO_SIM);
 
+
     }
 
     @Override
@@ -469,9 +445,6 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS '" + CREATE_TABLE_DEVICE_INFO + "'");
         db.execSQL("DROP TABLE IF EXISTS '" + CREATE_TABLE_DEVICE_INFO_SIM + "'");
-        //onCreate(db);
+
     }
-
-    ///////////////////////////////shima device local data
-
 }

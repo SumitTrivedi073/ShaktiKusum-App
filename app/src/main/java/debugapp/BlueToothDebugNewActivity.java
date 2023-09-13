@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,10 +41,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -71,6 +76,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -100,6 +106,8 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import utility.CustomUtility;
+import utility.FileUtils;
+import utility.VolleyMultipartRequest;
 import webservice.WebURL;
 
 public class BlueToothDebugNewActivity extends BaseActivity {
@@ -185,8 +193,8 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     String mvHour;
     String mvMinute;
     String mvNo_of_Start;
-    String filePath;
-
+    String filePath,finalFileName;
+    File selectedFile;
     String mAppName = "KUSUM", dirName = "";
     String project_no = "";
     File file;
@@ -219,7 +227,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     private int mLengthCount;
     private String headerLenghtMonth = "";
     private List<String> mMonthHeaderList;
-    private boolean mBoolflag = false;
+    private boolean mBoolflag = false,isDataExtract= false;
     private RelativeLayout rlvLoadingViewID;
     private TextView txtHeadingLabelID;
     private String MEmpType = "null", version;
@@ -429,7 +437,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                 if (mSimDetailsInfoResponse.size() >= 3) {
 
 
-                                    if (checkFirstTimeOlineStstus != 0) {
+                                    if (isDataExtract) {
                                         WebURL.BT_DEBUG_CHECK = 1;
                                         Constant.DBUG_PER_OFLINE = "X";//PER_OFLINE
                                         CustomUtility.setSharedPreference(getApplicationContext(), "DeviceStatus", getResources().getString(R.string.offline));
@@ -491,7 +499,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         rlvBT_9_ID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dirName = getMediaFilePath("", "Month_" + ControllerSerialNumber + ".xls");
+                dirName = getMediaFilePath("", "Month_" + ControllerSerialNumber +"_"+Calendar.getInstance().getTimeInMillis()+ ".xls");
 
                 if (!dirName.isEmpty()) {
                     if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
@@ -1052,6 +1060,8 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             jsonObj.put("RMS_SERVER_STATUS", RMS_SERVER_DOWN);
 
             jsonArray.put(jsonObj);
+            mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO, SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC, SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID, MUserId, RMS_STATUS, RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB, RMS_DEBUG_EXTRN, RMS_SERVER_DOWN, RMS_ORG_D_F, true);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -1079,10 +1089,6 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                     mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
 
                     CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice, "true");
-                    if (mSimDetailsInfoResponse.size() > 0)
-                        mSimDetailsInfoResponse.clear();
-
-                    mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
 
                     Constant.BT_DEVICE_NAME = "";
                     Constant.BT_DEVICE_MAC_ADDRESS = "";
@@ -2717,7 +2723,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
                     } catch (InterruptedException e1) {
                         baseRequest.hideLoader();
-                        CustomUtility.ShowToast(getResources().getString(R.string.pleasetryAgain),mContext);
+                    //    CustomUtility.ShowToast(getResources().getString(R.string.pleasetryAgain),mContext);
                         e1.printStackTrace();
                     }
 
@@ -2725,7 +2731,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             } catch (Exception e) {
                 e.printStackTrace();
                 baseRequest.hideLoader();
-                CustomUtility.ShowToast(getResources().getString(R.string.pleasetryAgain),mContext);
+             //   CustomUtility.ShowToast(getResources().getString(R.string.pleasetryAgain),mContext);
                 return false;
             }
             return false;
@@ -2944,12 +2950,13 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                             try {
                                 System.out.println("vikas--3==>" + mCharOne + "" + mCharTwo);
                                 if ("TX".equalsIgnoreCase((char) mCharOne + "" + (char) mCharTwo)) {
-
+                                    isDataExtract = true;
                                     CustomUtility.hideProgressDialog(BlueToothDebugNewActivity.this);
                                     Message message = new Message();
-                                    message.obj = "Data Extraction Completed!";
+                                    message.obj = "Data Extraction Completed! now upload extraction Data ";
                                     mHandler.sendMessage(message);
                                     mBoolflag = true;
+                                    sendFileToRMSServer();
                                     break;
                                 } else {
                                     if (mCharOne == 0 || mCharTwo == 0) {
@@ -3012,7 +3019,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                         } else {
                             if (sheet1 == null) {
                                 wb = new HSSFWorkbook();
-                                wb.createSheet(ControllerSerialNumber + ".xls");
+                                wb.createSheet(ControllerSerialNumber +"_"+Calendar.getInstance().getTimeInMillis()+ ".xls");
                             }
                             try {
                                 FileOutputStream os = new FileOutputStream(dirName);
@@ -3033,7 +3040,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
                             if (sheet1 == null) {
                                 wb = new HSSFWorkbook();
-                                wb.createSheet(ControllerSerialNumber + ".xls");
+                                wb.createSheet(ControllerSerialNumber +"_"+Calendar.getInstance().getTimeInMillis()+ ".xls");
                             }
                             try {
                                 FileOutputStream os = new FileOutputStream(dirName);
@@ -3262,6 +3269,29 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             super.onPostExecute(result);
         }
     }
+    void sendFileToRMSServer(){
+        Uri uri = Uri.parse(dirName);
+        String[] fileName = FileUtils.getPath(BlueToothDebugNewActivity.this, uri).split("/");
+         finalFileName = fileName[fileName.length - 1];
+        filePath = FileUtils.getPath(BlueToothDebugNewActivity.this, uri);
+        Log.e("uri=========>", uri.toString());
+        Log.e("finalFileName=========>", finalFileName);
+        Log.e("filePath=========>", filePath);
+
+        if (finalFileName.contains(".xls")) {
+            selectedFile = new File(filePath);
+            Log.e("selectedFile=========>", selectedFile.getAbsolutePath() + "==========>" + selectedFile.length());
+
+            if(CustomUtility.isInternetOn(BlueToothDebugNewActivity.this)){
+                uploadFile(selectedFile);
+            }else {
+                CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection), BlueToothDebugNewActivity.this);
+            }
+
+        } else {
+            CustomUtility.ShowToast(getResources().getString(R.string.fileNotValid), getApplicationContext());
+        }
+    }
 
     public String getMediaFilePath(String type, String name) {
 
@@ -3298,6 +3328,83 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             return true;
         }
         return false;
+    }
+
+    /*-------------------------------------------------------------Upload Excel Sheet-----------------------------------------------------------------------------*/
+
+    public void uploadFile(File selectedFile) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                CustomUtility.showProgressDialogue(BlueToothDebugNewActivity.this);
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        VolleyMultipartRequest volleyMultipartRequest = new VolleyMultipartRequest(
+                Request.Method.POST,
+                "https://solar10.shaktisolarrms.com/RMSAppTest1/ExcelUploadNew",
+                new Response.Listener<NetworkResponse>() {
+                    @Override
+                    public void onResponse(NetworkResponse response) {
+                        //Handle response
+                        hideDialogue();
+
+                        try {
+                            String json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+                            JSONObject obj = new JSONObject(json);
+                            Log.e("obj==========>", obj.toString());
+                            CustomUtility.ShowToast(obj.getString("message"), getApplicationContext());
+                        } catch (JSONException |
+                                 UnsupportedEncodingException e) {
+                            Log.e("JSONException==========>", e.toString());
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //Handle error
+                        hideDialogue();
+                        Log.e("error====>", "true" + "==========>" + error.toString());
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                String deviceNo = ControllerSerialNumber;
+                deviceNo.replace(".xls", "");
+                params.put("type", "Month");
+                params.put("DeviceNO", deviceNo);
+                params.put("columnCount", "15");
+                Log.e("Param===>", "" + params.toString());
+                return params;
+            }
+
+            @Override
+            protected Map<String, DataPart> getByteData() {
+                Map<String, DataPart> params = new HashMap<>();
+                params.put("excel", new DataPart(ControllerSerialNumber, CustomUtility.getFileData(BlueToothDebugNewActivity.this.selectedFile)));
+                return params;
+            }
+        };
+
+        //I used this because it was sending the file twice to the server
+        volleyMultipartRequest.setRetryPolicy(
+                new DefaultRetryPolicy(0, 4, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        requestQueue.add(volleyMultipartRequest);
+    }
+
+    private void hideDialogue() {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                // Toast.makeText(SimhaTwoODATAExtractionActivity.this, "Hello", Toast.LENGTH_SHORT).show();
+
+                CustomUtility.hideProgressDialog(BlueToothDebugNewActivity.this);
+            }
+        });
     }
 
 }
