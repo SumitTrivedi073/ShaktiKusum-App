@@ -77,7 +77,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     SimpleDateFormat getDate, getTime;
     Bitmap bitmap;
     File save;
-    public int TIME_INTERVAL = 30  * 1000;
+    public int TIME_INTERVAL =  1000;
     private LocationRequest locationRequest;
 
 
@@ -169,6 +169,8 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
             startBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.e("display=======>",display.getText().toString().trim());
+                    if(!display.getText().toString().isEmpty()){
                     captureImage();
 
                     startBtn.setEnabled(false);
@@ -177,6 +179,9 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
                     new Handler(Looper.getMainLooper()).postDelayed(() -> {
                         startBtn.setEnabled(true);
                     }, 5000);
+                }else {
+                        CustomUtility.showToast(CameraActivity2.this,getResources().getString(R.string.fetching_location));
+                    }
                 }
             });
         }
@@ -390,7 +395,8 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
                     getTime = new SimpleDateFormat(TIME_STAMP_FORMAT_TIME, Locale.getDefault());
 
 
-                    display.setText(" Latitude : " + latitudetxt + "\n" + "Longitude : " + longitudetxt + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
+                    display.setText(" Latitude : " + latitudetxt + "\n" +
+                            "Longitude : " + longitudetxt + "\n" + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
                             + "\n" + "Customer: " + customer_name);
 
 
