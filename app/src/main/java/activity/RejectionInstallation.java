@@ -129,11 +129,10 @@ public class RejectionInstallation extends AppCompatActivity {
     }
 
     private void getRejctionInstList() {
-        CustomUtility.showProgressDialogue(RejectionInstallation.this);
         rejectionInstArrayList = new ArrayList< >();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.rejectionInstalltionAPI + "?userid=801113&project_no=1092", null, new Response.Listener<JSONObject>() {
+                WebURL.rejectionInstalltionAPI + "?project_no=" + CustomUtility.getSharedPreferences(getApplicationContext(), "projectid") + "&userid=" + CustomUtility.getSharedPreferences(getApplicationContext(), "userid")  , null, new Response.Listener<JSONObject>() {
 
 
             @Override

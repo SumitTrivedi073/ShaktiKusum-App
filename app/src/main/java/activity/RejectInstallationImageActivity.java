@@ -459,8 +459,8 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
                 jsonObj.put("project_no", rejectDatum.getProjectNo());
                 jsonObj.put("project_login_no", "01");
                 jsonObj.put("app_version", versionName);
-                jsonObj.put("userid", "801113");
-            //    jsonObj.put("userid", CustomUtility.getSharedPreferences(RejectInstallationImageActivity.this, "userid"));
+             //   jsonObj.put("userid", "801113");
+                jsonObj.put("userid", CustomUtility.getSharedPreferences(RejectInstallationImageActivity.this, "userid"));
                 jsonObj.put("beneficiary", rejectDatum.getBeneficiary());
                 jsonObj.put("vbeln", rejectDatum.getVbeln());
                 jsonObj.put("customer_name", rejectDatum.getCustomerName());
