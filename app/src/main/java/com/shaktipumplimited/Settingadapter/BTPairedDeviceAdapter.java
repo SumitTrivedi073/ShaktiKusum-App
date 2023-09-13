@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +61,6 @@ public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAd
             @Override
             public void onClick(View v) {
 
-
                     WebURL.BT_DEVICE_NAME = mDeviceNameList.get(position).toString();
                     holder.txtDeviceNoID.setText(WebURL.BT_DEVICE_NAME);
                     WebURL.BT_DEVICE_MAC_ADDRESS = mDeviceMACAddressList.get(position).toString();
@@ -70,7 +70,11 @@ public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAd
                     Intent intent = new Intent(mContext, BlueToothDebugNewActivity.class);
                     intent.putExtra("BtNameHead", Constant.BT_DEVICE_NAME);
                     intent.putExtra("BtMacAddressHead", Constant.BT_DEVICE_MAC_ADDRESS);
-                    intent.putExtra(Constant.ControllerSerialNumber, ControllerSerialNumber);
+                    if(ControllerSerialNumber.isEmpty()) {
+                        intent.putExtra(Constant.ControllerSerialNumber, mDeviceNameList.get(position).toString());
+                    }else {
+                        intent.putExtra(Constant.ControllerSerialNumber, ControllerSerialNumber);
+                    }
                    intent.putExtra(Constant.debugDataExtract, debugDataExtract);
                     mContext.startActivity(intent);
                     ((Activity) mContext).finish();

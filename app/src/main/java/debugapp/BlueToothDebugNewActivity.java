@@ -2962,11 +2962,19 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                 if ("TX".equalsIgnoreCase((char) mCharOne + "" + (char) mCharTwo)) {
                                     isDataExtract = true;
                                     CustomUtility.hideProgressDialog(BlueToothDebugNewActivity.this);
+                                    if(debugDataExtract.equals("false")){
                                     Message message = new Message();
                                     message.obj = "Data Extraction Completed! now upload extraction Data ";
                                     mHandler.sendMessage(message);
                                     mBoolflag = true;
+
                                     sendFileToRMSServer();
+                                    }else {
+                                        Message message = new Message();
+                                        message.obj = "Data Extraction Completed";
+                                        mHandler.sendMessage(message);
+                                        mBoolflag = true;
+                                    }
                                     break;
                                 } else {
                                     if (mCharOne == 0 || mCharTwo == 0) {
