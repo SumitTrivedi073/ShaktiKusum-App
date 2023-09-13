@@ -39,6 +39,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 
 import com.android.volley.AuthFailureError;
@@ -231,8 +232,9 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     private RelativeLayout rlvLoadingViewID;
     private TextView txtHeadingLabelID;
     private String MEmpType = "null", version;
-    private String ControllerSerialNumber;
+    private String ControllerSerialNumber,debugDataExtract;
     private static Cell cell = null;
+    CardView submitBtnCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -268,6 +270,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         mSimDetailsInfoResponse = new ArrayList<>();
         if (getIntent().getExtras() != null) {
             ControllerSerialNumber = getIntent().getStringExtra(Constant.ControllerSerialNumber);
+            debugDataExtract = getIntent().getStringExtra(Constant.debugDataExtract);
         }
 
         try {
@@ -300,12 +303,19 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         rlvBT_9_ID = findViewById(R.id.rlvBT_9_ID);
         lvlMainTextContainerID = findViewById(R.id.lvlMainTextContainerID);
         edtPutCommandID = findViewById(R.id.edtPutCommandID);
+        submitBtnCard = findViewById(R.id.submitBtnCard);
         mIntCheckDeviceType = 0;
 
 
         changeButtonVisibilityRLV(true, 0.5f, rlvBT_S1_ID);
         changeButtonVisibilityRLV(true, 0.5f, rlvBT_S2_ID);
         changeButtonVisibilityRLV(false, 0.5f, rlvBT_7_ID_save);
+
+        if(debugDataExtract.equals("true")){
+            submitBtnCard.setVisibility(View.GONE);
+            imgBTShareFILEID.setVisibility(View.GONE);
+            imgBTSyncFILEID.setVisibility(View.GONE);
+        }
         setClickEventListner();
         getGpsLocation();
         try {
@@ -1759,7 +1769,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             scrlViewID.fullScroll(View.FOCUS_DOWN);
             baseRequest.hideLoader();
 
-             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")) {
+             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0") && debugDataExtract.equals("false")) {
                 ShowAlertResponse();
             } else {
                 if (CustomUtility.isInternetOn(getApplicationContext())) {
@@ -2083,7 +2093,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             baseRequest.hideLoader();
             WebURL.SERVER_CONNECTIVITY_OK = mCheckServerConnectivityValue;
 
-             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")) {
+             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")&& debugDataExtract.equals("false")) {
                 ShowAlertResponse();
             } else {
                 if (CustomUtility.isInternetOn(getApplicationContext())) {
@@ -2540,7 +2550,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
             WebURL.SERVER_CONNECTIVITY_OK = mCheckServerConnectivityValue;
 
-              if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")) {
+              if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")&& debugDataExtract.equals("false")) {
                 ShowAlertResponse();
             } else {
                 if (CustomUtility.isInternetOn(getApplicationContext())) {
