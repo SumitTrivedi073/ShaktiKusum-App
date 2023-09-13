@@ -33,6 +33,9 @@ import com.google.gson.Gson;
 import com.shaktipumplimited.shaktikusum.R;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -451,5 +454,27 @@ public class CustomUtility {
         else if(release < 10)  codeName="Pie";
         else if(release >= 10) codeName="Android "+((int)release);//since API 29 no more candy code names
         return ""+release;
+    }
+
+    public static byte[] getFileData(File selectedFile) {
+        int size = (int) selectedFile.length();
+        byte[] bytes = new byte[size];
+        byte[] tmpBuff = new byte[size];
+
+        try (FileInputStream inputStream = new FileInputStream(selectedFile)) {
+            int read = inputStream.read(bytes, 0, size);
+            if (read < size) {
+                int remain = size - read;
+                while (remain > 0) {
+                    read = inputStream.read(tmpBuff, 0, remain);
+                    System.arraycopy(tmpBuff, 0, bytes, size - remain, read);
+                    remain -= read;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return bytes;
     }
 }
