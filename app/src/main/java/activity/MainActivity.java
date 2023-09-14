@@ -274,7 +274,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 Toast.makeText(context, "You are not authorized for this.", Toast.LENGTH_SHORT).show();
             }
         } else if (id == R.id.nav_rejectsite) {
-            Intent intent = new Intent(context, ActivityRejectSite.class);
+            Intent intent = new Intent(context, RejectionInstallation.class);
             startActivity(intent);
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

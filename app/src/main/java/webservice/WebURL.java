@@ -13,16 +13,22 @@ public class WebURL {
     public static String barCodeResult = "";
     public static String DEBUG_CHECK_IN_KUSUM = "";
 
+    /************* production server **************/
+    public static final String HOST_NAME_SETTING1 = "https://solar10.shaktisolarrms.com/RMSAppTest/";
+ //   public static final String BASEURL = "https://spprdsrvr1.shaktipumps.com:8423";
+
+    /************* development server **************/
+    public static final String BASEURL = "https://spquasrvr1.shaktipumps.com:8423";
+
     public static String GALLERY_DIRECTORY_NAME_COMMON = "ShaktiKusum";
     public static final String MOTOR_PERSMETER_LIST = "MoterParamList";
 
-    public static final String HOST_NAME_SETTING1 = "https://solar10.shaktisolarrms.com/RMSAppTest/";
+
 
     public static final String IMAGE_DIRECTORY_NAME = "shaktikusumapp";
     public static String CUSTOMERID_ID = "";
     public static int BT_DEBUG_CHECK = 0;
 
-    public static final String BASEURL = "https://spprdsrvr1.shaktipumps.com:8423";
 
     public static String ProjectNo_Con, RegNo_Con, BenificiaryNo_Con;
 
@@ -85,8 +91,6 @@ public class WebURL {
 
     public static final String saveDeptDocSubmissionAPI = BASEURL +"/sap/bc/bsp/sap/zmapp_solar_pro/document_sub_save.htm";
 
-    private class Installtion {
-    }
 
     //https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/unloading_list_verification_pend.htm?project_no=1022&userid=0000700810&project_login_no=01
 }
