@@ -328,6 +328,7 @@
     <string name="enterLongitude">Please enter longitude</string>
     <string name="selectBorewellSize">Select Borewell Size</string>
     <string name="selectPumpWaterLever">Select pump water lever</string>
+    <string name="site_audit">Site Audit</string>
 
 
     <string-array name="nav_drawer_labels">
