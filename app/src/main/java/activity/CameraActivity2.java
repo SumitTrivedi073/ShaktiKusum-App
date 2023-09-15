@@ -366,7 +366,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
 
             Geocoder geocoder = new Geocoder(CameraActivity2.this, Locale.getDefault());
             try {
-                if (CustomUtility.isInternetOn(getApplicationContext())) {
+                if (CustomUtility.isInternetOn(CameraActivity2.this)) {
                     List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 
                     if (!addresses.isEmpty()) {

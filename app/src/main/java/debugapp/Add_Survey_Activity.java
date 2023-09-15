@@ -601,7 +601,7 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
 
             System.out.println(param1_invc);
 
-         /*   try {
+         try {
 
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
                 StrictMode.setThreadPolicy(policy);
@@ -650,7 +650,7 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
                 e.printStackTrace();
                 progressDialog.dismiss();
                 showingMessage(getResources().getString(R.string.somethingWentWrong));
-            }*/
+            }
 
             return obj2;
         }

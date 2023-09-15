@@ -15,10 +15,10 @@ public class WebURL {
 
     /************* production server **************/
     public static final String HOST_NAME_SETTING1 = "https://solar10.shaktisolarrms.com/RMSAppTest/";
-    public static final String BASEURL = "https://spprdsrvr1.shaktipumps.com:8423";
+   // public static final String BASEURL = "https://spprdsrvr1.shaktipumps.com:8423";
 
     /************* development server **************/
-  //  public static final String BASEURL = "https://spquasrvr1.shaktipumps.com:8423";
+    public static final String BASEURL = "https://spquasrvr1.shaktipumps.com:8423";
 
     public static String GALLERY_DIRECTORY_NAME_COMMON = "ShaktiKusum";
     public static final String MOTOR_PERSMETER_LIST = "MoterParamList";
