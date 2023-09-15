@@ -38,7 +38,7 @@ public class ActivitySurveyList extends BaseActivity {
     
     public static final String GALLERY_DIRECTORY_NAME = "ShaktiTransport";
     private SurweyListAdapter mSurweyListAdapter;
-    List<SurveyListResponse> mSurveyListResponse;
+    List<SurveyListResponse.Response> mSurveyListResponse;
     String mUserID = "", mproject_noID = "", mproject_login_noID = "";
 
     Toolbar mToolbar;
@@ -105,14 +105,14 @@ public class ActivitySurveyList extends BaseActivity {
                 Log.e("response", response.toString());
                 if (response.toString() != null && !response.toString().isEmpty()) {
                     try {
-                        JSONObject jo = new JSONObject(response.toString());
-                        String mStatus = jo.getString("status");
-                        if (mStatus.equals("true")) {
+                        SurveyListResponse SurveyListResponse = new Gson().fromJson(response.toString(),SurveyListResponse.class);
+
+                        if (SurveyListResponse.getStatus().equals("true")) {
                             noDataFound.setVisibility(View.GONE);
                             rclyTranportListView.setVisibility(View.VISIBLE);
-                            String jo11 = jo.getString("response");
-                            SurveyListResponse SurveyListResponse = new Gson().fromJson(jo11,SurveyListResponse.class);
-                            mSurveyListResponse.add(SurveyListResponse);
+
+
+                            mSurveyListResponse = SurveyListResponse.getResponse();
                             /*JSONArray ja = new JSONArray(jo11);
                             for (int i = 0; i < ja.length(); i++) {
 

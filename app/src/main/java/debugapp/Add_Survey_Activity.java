@@ -64,7 +64,7 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
 
     List<String> itemNameList = new ArrayList<>();
     Toolbar toolbar;
-    SurveyListResponse surveyListResponse;
+    SurveyListResponse.Response surveyListResponse;
     EditText applicantNameExt, contactNumberExt, applicationNumberExt, addressExt, siteWaterLevelExt, releventInfoExt;
     TextView latitudeExt, longitudeExt,submitBtn;
     RadioButton radio_DarkZone_yesID, radio_DarkZone_NoID, electricConnection_yesID, electricConnection_NoID,
@@ -78,7 +78,7 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
 
     boolean isdarkzone,isElectricConnectionFormer,isUniversalPump;
 
-    DatabaseHelper db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,11 +87,12 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
 
         Init();
         retriveValue();
+        SetAdapter();
     }
 
     private void retriveValue() {
         if (getIntent().getExtras() != null) {
-            surveyListResponse = (SurveyListResponse) getIntent().getSerializableExtra(Constant.surveyList);
+            surveyListResponse = (SurveyListResponse.Response) getIntent().getSerializableExtra(Constant.surveyList);
 
             applicantNameExt.setText(surveyListResponse.getCustomerName());
             contactNumberExt.setText(surveyListResponse.getMobile());
@@ -277,7 +278,7 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
 
                 DecimalFormat decimalFormat = new DecimalFormat("##.#####");
                 latitude = decimalFormat.format(gps.getLatitude());
-                longitude = decimalFormat.format(gps.getLatitude());
+                longitude = decimalFormat.format(gps.getLongitude());
                 latitudeExt.setText(latitude);
                 longitudeExt.setText(longitude);
             }
@@ -600,7 +601,7 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
 
             System.out.println(param1_invc);
 
-            try {
+         /*   try {
 
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
                 StrictMode.setThreadPolicy(policy);
@@ -649,7 +650,7 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
                 e.printStackTrace();
                 progressDialog.dismiss();
                 showingMessage(getResources().getString(R.string.somethingWentWrong));
-            }
+            }*/
 
             return obj2;
         }

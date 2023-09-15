@@ -22,11 +22,11 @@ import debugapp.GlobalValue.Constant;
 public class SurweyListAdapter extends RecyclerView.Adapter<SurweyListAdapter.ViewHolder> {
 
     private final Context mContext;
-    private final List<SurveyListResponse> mSurveyListResponse;
+    private final List<SurveyListResponse.Response> mSurveyListResponse;
 
 
 
-    public SurweyListAdapter(Context mContext, List<SurveyListResponse> mLrInvoiceResponse) {
+    public SurweyListAdapter(Context mContext, List<SurveyListResponse.Response> mLrInvoiceResponse) {
         this.mContext = mContext;
         this.mSurveyListResponse = mLrInvoiceResponse;
 

@@ -403,7 +403,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
                 }
 
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
 
 
@@ -447,6 +447,15 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     @Override
     public void onConnectionSuspended(int i) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mGoogleApiClient!=null){
+            mGoogleApiClient.disconnect();
+            mGoogleApiClient= null;
+        }
     }
 
     @Override

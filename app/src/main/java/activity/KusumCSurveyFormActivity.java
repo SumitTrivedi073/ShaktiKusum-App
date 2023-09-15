@@ -351,7 +351,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
 
                 DecimalFormat decimalFormat = new DecimalFormat("##.#####");
                 latitude = decimalFormat.format(gps.getLatitude());
-                longitude = decimalFormat.format(gps.getLatitude());
+                longitude = decimalFormat.format(gps.getLongitude());
                 currentLatLngExt.setText(latitude + "," + longitude);
             }
         } else {
