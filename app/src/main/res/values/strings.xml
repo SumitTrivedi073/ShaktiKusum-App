@@ -311,7 +311,7 @@
     <string name="fetching_location">Please wait we are fetching your location</string>
     <string name="fileNotValid">File Not Valid</string>
     <string name="default_notification_channel_id" translatable="false">com.shaktipumps.shakti.shaktisalesemployee.urgent</string>
-
+    <string name="site_audit">Site Audit</string>
 
 
     <string-array name="nav_drawer_labels">
