@@ -3,8 +3,10 @@ package debugapp.Bean;
 
 import com.google.gson.annotations.SerializedName;
 
-@SuppressWarnings("unused")
-public class SurweyListResponse {
+import java.io.Serializable;
+
+
+public class SurveyListResponse implements Serializable {
 
     @SerializedName("address")
     private String mAddress;

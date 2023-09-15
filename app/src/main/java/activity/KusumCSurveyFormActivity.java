@@ -827,8 +827,8 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
                         }
                     }
                 } else {
-                    CustomUtility.showToast(KusumCSurveyFormActivity.this, getResources().getString(R.string.somethingWentWrong));
-                    progressDialog.dismiss();
+                    showingMessage(getResources().getString(R.string.somethingWentWrong));
+                      progressDialog.dismiss();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

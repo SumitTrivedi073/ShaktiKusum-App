@@ -1,0 +1,714 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context="debugapp.Add_Survey_Activity">
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/applicant_name"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <EditText
+                        android:id="@+id/applicantNameExt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/edt_bg_shape"
+                        android:hint="@string/enter_applicant_name"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:padding="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/contact_no"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <EditText
+                        android:id="@+id/contactNumberExt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/edt_bg_shape"
+                        android:hint="@string/enter_contact_number"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:maxLines="1"
+                        android:padding="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/application_no"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <EditText
+                        android:id="@+id/applicationNumberExt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/edt_bg_shape"
+                        android:hint="@string/enter_application_number"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:padding="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/nameofvillage"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <EditText
+                        android:id="@+id/addressExt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/edt_bg_shape"
+                        android:hint="@string/enter_name_of_village_block_and_district"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:padding="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/latitude"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <EditText
+                        android:id="@+id/latitudeExt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/edt_bg_shape"
+                        android:hint="@string/enterLatitude"
+                        android:imeOptions="actionNext"
+                        android:inputType="numberDecimal"
+                        android:maxLines="1"
+                        android:padding="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/longitude"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <EditText
+                        android:id="@+id/longitudeExt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/edt_bg_shape"
+                        android:hint="@string/enterLongitude"
+                        android:imeOptions="actionNext"
+                        android:inputType="numberDecimal"
+                        android:maxLines="1"
+                        android:padding="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/darkZoneTxt"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/radio_DarkZone_yesID"
+                            android:layout_width="@dimen/_130sdp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-condensed-medium"
+                            android:text="@string/yes"
+                            android:checked="true"
+                            android:textColor="@color/colorPrimary" />
+
+                        <RadioButton
+                            android:id="@+id/radio_DarkZone_NoID"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-condensed-medium"
+                            android:text="@string/no"
+                            android:textColor="@color/colorPrimary" />
+
+                    </RadioGroup>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/sourceofWater"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/edt_bg_shape">
+
+                        <Spinner
+                            android:id="@+id/sourceofWaterSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/spinner_bg"
+                            android:entries="@array/sourceOfWater"
+                            android:padding="@dimen/_10sdp" />
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/size_of_borewell"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/edt_bg_shape">
+
+                        <Spinner
+                            android:id="@+id/sizeOfBorwellSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/spinner_bg"
+                            android:entries="@array/borewell_size"
+                            android:padding="@dimen/_10sdp" />
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/siteWaterlevel"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <EditText
+                        android:id="@+id/siteWaterLevelExt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/edt_bg_shape"
+                        android:hint="@string/enterSiteWaterLevel"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:padding="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/pumpWaterLevel"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/edt_bg_shape">
+
+                        <Spinner
+                            android:id="@+id/pumpWaterLevelSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/spinner_bg"
+                            android:entries="@array/pumpWaterLevel"
+                            android:padding="@dimen/_10sdp" />
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/selectAcDc"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/edt_bg_shape">
+
+                        <Spinner
+                            android:id="@+id/AcDcSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/spinner_bg"
+                            android:entries="@array/acDc"
+                            android:padding="@dimen/_10sdp" />
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/internetConnectivityType"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edt_bg_shape"
+                        android:layout_marginTop="@dimen/_5sdp">
+                        <Spinner
+                            android:id="@+id/internetConnectivitySpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/spinner_bg"
+                            android:padding="@dimen/_10sdp"
+                            android:entries="@array/internetConnectivity"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/electricConnectionDiscomTxt"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/electricConnection_yesID"
+                            android:layout_width="@dimen/_130sdp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-condensed-medium"
+                            android:text="@string/yes"
+                            android:checked="true"
+                            android:textColor="@color/colorPrimary" />
+
+                        <RadioButton
+                            android:id="@+id/electricConnection_NoID"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-condensed-medium"
+                            android:text="@string/no"
+                            android:textColor="@color/colorPrimary" />
+
+                    </RadioGroup>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/typesofirrigation"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edt_bg_shape"
+                        android:layout_marginTop="@dimen/_5sdp">
+                        <Spinner
+                            android:id="@+id/typesOfIrrigationSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/spinner_bg"
+                            android:padding="@dimen/_10sdp"
+                            android:entries="@array/irrigationInstalled"/>
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/isSouthFacingShadow"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edt_bg_shape"
+                        android:layout_marginTop="@dimen/_5sdp">
+                        <Spinner
+                            android:id="@+id/southfacingShadowSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/spinner_bg"
+                            android:padding="@dimen/_10sdp"
+                            android:entries="@array/yesNoSpinner"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/pumpsetrating"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edt_bg_shape"
+                        android:layout_marginTop="@dimen/_5sdp">
+                        <Spinner
+                            android:id="@+id/pumpSetRatingSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/spinner_bg"
+                            android:padding="@dimen/_10sdp"
+                            android:entries="@array/pumpRating"/>
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/typeOfPump"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edt_bg_shape"
+                        android:layout_marginTop="@dimen/_5sdp">
+                        <Spinner
+                            android:id="@+id/typeOfPumpSpinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/spinner_bg"
+                            android:padding="@dimen/_10sdp"
+                            android:entries="@array/typeOfPump"/>
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/agreeToInstallSolarPumpController"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/InstallSolarPump_yesID"
+                            android:layout_width="@dimen/_130sdp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-condensed-medium"
+                            android:text="@string/yes"
+                            android:checked="true"
+                            android:textColor="@color/colorPrimary" />
+
+                        <RadioButton
+                            android:id="@+id/InstallSolarPump_NoID"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-condensed-medium"
+                            android:text="@string/no"
+                            android:textColor="@color/colorPrimary" />
+
+                    </RadioGroup>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/releventInfo"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <EditText
+                        android:id="@+id/releventInfoExt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/edt_bg_shape"
+                        android:hint="@string/enter_releventInfo"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:padding="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:text="@string/attachimages"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:gravity="center|start"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_12sdp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/photoListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_20sdp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/submitBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/_10sdp"
+        android:gravity="center"
+        android:text="@string/submit"
+        android:background="@drawable/blue_btn_round"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_14sdp"
+        android:layout_alignParentBottom="true"/>
+
+
+</RelativeLayout>

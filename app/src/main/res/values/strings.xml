@@ -311,7 +311,23 @@
     <string name="fetching_location">Please wait we are fetching your location</string>
     <string name="fileNotValid">File Not Valid</string>
     <string name="default_notification_channel_id" translatable="false">com.shaktipumps.shakti.shaktisalesemployee.urgent</string>
-
+    <string name="applicant_name">Applicant Name</string>
+    <string name="enter_applicant_name">Enter Applicant Name</string>
+    <string name="latitude">Latitude</string>
+    <string name="enterLatitude">Please enter latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="darkZoneTxt">Is the area fall under dark zone/black zon areas notified by the government from time to time</string>
+    <string name="siteWaterlevel">site Water level (In meter)</string>
+    <string name="enterSiteWaterLevel">Enter Site Water Level (In meter)</string>
+    <string name="pumpWaterLevel">Pumping water level in reqired.(In meter)</string>
+    <string name="selectAcDc">Select Ac and Dc</string>
+    <string name="electricConnectionDiscomTxt">Is farmer having electric connection of the DISCOM at the site</string>
+    <string name="agreeToInstallSolarPumpController">Agree to install universal solar pump controller</string>
+    <string name="releventInfo">Any other relevant information</string>
+    <string name="enter_releventInfo">Enter relevant information</string>
+    <string name="enterLongitude">Please enter longitude</string>
+    <string name="selectBorewellSize">Select Borewell Size</string>
+    <string name="selectPumpWaterLever">Select pump water lever</string>
 
 
     <string-array name="nav_drawer_labels">
@@ -401,6 +417,35 @@
         <item>Select type of pump</item>
         <item>Surface</item>
         <item>Submersible</item>
+
+    </string-array>
+
+    <string-array name="borewell_size">
+        <item>Select borewell Size</item>
+        <item>4</item>
+        <item>6</item>
+        <item>8</item>
+        <item>10</item>
+        <item>12</item>
+    </string-array>
+
+
+    <string-array name="pumpWaterLevel">
+        <item>Select Pump water level</item>
+        <item>20</item>
+        <item>30</item>
+        <item>50</item>
+        <item>70</item>
+        <item>100</item>
+        <item>120</item>
+        <item>130</item>
+        <item>150</item>
+    </string-array>
+
+    <string-array name="acDc">
+        <item>Select Ac and Dc</item>
+        <item>AC</item>
+        <item>DC</item>
 
     </string-array>
 

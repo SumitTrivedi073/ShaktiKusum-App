@@ -5,12 +5,12 @@ import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
 @SuppressWarnings("unused")
-public class SurweyListModelViewe {
+public class SurveyListModelView {
 
     @SerializedName("message")
     private String mMessage;
     @SerializedName("response")
-    private List<SurweyListResponse> mResponse;
+    private List<SurveyListResponse> mResponse;
     @SerializedName("status")
     private String mStatus;
 
@@ -22,11 +22,11 @@ public class SurweyListModelViewe {
         mMessage = message;
     }
 
-    public List<SurweyListResponse> getResponse() {
+    public List<SurveyListResponse> getResponse() {
         return mResponse;
     }
 
-    public void setResponse(List<SurweyListResponse> response) {
+    public void setResponse(List<SurveyListResponse> response) {
         mResponse = response;
     }
 

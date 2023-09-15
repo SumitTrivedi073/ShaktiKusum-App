@@ -25,6 +25,7 @@ import activity.RoutePlanActivity;
 import activity.UnloadList;
 import bean.ItemNameBean;
 import database.DatabaseHelper;
+import debugapp.ActivitySurveyList;
 import utility.CustomUtility;
 
 public class Adapter_item_list extends RecyclerView.Adapter<Adapter_item_list.HomeCategoryViewHolder> {
@@ -101,7 +102,7 @@ public class Adapter_item_list extends RecyclerView.Adapter<Adapter_item_list.Ho
                         context.startActivity(intent);
                     } else if (responseList.get(position).getItem_id().equalsIgnoreCase("017")) {
                         CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
-                        Intent mIntent1 = new Intent(context, KusumCSurveyListActivty.class);
+                        Intent mIntent1 = new Intent(context, ActivitySurveyList.class);
                         context.startActivity(mIntent1);
                     }
                     else if (responseList.get(position).getItem_id().equalsIgnoreCase("021")) {
