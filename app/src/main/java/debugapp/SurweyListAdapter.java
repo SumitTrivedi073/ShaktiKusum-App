@@ -15,19 +15,20 @@ import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.List;
 
-import debugapp.Bean.SurweyListResponse;
+import debugapp.Bean.SurveyListResponse;
+import debugapp.GlobalValue.Constant;
 
 
 public class SurweyListAdapter extends RecyclerView.Adapter<SurweyListAdapter.ViewHolder> {
 
     private final Context mContext;
-    private final List<SurweyListResponse> mSurweyListResponse;
-    private List<Boolean> mLrInvoiceSelectionCheck;
+    private final List<SurveyListResponse.Response> mSurveyListResponse;
 
 
-    public SurweyListAdapter(Context mContext, List<SurweyListResponse> mLrInvoiceResponse) {
+
+    public SurweyListAdapter(Context mContext, List<SurveyListResponse.Response> mLrInvoiceResponse) {
         this.mContext = mContext;
-        this.mSurweyListResponse = mLrInvoiceResponse;
+        this.mSurveyListResponse = mLrInvoiceResponse;
 
     }
 
@@ -41,25 +42,16 @@ public class SurweyListAdapter extends RecyclerView.Adapter<SurweyListAdapter.Vi
     @Override
     public void onBindViewHolder(final ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
 
-        holder.txtMaterialCodeValueID.setText(mSurweyListResponse.get(position).getBeneficiary());
-        holder.txtDecriptionValueID.setText(mSurweyListResponse.get(position).getCustomerName());
-        holder.txtQuentityValueID.setText(mSurweyListResponse.get(position).getMobile());
-        holder.txtPriceValueID.setText(mSurweyListResponse.get(position).getAddress());
-
+        holder.txtMaterialCodeValueID.setText(mSurveyListResponse.get(position).getBeneficiary());
+        holder.txtDecriptionValueID.setText(mSurveyListResponse.get(position).getCustomerName());
+        holder.txtQuentityValueID.setText(mSurveyListResponse.get(position).getMobile());
+        holder.txtPriceValueID.setText(mSurveyListResponse.get(position).getAddress());
 
         holder.rlvMainItemViewID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, Add_Surway_Activity.class);
-                intent.putExtra("Beneficiary", mSurweyListResponse.get(position).getBeneficiary());
-                intent.putExtra("ProjectNo", mSurweyListResponse.get(position).getProjectNo());
-                intent.putExtra("Mobile", mSurweyListResponse.get(position).getMobile());
-                intent.putExtra("Lifnr", mSurweyListResponse.get(position).getLifnr());
-                intent.putExtra("CitycTxt", mSurweyListResponse.get(position).getAddress());
-                intent.putExtra("ApplicantName", mSurweyListResponse.get(position).getCustomerName());
-                intent.putExtra("RegistraionNo", mSurweyListResponse.get(position).getRegisno());
-                intent.putExtra("regio_txt", mSurweyListResponse.get(position).getAddress()+" "+mSurweyListResponse.get(position).getCitycTxt()+" "+mSurweyListResponse.get(position).getRegioTxt());
-
+                Intent intent = new Intent(mContext, Add_Survey_Activity.class);
+                intent.putExtra(Constant.surveyList,mSurveyListResponse.get(position));
                 mContext.startActivity(intent);
             }
         });
@@ -68,8 +60,8 @@ public class SurweyListAdapter extends RecyclerView.Adapter<SurweyListAdapter.Vi
 
     @Override
     public int getItemCount() {
-         if (mSurweyListResponse != null && mSurweyListResponse.size() > 0)
-            return mSurweyListResponse.size();
+         if (mSurveyListResponse != null && mSurveyListResponse.size() > 0)
+            return mSurveyListResponse.size();
         else
             return 0;
 
