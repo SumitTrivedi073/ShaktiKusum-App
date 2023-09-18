@@ -90,6 +90,8 @@ import webservice.WebURL;
          editsearch = findViewById(R.id.search);
          lin1 = findViewById(R.id.lin1);
          lin2 = findViewById(R.id.lin2);
+
+         user_id = CustomUtility.getSharedPreferences(context, "userid");
      }
 
      private void getValueFromDatatbase() {
