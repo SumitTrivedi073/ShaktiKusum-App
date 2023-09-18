@@ -765,7 +765,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             e.printStackTrace();
         }
         //  baseRequest.callAPIPost(1, jsonObject, Constant.GET_ALL_NOTIFICATION_LIST_API);/////
-        baseRequest.callAPIPostDebugApp(1, jsonObject, NewSolarVFD.INSERT_DEBUG_DATA_API);/////
+        baseRequest.callAPIPostDebugApp(1, jsonObject, WebURL.INSERT_DEBUG_DATA_API);/////
         //baseRequest.callAPIPut(1, jsonObject, NewSolarVFD.ORG_RESET_FORGOTPASS);/////
     }
 

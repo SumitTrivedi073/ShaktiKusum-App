@@ -24,6 +24,7 @@ import activity.BaseActivity;
 import debugapp.GlobalValue.AllPopupUtil;
 import debugapp.GlobalValue.Constant;
 import debugapp.GlobalValue.NewSolarVFD;
+import webservice.WebURL;
 
 public class NavigateOptionActivity extends BaseActivity {
 
@@ -174,7 +175,7 @@ public class NavigateOptionActivity extends BaseActivity {
         //  baseRequest.callAPIPost(1, jsonObject, NewSolarVFD.GET_PLANT_LIST_CHECK);/////
         //baseRequest.callAPIPostIMEI(1, jsonObject, NewSolarVFD.MOTOR_PERSMETER_LIST);/////
         System.out.println("jsonObject==>>"+wordsByKey);
-        baseRequest.callAPIGET(1, wordsByKey, NewSolarVFD.GET_DEVICE_SIM_NUMBER_API);/////
+        baseRequest.callAPIGET(1, wordsByKey, WebURL.GET_DEVICE_SIM_NUMBER_API);/////
 
 
       /*  JsonObject jsonObject = new JsonObject();

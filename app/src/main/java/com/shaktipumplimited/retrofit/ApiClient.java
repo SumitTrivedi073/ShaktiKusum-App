@@ -51,7 +51,7 @@ public class ApiClient {
         if (retrofit2 == null) {
 
             retrofit2 = new Retrofit.Builder()
-                    .baseUrl(NewSolarVFD.BASE_URL_VK)// close by vikas
+                    .baseUrl(WebURL.BASE_URL_VK)// close by vikas
                      .client(getRequestHeader())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
