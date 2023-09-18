@@ -1494,8 +1494,7 @@ public class InstallationInitial extends BaseActivity {
 
                 String mStatus = jsonObject.getString("status");
                 if (mStatus.equals("true")) {
-
-                    mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
+                   mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
                     mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
 
                     CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice, "true");

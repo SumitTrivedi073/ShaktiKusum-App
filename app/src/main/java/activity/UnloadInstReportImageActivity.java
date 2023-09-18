@@ -390,7 +390,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
             for (int i = 0; i < imageList.size(); i++) {
                 for (int j = 0; j < itemNameList.size(); j++) {
-                    if (imageList.get(i).getBillNo().trim().equals(getIntent().getExtras().getString("vbeln").trim())) {
+                    if (imageList.get(i).getBillNo().trim().equals(billNo)) {
                         if (imageList.get(i).getName().equals(itemNameList.get(j))) {
                             ImageModel imageModel = new ImageModel();
                             imageModel.setName(imageList.get(i).getName());
@@ -811,38 +811,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         }
     }
 
-    private void MatchControllerIDPopup() {
-        LayoutInflater inflater = (LayoutInflater) UnloadInstReportImageActivity.this
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = inflater.inflate(R.layout.send_successfully_layout,
-                null);
-        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(UnloadInstReportImageActivity.this, R.style.MyDialogTheme);
 
-        builder.setView(layout);
-        builder.setCancelable(false);
-        android.app.AlertDialog alertDialog = builder.create();
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        if (!isFinishing()) {
-            alertDialog.show();
-        }
-        CircleImageView user_img = layout.findViewById(R.id.user_img);
-        TextView OK_txt = layout.findViewById(R.id.OK_txt);
-        TextView title_txt = layout.findViewById(R.id.title_txt);
-
-        user_img.setVisibility(View.GONE);
-
-        title_txt.setText(getResources().getString(R.string.driveNumberNotMatched));
-
-        OK_txt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog.dismiss();
-
-            }
-        });
-
-    }
 
     public String GetDataOne() {
         String finalValue = "";

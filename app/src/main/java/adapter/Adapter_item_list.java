@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import activity.DeptDocSubActivity;
 import activity.GovtOffVisitActivity;
 import activity.InstReportImageActivity;
+import activity.InstallationList;
 import activity.KusumCSurveyListActivty;
 import activity.RejectionInstallation;
 import activity.RoutePlanActivity;
@@ -89,8 +90,8 @@ public class Adapter_item_list extends RecyclerView.Adapter<Adapter_item_list.Ho
                        /* CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
                         Intent inst_list = new Intent(context, InstallationList.class);
                         context.startActivity(inst_list);*/
-                        CustomUtility.setSharedPreference(context, "process_no", "022");
-                        Intent mIntent1 = new Intent(context, UnloadList.class);
+                        CustomUtility.setSharedPreference(context, "process_no", "009");
+                        Intent mIntent1 = new Intent(context, InstallationList.class);
                         context.startActivity(mIntent1);
                     } else if (responseList.get(position).getItem_id().equalsIgnoreCase("010")) {
                         CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());

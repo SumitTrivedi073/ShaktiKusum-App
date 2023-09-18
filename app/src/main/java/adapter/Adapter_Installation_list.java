@@ -162,7 +162,7 @@ public class Adapter_Installation_list extends RecyclerView.Adapter<Adapter_Inst
                             e.printStackTrace();
                         }
                         Intent intent = new Intent(context, UnloadInstReportImageActivity.class);
-                        intent.putExtra(Constant.unloadingData,responseList.get(position));
+                       intent.putExtra(Constant.unloadingData,responseList.get(position));
                         context.startActivity(intent);
                     }
             });
