@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import debugapp.GlobalValue.NewSolarVFD;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -51,7 +50,7 @@ public class ApiClient {
         if (retrofit2 == null) {
 
             retrofit2 = new Retrofit.Builder()
-                    .baseUrl(NewSolarVFD.BASE_URL_VK)// close by vikas
+                    .baseUrl(WebURL.BASE_URL_VK)// close by vikas
                      .client(getRequestHeader())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();

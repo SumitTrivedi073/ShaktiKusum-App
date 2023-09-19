@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.annotation.OptIn;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.os.BuildCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,7 +40,6 @@ import bean.BTResonseData;
 import bean.InstallationListBean;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
-import debugapp.GlobalValue.NewSolarVFD;
 import debugapp.localDB.DatabaseHelperTeacher;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
@@ -252,7 +250,7 @@ import webservice.WebURL;
                 recyclerView.setLayoutManager(layoutManagerSubCategory);
                 recyclerView.setAdapter(adapterInstallationList);
                 adapterInstallationList.notifyDataSetChanged();
-                NewSolarVFD.CHECK_DATA_UNOLAD = 0;
+                WebURL.CHECK_DATA_UNOLAD = 0;
             } else {
                 lin1.setVisibility(View.GONE);
                 lin2.setVisibility(View.VISIBLE);
@@ -292,7 +290,7 @@ import webservice.WebURL;
                 if (CustomUtility.isInternetOn(getApplicationContext())) {
                     recyclerView.setAdapter(null);
                     db.deleteInstallationListData();
-                    NewSolarVFD.CHECK_DATA_UNOLAD = 0;
+                    WebURL.CHECK_DATA_UNOLAD = 0;
                     new GetInstallationDataList_Task().execute();
                 } else {
                     Toast.makeText(getApplicationContext(), "No internet Connection....", Toast.LENGTH_SHORT).show();
@@ -446,7 +444,7 @@ import webservice.WebURL;
                 recyclerView.setLayoutManager(layoutManagerSubCategory);
                 recyclerView.setAdapter(adapterInstallationList);
                 adapterInstallationList.notifyDataSetChanged();
-                NewSolarVFD.CHECK_DATA_UNOLAD = 0;
+                WebURL.CHECK_DATA_UNOLAD = 0;
             } else {
                 lin1.setVisibility(View.GONE);
                 lin2.setVisibility(View.VISIBLE);
@@ -599,7 +597,7 @@ import webservice.WebURL;
                             recyclerView.setLayoutManager(layoutManagerSubCategory);
                             recyclerView.setAdapter(adapterInstallationList);
                             adapterInstallationList.notifyDataSetChanged();
-                            NewSolarVFD.CHECK_DATA_UNOLAD = 1;
+                            WebURL.CHECK_DATA_UNOLAD = 1;
                         } else {
                             lin1.setVisibility(View.GONE);
                             lin2.setVisibility(View.VISIBLE);

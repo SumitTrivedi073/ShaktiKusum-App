@@ -71,7 +71,6 @@ import bean.ImageModel;
 import bean.InstallationBean;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
-import debugapp.GlobalValue.NewSolarVFD;
 import debugapp.VerificationCodeModel;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
@@ -627,7 +626,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
                             databaseHelper.deleteUnloadingImages(billNo);
                             showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
-                            NewSolarVFD.CHECK_DATA_UNOLAD = 0;
+                            WebURL.CHECK_DATA_UNOLAD = 0;
 
                            Random random = new Random();
                             String generatedVerificationCode = String.format("%04d", random.nextInt(10000));

@@ -97,7 +97,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import debugapp.Bean.SimDetailsInfoResponse;
 import debugapp.GlobalValue.Constant;
 import debugapp.GlobalValue.CustomHttpClient;
-import debugapp.GlobalValue.NewSolarVFD;
 import debugapp.GlobalValue.UtilMethod;
 import debugapp.localDB.DatabaseHelperTeacher;
 import okhttp3.MediaType;
@@ -755,7 +754,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             e.printStackTrace();
         }
         //  baseRequest.callAPIPost(1, jsonObject, Constant.GET_ALL_NOTIFICATION_LIST_API);/////
-        baseRequest.callAPIPostDebugApp(1, jsonObject, NewSolarVFD.INSERT_DEBUG_DATA_API);/////
+        baseRequest.callAPIPostDebugApp(1, jsonObject, WebURL.INSERT_DEBUG_DATA_API);/////
         //baseRequest.callAPIPut(1, jsonObject, NewSolarVFD.ORG_RESET_FORGOTPASS);/////
     }
 
@@ -822,7 +821,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
         Map<String, String> wordsByKey = new HashMap<>();
         wordsByKey.put("device", ControllerSerialNumber + "-0");// DEVICE_NO = sssM[0];
-        baseRequest.callAPIGETDebugApp(1, wordsByKey, NewSolarVFD.SIM_STATUS_VK_PAGE);/////
+        baseRequest.callAPIGETDebugApp(1, wordsByKey, WebURL.SIM_STATUS_VK_PAGE);/////
         baseRequest.showLoader();
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
@@ -1065,7 +1064,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.e("URL=====>", NewSolarVFD.saveDebugData + "?action=" + jsonArray);
+        Log.e("URL=====>", WebURL.saveDebugData + "?action=" + jsonArray);
         final ArrayList<NameValuePair> param1 = new ArrayList<NameValuePair>();
         param1.add(new BasicNameValuePair("action", String.valueOf(jsonArray)));
         showProgressDialogue();
@@ -1073,7 +1072,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
             StrictMode.setThreadPolicy(policy);
 
-            String obj2 = CustomHttpClient.executeHttpPost1(NewSolarVFD.saveDebugData, param1);
+            String obj2 = CustomHttpClient.executeHttpPost1(WebURL.saveDebugData, param1);
 
             if (!obj2.isEmpty()) {
 

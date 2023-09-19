@@ -76,7 +76,6 @@ import database.DatabaseHelper;
 import de.hdodenhof.circleimageview.CircleImageView;
 import debugapp.Bean.SimDetailsInfoResponse;
 import debugapp.GlobalValue.Constant;
-import debugapp.GlobalValue.NewSolarVFD;
 import debugapp.VerificationCodeModel;
 import debugapp.localDB.DatabaseHelperTeacher;
 import utility.CustomUtility;
@@ -102,7 +101,7 @@ public class InstallationInitial extends BaseActivity {
     TextView save, txtDebugAppID, txtLatIDD, txtLongIDD, txtIBaseUpdateID, inst_controller_ser;
     InstallationBean installationBean;
     LabeledSwitch labeledSwitch;
-    int index_simoprator, index_conntype, id = 0, vkp = 0, currentScannerFor = -1, value;
+    int index_simoprator, index_conntype, id = 0,currentScannerFor = -1, value;
     Spinner spinner_simoprator, spinner_conntype;
 
     String pernr = "", project_no = "", project_no1 = "", MUserId = "", login_no = "", customer_name = "", installation_date = "", address_ins = "", make_ins = "", tehsil_ins = "",
@@ -410,8 +409,8 @@ public class InstallationInitial extends BaseActivity {
                 mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(inst_controller_ser.getText().toString().trim() + "-0");
                 System.out.println("mBTResonseDataList.size()==>>" + mBTResonseDataList.size());
                 if (mBTResonseDataList.size() > 0) {
-                    DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
-                    SIGNL_STREN = mBTResonseDataList.get(vkp).getSIGNLSTREN();
+                    DEVICE_NO = mBTResonseDataList.get(mBTResonseDataList.size()-1).getDEVICENO();
+                    SIGNL_STREN = mBTResonseDataList.get(mBTResonseDataList.size()-1).getSIGNLSTREN();
                     String[] mStrArry = SIGNL_STREN.split("###");
                     if (mStrArry.length > 0) {
                         SIGNL_STREN = mStrArry[0];
@@ -420,7 +419,7 @@ public class InstallationInitial extends BaseActivity {
                         INVOICE_NO_B = mStrArry[1];
                     }
 
-                    SIM = mBTResonseDataList.get(vkp).getSIM();
+                    SIM = mBTResonseDataList.get(mBTResonseDataList.size()-1).getSIM();
                     String[] mStrArrySim = SIM.split("###");
                     if (mStrArrySim.length > 0) {
                         SIM = mStrArrySim[0];
@@ -428,22 +427,22 @@ public class InstallationInitial extends BaseActivity {
                     if (mStrArrySim.length > 1) {
                         SIM_SR_NO = mStrArrySim[1];
                     }
-                    NET_REG = mBTResonseDataList.get(vkp).getNETREG();
-                    SER_CONNECT = mBTResonseDataList.get(vkp).getSERCONNECT();
-                    CAB_CONNECT = mBTResonseDataList.get(vkp).getCABCONNECT();
-                    LATITUDE = mBTResonseDataList.get(vkp).getLATITUDE();
-                    LANGITUDE = mBTResonseDataList.get(vkp).getLANGITUDE();
-                    MOBILE = mBTResonseDataList.get(vkp).getMOBILE();
-                    IMEI = mBTResonseDataList.get(vkp).getIMEI();
-                    DONGAL_ID = mBTResonseDataList.get(vkp).getDONGALID();
-                    RMS_STATUS = mBTResonseDataList.get(vkp).getRMS_STATUS();
-                    RMS_CURRENT_ONLINE_STATUS = mBTResonseDataList.get(vkp).getRMS_CURRENT_ONLINE_STATUS();
-                    RMS_LAST_ONLINE_DATE = mBTResonseDataList.get(vkp).getRMS_LAST_ONLINE_DATE();
+                    NET_REG = mBTResonseDataList.get(mBTResonseDataList.size()-1).getNETREG();
+                    SER_CONNECT = mBTResonseDataList.get(mBTResonseDataList.size()-1).getSERCONNECT();
+                    CAB_CONNECT = mBTResonseDataList.get(mBTResonseDataList.size()-1).getCABCONNECT();
+                    LATITUDE = mBTResonseDataList.get(mBTResonseDataList.size()-1).getLATITUDE();
+                    LANGITUDE = mBTResonseDataList.get(mBTResonseDataList.size()-1).getLANGITUDE();
+                    MOBILE = mBTResonseDataList.get(mBTResonseDataList.size()-1).getMOBILE();
+                    IMEI = mBTResonseDataList.get(mBTResonseDataList.size()-1).getIMEI();
+                    DONGAL_ID = mBTResonseDataList.get(mBTResonseDataList.size()-1).getDONGALID();
+                    RMS_STATUS = mBTResonseDataList.get(mBTResonseDataList.size()-1).getRMS_STATUS();
+                    RMS_CURRENT_ONLINE_STATUS = mBTResonseDataList.get(mBTResonseDataList.size()-1).getRMS_CURRENT_ONLINE_STATUS();
+                    RMS_LAST_ONLINE_DATE = mBTResonseDataList.get(mBTResonseDataList.size()-1).getRMS_LAST_ONLINE_DATE();
                     mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
                     mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
                     RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
                     RMS_SERVER_DOWN = "Working Fine";
-                    System.out.println("VikasVIHU==>>" + mBTResonseDataList.get(vkp).getDEVICENO());
+                    System.out.println("VikasVIHU==>>" + mBTResonseDataList.get(mBTResonseDataList.size()-1).getDEVICENO());
 
 
                     saveDataValidation();
@@ -1222,7 +1221,7 @@ public class InstallationInitial extends BaseActivity {
         inst_pump_ser.setText(pump);
 
         WebURL.mDEvice_Number_CHECK = controller;
-        inst_controller_ser.setText(controller);
+        inst_controller_ser.setText("7F-0135-0-13-06-23");
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {
             spinner_simoprator.setSelection(db.getPosition(spinner_simoprator, installationBean.getSimoprator()));
@@ -1353,7 +1352,7 @@ public class InstallationInitial extends BaseActivity {
         new Thread() {
             public void run() {
                 try {
-                    String obj = CustomHttpClient.executeHttpPost1(NewSolarVFD.UPDATE_IBASE_VK_PAGE, param);
+                    String obj = CustomHttpClient.executeHttpPost1(WebURL.UPDATE_IBASE_VK_PAGE, param);
                     Log.d("check_error", obj);
                     Log.e("check_error", obj);
 
@@ -1474,7 +1473,7 @@ public class InstallationInitial extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.e("URL=====>", NewSolarVFD.saveDebugData + "?action=" + jsonArray);
+        Log.e("URL=====>", WebURL.saveDebugData + "?action=" + jsonArray);
         final ArrayList<NameValuePair> param1 = new ArrayList<NameValuePair>();
         param1.add(new BasicNameValuePair("action", String.valueOf(jsonArray)));
 
@@ -1482,7 +1481,7 @@ public class InstallationInitial extends BaseActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
             StrictMode.setThreadPolicy(policy);
 
-            String obj2 = debugapp.GlobalValue.CustomHttpClient.executeHttpPost1(NewSolarVFD.saveDebugData, param1);
+            String obj2 = debugapp.GlobalValue.CustomHttpClient.executeHttpPost1(WebURL.saveDebugData, param1);
 
             if (!obj2.isEmpty()) {
 
@@ -1497,7 +1496,6 @@ public class InstallationInitial extends BaseActivity {
                     mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
                     mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
 
-                    CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice, "true");
                     if (mSimDetailsInfoResponse.size() > 0)
                         mSimDetailsInfoResponse.clear();
 
@@ -1505,7 +1503,6 @@ public class InstallationInitial extends BaseActivity {
                     CustomUtility.hideProgressDialog(InstallationInitial.this);
                     Constant.BT_DEVICE_NAME = "";
                     Constant.BT_DEVICE_MAC_ADDRESS = "";
-                    //  CustomUtility.ShowToast(getResources().getString(R.string.dataSubmittedSuccessfully), getApplicationContext());
 
                     new SyncInstallationData().execute();
 

@@ -209,7 +209,7 @@ public class ActivityRejectSite extends BaseActivity {
             param.add(new BasicNameValuePair("project_no", CustomUtility.getSharedPreferences(context, "projectid")));
             String login_selec = null;
             try {
-                login_selec = CustomHttpClient.executeHttpPost1(WebURL.REJECT_DATA, param);
+                login_selec = CustomHttpClient.executeHttpPost1(WebURL.rejectionInstalltionAPI, param);
                 JSONObject object = new JSONObject(login_selec);
                 String obj1 = object.getString("reject_data");
                 Log.e("DATA","&&&&"+obj1);

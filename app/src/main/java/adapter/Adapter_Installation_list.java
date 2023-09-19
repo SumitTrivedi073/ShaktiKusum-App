@@ -29,7 +29,6 @@ import bean.InstallationBean;
 import bean.InstallationListBean;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
-import debugapp.GlobalValue.NewSolarVFD;
 import utility.CustomUtility;
 import webservice.WebURL;
 
@@ -96,7 +95,7 @@ import webservice.WebURL;
             holder.status.setImageResource(R.drawable.red_icn);
 
             holder.cardView.setOnClickListener(view -> {
-                    if (NewSolarVFD.CHECK_DATA_UNOLAD == 0) {
+                    if (WebURL.CHECK_DATA_UNOLAD == 0) {
                         WebURL.mSettingCheckValue = "0";
                         if (responseList.get(position).getSync().equalsIgnoreCase("X")) {
                             Toast.makeText(context, "Installation Already Completed...", Toast.LENGTH_SHORT).show();
