@@ -58,6 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_KUSUMCSURVEYFORM = "tbl_kusumcsurvetform";
 
     public static final String TABLE_INSTALLATION_IMAGE_DATA = "tbl_installation_image_data";
+    public static final String TABLE_REJECTED_INSTALLATION_IMAGE_DATA = "tbl_installation_image_data";
 
     public static final String TABLE_UNLOADING_IMAGE_DATA = "tbl_unloading_image_data";
     public static final String TABLE_AUDIT_PUMP_DATA = "tbl_audit_pump_data";
@@ -761,6 +762,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_INSTALLATION_LATITUDE + " TEXT,"
             + KEY_INSTALLATION_LONGITUDE + " TEXT)";
 
+    private static final String CREATE_TABLE_REJECTED_INSTALLATION_IMAGES = "CREATE TABLE "
+            + TABLE_REJECTED_INSTALLATION_IMAGE_DATA+ "("  + KEY_INSTALLATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+            + KEY_INSTALLATION_NAME + " TEXT,"
+            + KEY_INSTALLATION_PATH + " TEXT,"
+            + KEY_INSTALLATION_IMAGE_SELECTED + " BOOLEAN,"
+            + KEY_INSTALLATION_BILL_NO + " TEXT)";
+
     private static final String CREATE_TABLE_SITE_AUDIT_IMAGES = "CREATE TABLE "
             + TABLE_SITE_AUDIT + "("  + KEY_SITE_AUDIT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_SITE_AUDIT_NAME + " TEXT," + KEY_SITE_AUDIT_PATH + " TEXT," + KEY_SITE_AUDIT_IMAGE_SELECTED + " BOOLEAN," + KEY_SITE_AUDIT_BILL_NO + " TEXT)";
 
@@ -1165,6 +1173,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_SIM_CARD_REPLACEMENT);
         db.execSQL(CREATE_TABLE_SURVEY_DATA);
         db.execSQL(CREATE_TABLE_INSTALLATION_IMAGES);
+        db.execSQL(CREATE_TABLE_REJECTED_INSTALLATION_IMAGES);
         db.execSQL(CREATE_TABLE_SITE_AUDIT_IMAGES);
         db.execSQL(CREATE_TABLE_KusumCImages);
         db.execSQL(CREATE_TABLE_UNLOADING_IMAGES);
@@ -1194,6 +1203,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_AUDITSITE_LIST);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_AUDIT_PUMP_DATA);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_INSTALLATION_IMAGE_DATA);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_REJECTED_INSTALLATION_IMAGE_DATA);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_SITE_AUDIT);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_KusumCImages);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_UNLOADING_IMAGE_DATA);
@@ -3672,6 +3682,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.delete(TABLE_INSTALLATION_IMAGE_DATA, null, null);
         }
     }
+
+    public void deleteRejectedInstallationImages() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if(CustomUtility.doesTableExist(db,TABLE_INSTALLATION_IMAGE_DATA)) {
+            db.delete(TABLE_INSTALLATION_IMAGE_DATA, null, null);
+        }
+    }
     public void deleteSiteAuditImages() {
         SQLiteDatabase db = this.getWritableDatabase();
         if(CustomUtility.doesTableExist(db,TABLE_SITE_AUDIT)) {
@@ -4133,6 +4150,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return icount > 0;
     }
 
+    public void insertRejectedInstallationImage(String name, String path, boolean isSelected, String billNo, String latitude, String longitude) {
+        SQLiteDatabase  database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_INSTALLATION_NAME, name);
+        contentValues.put(KEY_INSTALLATION_PATH, path);
+        contentValues.put(KEY_INSTALLATION_IMAGE_SELECTED, isSelected);
+        contentValues.put(KEY_INSTALLATION_BILL_NO, billNo);
+        contentValues.put(KEY_INSTALLATION_LATITUDE, latitude);
+        contentValues.put(KEY_INSTALLATION_LONGITUDE, longitude);
+        database.insert(TABLE_REJECTED_INSTALLATION_IMAGE_DATA, null, contentValues);
+        database.close();
+    }
+
+    public void updateRejectedInstallationImage(String name, String path, boolean isSelected, String billNo, String latitude, String longitude) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_INSTALLATION_NAME, name);
+        values.put(KEY_INSTALLATION_PATH, path);
+        values.put(KEY_INSTALLATION_IMAGE_SELECTED, isSelected);
+        values.put(KEY_INSTALLATION_BILL_NO, billNo);
+        values.put(KEY_INSTALLATION_LATITUDE, latitude);
+        values.put(KEY_INSTALLATION_LONGITUDE, longitude);
+        // update Row
+        db.update(TABLE_REJECTED_INSTALLATION_IMAGE_DATA,values,"installationImageName = '"+name+"'",null);
+        db.close();
+    }
+
+
     public void insertInstallationImage(String name, String path, boolean isSelected, String billNo, String latitude, String longitude) {
       SQLiteDatabase  database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -4268,7 +4313,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-
+    public void deleteRejectedInstallationImages(String billNo){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String where = "";
+        where = KEY_INSTALLATION_BILL_NO + "='" + billNo + "'";
+        if(CustomUtility.doesTableExist(db,TABLE_REJECTED_INSTALLATION_IMAGE_DATA)) {
+            db.delete(TABLE_REJECTED_INSTALLATION_IMAGE_DATA, where, null);
+        }
+    }
 
 
     public void deleteUnloadingImages(String billNo){

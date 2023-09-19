@@ -21,7 +21,6 @@ public class WebURL {
     public static int BT_DEBUG_CHECK = 0;
     public static final String INSERT_DEBUG_DATA_API = "DeviceDebug";
     public static final String GET_DEVICE_SIM_NUMBER_API = "PumpSetCode";
-
     public static String ProjectNo_Con, RegNo_Con, BenificiaryNo_Con;
 
     /************* production server **************/

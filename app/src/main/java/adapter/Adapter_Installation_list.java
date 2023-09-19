@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.core.os.BuildCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.shaktipumplimited.shaktikusum.R;
@@ -29,7 +28,6 @@ import bean.InstallationBean;
 import bean.InstallationListBean;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
-import debugapp.GlobalValue.NewSolarVFD;
 import utility.CustomUtility;
 import webservice.WebURL;
 
@@ -94,7 +92,7 @@ public class Adapter_Installation_list extends RecyclerView.Adapter<Adapter_Inst
             holder.status.setImageResource(R.drawable.red_icn);
 
             holder.cardView.setOnClickListener(view -> {
-                    if (NewSolarVFD.CHECK_DATA_UNOLAD == 0) {
+                    if (WebURL.CHECK_DATA_UNOLAD == 0) {
                         WebURL.mSettingCheckValue = "0";
                         if (responseList.get(position).getSync().equalsIgnoreCase("X")) {
                             Toast.makeText(context, "Installation Already Completed...", Toast.LENGTH_SHORT).show();

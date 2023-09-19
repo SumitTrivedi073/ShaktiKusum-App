@@ -23,7 +23,6 @@ import java.util.Map;
 import activity.BaseActivity;
 import debugapp.GlobalValue.AllPopupUtil;
 import debugapp.GlobalValue.Constant;
-import debugapp.GlobalValue.NewSolarVFD;
 import webservice.WebURL;
 
 public class NavigateOptionActivity extends BaseActivity {

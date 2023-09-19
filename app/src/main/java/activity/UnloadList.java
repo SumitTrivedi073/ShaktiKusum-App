@@ -8,15 +8,11 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.shaktipumplimited.shaktikusum.R;
@@ -31,9 +27,6 @@ import java.util.Locale;
 
 import adapter.Adapter_Installation_list;
 import bean.InstallationListBean;
-import database.DatabaseHelper;
-import debugapp.GlobalValue.Constant;
-import debugapp.GlobalValue.NewSolarVFD;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
@@ -262,7 +255,7 @@ public class UnloadList extends BaseActivity {
                     recyclerView.setHasFixedSize(true);
                     recyclerView.setAdapter(adapterInstallationList);
                     adapterInstallationList.notifyDataSetChanged();
-                    NewSolarVFD.CHECK_DATA_UNOLAD = 1;
+                    WebURL.CHECK_DATA_UNOLAD = 1;
                 }else {
                     lin1.setVisibility(View.GONE);
                     lin2.setVisibility(View.VISIBLE);

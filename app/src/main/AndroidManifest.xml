@@ -246,10 +246,6 @@
             android:label="Device Status"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.RejectInstRepImgActivity"
-            android:label="Reject Documents"
-            android:screenOrientation="portrait" />
-        <activity
             android:name="activity.ShowDocument1"
             android:screenOrientation="portrait" />
         <activity

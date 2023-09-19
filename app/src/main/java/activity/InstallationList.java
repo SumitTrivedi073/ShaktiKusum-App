@@ -3,11 +3,8 @@ package activity;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,9 +15,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.annotation.OptIn;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.os.BuildCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,17 +27,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import adapter.Adapter_Installation_list;
-import adapter.Adapter_Unload_Installation_list;
-import bean.BTResonseData;
 import bean.InstallationListBean;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
-import debugapp.GlobalValue.NewSolarVFD;
-import debugapp.localDB.DatabaseHelperTeacher;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
@@ -111,7 +101,7 @@ import webservice.WebURL;
                  recyclerView.setLayoutManager(layoutManagerSubCategory);
                  recyclerView.setAdapter(adapterInstallationList);
                  adapterInstallationList.notifyDataSetChanged();
-                 NewSolarVFD.CHECK_DATA_UNOLAD = 0;
+                 WebURL.CHECK_DATA_UNOLAD = 0;
              } else {
                  lin1.setVisibility(View.GONE);
                  lin2.setVisibility(View.VISIBLE);
@@ -178,7 +168,7 @@ import webservice.WebURL;
                 if (CustomUtility.isInternetOn(getApplicationContext())) {
                     recyclerView.setAdapter(null);
                     db.deleteInstallationListData();
-                    NewSolarVFD.CHECK_DATA_UNOLAD = 0;
+                    WebURL.CHECK_DATA_UNOLAD = 0;
                     new GetInstallationDataList_Task().execute();
                 } else {
                     Toast.makeText(getApplicationContext(), "No internet Connection....", Toast.LENGTH_SHORT).show();
@@ -266,11 +256,10 @@ import webservice.WebURL;
                     progressDialog.dismiss();
                     progressDialog = null;
                 }
+                lin1.setVisibility(View.GONE);
+                lin2.setVisibility(View.VISIBLE);
             }
-            if ((progressDialog != null) && progressDialog.isShowing()) {
-                progressDialog.dismiss();
-                progressDialog = null;
-            }
+
             return login_selec;
         }
 
@@ -292,7 +281,7 @@ import webservice.WebURL;
                 recyclerView.setLayoutManager(layoutManagerSubCategory);
                 recyclerView.setAdapter(adapterInstallationList);
                 adapterInstallationList.notifyDataSetChanged();
-                NewSolarVFD.CHECK_DATA_UNOLAD = 0;
+                WebURL.CHECK_DATA_UNOLAD = 0;
             } else {
                 lin1.setVisibility(View.GONE);
                 lin2.setVisibility(View.VISIBLE);

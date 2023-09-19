@@ -26,7 +26,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
 
-import debugapp.GlobalValue.NewSolarVFD;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

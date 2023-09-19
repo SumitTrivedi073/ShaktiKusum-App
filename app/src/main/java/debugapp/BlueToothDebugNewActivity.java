@@ -98,7 +98,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import debugapp.Bean.SimDetailsInfoResponse;
 import debugapp.GlobalValue.Constant;
 import debugapp.GlobalValue.CustomHttpClient;
-import debugapp.GlobalValue.NewSolarVFD;
 import debugapp.GlobalValue.UtilMethod;
 import debugapp.localDB.DatabaseHelperTeacher;
 import okhttp3.MediaType;
