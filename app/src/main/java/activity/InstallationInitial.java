@@ -411,6 +411,7 @@ public class InstallationInitial extends BaseActivity {
                 mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(inst_controller_ser.getText().toString().trim() + "-0");
                 System.out.println("mBTResonseDataList.size()==>>" + mBTResonseDataList.size());
                 if (mBTResonseDataList.size() > 0) {
+                    vkp = mBTResonseDataList.size()-1;
                     DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
                     SIGNL_STREN = mBTResonseDataList.get(vkp).getSIGNLSTREN();
                     String[] mStrArry = SIGNL_STREN.split("###");
@@ -1354,7 +1355,7 @@ public class InstallationInitial extends BaseActivity {
         new Thread() {
             public void run() {
                 try {
-                    String obj = CustomHttpClient.executeHttpPost1(NewSolarVFD.UPDATE_IBASE_VK_PAGE, param);
+                    String obj = CustomHttpClient.executeHttpPost1(WebURL.UPDATE_IBASE_VK_PAGE, param);
                     Log.d("check_error", obj);
                     Log.e("check_error", obj);
 
@@ -1475,15 +1476,15 @@ public class InstallationInitial extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.e("URL=====>", NewSolarVFD.saveDebugData + "?action=" + jsonArray);
+        Log.e("URL=====>", WebURL.saveDebugData + "?action=" + jsonArray);
         final ArrayList<NameValuePair> param1 = new ArrayList<NameValuePair>();
         param1.add(new BasicNameValuePair("action", String.valueOf(jsonArray)));
 
-        try {
+     try {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
             StrictMode.setThreadPolicy(policy);
 
-            String obj2 = debugapp.GlobalValue.CustomHttpClient.executeHttpPost1(NewSolarVFD.saveDebugData, param1);
+            String obj2 = debugapp.GlobalValue.CustomHttpClient.executeHttpPost1(WebURL.saveDebugData, param1);
 
             if (!obj2.isEmpty()) {
 

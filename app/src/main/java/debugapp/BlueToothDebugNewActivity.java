@@ -565,6 +565,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
     private void saveDataLocaly() {
         CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice, "true");
+        Log.e("DEVICE_NO=========>",DEVICE_NO);
         mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO, SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC, SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID, MUserId, RMS_STATUS, RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB, RMS_DEBUG_EXTRN, RMS_SERVER_DOWN, RMS_ORG_D_F, true);
         onBackPressed();
         Toast.makeText(mContext, " Data save in local Data base", Toast.LENGTH_SHORT).show();
@@ -832,7 +833,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
         Map<String, String> wordsByKey = new HashMap<>();
         wordsByKey.put("device", ControllerSerialNumber + "-0");// DEVICE_NO = sssM[0];
-        baseRequest.callAPIGETDebugApp(1, wordsByKey, NewSolarVFD.SIM_STATUS_VK_PAGE);/////
+        baseRequest.callAPIGETDebugApp(1, wordsByKey, WebURL.SIM_STATUS_VK_PAGE);/////
         baseRequest.showLoader();
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
@@ -1075,7 +1076,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.e("URL=====>", NewSolarVFD.saveDebugData + "?action=" + jsonArray);
+        Log.e("URL=====>", WebURL.saveDebugData + "?action=" + jsonArray);
         final ArrayList<NameValuePair> param1 = new ArrayList<NameValuePair>();
         param1.add(new BasicNameValuePair("action", String.valueOf(jsonArray)));
         showProgressDialogue();
@@ -1083,7 +1084,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
             StrictMode.setThreadPolicy(policy);
 
-            String obj2 = CustomHttpClient.executeHttpPost1(NewSolarVFD.saveDebugData, param1);
+            String obj2 = CustomHttpClient.executeHttpPost1(WebURL.saveDebugData, param1);
 
             if (!obj2.isEmpty()) {
 
@@ -2963,12 +2964,19 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                     isDataExtract = true;
                                     CustomUtility.hideProgressDialog(BlueToothDebugNewActivity.this);
                                     if(debugDataExtract.equals("false")){
-                                    Message message = new Message();
-                                    message.obj = "Data Extraction Completed! now upload extraction Data ";
-                                    mHandler.sendMessage(message);
-                                    mBoolflag = true;
 
-                                    sendFileToRMSServer();
+                                    mBoolflag = true;
+                                        if(CustomUtility.isInternetOn(BlueToothDebugNewActivity.this)) {
+                                            Message message = new Message();
+                                            message.obj = "Data Extraction Completed! now upload extraction Data ";
+                                            mHandler.sendMessage(message);
+                                            sendFileToRMSServer();
+                                        }else {
+                                            Message message = new Message();
+                                            message.obj = "Data Extraction Completed!";
+                                            mHandler.sendMessage(message);
+
+                                        }
                                     }else {
                                         Message message = new Message();
                                         message.obj = "Data Extraction Completed";
