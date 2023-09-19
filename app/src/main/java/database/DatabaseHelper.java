@@ -58,7 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_KUSUMCSURVEYFORM = "tbl_kusumcsurvetform";
 
     public static final String TABLE_INSTALLATION_IMAGE_DATA = "tbl_installation_image_data";
-    public static final String TABLE_REJECTED_INSTALLATION_IMAGE_DATA = "tbl_installation_image_data";
+    public static final String TABLE_REJECTED_INSTALLATION_IMAGE_DATA = "tbl_rejectinstallation_image_data";
 
     public static final String TABLE_UNLOADING_IMAGE_DATA = "tbl_unloading_image_data";
     public static final String TABLE_AUDIT_PUMP_DATA = "tbl_audit_pump_data";
