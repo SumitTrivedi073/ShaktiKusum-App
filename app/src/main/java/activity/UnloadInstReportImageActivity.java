@@ -231,15 +231,11 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         Log.e("installationListBean===>", installationListBean.customer_name);
         customerName = installationListBean.customer_name;
         userID = CustomUtility.getSharedPreferences(UnloadInstReportImageActivity.this, "userid");
-        ;
         billNo = installationListBean.billno;
         moduleqty = installationListBean.moduleqty;
         custMobile = installationListBean.getCUS_CONTACT_NO();
         regisno = installationListBean.regisno;
         Hp = installationListBean.getHP();
-        pumpSerNo.setText(installationListBean.pump_ser);
-        motorSerNo.setText(installationListBean.motor_ser);
-        controllerSerNo.setText(installationListBean.controller_ser);
         beneficiary = WebURL.BenificiaryNo_Con;
         regNO = WebURL.RegNo_Con;
         projectNo = WebURL.ProjectNo_Con;
