@@ -329,6 +329,9 @@
     <string name="selectBorewellSize">Select Borewell Size</string>
     <string name="selectPumpWaterLever">Select pump water lever</string>
     <string name="site_audit">Site Audit</string>
+    <string name="enter_pump_serial_number">Enter pump serial number</string>
+    <string name="enter_motor_serial_number">Enter motor serial number</string>
+    <string name="enter_controller_serial_number">Enter controller serial number</string>
 
 
     <string-array name="nav_drawer_labels">

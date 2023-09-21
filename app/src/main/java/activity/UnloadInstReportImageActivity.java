@@ -264,16 +264,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                     CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectInvoicePhoto));
                 } else if (!imageArrayList.get(2).isImageSelected()) {
                     CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectCustomerPhoto));
-                } else if (remarkEdt.getText().toString().isEmpty()) {
-                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
-                } else if (pumpSerNo.getText().toString().isEmpty() && !pumpSerNo.getText().toString().equals(installationListBean.pump_ser)) {
-                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctPumpSr));
-                } else if (motorSerNo.getText().toString().isEmpty() && !motorSerNo.getText().toString().equals(installationListBean.motor_ser)) {
-                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctMotorSr));
-                } else if (controllerSerNo.getText().toString().isEmpty() && !controllerSerNo.getText().toString().equals(installationListBean.controller_ser)) {
-                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctControllerSr));
-                } else {
-
+                }   else {
                     Set<String> set = new HashSet<>();
                     if (!inst_module_ser_no.getText().toString().trim().equals("0")) {
 
@@ -310,9 +301,20 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
 
                     }
+
                     if (CustomUtility.isInternetOn(getApplicationContext())) {
                         if (isSubmit) {
-                            new SyncInstallationData().execute();
+                            if (pumpSerNo.getText().toString().isEmpty() || !pumpSerNo.getText().toString().equalsIgnoreCase(installationListBean.getPump_ser())) {
+                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctPumpSr));
+                            } else if (motorSerNo.getText().toString().isEmpty() || !motorSerNo.getText().toString().equalsIgnoreCase(installationListBean.getMotor_ser())) {
+                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctMotorSr));
+                            } else if (controllerSerNo.getText().toString().isEmpty() || !controllerSerNo.getText().toString().equalsIgnoreCase(installationListBean.getController_ser())) {
+                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctControllerSr));
+                            }else if (remarkEdt.getText().toString().isEmpty()) {
+                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
+                            }else {
+                                new SyncInstallationData().execute();
+                            }
                         }
                     } else {
                         CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection), getApplicationContext());
@@ -333,7 +335,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                 startScanner(1000);
             }
         });
-        pump_scanner.setOnClickListener(new View.OnClickListener() {
+        motor_scanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 isPumpMotorController = true;
@@ -341,7 +343,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             }
         });
 
-        pump_scanner.setOnClickListener(new View.OnClickListener() {
+        controllerScanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 isPumpMotorController = true;
@@ -790,7 +792,6 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                         pumpSerNo.setText(scanContent);
                         break;
                     case 2000:
-
                         motorSerNo.setText(scanContent);
                         break;
                     case 3000:

@@ -94,12 +94,12 @@
                         android:weightSum="1">
 
 
-                        <TextView
+                        <EditText
                             android:id="@+id/pumpSerNo"
                             style="@style/under_line_et"
                             android:layout_width="0dp"
                             android:layout_gravity="center"
-                            android:layout_marginBottom="1dp"
+                            android:hint="@string/enter_pump_serial_number"
                             android:layout_weight="1"/>
 
 
@@ -141,12 +141,12 @@
                         android:weightSum="1">
 
 
-                        <TextView
+                        <EditText
                             android:id="@+id/motorSerNo"
                             style="@style/under_line_et"
                             android:layout_width="0dp"
                             android:layout_gravity="center"
-                            android:layout_marginBottom="1dp"
+                            android:hint="@string/enter_motor_serial_number"
                             android:layout_weight="1"/>
 
 
@@ -188,12 +188,14 @@
                         android:weightSum="1">
 
 
-                        <TextView
+                        <EditText
                             android:id="@+id/controllerSerNo"
                             style="@style/under_line_et"
                             android:layout_width="0dp"
                             android:layout_gravity="center"
                             android:layout_marginBottom="1dp"
+                            android:textColor="@color/black"
+                            android:hint="@string/enter_controller_serial_number"
                             android:layout_weight="1"/>
 
 
