@@ -34,7 +34,6 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.os.BuildCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -76,14 +75,13 @@ import database.DatabaseHelper;
 import de.hdodenhof.circleimageview.CircleImageView;
 import debugapp.Bean.SimDetailsInfoResponse;
 import debugapp.GlobalValue.Constant;
-import debugapp.GlobalValue.NewSolarVFD;
 import debugapp.VerificationCodeModel;
 import debugapp.localDB.DatabaseHelperTeacher;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-@BuildCompat.PrereleaseSdkCheck
+
 public class InstallationInitial extends BaseActivity {
 
 
@@ -257,6 +255,7 @@ public class InstallationInitial extends BaseActivity {
                     if (WebURL.BT_DEVICE_NAME.equalsIgnoreCase("") || WebURL.BT_DEVICE_MAC_ADDRESS.equalsIgnoreCase("")) {
                         Intent intent = new Intent(mContext, PairedDeviceActivity.class);
                         intent.putExtra(Constant.ControllerSerialNumber, inst_controller_ser.getText().toString().trim());
+                        intent.putExtra(Constant.debugDataExtract, "false");
                         startActivity(intent);
                     }
                 } else {
@@ -410,6 +409,7 @@ public class InstallationInitial extends BaseActivity {
                 mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(inst_controller_ser.getText().toString().trim() + "-0");
                 System.out.println("mBTResonseDataList.size()==>>" + mBTResonseDataList.size());
                 if (mBTResonseDataList.size() > 0) {
+                    vkp = mBTResonseDataList.size()-1;
                     DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
                     SIGNL_STREN = mBTResonseDataList.get(vkp).getSIGNLSTREN();
                     String[] mStrArry = SIGNL_STREN.split("###");
@@ -1353,7 +1353,7 @@ public class InstallationInitial extends BaseActivity {
         new Thread() {
             public void run() {
                 try {
-                    String obj = CustomHttpClient.executeHttpPost1(NewSolarVFD.UPDATE_IBASE_VK_PAGE, param);
+                    String obj = CustomHttpClient.executeHttpPost1(WebURL.UPDATE_IBASE_VK_PAGE, param);
                     Log.d("check_error", obj);
                     Log.e("check_error", obj);
 
@@ -1474,15 +1474,15 @@ public class InstallationInitial extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.e("URL=====>", NewSolarVFD.saveDebugData + "?action=" + jsonArray);
+        Log.e("URL=====>", WebURL.saveDebugData + "?action=" + jsonArray);
         final ArrayList<NameValuePair> param1 = new ArrayList<NameValuePair>();
         param1.add(new BasicNameValuePair("action", String.valueOf(jsonArray)));
 
-        try {
+     try {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
             StrictMode.setThreadPolicy(policy);
 
-            String obj2 = debugapp.GlobalValue.CustomHttpClient.executeHttpPost1(NewSolarVFD.saveDebugData, param1);
+            String obj2 = debugapp.GlobalValue.CustomHttpClient.executeHttpPost1(WebURL.saveDebugData, param1);
 
             if (!obj2.isEmpty()) {
 
@@ -1493,8 +1493,7 @@ public class InstallationInitial extends BaseActivity {
 
                 String mStatus = jsonObject.getString("status");
                 if (mStatus.equals("true")) {
-
-                    mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
+                   mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
                     mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
 
                     CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice, "true");

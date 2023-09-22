@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.core.os.BuildCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.shaktipumplimited.shaktikusum.R;
@@ -29,19 +28,16 @@ import bean.InstallationBean;
 import bean.InstallationListBean;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
-import debugapp.GlobalValue.NewSolarVFD;
 import utility.CustomUtility;
 import webservice.WebURL;
 
-@BuildCompat.PrereleaseSdkCheck public class Adapter_Installation_list extends RecyclerView.Adapter<Adapter_Installation_list.HomeCategoryViewHolder> {
-    View.OnClickListener onclick_listener;
+public class Adapter_Installation_list extends RecyclerView.Adapter<Adapter_Installation_list.HomeCategoryViewHolder> {
     DatabaseHelper db;
-    InstallationBean installationBean;
     private final Context context;
     private final ArrayList<InstallationListBean> responseList;
     private List<InstallationListBean> SearchesList = null;
     String pernr, billno;
-//    private boolean isOffline;
+
 
     public Adapter_Installation_list(Context context, ArrayList<InstallationListBean> responseList) {
         this.context = context;
@@ -49,7 +45,7 @@ import webservice.WebURL;
         db = new DatabaseHelper(context);
         this.SearchesList = new ArrayList<InstallationListBean>();
         this.SearchesList.addAll(responseList);
-//        this.isOffline = isOffline;
+
     }
 
     @Override
@@ -96,7 +92,7 @@ import webservice.WebURL;
             holder.status.setImageResource(R.drawable.red_icn);
 
             holder.cardView.setOnClickListener(view -> {
-                    if (NewSolarVFD.CHECK_DATA_UNOLAD == 0) {
+                    if (WebURL.CHECK_DATA_UNOLAD == 0) {
                         WebURL.mSettingCheckValue = "0";
                         if (responseList.get(position).getSync().equalsIgnoreCase("X")) {
                             Toast.makeText(context, "Installation Already Completed...", Toast.LENGTH_SHORT).show();
@@ -164,13 +160,7 @@ import webservice.WebURL;
                             e.printStackTrace();
                         }
                         Intent intent = new Intent(context, UnloadInstReportImageActivity.class);
-                        intent.putExtra("vbeln", responseList.get(position).getBillno());
-                        intent.putExtra("cust_name", custname);
-                        intent.putExtra("userid", pernr);
-                        intent.putExtra("moduleqty", responseList.get(position).getModuleqty());
-                        intent.putExtra("mobile", responseList.get(position).getCUS_CONTACT_NO());
-                        intent.putExtra("HP", responseList.get(position).getHP());
-                        intent.putExtra(Constant.regisno, responseList.get(position).getRegisno());
+                       intent.putExtra(Constant.unloadingData,responseList.get(position));
                         context.startActivity(intent);
                     }
             });

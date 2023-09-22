@@ -48,7 +48,7 @@ import database.DatabaseHelper;
 import utility.CustomUtility;
 
 
-@BuildCompat.PrereleaseSdkCheck
+
 public class InstReportImageActivity extends BaseActivity implements ImageSelectionAdapter.ImageSelectionListener {
 
 
@@ -70,7 +70,6 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
 
     boolean isBackPressed = false,isUpdate = false;
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +78,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
         CheakPermissions();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+
     private void CheakPermissions() {
         if (checkPermission()) {
             SetAdapter();
@@ -104,7 +103,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+
     private boolean checkPermission() {
         int cameraPermission =
                 ContextCompat.checkSelfPermission(InstReportImageActivity.this, CAMERA);
@@ -215,6 +214,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
         itemNameList.add(getResources().getString(R.string.delayInstallation));
         itemNameList.add(getResources().getString(R.string.insideCOntroller));
         itemNameList.add(getResources().getString(R.string.outsideController));
+        itemNameList.add(getResources().getString(R.string.namePlate));
 
 
         for (int i = 0; i < itemNameList.size(); i++) {

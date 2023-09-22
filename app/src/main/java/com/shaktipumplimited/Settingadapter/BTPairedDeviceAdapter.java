@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,22 +28,18 @@ public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAd
 
     private List mDeviceNameList;
     private List mDeviceMACAddressList;
-    String ControllerSerialNumber;
+    String ControllerSerialNumber,debugDataExtract;
 
-    public BTPairedDeviceAdapter(Context mContext, List mDeviceNameList, List mDeviceMACAddressList, String controllerSerialNumber) {
+    public BTPairedDeviceAdapter(Context mContext, List mDeviceNameList, List mDeviceMACAddressList, String controllerSerialNumber,String debugDataExtract) {
 
         this.mDeviceNameList = mDeviceNameList;
         this.mDeviceMACAddressList = mDeviceMACAddressList;
          this.ControllerSerialNumber = controllerSerialNumber;
+         this.debugDataExtract = debugDataExtract;
         this.mContext = mContext;
 
     }
 
-    public BTPairedDeviceAdapter(String SSS, Context mContext) {
-        // this.galleryModelsList = galleryModelsList;
-        this.mContext = mContext;
-
-    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -63,23 +60,25 @@ public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAd
         holder.cardMainViewMyNotifyID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // Constant.Bluetooth_Activity_Navigation = 2;
 
+                    WebURL.BT_DEVICE_NAME = mDeviceNameList.get(position).toString();
+                    holder.txtDeviceNoID.setText(WebURL.BT_DEVICE_NAME);
+                    WebURL.BT_DEVICE_MAC_ADDRESS = mDeviceMACAddressList.get(position).toString();
+                    String BT_NAME_ORG = holder.txtDeviceNoID.getText().toString().trim();
+                    Constant.BT_DEVICE_NAME = mDeviceNameList.get(position).toString();
+                    Constant.BT_DEVICE_MAC_ADDRESS = mDeviceMACAddressList.get(position).toString();
+                    Intent intent = new Intent(mContext, BlueToothDebugNewActivity.class);
+                    intent.putExtra("BtNameHead", Constant.BT_DEVICE_NAME);
+                    intent.putExtra("BtMacAddressHead", Constant.BT_DEVICE_MAC_ADDRESS);
+                    if(ControllerSerialNumber.isEmpty()) {
+                        intent.putExtra(Constant.ControllerSerialNumber, mDeviceNameList.get(position).toString());
+                    }else {
+                        intent.putExtra(Constant.ControllerSerialNumber, ControllerSerialNumber);
+                    }
+                   intent.putExtra(Constant.debugDataExtract, debugDataExtract);
+                    mContext.startActivity(intent);
+                    ((Activity) mContext).finish();
 
-                WebURL.BT_DEVICE_NAME = mDeviceNameList.get(position).toString();
-                holder.txtDeviceNoID.setText(WebURL.BT_DEVICE_NAME);
-                WebURL.BT_DEVICE_MAC_ADDRESS = mDeviceMACAddressList.get(position).toString();
-                String BT_NAME_ORG = holder.txtDeviceNoID.getText().toString().trim();
-                Constant.BT_DEVICE_NAME = mDeviceNameList.get(position).toString();
-                Constant.BT_DEVICE_MAC_ADDRESS = mDeviceMACAddressList.get(position).toString();
-
-                Intent intent = new Intent(mContext, BlueToothDebugNewActivity.class);
-                intent.putExtra("BtNameHead",Constant.BT_DEVICE_NAME );
-                intent.putExtra("BtMacAddressHead",Constant.BT_DEVICE_MAC_ADDRESS );
-                intent.putExtra(Constant.ControllerSerialNumber,ControllerSerialNumber);
-                mContext.startActivity(intent);
-
-                ((Activity)mContext).finish();
 
             }
         });

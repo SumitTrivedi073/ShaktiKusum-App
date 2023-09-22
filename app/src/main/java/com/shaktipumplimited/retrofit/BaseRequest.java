@@ -26,7 +26,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
 
-import debugapp.GlobalValue.NewSolarVFD;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -240,7 +239,7 @@ public class BaseRequest extends BaseRequestParser {
 
         //  showLoader();
         // String baseURL = "http://111.118.249.190:8080/RMSApp/" + remainingURL;
-        String baseURL = NewSolarVFD.BASE_URL_OPTION_VK + remainingURL;
+        String baseURL = WebURL.BASE_URL_OPTION_VK + remainingURL;
         // String baseURL = "http://solar10.shaktisolarrms.com:1992/Home/" + remainingURL;
         if (!baseURL.endsWith("?")) {
             baseURL = baseURL + "?";

@@ -3,6 +3,7 @@ package activity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -12,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +29,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -37,6 +38,8 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
 import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.tasks.Task;
+import com.shaktipumplimited.SetParameter.PairedDeviceActivity;
+import com.shaktipumplimited.SettingModel.AllPopupUtil;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
@@ -50,13 +53,13 @@ import adapter.Adapter_item_list;
 import bean.ItemNameBean;
 import bean.LoginBean;
 import database.DatabaseHelper;
-import debugapp.ActivitySurveyList;
+import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
 @SuppressWarnings("resource")
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private static DatabaseHelper dataHelper;
     private AppUpdateManager appUpdateManager;
@@ -78,9 +81,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private final Handler progressBarHandler = new Handler();
     ProgressDialog progressBar;
 
-    CardView cardSurveySiteID,SurveySiteC,pendingFeedback,pendingUnloadingVerification;
-
-
+    CardView pendingFeedback, pendingUnloadingVerification, checkRMSStatus, debugDataExtract,
+            siteAuditCard, simReplacementCard;
 
 
     @SuppressLint("SetTextI18n")
@@ -91,9 +93,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         context = this;
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        recyclerView = findViewById(R.id.item_list);
+        pendingFeedback = findViewById(R.id.pendingInstallationVerification);
+        pendingUnloadingVerification = findViewById(R.id.pendingUnloadingVerification);
+        lin1 = findViewById(R.id.lin1);
+        lin2 = findViewById(R.id.lin2);
+        checkRMSStatus = findViewById(R.id.checkRMSStatus);
+        debugDataExtract = findViewById(R.id.debugDataExtract);
+        siteAuditCard = findViewById(R.id.siteAuditCard);
+        simReplacementCard = findViewById(R.id.simReplacementCard);
+        flvViewFlipperID = findViewById(R.id.flvViewFlipperID);
+
+        flvViewFlipperID.setFlipInterval(3000); //set 1 seconds for interval time
+        flvViewFlipperID.startFlipping();
+
 
         dataHelper = new DatabaseHelper(context);
-
         PackageManager pm = getApplicationContext().getPackageManager();
         String pkgName = getApplicationContext().getPackageName();
         PackageInfo pkgInfo = null;
@@ -108,11 +123,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         LoginBean loginBean = new LoginBean();
 
         emp_type = loginBean.getUsertype();
-
-        Log.e("EMP", "&&&" + emp_type);
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-
         navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -121,27 +132,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         navigationView.setNavigationItemSelectedListener(this);
 
         View headerView = navigationView.getHeaderView(0);
-        TextView username =  headerView.findViewById(R.id.user_name);
-        TextView appversion =  headerView.findViewById(R.id.app_version);
-        TextView projname =  headerView.findViewById(R.id.proj_name);
-
+        TextView username = headerView.findViewById(R.id.user_name);
+        TextView appversion = headerView.findViewById(R.id.app_version);
+        TextView projname = headerView.findViewById(R.id.proj_name);
         username.setText(CustomUtility.getSharedPreferences(context, "username"));
         projname.setText(CustomUtility.getSharedPreferences(context, "projectname"));
         appversion.setText("Version " + versionName);
         CustomUtility.setSharedPreference(context, "CHECK_OTP_VERIFED", "Y");
-
-
-        cardSurveySiteID = findViewById(R.id.cardSurveySiteID);
-        recyclerView = findViewById(R.id.item_list);
-        pendingFeedback = findViewById(R.id.pendingFeedback);
-        pendingUnloadingVerification = findViewById(R.id.pendingUnloadingVerification);
-        lin1 =  findViewById(R.id.lin1);
-        lin2 =  findViewById(R.id.lin2);
-
-        flvViewFlipperID =  findViewById(R.id.flvViewFlipperID);
-        SurveySiteC =  findViewById(R.id.SurveySiteC);
-        flvViewFlipperID.setFlipInterval(3000); //set 1 seconds for interval time
-        flvViewFlipperID.startFlipping();
 
         if (CustomUtility.isInternetOn(getApplicationContext())) {
             new Dashboard().execute();
@@ -150,28 +147,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             Toast.makeText(context, "Please Connect to Internet", Toast.LENGTH_SHORT).show();
         }
 
-        cardSurveySiteID.setOnClickListener(v -> {
-            Intent mIntent = new Intent(context, ActivitySurveyList.class);
-            startActivity(mIntent);
-        });
 
-        SurveySiteC.setOnClickListener(v -> {
-            Intent mIntent = new Intent(context, KusumCSurveyListActivty.class);
-            startActivity(mIntent);
-        });
-
-        pendingFeedback.setOnClickListener(view -> {
-            Intent mIntent = new Intent(context, PendingFeedbackActivity.class);
-            startActivity(mIntent);
-        });
-        pendingUnloadingVerification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent mIntent = new Intent(context, PendingUnloadVerificationActivity.class);
-                startActivity(mIntent);
-            }
-        });
-
+        pendingFeedback.setOnClickListener(this);
+        pendingUnloadingVerification.setOnClickListener(this);
+        checkRMSStatus.setOnClickListener(this);
+        debugDataExtract.setOnClickListener(this);
+        siteAuditCard.setOnClickListener(this);
+        simReplacementCard.setOnClickListener(this);
         appUpdateManager = AppUpdateManagerFactory.create(getApplicationContext());
         checkUpdate();
     }
@@ -184,7 +166,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
                     && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
                 startUpdateFlow(appUpdateInfo);
-            } else if  (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS){
+            } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
                 startUpdateFlow(appUpdateInfo);
             }
         });
@@ -235,16 +217,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_logout) {
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(context, R.style.MyDialogTheme);
-            alertDialog.setTitle("Confirmation");
-            alertDialog.setMessage("Are you sure you wish to Sign Out ?");
-            alertDialog.setPositiveButton("Yes", (dialog, which) -> logout());
-            alertDialog.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
-            alertDialog.show();
-            return true;
-        }
-
         if (id == R.id.action_state_city) {
             CustomUtility.getSharedPreferences(context, "usertype");
             if (CustomUtility.getSharedPreferences(context, "usertype").equalsIgnoreCase("02")) {
@@ -269,9 +241,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             } else {
                 super.onBackPressed();
             }
-        } else if (id == R.id.nav_offlinedata) {
-            Intent offlinedata = new Intent(context, OfflineData.class);
-            startActivity(offlinedata);
         } else if (id == R.id.nav_logout) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(context, R.style.MyDialogTheme);
             alertDialog.setTitle("Confirmation");
@@ -279,22 +248,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             alertDialog.setPositiveButton("Yes", (dialog, which) -> logout());
             alertDialog.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
             alertDialog.show();
-        } else if (id == R.id.nav_simreplace) {
-            Intent intent = new Intent(context, SimCardOptions.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_devicestatus) {
-            Intent intent = new Intent(context, DeviceStatusActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_siteaudit) {
-            if (CustomUtility.getSharedPreferences(context, "usertype").equalsIgnoreCase("02")) {
-                Intent intent = new Intent(context, SiteAuditList.class);
-                startActivity(intent);
-            } else {
-                Toast.makeText(context, "You are not authorized for this.", Toast.LENGTH_SHORT).show();
-            }
-        } else if (id == R.id.nav_rejectsite) {
-            Intent intent = new Intent(context, ActivityRejectSite.class);
-            startActivity(intent);
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -331,36 +284,79 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
 
-
-    @SuppressLint("WrongConstant")
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
     private void getListData() {
 
         if (dataHelper.getItemData() != null && dataHelper.getItemData().size() > 0) {
-        itemNameBeans = dataHelper.getItemData();
-        /*ItemNameBean itemNameBean = new ItemNameBean("000","Installation Offline");
-        itemNameBeans.add(itemNameBean);*/
-
+            itemNameBeans = dataHelper.getItemData();
 
             lin1.setVisibility(View.VISIBLE);
             lin2.setVisibility(View.GONE);
 
             adapter_item_list = new Adapter_item_list(context, itemNameBeans, onclick);
-
-            LinearLayoutManager layoutManagerSubCategory = new LinearLayoutManager(context);
-            layoutManagerSubCategory.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerView.setLayoutManager(layoutManagerSubCategory);
+            recyclerView.setHasFixedSize(true);
             recyclerView.setAdapter(adapter_item_list);
             adapter_item_list.notifyDataSetChanged();
 
         } else {
             lin1.setVisibility(View.GONE);
             lin2.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.pendingInstallationVerification:
+                Intent mIntent2 = new Intent(context, PendingFeedbackActivity.class);
+                startActivity(mIntent2);
+                break;
+
+
+            case R.id.pendingUnloadingVerification:
+                Intent mIntent3 = new Intent(context, PendingUnloadVerificationActivity.class);
+                startActivity(mIntent3);
+                break;
+
+
+            case R.id.checkRMSStatus:
+                Intent mIntent4 = new Intent(context, CheckRMSActivity.class);
+                startActivity(mIntent4);
+                break;
+
+            case R.id.debugDataExtract:
+                WebURL.BT_DEVICE_NAME = "";
+                WebURL.BT_DEVICE_MAC_ADDRESS = "";
+                Constant.Bluetooth_Activity_Navigation = 1;///Debug
+
+                BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                if (mBluetoothAdapter.isEnabled()) {
+                    if (AllPopupUtil.pairedDeviceListGloable(context)) {
+                        if (WebURL.BT_DEVICE_NAME.equalsIgnoreCase("") || WebURL.BT_DEVICE_MAC_ADDRESS.equalsIgnoreCase("")) {
+                            Intent intent = new Intent(context, PairedDeviceActivity.class);
+                            intent.putExtra(Constant.ControllerSerialNumber, "");
+                            intent.putExtra(Constant.debugDataExtract, "true");
+                            startActivity(intent);
+                        }
+                    } else {
+                        startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
+                    }
+                } else {
+                    startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
+                }
+                break;
+            case R.id.simReplacementCard:
+                Intent intent = new Intent(context, SimCardOptions.class);
+                startActivity(intent);
+                break;
+
+            case R.id.siteAuditCard:
+                if (CustomUtility.getSharedPreferences(context, "usertype").equalsIgnoreCase("02")) {
+                    Intent intent1 = new Intent(context, SiteAuditList.class);
+                    startActivity(intent1);
+                } else {
+                    Toast.makeText(context, "You are not authorized for this.", Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
     }
 
@@ -380,7 +376,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             param.add(new BasicNameValuePair("USERID", CustomUtility.getSharedPreferences(context, "userid")));
             param.add(new BasicNameValuePair("PROJECT_NO", CustomUtility.getSharedPreferences(context, "projectid")));
             param.add(new BasicNameValuePair("PROJECT_LOGIN_NO", CustomUtility.getSharedPreferences(context, "loginid")));
-            String login_selec = null, project_no, process_no , process_nm ;
+            String login_selec = null, project_no, process_no, process_nm;
+            Log.e("DashboardURL========>", WebURL.DASHBOARD_DATA + param.toString());
             try {
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
                 StrictMode.setThreadPolicy(policy);

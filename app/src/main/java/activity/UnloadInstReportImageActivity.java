@@ -69,9 +69,9 @@ import java.util.Set;
 import adapter.ImageSelectionAdapter;
 import bean.ImageModel;
 import bean.InstallationBean;
+import bean.InstallationListBean;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
-import debugapp.GlobalValue.NewSolarVFD;
 import debugapp.VerificationCodeModel;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
@@ -84,29 +84,25 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     private static final int PICK_FROM_FILE = 102;
     List<ImageModel> imageArrayList = new ArrayList<>();
     List<ImageModel> imageList = new ArrayList<>();
-
     ArrayList<String> scannedDeviceNo = new ArrayList<>();
     RecyclerView recyclerview;
     EditText remarkEdt;
-    TextView inst_module_ser_no;
+    TextView inst_module_ser_no, pumpSerNo, motorSerNo, controllerSerNo;
 
+    ImageView pump_scanner, motor_scanner, controllerScanner;
     LinearLayout moduleOneLL;
-
     Button btnSave;
     AlertDialog alertDialog;
     int selectedIndex;
     ImageSelectionAdapter customAdapter;
     boolean isSubmit = false;
-
     List<String> itemNameList = new ArrayList<>();
-    List<String> listOfModules = new ArrayList<>();
-    String customerName, beneficiary, regNO, projectNo, userID, billNo, moduleqty,custMobile,regisno,
-            no_of_module_value, noOfModules = "",Hp;
+    String customerName, beneficiary, regNO, projectNo, userID, billNo, moduleqty, custMobile, regisno,
+            no_of_module_value, noOfModules = "", Hp;
     int value, currentScannerFor = -1;
-
     Toolbar mToolbar;
-
-    boolean isUpdate = false;
+    boolean isUpdate = false, isPumpMotorController = false;
+    InstallationListBean installationListBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,8 +205,13 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         remarkEdt = findViewById(R.id.edtRemarkVKID);
         inst_module_ser_no = findViewById(R.id.module_serial_no);
         moduleOneLL = findViewById(R.id.layout_one);
-
+        pumpSerNo = findViewById(R.id.pumpSerNo);
+        motorSerNo = findViewById(R.id.motorSerNo);
+        controllerSerNo = findViewById(R.id.controllerSerNo);
         btnSave = findViewById(R.id.btnSave);
+        pump_scanner = findViewById(R.id.pump_scanner);
+        motor_scanner = findViewById(R.id.motor_scanner);
+        controllerScanner = findViewById(R.id.controllerScanner);
 
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -225,13 +226,16 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
     private void retriveValue() {
         Bundle bundle = getIntent().getExtras();
-        customerName = bundle.getString("cust_name");
-        userID = bundle.getString("userid");
-        billNo = bundle.getString("vbeln");
-        moduleqty = bundle.getString("moduleqty");
-        custMobile = bundle.getString("mobile");
-        regisno = bundle.getString(Constant.regisno);
-        Hp = bundle.getString("HP");
+
+        installationListBean = (InstallationListBean) bundle.getSerializable(Constant.unloadingData);
+        Log.e("installationListBean===>", installationListBean.customer_name);
+        customerName = installationListBean.customer_name;
+        userID = CustomUtility.getSharedPreferences(UnloadInstReportImageActivity.this, "userid");
+        billNo = installationListBean.billno;
+        moduleqty = installationListBean.moduleqty;
+        custMobile = installationListBean.getCUS_CONTACT_NO();
+        regisno = installationListBean.regisno;
+        Hp = installationListBean.getHP();
         beneficiary = WebURL.BenificiaryNo_Con;
         regNO = WebURL.RegNo_Con;
         projectNo = WebURL.ProjectNo_Con;
@@ -260,10 +264,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                     CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectInvoicePhoto));
                 } else if (!imageArrayList.get(2).isImageSelected()) {
                     CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectCustomerPhoto));
-                } else if (remarkEdt.getText().toString().isEmpty()) {
-                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
-                } else {
-
+                }   else {
                     Set<String> set = new HashSet<>();
                     if (!inst_module_ser_no.getText().toString().trim().equals("0")) {
 
@@ -300,9 +301,20 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
 
                     }
+
                     if (CustomUtility.isInternetOn(getApplicationContext())) {
                         if (isSubmit) {
-                            new SyncInstallationData().execute();
+                            if (pumpSerNo.getText().toString().isEmpty() || !pumpSerNo.getText().toString().equalsIgnoreCase(installationListBean.getPump_ser())) {
+                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctPumpSr));
+                            } else if (motorSerNo.getText().toString().isEmpty() || !motorSerNo.getText().toString().equalsIgnoreCase(installationListBean.getMotor_ser())) {
+                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctMotorSr));
+                            } else if (controllerSerNo.getText().toString().isEmpty() || !controllerSerNo.getText().toString().equalsIgnoreCase(installationListBean.getController_ser())) {
+                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctControllerSr));
+                            }else if (remarkEdt.getText().toString().isEmpty()) {
+                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
+                            }else {
+                                new SyncInstallationData().execute();
+                            }
                         }
                     } else {
                         CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection), getApplicationContext());
@@ -316,7 +328,28 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             }
         });
         mToolbar.setNavigationOnClickListener(v -> onBackPressed());
+        pump_scanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isPumpMotorController = true;
+                startScanner(1000);
+            }
+        });
+        motor_scanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isPumpMotorController = true;
+                startScanner(2000);
+            }
+        });
 
+        controllerScanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isPumpMotorController = true;
+                startScanner(3000);
+            }
+        });
     }
 
     @Override
@@ -353,7 +386,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
             for (int i = 0; i < imageList.size(); i++) {
                 for (int j = 0; j < itemNameList.size(); j++) {
-                    if (imageList.get(i).getBillNo().trim().equals(getIntent().getExtras().getString("vbeln").trim())) {
+                    if (imageList.get(i).getBillNo().trim().equals(billNo)) {
                         if (imageList.get(i).getName().equals(itemNameList.get(j))) {
                             ImageModel imageModel = new ImageModel();
                             imageModel.setName(imageList.get(i).getName());
@@ -627,9 +660,9 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
                             databaseHelper.deleteUnloadingImages(billNo);
                             showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
-                            NewSolarVFD.CHECK_DATA_UNOLAD = 0;
+                            WebURL.CHECK_DATA_UNOLAD = 0;
 
-                           Random random = new Random();
+                            Random random = new Random();
                             String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
 
                             runOnUiThread(() -> {
@@ -734,28 +767,46 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             String scanFormat = scanningResult.getFormatName();
 
             Toast.makeText(getApplicationContext(), scanFormat + scanContent, Toast.LENGTH_SHORT);
-            boolean alreadySet = false;
-            if (!alreadySet) {
-                EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
+            if (!isPumpMotorController) {
+                boolean alreadySet = false;
+                if (!alreadySet) {
+                    EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
 
-                if (scannedDeviceNo.size() > 0) {
-                    if (!scannedDeviceNo.contains(scanContent)) {
+                    if (scannedDeviceNo.size() > 0) {
+                        if (!scannedDeviceNo.contains(scanContent)) {
+                            edit_O.setText(scanContent);
+                            scannedDeviceNo.add(scanContent);
+                        } else {
+                            CustomUtility.ShowToast("Already Done", getApplicationContext());
+
+                        }
+                    } else {
                         edit_O.setText(scanContent);
                         scannedDeviceNo.add(scanContent);
-                    } else {
-                        CustomUtility.ShowToast("Already Done", getApplicationContext());
-
                     }
-                } else {
-                    edit_O.setText(scanContent);
-                    scannedDeviceNo.add(scanContent);
-                }
 
+                }
+            } else {
+                switch (currentScannerFor) {
+                    case 1000:
+                        pumpSerNo.setText(scanContent);
+                        break;
+                    case 2000:
+                        motorSerNo.setText(scanContent);
+                        break;
+                    case 3000:
+                        controllerSerNo.setText(scanContent);
+
+
+                        break;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
 
     public String GetDataOne() {
         String finalValue = "";
@@ -781,7 +832,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.SendOTP + "&mobiles=" + ContactNo +
-                        "&message=प्रिय ग्राहक, आपको (shakti energy solution private limited pithampur) द्वारा "+ Hp+ "का पूरा सिस्टम आपके कस्टमर -आय डी "+ beneficiaryNo +" के तहत भेज दिया गया है। यदि भेजा गया सिस्टम सफलतापूर्वक आपको पूरा प्राप्त हुआ है तो (shakti energy solution private limited pithampur) द्वारा अधिकृत इंस्टॉलेशन टीम को OTP-"+ generatedVerificationCode +" शेयर कर पुष्टि करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169347351235207",
+                        "&message=प्रिय ग्राहक, आपको (shakti energy solution private limited pithampur) द्वारा " + Hp + "का पूरा सिस्टम आपके कस्टमर -आय डी " + beneficiaryNo + " के तहत भेज दिया गया है। यदि भेजा गया सिस्टम सफलतापूर्वक आपको पूरा प्राप्त हुआ है तो (shakti energy solution private limited pithampur) द्वारा अधिकृत इंस्टॉलेशन टीम को OTP-" + generatedVerificationCode + " शेयर कर पुष्टि करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169347351235207",
 
 
                 /*प्रिय ग्राहक, आपको  (shakti energy solution private limited pithampur)
@@ -797,7 +848,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                 if (!res.toString().isEmpty()) {
                     VerificationCodeModel verificationCodeModel = new Gson().fromJson(res.toString(), VerificationCodeModel.class);
                     if (verificationCodeModel.getStatus().equals("Success")) {
-                         databaseHelper.deleteInstallationImages(billNo);
+                        databaseHelper.deleteInstallationImages(billNo);
                         ShowAlertResponse(generatedVerificationCode, ContactNo, Hp, beneficiaryNo, billNo);
                     }
 
@@ -841,7 +892,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             intent.putExtra(Constant.PendingFeedbackBeneficiary, beneficiaryNo);
             intent.putExtra(Constant.VerificationCode, generatedVerificationCode);
             intent.putExtra(Constant.regisno, regisno);
-            intent.putExtra(Constant.isUnloading ,"true");
+            intent.putExtra(Constant.isUnloading, "true");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
