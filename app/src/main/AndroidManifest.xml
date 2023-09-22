@@ -55,7 +55,7 @@
 
 
         <activity
-            android:name="activity.RejectInstRepImgActivity"
+            android:name="activity.RejectedSiteAuditImgActivity"
             android:exported="false" />
         <activity
             android:name="activity.ActivityRejectSite"

@@ -53,7 +53,9 @@ public class WebURL {
 
     public static final String INSTALLATION_UNLOAD1 = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/unloading_list.htm";
 
-    public static final String REJECT_INSTALLATION = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_reject_installation.htm";
+
+
+    public static final String REJECT_SITE_AUDIT_IMAGES = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_site_audit_vendor.htm";
     public static final String SYNC_OFFLINE_DATA_TO_SAP = BASEURL + "/sap/bc/bsp/sap/zmapp_solar/sync_offline_data.htm";
     public static final String STATE_DATA = BASEURL + "/sap/bc/bsp/sap/zmapp_solar/state_data.htm";
 

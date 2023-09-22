@@ -59,7 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_INSTALLATION_IMAGE_DATA = "tbl_installation_image_data";
     public static final String TABLE_REJECTED_INSTALLATION_IMAGE_DATA = "tbl_rejectinstallation_image_data";
-
+    public static final String  TABLE_REJECTED_SITE_AUDIT_IMAGES = "tbl_rejected_site_audit_image_data";
     public static final String TABLE_UNLOADING_IMAGE_DATA = "tbl_unloading_image_data";
     public static final String TABLE_AUDIT_PUMP_DATA = "tbl_audit_pump_data";
     public static final String TABLE_SURVEY_PUMP_DATA = "tbl_survey_pump_data";
@@ -767,7 +767,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_INSTALLATION_NAME + " TEXT,"
             + KEY_INSTALLATION_PATH + " TEXT,"
             + KEY_INSTALLATION_IMAGE_SELECTED + " BOOLEAN,"
-            + KEY_INSTALLATION_BILL_NO + " TEXT)";
+            + KEY_INSTALLATION_BILL_NO + " TEXT,"
+            + KEY_INSTALLATION_LATITUDE + " TEXT,"
+            + KEY_INSTALLATION_LONGITUDE + " TEXT)";
+
+    private static final String CREATE_TABLE_REJECTED_SITE_AUDIT_IMAGES = "CREATE TABLE "
+            + TABLE_REJECTED_SITE_AUDIT_IMAGES+ "("  + KEY_INSTALLATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+            + KEY_INSTALLATION_NAME + " TEXT,"
+            + KEY_INSTALLATION_PATH + " TEXT,"
+            + KEY_INSTALLATION_IMAGE_SELECTED + " BOOLEAN,"
+            + KEY_INSTALLATION_BILL_NO + " TEXT,"
+            + KEY_INSTALLATION_LATITUDE + " TEXT,"
+            + KEY_INSTALLATION_LONGITUDE + " TEXT)";
 
     private static final String CREATE_TABLE_SITE_AUDIT_IMAGES = "CREATE TABLE "
             + TABLE_SITE_AUDIT + "("  + KEY_SITE_AUDIT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_SITE_AUDIT_NAME + " TEXT," + KEY_SITE_AUDIT_PATH + " TEXT," + KEY_SITE_AUDIT_IMAGE_SELECTED + " BOOLEAN," + KEY_SITE_AUDIT_BILL_NO + " TEXT)";
@@ -1037,38 +1048,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_BEN_NO + " TEXT,"
             + KEY_CUST_NAME + " TEXT,"
             + KEY_REG_NO + " TEXT,"
-            + KEY_REMARK1 + " TEXT,"
-            + KEY_REMARK2 + " TEXT,"
-            + KEY_REMARK3 + " TEXT,"
-            + KEY_REMARK4 + " TEXT,"
-            + KEY_REMARK5 + " TEXT,"
-            + KEY_REMARK6 + " TEXT,"
-            + KEY_REMARK7 + " TEXT,"
-            + KEY_REMARK8 + " TEXT,"
-            + KEY_REMARK9 + " TEXT,"
-            + KEY_REMARK10 + " TEXT,"
-            + KEY_REMARK11 + " TEXT,"
-            + KEY_REMARK12 + " TEXT,"
-            + KEY_REMARK13 + " TEXT,"
-            + KEY_REMARK14 + " TEXT,"
-            + KEY_REMARK15 + " TEXT,"
-            + KEY_REMARK16 + " TEXT,"
-            + KEY_PHOTO1 + " TEXT,"
-            + KEY_PHOTO2 + " TEXT,"
-            + KEY_PHOTO3 + " TEXT,"
-            + KEY_PHOTO4 + " TEXT,"
-            + KEY_PHOTO5 + " TEXT,"
-            + KEY_PHOTO6 + " TEXT,"
-            + KEY_PHOTO7 + " TEXT,"
-            + KEY_PHOTO8 + " TEXT,"
-            + KEY_PHOTO9 + " TEXT,"
-            + KEY_PHOTO10 + " TEXT,"
-            + KEY_PHOTO11 + " TEXT,"
-            + KEY_PHOTO12 + " TEXT,"
-            + KEY_PHOTO13 + " TEXT,"
-            + KEY_PHOTO14 + " TEXT,"
-            + KEY_PHOTO15 + " TEXT,"
-            + KEY_PHOTO16 + " TEXT)";
+            + KEY_FOUND + " TEXT,"
+            + KEY_STRUCT + " TEXT,"
+            + KEY_DRV_MOUNT + " TEXT,"
+            + KEY_LA_EARTH + " TEXT,"
+            + KEY_WRK_QLTY + " TEXT)";
 
     private static final String CREATE_TABLE_SURVEY_LIST = "CREATE TABLE "
             + TABLE_SURVEY_LIST + "("
@@ -1174,6 +1158,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_SURVEY_DATA);
         db.execSQL(CREATE_TABLE_INSTALLATION_IMAGES);
         db.execSQL(CREATE_TABLE_REJECTED_INSTALLATION_IMAGES);
+        db.execSQL(CREATE_TABLE_REJECTED_SITE_AUDIT_IMAGES);
         db.execSQL(CREATE_TABLE_SITE_AUDIT_IMAGES);
         db.execSQL(CREATE_TABLE_KusumCImages);
         db.execSQL(CREATE_TABLE_UNLOADING_IMAGES);
@@ -1204,6 +1189,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_AUDIT_PUMP_DATA);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_INSTALLATION_IMAGE_DATA);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_REJECTED_INSTALLATION_IMAGE_DATA);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_REJECTED_SITE_AUDIT_IMAGES);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_SITE_AUDIT);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_KusumCImages);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_UNLOADING_IMAGE_DATA);
@@ -1876,40 +1862,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void insertRejectListData(String enqdoc, RejectListBean rejectListBean) {
+    public void insertRejectedAuditSiteListData(String enqdoc, RejectListBean.RejectDatum rejectListBean) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
         ContentValues values;
         try {
+
             values = new ContentValues();
-            values.put(KEY_BILL_NO, rejectListBean.getBillno());
-            values.put(KEY_BEN_NO, rejectListBean.getBenno());
-            values.put(KEY_REG_NO, rejectListBean.getRegno());
-            values.put(KEY_CUST_NAME, rejectListBean.getCustnm());
-            values.put(KEY_PHOTO1, rejectListBean.getPhoto1());
-            values.put(KEY_PHOTO2, rejectListBean.getPhoto2());
-            values.put(KEY_PHOTO3, rejectListBean.getPhoto3());
-            values.put(KEY_PHOTO4, rejectListBean.getPhoto4());
-            values.put(KEY_PHOTO5, rejectListBean.getPhoto5());
-            values.put(KEY_PHOTO6, rejectListBean.getPhoto6());
-            values.put(KEY_PHOTO7, rejectListBean.getPhoto7());
-            values.put(KEY_PHOTO8, rejectListBean.getPhoto8());
-            values.put(KEY_PHOTO9, rejectListBean.getPhoto9());
-            values.put(KEY_PHOTO10, rejectListBean.getPhoto10());
-            values.put(KEY_PHOTO11, rejectListBean.getPhoto11());
-            values.put(KEY_PHOTO12, rejectListBean.getPhoto12());
-            values.put(KEY_REMARK1, rejectListBean.getRemark1());
-            values.put(KEY_REMARK2, rejectListBean.getRemark2());
-            values.put(KEY_REMARK3, rejectListBean.getRemark3());
-            values.put(KEY_REMARK4, rejectListBean.getRemark4());
-            values.put(KEY_REMARK5, rejectListBean.getRemark5());
-            values.put(KEY_REMARK6, rejectListBean.getRemark6());
-            values.put(KEY_REMARK7, rejectListBean.getRemark7());
-            values.put(KEY_REMARK8, rejectListBean.getRemark8());
-            values.put(KEY_REMARK9, rejectListBean.getRemark9());
-            values.put(KEY_REMARK10, rejectListBean.getRemark10());
-            values.put(KEY_REMARK11, rejectListBean.getRemark11());
-            values.put(KEY_REMARK12, rejectListBean.getRemark12());
+            values.put(KEY_BILL_NO, rejectListBean.getVbeln());
+            values.put(KEY_BEN_NO, rejectListBean.getBeneficiary());
+            values.put(KEY_REG_NO, rejectListBean.getRegisno());
+            values.put(KEY_CUST_NAME, rejectListBean.getCustomerName());
+            values.put(KEY_STRUCT, rejectListBean.getStruAssem());
+            values.put(KEY_DRV_MOUNT, rejectListBean.getDrvMount());
+            values.put(KEY_LA_EARTH, rejectListBean.getLaEarth());
+            values.put(KEY_WRK_QLTY, rejectListBean.getWrkmnQlty());
             long i = db.insert(TABLE_REJECTION_LIST, null, values);
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
@@ -1920,7 +1887,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void updateRejectListData(String enqdoc, RejectListBean rejectListBean) {
+    public void updateRejectedAuditSiteListData(String enqdoc, RejectListBean.RejectDatum rejectListBean) {
         long i = 0;
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
@@ -1929,34 +1896,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         try {
             values = new ContentValues();
-            values.put(KEY_BILL_NO, rejectListBean.getBillno());
-            values.put(KEY_BEN_NO, rejectListBean.getBenno());
-            values.put(KEY_REG_NO, rejectListBean.getRegno());
-            values.put(KEY_CUST_NAME, rejectListBean.getCustnm());
-            values.put(KEY_PHOTO1, rejectListBean.getPhoto1());
-            values.put(KEY_PHOTO2, rejectListBean.getPhoto2());
-            values.put(KEY_PHOTO3, rejectListBean.getPhoto3());
-            values.put(KEY_PHOTO4, rejectListBean.getPhoto4());
-            values.put(KEY_PHOTO5, rejectListBean.getPhoto5());
-            values.put(KEY_PHOTO6, rejectListBean.getPhoto6());
-            values.put(KEY_PHOTO7, rejectListBean.getPhoto7());
-            values.put(KEY_PHOTO8, rejectListBean.getPhoto8());
-            values.put(KEY_PHOTO9, rejectListBean.getPhoto9());
-            values.put(KEY_PHOTO10, rejectListBean.getPhoto10());
-            values.put(KEY_PHOTO11, rejectListBean.getPhoto11());
-            values.put(KEY_PHOTO12, rejectListBean.getPhoto12());
-            values.put(KEY_REMARK1, rejectListBean.getRemark1());
-            values.put(KEY_REMARK2, rejectListBean.getRemark2());
-            values.put(KEY_REMARK3, rejectListBean.getRemark3());
-            values.put(KEY_REMARK4, rejectListBean.getRemark4());
-            values.put(KEY_REMARK5, rejectListBean.getRemark5());
-            values.put(KEY_REMARK6, rejectListBean.getRemark6());
-            values.put(KEY_REMARK7, rejectListBean.getRemark7());
-            values.put(KEY_REMARK8, rejectListBean.getRemark8());
-            values.put(KEY_REMARK9, rejectListBean.getRemark9());
-            values.put(KEY_REMARK10, rejectListBean.getRemark10());
-            values.put(KEY_REMARK11, rejectListBean.getRemark11());
-            values.put(KEY_REMARK12, rejectListBean.getRemark12());
+            values.put(KEY_BILL_NO, rejectListBean.getVbeln());
+            values.put(KEY_BEN_NO, rejectListBean.getBeneficiary());
+            values.put(KEY_REG_NO, rejectListBean.getRegisno());
+            values.put(KEY_CUST_NAME, rejectListBean.getCustomerName());
+            values.put(KEY_STRUCT, rejectListBean.getStruAssem());
+            values.put(KEY_DRV_MOUNT, rejectListBean.getDrvMount());
+            values.put(KEY_LA_EARTH, rejectListBean.getLaEarth());
+            values.put(KEY_WRK_QLTY, rejectListBean.getWrkmnQlty());
             where = KEY_BILL_NO + "='" + enqdoc + "'";
             i = db.update(TABLE_REJECTION_LIST, values, where, null);
             db.setTransactionSuccessful();
@@ -3330,9 +3277,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return list_document;
     }
     @SuppressLint("Range")
-    public ArrayList<RejectListBean> getRejectionListData() {
-        RejectListBean installationBean = new RejectListBean();
-        ArrayList<RejectListBean> list_document = new ArrayList<>();
+    public ArrayList<RejectListBean.RejectDatum> getRejectedAuditSiteListData() {
+        RejectListBean.RejectDatum rejectDatum = new RejectListBean.RejectDatum();
+        ArrayList<RejectListBean.RejectDatum> list_document = new ArrayList<>();
         list_document.clear();
         SQLiteDatabase db = this.getReadableDatabase();
         db.beginTransaction();
@@ -3343,38 +3290,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if (cursor.getCount() > 0) {
                 if (cursor.moveToFirst()) {
                     while (!cursor.isAfterLast()) {
-                        installationBean = new RejectListBean();
-                        installationBean.setBillno(cursor.getString(cursor.getColumnIndex(KEY_BILL_NO)));
-                        installationBean.setBenno(cursor.getString(cursor.getColumnIndex(KEY_BEN_NO)));
-                        installationBean.setRegno(cursor.getString(cursor.getColumnIndex(KEY_REG_NO)));
-                        installationBean.setCustnm(cursor.getString(cursor.getColumnIndex(KEY_CUST_NAME)));
-                        installationBean.setPhoto1(cursor.getString(cursor.getColumnIndex(KEY_PHOTO1)));
-                        installationBean.setPhoto2(cursor.getString(cursor.getColumnIndex(KEY_PHOTO2)));
-                        installationBean.setPhoto3(cursor.getString(cursor.getColumnIndex(KEY_PHOTO3)));
-                        installationBean.setPhoto4(cursor.getString(cursor.getColumnIndex(KEY_PHOTO4)));
-                        installationBean.setPhoto5(cursor.getString(cursor.getColumnIndex(KEY_PHOTO5)));
-                        installationBean.setPhoto6(cursor.getString(cursor.getColumnIndex(KEY_PHOTO6)));
-                        installationBean.setPhoto7(cursor.getString(cursor.getColumnIndex(KEY_PHOTO7)));
-                        installationBean.setPhoto8(cursor.getString(cursor.getColumnIndex(KEY_PHOTO8)));
-                        installationBean.setPhoto9(cursor.getString(cursor.getColumnIndex(KEY_PHOTO9)));
-                        installationBean.setPhoto10(cursor.getString(cursor.getColumnIndex(KEY_PHOTO10)));
-                        installationBean.setPhoto11(cursor.getString(cursor.getColumnIndex(KEY_PHOTO11)));
-                        installationBean.setPhoto12(cursor.getString(cursor.getColumnIndex(KEY_PHOTO12)));
-                        installationBean.setRemark1(cursor.getString(cursor.getColumnIndex(KEY_REMARK1)));
-                        installationBean.setRemark2(cursor.getString(cursor.getColumnIndex(KEY_REMARK2)));
-                        installationBean.setRemark3(cursor.getString(cursor.getColumnIndex(KEY_REMARK3)));
-                        installationBean.setRemark4(cursor.getString(cursor.getColumnIndex(KEY_REMARK4)));
-                        installationBean.setRemark5(cursor.getString(cursor.getColumnIndex(KEY_REMARK5)));
-                        installationBean.setRemark6(cursor.getString(cursor.getColumnIndex(KEY_REMARK6)));
-                        installationBean.setRemark7(cursor.getString(cursor.getColumnIndex(KEY_REMARK7)));
-                        installationBean.setRemark8(cursor.getString(cursor.getColumnIndex(KEY_REMARK8)));
-                        installationBean.setRemark9(cursor.getString(cursor.getColumnIndex(KEY_REMARK9)));
-                        installationBean.setRemark10(cursor.getString(cursor.getColumnIndex(KEY_REMARK10)));
-                        installationBean.setRemark11(cursor.getString(cursor.getColumnIndex(KEY_REMARK11)));
-                        installationBean.setRemark12(cursor.getString(cursor.getColumnIndex(KEY_REMARK12)));
 
-
-                        list_document.add(installationBean);
+                        rejectDatum = new RejectListBean.RejectDatum();
+                        rejectDatum.setVbeln(cursor.getString(cursor.getColumnIndex(KEY_BILL_NO)));
+                        rejectDatum.setBeneficiary(cursor.getString(cursor.getColumnIndex(KEY_BEN_NO)));
+                        rejectDatum.setRegisno(cursor.getString(cursor.getColumnIndex(KEY_REG_NO)));
+                        rejectDatum.setCustomerName(cursor.getString(cursor.getColumnIndex(KEY_CUST_NAME)));
+                        rejectDatum.setStruAssem(cursor.getString(cursor.getColumnIndex(KEY_STRUCT)));
+                        rejectDatum.setDrvMount(cursor.getString(cursor.getColumnIndex(KEY_DRV_MOUNT)));
+                        rejectDatum.setLaEarth(cursor.getString(cursor.getColumnIndex(KEY_LA_EARTH)));
+                        rejectDatum.setWrkmnQlty(cursor.getString(cursor.getColumnIndex(KEY_WRK_QLTY)));
+                        list_document.add(rejectDatum);
 
                         cursor.moveToNext();
 
@@ -3590,7 +3516,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public void deleteRejectListData() {
+    public void deleteRejectAuditSiteListData() {
         SQLiteDatabase db = this.getWritableDatabase();
         if(CustomUtility.doesTableExist(db,TABLE_REJECTION_LIST)) {
             db.delete(TABLE_REJECTION_LIST, null, null);
@@ -4178,6 +4104,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public void insertRejectedSiteAuditImage(String name, String path, boolean isSelected, String billNo, String latitude, String longitude) {
+        SQLiteDatabase  database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_INSTALLATION_NAME, name);
+        contentValues.put(KEY_INSTALLATION_PATH, path);
+        contentValues.put(KEY_INSTALLATION_IMAGE_SELECTED, isSelected);
+        contentValues.put(KEY_INSTALLATION_BILL_NO, billNo);
+        contentValues.put(KEY_INSTALLATION_LATITUDE, latitude);
+        contentValues.put(KEY_INSTALLATION_LONGITUDE, longitude);
+        database.insert(TABLE_REJECTED_SITE_AUDIT_IMAGES, null, contentValues);
+        database.close();
+    }
+
+    public void updateRejectedSiteAuditImage(String name, String path, boolean isSelected, String billNo, String latitude, String longitude) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_INSTALLATION_NAME, name);
+        values.put(KEY_INSTALLATION_PATH, path);
+        values.put(KEY_INSTALLATION_IMAGE_SELECTED, isSelected);
+        values.put(KEY_INSTALLATION_BILL_NO, billNo);
+        values.put(KEY_INSTALLATION_LATITUDE, latitude);
+        values.put(KEY_INSTALLATION_LONGITUDE, longitude);
+        // update Row
+        db.update(TABLE_REJECTED_SITE_AUDIT_IMAGES,values,"installationImageName = '"+name+"'",null);
+        db.close();
+    }
+
+
     public void insertInstallationImage(String name, String path, boolean isSelected, String billNo, String latitude, String longitude) {
       SQLiteDatabase  database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -4322,6 +4276,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void deleteRejectedSiteAuditImages(String billNo){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String where = "";
+        where = KEY_INSTALLATION_BILL_NO + "='" + billNo + "'";
+        if(CustomUtility.doesTableExist(db,TABLE_REJECTED_SITE_AUDIT_IMAGES)) {
+            db.delete(TABLE_REJECTED_SITE_AUDIT_IMAGES, where, null);
+        }
+    }
+
 
     public void deleteUnloadingImages(String billNo){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -4363,6 +4326,65 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public ArrayList<ImageModel> getRejectedInstallationImages() {
+        ArrayList<ImageModel> installationImages = new ArrayList<ImageModel>();
+        SQLiteDatabase  database = this.getWritableDatabase();
+        if(CustomUtility.doesTableExist(database,TABLE_REJECTED_INSTALLATION_IMAGE_DATA)) {
+            Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_REJECTED_INSTALLATION_IMAGE_DATA, null);
+
+            installationImages.clear();
+            ImageModel imageModel;
+
+            if (mcursor.getCount() > 0) {
+                for (int i = 0; i < mcursor.getCount(); i++) {
+                    mcursor.moveToNext();
+
+                    imageModel = new ImageModel();
+                    imageModel.setID(mcursor.getString(0));
+                    imageModel.setName(mcursor.getString(1));
+                    imageModel.setImagePath(mcursor.getString(2));
+                    imageModel.setImageSelected(Boolean.parseBoolean(mcursor.getString(3)));
+                    imageModel.setBillNo(mcursor.getString(4));
+                    imageModel.setLatitude(mcursor.getString(5));
+                    imageModel.setLongitude(mcursor.getString(6));
+                    installationImages.add(imageModel);
+                }
+            }
+            mcursor.close();
+            database.close();
+        }
+        return installationImages;
+    }
+
+    public ArrayList<ImageModel> getRejectedSiteAuditImages() {
+        ArrayList<ImageModel> installationImages = new ArrayList<ImageModel>();
+        SQLiteDatabase  database = this.getWritableDatabase();
+        if(CustomUtility.doesTableExist(database,TABLE_REJECTED_SITE_AUDIT_IMAGES)) {
+            Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_REJECTED_SITE_AUDIT_IMAGES, null);
+
+            installationImages.clear();
+            ImageModel imageModel;
+
+            if (mcursor.getCount() > 0) {
+                for (int i = 0; i < mcursor.getCount(); i++) {
+                    mcursor.moveToNext();
+
+                    imageModel = new ImageModel();
+                    imageModel.setID(mcursor.getString(0));
+                    imageModel.setName(mcursor.getString(1));
+                    imageModel.setImagePath(mcursor.getString(2));
+                    imageModel.setImageSelected(Boolean.parseBoolean(mcursor.getString(3)));
+                    imageModel.setBillNo(mcursor.getString(4));
+                    imageModel.setLatitude(mcursor.getString(5));
+                    imageModel.setLongitude(mcursor.getString(6));
+                    installationImages.add(imageModel);
+                }
+            }
+            mcursor.close();
+            database.close();
+        }
+        return installationImages;
+    }
 
     public void insertUnloadingImage( String name ,String path,boolean isSelected,  String billNo ) {
         SQLiteDatabase  database = this.getWritableDatabase();

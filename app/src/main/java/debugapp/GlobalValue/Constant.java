@@ -44,5 +44,6 @@ public class Constant {
     public static String JointInspection = "JointInspection";
 
     public static String RejectInstallation = "RejectInstallation";
+    public static String RejectSite = "RejectSite";
 
 }

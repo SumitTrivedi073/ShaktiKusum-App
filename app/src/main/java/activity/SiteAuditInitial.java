@@ -577,15 +577,6 @@ public class SiteAuditInitial extends BaseActivity {
     }
 
     private void retriveArrayList() {
-      /*  imageList = new ArrayList<>();
-        String json = CustomUtility.getSharedPreferences(InstallationInitial.this, InstallationImage);
-        // below line is to get the type of our array list.
-        Type type = new TypeToken<ArrayList<ImageModel>>() {
-        }.getType();
-
-        // in below line we are getting data from gson
-        // and saving it to our array list
-        imageList = new Gson().fromJson(json, type);*/
         imageList = new ArrayList<>();
         DatabaseHelper db = new DatabaseHelper(this);
 

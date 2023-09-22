@@ -6,7 +6,6 @@ import static android.Manifest.permission.READ_MEDIA_AUDIO;
 import static android.Manifest.permission.READ_MEDIA_IMAGES;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION.SDK_INT;
-import static debugapp.GlobalValue.Constant.RejectedImage;
 import static utility.FileUtils.getPath;
 
 import android.Manifest;
@@ -33,7 +32,6 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -41,8 +39,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
@@ -50,20 +46,21 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import adapter.ImageSelectionAdapter;
 import bean.ImageModel;
 import bean.RejectListBean;
+import database.DatabaseHelper;
+import debugapp.GlobalValue.Constant;
 import pub.devrel.easypermissions.EasyPermissions;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
 
-public class RejectInstRepImgActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks, ImageSelectionAdapter.ImageSelectionListener {
+public class RejectedSiteAuditImgActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks, ImageSelectionAdapter.ImageSelectionListener {
 
     private static final int REQUEST_CODE_PERMISSION = 101;
     private static final int PICK_FROM_FILE = 102;
@@ -77,13 +74,14 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
     List<String> itemNameList = new ArrayList<>();
 
-    String customerName, enqDocno, benificiaryNo, regNo, projNo, userID;
-
     Toolbar mToolbar;
 
-    RejectListBean rejectList;
+    RejectListBean.RejectDatum rejectDatum;
 
     TextView saveBtn;
+    boolean isUpdate = false;
+    DatabaseHelper databaseHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,7 +158,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                         boolean ReadAudioImages = grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
                         if (!ACCESSCAMERA && !ReadMediaImages && !ReadAudioImages) {
-                            Toast.makeText(RejectInstRepImgActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
+                            Toast.makeText(RejectedSiteAuditImgActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
                         }
                     } else {
                         boolean ACCESSCAMERA = grantResults[0] == PackageManager.PERMISSION_GRANTED;
@@ -170,7 +168,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                                 grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
                         if (!ACCESSCAMERA && !writeExternalStorage && !ReadExternalStorage) {
-                            Toast.makeText(RejectInstRepImgActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
+                            Toast.makeText(RejectedSiteAuditImgActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
                         }
 
                     }
@@ -182,9 +180,10 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
 
     private void Init() {
+
+        databaseHelper = new DatabaseHelper(getApplicationContext());
         recyclerview = findViewById(R.id.recyclerview);
         saveBtn = findViewById(R.id.saveBtn);
-
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -197,13 +196,8 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
     }
 
     private void retrieveValue() {
-        rejectList = getIntent().getParcelableExtra("RejectImagesList");
-        customerName = rejectList.getCustnm();
-        enqDocno = rejectList.getBillno();
-        benificiaryNo = rejectList.getBenno();
-        regNo = rejectList.getRegno();
-        projNo = CustomUtility.getSharedPreferences(RejectInstRepImgActivity.this, "projectid");
-        userID = CustomUtility.getSharedPreferences(RejectInstRepImgActivity.this, "userid");
+        rejectDatum = (RejectListBean.RejectDatum) getIntent().getSerializableExtra(Constant.RejectSite);
+
     }
 
 
@@ -219,9 +213,9 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                         validate = !imageArrayList.get(i).isImageSelected();
                     }
                     if (validate) {
-                        CustomUtility.showToast(RejectInstRepImgActivity.this, getResources().getString(R.string.selectAllImages));
+                        CustomUtility.showToast(RejectedSiteAuditImgActivity.this, getResources().getString(R.string.selectAllImages));
                     } else {
-                        new SyncRejInstallationData().execute();
+                        new RejectedSiteAuditImageData().execute();
                     }
                 }
 
@@ -238,64 +232,39 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
     }
 
-    private void SetAdapter() {
+   private void SetAdapter() {
         imageArrayList = new ArrayList<>();
         itemNameList = new ArrayList<>();
-        if (rejectList.getPhoto1() != null && !rejectList.getPhoto1().isEmpty()) {
-            itemNameList.add("Panel Module Photo");
+        if (rejectDatum.getFoundation() != null && !rejectDatum.getFoundation().isEmpty()&& rejectDatum.getFoundation().equals(getResources().getString(R.string.notok))) {
+            itemNameList.add(getResources().getString(R.string.foundation));
         }
-        if (rejectList.getPhoto2() != null && !rejectList.getPhoto2().isEmpty()) {
-            itemNameList.add("Controller Photo");
+       if (rejectDatum.getStruAssem() != null && !rejectDatum.getStruAssem().isEmpty()&& rejectDatum.getStruAssem().equals(getResources().getString(R.string.notok))) {
+           itemNameList.add(getResources().getString(R.string.structure_assembly));
         }
-        if (rejectList.getPhoto3() != null && !rejectList.getPhoto3().isEmpty()) {
-            itemNameList.add("Motor Pump Photo");
+       if (rejectDatum.getDrvMount() != null && !rejectDatum.getDrvMount().isEmpty()&& rejectDatum.getDrvMount().equals(getResources().getString(R.string.notok))) {
+           itemNameList.add(getResources().getString(R.string.drive_mounting_and_cable_dressing));
         }
-        if (rejectList.getPhoto4() != null && !rejectList.getPhoto4().isEmpty()) {
-            itemNameList.add("Discharge Photo");
+       if (rejectDatum.getLaEarth() != null && !rejectDatum.getLaEarth().isEmpty()&& rejectDatum.getLaEarth().equals(getResources().getString(R.string.notok))) {
+           itemNameList.add(getResources().getString(R.string.la_and_earthing));
         }
-        if (rejectList.getPhoto5() != null && !rejectList.getPhoto5().isEmpty()) {
-            itemNameList.add("Document Photo 1");
+       if (rejectDatum.getWrkmnQlty() != null && !rejectDatum.getWrkmnQlty().isEmpty()&& rejectDatum.getWrkmnQlty().equals(getResources().getString(R.string.notok))) {
+           itemNameList.add(getResources().getString(R.string.workmanship_and_work_quality));
         }
-        if (rejectList.getPhoto6() != null && !rejectList.getPhoto6().isEmpty()) {
-            itemNameList.add("Document Photo 2");
-        }
-        if (rejectList.getPhoto7() != null && !rejectList.getPhoto7().isEmpty()) {
-            itemNameList.add("Document Photo 3");
-        }
-        if (rejectList.getPhoto8() != null && !rejectList.getPhoto8().isEmpty()) {
-            itemNameList.add("Document Photo 4");
-        }
-        if (rejectList.getPhoto9() != null && !rejectList.getPhoto9().isEmpty()) {
-            itemNameList.add("Document Photo 5");
-        }
-        if (rejectList.getPhoto10() != null && !rejectList.getPhoto10().isEmpty()) {
-            itemNameList.add("Document Photo 6");
-        }
-        if (rejectList.getPhoto11() != null && !rejectList.getPhoto11().isEmpty()) {
-            itemNameList.add("Document Photo 7");
-        }
-        if (rejectList.getPhoto12() != null && !rejectList.getPhoto12().isEmpty()) {
-            itemNameList.add("Document Photo 8");
-        }
-
 
         for (int i = 0; i < itemNameList.size(); i++) {
             ImageModel imageModel = new ImageModel();
             imageModel.setName(itemNameList.get(i));
             imageModel.setImagePath("");
             imageModel.setImageSelected(false);
+            imageModel.setPoistion(i);
+            imageModel.setLatitude("");
+            imageModel.setLongitude("");
             imageArrayList.add(imageModel);
         }
 
-        imageList = new ArrayList<>();
-        String json = CustomUtility.getSharedPreferences(RejectInstRepImgActivity.this, RejectedImage);
-        // below line is to get the type of our array list.
-        Type type = new TypeToken<ArrayList<ImageModel>>() {
-        }.getType();
+       DatabaseHelper db = new DatabaseHelper(this);
 
-        // in below line we are getting data from gson
-        // and saving it to our array list
-        imageList = new Gson().fromJson(json, type);
+       imageList = db.getRejectedSiteAuditImages();
 
         if (imageArrayList.size() > 0 && imageList != null && imageList.size() > 0) {
 
@@ -305,11 +274,14 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                     imageModel.setName(imageList.get(j).getName());
                     imageModel.setImagePath(imageList.get(j).getImagePath());
                     imageModel.setImageSelected(true);
+                    imageModel.setPoistion(imageList.get(j).getPoistion());
+                    imageModel.setLatitude(imageList.get(j).getLatitude());
+                    imageModel.setLongitude(imageList.get(j).getLongitude());
                     imageArrayList.set(j, imageModel);
                 }
             }
         }
-        customAdapter = new ImageSelectionAdapter(RejectInstRepImgActivity.this, imageArrayList);
+        customAdapter = new ImageSelectionAdapter(RejectedSiteAuditImgActivity.this, imageArrayList);
         recyclerview.setHasFixedSize(true);
         recyclerview.setAdapter(customAdapter);
         customAdapter.ImageSelection(this);
@@ -321,18 +293,20 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
         selectedIndex = position;
 
         if (imageModelList.isImageSelected()) {
+            isUpdate = true;
             selectImage("1");
         } else {
+            isUpdate = false;
             selectImage("0");
         }
     }
 
     private void selectImage(String value) {
-        LayoutInflater inflater = (LayoutInflater) RejectInstRepImgActivity.this.getSystemService(
+        LayoutInflater inflater = (LayoutInflater) RejectedSiteAuditImgActivity.this.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.pick_img_layout, null);
         final AlertDialog.Builder builder =
-                new AlertDialog.Builder(RejectInstRepImgActivity.this, R.style.MyDialogTheme);
+                new AlertDialog.Builder(RejectedSiteAuditImgActivity.this, R.style.MyDialogTheme);
 
         builder.setView(layout);
         builder.setCancelable(true);
@@ -364,7 +338,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                 if (value.equals("0")) {
                     galleryIntent();
                 } else {
-                    Intent i_display_image = new Intent(RejectInstRepImgActivity.this, PhotoViewerActivity.class);
+                    Intent i_display_image = new Intent(RejectedSiteAuditImgActivity.this, PhotoViewerActivity.class);
                     i_display_image.putExtra("image_path", imageArrayList.get(selectedIndex).getImagePath());
                     startActivity(i_display_image);
                 }
@@ -400,8 +374,8 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
     private void cameraIntent() {
 
-        camraLauncher.launch(new Intent(RejectInstRepImgActivity.this, CameraActivity2.class)
-                .putExtra("cust_name", customerName));
+        camraLauncher.launch(new Intent(RejectedSiteAuditImgActivity.this, CameraActivity2.class)
+                .putExtra("cust_name", rejectDatum.getCustomerName()));
 
     }
 
@@ -414,8 +388,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                         if (result.getData() != null && result.getData().getExtras() != null) {
 
                             Bundle bundle = result.getData().getExtras();
-                            Log.e("bundle====>", bundle.get("data").toString());
-                            UpdateArrayList(bundle.get("data").toString());
+                            UpdateArrayList(bundle.get("data").toString(),  bundle.get("latitude").toString(), bundle.get("longitude").toString());
 
                         }
 
@@ -435,7 +408,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
             case PICK_FROM_FILE:
                 try {
                     Uri mImageCaptureUri = data.getData();
-                    String path = getPath(RejectInstRepImgActivity.this, mImageCaptureUri); // From Gallery
+                    String path = getPath(RejectedSiteAuditImgActivity.this, mImageCaptureUri); // From Gallery
                     if (path == null) {
                         path = mImageCaptureUri.getPath(); // From File Manager
                     }
@@ -448,9 +421,9 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                         file = "";
                     }
                     if (TextUtils.isEmpty(file)) {
-                        Toast.makeText(RejectInstRepImgActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(RejectedSiteAuditImgActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
                     } else {
-                        UpdateArrayList(path);
+                        UpdateArrayList(path, "", "");
 
                     }
                 } catch (Exception e) {
@@ -462,16 +435,32 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
     }
 
-    private void UpdateArrayList(String path) {
+    private void UpdateArrayList(String path, String latitude, String longitude) {
 
         ImageModel imageModel = new ImageModel();
         imageModel.setName(imageArrayList.get(selectedIndex).getName());
         imageModel.setImagePath(path);
         imageModel.setImageSelected(true);
+        imageModel.setBillNo(imageArrayList.get(selectedIndex).getBillNo());
+        imageModel.setLatitude(latitude);
+        imageModel.setLongitude(longitude);
+        imageModel.setPoistion(imageArrayList.get(selectedIndex).getPoistion());
         imageArrayList.set(selectedIndex, imageModel);
-        CustomUtility.saveArrayList(RejectInstRepImgActivity.this, imageArrayList, RejectedImage);
-        customAdapter.notifyDataSetChanged();
+        addupdateDatabase(path,latitude,longitude);
 
+        customAdapter.notifyDataSetChanged();
+    }
+    private void addupdateDatabase(String path, String latitude, String longitude) {
+
+
+
+        if (isUpdate) {
+            databaseHelper.updateRejectedSiteAuditImage(imageArrayList.get(selectedIndex).getName(), path,
+                    true, rejectDatum.getVbeln() , latitude, longitude);
+        } else {
+            databaseHelper.insertRejectedSiteAuditImage(imageArrayList.get(selectedIndex).getName(), path,
+                    true, rejectDatum.getVbeln() , latitude, longitude);
+        }
 
     }
 
@@ -492,15 +481,17 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
     }
 
 
-    private class SyncRejInstallationData extends AsyncTask<String, String, String> {
+    private class RejectedSiteAuditImageData extends AsyncTask<String, String, String> {
 
         ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
 
-            progressDialog = new ProgressDialog(RejectInstRepImgActivity.this);
-            progressDialog = ProgressDialog.show(RejectInstRepImgActivity.this, "", "Sending Data to server..please wait !");
+            progressDialog = new ProgressDialog(RejectedSiteAuditImgActivity.this);
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog = ProgressDialog.show(RejectedSiteAuditImgActivity.this, "", "Sending Data to server..please wait !");
 
         }
 
@@ -516,50 +507,24 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
             try {
 
-                jsonObj.put("userid", userID);
-                jsonObj.put("vbeln", enqDocno);
-                jsonObj.put("beneficiary", benificiaryNo);
-                jsonObj.put("regisno", regNo);
-                jsonObj.put("project_no", projNo);
-                jsonObj.put("customer_name", customerName);
+                jsonObj.put("userid", CustomUtility.getSharedPreferences(RejectedSiteAuditImgActivity.this, "userid"));
+                jsonObj.put("vbeln", rejectDatum.getVbeln());
+                jsonObj.put("beneficiary", rejectDatum.getBeneficiary());
+                jsonObj.put("regisno", rejectDatum.getRegisno());
+                jsonObj.put("project_no", CustomUtility.getSharedPreferences(RejectedSiteAuditImgActivity.this, "projectid"));
+                jsonObj.put("customer_name", rejectDatum.getCustomerName());
 
 
-                if (0<imageArrayList.size() && imageArrayList.get(0).isImageSelected()) {
-                    jsonObj.put("PHOTO1", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(0).getImagePath()));
-                }
-                if (1<imageArrayList.size() && imageArrayList.get(1).isImageSelected()) {
-                    jsonObj.put("PHOTO2", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(1).getImagePath()));
-                }
-                if (2<imageArrayList.size() && imageArrayList.get(2).isImageSelected()) {
-                    jsonObj.put("PHOTO3", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(2).getImagePath()));
-                }
-                if (3<imageArrayList.size() &&imageArrayList.get(3).isImageSelected()) {
-                    jsonObj.put("PHOTO4", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(3).getImagePath()));
-                }
-                if (4<imageArrayList.size() && imageArrayList.get(4).isImageSelected()) {
-                    jsonObj.put("PHOTO5", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(4).getImagePath()));
-                }
-                if (5<imageArrayList.size() && imageArrayList.get(5).isImageSelected()) {
-                    jsonObj.put("PHOTO6", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(5).getImagePath()));
-                }
-                if (6<imageArrayList.size() && imageArrayList.get(6).isImageSelected()) {
-                    jsonObj.put("PHOTO7", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(6).getImagePath()));
-                }
-                if (7<imageArrayList.size() && imageArrayList.get(7).isImageSelected()) {
-                    jsonObj.put("PHOTO8", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(7).getImagePath()));
-                }
-                if (8<imageArrayList.size() && imageArrayList.get(8).isImageSelected()) {
-                    jsonObj.put("PHOTO9", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(8).getImagePath()));
-                }
-                if (9<imageArrayList.size() && imageArrayList.get(9).isImageSelected()) {
-                    jsonObj.put("PHOTO10", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(9).getImagePath()));
-                }
-                if (10<imageArrayList.size() && imageArrayList.get(10).isImageSelected()) {
-                    jsonObj.put("PHOTO11", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(10).getImagePath()));
-                }
-                if (11<imageArrayList.size() && imageArrayList.get(11).isImageSelected()) {
-                    jsonObj.put("PHOTO12", CustomUtility.getBase64FromBitmap(RejectInstRepImgActivity.this, imageArrayList.get(11).getImagePath()));
-                }
+                    if(imageArrayList.size()>0){
+                        for (int i=0; i<imageArrayList.size(); i++){
+
+                            if(imageArrayList.get(i).isImageSelected()){
+                                jsonObj.put("photo"+(i+1), CustomUtility.getBase64FromBitmap(RejectedSiteAuditImgActivity.this, imageArrayList.get(i).getImagePath()));
+
+                            }
+                        }
+                    }
+
 
                 ja_invc_data.put(jsonObj);
 
@@ -569,7 +534,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
 
             final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
-            param1_invc.add(new BasicNameValuePair("reject_installation", String.valueOf(ja_invc_data)));
+            param1_invc.add(new BasicNameValuePair("site_audit_data", String.valueOf(ja_invc_data)));
             Log.e("DATA", "$$$$" + param1_invc);
 
             System.out.println(param1_invc);
@@ -579,7 +544,7 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
                 StrictMode.setThreadPolicy(policy);
 
-                obj2 = CustomHttpClient.executeHttpPost1(WebURL.REJECT_INSTALLATION, param1_invc);
+                obj2 = CustomHttpClient.executeHttpPost1(WebURL.REJECT_SITE_AUDIT_IMAGES, param1_invc);
 
                 Log.e("OUTPUT1", "&&&&" + obj2);
 
@@ -604,15 +569,14 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
 
                         if (invc_done.equalsIgnoreCase("Y")) {
-                              CustomUtility.deleteArrayList(RejectInstRepImgActivity.this,RejectedImage);
+                            showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
+                            databaseHelper.deleteRejectedSiteAuditImages(rejectDatum.getVbeln());
                             progressDialog.dismiss();
                             finish();
 
                         } else if (invc_done.equalsIgnoreCase("N")) {
 
-                            /*Message msg = new Message();
-                            msg.obj = "Data Not Submitted, Please try After Sometime.";*/
-
+                            showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
 
                             progressDialog.dismiss();
                             finish();
@@ -639,5 +603,15 @@ public class RejectInstRepImgActivity extends AppCompatActivity implements EasyP
 
         }
     }
+    private void showingMessage(String message) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+
+                CustomUtility.showToast(RejectedSiteAuditImgActivity.this, message);
+
+            }
+        });
+    }
+
 }
 

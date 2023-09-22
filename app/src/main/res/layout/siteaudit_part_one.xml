@@ -56,7 +56,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Foundation"
+                    android:text="@string/foundation"
                     android:drawableEnd="@drawable/ic_mendotry"
                     android:padding="5dp"
                     android:id="@+id/found_txt"
@@ -134,7 +134,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Structure Assembly"
+                    android:text="@string/structure_assembly"
                     android:padding="5dp"
                     android:drawableEnd="@drawable/ic_mendotry"
                     android:id="@+id/stru_txt"
@@ -212,7 +212,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Drive Mounting and Cable Dressing"
+                    android:text="@string/drive_mounting_and_cable_dressing"
                     android:drawableEnd="@drawable/ic_mendotry"
                     android:padding="5dp"
                     android:id="@+id/drvcab_txt"
@@ -290,7 +290,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="LA and Earthing"
+                    android:text="@string/la_and_earthing"
                     android:drawableEnd="@drawable/ic_mendotry"
                     android:padding="5dp"
                     android:id="@+id/laert_txt"
@@ -368,7 +368,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Workmanship and Work Quality"
+                    android:text="@string/workmanship_and_work_quality"
                     android:drawableEnd="@drawable/ic_mendotry"
                     android:padding="5dp"
                     android:id="@+id/wrkmn_txt"

@@ -254,7 +254,7 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
 
         DatabaseHelper db = new DatabaseHelper(this);
 
-        imageList = db.getAllInstallationImages();
+        imageList = db.getRejectedInstallationImages();
 
 
         if (itemNameList.size() > 0 && imageList != null && imageList.size() > 0) {

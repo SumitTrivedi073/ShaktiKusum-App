@@ -333,6 +333,11 @@
     <string name="enter_motor_serial_number">Enter motor serial number</string>
     <string name="enter_controller_serial_number">Enter controller serial number</string>
     <string name="notok">NOT OK</string>
+    <string name="foundation">Foundation</string>
+    <string name="structure_assembly">Structure Assembly</string>
+    <string name="drive_mounting_and_cable_dressing">Drive Mounting and Cable Dressing</string>
+    <string name="la_and_earthing">LA and Earthing</string>
+    <string name="workmanship_and_work_quality">Workmanship and Work Quality</string>
 
 
     <string-array name="nav_drawer_labels">
