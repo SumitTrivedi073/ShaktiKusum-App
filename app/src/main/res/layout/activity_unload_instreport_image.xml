@@ -34,13 +34,16 @@
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
                     android:orientation="horizontal">
 
                     <TextView
                         style="@style/wrap_text_medatory"
                         android:text="Panel Module Qty"
-                        android:textColor="@color/colorAccent" />
+                        android:textColor="@color/colorAccent"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:textSize="@dimen/_12sdp"/>
 
                     <TextView
                         android:id="@+id/module_serial_no"
@@ -50,6 +53,7 @@
                         android:background="@drawable/black_border_text"
                         android:gravity="center"
                         android:textColor="@color/black"
+                        android:fontFamily="sans-serif-condensed-medium"
                         android:textSize="@dimen/size_mid16" />
 
                 </LinearLayout>
@@ -58,10 +62,157 @@
                     android:id="@+id/layout_one"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
                     android:orientation="vertical"
                     android:visibility="gone">
 
                 </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/wrap_text_medatory"
+                        android:text="Pump Serial No."
+                        android:textColor="@color/colorAccent"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:textSize="@dimen/_12sdp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+
+                        <EditText
+                            android:id="@+id/pumpSerNo"
+                            style="@style/under_line_et"
+                            android:layout_width="0dp"
+                            android:layout_gravity="center"
+                            android:hint="@string/enter_pump_serial_number"
+                            android:layout_weight="1"/>
+
+
+                        <ImageView
+                            android:id="@+id/pump_scanner"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="@dimen/_30sdp"
+                            android:padding="@dimen/space_tinny2"
+                            android:src="@drawable/scan" />
+
+
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/wrap_text_medatory"
+                        android:text="Motor Serial No."
+                        android:textColor="@color/colorAccent"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:textSize="@dimen/_12sdp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+
+                        <EditText
+                            android:id="@+id/motorSerNo"
+                            style="@style/under_line_et"
+                            android:layout_width="0dp"
+                            android:layout_gravity="center"
+                            android:hint="@string/enter_motor_serial_number"
+                            android:layout_weight="1"/>
+
+
+                        <ImageView
+                            android:id="@+id/motor_scanner"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="@dimen/_30sdp"
+                            android:padding="@dimen/space_tinny2"
+                            android:src="@drawable/scan" />
+
+
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/wrap_text_medatory"
+                        android:text="Controller Model Serial No."
+                        android:textColor="@color/colorAccent"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:textSize="@dimen/_12sdp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+
+                        <EditText
+                            android:id="@+id/controllerSerNo"
+                            style="@style/under_line_et"
+                            android:layout_width="0dp"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="1dp"
+                            android:textColor="@color/black"
+                            android:hint="@string/enter_controller_serial_number"
+                            android:layout_weight="1"/>
+
+
+                        <ImageView
+                            android:id="@+id/controllerScanner"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="@dimen/_30sdp"
+                            android:padding="@dimen/space_tinny2"
+                            android:src="@drawable/scan" />
+
+
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -69,9 +220,9 @@
                     android:layout_marginStart="@dimen/_15sdp"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:text="* Remark"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_16ssp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_12ssp"
+                    android:fontFamily="sans-serif-condensed-medium" />
 
                 <EditText
                     android:id="@+id/edtRemarkVKID"
@@ -93,8 +244,9 @@
                     android:layout_height="@dimen/_35sdp"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/_30sdp"
-                    android:background="@drawable/rounded_shape"
+                    android:background="@drawable/blue_btn_round"
                     android:text="@string/btn_save_dsr"
+                    android:fontFamily="sans-serif-condensed-medium"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12sdp" />
 

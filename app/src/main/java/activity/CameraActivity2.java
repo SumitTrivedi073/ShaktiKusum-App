@@ -366,7 +366,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
 
             Geocoder geocoder = new Geocoder(CameraActivity2.this, Locale.getDefault());
             try {
-                if (CustomUtility.isInternetOn(getApplicationContext())) {
+                if (CustomUtility.isInternetOn(CameraActivity2.this)) {
                     List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 
                     if (!addresses.isEmpty()) {
@@ -403,7 +403,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
                 }
 
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
 
 
@@ -447,6 +447,15 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     @Override
     public void onConnectionSuspended(int i) {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mGoogleApiClient!=null){
+            mGoogleApiClient.disconnect();
+            mGoogleApiClient= null;
+        }
     }
 
     @Override

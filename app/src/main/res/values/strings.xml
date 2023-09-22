@@ -118,6 +118,7 @@
     <string name="borewell_depth">Borewell Depth</string>
     <string name="size_of_borewell">Size of Borewell</string>
     <string name="contact_no">Contact No.</string>
+    <string name="project_no">Project No.</string>
 
     <string name="Get_text">Get</string>
     <string name="Set_text">Set</string>
@@ -159,6 +160,7 @@
     <string name="delayInstallation">IF DELAY INSTALLATION WITH REASON PHOTO</string>
     <string name="insideCOntroller">INSIDE IMEI NUMBER PHOTOS</string>
     <string name="outsideController">OUTSIDE CONTROLLER ID STIKER PHOTOS</string>
+    <string name="namePlate">NAME PLATE WITH FARMER</string>
 
     <string name="material_unloading_img">Material Unloading Images</string>
     <string name="installationImg">Installation Images</string>
@@ -191,6 +193,7 @@
     <string name="capture">Capture</string>
     <string name="Click_Again">Click Again</string>
     <string name="cant_proceed">Your not able to proceed with this device because Drive Number are not matched.Please Update the I-Base first</string>
+    <string name="driveNumberNotMatched">Your not able to proceed with this device because Drive Number are not matched.</string>
     <string name="siteAuditImages">Site Audit Images</string>
     <string name="foundation_photo">Foundation Photo</string>
     <string name="Structure_Assembly_photo">Structure Assembly Photo</string>
@@ -209,7 +212,7 @@
     <string name="enter_allModuleSrno">Please Enter all module serial no.</string>
     <string name="moduleMultipleTime">Module No. are entered multiple times, please change it</string>
     <string name="sitesurvey_B">Site Survey Kusum (B)</string>
-    <string name="sitesurvey_C">Site Survey kusum (C)</string>
+    <string name="sitesurvey_C">Survey</string>
     <string name="farmer_name">Farmer Name</string>
     <string name="application_no">Application No.</string>
     <string name="nameofvillage">Name of village, block and district</string>
@@ -287,9 +290,49 @@
     <string name="dataSavedOffline">your data saved in offline mode please re-submit when you have a internet connetion!</string>
     <string name="savedInLocalDatabase">Your Data Saved in local Database, please check your internet connection and try again!</string>
     <string name="pleasetryAgain">Please try again</string>
+    <string name="pairedDevice">Please make sure device is paired or connected via bluetooth!</string>
+    <string name="unloading_material">Unloading Material List</string>
+    <string name="routeplan">Route Plan List</string>
+    <string name="no_data_found">No Data Found</string>
+    <string name="correctPumpSr">Please enter correct pump serial number</string>
+    <string name="correctMotorSr">Please enter correct motor serial number</string>
+    <string name="correctControllerSr">Please enter correct controller serial number</string>
+    <string name="bill_no">Bill No.</string>
+    <string name="jsDocument1">Js Document 1</string>
+    <string name="jsDocument2">Js Document 2</string>
+    <string name="Document1">Document 1</string>
+    <string name="Document2">Document 2</string>
+    <string name="departmentSubm">Document Submission</string>
+    <string name="govtOfficeVisit">Govt. Officer Visit</string>
+    <string name="rejection">Reject Installation</string>
+    <string name="rejectionImgae">Reject Installation Images</string>
+    <string name="depatmentDocuments">Department Documents</string>
+    <string name="JointInspectionDoc">Joint Inspection Documents</string>
     <string name="fetching_location">Please wait we are fetching your location</string>
     <string name="fileNotValid">File Not Valid</string>
     <string name="default_notification_channel_id" translatable="false">com.shaktipumps.shakti.shaktisalesemployee.urgent</string>
+    <string name="applicant_name">Applicant Name</string>
+    <string name="enter_applicant_name">Enter Applicant Name</string>
+    <string name="latitude">Latitude</string>
+    <string name="enterLatitude">Please enter latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="darkZoneTxt">Is the area fall under dark zone/black zon areas notified by the government from time to time</string>
+    <string name="siteWaterlevel">site Water level (In meter)</string>
+    <string name="enterSiteWaterLevel">Enter Site Water Level (In meter)</string>
+    <string name="pumpWaterLevel">Pumping water level in reqired.(In meter)</string>
+    <string name="selectAcDc">Select Ac and Dc</string>
+    <string name="electricConnectionDiscomTxt">Is farmer having electric connection of the DISCOM at the site</string>
+    <string name="agreeToInstallSolarPumpController">Agree to install universal solar pump controller</string>
+    <string name="releventInfo">Any other relevant information</string>
+    <string name="enter_releventInfo">Enter relevant information</string>
+    <string name="enterLongitude">Please enter longitude</string>
+    <string name="selectBorewellSize">Select Borewell Size</string>
+    <string name="selectPumpWaterLever">Select pump water lever</string>
+    <string name="site_audit">Site Audit</string>
+    <string name="enter_pump_serial_number">Enter pump serial number</string>
+    <string name="enter_motor_serial_number">Enter motor serial number</string>
+    <string name="enter_controller_serial_number">Enter controller serial number</string>
+
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>
@@ -378,6 +421,35 @@
         <item>Select type of pump</item>
         <item>Surface</item>
         <item>Submersible</item>
+
+    </string-array>
+
+    <string-array name="borewell_size">
+        <item>Select borewell Size</item>
+        <item>4</item>
+        <item>6</item>
+        <item>8</item>
+        <item>10</item>
+        <item>12</item>
+    </string-array>
+
+
+    <string-array name="pumpWaterLevel">
+        <item>Select Pump water level</item>
+        <item>20</item>
+        <item>30</item>
+        <item>50</item>
+        <item>70</item>
+        <item>100</item>
+        <item>120</item>
+        <item>130</item>
+        <item>150</item>
+    </string-array>
+
+    <string-array name="acDc">
+        <item>Select Ac and Dc</item>
+        <item>AC</item>
+        <item>DC</item>
 
     </string-array>
 

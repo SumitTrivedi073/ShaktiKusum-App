@@ -2,47 +2,12 @@ package bean;
 
 public class KusumCSurveyBean {
 
-    String project_no = "";
-    String userid= "";
-    String project_login_no = "";
-    String FARMER_CONTACT_NO= "";
-    String        APPLICANT_NO= "";
-    String REGISNO= "";
-    String       BENEFICIARY= "";
-    String SITE_ADRC= "";
-    String        LAT= "";
-    String LNG= "";
-    String         CATEGORY= "";
-    String WATER_SOURCE= "";
-    String        INTERNET_TYPE= "";
-    String CROP_PATTERN= "";
-    String        TYPE_OF_IRIGATN= "";
-    String SHADOW_FREE_LAND= "";
-    String       ELEC_CON= "";
-    String ELEC_IDEN_NO= "";
-    String        PUMP_TYPE= "";
-    String PUMP_SET_RATING= "";
-    String      PUMP_MAKE= "";
-    String PHASE_VOL_V1= "";
-    String     PHASE_VOL_V2= "";
-    String PHASE_VOL_V3= "";
-    String     LINE_VOL_V1= "";
-    String LINE_VOL_V2= "";
-    String       LINE_VOL_V3= "";
-    String LINE_CRNT_AMP1= "";
-    String    LINE_CRNT_AMP2= "";
-    String LINE_CRNT_AMP3= "";
-    String      FREQ_HERTZ= "";
-    String  LINE_POWFACT_1= "";
-    String      LINE_POWFACT_2= "";
-    String LINE_POWFACT_3= "";
-    String      BOREWELL_SIZE= "";
-    String  BOREWELL_DEPTH= "";
-    String    PUMP_SET_DEPTH= "";
-    String DIS_PUMP_LPM= "";
-    String      DEL_PUMP_LPM= "";
-    String DISTANCE= "";
-    public String photo1, photo2,photo3,photo4;
+    String project_no = "", userid = "", project_login_no = "", FARMER_CONTACT_NO = "", APPLICANT_NO = "",REGISNO = "", BENEFICIARY = "", SITE_ADRC = "",
+     LAT = "", LNG = "", CATEGORY = "", WATER_SOURCE = "", INTERNET_TYPE = "", CROP_PATTERN = "", TYPE_OF_IRIGATN = "", SHADOW_FREE_LAND = "", ELEC_CON = "",
+     ELEC_IDEN_NO = "", PUMP_TYPE = "", PUMP_SET_RATING = "", PUMP_MAKE = "", PHASE_VOL_V1 = "", PHASE_VOL_V2 = "", PHASE_VOL_V3 = "", LINE_VOL_V1 = "",
+     LINE_VOL_V2 = "", LINE_VOL_V3 = "", LINE_CRNT_AMP1 = "", LINE_CRNT_AMP2 = "", LINE_CRNT_AMP3 = "", FREQ_HERTZ = "", LINE_POWFACT_1 = "", LINE_POWFACT_2 = "",
+     LINE_POWFACT_3 = "", BOREWELL_SIZE = "", BOREWELL_DEPTH = "", PUMP_SET_DEPTH = "", DIS_PUMP_LPM = "", DEL_PUMP_LPM = "", DISTANCE = "",
+            photo1, photo2, photo3, photo4;
 
 
     public KusumCSurveyBean(String project_no, String userid, String project_login_no, String FARMER_CONTACT_NO, String APPLICANT_NO, String REGISNO, String BENEFICIARY, String SITE_ADRC, String LAT, String LNG, String CATEGORY, String WATER_SOURCE, String INTERNET_TYPE, String CROP_PATTERN, String TYPE_OF_IRIGATN, String SHADOW_FREE_LAND, String ELEC_CON, String ELEC_IDEN_NO, String PUMP_TYPE, String PUMP_SET_RATING, String PUMP_MAKE, String PHASE_VOL_V1, String PHASE_VOL_V2, String PHASE_VOL_V3, String LINE_VOL_V1, String LINE_VOL_V2, String LINE_VOL_V3, String LINE_CRNT_AMP1, String LINE_CRNT_AMP2, String LINE_CRNT_AMP3, String FREQ_HERTZ, String LINE_POWFACT_1, String LINE_POWFACT_2, String LINE_POWFACT_3, String BOREWELL_SIZE, String BOREWELL_DEPTH, String PUMP_SET_DEPTH, String DIS_PUMP_LPM, String DEL_PUMP_LPM, String DISTANCE, String photo1, String photo2, String photo3, String photo4) {

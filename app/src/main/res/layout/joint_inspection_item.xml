@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/item_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/_5sdp"
+        app:cardElevation="@dimen/_5sdp"
+        app:cardBackgroundColor="@color/white"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+       >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_12sdp"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:textColor="@color/colorPrimary"
+                    android:text="@string/customer_name"
+                    android:padding="@dimen/_5sdp"
+                    />
+
+                <TextView
+                    android:id="@+id/custNameTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_10sdp"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:textColor="@color/black"
+                    android:text="@string/app_name"
+                    android:padding="@dimen/_5sdp"
+                    />
+
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_12sdp"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:textColor="@color/colorPrimary"
+                    android:text="@string/bill_no"
+                    android:padding="@dimen/_5sdp"
+                    />
+
+                <TextView
+                    android:id="@+id/billNoTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_10sdp"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:textColor="@color/black"
+                    android:text="@string/app_name"
+                    android:padding="@dimen/_5sdp"
+                   />
+
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_12sdp"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:textColor="@color/colorPrimary"
+                    android:text="@string/beneficiary_id"
+                    android:padding="@dimen/_5sdp"
+                    />
+
+                <TextView
+                    android:id="@+id/beneficiaryId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_10sdp"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:textColor="@color/black"
+                    android:text="@string/app_name"
+                    android:padding="@dimen/_5sdp"
+                    />
+
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_12sdp"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:textColor="@color/colorPrimary"
+                    android:text="Dispatch Date"
+                    android:padding="@dimen/_5sdp"
+                    />
+
+                <TextView
+                    android:id="@+id/dispatchDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_10sdp"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:textColor="@color/black"
+                    android:text="@string/app_name"
+                    android:padding="@dimen/_5sdp"
+                   />
+
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_12sdp"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:textColor="@color/colorPrimary"
+                    android:text="@string/contact_no"
+                    android:padding="@dimen/_5sdp"
+                    />
+
+                <TextView
+                    android:id="@+id/contactNo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_10sdp"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:textColor="@color/black"
+                    android:text="@string/app_name"
+                    android:padding="@dimen/_5sdp"
+                   />
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_12sdp"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:textColor="@color/colorPrimary"
+                    android:text="@string/address"
+                    android:padding="@dimen/_5sdp"
+                  />
+
+                <TextView
+                    android:id="@+id/addressTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/_10sdp"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:textColor="@color/black"
+                    android:text="BHIWANI Bhiwani Bhangarh,Haryana,Bhiwani,BHIWANI dsgsgasgasgsaga"
+                    android:padding="@dimen/_5sdp" />
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

@@ -34,7 +34,15 @@ public class Constant {
     public static String currentDate = "currentDate";
     public static String isDebugDevice = "DebugDevice";
     public static String isUnloading = "isUnloading";
+
     public static String regisno = "regisno";
 
+    public static String unloadingData = "unloadingData";
+
+    public static String debugDataExtract = "debugDataExtract";
+
+    public static String JointInspection = "JointInspection";
+
+    public static String RejectInstallation = "RejectInstallation";
 
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -43,14 +43,14 @@
                 android:id="@+id/imgDeviceImageID"
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"
+                android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/imgHeaderID"
                 android:paddingStart="@dimen/_1sdp"
                 android:paddingTop="@dimen/_2sdp"
                 android:paddingEnd="@dimen/_2sdp"
                 android:paddingBottom="@dimen/_2sdp"
-                android:layout_centerVertical="true"
-                android:visibility="gone"
-                android:src="@drawable/logo_blue" />
+                android:src="@drawable/logo_blue"
+                android:visibility="gone" />
         </RelativeLayout>
 
         <TextView
@@ -67,23 +67,10 @@
 
 
         <RelativeLayout
-            android:visibility="gone"
             android:layout_width="@dimen/_100sdp"
             android:layout_height="match_parent"
-            android:layout_alignParentEnd="true">
-
-<!--
-            <ImageView
-                android:id="@+id/imgBTAndInternetToggleID"
-                android:layout_width="@dimen/_100sdp"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
-                android:paddingTop="@dimen/_12sdp"
-                android:paddingBottom="@dimen/_12sdp"
-                android:padding="@dimen/_2sdp"
-
-                android:src="@drawable/int_to_bt" />-->
+            android:layout_alignParentEnd="true"
+            android:visibility="gone">
 
 
         </RelativeLayout>
@@ -91,35 +78,31 @@
 
     </RelativeLayout>
 
-    <!--/////////////////////////////vikas-->
 
     <androidx.recyclerview.widget.RecyclerView
-      android:layout_below="@+id/rlvHeaderViewID"
         android:id="@+id/rclSettingListViewID"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:background="@android:color/transparent"
-        android:scrollbars="none"/>
+        android:layout_above="@+id/txtPairedDeviceListID"
+        android:layout_below="@+id/rlvHeaderViewID"
+        android:layout_margin="@dimen/_5sdp"
+        android:scrollbars="none"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+
+        />
 
     <TextView
         android:id="@+id/txtPairedDeviceListID"
-        android:layout_marginStart="@dimen/_40sdp"
-        android:layout_marginEnd="@dimen/_40sdp"
-        android:layout_marginBottom="@dimen/_20sdp"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40sdp"
-        android:background="@drawable/rounded_shape"
         android:layout_alignParentBottom="true"
-        android:textColor="@color/white"
-        android:text="Paired Devices"
+        android:layout_margin="@dimen/_10sdp"
+        android:background="@drawable/blue_btn_round"
+        android:fontFamily="sans-serif-condensed-medium"
         android:gravity="center"
-        android:textSize="@dimen/_18ssp"
-        android:textStyle="bold"
-        />
+        android:text="Paired Devices"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_14sdp" />
 
 
 </RelativeLayout>

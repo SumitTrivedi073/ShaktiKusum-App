@@ -80,6 +80,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 		}
 
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			pendingIntent = PendingIntent.getActivity(this,
 					0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);

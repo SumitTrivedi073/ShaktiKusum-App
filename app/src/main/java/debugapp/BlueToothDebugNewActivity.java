@@ -39,6 +39,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 
 import com.android.volley.AuthFailureError;
@@ -97,7 +98,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import debugapp.Bean.SimDetailsInfoResponse;
 import debugapp.GlobalValue.Constant;
 import debugapp.GlobalValue.CustomHttpClient;
-import debugapp.GlobalValue.NewSolarVFD;
 import debugapp.GlobalValue.UtilMethod;
 import debugapp.localDB.DatabaseHelperTeacher;
 import okhttp3.MediaType;
@@ -231,8 +231,9 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     private RelativeLayout rlvLoadingViewID;
     private TextView txtHeadingLabelID;
     private String MEmpType = "null", version;
-    private String ControllerSerialNumber;
+    private String ControllerSerialNumber,debugDataExtract;
     private static Cell cell = null;
+    CardView submitBtnCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -268,6 +269,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         mSimDetailsInfoResponse = new ArrayList<>();
         if (getIntent().getExtras() != null) {
             ControllerSerialNumber = getIntent().getStringExtra(Constant.ControllerSerialNumber);
+            debugDataExtract = getIntent().getStringExtra(Constant.debugDataExtract);
         }
 
         try {
@@ -300,12 +302,19 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         rlvBT_9_ID = findViewById(R.id.rlvBT_9_ID);
         lvlMainTextContainerID = findViewById(R.id.lvlMainTextContainerID);
         edtPutCommandID = findViewById(R.id.edtPutCommandID);
+        submitBtnCard = findViewById(R.id.submitBtnCard);
         mIntCheckDeviceType = 0;
 
 
         changeButtonVisibilityRLV(true, 0.5f, rlvBT_S1_ID);
         changeButtonVisibilityRLV(true, 0.5f, rlvBT_S2_ID);
         changeButtonVisibilityRLV(false, 0.5f, rlvBT_7_ID_save);
+
+        if(debugDataExtract.equals("true")){
+            submitBtnCard.setVisibility(View.GONE);
+            imgBTShareFILEID.setVisibility(View.GONE);
+            imgBTSyncFILEID.setVisibility(View.GONE);
+        }
         setClickEventListner();
         getGpsLocation();
         try {
@@ -555,6 +564,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
     private void saveDataLocaly() {
         CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice, "true");
+        Log.e("DEVICE_NO=========>",DEVICE_NO);
         mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO, SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC, SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID, MUserId, RMS_STATUS, RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB, RMS_DEBUG_EXTRN, RMS_SERVER_DOWN, RMS_ORG_D_F, true);
         onBackPressed();
         Toast.makeText(mContext, " Data save in local Data base", Toast.LENGTH_SHORT).show();
@@ -755,7 +765,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             e.printStackTrace();
         }
         //  baseRequest.callAPIPost(1, jsonObject, Constant.GET_ALL_NOTIFICATION_LIST_API);/////
-        baseRequest.callAPIPostDebugApp(1, jsonObject, NewSolarVFD.INSERT_DEBUG_DATA_API);/////
+        baseRequest.callAPIPostDebugApp(1, jsonObject, WebURL.INSERT_DEBUG_DATA_API);/////
         //baseRequest.callAPIPut(1, jsonObject, NewSolarVFD.ORG_RESET_FORGOTPASS);/////
     }
 
@@ -822,7 +832,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
         Map<String, String> wordsByKey = new HashMap<>();
         wordsByKey.put("device", ControllerSerialNumber + "-0");// DEVICE_NO = sssM[0];
-        baseRequest.callAPIGETDebugApp(1, wordsByKey, NewSolarVFD.SIM_STATUS_VK_PAGE);/////
+        baseRequest.callAPIGETDebugApp(1, wordsByKey, WebURL.SIM_STATUS_VK_PAGE);/////
         baseRequest.showLoader();
         baseRequest.setBaseRequestListner(new RequestReciever() {
             @Override
@@ -1065,7 +1075,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.e("URL=====>", NewSolarVFD.saveDebugData + "?action=" + jsonArray);
+        Log.e("URL=====>", WebURL.saveDebugData + "?action=" + jsonArray);
         final ArrayList<NameValuePair> param1 = new ArrayList<NameValuePair>();
         param1.add(new BasicNameValuePair("action", String.valueOf(jsonArray)));
         showProgressDialogue();
@@ -1073,7 +1083,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
             StrictMode.setThreadPolicy(policy);
 
-            String obj2 = CustomHttpClient.executeHttpPost1(NewSolarVFD.saveDebugData, param1);
+            String obj2 = CustomHttpClient.executeHttpPost1(WebURL.saveDebugData, param1);
 
             if (!obj2.isEmpty()) {
 
@@ -1759,7 +1769,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             scrlViewID.fullScroll(View.FOCUS_DOWN);
             baseRequest.hideLoader();
 
-             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")) {
+             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0") && debugDataExtract.equals("false")) {
                 ShowAlertResponse();
             } else {
                 if (CustomUtility.isInternetOn(getApplicationContext())) {
@@ -2083,7 +2093,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             baseRequest.hideLoader();
             WebURL.SERVER_CONNECTIVITY_OK = mCheckServerConnectivityValue;
 
-             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")) {
+             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")&& debugDataExtract.equals("false")) {
                 ShowAlertResponse();
             } else {
                 if (CustomUtility.isInternetOn(getApplicationContext())) {
@@ -2540,7 +2550,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
             WebURL.SERVER_CONNECTIVITY_OK = mCheckServerConnectivityValue;
 
-              if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")) {
+              if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber + "-0")&& debugDataExtract.equals("false")) {
                 ShowAlertResponse();
             } else {
                 if (CustomUtility.isInternetOn(getApplicationContext())) {
@@ -2952,11 +2962,26 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                 if ("TX".equalsIgnoreCase((char) mCharOne + "" + (char) mCharTwo)) {
                                     isDataExtract = true;
                                     CustomUtility.hideProgressDialog(BlueToothDebugNewActivity.this);
-                                    Message message = new Message();
-                                    message.obj = "Data Extraction Completed! now upload extraction Data ";
-                                    mHandler.sendMessage(message);
+                                    if(debugDataExtract.equals("false")){
+
                                     mBoolflag = true;
-                                    sendFileToRMSServer();
+                                        if(CustomUtility.isInternetOn(BlueToothDebugNewActivity.this)) {
+                                            Message message = new Message();
+                                            message.obj = "Data Extraction Completed! now upload extraction Data ";
+                                            mHandler.sendMessage(message);
+                                            sendFileToRMSServer();
+                                        }else {
+                                            Message message = new Message();
+                                            message.obj = "Data Extraction Completed!";
+                                            mHandler.sendMessage(message);
+
+                                        }
+                                    }else {
+                                        Message message = new Message();
+                                        message.obj = "Data Extraction Completed";
+                                        mHandler.sendMessage(message);
+                                        mBoolflag = true;
+                                    }
                                     break;
                                 } else {
                                     if (mCharOne == 0 || mCharTwo == 0) {
