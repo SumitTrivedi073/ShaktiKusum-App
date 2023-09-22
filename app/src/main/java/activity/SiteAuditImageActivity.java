@@ -52,18 +52,12 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
     List<ImageModel> imageList = new ArrayList<>();
     ImageSelectionAdapter siteAuditAdapter;
     Toolbar mToolbar;
-    double AUD_latitude_double,
-            AUD_longitude_double;
-    String type="AUD/";
+
 
     public static final String GALLERY_DIRECTORY_NAME = "ShaktiKusum";
 
-    String imageStoragePath, enq_docno, cust_nm, photo1_text, photo2_text, photo3_text, photo4_text;
-    TextView photo1, photo2, photo3, photo4;
-    boolean photo1_flag = false,
-            photo2_flag = false,
-            photo3_flag = false,
-            photo4_flag = false;
+    String  enq_docno, cust_nm;
+
 
 
     @Override
@@ -301,31 +295,7 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
         }
     }
 
-    public void setFlag(String key) {
 
-        photo1_flag = false;
-        photo2_flag = false;
-        photo3_flag = false;
-        photo4_flag = false;
-
-        switch (key) {
-
-            case DatabaseHelper.KEY_PHOTO1:
-                photo1_flag = true;
-                break;
-            case DatabaseHelper.KEY_PHOTO2:
-                photo2_flag = true;
-                break;
-            case DatabaseHelper.KEY_PHOTO3:
-                photo3_flag = true;
-                break;
-            case DatabaseHelper.KEY_PHOTO4:
-                photo4_flag = true;
-                break;
-
-        }
-
-    }
 
     @Override
     public void onBackPressed() {

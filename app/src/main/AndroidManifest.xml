@@ -52,6 +52,15 @@
         android:theme="@style/MyMaterialTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu">
+
+
+        <activity
+            android:name="activity.RejectInstRepImgActivity"
+            android:exported="false" />
+        <activity
+            android:name="activity.ActivityRejectSite"
+            android:exported="false" />
+
         <activity
             android:name="activity.RejectInstallationImageActivity"
             android:exported="false" />

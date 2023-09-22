@@ -96,4 +96,7 @@ public class WebURL {
     public static final String SIM_STATUS_VK_PAGE = BASE_URL_VK +"sim_actiavtion_status.htm";
 
     public static final String saveDebugData = BASE_URL_VK +"save.htm";
- }
+
+    public static final String REJECT_DATA = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/reject_data.htm";
+
+}

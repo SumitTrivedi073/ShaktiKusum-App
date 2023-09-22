@@ -82,7 +82,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     ProgressDialog progressBar;
 
     CardView pendingFeedback, pendingUnloadingVerification, checkRMSStatus, debugDataExtract,
-            siteAuditCard, simReplacementCard;
+            siteAuditCard, rejectSiteAudit,simReplacementCard;
 
 
     @SuppressLint("SetTextI18n")
@@ -101,6 +101,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         checkRMSStatus = findViewById(R.id.checkRMSStatus);
         debugDataExtract = findViewById(R.id.debugDataExtract);
         siteAuditCard = findViewById(R.id.siteAuditCard);
+        rejectSiteAudit = findViewById(R.id.rejectSiteAudit);
         simReplacementCard = findViewById(R.id.simReplacementCard);
         flvViewFlipperID = findViewById(R.id.flvViewFlipperID);
 
@@ -153,6 +154,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         checkRMSStatus.setOnClickListener(this);
         debugDataExtract.setOnClickListener(this);
         siteAuditCard.setOnClickListener(this);
+        rejectSiteAudit.setOnClickListener(this);
         simReplacementCard.setOnClickListener(this);
         appUpdateManager = AppUpdateManagerFactory.create(getApplicationContext());
         checkUpdate();
@@ -356,6 +358,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 } else {
                     Toast.makeText(context, "You are not authorized for this.", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case  R.id.rejectSiteAudit:
+                Intent intent2 = new Intent(context, ActivityRejectSite.class);
+                startActivity(intent2);
                 break;
         }
     }
