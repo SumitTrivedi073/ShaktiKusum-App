@@ -246,9 +246,6 @@ import webservice.WebURL;
                             db.insertInstallationListData(bill_no, installationBean);
                         }
                     }
-                }else {
-                    lin1.setVisibility(View.GONE);
-                    lin2.setVisibility(View.VISIBLE);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
