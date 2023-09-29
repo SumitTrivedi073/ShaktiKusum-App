@@ -217,6 +217,10 @@
     <string name="application_no">Application No.</string>
     <string name="nameofvillage">Name of village, block and district</string>
     <string name="enter_contact_number">Enter Contact Number</string>
+    <string name="depth"> Depth of well</string>
+    <string name="enter_depth">Enter Depth of well</string>
+    <string name="sale">Sales employee</string>
+    <string name="installer">Installer</string>
     <string name="enter_farmar_name">Enter Farmar Name</string>
     <string name="enter_application_number">Enter Application Number</string>
     <string name="enter_name_of_village_block_and_district">Enter name of village, block and district</string>
@@ -238,6 +242,10 @@
     <string name="select_pumpsetrating">Select Pump Set Rating</string>
     <string name="pumpsetmake">Pump Set Make</string>
     <string name="enter_pumpsetmake">Enter pump set make</string>
+
+    <string name="enter_roadShowPersonQtyExt">Enter Road Show Person Qty.</string>
+    <string name="enter_bill_No">Enter Bill No</string>
+    <string name="enter_beneficiaryNoExt">Enter Beneficiary No</string>
     <string name="existingPumpSetElectricParameter">Existing Pump Set Electric Parameter</string>
     <string name="phasevoltage">Phase Voltage</string>
     <string name="voltageV1Volt">Enter Voltage (V1) (Y-N) Volt</string>
@@ -278,7 +286,8 @@
     <string name="selectCategoty">Please Select Category</string>
     <string name="selectSourceOfWater">Select Source Of Water</string>
     <string name="selectInternetConnectivity">Select Internet Connectivity</string>
-    <string name="selectTypesOfIrrigation">Select Type sOf Irrigation</string>
+    <string name="selectBorwell">Select BorWell/Open Well Present</string>
+    <string name="selectTypesOfIrrigation">Select Type Of Irrigation</string>
     <string name="selectSouthfacingShadow">Select South facing Shadow</string>
     <string name="selectElectricConnectionType">Select Electric Connection Type</string>
     <string name="typeOfPump">Type Of Pump</string>
@@ -287,6 +296,18 @@
     <string name="attechTransformerPhoto">Please Attach Transformer Photo</string>
     <string name="attechFormPhoto">Please Attach Form Photo</string>
     <string name="enter_valid_contact_number">Please enter valid contact number</string>
+    <string name="installed">Geo-tagged photos of the surveyed site where pumps of another company are installed."</string>
+    <string name="customer">Completed survey form with signatures of customer and installer.)</string>
+    <string name="geo">Geo-tagged photos and videos of the entire system already installed at the customers place</string>
+    <string name="PMC">Geo-tagged photos of Shakti Pumps with complete PMC system.</string>
+    <string name="presence">Geo-tagged photos of farmers presence</string>
+    <string name="mobileNo">Customer Attendance List with Mobile Number</string>
+    <string name="select_installed">Select Geo-tagged photos of the surveyed site where pumps of another company are installed."</string>
+    <string name="customerSelect">SelectCompleted survey form with signatures of customer and installer.)</string>
+    <string name="geoSelect">Select Geo-tagged photos and videos of the entire system already installed at the customers place</string>
+    <string name="PMCSelect">SelectGeo-tagged photos of Shakti Pumps with complete PMC system.</string>
+    <string name="presenceSelect">Select Geo-tagged photos of farmers presence</string>
+    <string name="mobileNoSelect">SelectCustomer Attendance List with Mobile Number</string>
     <string name="dataSavedOffline">your data saved in offline mode please re-submit when you have a internet connetion!</string>
     <string name="savedInLocalDatabase">Your Data Saved in local Database, please check your internet connection and try again!</string>
     <string name="pleasetryAgain">Please try again</string>
@@ -295,6 +316,7 @@
     <string name="routeplan">Route Plan List</string>
     <string name="no_data_found">No Data Found</string>
     <string name="correctPumpSr">Please enter correct pump serial number</string>
+    <string name="nameManufacturer">Please enter name of Manufacture of Old Solar Pump</string>
     <string name="correctMotorSr">Please enter correct motor serial number</string>
     <string name="correctControllerSr">Please enter correct controller serial number</string>
     <string name="bill_no">Bill No.</string>
@@ -341,14 +363,17 @@
     <string name="module_wattage">Module Wattage</string>
     <string name="module_qty">Module Qty</string>
     <string name="billno_rgpno">Bill No. / RGP NO.</string>
+    <string name="BENEFICIARY">  BENEFICIARY.</string>
     <string name="roadShowPersonQty">Road Show Person Qty.</string>
     <string name="materialReceivingDate">Material Receiving Date</string>
     <string name="enter_name_of_manufacturer">Enter Name Of Manufacturer</string>
     <string name="enter_delivery_of_old_pump_set">Enter Delivery of Old Pump Set</string>
+    <string name="enter_ReleventInfoExt">Enter Any other Relevant Information</string>
     <string name="enter_module_manufacturer">Enter Module Manufacturer</string>
     <string name="enter_module_wattage">Enter Module Wattage</string>
     <string name="enter_module_qty">Enter Module Qty</string>
     <string name="enter_billno_rgpno">Enter Bill No/ RGP No.</string>
+    <string name="enter_BENEFICIARY">Enter BENEFICIARY.</string>
     <string name="enter_road_show_person_qty">Enter Road Show person Qty</string>
 
 

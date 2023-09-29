@@ -24,6 +24,35 @@
                 android:layout_margin="@dimen/_10sdp"
                 android:orientation="vertical">
 
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <RadioButton
+                        android:id="@+id/salesRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sale"
+                        android:layout_gravity="center_horizontal"
+                        android:checked="true"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <RadioButton
+                        android:id="@+id/installerRadio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/installer"
+                        android:layout_gravity="center_horizontal"
+                        android:checked="false"
+                        android:textSize="@dimen/_12sdp"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:layout_marginRight="@dimen/_10sdp"/>
+
+
+                </RadioGroup>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -256,6 +285,38 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/depth"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <EditText
+                        android:id="@+id/depth"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/edt_bg_shape"
+                        android:hint="@string/enter_depth"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:maxLines="1"
+                        android:padding="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
                         android:text="@string/internetConnectivityType"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/_12sdp" />
@@ -363,7 +424,7 @@
                         android:background="@drawable/edt_bg_shape"
                         android:hint="@string/enter_name_of_manufacturer"
                         android:imeOptions="actionDone"
-                        android:inputType="numberDecimal"
+                        android:inputType="textPersonName"
                         android:maxLength="10"
                         android:maxLines="1"
                         android:padding="@dimen/_10sdp"
@@ -519,7 +580,7 @@
                         android:background="@drawable/edt_bg_shape"
                         android:hint="@string/enter_module_manufacturer"
                         android:imeOptions="actionNext"
-                        android:inputType="text"
+                        android:inputType="number"
                         android:maxLines="1"
                         android:padding="@dimen/_10sdp"
                         android:singleLine="true"
@@ -549,7 +610,7 @@
                         android:background="@drawable/edt_bg_shape"
                         android:hint="@string/enter_module_wattage"
                         android:imeOptions="actionNext"
-                        android:inputType="text"
+                        android:inputType="number"
                         android:maxLines="1"
                         android:padding="@dimen/_10sdp"
                         android:singleLine="true"
@@ -579,7 +640,7 @@
                         android:background="@drawable/edt_bg_shape"
                         android:hint="@string/enter_module_qty"
                         android:imeOptions="actionNext"
-                        android:inputType="text"
+                        android:inputType="number"
                         android:maxLines="1"
                         android:padding="@dimen/_10sdp"
                         android:singleLine="true"
@@ -609,7 +670,37 @@
                         android:background="@drawable/edt_bg_shape"
                         android:hint="@string/enter_billno_rgpno"
                         android:imeOptions="actionDone"
-                        android:inputType="text"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:padding="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_12sdp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="@string/BENEFICIARY"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_12sdp" />
+
+                    <EditText
+                        android:id="@+id/beneficiaryNoExt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/edt_bg_shape"
+                        android:hint="@string/enter_BENEFICIARY"
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
                         android:maxLines="1"
                         android:padding="@dimen/_10sdp"
                         android:singleLine="true"
@@ -678,11 +769,11 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-condensed-medium"
-                    android:text="@string/attachimages"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:layout_marginBottom="@dimen/_10sdp"
+                    android:fontFamily="sans-serif-condensed-medium"
                     android:gravity="center|start"
+                    android:text="@string/attachimages"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/_12sdp" />
 
@@ -690,16 +781,41 @@
                     android:id="@+id/photoListView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/_20sdp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/save"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/space_tinny4"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:background="@color/header_color"
+                        android:gravity="center"
+                        android:padding="@dimen/space_mid10"
+                        android:text="Save"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/size_xlarge20" />
+
+
+                </LinearLayout>
 
             </LinearLayout>
+
+
+
 
         </ScrollView>
 
     </LinearLayout>
-
 
 </RelativeLayout>
