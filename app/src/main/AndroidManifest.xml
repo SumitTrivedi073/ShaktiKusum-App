@@ -52,6 +52,11 @@
         android:theme="@style/MyMaterialTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu">
+
+        <activity
+            android:name="activity.DemoRoadShowActivity"
+            android:exported="false" />
+
         <activity
             android:name="activity.RejectInstallationImageActivity"
             android:exported="false" />

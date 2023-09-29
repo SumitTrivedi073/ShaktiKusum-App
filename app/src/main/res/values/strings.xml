@@ -332,6 +332,24 @@
     <string name="enter_pump_serial_number">Enter pump serial number</string>
     <string name="enter_motor_serial_number">Enter motor serial number</string>
     <string name="enter_controller_serial_number">Enter controller serial number</string>
+    <string name="demo_road_show_form"><![CDATA[Demo & Road Show Form]]></string>
+    <string name="rating_of_old_pump_set_hp">Rating of old pump set (HP)</string>
+    <string name="delivery_old_pump_set">Delivery of old pump set (inches)</string>
+    <string name="name_of_manufacture_of_old_solar_pump">Name of Manufacture of Old Solar Pump</string>
+    <string name="borwell_present_at_site">Is there any (bore well/open well) is present at site.</string>
+    <string name="module_manufacturer">Module Manufacturer</string>
+    <string name="module_wattage">Module Wattage</string>
+    <string name="module_qty">Module Qty</string>
+    <string name="billno_rgpno">Bill No. / RGP NO.</string>
+    <string name="roadShowPersonQty">Road Show Person Qty.</string>
+    <string name="materialReceivingDate">Material Receiving Date</string>
+    <string name="enter_name_of_manufacturer">Enter Name Of Manufacturer</string>
+    <string name="enter_delivery_of_old_pump_set">Enter Delivery of Old Pump Set</string>
+    <string name="enter_module_manufacturer">Enter Module Manufacturer</string>
+    <string name="enter_module_wattage">Enter Module Wattage</string>
+    <string name="enter_module_qty">Enter Module Qty</string>
+    <string name="enter_billno_rgpno">Enter Bill No/ RGP No.</string>
+    <string name="enter_road_show_person_qty">Enter Road Show person Qty</string>
 
 
     <string-array name="nav_drawer_labels">
@@ -405,6 +423,13 @@
 
     <string-array name="yesNoSpinner">
         <item>Select option for south facing shadow</item>
+        <item>Yes</item>
+        <item>No</item>
+
+    </string-array>
+
+    <string-array name="yesNoSpinner2">
+        <item>Select BorWell/ OpenWell Present</item>
         <item>Yes</item>
         <item>No</item>
 

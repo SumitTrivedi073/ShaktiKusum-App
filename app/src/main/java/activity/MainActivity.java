@@ -241,7 +241,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             } else {
                 super.onBackPressed();
             }
-        } else if (id == R.id.nav_logout) {
+        } else if (id == R.id.nav_demoRoadShow) {
+            Intent intent = new Intent(context,DemoRoadShowActivity.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.nav_logout) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(context, R.style.MyDialogTheme);
             alertDialog.setTitle("Confirmation");
             alertDialog.setMessage("Are you sure you wish to Sign Out ?");
