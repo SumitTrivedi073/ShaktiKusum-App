@@ -530,9 +530,10 @@ public class InstallationInitial extends BaseActivity {
                     break;
             }
             if (!alreadySet) {
-                EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
 
                 if (scannedDeviceNo.size() > 0) {
+                    EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
+
                     if (!scannedDeviceNo.contains(scanContent)) {
                         edit_O.setText(scanContent);
                         scannedDeviceNo.add(scanContent);
@@ -540,6 +541,8 @@ public class InstallationInitial extends BaseActivity {
                         Toast.makeText(mContext, "Already done.", Toast.LENGTH_SHORT).show();
                     }
                 } else {
+                    EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
+
                     edit_O.setText(scanContent);
                     scannedDeviceNo.add(scanContent);
                 }

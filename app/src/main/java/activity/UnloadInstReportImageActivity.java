@@ -770,17 +770,18 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             if (!isPumpMotorController) {
                 boolean alreadySet = false;
                 if (!alreadySet) {
-                    EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
-
                     if (scannedDeviceNo.size() > 0) {
+                        EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
+
                         if (!scannedDeviceNo.contains(scanContent)) {
                             edit_O.setText(scanContent);
                             scannedDeviceNo.add(scanContent);
                         } else {
-                            CustomUtility.ShowToast("Already Done", getApplicationContext());
-
+                            CustomUtility.ShowToast("Already done",getApplicationContext());
                         }
                     } else {
+                        EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
+
                         edit_O.setText(scanContent);
                         scannedDeviceNo.add(scanContent);
                     }
