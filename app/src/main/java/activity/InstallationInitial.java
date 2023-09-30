@@ -530,19 +530,22 @@ public class InstallationInitial extends BaseActivity {
                     break;
             }
             if (!alreadySet) {
-                EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
-
                 if (scannedDeviceNo.size() > 0) {
+                    EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
+
                     if (!scannedDeviceNo.contains(scanContent)) {
                         edit_O.setText(scanContent);
                         scannedDeviceNo.add(scanContent);
                     } else {
-                        Toast.makeText(mContext, "Already done.", Toast.LENGTH_SHORT).show();
+                        CustomUtility.ShowToast("Already done",getApplicationContext());
                     }
                 } else {
+                    EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
+
                     edit_O.setText(scanContent);
                     scannedDeviceNo.add(scanContent);
                 }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
