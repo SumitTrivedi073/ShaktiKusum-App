@@ -332,6 +332,8 @@
     <string name="enter_pump_serial_number">Enter pump serial number</string>
     <string name="enter_motor_serial_number">Enter motor serial number</string>
     <string name="enter_controller_serial_number">Enter controller serial number</string>
+    <string name="dataExtractFileToServer">Sending Data Extract File To Server......</string>
+    <string name="ImeiFileToServer">Sending IMEI File To Server...</string>
 
 
     <string-array name="nav_drawer_labels">
