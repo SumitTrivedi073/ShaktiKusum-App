@@ -214,6 +214,7 @@
     <string name="sitesurvey_B">Site Survey Kusum (B)</string>
     <string name="sitesurvey_C">Survey</string>
     <string name="farmer_name">Farmer Name</string>
+    <string name="salesName">Sales Person Name</string>
     <string name="application_no">Application No.</string>
     <string name="nameofvillage">Name of village, block and district</string>
     <string name="enter_contact_number">Enter Contact Number</string>
@@ -221,7 +222,8 @@
     <string name="enter_depth">Enter Depth of well</string>
     <string name="sale">Sales employee</string>
     <string name="installer">Installer</string>
-    <string name="enter_farmar_name">Enter Farmar Name</string>
+    <string name="enter_farmar_name">Enter Farmer Name</string>
+    <string name="enter_sale_name">Enter Sales Person Name</string>
     <string name="enter_application_number">Enter Application Number</string>
     <string name="enter_name_of_village_block_and_district">Enter name of village, block and district</string>
     <string name="currentlocation">Current Location</string>
@@ -359,7 +361,7 @@
     <string name="delivery_old_pump_set">Delivery of old pump set (inches)</string>
     <string name="name_of_manufacture_of_old_solar_pump">Name of Manufacture of Old Solar Pump</string>
     <string name="borwell_present_at_site">Is there any (bore well/open well) is present at site.</string>
-    <string name="module_manufacturer">Module Manufacturer</string>
+    <string name="module_manufacturer">Module Manufacturer Name</string>
     <string name="module_wattage">Module Wattage</string>
     <string name="module_qty">Module Qty</string>
     <string name="billno_rgpno">Bill No. / RGP NO.</string>
@@ -369,7 +371,7 @@
     <string name="enter_name_of_manufacturer">Enter Name Of Manufacturer</string>
     <string name="enter_delivery_of_old_pump_set">Enter Delivery of Old Pump Set</string>
     <string name="enter_ReleventInfoExt">Enter Any other Relevant Information</string>
-    <string name="enter_module_manufacturer">Enter Module Manufacturer</string>
+    <string name="enter_module_manufacturer">Enter Module Manufacturer Name</string>
     <string name="enter_module_wattage">Enter Module Wattage</string>
     <string name="enter_module_qty">Enter Module Qty</string>
     <string name="enter_billno_rgpno">Enter Bill No/ RGP No.</string>

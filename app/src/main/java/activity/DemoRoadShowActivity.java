@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -20,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -51,9 +53,7 @@ import java.util.Locale;
 
 import adapter.ImageSelectionAdapter;
 import bean.ImageModel;
-import bean.KusumCSurveyBean;
 import database.DatabaseHelper;
-import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
@@ -71,11 +71,12 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
 
     List<String> itemNameList = new ArrayList<>();
 
+    LinearLayout borwelSpinner;
     Toolbar mToolbar;
     RecyclerView photoListView;
     Context mContext;
 
-    EditText farmerNameExt, contactNumberExt, addressExt, NameSolarPumpManufacture, OldPumpSetDelivery,
+    EditText farmerNameExt,salesNameExt, contactNumberExt, addressExt, NameSolarPumpManufacture, OldPumpSetDelivery,
             releventInfoExt, moduleManufacturerExt, depth, moduleWattageExt, moduleQtyExt, billNoExt, roadShowPersonQtyExt,beneficiaryNoExt;
 
     Spinner categorySpinner, sourceofWaterSpinner, borWellPresentSpinner, internetConnectivitySpinner, typesOfIrrigationSpinner, southfacingShadowSpinner,
@@ -114,6 +115,7 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
         installerRadio =findViewById(R.id.installerRadio);
         mToolbar = findViewById(R.id.toolbar);
         farmerNameExt = findViewById(R.id.farmerNameExt);
+        salesNameExt =findViewById(R.id.salesNameExt);
         contactNumberExt = findViewById(R.id.contactNumberExt);
         addressExt = findViewById(R.id.addressExt);
         NameSolarPumpManufacture = findViewById(R.id.NameSolarPumpManufacture);
@@ -128,6 +130,7 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
         categorySpinner = findViewById(R.id.categorySpinner);
         sourceofWaterSpinner = findViewById(R.id.sourceofWaterSpinner);
         borWellPresentSpinner = findViewById(R.id.borWellPresentSpinner);
+        borwelSpinner = findViewById(R.id.borwelSpinner);
         depth = findViewById(R.id.depth);
         internetConnectivitySpinner = findViewById(R.id.internetConnectivitySpinner);
         typesOfIrrigationSpinner = findViewById(R.id.typesOfIrrigationSpinner);
@@ -188,7 +191,9 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
 
         if (farmerNameExt.getText().toString().isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.enter_farmar_name), getApplicationContext());
-        } else if (contactNumberExt.getText().toString().isEmpty()) {
+        } else if(salesNameExt.getText().toString().isEmpty()){
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_sale_name), getApplicationContext());
+        }else if (contactNumberExt.getText().toString().isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.enter_contact_number), getApplicationContext());
         } else if (!CustomUtility.isValidMobile(contactNumberExt.getText().toString().trim())) {
             CustomUtility.ShowToast(getResources().getString(R.string.enter_valid_contact_number), getApplicationContext());
@@ -202,9 +207,7 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
             CustomUtility.ShowToast(getResources().getString(R.string.selectSourceOfWater), getApplicationContext());
         }  else if (selectedborwell.isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.selectBorwell), getApplicationContext());
-        }  else if (depth.getText().toString().isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.enter_depth), getApplicationContext());
-        }else if (selectedInternetConnectivity.isEmpty()) {
+        } else if (selectedInternetConnectivity.isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.selectInternetConnectivity), getApplicationContext());
         } else if (selectedTypesOfIrrigation.isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.selectTypesOfIrrigation), getApplicationContext());
@@ -232,8 +235,7 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
             CustomUtility.ShowToast(getResources().getString(R.string.enter_beneficiaryNoExt), getApplicationContext());
         }    else if (roadShowPersonQtyExt.getText().toString().isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.enter_roadShowPersonQtyExt), getApplicationContext());
-        }
-         if (!imageArrayList.get(0).isImageSelected()) {
+        } else if (!imageArrayList.get(0).isImageSelected()) {
             CustomUtility.ShowToast(getResources().getString(R.string.select_installed), getApplicationContext());
 
         } else if (!imageArrayList.get(1).isImageSelected()) {
@@ -296,12 +298,12 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
                 SimpleDateFormat dt = new SimpleDateFormat("dd.MM.yyyy");
 
                 if (installerRadio.isChecked()) {
-                    jsonObj.put( "installer ", installerRadio.getText().toString().trim());
+                    jsonObj.put( "installer ", "X");
                 } else {
                     jsonObj.put("installer", "");
                 }
                 if (salesRadio.isChecked()) {
-                    jsonObj.put("sales_emp", salesRadio.getText().toString().trim());
+                    jsonObj.put("sales_emp", "X");
                 } else {
                     jsonObj.put("sales_emp", "");
                 }
@@ -658,6 +660,12 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
         } else if (parent.getId() == R.id.borWellPresentSpinner) {
             if (!parent.getSelectedItem().toString().equals("Select BorWell/ OpenWell Present")) {
                 selectedborwell = parent.getSelectedItem().toString();
+
+                if(selectedborwell.equals("Yes")){
+                    borwelSpinner.setVisibility(view.VISIBLE);
+                }else {
+                    borwelSpinner.setVisibility(view.GONE);
+                }
 
             }
         }  else if (parent.getId() == R.id.internetConnectivitySpinner) {
