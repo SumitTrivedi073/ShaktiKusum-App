@@ -8,6 +8,8 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.opengl.Visibility;
 import android.os.AsyncTask;
@@ -54,6 +56,7 @@ import java.util.Locale;
 import adapter.ImageSelectionAdapter;
 import bean.ImageModel;
 import database.DatabaseHelper;
+import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
@@ -62,8 +65,6 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
 
     private static final int PICK_FROM_FILE = 102;
     List<ImageModel> imageArrayList = new ArrayList<>();
-    List<ImageModel> imageList = new ArrayList<>();
-    DatabaseHelper db;
     AlertDialog alertDialog;
     int selectedIndex;
     boolean isUpdate = false;
@@ -74,8 +75,6 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
     LinearLayout borwelSpinner;
     Toolbar mToolbar;
     RecyclerView photoListView;
-    Context mContext;
-
     EditText farmerNameExt,salesNameExt, contactNumberExt, addressExt, NameSolarPumpManufacture, OldPumpSetDelivery,
             releventInfoExt, moduleManufacturerExt, depth, moduleWattageExt, moduleQtyExt, billNoExt, roadShowPersonQtyExt,beneficiaryNoExt;
 
@@ -86,7 +85,7 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
     RadioButton salesRadio, installerRadio;
 
     String latitude = "",sendDateMaterial, longitude = "",selectedCategory = "", selectedSourceofWater = "", selectedInternetConnectivity = "", selectedTypesOfIrrigation = "", selectedSouthfacingShadow = "",
-           selectedTypeOfPump = "", selectedPumpSetRating = "", selectedborwell = "", Photo1 = "", Photo2 = "", Photo3 = "", Photo4 = "", Photo5 = "", Photo6 = "";
+           selectedTypeOfPump = "", selectedPumpSetRating = "", selectedborwell = "", version = "";
     Calendar calendar;
 
     public final static SimpleDateFormat dateFormat =
@@ -152,6 +151,16 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
         MaterialReceivingDate.setText(CustomUtility.getCurrentDate());
         getGpsLocation();
         SetAdapter();
+
+        try {
+            PackageManager manager = getPackageManager();
+            PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
+            version = info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("versionErrpr====>", e.getMessage());
+            throw new RuntimeException(e);
+
+        }
     }
 
     private void listner() {
@@ -187,218 +196,7 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
         pumpSetRatingSpinner.setOnItemSelectedListener(this);
     }
 
-    private void ValidationCheck() {
 
-        if (farmerNameExt.getText().toString().isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.enter_farmar_name), getApplicationContext());
-        } else if(salesNameExt.getText().toString().isEmpty()){
-            CustomUtility.ShowToast(getResources().getString(R.string.enter_sale_name), getApplicationContext());
-        }else if (contactNumberExt.getText().toString().isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.enter_contact_number), getApplicationContext());
-        } else if (!CustomUtility.isValidMobile(contactNumberExt.getText().toString().trim())) {
-            CustomUtility.ShowToast(getResources().getString(R.string.enter_valid_contact_number), getApplicationContext());
-        } else if (addressExt.getText().toString().isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.enter_name_of_village_block_and_district), getApplicationContext());
-        } else if (currentLatLngExt.getText().toString().isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.enter_LatLng), getApplicationContext());
-        } else if (selectedCategory.isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.selectCategoty), getApplicationContext());
-        } else if (selectedSourceofWater.isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.selectSourceOfWater), getApplicationContext());
-        }  else if (selectedborwell.isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.selectBorwell), getApplicationContext());
-        } else if (selectedInternetConnectivity.isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.selectInternetConnectivity), getApplicationContext());
-        } else if (selectedTypesOfIrrigation.isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.selectTypesOfIrrigation), getApplicationContext());
-        } else if (selectedSouthfacingShadow.isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.selectSouthfacingShadow), getApplicationContext());
-        } else if (NameSolarPumpManufacture.getText().toString().isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.nameManufacturer), getApplicationContext());
-        }  else if (selectedTypeOfPump.isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.selectTypeOfPump), getApplicationContext());
-        } else if (selectedPumpSetRating.isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.select_pumpsetrating), getApplicationContext());
-        }  else if ( OldPumpSetDelivery.getText().toString().isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.enter_delivery_of_old_pump_set), getApplicationContext());
-        }   else if ( releventInfoExt.getText().toString().isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.enter_ReleventInfoExt), getApplicationContext());
-        }    else if ( moduleManufacturerExt.getText().toString().isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.enter_module_manufacturer), getApplicationContext());
-        }   else if ( moduleWattageExt.getText().toString().isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.enter_module_wattage), getApplicationContext());
-        }   else if ( moduleQtyExt.getText().toString().isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.enter_module_qty), getApplicationContext());
-        }  else if (billNoExt.getText().toString().isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.enter_bill_No), getApplicationContext());
-        }  else if (beneficiaryNoExt.getText().toString().isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.enter_beneficiaryNoExt), getApplicationContext());
-        }    else if (roadShowPersonQtyExt.getText().toString().isEmpty()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.enter_roadShowPersonQtyExt), getApplicationContext());
-        } else if (!imageArrayList.get(0).isImageSelected()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.select_installed), getApplicationContext());
-
-        } else if (!imageArrayList.get(1).isImageSelected()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.customerSelect), getApplicationContext());
-
-        } else if (!imageArrayList.get(2).isImageSelected()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.geoSelect), getApplicationContext());
-
-        } else if (!imageArrayList.get(3).isImageSelected()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.PMCSelect), getApplicationContext());
-
-        }  else if (!imageArrayList.get(4).isImageSelected()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.presenceSelect), getApplicationContext());
-
-        } else if (!imageArrayList.get(5).isImageSelected()) {
-            CustomUtility.ShowToast(getResources().getString(R.string.mobileNoSelect), getApplicationContext());
-
-        } else {
-
-            Photo1 = CustomUtility.getBase64FromBitmap(getApplicationContext(), imageArrayList.get(0).getImagePath());
-            Photo2 = CustomUtility.getBase64FromBitmap(getApplicationContext(), imageArrayList.get(1).getImagePath());
-            Photo3 = CustomUtility.getBase64FromBitmap(getApplicationContext(), imageArrayList.get(2).getImagePath());
-            Photo4 = CustomUtility.getBase64FromBitmap(getApplicationContext(), imageArrayList.get(3).getImagePath());
-            Photo5 = CustomUtility.getBase64FromBitmap(getApplicationContext(), imageArrayList.get(4).getImagePath());
-            Photo6 = CustomUtility.getBase64FromBitmap(getApplicationContext(), imageArrayList.get(5).getImagePath());
-
-
-            if (CustomUtility.isInternetOn(getApplicationContext())) {
-                new submitDemoRoadForm().execute();
-            }
-
-        }
-    }
-
-
-
-    @SuppressLint("StaticFieldLeak")
-    private class submitDemoRoadForm extends AsyncTask<String, String, String> {
-        ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog = new ProgressDialog(DemoRoadShowActivity.this);
-            progressDialog.setCancelable(false);
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setMessage("Sending Data to server..please wait !");
-            progressDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            String docno_sap = null;
-            String invc_done;
-            String obj2 = null;
-
-            JSONArray ja_invc_data = new JSONArray();
-            JSONObject jsonObj = new JSONObject();
-            try {
-                SimpleDateFormat dt = new SimpleDateFormat("dd.MM.yyyy");
-
-                if (installerRadio.isChecked()) {
-                    jsonObj.put( "installer ", "X");
-                } else {
-                    jsonObj.put("installer", "");
-                }
-                if (salesRadio.isChecked()) {
-                    jsonObj.put("sales_emp", "X");
-                } else {
-                    jsonObj.put("sales_emp", "");
-                }
-                jsonObj.put("father_name",  farmerNameExt.getText().toString().trim());
-                jsonObj.put("contact", contactNumberExt.getText().toString().trim());
-                jsonObj.put("village", addressExt.getText().toString().trim());
-                jsonObj.put("lat", latitude);
-                jsonObj.put("log", longitude);
-                jsonObj.put("catogry", selectedCategory);
-                jsonObj.put("source", selectedSourceofWater);
-                jsonObj.put("present", selectedborwell);
-                jsonObj.put("depth", depth.getText().toString().trim());
-                jsonObj.put("type_of_inter", selectedInternetConnectivity);
-                jsonObj.put("irrgation", selectedTypesOfIrrigation);
-                jsonObj.put("south_facing", selectedSouthfacingShadow);
-                jsonObj.put("old_solar", NameSolarPumpManufacture.getText().toString().trim());
-                jsonObj.put("type_of_pump", selectedTypeOfPump);
-                jsonObj.put("rating", selectedPumpSetRating);
-                jsonObj.put("inch",OldPumpSetDelivery.getText().toString().trim() );
-                jsonObj.put("remark",  releventInfoExt.getText().toString().trim());
-                jsonObj.put("module_manu",moduleManufacturerExt.getText().toString().trim() );
-                jsonObj.put("module_watt",moduleWattageExt.getText().toString().trim());
-                jsonObj.put("module_qty",moduleQtyExt.getText().toString().trim() );
-                jsonObj.put("vbeln",billNoExt.getText().toString().trim() );
-                jsonObj.put("beneficiary", beneficiaryNoExt.getText().toString().trim());
-                jsonObj.put("date1",sendDateMaterial);
-                jsonObj.put("per_aty", roadShowPersonQtyExt.getText().toString().trim() );
-                jsonObj.put("photo1", Photo1);
-                jsonObj.put("photo2", Photo2);
-                jsonObj.put("photo3", Photo3);
-                jsonObj.put("photo4", Photo4);
-                jsonObj.put("photo5", Photo5);
-                jsonObj.put("photo6", Photo6);
-
-                ja_invc_data.put(jsonObj);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            Log.e("DemoParam====>", ja_invc_data.toString());
-            final ArrayList<NameValuePair> param1_invc = new ArrayList<>();
-            param1_invc.add(new BasicNameValuePair("demo_road", String.valueOf(ja_invc_data)));
-            Log.e("DATA", "$$$$" + param1_invc);
-            System.out.println("param1_invc_vihu==>>" + param1_invc);
-            try {
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
-                StrictMode.setThreadPolicy(policy);
-                obj2 = CustomHttpClient.executeHttpPost1(WebURL.DemoRoadURL, param1_invc);
-                Log.e("OUTPUT1", "&&&&" + obj2);
-                System.out.println("OUTPUT1==>>" + obj2);
-                progressDialog.dismiss();
-                if (!obj2.equalsIgnoreCase("")) {
-                    JSONObject object = new JSONObject(obj2);
-
-                        docno_sap = object.getString("status");
-                        invc_done = object.getString("message");
-                        if (docno_sap.equalsIgnoreCase("True")) {
-
-                        showingMessage( invc_done);
-
-                            finish();
-
-                        }
-                        else {
-                            showingMessage(getResources().getString(R.string.dataNotSubmitted));
-                            progressDialog.dismiss();
-
-
-                        }
-
-                } else {
-                    showingMessage(getResources().getString(R.string.somethingWentWrong));
-                    progressDialog.dismiss();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                progressDialog.dismiss();
-            }
-            return obj2;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            progressDialog.dismiss();
-        }
-    }
-
-    private void showingMessage(String message) {
-        runOnUiThread(new Runnable() {
-            public void run() {
-
-                CustomUtility.showToast(DemoRoadShowActivity.this, message);
-
-            }
-        });
-    }
     /*------------------------------------------------------------------------Retrieve lat long---------------------------------------------------------------------*/
 
     public void getGpsLocation() {
@@ -424,12 +222,21 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
     private void SetAdapter() {
         imageArrayList = new ArrayList<>();
         itemNameList = new ArrayList<>();
-        itemNameList.add(getResources().getString(R.string.installed));
-        itemNameList.add(getResources().getString(R.string.customer));
-        itemNameList.add(getResources().getString(R.string.geo));
-        itemNameList.add(getResources().getString(R.string.PMC));
-        itemNameList.add(getResources().getString(R.string.presence));
-        itemNameList.add(getResources().getString(R.string.mobileNo));
+        itemNameList.add(getResources().getString(R.string.SurveyFormWithSignature));
+        itemNameList.add(getResources().getString(R.string.PmcModulePhoto));
+        itemNameList.add(getResources().getString(R.string.PmcFarmerGroupPhoto));
+        itemNameList.add(getResources().getString(R.string.photoWithBanner));
+        itemNameList.add(getResources().getString(R.string.photoWithMandap));
+        itemNameList.add(getResources().getString(R.string.dischargePhotoWithFarmers));
+        itemNameList.add(getResources().getString(R.string.groupPhotoWithSnacks));
+        itemNameList.add(getResources().getString(R.string.groupPhotoWithFarmer));
+        itemNameList.add(getResources().getString(R.string.demoPhoto));
+        itemNameList.add(getResources().getString(R.string.additionalActivityPhoto));
+        itemNameList.add(getResources().getString(R.string.photoDistributionMarketingMaterial));
+        itemNameList.add(getResources().getString(R.string.photosOfHanding));
+        itemNameList.add(getResources().getString(R.string.additionalphoto)+" 1");
+        itemNameList.add(getResources().getString(R.string.additionalphoto)+" 2");
+        itemNameList.add(getResources().getString(R.string.additionalphoto)+" 3");
 
 
         for (int i = 0; i < itemNameList.size(); i++) {
@@ -438,32 +245,9 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
             imageModel.setImagePath("");
             imageModel.setImageSelected(false);
             imageModel.setBillNo("");
+            imageModel.setPoistion(i+1);
             imageArrayList.add(imageModel);
         }
-
-        /*DatabaseHelper db = new DatabaseHelper(this);
-
-        //Create Table
-        imageList = db.getAllkusumCImages();
-
-        if (itemNameList.size() > 0 && imageList != null && imageList.size() > 0) {
-
-            for (int i = 0; i < imageList.size(); i++) {
-                for (int j = 0; j < itemNameList.size(); j++) {
-                    if (imageList.get(i).getBillNo() != null &&
-                            imageList.get(i).getBillNo().trim().equals(applicationNumberExt.getText().toString())) {
-                        if (imageList.get(i).getName().equals(itemNameList.get(j))) {
-                            ImageModel imageModel = new ImageModel();
-                            imageModel.setName(imageList.get(i).getName());
-                            imageModel.setImagePath(imageList.get(i).getImagePath());
-                            imageModel.setBillNo(imageList.get(i).getBillNo());
-                            imageModel.setImageSelected(true);
-                            imageArrayList.set(j, imageModel);
-                        }
-                    }
-                }
-            }
-        }*/
 
         customAdapter = new ImageSelectionAdapter(DemoRoadShowActivity.this, imageArrayList);
         photoListView.setHasFixedSize(true);
@@ -629,17 +413,9 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
         imageModel.setName(imageArrayList.get(selectedIndex).getName());
         imageModel.setImagePath(path);
         imageModel.setImageSelected(true);
+        imageModel.setPoistion(imageArrayList.get(selectedIndex).getPoistion());
         imageModel.setBillNo("");
         imageArrayList.set(selectedIndex, imageModel);
-
-        DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-
-        if (isUpdate) {
-            db.updateKusumCImages(imageArrayList.get(selectedIndex).getName(), path, true, "");
-        } else {
-            db.insertKusumCImages(imageArrayList.get(selectedIndex).getName(), path, true, "");
-        }
-
         customAdapter.notifyDataSetChanged();
 
 
@@ -716,4 +492,209 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
         datePickerDialog.show();
 
     }
+
+    /*------------------------------------------------------------------------Submit Form Data API Integration---------------------------------------------------------------------*/
+
+
+
+    private void ValidationCheck() {
+
+        if (farmerNameExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_farmar_name), getApplicationContext());
+        } else if(salesNameExt.getText().toString().isEmpty()){
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_sale_name), getApplicationContext());
+        }else if (contactNumberExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_contact_number), getApplicationContext());
+        } else if (!CustomUtility.isValidMobile(contactNumberExt.getText().toString().trim())) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_valid_contact_number), getApplicationContext());
+        } else if (addressExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_name_of_village_block_and_district), getApplicationContext());
+        } else if (currentLatLngExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_LatLng), getApplicationContext());
+        } else if (selectedCategory.isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.selectCategoty), getApplicationContext());
+        } else if (selectedSourceofWater.isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.selectSourceOfWater), getApplicationContext());
+        }  else if (selectedborwell.isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.selectBorwell), getApplicationContext());
+        } else if (selectedInternetConnectivity.isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.selectInternetConnectivity), getApplicationContext());
+        } else if (selectedTypesOfIrrigation.isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.selectTypesOfIrrigation), getApplicationContext());
+        } else if (selectedSouthfacingShadow.isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.selectSouthfacingShadow), getApplicationContext());
+        } else if (NameSolarPumpManufacture.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.nameManufacturer), getApplicationContext());
+        }  else if (selectedTypeOfPump.isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.selectTypeOfPump), getApplicationContext());
+        } else if (selectedPumpSetRating.isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.select_pumpsetrating), getApplicationContext());
+        }  else if ( OldPumpSetDelivery.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_delivery_of_old_pump_set), getApplicationContext());
+        }   else if ( releventInfoExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_ReleventInfoExt), getApplicationContext());
+        }    else if ( moduleManufacturerExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_module_manufacturer), getApplicationContext());
+        }   else if ( moduleWattageExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_module_wattage), getApplicationContext());
+        }   else if ( moduleQtyExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_module_qty), getApplicationContext());
+        }  else if (billNoExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_bill_No), getApplicationContext());
+        }  else if (beneficiaryNoExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_beneficiaryNoExt), getApplicationContext());
+        }    else if (roadShowPersonQtyExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_roadShowPersonQtyExt), getApplicationContext());
+        } else {
+
+            if (CustomUtility.isInternetOn(getApplicationContext())) {
+                if (imageArrayList.size()>0) {
+                    new submitDemoRoadForm().execute();
+
+                }else {
+                    CustomUtility.ShowToast(getResources().getString(R.string.select_image),getApplicationContext());
+                }
+
+            }
+
+        }
+    }
+
+
+
+    @SuppressLint("StaticFieldLeak")
+    private class submitDemoRoadForm extends AsyncTask<String, String, String> {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(DemoRoadShowActivity.this);
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setMessage("Sending Data to server..please wait !");
+            progressDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String docno_sap = null;
+            String invc_done;
+            String obj2 = null;
+
+            JSONArray ja_invc_data = new JSONArray();
+            JSONObject jsonObj = new JSONObject();
+            try {
+                SimpleDateFormat dt = new SimpleDateFormat("dd.MM.yyyy");
+
+                if (installerRadio.isChecked()) {
+                    jsonObj.put( "installer ", "X");
+                } else {
+                    jsonObj.put("installer", "");
+                }
+                if (salesRadio.isChecked()) {
+                    jsonObj.put("sales_emp", "X");
+                } else {
+                    jsonObj.put("sales_emp", "");
+                }
+                jsonObj.put("father_name",  farmerNameExt.getText().toString().trim());
+                jsonObj.put("SALES_PER_NAME",  salesNameExt.getText().toString().trim());
+                jsonObj.put("contact", contactNumberExt.getText().toString().trim());
+                jsonObj.put("site_add", addressExt.getText().toString().trim());
+                jsonObj.put("lat", latitude);
+                jsonObj.put("log", longitude);
+                jsonObj.put("catogry", selectedCategory);
+                jsonObj.put("source", selectedSourceofWater);
+                jsonObj.put("present", selectedborwell);
+                jsonObj.put("depth", depth.getText().toString().trim());
+                jsonObj.put("type_of_inter", selectedInternetConnectivity);
+                jsonObj.put("irrgation", selectedTypesOfIrrigation);
+                jsonObj.put("south_facing", selectedSouthfacingShadow);
+                jsonObj.put("old_solar", NameSolarPumpManufacture.getText().toString().trim());
+                jsonObj.put("type_of_pump", selectedTypeOfPump);
+                jsonObj.put("rating", selectedPumpSetRating);
+                jsonObj.put("inch",OldPumpSetDelivery.getText().toString().trim() );
+                jsonObj.put("remark",  releventInfoExt.getText().toString().trim());
+                jsonObj.put("module_manu",moduleManufacturerExt.getText().toString().trim() );
+                jsonObj.put("module_watt",moduleWattageExt.getText().toString().trim());
+                jsonObj.put("module_qty",moduleQtyExt.getText().toString().trim() );
+                jsonObj.put("vbeln",billNoExt.getText().toString().trim() );
+                jsonObj.put("beneficiary", beneficiaryNoExt.getText().toString().trim());
+                jsonObj.put("date1",sendDateMaterial);
+                jsonObj.put("per_aty", roadShowPersonQtyExt.getText().toString().trim());
+                jsonObj.put("LOGIN_NAME", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonName));
+                jsonObj.put("app_version", version);
+
+                if(imageArrayList.size()>0){
+                    for (int i=0; i<imageArrayList.size(); i++){
+                        if(imageArrayList.get(i).isImageSelected()) {
+                            jsonObj.put("PHOTO" + imageArrayList.get(i).getPoistion(), CustomUtility.getBase64FromBitmap(DemoRoadShowActivity.this,imageArrayList.get(i).getImagePath()));
+                        }
+
+                    }
+                }
+
+                ja_invc_data.put(jsonObj);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Log.e("DemoParam====>", ja_invc_data.toString());
+            final ArrayList<NameValuePair> param1_invc = new ArrayList<>();
+            param1_invc.add(new BasicNameValuePair("demo_road", String.valueOf(ja_invc_data)));
+            Log.e("DATA", "$$$$" + param1_invc);
+            System.out.println("param1_invc_vihu==>>" + param1_invc);
+            try {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
+                StrictMode.setThreadPolicy(policy);
+                obj2 = CustomHttpClient.executeHttpPost1(WebURL.DemoRoadURL, param1_invc);
+                Log.e("OUTPUT1", "&&&&" + obj2);
+                System.out.println("OUTPUT1==>>" + obj2);
+                progressDialog.dismiss();
+                if (!obj2.equalsIgnoreCase("")) {
+                    JSONObject object = new JSONObject(obj2);
+
+                    docno_sap = object.getString("status");
+                    invc_done = object.getString("message");
+                    if (docno_sap.equalsIgnoreCase("True")) {
+
+                        showingMessage( invc_done);
+
+                        finish();
+
+                    }
+                    else {
+                        showingMessage(getResources().getString(R.string.dataNotSubmitted));
+                        progressDialog.dismiss();
+
+
+                    }
+
+                } else {
+                    showingMessage(getResources().getString(R.string.somethingWentWrong));
+                    progressDialog.dismiss();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                progressDialog.dismiss();
+            }
+            return obj2;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+        }
+    }
+
+    private void showingMessage(String message) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+
+                CustomUtility.showToast(DemoRoadShowActivity.this, message);
+
+            }
+        });
+    }
+
+
 }

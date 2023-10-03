@@ -219,7 +219,7 @@
     <string name="nameofvillage">Name of village, block and district</string>
     <string name="enter_contact_number">Enter Contact Number</string>
     <string name="depth"> Depth of well</string>
-    <string name="enter_depth">Enter Depth of well</string>
+    <string name="enter_depth">Enter Depth of well (In meters)</string>
     <string name="sale">Sales employee</string>
     <string name="installer">Installer</string>
     <string name="enter_farmar_name">Enter Farmer Name</string>
@@ -298,18 +298,8 @@
     <string name="attechTransformerPhoto">Please Attach Transformer Photo</string>
     <string name="attechFormPhoto">Please Attach Form Photo</string>
     <string name="enter_valid_contact_number">Please enter valid contact number</string>
-    <string name="installed">Geo-tagged photos of the surveyed site where pumps of another company are installed."</string>
-    <string name="customer">Completed survey form with signatures of customer and installer.)</string>
-    <string name="geo">Geo-tagged photos and videos of the entire system already installed at the customers place</string>
-    <string name="PMC">Geo-tagged photos of Shakti Pumps with complete PMC system.</string>
-    <string name="presence">Geo-tagged photos of farmers presence</string>
-    <string name="mobileNo">Customer Attendance List with Mobile Number</string>
-    <string name="select_installed">Select Geo-tagged photos of the surveyed site where pumps of another company are installed."</string>
-    <string name="customerSelect">SelectCompleted survey form with signatures of customer and installer.)</string>
-    <string name="geoSelect">Select Geo-tagged photos and videos of the entire system already installed at the customers place</string>
-    <string name="PMCSelect">SelectGeo-tagged photos of Shakti Pumps with complete PMC system.</string>
-    <string name="presenceSelect">Select Geo-tagged photos of farmers presence</string>
-    <string name="mobileNoSelect">SelectCustomer Attendance List with Mobile Number</string>
+
+
     <string name="dataSavedOffline">your data saved in offline mode please re-submit when you have a internet connetion!</string>
     <string name="savedInLocalDatabase">Your Data Saved in local Database, please check your internet connection and try again!</string>
     <string name="pleasetryAgain">Please try again</string>
@@ -377,6 +367,19 @@
     <string name="enter_billno_rgpno">Enter Bill No/ RGP No.</string>
     <string name="enter_BENEFICIARY">Enter BENEFICIARY.</string>
     <string name="enter_road_show_person_qty">Enter Road Show person Qty</string>
+    <string name="SurveyFormWithSignature"><![CDATA[Survey Form  with fill sign by Customers & Vendors photo (Consent letter)]]></string>
+    <string name="PmcModulePhoto">Existing company\'s PMC + Module photos </string>
+    <string name="PmcFarmerGroupPhoto">Existing company\'s PMC Farmers group photo With Discharge</string>
+    <string name="photoWithBanner">Farmers group photo With banner</string>
+    <string name="photoWithMandap">Farmers group photo With mandap </string>
+    <string name="dischargePhotoWithFarmers">Discharge photo of our (Shakti) PMC with group of farmers</string>
+    <string name="groupPhotoWithSnacks">Farmers group photo With Snacks</string>
+    <string name="groupPhotoWithFarmer">Farmers Group photo with all former </string>
+    <string name="demoPhoto">Photo showing Demo given by the Sales person/Vendor</string>
+    <string name="additionalActivityPhoto">Proof Photo  of any additional activity</string>
+    <string name="photoDistributionMarketingMaterial">Photo that shows distribution of marketing material</string>
+    <string name="photosOfHanding">Photo of Handing over of existing PMC</string>
+    <string name="additionalphoto">Additional Photo </string>
 
 
     <string-array name="nav_drawer_labels">

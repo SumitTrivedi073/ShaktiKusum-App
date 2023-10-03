@@ -29,7 +29,9 @@ public abstract class  BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getFirestoreData();
+        if(CustomUtility.isInternetOn(BaseActivity.this)) {
+            getFirestoreData();
+        }
     }
 
     private void getFirestoreData() {
