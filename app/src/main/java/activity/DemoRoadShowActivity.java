@@ -108,7 +108,6 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
 
     private void Init() {
 
-
         calendar = Calendar.getInstance();
         salesRadio = findViewById(R.id.salesRadio);
         installerRadio =findViewById(R.id.installerRadio);
@@ -517,6 +516,8 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
             CustomUtility.ShowToast(getResources().getString(R.string.selectSourceOfWater), getApplicationContext());
         }  else if (selectedborwell.isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.selectBorwell), getApplicationContext());
+        }else if(selectedborwell.equals("Yes") && depth.getText().toString().isEmpty()){
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_depth), getApplicationContext());
         } else if (selectedInternetConnectivity.isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.selectInternetConnectivity), getApplicationContext());
         } else if (selectedTypesOfIrrigation.isEmpty()) {
@@ -541,16 +542,41 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
             CustomUtility.ShowToast(getResources().getString(R.string.enter_module_qty), getApplicationContext());
         }  else if (billNoExt.getText().toString().isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.enter_bill_No), getApplicationContext());
-        }  else if (beneficiaryNoExt.getText().toString().isEmpty()) {
+        }/*  else if (beneficiaryNoExt.getText().toString().isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.enter_beneficiaryNoExt), getApplicationContext());
-        }    else if (roadShowPersonQtyExt.getText().toString().isEmpty()) {
+        } */ else if (roadShowPersonQtyExt.getText().toString().isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.enter_roadShowPersonQtyExt), getApplicationContext());
         } else {
 
             if (CustomUtility.isInternetOn(getApplicationContext())) {
                 if (imageArrayList.size()>0) {
-                    new submitDemoRoadForm().execute();
-
+                    if (!imageArrayList.get(0).isImageSelected()) {
+                        Toast.makeText(this, getResources().getString(R.string.SelectSurveyFormWithSignature), Toast.LENGTH_SHORT).show();
+                    } else if (!imageArrayList.get(1).isImageSelected()) {
+                        Toast.makeText(this, getResources().getString(R.string.SelectPmcModulePhoto), Toast.LENGTH_SHORT).show();
+                    } else if (!imageArrayList.get(2).isImageSelected()) {
+                        Toast.makeText(this, getResources().getString(R.string.SelectPmcFarmerGroupPhoto), Toast.LENGTH_SHORT).show();
+                    } else if (!imageArrayList.get(3).isImageSelected()) {
+                        Toast.makeText(this, getResources().getString(R.string.SelectphotoWithBanner), Toast.LENGTH_SHORT).show();
+                    } else if (!imageArrayList.get(4).isImageSelected()) {
+                        Toast.makeText(this, getResources().getString(R.string.SelectphotoWithMandap), Toast.LENGTH_SHORT).show();
+                    } else if (!imageArrayList.get(5).isImageSelected()) {
+                        Toast.makeText(this, getResources().getString(R.string.SelectdischargePhotoWithFarmers), Toast.LENGTH_SHORT).show();
+                    } else if (!imageArrayList.get(6).isImageSelected()) {
+                        Toast.makeText(this, getResources().getString(R.string.SelectgroupPhotoWithSnacks), Toast.LENGTH_SHORT).show();
+                    } else if (!imageArrayList.get(7).isImageSelected()) {
+                        Toast.makeText(this, getResources().getString(R.string.SelectgroupPhotoWithFarmer), Toast.LENGTH_SHORT).show();
+                    } else if (!imageArrayList.get(8).isImageSelected()) {
+                        Toast.makeText(this, getResources().getString(R.string.SelectdemoPhoto), Toast.LENGTH_SHORT).show();
+                    }else if (!imageArrayList.get(9).isImageSelected()) {
+                        Toast.makeText(this, getResources().getString(R.string.SelectadditionalActivityPhoto), Toast.LENGTH_SHORT).show();
+                    }else if (!imageArrayList.get(10).isImageSelected()) {
+                        Toast.makeText(this, getResources().getString(R.string.SelectphotoDistributionMarketingMaterial), Toast.LENGTH_SHORT).show();
+                    }else if (!imageArrayList.get(11).isImageSelected()) {
+                        Toast.makeText(this, getResources().getString(R.string.SelectphotosOfHanding), Toast.LENGTH_SHORT).show();
+                    }else {
+                        new submitDemoRoadForm().execute();
+                    }
                 }else {
                     CustomUtility.ShowToast(getResources().getString(R.string.select_image),getApplicationContext());
                 }
@@ -584,7 +610,7 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
 
             JSONArray ja_invc_data = new JSONArray();
             JSONObject jsonObj = new JSONObject();
-            try {
+    /*        try {
                 SimpleDateFormat dt = new SimpleDateFormat("dd.MM.yyyy");
 
                 if (installerRadio.isChecked()) {
@@ -619,7 +645,7 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
                 jsonObj.put("module_watt",moduleWattageExt.getText().toString().trim());
                 jsonObj.put("module_qty",moduleQtyExt.getText().toString().trim() );
                 jsonObj.put("vbeln",billNoExt.getText().toString().trim() );
-                jsonObj.put("beneficiary", beneficiaryNoExt.getText().toString().trim());
+                jsonObj.put("beneficiary", "");
                 jsonObj.put("date1",sendDateMaterial);
                 jsonObj.put("per_aty", roadShowPersonQtyExt.getText().toString().trim());
                 jsonObj.put("LOGIN_NAME", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonName));
@@ -637,7 +663,7 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
                 ja_invc_data.put(jsonObj);
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
             Log.e("DemoParam====>", ja_invc_data.toString());
             final ArrayList<NameValuePair> param1_invc = new ArrayList<>();
             param1_invc.add(new BasicNameValuePair("demo_road", String.valueOf(ja_invc_data)));

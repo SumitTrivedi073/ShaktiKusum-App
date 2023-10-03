@@ -459,7 +459,6 @@
                         android:hint="@string/enter_name_of_manufacturer"
                         android:imeOptions="actionDone"
                         android:inputType="textPersonName"
-                        android:maxLength="10"
                         android:maxLines="1"
                         android:padding="@dimen/_10sdp"
                         android:singleLine="true"
@@ -716,7 +715,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="match_parent"

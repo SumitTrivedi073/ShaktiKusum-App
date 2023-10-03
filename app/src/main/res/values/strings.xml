@@ -381,6 +381,20 @@
     <string name="photosOfHanding">Photo of Handing over of existing PMC</string>
     <string name="additionalphoto">Additional Photo </string>
 
+    <string name="SelectSurveyFormWithSignature"><![CDATA[ Select Survey Form  with fill sign by Customers & Vendors photo (Consent letter)]]></string>
+    <string name="SelectPmcModulePhoto">Select Existing company\'s PMC + Module photos </string>
+    <string name="SelectPmcFarmerGroupPhoto">Select Existing company\'s PMC Farmers group photo With Discharge</string>
+    <string name="SelectphotoWithBanner">Select Farmers group photo With banner</string>
+    <string name="SelectphotoWithMandap">Select Farmers group photo With mandap </string>
+    <string name="SelectdischargePhotoWithFarmers">Select Discharge photo of our (Shakti) PMC with group of farmers</string>
+    <string name="SelectgroupPhotoWithSnacks">Select Farmers group photo With Snacks</string>
+    <string name="SelectgroupPhotoWithFarmer">Select Farmers Group photo with all former </string>
+    <string name="SelectdemoPhoto">Select Photo showing Demo given by the Sales person/Vendor</string>
+    <string name="SelectadditionalActivityPhoto">Select Proof Photo  of any additional activity</string>
+    <string name="SelectphotoDistributionMarketingMaterial">Select Photo that shows distribution of marketing material</string>
+    <string name="SelectphotosOfHanding">Select Photo of Handing over of existing PMC</string>
+
+
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>
