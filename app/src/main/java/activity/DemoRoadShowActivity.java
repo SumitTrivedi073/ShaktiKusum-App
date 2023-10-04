@@ -610,7 +610,7 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
 
             JSONArray ja_invc_data = new JSONArray();
             JSONObject jsonObj = new JSONObject();
-    /*        try {
+            try {
                 SimpleDateFormat dt = new SimpleDateFormat("dd.MM.yyyy");
 
                 if (installerRadio.isChecked()) {
@@ -650,20 +650,23 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
                 jsonObj.put("per_aty", roadShowPersonQtyExt.getText().toString().trim());
                 jsonObj.put("LOGIN_NAME", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonName));
                 jsonObj.put("app_version", version);
+                jsonObj.put("USERID", CustomUtility.getSharedPreferences(DemoRoadShowActivity.this, "userid"));
+                jsonObj.put("PROJECT_NO", CustomUtility.getSharedPreferences(DemoRoadShowActivity.this, "projectid"));
+                jsonObj.put("PROJECT_LOGIN_NO", CustomUtility.getSharedPreferences(DemoRoadShowActivity.this, "loginid"));
+
+
 
                 if(imageArrayList.size()>0){
                     for (int i=0; i<imageArrayList.size(); i++){
                         if(imageArrayList.get(i).isImageSelected()) {
                             jsonObj.put("PHOTO" + imageArrayList.get(i).getPoistion(), CustomUtility.getBase64FromBitmap(DemoRoadShowActivity.this,imageArrayList.get(i).getImagePath()));
                         }
-
                     }
                 }
-
                 ja_invc_data.put(jsonObj);
             } catch (Exception e) {
                 e.printStackTrace();
-            }*/
+            }
             Log.e("DemoParam====>", ja_invc_data.toString());
             final ArrayList<NameValuePair> param1_invc = new ArrayList<>();
             param1_invc.add(new BasicNameValuePair("demo_road", String.valueOf(ja_invc_data)));
