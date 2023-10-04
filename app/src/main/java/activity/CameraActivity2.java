@@ -169,7 +169,6 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
             startBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e("display=======>",display.getText().toString().trim());
                     if(!display.getText().toString().isEmpty()){
                     captureImage();
 
@@ -266,7 +265,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     protected void onPause()
     {
         super.onPause();
-        if (camera != null) {
+        if (camera != null ) {
             camera.stopPreview();
             camera.release();
         }

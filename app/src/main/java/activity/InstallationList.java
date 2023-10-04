@@ -253,8 +253,7 @@ import webservice.WebURL;
                     progressDialog.dismiss();
                     progressDialog = null;
                 }
-                lin1.setVisibility(View.GONE);
-                lin2.setVisibility(View.VISIBLE);
+
             }
 
             return login_selec;

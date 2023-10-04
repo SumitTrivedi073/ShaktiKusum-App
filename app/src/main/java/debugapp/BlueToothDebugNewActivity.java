@@ -2867,7 +2867,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                 }
 
             } catch (Exception e) {
-                Log.e("Exception====>", e.getMessage());
+                Log.e("Exception====>", e.toString());
 
                 Message mess = new Message();
                 mess.obj = " Some conflict occurred in data extraction. Please remove and reconnect dongle";
