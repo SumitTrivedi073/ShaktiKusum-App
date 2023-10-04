@@ -115,46 +115,6 @@ public class CustomUtility {
         //alertDialog.setCancelable(cancellable);
     }
 
-    public static void showTimeSetting(final Context mContext, DialogInterface.OnClickListener pos, DialogInterface.OnClickListener neg) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext,R.style.MyDialogTheme);
-        // Setting Dialog Title
-        alertDialog.setTitle("DATE TIME SETTINGS");
-        // Setting Dialog Message
-        alertDialog.setMessage("Date Time not auto update please check it.");
-        // On pressing Settings button
-        alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Settings.ACTION_DATE_SETTINGS);
-                mContext.startActivity(intent);
-            }
-        });
-        // on pressing cancel button
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        // Showing Alert Message
-        alertDialog.show();
-        //alertDialog.setCancelable(cancellable);
-    }
-
-    public static Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        float bitmapRatio = (float) width / (float) height;
-        if (bitmapRatio > 1) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-
-        return Bitmap.createScaledBitmap(image, width, height, true);
-    }
 
     public static String getDeviceName() {
         String manufacturer = Build.MANUFACTURER;
@@ -216,21 +176,6 @@ public class CustomUtility {
         return formatedDate;
     }
 
-    public static String formateDate1(String date) {
-        String formatedDate = "";
-        try {
-            SimpleDateFormat formate = new SimpleDateFormat("yyyy-MM-dd");
-            Date mDate = formate.parse(date);
-//            SimpleDateFormat appFormate = newworkorder SimpleDateFormat("dd MMM, yyyy");
-            SimpleDateFormat appFormate = new SimpleDateFormat("yyyyMMdd");
-            formatedDate = appFormate.format(mDate);
-            Log.i("Result", "mDate " + formatedDate);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return formatedDate;
-    }
 
     public static boolean checkPermission(final Context context) {
         int currentAPIVersion = Build.VERSION.SDK_INT;
@@ -305,8 +250,7 @@ public class CustomUtility {
     }
 
     public static void showToast(Context context, String message) {
-
-                Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
     public static void clearSharedPrefrences(Context context) {
@@ -330,13 +274,6 @@ public class CustomUtility {
         return current_date.trim();
     }
 
-    @SuppressLint("SimpleDateFormat")
-    public String getCurrentTime() {
-        calander = Calendar.getInstance();
-        simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-        current_time = simpleDateFormat.format(calander.getTime());
-        return current_time.trim();
-    }
 
     public static void showProgressDialogue(Activity context) {
         progressDialog = new CustomProgressDialog(context);
@@ -392,19 +329,7 @@ public class CustomUtility {
         return Uri.parse(path);
     }
 
-    public static String getRealPathFromURI(Context context, Uri uri) {
-        String path = "";
-        if (context.getContentResolver() != null) {
-            Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-                path = cursor.getString(idx);
-                cursor.close();
-            }
-        }
-        return path;
-    }
+
 
     public static boolean doesTableExist(SQLiteDatabase db, String tableName) {
         Cursor cursor = db.rawQuery("select DISTINCT tbl_name from sqlite_master where tbl_name = '" + tableName + "'", null);

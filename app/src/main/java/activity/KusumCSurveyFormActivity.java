@@ -76,11 +76,11 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
             current1AmpExt, current2AmpExt, current3AmpExt, frequencyHzExt, powerFactor1Ext, powerFactor2Ext, powerFactor3Ext, BorwellDiameterExt, BorwellDepthExt, pumpSetDepthExt, pumpSetDischargeExt,
             pumpSetDeliveryExt, distanceFromProposedSolarPlantExt;
     Spinner categorySpinner, sourceofWaterSpinner, internetConnectivitySpinner, typesOfIrrigationSpinner, southfacingShadowSpinner,
-            electicConnectionTypeSpinner, typeOfPumpSpinner,pumpSetRatingSpinner;
+            electicConnectionTypeSpinner, typeOfPumpSpinner, pumpSetRatingSpinner;
 
     LinearLayout sourceOfWaterLinear;
     String selectedCategory = "", selectedSourceofWater = "", selectedInternetConnectivity = "", selectedTypesOfIrrigation = "", selectedSouthfacingShadow = "",
-            selectedElectricConnectionType = "", selectedTypeOfPump = "",selectedPumpSetRating = "", latitude = "", longitude = "", Photo1 = "", Photo2 = "", Photo3 = "", Photo4 = "";
+            selectedElectricConnectionType = "", selectedTypeOfPump = "", selectedPumpSetRating = "", latitude = "", longitude = "", Photo1 = "", Photo2 = "", Photo3 = "", Photo4 = "";
 
     TextView submitBtn;
     SurveyListModel.Response surveyListModel;
@@ -165,7 +165,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
 
         kusumCSurveyBean = db.getKusumCSurvey(applicationNumberExt.getText().toString());
 
-        if(kusumCSurveyBean.getAPPLICANT_NO() != null){
+        if (kusumCSurveyBean.getAPPLICANT_NO() != null) {
 
             cropPatternAreaExt = findViewById(R.id.cropPatternAreaExt);
             electricConnectionIdentificationNoEXT = findViewById(R.id.electricConnectionIdentificationNoEXT);
@@ -196,72 +196,72 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
 
             List<String> categoryList = Arrays.asList(getResources().getStringArray(R.array.categorySpinner));
 
-            for (int i = 0 ; i < categoryList.size() ; i++){
-                if (kusumCSurveyBean.getCATEGORY().equalsIgnoreCase(categoryList.get(i))){
-                    categorySpinner.setSelection(i,true);
+            for (int i = 0; i < categoryList.size(); i++) {
+                if (kusumCSurveyBean.getCATEGORY().equalsIgnoreCase(categoryList.get(i))) {
+                    categorySpinner.setSelection(i, true);
                     selectedCategory = kusumCSurveyBean.getCATEGORY();
                 }
             }
 
             List<String> sourceofwaterList = Arrays.asList(getResources().getStringArray(R.array.sourceOfWater));
 
-            for (int i = 0 ; i < sourceofwaterList.size() ; i++){
-                if (kusumCSurveyBean.getWATER_SOURCE().equalsIgnoreCase(sourceofwaterList.get(i))){
-                    sourceofWaterSpinner.setSelection(i,true);
+            for (int i = 0; i < sourceofwaterList.size(); i++) {
+                if (kusumCSurveyBean.getWATER_SOURCE().equalsIgnoreCase(sourceofwaterList.get(i))) {
+                    sourceofWaterSpinner.setSelection(i, true);
                     selectedSourceofWater = kusumCSurveyBean.getWATER_SOURCE();
                 }
             }
 
             List<String> internetConnectivitySpinnerList = Arrays.asList(getResources().getStringArray(R.array.internetConnectivity));
 
-            for (int i = 0 ; i < internetConnectivitySpinnerList.size() ; i++){
-                if (kusumCSurveyBean.getINTERNET_TYPE().equalsIgnoreCase(internetConnectivitySpinnerList.get(i))){
-                    internetConnectivitySpinner.setSelection(i,true);
+            for (int i = 0; i < internetConnectivitySpinnerList.size(); i++) {
+                if (kusumCSurveyBean.getINTERNET_TYPE().equalsIgnoreCase(internetConnectivitySpinnerList.get(i))) {
+                    internetConnectivitySpinner.setSelection(i, true);
                     selectedInternetConnectivity = kusumCSurveyBean.getINTERNET_TYPE();
                 }
             }
 
             List<String> typesOfIrrigationSpinnerList = Arrays.asList(getResources().getStringArray(R.array.irrigationInstalled));
 
-            for (int i = 0 ; i < typesOfIrrigationSpinnerList.size() ; i++){
-                if (kusumCSurveyBean.getTYPE_OF_IRIGATN().equalsIgnoreCase(typesOfIrrigationSpinnerList.get(i))){
-                    typesOfIrrigationSpinner.setSelection(i,true);
+            for (int i = 0; i < typesOfIrrigationSpinnerList.size(); i++) {
+                if (kusumCSurveyBean.getTYPE_OF_IRIGATN().equalsIgnoreCase(typesOfIrrigationSpinnerList.get(i))) {
+                    typesOfIrrigationSpinner.setSelection(i, true);
                     selectedTypesOfIrrigation = kusumCSurveyBean.getTYPE_OF_IRIGATN();
                 }
             }
 
             List<String> southfacingShadowSpinnerList = Arrays.asList(getResources().getStringArray(R.array.yesNoSpinner));
 
-            for (int i = 0 ; i < southfacingShadowSpinnerList.size() ; i++){
-                if (kusumCSurveyBean.getSHADOW_FREE_LAND().equalsIgnoreCase(southfacingShadowSpinnerList.get(i))){
-                    southfacingShadowSpinner.setSelection(i,true);
+            for (int i = 0; i < southfacingShadowSpinnerList.size(); i++) {
+                if (kusumCSurveyBean.getSHADOW_FREE_LAND().equalsIgnoreCase(southfacingShadowSpinnerList.get(i))) {
+                    southfacingShadowSpinner.setSelection(i, true);
                     selectedSouthfacingShadow = kusumCSurveyBean.getSHADOW_FREE_LAND();
                 }
             }
 
             List<String> electicConnectionTypeSpinnerList = Arrays.asList(getResources().getStringArray(R.array.electricConnectionType));
 
-            for (int i = 0 ; i < electicConnectionTypeSpinnerList.size() ; i++){
-                if (kusumCSurveyBean.getELEC_CON().equalsIgnoreCase(electicConnectionTypeSpinnerList.get(i))){
-                    electicConnectionTypeSpinner.setSelection(i,true);
+            for (int i = 0; i < electicConnectionTypeSpinnerList.size(); i++) {
+                if (kusumCSurveyBean.getELEC_CON().equalsIgnoreCase(electicConnectionTypeSpinnerList.get(i))) {
+                    electicConnectionTypeSpinner.setSelection(i, true);
                     selectedElectricConnectionType = kusumCSurveyBean.getELEC_CON();
                 }
             }
 
             List<String> typeOfPumpSpinnerList = Arrays.asList(getResources().getStringArray(R.array.typeOfPump));
 
-            for (int i = 0 ; i < typeOfPumpSpinnerList.size() ; i++){
-                if (kusumCSurveyBean.getPUMP_TYPE().equalsIgnoreCase(typeOfPumpSpinnerList.get(i))){
-                    typeOfPumpSpinner.setSelection(i,true);
+            for (int i = 0; i < typeOfPumpSpinnerList.size(); i++) {
+                if (kusumCSurveyBean.getPUMP_TYPE().equalsIgnoreCase(typeOfPumpSpinnerList.get(i))) {
+                    typeOfPumpSpinner.setSelection(i, true);
                     selectedTypeOfPump = kusumCSurveyBean.getPUMP_TYPE();
                 }
             }
 
             List<String> pumpSetRatingSpinnerList = Arrays.asList(getResources().getStringArray(R.array.pumpRating));
 
-            for (int i = 0 ; i < pumpSetRatingSpinnerList.size() ; i++){
-                if (kusumCSurveyBean.getPUMP_SET_RATING().equalsIgnoreCase(pumpSetRatingSpinnerList.get(i))){
-                    pumpSetRatingSpinner.setSelection(i,true);
+            for (int i = 0; i < pumpSetRatingSpinnerList.size(); i++) {
+                if (kusumCSurveyBean.getPUMP_SET_RATING().equalsIgnoreCase(pumpSetRatingSpinnerList.get(i))) {
+                    pumpSetRatingSpinner.setSelection(i, true);
                     selectedPumpSetRating = kusumCSurveyBean.getPUMP_SET_RATING();
                 }
             }
@@ -303,36 +303,35 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (parent.getId() == R.id.categorySpinner) {
-            if(!parent.getSelectedItem().toString().equals("Select Category")) {
+            if (!parent.getSelectedItem().toString().equals("Select Category")) {
                 selectedCategory = parent.getSelectedItem().toString();
             }
         } else if (parent.getId() == R.id.sourceofWaterSpinner) {
-            if(!parent.getSelectedItem().toString().equals("Select source of water")) {
+            if (!parent.getSelectedItem().toString().equals("Select source of water")) {
                 selectedSourceofWater = parent.getSelectedItem().toString();
             }
         } else if (parent.getId() == R.id.internetConnectivitySpinner) {
-            if(!parent.getSelectedItem().toString().equals("Select internet connectivity type")) {
+            if (!parent.getSelectedItem().toString().equals("Select internet connectivity type")) {
                 selectedInternetConnectivity = parent.getSelectedItem().toString();
             }
         } else if (parent.getId() == R.id.typesOfIrrigationSpinner) {
-            if(!parent.getSelectedItem().toString().equals("Select type of irrigation installed")) {
+            if (!parent.getSelectedItem().toString().equals("Select type of irrigation installed")) {
                 selectedTypesOfIrrigation = parent.getSelectedItem().toString();
             }
         } else if (parent.getId() == R.id.southfacingShadowSpinner) {
-            if(!parent.getSelectedItem().toString().equals("Select option for south facing shadow")) {
+            if (!parent.getSelectedItem().toString().equals("Select option for south facing shadow")) {
                 selectedSouthfacingShadow = parent.getSelectedItem().toString();
             }
         } else if (parent.getId() == R.id.electicConnectionTypeSpinner) {
-            if(!parent.getSelectedItem().toString().equals("Select electric Connection Type")) {
+            if (!parent.getSelectedItem().toString().equals("Select electric Connection Type")) {
                 selectedElectricConnectionType = parent.getSelectedItem().toString();
             }
         } else if (parent.getId() == R.id.typeOfPumpSpinner) {
-            if(!parent.getSelectedItem().toString().equals("Select type of pump")) {
+            if (!parent.getSelectedItem().toString().equals("Select type of pump")) {
                 selectedTypeOfPump = parent.getSelectedItem().toString();
             }
-        }
-        else if (parent.getId() == R.id.pumpSetRatingSpinner) {
-            if(!parent.getSelectedItem().toString().equals("Select Pump Rating")) {
+        } else if (parent.getId() == R.id.pumpSetRatingSpinner) {
+            if (!parent.getSelectedItem().toString().equals("Select Pump Rating")) {
                 selectedPumpSetRating = parent.getSelectedItem().toString();
             }
         }
@@ -390,7 +389,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
 
             for (int i = 0; i < imageList.size(); i++) {
                 for (int j = 0; j < itemNameList.size(); j++) {
-                    if (imageList.get(i).getBillNo()!=null &&
+                    if (imageList.get(i).getBillNo() != null &&
                             imageList.get(i).getBillNo().trim().equals(applicationNumberExt.getText().toString())) {
                         if (imageList.get(i).getName().equals(itemNameList.get(j))) {
                             ImageModel imageModel = new ImageModel();
@@ -574,10 +573,10 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
 
         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 
-        if( isUpdate){
-            db.updateKusumCImages(imageArrayList.get(selectedIndex).getName(), path,true, applicationNumberExt.getText().toString());
-        }else {
-            db.insertKusumCImages(imageArrayList.get(selectedIndex).getName(), path,true, applicationNumberExt.getText().toString());
+        if (isUpdate) {
+            db.updateKusumCImages(imageArrayList.get(selectedIndex).getName(), path, true, applicationNumberExt.getText().toString());
+        } else {
+            db.insertKusumCImages(imageArrayList.get(selectedIndex).getName(), path, true, applicationNumberExt.getText().toString());
         }
 
         customAdapter.notifyDataSetChanged();
@@ -682,7 +681,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
 
 
             if (CustomUtility.isInternetOn(getApplicationContext())) {
-              new  submitSurveyForm().execute();
+                new submitSurveyForm().execute();
             } else {
                 CustomUtility.ShowToast(getResources().getString(R.string.dataSavedOffline), getApplicationContext());
 
@@ -729,7 +728,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
         protected String doInBackground(String... params) {
 
             String docno_sap = null;
-            String invc_done ;
+            String invc_done;
             String obj2 = null;
 
             JSONArray ja_invc_data = new JSONArray();
@@ -812,8 +811,8 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
                             if (db.isRecordExist(DatabaseHelper.TABLE_KUSUMCSURVEYFORM, DatabaseHelper.KEY_APPLICANT_NO, applicationNumberExt.getText().toString().trim())) {
                                 db.deleteKusumCSurveyFrom();
                             }
-                            CustomUtility.deleteArrayList(getApplicationContext(),Constant.surveyList);
-                            CustomUtility.removeValueFromSharedPref(getApplicationContext(),Constant.currentDate);
+                            CustomUtility.deleteArrayList(getApplicationContext(), Constant.surveyList);
+                            CustomUtility.removeValueFromSharedPref(getApplicationContext(), Constant.currentDate);
 
                             showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
 
@@ -828,7 +827,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
                     }
                 } else {
                     showingMessage(getResources().getString(R.string.somethingWentWrong));
-                      progressDialog.dismiss();
+                    progressDialog.dismiss();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
