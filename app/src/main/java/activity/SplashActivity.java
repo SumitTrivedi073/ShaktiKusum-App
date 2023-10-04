@@ -170,7 +170,7 @@ public class SplashActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 CustomUtility.hideProgressDialog(SplashActivity.this);
                 Log.e("error", String.valueOf(error));
-                Toast.makeText(SplashActivity.this, error.getMessage(),
+                Toast.makeText(SplashActivity.this, error.toString(),
                         Toast.LENGTH_LONG).show();
             }
         });

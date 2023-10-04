@@ -156,7 +156,7 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
             public void onErrorResponse(VolleyError error) {
                 CustomUtility.hideProgressDialog(PendingFeedBackOTPVerification.this);
                 Log.e("error", String.valueOf(error));
-                Toast.makeText(PendingFeedBackOTPVerification.this, error.getMessage(),
+                Toast.makeText(PendingFeedBackOTPVerification.this, error.toString(),
                         Toast.LENGTH_LONG).show();
             }
         });
