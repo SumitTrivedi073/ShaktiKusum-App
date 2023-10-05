@@ -9,8 +9,8 @@ android {
         minSdkVersion 26
         targetSdkVersion 33
         vectorDrawables.useSupportLibrary = true
-        versionCode 20
-        versionName "2.9"
+        versionCode 21
+        versionName "3.0"
         resConfigs "en"
         multiDexEnabled true
         useLibrary 'org.apache.http.legacy'
