@@ -410,6 +410,9 @@
     <string name="deliveryofPump">Delivery of pump set (inches)</string>
     <string name="enterdeliveryofPump">Enter Delivery of pump</string>
 
+    <string name="dataExtractFileToServer">Sending Data Extract File To Server......</string>
+    <string name="ImeiFileToServer">Sending IMEI File To Server...</string>
+
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>
