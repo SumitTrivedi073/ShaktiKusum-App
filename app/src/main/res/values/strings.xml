@@ -214,7 +214,8 @@
     <string name="sitesurvey_B">Site Survey Kusum (B)</string>
     <string name="sitesurvey_C">Survey</string>
     <string name="farmer_name">Farmer Name</string>
-    <string name="salesName">Sales Person Name</string>
+    <string name="salesName">Employee Code</string>
+    <string name="selectRadio">Select any one option</string>
     <string name="application_no">Application No.</string>
     <string name="nameofvillage">Name of village, block and district</string>
     <string name="enter_contact_number">Enter Contact Number</string>
@@ -222,6 +223,9 @@
     <string name="enter_depth">Enter Depth of well (In meters)</string>
     <string name="sale">Sales employee</string>
     <string name="installer">Installer</string>
+    <string name="demo">Demo</string>
+    <string name="both">Both</string>
+    <string name="road">Road Show</string>
     <string name="enter_farmar_name">Enter Farmer Name</string>
     <string name="enter_sale_name">Enter Sales Person Name</string>
     <string name="enter_application_number">Enter Application Number</string>
@@ -283,6 +287,7 @@
     <string name="attechformphoto1">Attach form photo1</string>
     <string name="attechformphoto2">Attach form photo2</string>
     <string name="attachimages">Attach Images</string>
+    <string name="shaktiDetail">Shakti Pump Detail</string>
     <string name="submit_feedback">Submit Feedback</string>
     <string name="enter_LatLng">Enter Latitude and longitude of current address</string>
     <string name="selectCategoty">Please Select Category</string>
@@ -293,13 +298,12 @@
     <string name="selectSouthfacingShadow">Select South facing Shadow</string>
     <string name="selectElectricConnectionType">Select Electric Connection Type</string>
     <string name="typeOfPump">Type Of Pump</string>
+    <string name="shaktitypeOfPump">Type Of Pump</string>
     <string name="selectTypeOfPump">Select Type Of Pump</string>
     <string name="attechWaterSourcePhoto">Please Attach Water Source Photo</string>
     <string name="attechTransformerPhoto">Please Attach Transformer Photo</string>
     <string name="attechFormPhoto">Please Attach Form Photo</string>
     <string name="enter_valid_contact_number">Please enter valid contact number</string>
-
-
     <string name="dataSavedOffline">your data saved in offline mode please re-submit when you have a internet connetion!</string>
     <string name="savedInLocalDatabase">Your Data Saved in local Database, please check your internet connection and try again!</string>
     <string name="pleasetryAgain">Please try again</string>
@@ -393,7 +397,18 @@
     <string name="SelectadditionalActivityPhoto">Select Proof Photo  of any additional activity</string>
     <string name="SelectphotoDistributionMarketingMaterial">Select Photo that shows distribution of marketing material</string>
     <string name="SelectphotosOfHanding">Select Photo of Handing over of existing PMC</string>
-
+    <string name="exPumps_HEAD"> Ex Pumps HEAD</string>
+    <string name="enter_ExPumps_HEAD">Enter Existing. Pumps HEAD</string>
+    <string name="pumpsDischarge">Existing. Pumps Discharge (LPM)</string>
+    <string name="enterPumpsDischarge">Enter Ex. Pumps Discharge</string>
+    <string name="shaktiHeadtxt">Shakti Pump Head</string>
+    <string name="entershaktiHeadtxt">Enter Shakti Head</string>
+    <string name="shaktiCode">Shakti Material Code</string>
+    <string name="enterShaktiCode">Enter Shakti Code</string>
+    <string name="shaktiDischargetxt">Shakti Pumps Discharge (LPM)</string>
+    <string name="entershaktiDischargetxt">Enter Shakti Pumps Discharge (LPM)</string>
+    <string name="deliveryofPump">Delivery of pump set (inches)</string>
+    <string name="enterdeliveryofPump">Enter Delivery of pump</string>
 
 
     <string-array name="nav_drawer_labels">
@@ -486,11 +501,20 @@
         <item>Other</item>
 
     </string-array>
+
+    <string-array name="shaktitypeOfPump">
+        <item>Select type of pump</item>
+        <item>AC Surface</item>
+        <item>AC Submersible</item>
+        <item>DC Surface</item>
+        <item>DC Submersible</item>
+
+    </string-array>
+
     <string-array name="typeOfPump">
         <item>Select type of pump</item>
-        <item>Surface</item>
-        <item>Submersible</item>
-
+        <item> Surface</item>
+        <item> Submersible</item>
     </string-array>
 
     <string-array name="borewell_size">

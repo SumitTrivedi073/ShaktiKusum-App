@@ -11,11 +11,9 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.os.TestLooperManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -44,18 +42,15 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import adapter.ImageSelectionAdapter;
 import bean.ImageModel;
-import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
@@ -76,16 +71,17 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
     Toolbar mToolbar;
     RecyclerView photoListView;
     EditText farmerNameExt,salesNameExt, contactNumberExt, addressExt, NameSolarPumpManufacture, OldPumpSetDelivery,
-            releventInfoExt, moduleManufacturerExt, depth, moduleWattageExt, moduleQtyExt, billNoExt, roadShowPersonQtyExt,beneficiaryNoExt;
+            releventInfoExt, moduleManufacturerExt, depth, moduleWattageExt, moduleQtyExt, billNoExt, roadShowPersonQtyExt,
+            exPumpHEADExt,pumpDischargeExt,shaktiHead,shaktiCode,deliveryOfPumpExt,shaktiDischarge;
 
     Spinner categorySpinner, sourceofWaterSpinner, borWellPresentSpinner, internetConnectivitySpinner, typesOfIrrigationSpinner, southfacingShadowSpinner,
-            typeOfPumpSpinner, pumpSetRatingSpinner;
+            typeOfPumpSpinner, pumpSetRatingSpinner, shaktiTypeOfPumpSpinner,shaktipumpSetRatingSpinner;
     TextView save, currentLatLngExt, MaterialReceivingDate;
 
-    RadioButton salesRadio, installerRadio;
+    RadioButton salesRadio, installerRadio,demo,road, both;
 
     String latitude = "",sendDateMaterial, longitude = "",selectedCategory = "", selectedSourceofWater = "", selectedInternetConnectivity = "", selectedTypesOfIrrigation = "", selectedSouthfacingShadow = "",
-           selectedTypeOfPump = "", selectedPumpSetRating = "", selectedborwell = "", version = "";
+           selectedTypeOfPump = "",shaktiSelectedTypeOfPump = "", selectedPumpSetRating = "" ,shaktiSelecteRating = "", selectedborwell = "", version = "";
     Calendar calendar;
 
     public final static SimpleDateFormat dateFormat =
@@ -111,6 +107,9 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
         calendar = Calendar.getInstance();
         salesRadio = findViewById(R.id.salesRadio);
         installerRadio =findViewById(R.id.installerRadio);
+        demo =findViewById(R.id.demoRadio);
+        road = findViewById(R.id.roadRadio);
+        both = findViewById(R.id.bothRadio);
         mToolbar = findViewById(R.id.toolbar);
         farmerNameExt = findViewById(R.id.farmerNameExt);
         salesNameExt =findViewById(R.id.salesNameExt);
@@ -120,7 +119,12 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
         OldPumpSetDelivery = findViewById(R.id.OldPumpSetDelivery);
         releventInfoExt = findViewById(R.id.releventInfoExt);
         moduleManufacturerExt = findViewById(R.id.moduleManufacturerExt);
-        beneficiaryNoExt = findViewById(R.id.beneficiaryNoExt);
+        exPumpHEADExt = findViewById(R.id.exPumpHEADExt);
+        pumpDischargeExt =findViewById(R.id.pumpDischargeExt);
+        shaktiDischarge = findViewById(R.id.shaktiDischarge);
+        shaktiHead =findViewById(R.id.shaktiHead);
+        shaktiCode =findViewById(R.id.shaktiCode);
+        deliveryOfPumpExt =findViewById(R.id.deliveryOfPumpExt);
         moduleWattageExt = findViewById(R.id.moduleWattageExt);
         moduleQtyExt = findViewById(R.id.moduleQtyExt);
         billNoExt = findViewById(R.id.billNoExt);
@@ -134,6 +138,8 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
         typesOfIrrigationSpinner = findViewById(R.id.typesOfIrrigationSpinner);
         southfacingShadowSpinner = findViewById(R.id.southfacingShadowSpinner);
         typeOfPumpSpinner = findViewById(R.id.typeOfPumpSpinner);
+        shaktiTypeOfPumpSpinner = findViewById(R.id.shaktiTypeOfPumpSpinner);
+        shaktipumpSetRatingSpinner =findViewById(R.id.shaktipumpSetRatingSpinner);
         pumpSetRatingSpinner = findViewById(R.id.pumpSetRatingSpinner);
         currentLatLngExt = findViewById(R.id.currentLatLngExt);
         MaterialReceivingDate = findViewById(R.id.MaterialReceivingDate);
@@ -148,6 +154,7 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
         getSupportActionBar().setTitle(getResources().getString(R.string.demo_road_show_form));
 
         MaterialReceivingDate.setText(CustomUtility.getCurrentDate());
+        sendDateMaterial= sendDateFormat.format(calendar.getTime());
         getGpsLocation();
         SetAdapter();
 
@@ -192,6 +199,8 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
         typesOfIrrigationSpinner.setOnItemSelectedListener(this);
         southfacingShadowSpinner.setOnItemSelectedListener(this);
         typeOfPumpSpinner.setOnItemSelectedListener(this);
+        shaktiTypeOfPumpSpinner.setOnItemSelectedListener(this);
+        shaktipumpSetRatingSpinner.setOnItemSelectedListener(this);
         pumpSetRatingSpinner.setOnItemSelectedListener(this);
     }
 
@@ -459,6 +468,14 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
             if (!parent.getSelectedItem().toString().equals("Select type of pump")) {
                 selectedTypeOfPump = parent.getSelectedItem().toString();
             }
+        }  else if (parent.getId() == R.id.shaktipumpSetRatingSpinner) {
+            if (!parent.getSelectedItem().toString().equals("Select type of pump")) {
+                shaktiSelectedTypeOfPump = parent.getSelectedItem().toString();
+            }
+        } else if (parent.getId() == R.id.shaktiTypeOfPumpSpinner) {
+            if (!parent.getSelectedItem().toString().equals("Select type of pump")) {
+                shaktiSelecteRating = parent.getSelectedItem().toString();
+            }
         } else if (parent.getId() == R.id.pumpSetRatingSpinner) {
             if (!parent.getSelectedItem().toString().equals("Select Pump Rating")) {
                 selectedPumpSetRating = parent.getSelectedItem().toString();
@@ -484,7 +501,7 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
                                     calendar.get(Calendar.MINUTE));
                             MaterialReceivingDate.setText(dateFormat.format(calendar.getTime()));
                             sendDateMaterial= sendDateFormat.format(calendar.getTime());
-
+                            Log.e("Date1==>",sendDateMaterial.toString());
                         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
@@ -497,7 +514,7 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
 
 
     private void ValidationCheck() {
-
+                 Log.e("sendDateFormat===========>",sendDateMaterial);
         if (farmerNameExt.getText().toString().isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.enter_farmar_name), getApplicationContext());
         } else if(salesNameExt.getText().toString().isEmpty()){
@@ -546,6 +563,24 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
             CustomUtility.ShowToast(getResources().getString(R.string.enter_beneficiaryNoExt), getApplicationContext());
         } */ else if (roadShowPersonQtyExt.getText().toString().isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.enter_roadShowPersonQtyExt), getApplicationContext());
+        }else if (exPumpHEADExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_ExPumps_HEAD), getApplicationContext());
+        }else if (pumpDischargeExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enterPumpsDischarge), getApplicationContext());
+        }else if (shaktiDischarge.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.entershaktiDischargetxt), getApplicationContext());
+        }else if (exPumpHEADExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_ExPumps_HEAD), getApplicationContext());
+        }else if (shaktiHead.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.entershaktiHeadtxt), getApplicationContext());
+        }else if (shaktiCode.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enterShaktiCode), getApplicationContext());
+        }else if (deliveryOfPumpExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enterdeliveryofPump), getApplicationContext());
+        }else if (shaktiSelecteRating.isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.select_pumpsetrating), getApplicationContext());
+        }else if (shaktiSelectedTypeOfPump.isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.selectTypeOfPump), getApplicationContext());
         } else {
 
             if (CustomUtility.isInternetOn(getApplicationContext())) {
@@ -623,8 +658,23 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
                 } else {
                     jsonObj.put("sales_emp", "");
                 }
+                if (demo.isChecked()) {
+                    jsonObj.put( "count", "X");
+                } else {
+                    jsonObj.put("count", "");
+                }
+                if (road.isChecked()) {
+                    jsonObj.put("count", "X");
+                } else {
+                    jsonObj.put("count", "");
+                }
+                if (both.isChecked()) {
+                    jsonObj.put("count", "X");
+                } else {
+                    jsonObj.put("count", "");
+                }
                 jsonObj.put("father_name",  farmerNameExt.getText().toString().trim());
-                jsonObj.put("SALES_PER_NAME",  salesNameExt.getText().toString().trim());
+                jsonObj.put("SALES_PER_CODE",  salesNameExt.getText().toString().trim());
                 jsonObj.put("contact", contactNumberExt.getText().toString().trim());
                 jsonObj.put("site_add", addressExt.getText().toString().trim());
                 jsonObj.put("lat", latitude);
@@ -646,14 +696,21 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
                 jsonObj.put("module_qty",moduleQtyExt.getText().toString().trim() );
                 jsonObj.put("vbeln",billNoExt.getText().toString().trim() );
                 jsonObj.put("beneficiary", "");
-                jsonObj.put("date1",sendDateMaterial);
+                jsonObj.put("date1", sendDateMaterial);
                 jsonObj.put("per_aty", roadShowPersonQtyExt.getText().toString().trim());
                 jsonObj.put("LOGIN_NAME", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonName));
                 jsonObj.put("app_version", version);
                 jsonObj.put("USERID", CustomUtility.getSharedPreferences(DemoRoadShowActivity.this, "userid"));
                 jsonObj.put("PROJECT_NO", CustomUtility.getSharedPreferences(DemoRoadShowActivity.this, "projectid"));
                 jsonObj.put("PROJECT_LOGIN_NO", CustomUtility.getSharedPreferences(DemoRoadShowActivity.this, "loginid"));
-
+                jsonObj.put("expset",exPumpHEADExt.getText().toString().trim() );
+                jsonObj.put("expdis",  pumpDischargeExt.getText().toString().trim());
+                jsonObj.put("shead", shaktiHead.getText().toString().trim() );
+                jsonObj.put("matnr", shaktiCode.getText().toString().trim() );
+                jsonObj.put("spdis", shaktiDischarge.getText().toString().trim() );
+                jsonObj.put("shp",shaktiSelecteRating);
+                jsonObj.put("stop", shaktiSelectedTypeOfPump );
+                jsonObj.put("DELI_OF_PUMP", deliveryOfPumpExt.getText().toString().trim());
 
 
                 if(imageArrayList.size()>0){
@@ -685,11 +742,8 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
                     docno_sap = object.getString("status");
                     invc_done = object.getString("message");
                     if (docno_sap.equalsIgnoreCase("True")) {
-
                         showingMessage( invc_done);
-
                         finish();
-
                     }
                     else {
                         showingMessage(getResources().getString(R.string.dataNotSubmitted));
