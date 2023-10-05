@@ -37,7 +37,7 @@ public class WebURL {
 
    // public static final String BASE_URL_OPTION_VK= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
 
-*/
+
 
 
     /************* APIS **************/
