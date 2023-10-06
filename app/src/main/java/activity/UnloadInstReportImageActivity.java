@@ -648,7 +648,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             param1_invc.add(new BasicNameValuePair("unloading", String.valueOf(ja_invc_data)));
             Log.e("DATA", "$$$$" + param1_invc);
             System.out.println("param1_invc_vihu==>>" + param1_invc);
-          /*  try {
+          try {
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
                 StrictMode.setThreadPolicy(policy);
                 obj2 = CustomHttpClient.executeHttpPost1(WebURL.INSTALLATION_DATA_UNLOAD, param1_invc);
@@ -699,7 +699,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             } catch (Exception e) {
                 e.printStackTrace();
                 progressDialog.dismiss();
-            }*/
+            }
             return obj2;
         }
 
