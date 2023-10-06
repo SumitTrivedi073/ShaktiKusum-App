@@ -15,11 +15,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -59,6 +61,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -275,13 +278,13 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                                 CustomUtility.ShowToast(getResources().getString(R.string.enter_allModuleSrno), getApplicationContext());
                                 isSubmit = false;
                             } else {
-                                if (set.contains(edit_O.getText().toString())) {
+                                if (set.contains(edit_O.getText().toString().toUpperCase())) {
                                     isSubmit = false;
                                     CustomUtility.ShowToast(edit_O.getText().toString() + getResources().getString(R.string.moduleMultipleTime), this);
                                     Log.e(edit_O.getText().toString(), " is duplicated");
                                     break;
                                 } else {
-                                    set.add(edit_O.getText().toString());
+                                    set.add(edit_O.getText().toString().toUpperCase());
 
                                 }
                             }
@@ -539,7 +542,11 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                 if (TextUtils.isEmpty(file)) {
                     Toast.makeText(UnloadInstReportImageActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
                 } else {
-                    UpdateArrayList(path);
+
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver() , mImageCaptureUri);
+                   File file1 = CustomUtility.saveFile(bitmap,customerName.trim(),"Images");
+
+                    UpdateArrayList(file1.getPath());
 
                 }
             } catch (Exception e) {
@@ -621,7 +628,8 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
                 if (imageArrayList.size() > 0) {
 
-                    if (imageArrayList.get(0).isImageSelected()) {
+
+                   if (imageArrayList.get(0).isImageSelected()) {
                         jsonObj.put("unld_photo1", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(0).getImagePath()));
                     }
                     if (1 < imageArrayList.size() && imageArrayList.get(1).isImageSelected()) {
@@ -640,7 +648,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             param1_invc.add(new BasicNameValuePair("unloading", String.valueOf(ja_invc_data)));
             Log.e("DATA", "$$$$" + param1_invc);
             System.out.println("param1_invc_vihu==>>" + param1_invc);
-            try {
+          try {
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
                 StrictMode.setThreadPolicy(policy);
                 obj2 = CustomHttpClient.executeHttpPost1(WebURL.INSTALLATION_DATA_UNLOAD, param1_invc);
@@ -771,9 +779,10 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                 boolean alreadySet = false;
                 if (!alreadySet) {
                     if (scannedDeviceNo.size() > 0) {
-                        EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
 
                         if (!scannedDeviceNo.contains(scanContent)) {
+                            EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
+
                             edit_O.setText(scanContent);
                             scannedDeviceNo.add(scanContent);
                         } else {
