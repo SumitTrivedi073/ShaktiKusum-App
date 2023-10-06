@@ -19,6 +19,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -35,6 +36,8 @@ import com.shaktipumplimited.shaktikusum.R;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -381,25 +384,34 @@ public class CustomUtility {
         return ""+release;
     }
 
-    public static byte[] getFileData(File selectedFile) {
-        int size = (int) selectedFile.length();
-        byte[] bytes = new byte[size];
-        byte[] tmpBuff = new byte[size];
+    public static File saveFile(Bitmap bitmap, String type, String name) {
+        File file = new File(getMediaFilePath(type,name));
+        try {
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
 
-        try (FileInputStream inputStream = new FileInputStream(selectedFile)) {
-            int read = inputStream.read(bytes, 0, size);
-            if (read < size) {
-                int remain = size - read;
-                while (remain > 0) {
-                    read = inputStream.read(tmpBuff, 0, remain);
-                    System.arraycopy(tmpBuff, 0, bytes, size - remain, read);
-                    remain -= read;
-                }
+    public static String getMediaFilePath(String type, String name) {
+
+        File root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Shakti Kusum App");
+
+        File dir = new File(root.getAbsolutePath() + "/"+name+"/" + type); //it is my root directory
+
+        try {
+            if (!dir.exists()) {
+                dir.mkdirs();
             }
-        } catch (IOException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return bytes;
+        // Create a media file name
+        return dir.getPath() + File.separator + "IMG_"+ Calendar.getInstance().getTimeInMillis() +".jpg";
     }
+
+
 }

@@ -60,7 +60,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         com.google.android.gms.location.LocationListener{
     private static final String TIME_STAMP_FORMAT_DATE = "dd.MM.yyyy";
     private static final String TIME_STAMP_FORMAT_TIME = "h:mm a";
-    private static final String GALLERY_DIRECTORY_NAME_COMMON = "SurfaceCamera";
+    private static final String GALLERY_DIRECTORY_NAME_COMMON = "Shakti Kusum App";
 
     private static final String TAG = "LocationService";
     private SurfaceHolder surfaceHolder;
@@ -342,7 +342,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
 
         File root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), GALLERY_DIRECTORY_NAME_COMMON);
 
-        File dir = new File(root.getAbsolutePath() + "/SKAPP/" + type); //it is my root directory
+        File dir = new File(root.getAbsolutePath() + "/Images/" + type); //it is my root directory
 
         try {
             if (!dir.exists()) {
