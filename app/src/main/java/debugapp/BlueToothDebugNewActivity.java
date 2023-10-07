@@ -397,14 +397,14 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                     if (mSimDetailsInfoResponse.size() > 0)
                         mSimDetailsInfoResponse.clear();
                     mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
-                   /* if (!SER_CONNECT.isEmpty() && SER_CONNECT.equals("Connected")) {
+                    if (!SER_CONNECT.isEmpty() && SER_CONNECT.equals("Connected")) {
                         CustomUtility.setSharedPreference(getApplicationContext(), "DeviceStatus", getResources().getString(R.string.online));
                         if (CustomUtility.isInternetOn(getApplicationContext())) {
                             sendDataToServer();
                         } else {
                             saveDataLocaly();
                         }
-                    } else {*/
+                    } else {
                         if (mSimDetailsInfoResponse.size() >= 1) {
                             if (mSimDetailsInfoResponse.size() >= 2) {
                                 if (mSimDetailsInfoResponse.size() >= 3) {
@@ -434,7 +434,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                             CustomUtility.ShowToast(getResources().getString(R.string.sim_insertMsg), getApplicationContext());
 
                         }
-                   // }
+                    }
                 }
             }
         });
