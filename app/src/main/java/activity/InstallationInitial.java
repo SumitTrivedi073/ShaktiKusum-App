@@ -1841,7 +1841,7 @@ public class InstallationInitial extends BaseActivity {
                     VerificationCodeModel verificationCodeModel = new Gson().fromJson(res.toString(), VerificationCodeModel.class);
                     if (verificationCodeModel.getStatus().equals("Success")) {
                         CustomUtility.removeValueFromSharedPref(getApplicationContext(), "DeviceStatus");
-                        databaseHelper.deleteInstallationImages(billNo);
+                        databaseHelper.deleteInstallationImages(bill_no.getText().toString().trim());
                         ShowAlertResponse(generatedVerificationCode, ContactNo, Hp, beneficiaryNo, billNo);
                     }
 

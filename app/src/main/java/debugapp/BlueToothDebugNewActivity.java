@@ -3115,8 +3115,10 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             CustomUtility.hideProgressDialog(BlueToothDebugNewActivity.this);
             System.out.println("IMEI==>>" + imeiNumber);
             System.out.println("isDongleExtract==>>" + isDongleExtract);
-            if (!imeiNumber.equals("Not Available") ) {
+            if (imeiNumber!=null && !imeiNumber.equals("Not Available") ) {
                 dongleDataExtract();
+            }else {
+                ShowToast(getResources().getString(R.string.pleasetryAgain));
             }
         }
 

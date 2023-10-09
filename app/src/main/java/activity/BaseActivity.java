@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -40,8 +41,12 @@ public abstract class  BaseActivity extends AppCompatActivity {
 
             if (!RetrieveFirestoreData.isServiceRunning) {
                 Intent intent = new Intent(BaseActivity.this, RetrieveFirestoreData.class);
-                BaseActivity.this.startService(intent);
 
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    BaseActivity.this.startForegroundService(intent);
+                } else {
+                    BaseActivity.this.startService(intent);
+                }
             }
         }
 
