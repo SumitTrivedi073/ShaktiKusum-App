@@ -511,7 +511,7 @@
         <item>AC Submersible</item>
         <item>DC Surface</item>
         <item>DC Submersible</item>
-
+        <item>US PC</item>
     </string-array>
 
     <string-array name="typeOfPump">
