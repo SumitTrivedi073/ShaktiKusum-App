@@ -42,11 +42,7 @@ public abstract class  BaseActivity extends AppCompatActivity {
             if (!RetrieveFirestoreData.isServiceRunning) {
                 Intent intent = new Intent(BaseActivity.this, RetrieveFirestoreData.class);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    BaseActivity.this.startForegroundService(intent);
-                } else {
-                    BaseActivity.this.startService(intent);
-                }
+                startService(intent);
             }
         }
 

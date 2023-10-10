@@ -230,7 +230,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         mCheckServerConnectivityValue = 0;
         mCheckCableOKValue = 0;
         INVOICE_NO_B = Constant.BILL_NUMBER_UNIC;
-        Constant.Bluetooth_Activity_Navigation1 = 1;
+
 
         pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         editor = pref.edit();
@@ -397,7 +397,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                     if (mSimDetailsInfoResponse.size() > 0)
                         mSimDetailsInfoResponse.clear();
                     mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
-                    if (!SER_CONNECT.isEmpty() && SER_CONNECT.equals("Connected")) {
+                    if (SER_CONNECT!=null && !SER_CONNECT.isEmpty() && SER_CONNECT.equals("Connected")) {
                         CustomUtility.setSharedPreference(getApplicationContext(), "DeviceStatus", getResources().getString(R.string.online));
                         if (CustomUtility.isInternetOn(getApplicationContext())) {
                             sendDataToServer();
@@ -763,7 +763,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                     @Override
                     public void run() {
 
-                        //textView.setText("Your new text");
+
                         new BluetoothCommunicationSET_LAT().execute(":LAT :0" + latLenght + "," + inst_latitude_double + "#", ":LAT :" + latLenght + "," + inst_latitude_double + "#", "Start");
 
                     }
@@ -1420,6 +1420,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         {
             super.onPostExecute(result);
             pp++;
+            Constant.Bluetooth_Activity_Navigation1 = 1;
             AllCommomSTRContainer = AllCommomSTRContainer + "\nIMEI";
             new BluetoothCommunicationForGET_IMEI_66_1().execute(":GET IMEI#", ":GET IMEI#", "Start");
             scrlViewID.fullScroll(View.FOCUS_DOWN);
@@ -1535,7 +1536,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
             scrlViewID.fullScroll(View.FOCUS_DOWN);
             baseRequest.hideLoader();
-
+            Constant.Bluetooth_Activity_Navigation1 = 1;
             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber) && debugDataExtract.equals("false")) {
                 ShowAlertResponse();
             } else {
@@ -1855,6 +1856,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             pp++;
             scrlViewID.fullScroll(View.FOCUS_DOWN);
             baseRequest.hideLoader();
+            Constant.Bluetooth_Activity_Navigation1 = 1;
             WebURL.SERVER_CONNECTIVITY_OK = mCheckServerConnectivityValue;
             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber) && debugDataExtract.equals("false")) {
                 ShowAlertResponse();
@@ -2310,7 +2312,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             pp++;
             scrlViewID.fullScroll(View.FOCUS_DOWN);
             baseRequest.hideLoader();
-
+            Constant.Bluetooth_Activity_Navigation1 = 1;
             WebURL.SERVER_CONNECTIVITY_OK = mCheckServerConnectivityValue;
             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber) && debugDataExtract.equals("false")) {
                 ShowAlertResponse();
@@ -2529,7 +2531,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                 }
             });
 
-
+            Constant.Bluetooth_Activity_Navigation1 = 1;
             scrlViewID.fullScroll(View.FOCUS_DOWN);
         }
     }
