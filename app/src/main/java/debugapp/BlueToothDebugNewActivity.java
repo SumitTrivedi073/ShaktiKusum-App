@@ -1802,12 +1802,14 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                             lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nIMEI: Not Available"));
                                         }
                                     } else if (i == 10) {
-                                        String[] ssSubIn1 = sssM[10].split("-");
+                                        String[] ssSubIn1 = sssM[10].split("");
 
                                         if (!ssSubIn1[1].equalsIgnoreCase("")) {
-                                            DONGAL_ID = ssSubIn1[1] + "-" + ssSubIn1[2] + "-" + ssSubIn1[3] + "-" + ssSubIn1[4] + "-" + ssSubIn1[5] + "-" + ssSubIn1[6] + "-" + ssSubIn1[7];
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id:" + ssSubIn1[1];
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + ssSubIn1[1]));
+                                            Log.e("ssSubIn1=====>",sssM[10]);
+                                         //   DONGAL_ID = ssSubIn1.toString();
+                                            DONGAL_ID = sssM[10];
+                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id:" + DONGAL_ID;
+                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + DONGAL_ID));
                                         } else {
                                             DONGAL_ID = "Not Available";
                                             AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
@@ -2123,12 +2125,24 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                                 lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nIMEI: Not Available"));
                                             }
                                         } else if (i == 10) {
-                                            String[] ssSubIn1 = sssM[10].split("-");
+                                            /*String[] ssSubIn1 = sssM[10].split("-");
 
                                             if (!ssSubIn1[1].equalsIgnoreCase("")) {
                                                 DONGAL_ID = ssSubIn1[1];
                                                 AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id:" + ssSubIn1[1];
                                                 lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + ssSubIn1[1]));
+                                            } else {
+                                                DONGAL_ID = "Not Available";
+                                                AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
+                                                lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id: Not Available"));
+                                            }*/
+                                            String[] ssSubIn1 = sssM[10].split("");
+
+                                            if (!ssSubIn1[1].equalsIgnoreCase("")) {
+                                                Log.e("ssSubIn1=====>",sssM[10]);
+                                                DONGAL_ID = sssM[10];
+                                                AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id:" + DONGAL_ID;
+                                                lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + DONGAL_ID));
                                             } else {
                                                 DONGAL_ID = "Not Available";
                                                 AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
@@ -2260,12 +2274,23 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                                 lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nIMEI: Not Available"));
                                             }
                                         } else if (i == 9) {
-                                            String[] ssSubIn1 = sssM[9].split("-");
+                                            /*String[] ssSubIn1 = sssM[9].split("-");
 
                                             if (!ssSubIn1[1].equalsIgnoreCase("")) {
                                                 DONGAL_ID = ssSubIn1[1];
                                                 AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id:" + ssSubIn1[1];
                                                 lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + ssSubIn1[1]));
+                                            } else {
+                                                DONGAL_ID = "Not Available";
+                                                AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
+                                                lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id: Not Available"));
+                                            }*/
+                                            String[] ssSubIn1 = sssM[10].split("");
+
+                                            if (!ssSubIn1[1].equalsIgnoreCase("")) {
+                                                DONGAL_ID = sssM[10];
+                                                AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id:" + DONGAL_ID;
+                                                lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + DONGAL_ID));
                                             } else {
                                                 DONGAL_ID = "Not Available";
                                                 AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
@@ -3923,7 +3948,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
         RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("deviceNo", ControllerSerialNumber)
-                .addFormDataPart("simimei", imeiNumber)
+                .addFormDataPart("simimei", imeiNumber.trim())
                 .addFormDataPart("file", filePath,
                         RequestBody.create(MediaType.parse("application/vnd.ms-excel"),
                                 new File(filePath)))

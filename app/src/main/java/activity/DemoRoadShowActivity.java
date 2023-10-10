@@ -514,11 +514,11 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
 
 
     private void ValidationCheck() {
-                 Log.e("sendDateFormat===========>",sendDateMaterial);
+
         if (farmerNameExt.getText().toString().isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.enter_farmar_name), getApplicationContext());
         } else if(salesNameExt.getText().toString().isEmpty()){
-            CustomUtility.ShowToast(getResources().getString(R.string.enter_sale_name), getApplicationContext());
+            CustomUtility.ShowToast(getResources().getString(R.string.enterSalesPersonSapCode), getApplicationContext());
         }else if (contactNumberExt.getText().toString().isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.enter_contact_number), getApplicationContext());
         } else if (!CustomUtility.isValidMobile(contactNumberExt.getText().toString().trim())) {
@@ -610,7 +610,11 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
                     }else if (!imageArrayList.get(11).isImageSelected()) {
                         Toast.makeText(this, getResources().getString(R.string.SelectphotosOfHanding), Toast.LENGTH_SHORT).show();
                     }else {
-                        new submitDemoRoadForm().execute();
+                        if(!latitude.isEmpty()&& !latitude.equals("0")&& !latitude.equals("0.0")) {
+                            new submitDemoRoadForm().execute();
+                        }else {
+                            CustomUtility.showToast(this,"we are trying to fetch your location please try after some time");
+                        }
                     }
                 }else {
                     CustomUtility.ShowToast(getResources().getString(R.string.select_image),getApplicationContext());

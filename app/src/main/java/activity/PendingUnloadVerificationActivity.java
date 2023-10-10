@@ -248,7 +248,7 @@ public class PendingUnloadVerificationActivity extends BaseActivity implements P
             public void onErrorResponse(VolleyError error) {
                 CustomUtility.hideProgressDialog(PendingUnloadVerificationActivity.this);
                 Log.e("error", String.valueOf(error));
-                Toast.makeText(PendingUnloadVerificationActivity.this, error.getMessage(),
+                Toast.makeText(PendingUnloadVerificationActivity.this, error.toString(),
                         Toast.LENGTH_LONG).show();
             }
         });
