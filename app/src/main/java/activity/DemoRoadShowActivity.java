@@ -663,21 +663,21 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
                     jsonObj.put("sales_emp", "");
                 }
                 if (demo.isChecked()) {
-                    jsonObj.put( "count", "X");
+                    jsonObj.put( "zcount", "0");
                 } else {
-                    jsonObj.put("count", "");
+                    jsonObj.put("zcount", "");
                 }
                 if (road.isChecked()) {
-                    jsonObj.put("count", "X");
+                    jsonObj.put("zcount", "1");
                 } else {
-                    jsonObj.put("count", "");
+                    jsonObj.put("zcount", "");
                 }
                 if (both.isChecked()) {
-                    jsonObj.put("count", "X");
+                    jsonObj.put("zcount", "2");
                 } else {
-                    jsonObj.put("count", "");
+                    jsonObj.put("zcount", "");
                 }
-                jsonObj.put("father_name",  farmerNameExt.getText().toString().trim());
+                jsonObj.put("farmer_name",  farmerNameExt.getText().toString().trim());
                 jsonObj.put("SALES_PER_CODE",  salesNameExt.getText().toString().trim());
                 jsonObj.put("contact", contactNumberExt.getText().toString().trim());
                 jsonObj.put("site_add", addressExt.getText().toString().trim());

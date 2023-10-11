@@ -225,9 +225,10 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
             imageModel.setName(itemNameList.get(i));
             imageModel.setImagePath("");
             imageModel.setImageSelected(false);
-            imageModel.setBillNo("");
+            imageModel.setBillNo(enqDocno);
             imageModel.setLatitude("");
             imageModel.setLongitude("");
+            imageModel.setPoistion(i+1);
             imageArrayList.add(imageModel);
         }
 
@@ -249,6 +250,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
                             imageModel.setBillNo(imageList.get(i).getBillNo());
                             imageModel.setLatitude(imageList.get(i).getLatitude());
                             imageModel.setLongitude(imageList.get(i).getLongitude());
+                            imageModel.setPoistion(imageList.get(i).getPoistion());
                             imageArrayList.set(j, imageModel);
                         }
                     }
@@ -430,11 +432,13 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
         imageModel.setName(imageArrayList.get(selectedIndex).getName());
         imageModel.setImagePath(path);
         imageModel.setImageSelected(true);
-        imageModel.setBillNo(enqDocno);
+        imageModel.setBillNo(imageArrayList.get(selectedIndex).getBillNo());
+        imageModel.setPoistion(imageArrayList.get(selectedIndex).getPoistion());
         if(value.equals("0")) {
             imageModel.setLatitude(latitude);
             imageModel.setLongitude(longitude);
             imageArrayList.set(selectedIndex, imageModel);
+
             addupdateDatabase(path,latitude,longitude);
         }else {
             imageModel.setLatitude("");
@@ -451,11 +455,9 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 
         if (isUpdate) {
-            db.updateRecordAlternate(imageArrayList.get(selectedIndex).getName(), path,
-                    true, enqDocno, latitude, longitude);
+            db.updateRecordAlternate(imageArrayList.get(selectedIndex));
         } else {
-            db.insertInstallationImage(imageArrayList.get(selectedIndex).getName(), path,
-                    true, enqDocno, latitude, longitude);
+            db.insertInstallationImage(imageArrayList.get(selectedIndex));
         }
 
     }
@@ -619,8 +621,6 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
             }
 
         }
-
-
         return isBackPressed;
 
     }

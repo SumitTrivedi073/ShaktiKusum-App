@@ -131,6 +131,7 @@ public class RejectionInstallation extends AppCompatActivity {
     private void getRejctionInstList() {
         rejectionInstArrayList = new ArrayList< >();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
+        Log.e("URL=========>",WebURL.rejectionInstalltionAPI + "?project_no=" + CustomUtility.getSharedPreferences(getApplicationContext(), "projectid") + "&userid=" + CustomUtility.getSharedPreferences(getApplicationContext(), "userid"));
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.rejectionInstalltionAPI + "?project_no=" + CustomUtility.getSharedPreferences(getApplicationContext(), "projectid") + "&userid=" + CustomUtility.getSharedPreferences(getApplicationContext(), "userid")  , null, new Response.Listener<JSONObject>() {
 

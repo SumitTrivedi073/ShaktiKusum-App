@@ -83,12 +83,12 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reject_installation_image);
-        
+
         Init();
         checkPermissions();
-        
+
     }
-    
+
     private void Init() {
         recyclerview = findViewById(R.id.recyclerview);
         remarkTxt = findViewById(R.id.remarkTxt);
@@ -181,12 +181,11 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
 
                 if (imageArrayList.size() > 0) {
 
-                    for (int i = 0 ; i < imageArrayList.size() ; i++){
-                        if (!imageArrayList.get(i).isImageSelected() ) {
+                    for (int i = 0; i < imageArrayList.size(); i++) {
+                        if (!imageArrayList.get(i).isImageSelected()) {
                             CustomUtility.showToast(RejectInstallationImageActivity.this, getResources().getString(R.string.select_image));
-                        }
-                        else {
-                             new SubmitRejectImage().execute();
+                        } else {
+                            new SubmitRejectImage().execute();
                         }
                     }
 
@@ -202,40 +201,51 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
         imageArrayList = new ArrayList<>();
         itemNameList = new ArrayList<>();
 
-        if (!rejectDatum.getPhotos1().isEmpty()){
+        if (!rejectDatum.getPhotos1().isEmpty()) {
             itemNameList.add(getResources().getString(R.string.photosOfCivilMaterial));
             positionList.add(rejectDatum.getPhotos1());
-        }    if (!rejectDatum.getPhotos2().isEmpty()){
+        }
+        if (!rejectDatum.getPhotos2().isEmpty()) {
             itemNameList.add(getResources().getString(R.string.pannelModeuleFrontSide));
             positionList.add(rejectDatum.getPhotos2());
-        }   if (!rejectDatum.getPhotos3().isEmpty()){
+        }
+        if (!rejectDatum.getPhotos3().isEmpty()) {
             itemNameList.add(getResources().getString(R.string.controllerWithFormer));
             positionList.add(rejectDatum.getPhotos3());
-        }   if (!rejectDatum.getPhotos4().isEmpty()){
+        }
+        if (!rejectDatum.getPhotos4().isEmpty()) {
             itemNameList.add(getResources().getString(R.string.dischargeWithFormer));
             positionList.add(rejectDatum.getPhotos4());
-        }   if (!rejectDatum.getPhotos5().isEmpty()){
+        }
+        if (!rejectDatum.getPhotos5().isEmpty()) {
             itemNameList.add(getResources().getString(R.string.foundationWithFormer));
             positionList.add(rejectDatum.getPhotos5());
-        }   if (!rejectDatum.getPhotos6().isEmpty()){
+        }
+        if (!rejectDatum.getPhotos6().isEmpty()) {
             itemNameList.add(getResources().getString(R.string.earthingAndLighting));
             positionList.add(rejectDatum.getPhotos6());
-        }   if (!rejectDatum.getPhotos7().isEmpty()){
+        }
+        if (!rejectDatum.getPhotos7().isEmpty()) {
             itemNameList.add(getResources().getString(R.string.noDuesForm));
             positionList.add(rejectDatum.getPhotos7());
-        }   if (!rejectDatum.getPhotos8().isEmpty()){
+        }
+        if (!rejectDatum.getPhotos8().isEmpty()) {
             itemNameList.add(getResources().getString(R.string.noNetworkNoc));
             positionList.add(rejectDatum.getPhotos8());
-        }   if (!rejectDatum.getPhotos9().isEmpty()){
+        }
+        if (!rejectDatum.getPhotos9().isEmpty()) {
             itemNameList.add(getResources().getString(R.string.delayInstallation));
             positionList.add(rejectDatum.getPhotos9());
-        }   if (!rejectDatum.getPhotos10().isEmpty()){
+        }
+        if (!rejectDatum.getPhotos10().isEmpty()) {
             itemNameList.add(getResources().getString(R.string.insideCOntroller));
             positionList.add(rejectDatum.getPhotos10());
-        }   if (!rejectDatum.getPhotos11().isEmpty()){
+        }
+        if (!rejectDatum.getPhotos11().isEmpty()) {
             itemNameList.add(getResources().getString(R.string.outsideController));
             positionList.add(rejectDatum.getPhotos11());
-        }   if (!rejectDatum.getPhotos12().isEmpty()){
+        }
+        if (!rejectDatum.getPhotos12().isEmpty()) {
             itemNameList.add(getResources().getString(R.string.namePlate));
             positionList.add(rejectDatum.getPhotos12());
         }
@@ -245,16 +255,16 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
             imageModel.setName(itemNameList.get(i));
             imageModel.setImagePath("");
             imageModel.setImageSelected(false);
-            imageModel.setBillNo("");
+            imageModel.setBillNo(enqDocno);
             imageModel.setLatitude("");
             imageModel.setLongitude("");
-            imageModel.setPoistion(Integer.parseInt(positionList.get(i)));
+            imageModel.setPoistion(i + 1);
             imageArrayList.add(imageModel);
         }
 
         DatabaseHelper db = new DatabaseHelper(this);
 
-        imageList = db.getAllInstallationImages();
+        imageList = db.getRejectedInstallationImages();
 
 
         if (itemNameList.size() > 0 && imageList != null && imageList.size() > 0) {
@@ -270,6 +280,7 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
                             imageModel.setBillNo(imageList.get(i).getBillNo());
                             imageModel.setLatitude(imageList.get(i).getLatitude());
                             imageModel.setLongitude(imageList.get(i).getLongitude());
+                            imageModel.setPoistion(imageList.get(i).getPoistion());
                             imageArrayList.set(j, imageModel);
                         }
                     }
@@ -437,32 +448,30 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
         imageModel.setName(imageArrayList.get(selectedIndex).getName());
         imageModel.setImagePath(path);
         imageModel.setImageSelected(true);
-        imageModel.setBillNo(enqDocno);
-
+        imageModel.setBillNo(imageArrayList.get(selectedIndex).getBillNo());
         imageModel.setPoistion(imageArrayList.get(selectedIndex).getPoistion());
-        if(value.equals("0")) {
+        if (value.equals("0")) {
             imageModel.setLatitude(latitude);
             imageModel.setLongitude(longitude);
             imageArrayList.set(selectedIndex, imageModel);
-            addupdateDatabase(path,latitude,longitude);
-        }else {
+            addupdateDatabase(path, latitude, longitude);
+        } else {
             imageModel.setLatitude("");
             imageModel.setLongitude("");
             imageArrayList.set(selectedIndex, imageModel);
-            addupdateDatabase(path,"","");
+            addupdateDatabase(path, "", "");
         }
         customAdapter.notifyDataSetChanged();
     }
+
     private void addupdateDatabase(String path, String latitude, String longitude) {
 
         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 
         if (isUpdate) {
-            db.updateRejectedInstallationImage(imageArrayList.get(selectedIndex).getName(), path,
-                    true, rejectDatum.getVbeln() , latitude, longitude);
+            db.updateRejectedInstallationImage(imageArrayList.get(selectedIndex));
         } else {
-            db.insertRejectedInstallationImage(imageArrayList.get(selectedIndex).getName(), path,
-                    true, rejectDatum.getVbeln(), latitude, longitude);
+            db.insertRejectedInstallationImage(imageArrayList.get(selectedIndex));
         }
 
     }
@@ -494,19 +503,21 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
             JSONArray ja_invc_data = new JSONArray();
             JSONObject jsonObj = new JSONObject();
             try {
-               jsonObj.put("project_no", rejectDatum.getProjectNo());
+                jsonObj.put("project_no", rejectDatum.getProjectNo());
                 jsonObj.put("project_login_no", "01");
                 jsonObj.put("app_version", versionName);
                 jsonObj.put("userid", CustomUtility.getSharedPreferences(RejectInstallationImageActivity.this, "userid"));
                 jsonObj.put("beneficiary", rejectDatum.getBeneficiary());
                 jsonObj.put("vbeln", rejectDatum.getVbeln());
                 jsonObj.put("customer_name", rejectDatum.getCustomerName());
-                jsonObj.put("LatLng1", imageArrayList.get(0).getLatitude()+","+ imageArrayList.get(0).getLongitude());
-              
-             if (imageArrayList.size() > 0) {
-                     for (int i = 0 ; i < imageArrayList.size() ; i++){
-                         jsonObj.put("PHOTO"+imageArrayList.get(i).getPoistion(), CustomUtility.getBase64FromBitmap(RejectInstallationImageActivity.this,imageArrayList.get(i).getImagePath()));
+                jsonObj.put("LatLng1", imageArrayList.get(0).getLatitude() + "," + imageArrayList.get(0).getLongitude());
+
+                if (imageArrayList.size() > 0) {
+                    for (int i = 0; i < imageArrayList.size(); i++) {
+                        if (imageArrayList.get(i).isImageSelected()) {
+                            jsonObj.put("PHOTO" + imageArrayList.get(i).getPoistion(), CustomUtility.getBase64FromBitmap(RejectInstallationImageActivity.this, imageArrayList.get(i).getImagePath()));
                         }
+                    }
                 }
 
                 ja_invc_data.put(jsonObj);
@@ -518,7 +529,7 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
             param1_invc.add(new BasicNameValuePair("Reject", String.valueOf(ja_invc_data)));
             Log.e("DATA", "$$$$" + param1_invc);
             System.out.println("param1_invc_vihu==>>" + param1_invc);
-       try {
+            try {
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
                 StrictMode.setThreadPolicy(policy);
                 obj2 = CustomHttpClient.executeHttpPost1(WebURL.saveRejectImageAPI, param1_invc);
