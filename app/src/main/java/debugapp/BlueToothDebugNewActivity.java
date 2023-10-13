@@ -283,7 +283,6 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         submitBtnCard = findViewById(R.id.submitBtnCard);
         mIntCheckDeviceType = 0;
 
-
         changeButtonVisibilityRLV(true, 0.5f, rlvBT_S1_ID);
         changeButtonVisibilityRLV(true, 0.5f, rlvBT_S2_ID);
 
@@ -1806,8 +1805,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
                                         if (!ssSubIn1[1].equalsIgnoreCase("")) {
                                             Log.e("ssSubIn1=====>",sssM[10]);
-                                         //   DONGAL_ID = ssSubIn1.toString();
-                                            DONGAL_ID = sssM[10];
+                                            DONGAL_ID = sssM[10].replace("DID-","");
                                             AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id:" + DONGAL_ID;
                                             lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + DONGAL_ID));
                                         } else {
@@ -2140,7 +2138,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
                                             if (!ssSubIn1[1].equalsIgnoreCase("")) {
                                                 Log.e("ssSubIn1=====>",sssM[10]);
-                                                DONGAL_ID = sssM[10];
+                                                DONGAL_ID = sssM[10].replace("DID-","");
                                                 AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id:" + DONGAL_ID;
                                                 lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + DONGAL_ID));
                                             } else {
@@ -2288,7 +2286,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                             String[] ssSubIn1 = sssM[10].split("");
 
                                             if (!ssSubIn1[1].equalsIgnoreCase("")) {
-                                                DONGAL_ID = sssM[10];
+                                                DONGAL_ID = sssM[10].replace("DID-","");
                                                 AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id:" + DONGAL_ID;
                                                 lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + DONGAL_ID));
                                             } else {

@@ -7,10 +7,12 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -39,6 +41,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -550,7 +553,11 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
                     if (TextUtils.isEmpty(file)) {
                         Toast.makeText(KusumCSurveyFormActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
                     } else {
-                        UpdateArrayList(path);
+
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver() , mImageCaptureUri);
+                        File file1 = CustomUtility.saveFile(bitmap,surveyListModel.getCustomerName().trim(),"Images");
+
+                        UpdateArrayList(file1.getPath());
 
                     }
                 } catch (Exception e) {

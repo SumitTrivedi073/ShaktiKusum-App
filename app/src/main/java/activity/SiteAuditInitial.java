@@ -61,7 +61,7 @@ public class SiteAuditInitial extends BaseActivity {
     String regisno = "";
     String auddate = "";
     String contactno = "";
-    String beneficiary ="";
+    String beneficiary ="",vendor="";
     AuditSiteBean auditSiteBean;
     EditText foud_rea_txt,stru_rea_txt,drvcb_txt,laer_txt,wrk_txt,siteaudit_date;
 
@@ -149,7 +149,7 @@ public class SiteAuditInitial extends BaseActivity {
                 projectno  = extras.getString("projectno");
                 contactno  = extras.getString("contact");
                 beneficiary = extras.getString("benficiary");
-
+                vendor = extras.getString("vendor");
             }
         } else {
 
@@ -163,6 +163,7 @@ public class SiteAuditInitial extends BaseActivity {
             projectno  = (String) savedInstanceState.getSerializable("projectno");
             contactno  = (String) savedInstanceState.getSerializable("contact");
             beneficiary = (String) savedInstanceState.getSerializable("benficiary");
+            vendor =  (String) savedInstanceState.getSerializable("vendor");
         }
 
 
@@ -332,11 +333,10 @@ public class SiteAuditInitial extends BaseActivity {
                             if(selectedId5 != 0) {
 
                                 if(site_rating != 0.0) {
-
-                                    if (CustomUtility.getSharedPreferences(context, "AUDSYNC" + billno).equalsIgnoreCase("1")) {
+                                    if(imageList.size()>0) {
                                         new SyncAuditData().execute();
                                     } else {
-                                        Toast.makeText(context, "Please Select Photos", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, "Please Select Images", Toast.LENGTH_SHORT).show();
                                     }
 
                                 } else {
@@ -666,6 +666,7 @@ public class SiteAuditInitial extends BaseActivity {
                 jsonObj.put("wrkmn_qlty_remark", param_invc.getWrk_quality_rmk());
                 jsonObj.put("site_rating", param_invc.getSite_art());
                 jsonObj.put("beneficiary", beneficiary);
+                jsonObj.put("vendor",vendor);
 
                 if (imageList.size() > 0) {
 

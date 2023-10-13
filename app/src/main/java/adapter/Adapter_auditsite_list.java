@@ -109,9 +109,9 @@ public class Adapter_auditsite_list extends RecyclerView.Adapter<Adapter_auditsi
                 @Override
                 public void onClick(View view) {
 
-                    Log.e("registr","&&&"+responseList.get(position).getRegisno());
+                    Log.e("getVendor","&&&"+responseList.get(position).getVendor());
 
-                        Intent in = new Intent(context, SiteAuditInitial.class);
+                     Intent in = new Intent(context, SiteAuditInitial.class);
                         Bundle extras = new Bundle();
                         extras.putString("bill_no", responseList.get(position).getBillno());
                         extras.putString("bill_date", responseList.get(position).getBilldate());
@@ -122,6 +122,7 @@ public class Adapter_auditsite_list extends RecyclerView.Adapter<Adapter_auditsi
                         extras.putString("address", responseList.get(position).getAddress());
                         extras.putString("contact", responseList.get(position).getContact_no());
                         extras.putString("benficiary", responseList.get(position).getBeneficiary());
+                         extras.putString("vendor", responseList.get(position).getVendor());
 
                     in.putExtras(extras);
                         context.startActivity(in);

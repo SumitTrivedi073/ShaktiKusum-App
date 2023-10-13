@@ -133,7 +133,7 @@ public class RejectionInstallation extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         Log.e("URL=========>",WebURL.rejectionInstalltionAPI + "?project_no=" + CustomUtility.getSharedPreferences(getApplicationContext(), "projectid") + "&userid=" + CustomUtility.getSharedPreferences(getApplicationContext(), "userid"));
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.rejectionInstalltionAPI + "?project_no=" + CustomUtility.getSharedPreferences(getApplicationContext(), "projectid") + "&userid=" + CustomUtility.getSharedPreferences(getApplicationContext(), "userid")  , null, new Response.Listener<JSONObject>() {
+                WebURL.rejectionInstalltionAPI + "?project_no=" + CustomUtility.getSharedPreferences(getApplicationContext(), "projectid") + "&userid=0000" + CustomUtility.getSharedPreferences(getApplicationContext(), "userid")  , null, new Response.Listener<JSONObject>() {
 
 
             @Override

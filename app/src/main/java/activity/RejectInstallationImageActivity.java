@@ -15,11 +15,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -46,6 +48,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -430,7 +433,11 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
                     if (TextUtils.isEmpty(file)) {
                         Toast.makeText(RejectInstallationImageActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
                     } else {
-                        UpdateArrayList(path, "1", latitude, longitude);
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver() , mImageCaptureUri);
+                        File file1 = CustomUtility.saveFile(bitmap,rejectDatum.getCustomerName().trim(),"Images");
+
+
+                        UpdateArrayList(file1.getPath(), "1", latitude, longitude);
 
                     }
                 } catch (Exception e) {

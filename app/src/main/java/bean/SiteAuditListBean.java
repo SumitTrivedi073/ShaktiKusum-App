@@ -22,7 +22,7 @@ public class SiteAuditListBean {
             regisno,
             projectno,
             address,
-            beneficiary;
+            beneficiary, Vendor;
 
 
     public SiteAuditListBean() {
@@ -47,10 +47,8 @@ public class SiteAuditListBean {
                              String regisno_text,
                              String projectno_text,
                              String address_text,
-                             String beneficiary_text
-
-
-    ) {
+                             String beneficiary_text,
+                             String vendor) {
 
         enqdoc = enqdoc_text;
         pernr = pernr_text;
@@ -69,6 +67,7 @@ public class SiteAuditListBean {
         projectno = projectno_text;
         address = address_text;
         beneficiary = beneficiary_text;
+        Vendor = vendor;
 
 
     }
@@ -208,5 +207,13 @@ public class SiteAuditListBean {
 
     public void setBeneficiary(String beneficiary) {
         this.beneficiary = beneficiary;
+    }
+
+    public String getVendor() {
+        return Vendor;
+    }
+
+    public void setVendor(String vendor) {
+        this.Vendor = vendor;
     }
 }

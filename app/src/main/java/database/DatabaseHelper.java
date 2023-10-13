@@ -179,6 +179,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String KEY_BENEFICIARY_NO = "street";
 
+    public static final String KEY_Vendor = "vendor";
+
     public static final String TABLE_STATE_SEARCH = "tbl_state_detail";
     public static final String KEY_SIMMOB = "sim_mob";
     public static final String KEY_ADD1 = "add1";
@@ -1016,6 +1018,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_DISTRICT + " TEXT,"
             + KEY_CONTACT_NO + " TEXT,"
             + KEY_ADDRESS + " TEXT,"
+            + KEY_Vendor + " TEXT,"
             + KEY_ADD1 + " TEXT,"
             + KEY_ADD2 + " TEXT,"
             + KEY_ADD3 + " TEXT,"
@@ -1826,12 +1829,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_DISTRICT_TEXT, auditListBean.getCitytxt());
             values.put(KEY_CONTACT_NO, auditListBean.getContact_no());
             values.put(KEY_ADDRESS, auditListBean.getAddress());
+            values.put(KEY_Vendor,auditListBean.getVendor());
             values.put(KEY_ADD1, auditListBean.getRegisno());
             values.put(KEY_ADD2, auditListBean.getProjectno());
             values.put(KEY_ADD3, auditListBean.getBeneficiary());
             values.put(KEY_ADD4, auditListBean.getDispdate());
+
+
             long i = db.insert(TABLE_AUDITSITE_LIST, null, values);
-            db.setTransactionSuccessful();
+
+             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
             e.printStackTrace();
         } finally {
@@ -2099,11 +2106,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_DISTRICT_TEXT, siteAuditListBean.getCitytxt());
             values.put(KEY_CONTACT_NO, siteAuditListBean.getContact_no());
             values.put(KEY_ADDRESS, siteAuditListBean.getAddress());
+            values.put(KEY_Vendor,siteAuditListBean.getVendor());
             values.put(KEY_ADD1, siteAuditListBean.getRegisno());
             values.put(KEY_ADD2, siteAuditListBean.getProjectno());
             values.put(KEY_ADD3, siteAuditListBean.getBeneficiary());
             values.put(KEY_ADD4, siteAuditListBean.getDispdate());
-
 
             where = KEY_ENQ_DOC + "='" + enqdoc + "'";
 
@@ -3307,6 +3314,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         installationBean.setProjectno(cursor.getString(cursor.getColumnIndex(KEY_ADD2)));
                         installationBean.setBeneficiary(cursor.getString(cursor.getColumnIndex(KEY_ADD3)));
                         installationBean.setAddress(cursor.getString(cursor.getColumnIndex(KEY_ADDRESS)));
+                        installationBean.setVendor(cursor.getString(cursor.getColumnIndex(KEY_Vendor)));
                         installationBean.setDispdate(cursor.getString(cursor.getColumnIndex(KEY_ADD4)));
 
 
