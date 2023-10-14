@@ -225,7 +225,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
             imageModel.setName(itemNameList.get(i));
             imageModel.setImagePath("");
             imageModel.setImageSelected(false);
-            imageModel.setBillNo(enqDocno);
+            imageModel.setBillNo("");
             imageModel.setLatitude("");
             imageModel.setLongitude("");
             imageModel.setPoistion(i+1);
@@ -432,7 +432,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
         imageModel.setName(imageArrayList.get(selectedIndex).getName());
         imageModel.setImagePath(path);
         imageModel.setImageSelected(true);
-        imageModel.setBillNo(imageArrayList.get(selectedIndex).getBillNo());
+        imageModel.setBillNo(enqDocno);
         imageModel.setPoistion(imageArrayList.get(selectedIndex).getPoistion());
         if(value.equals("0")) {
             imageModel.setLatitude(latitude);
@@ -455,9 +455,11 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 
         if (isUpdate) {
-            db.updateRecordAlternate(imageArrayList.get(selectedIndex));
+            db.updateRecordAlternate(imageArrayList.get(selectedIndex).getName(), path,
+                    true, enqDocno, latitude, longitude,selectedIndex);
         } else {
-            db.insertInstallationImage(imageArrayList.get(selectedIndex));
+            db.insertInstallationImage(imageArrayList.get(selectedIndex).getName(), path,
+                    true, enqDocno, latitude, longitude,selectedIndex);
         }
 
     }

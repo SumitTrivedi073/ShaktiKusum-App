@@ -258,7 +258,7 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
             imageModel.setName(itemNameList.get(i));
             imageModel.setImagePath("");
             imageModel.setImageSelected(false);
-            imageModel.setBillNo(enqDocno);
+            imageModel.setBillNo("");
             imageModel.setLatitude("");
             imageModel.setLongitude("");
             imageModel.setPoistion(i + 1);
@@ -455,7 +455,8 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
         imageModel.setName(imageArrayList.get(selectedIndex).getName());
         imageModel.setImagePath(path);
         imageModel.setImageSelected(true);
-        imageModel.setBillNo(imageArrayList.get(selectedIndex).getBillNo());
+        imageModel.setBillNo(enqDocno);
+
         imageModel.setPoistion(imageArrayList.get(selectedIndex).getPoistion());
         if (value.equals("0")) {
             imageModel.setLatitude(latitude);
@@ -476,9 +477,11 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 
         if (isUpdate) {
-            db.updateRejectedInstallationImage(imageArrayList.get(selectedIndex));
+            db.updateRejectedInstallationImage(imageArrayList.get(selectedIndex).getName(), path,
+                    true, rejectDatum.getVbeln() , latitude, longitude,selectedIndex);
         } else {
-            db.insertRejectedInstallationImage(imageArrayList.get(selectedIndex));
+            db.insertRejectedInstallationImage(imageArrayList.get(selectedIndex).getName(), path,
+                    true, rejectDatum.getVbeln(), latitude, longitude,selectedIndex);
         }
 
     }
