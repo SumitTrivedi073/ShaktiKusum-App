@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -245,7 +246,9 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
                     if (TextUtils.isEmpty(file)) {
                         Toast.makeText(SiteAuditImageActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
                     } else {
-                        UpdateArrayList(path);
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver() , mImageCaptureUri);
+                        File file1 = CustomUtility.saveFile(bitmap,cust_nm.trim(),"Images");
+                        UpdateArrayList(file1.getPath());
 
                     }
                 } catch (Exception e) {

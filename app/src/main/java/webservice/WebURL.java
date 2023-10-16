@@ -27,7 +27,6 @@ public class WebURL {
     public static final String HOST_NAME_SETTING1 = "https://solar10.shaktisolarrms.com/RMSAppTest/";
     public static final String BASEURL = "https://spprdsrvr1.shaktipumps.com:8423";
    public static final String BASE_URL_VK= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/";
-   public static final String BASE_URL_VK1= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/";
   public static final String BASE_URL_OPTION_VK= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
 
     /************* development server **************/
@@ -55,7 +54,6 @@ public class WebURL {
 
     public static final String INSTALLATION_UNLOAD1 = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/unloading_list.htm";
 
-    public static final String REJECT_INSTALLATION = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_reject_installation.htm";
     public static final String SYNC_OFFLINE_DATA_TO_SAP = BASEURL + "/sap/bc/bsp/sap/zmapp_solar/sync_offline_data.htm";
     public static final String STATE_DATA = BASEURL + "/sap/bc/bsp/sap/zmapp_solar/state_data.htm";
 
@@ -84,7 +82,7 @@ public class WebURL {
 
     public static final String jointInspectionAPI = BASEURL +"/sap/bc/bsp/sap/zmapp_solar_pro/joint_inspection.htm";
 
-    public static final String rejectionInstalltionAPI = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/reject_data.htm";
+    public static final String rejectionInstalltionAPI = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/get_reject_installation.htm";
 
     public static final String DocumentSubmissionListAPI = BASEURL +"/sap/bc/bsp/sap/zmapp_solar_pro/document_submission.htm";
 
@@ -94,10 +92,10 @@ public class WebURL {
 
     public static final String saveDeptDocSubmissionAPI = BASEURL +"/sap/bc/bsp/sap/zmapp_solar_pro/document_sub_save.htm";
 
-    public static final String UPDATE_IBASE_VK_PAGE = BASE_URL_VK1 +"new_serial_no_update.htm";
+    public static final String UPDATE_IBASE_VK_PAGE = BASEURL +"/sap/bc/bsp/sap/zmapp_solar_pro/new_serial_no_update.htm";
     public static final String SIM_STATUS_VK_PAGE = BASE_URL_VK +"sim_actiavtion_status.htm";
 
     public static final String saveDebugData = BASE_URL_VK +"save.htm";
 
-    public static final String DemoRoadURL = "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/demo_road_show.htm";
+    public static final String DemoRoadURL = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/demo_road_show.htm";
  }

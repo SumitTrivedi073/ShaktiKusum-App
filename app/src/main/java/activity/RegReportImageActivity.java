@@ -14,9 +14,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -41,6 +43,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.shaktipumplimited.shaktikusum.R;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -381,7 +384,9 @@ public class RegReportImageActivity extends BaseActivity implements EasyPermissi
                     if (TextUtils.isEmpty(file)) {
                         Toast.makeText(RegReportImageActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
                     } else {
-                        UpdateArrayList(path);
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver() , mImageCaptureUri);
+                        File file1 = CustomUtility.saveFile(bitmap,customerName.trim(),"Images");
+                        UpdateArrayList(file1.getPath());
 
                     }
                 } catch (Exception e) {

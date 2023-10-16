@@ -179,6 +179,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String KEY_BENEFICIARY_NO = "street";
 
+    public static final String KEY_Vendor = "vendor";
+
     public static final String TABLE_STATE_SEARCH = "tbl_state_detail";
     public static final String KEY_SIMMOB = "sim_mob";
     public static final String KEY_ADD1 = "add1";
@@ -251,7 +253,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String KEY_INSTALLATION_ID = "installationId",KEY_INSTALLATION_NAME = "installationImageName",
             KEY_INSTALLATION_PATH = "installtionPath",KEY_INSTALLATION_IMAGE_SELECTED = "installtionImageSelected",
-            KEY_INSTALLATION_BILL_NO = "InstalltionBillNo",KEY_INSTALLATION_LATITUDE = "InstalltionLatitude",KEY_INSTALLATION_LONGITUDE = "InstalltionLongitude";
+            KEY_INSTALLATION_BILL_NO = "InstalltionBillNo",KEY_INSTALLATION_LATITUDE = "InstalltionLatitude",
+            KEY_INSTALLATION_LONGITUDE = "InstalltionLongitude", KEY_INSTALLATION_POSITION = "InstalltionPosition";
 
     public static final String KEY_UNLOADING_ID = "unloadingId",KEY_UNLOADING_NAME = "unloadingImageName",KEY_UNLOADING_PATH = "unloadingPath",KEY_UNLOADING_IMAGE_SELECTED = "unloadingImageSelected",KEY_UNLOADING_BILL_NO = "unloadingBillNo";
 
@@ -760,14 +763,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_INSTALLATION_IMAGE_SELECTED + " BOOLEAN,"
             + KEY_INSTALLATION_BILL_NO + " TEXT,"
             + KEY_INSTALLATION_LATITUDE + " TEXT,"
-            + KEY_INSTALLATION_LONGITUDE + " TEXT)";
+            + KEY_INSTALLATION_LONGITUDE + " TEXT,"
+            + KEY_INSTALLATION_POSITION + " TEXT)";
 
     private static final String CREATE_TABLE_REJECTED_INSTALLATION_IMAGES = "CREATE TABLE "
             + TABLE_REJECTED_INSTALLATION_IMAGE_DATA+ "("  + KEY_INSTALLATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
             + KEY_INSTALLATION_NAME + " TEXT,"
             + KEY_INSTALLATION_PATH + " TEXT,"
             + KEY_INSTALLATION_IMAGE_SELECTED + " BOOLEAN,"
-            + KEY_INSTALLATION_BILL_NO + " TEXT)";
+            + KEY_INSTALLATION_BILL_NO + " TEXT,"
+            + KEY_INSTALLATION_LATITUDE + " TEXT,"
+            + KEY_INSTALLATION_LONGITUDE + " TEXT,"
+            + KEY_INSTALLATION_POSITION + " TEXT)";
+
 
     private static final String CREATE_TABLE_SITE_AUDIT_IMAGES = "CREATE TABLE "
             + TABLE_SITE_AUDIT + "("  + KEY_SITE_AUDIT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_SITE_AUDIT_NAME + " TEXT," + KEY_SITE_AUDIT_PATH + " TEXT," + KEY_SITE_AUDIT_IMAGE_SELECTED + " BOOLEAN," + KEY_SITE_AUDIT_BILL_NO + " TEXT)";
@@ -1014,6 +1022,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_DISTRICT + " TEXT,"
             + KEY_CONTACT_NO + " TEXT,"
             + KEY_ADDRESS + " TEXT,"
+            + KEY_Vendor + " TEXT,"
             + KEY_ADD1 + " TEXT,"
             + KEY_ADD2 + " TEXT,"
             + KEY_ADD3 + " TEXT,"
@@ -1824,12 +1833,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_DISTRICT_TEXT, auditListBean.getCitytxt());
             values.put(KEY_CONTACT_NO, auditListBean.getContact_no());
             values.put(KEY_ADDRESS, auditListBean.getAddress());
+            values.put(KEY_Vendor,auditListBean.getVendor());
             values.put(KEY_ADD1, auditListBean.getRegisno());
             values.put(KEY_ADD2, auditListBean.getProjectno());
             values.put(KEY_ADD3, auditListBean.getBeneficiary());
             values.put(KEY_ADD4, auditListBean.getDispdate());
+
+
             long i = db.insert(TABLE_AUDITSITE_LIST, null, values);
-            db.setTransactionSuccessful();
+
+             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
             e.printStackTrace();
         } finally {
@@ -2097,11 +2110,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_DISTRICT_TEXT, siteAuditListBean.getCitytxt());
             values.put(KEY_CONTACT_NO, siteAuditListBean.getContact_no());
             values.put(KEY_ADDRESS, siteAuditListBean.getAddress());
+            values.put(KEY_Vendor,siteAuditListBean.getVendor());
             values.put(KEY_ADD1, siteAuditListBean.getRegisno());
             values.put(KEY_ADD2, siteAuditListBean.getProjectno());
             values.put(KEY_ADD3, siteAuditListBean.getBeneficiary());
             values.put(KEY_ADD4, siteAuditListBean.getDispdate());
-
 
             where = KEY_ENQ_DOC + "='" + enqdoc + "'";
 
@@ -3305,6 +3318,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         installationBean.setProjectno(cursor.getString(cursor.getColumnIndex(KEY_ADD2)));
                         installationBean.setBeneficiary(cursor.getString(cursor.getColumnIndex(KEY_ADD3)));
                         installationBean.setAddress(cursor.getString(cursor.getColumnIndex(KEY_ADDRESS)));
+                        installationBean.setVendor(cursor.getString(cursor.getColumnIndex(KEY_Vendor)));
                         installationBean.setDispdate(cursor.getString(cursor.getColumnIndex(KEY_ADD4)));
 
 
@@ -4150,7 +4164,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return icount > 0;
     }
 
-    public void insertRejectedInstallationImage(String name, String path, boolean isSelected, String billNo, String latitude, String longitude) {
+    public void insertRejectedInstallationImage(String name, String path, boolean isSelected, String billNo, String latitude, String longitude, int position) {
         SQLiteDatabase  database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_INSTALLATION_NAME, name);
@@ -4159,11 +4173,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(KEY_INSTALLATION_BILL_NO, billNo);
         contentValues.put(KEY_INSTALLATION_LATITUDE, latitude);
         contentValues.put(KEY_INSTALLATION_LONGITUDE, longitude);
+        contentValues.put(KEY_INSTALLATION_POSITION, position);
         database.insert(TABLE_REJECTED_INSTALLATION_IMAGE_DATA, null, contentValues);
         database.close();
     }
 
-    public void updateRejectedInstallationImage(String name, String path, boolean isSelected, String billNo, String latitude, String longitude) {
+    public void updateRejectedInstallationImage(String name, String path, boolean isSelected, String billNo, String latitude, String longitude, int position) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_INSTALLATION_NAME, name);
@@ -4172,13 +4187,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_INSTALLATION_BILL_NO, billNo);
         values.put(KEY_INSTALLATION_LATITUDE, latitude);
         values.put(KEY_INSTALLATION_LONGITUDE, longitude);
+        values.put(KEY_INSTALLATION_POSITION, position);
         // update Row
         db.update(TABLE_REJECTED_INSTALLATION_IMAGE_DATA,values,"installationImageName = '"+name+"'",null);
         db.close();
     }
 
 
-    public void insertInstallationImage(String name, String path, boolean isSelected, String billNo, String latitude, String longitude) {
+    public void insertInstallationImage(String name, String path, boolean isSelected, String billNo, String latitude, String longitude, int position) {
       SQLiteDatabase  database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_INSTALLATION_NAME, name);
@@ -4187,11 +4203,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(KEY_INSTALLATION_BILL_NO, billNo);
         contentValues.put(KEY_INSTALLATION_LATITUDE, latitude);
         contentValues.put(KEY_INSTALLATION_LONGITUDE, longitude);
+        contentValues.put(KEY_INSTALLATION_POSITION, position);
         database.insert(TABLE_INSTALLATION_IMAGE_DATA, null, contentValues);
         database.close();
     }
 
-    public void updateRecordAlternate(String name, String path, boolean isSelected, String billNo, String latitude, String longitude) {
+    public void updateRecordAlternate(String name, String path, boolean isSelected, String billNo, String latitude, String longitude, int position) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_INSTALLATION_NAME, name);
@@ -4200,6 +4217,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_INSTALLATION_BILL_NO, billNo);
         values.put(KEY_INSTALLATION_LATITUDE, latitude);
         values.put(KEY_INSTALLATION_LONGITUDE, longitude);
+        values.put(KEY_INSTALLATION_POSITION, position);
         // update Row
         db.update(TABLE_INSTALLATION_IMAGE_DATA,values,"installationImageName = '"+name+"'",null);
         db.close();
@@ -4353,6 +4371,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     imageModel.setBillNo(mcursor.getString(4));
                     imageModel.setLatitude(mcursor.getString(5));
                     imageModel.setLongitude(mcursor.getString(6));
+                    imageModel.setPoistion(mcursor.getInt(7));
+                    installationImages.add(imageModel);
+                }
+            }
+            mcursor.close();
+            database.close();
+        }
+        return installationImages;
+    }
+
+    public ArrayList<ImageModel> getRejectedInstallationImages() {
+        ArrayList<ImageModel> installationImages = new ArrayList<ImageModel>();
+        SQLiteDatabase  database = this.getWritableDatabase();
+        if(CustomUtility.doesTableExist(database,TABLE_REJECTED_INSTALLATION_IMAGE_DATA)) {
+            Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_REJECTED_INSTALLATION_IMAGE_DATA, null);
+
+            installationImages.clear();
+            ImageModel imageModel;
+
+            if (mcursor.getCount() > 0) {
+                for (int i = 0; i < mcursor.getCount(); i++) {
+                    mcursor.moveToNext();
+
+                    imageModel = new ImageModel();
+                    imageModel.setID(mcursor.getString(0));
+                    imageModel.setName(mcursor.getString(1));
+                    imageModel.setImagePath(mcursor.getString(2));
+                    imageModel.setImageSelected(Boolean.parseBoolean(mcursor.getString(3)));
+                    imageModel.setBillNo(mcursor.getString(4));
+                    imageModel.setLatitude(mcursor.getString(5));
+                    imageModel.setLongitude(mcursor.getString(6));
+                    imageModel.setPoistion(mcursor.getInt(7));
                     installationImages.add(imageModel);
                 }
             }

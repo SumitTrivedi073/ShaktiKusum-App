@@ -412,6 +412,8 @@
 
     <string name="dataExtractFileToServer">Sending Data Extract File To Server......</string>
     <string name="ImeiFileToServer">Sending IMEI File To Server...</string>
+    <string name="not_ok">NOT OK</string>
+    <string name="ok">OK</string>
 
 
     <string-array name="nav_drawer_labels">

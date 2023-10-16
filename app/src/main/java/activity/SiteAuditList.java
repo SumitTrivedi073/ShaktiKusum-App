@@ -67,7 +67,7 @@ public class SiteAuditList extends BaseActivity {
     public String village = "";
     public String tehsil = "";
     public String rec_no = "";
-    public String beneficiary = "";
+    public String beneficiary = "",vendor="";
     Context context;
     DatabaseHelper db;
     dialog5 yourDialog;
@@ -302,7 +302,7 @@ public class SiteAuditList extends BaseActivity {
 
                     regisno = jo.getString("regisno");
                     projectno = jo.getString("project_no");
-
+                    vendor = jo.getString("vendor");
                     installationBean = new SiteAuditListBean(bill_no,
                             CustomUtility.getSharedPreferences(context, "userid"),
                             name,
@@ -319,7 +319,8 @@ public class SiteAuditList extends BaseActivity {
                             regisno,
                             projectno,
                             address,
-                            beneficiary);
+                            beneficiary,
+                            vendor);
 
 
                     if (db.isRecordExist(DatabaseHelper.TABLE_AUDITSITE_LIST, DatabaseHelper.KEY_ENQ_DOC, bill_no)) {
