@@ -6,10 +6,12 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -34,6 +36,8 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -479,7 +483,10 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
                     if (TextUtils.isEmpty(file)) {
                         Toast.makeText(Add_Survey_Activity.this, "File not valid!", Toast.LENGTH_LONG).show();
                     } else {
-                        UpdateArrayList(path);
+
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver() , mImageCaptureUri);
+                        File file1 = CustomUtility.saveFile(bitmap,surveyListResponse.getCustomerName(),"Images");
+                        UpdateArrayList(file1.getPath());
 
                     }
                 } catch (Exception e) {

@@ -360,7 +360,7 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
             }
 
             public void onFinish() {
-                verificationCode = "";
+
                 countdownTxt.setVisibility(View.GONE);
                 resendLinear.setVisibility(View.VISIBLE);
             }
@@ -368,5 +368,5 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
 
     }
 
-//719913
+
 }

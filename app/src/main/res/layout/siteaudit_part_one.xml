@@ -93,7 +93,7 @@
                         android:textColor="@color/colorAccent"
                         android:layout_gravity="center|right"
                         android:checked="false"
-                        android:text="Not Ok"
+                        android:text="@string/not_ok"
                         android:textSize="13sp" />
                 </RadioGroup
                     >
@@ -155,7 +155,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
-                        android:text="OK"
+                        android:text="@string/ok"
                         android:buttonTint="@color/colorAccent"
                         android:textColor="@color/colorAccent"
                         android:layout_gravity="center|left"
@@ -171,7 +171,7 @@
                         android:textColor="@color/colorAccent"
                         android:layout_gravity="center|right"
                         android:checked="false"
-                        android:text="Not Ok"
+                        android:text="@string/not_ok"
                         android:textSize="13sp" />
                 </RadioGroup
                     >
@@ -233,7 +233,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
-                        android:text="OK"
+                        android:text="@string/ok"
                         android:buttonTint="@color/colorAccent"
                         android:textColor="@color/colorAccent"
                         android:layout_gravity="center|left"
@@ -249,7 +249,7 @@
                         android:textColor="@color/colorAccent"
                         android:layout_gravity="center|right"
                         android:checked="false"
-                        android:text="Not Ok"
+                        android:text="@string/not_ok"
                         android:textSize="13sp" />
                 </RadioGroup
                     >
@@ -311,7 +311,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
-                        android:text="OK"
+                        android:text="@string/ok"
                         android:buttonTint="@color/colorAccent"
                         android:textColor="@color/colorAccent"
                         android:layout_gravity="center|left"
@@ -327,7 +327,7 @@
                         android:textColor="@color/colorAccent"
                         android:layout_gravity="center|right"
                         android:checked="false"
-                        android:text="Not Ok"
+                        android:text="@string/not_ok"
                         android:textSize="13sp" />
                 </RadioGroup
                     >
@@ -389,7 +389,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.5"
-                        android:text="OK"
+                        android:text="@string/ok"
                         android:buttonTint="@color/colorAccent"
                         android:textColor="@color/colorAccent"
                         android:layout_gravity="center|left"
@@ -405,7 +405,7 @@
                         android:textColor="@color/colorAccent"
                         android:layout_gravity="center|right"
                         android:checked="false"
-                        android:text="Not Ok"
+                        android:text="@string/not_ok"
                         android:textSize="13sp" />
                 </RadioGroup
                     >

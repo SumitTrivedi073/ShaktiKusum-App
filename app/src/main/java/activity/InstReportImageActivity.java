@@ -228,6 +228,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
             imageModel.setBillNo("");
             imageModel.setLatitude("");
             imageModel.setLongitude("");
+            imageModel.setPoistion(i+1);
             imageArrayList.add(imageModel);
         }
 
@@ -249,6 +250,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
                             imageModel.setBillNo(imageList.get(i).getBillNo());
                             imageModel.setLatitude(imageList.get(i).getLatitude());
                             imageModel.setLongitude(imageList.get(i).getLongitude());
+                            imageModel.setPoistion(imageList.get(i).getPoistion());
                             imageArrayList.set(j, imageModel);
                         }
                     }
@@ -431,10 +433,12 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
         imageModel.setImagePath(path);
         imageModel.setImageSelected(true);
         imageModel.setBillNo(enqDocno);
+        imageModel.setPoistion(imageArrayList.get(selectedIndex).getPoistion());
         if(value.equals("0")) {
             imageModel.setLatitude(latitude);
             imageModel.setLongitude(longitude);
             imageArrayList.set(selectedIndex, imageModel);
+
             addupdateDatabase(path,latitude,longitude);
         }else {
             imageModel.setLatitude("");
@@ -452,10 +456,10 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
 
         if (isUpdate) {
             db.updateRecordAlternate(imageArrayList.get(selectedIndex).getName(), path,
-                    true, enqDocno, latitude, longitude);
+                    true, enqDocno, latitude, longitude,selectedIndex);
         } else {
             db.insertInstallationImage(imageArrayList.get(selectedIndex).getName(), path,
-                    true, enqDocno, latitude, longitude);
+                    true, enqDocno, latitude, longitude,selectedIndex);
         }
 
     }
@@ -619,8 +623,6 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
             }
 
         }
-
-
         return isBackPressed;
 
     }

@@ -10,10 +10,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -42,6 +44,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -403,7 +406,10 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
                     if (TextUtils.isEmpty(file)) {
                         Toast.makeText(DemoRoadShowActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
                     } else {
-                        UpdateArrayList(path);
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver() , mImageCaptureUri);
+                        File file1 = CustomUtility.saveFile(bitmap,"DemoRoadShow","Images");
+
+                        UpdateArrayList(file1.getPath());
 
                     }
                 } catch (Exception e) {
@@ -663,21 +669,21 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
                     jsonObj.put("sales_emp", "");
                 }
                 if (demo.isChecked()) {
-                    jsonObj.put( "count", "X");
+                    jsonObj.put( "zcount", "0");
                 } else {
-                    jsonObj.put("count", "");
+                    jsonObj.put("zcount", "");
                 }
                 if (road.isChecked()) {
-                    jsonObj.put("count", "X");
+                    jsonObj.put("zcount", "1");
                 } else {
-                    jsonObj.put("count", "");
+                    jsonObj.put("zcount", "");
                 }
                 if (both.isChecked()) {
-                    jsonObj.put("count", "X");
+                    jsonObj.put("zcount", "2");
                 } else {
-                    jsonObj.put("count", "");
+                    jsonObj.put("zcount", "");
                 }
-                jsonObj.put("father_name",  farmerNameExt.getText().toString().trim());
+                jsonObj.put("farmer_name",  farmerNameExt.getText().toString().trim());
                 jsonObj.put("SALES_PER_CODE",  salesNameExt.getText().toString().trim());
                 jsonObj.put("contact", contactNumberExt.getText().toString().trim());
                 jsonObj.put("site_add", addressExt.getText().toString().trim());
