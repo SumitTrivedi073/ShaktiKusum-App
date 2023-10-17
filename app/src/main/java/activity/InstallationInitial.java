@@ -1655,71 +1655,6 @@ public class InstallationInitial extends BaseActivity {
                         Log.e("jsonObj=======>",jsonObj.toString());
                     }
 
-
-                  /*  if (imageList.get(0).isImageSelected()) {
-                        jsonObj.put("PHOTO1", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(0).getImagePath()));
-                        jsonObj.put("LatLng1", imageList.get(0).getLatitude() + "," + imageList.get(0).getLongitude());
-                        //jsonObj.put("photo_name1",imageList.get(0).getName());
-                    }
-                    if (1 < imageList.size() && imageList.get(1).isImageSelected()) {
-                        jsonObj.put("PHOTO2", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(1).getImagePath()));
-                        jsonObj.put("LatLng2", imageList.get(1).getLatitude() + "," + imageList.get(1).getLongitude());
-                        //  jsonObj.put("photo_name2",imageList.get(1).getName());
-                    }
-                    if (2 < imageList.size() && imageList.get(2).isImageSelected()) {
-                        jsonObj.put("PHOTO3", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(2).getImagePath()));
-                        jsonObj.put("LatLng3", imageList.get(2).getLatitude() + "," + imageList.get(2).getLongitude());
-                        //    jsonObj.put("photo_name3",imageList.get(2).getName());
-                    }
-                    if (3 < imageList.size() && imageList.get(3).isImageSelected()) {
-                        jsonObj.put("PHOTO4", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(3).getImagePath()));
-                        jsonObj.put("LatLng4", imageList.get(3).getLatitude() + "," + imageList.get(3).getLongitude());
-                        //   jsonObj.put("photo_name4",imageList.get(3).getName());
-                    }
-                    if (4 < imageList.size() && imageList.get(4).isImageSelected()) {
-                        jsonObj.put("PHOTO5", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(4).getImagePath()));
-                        jsonObj.put("LatLng5", imageList.get(4).getLatitude() + "," + imageList.get(4).getLongitude());
-                        //   jsonObj.put("photo_name5",imageList.get(4).getName());
-                    }
-                    if (5 < imageList.size() && imageList.get(5).isImageSelected()) {
-                        jsonObj.put("PHOTO6", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(5).getImagePath()));
-                        jsonObj.put("LatLng6", imageList.get(5).getLatitude() + "," + imageList.get(5).getLongitude());
-                        //   jsonObj.put("photo_name6",imageList.get(5).getName());
-                    }
-                    if (6 < imageList.size() && imageList.get(6).isImageSelected()) {
-                        jsonObj.put("PHOTO7", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(6).getImagePath()));
-                        jsonObj.put("LatLng7", imageList.get(6).getLatitude() + "," + imageList.get(6).getLongitude());
-                        //  jsonObj.put("photo_name7",imageList.get(6).getName());
-                    }
-                    if (7 < imageList.size() && imageList.get(7).isImageSelected()) {
-                        jsonObj.put("PHOTO8", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(7).getImagePath()));
-                        jsonObj.put("LatLng8", imageList.get(7).getLatitude() + "," + imageList.get(7).getLongitude());
-                        //   jsonObj.put("photo_name8",imageList.get(7).getName());
-                    }
-
-                    if (8 < imageList.size() && imageList.get(8).isImageSelected()) {
-                        jsonObj.put("PHOTO9", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(8).getImagePath()));
-                        jsonObj.put("LatLng9", imageList.get(8).getLatitude() + "," + imageList.get(8).getLongitude());
-                        //  jsonObj.put("photo_name9",imageList.get(8).getName());
-                    }
-                    if (9 < imageList.size() && imageList.get(9).isImageSelected()) {
-                        jsonObj.put("PHOTO10", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(9).getImagePath()));
-                        jsonObj.put("LatLng10", imageList.get(9).getLatitude() + "," + imageList.get(9).getLongitude());
-                        //  jsonObj.put("photo_name10",imageList.get(9).getName());
-                    }
-                    if (10 < imageList.size() && imageList.get(10).isImageSelected()) {
-                        jsonObj.put("PHOTO11", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(10).getImagePath()));
-                        jsonObj.put("LatLng11", imageList.get(10).getLatitude() + "," + imageList.get(10).getLongitude());
-                        //  jsonObj.put("photo_name11",imageList.get(10).getName());
-                    }
-                    if (11 < imageList.size() && imageList.get(11).isImageSelected()) {
-                        jsonObj.put("PHOTO12", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(11).getImagePath()));
-                        jsonObj.put("LatLng12", imageList.get(11).getLatitude() + "," + imageList.get(11).getLongitude());
-                        //      jsonObj.put("photo_name12",imageList.get(11).getName());
-                    }*/
-
-
-
                 ja_invc_data.put(jsonObj);
 
             } catch (Exception e) {
@@ -1842,11 +1777,7 @@ public class InstallationInitial extends BaseActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.SendOTP + "&mobiles=" + ContactNo +
-                        "&message=आप अपने खेत में शक्ति पम्प्स (इंडिया) लिमिटेड द्वारा स्थापित " + Hp + " एचपी रेटिंग सोलर पंप सेट के लिए लाभार्थी आईडी " + beneficiaryNo + " के संदर्भ में यह संदेश प्राप्त कर रहे हैं।" +
-                        " यह संदेश केवल आपकी प्रतिक्रिया के उद्देश्य से है शक्ति पंप्स इंस्टालर को सत्यपान कोड साझा करके आप निम्नलिखित की पुष्टि कर रहे हैं 1) आप स्थापना की गुणवत्ता से संतुष्ट हैं" +
-                        " 2) आप सोलर पंप सेट के प्रदर्शन से संतुष्ट हैं 3) इंस्टॉलर ने किसी भी प्रकार की सामग्री या स्थापना कार्य के लिए कोई राशि नहीं ली हैं यदि उपरोक्त सभी तीन कथन सही हैं, " +
-                        "तो कृपया अपने सोलर पम्प सेट की 5 वर्ष की सेवा को सक्रिय करने के लिए इंस्टॉलर के साथ सत्यपान कोड OTP "+generatedVerificationCode+" साझा करें।शक्ति पम्प्स&sender=SHAKTl&route=2&country=91&DLT_TE_ID=1707169658140762656&unicode=1",
-
+                        "&message="+beneficiaryNo+" के तहत "+Hp+"HP पंप सेट का इंस्टॉलेशन किया गया है यदि आप संतुष्ट हैं तो इंस्टॉलेशन टीम को OTP-"+generatedVerificationCode+" शेयर करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169744934483345",
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
