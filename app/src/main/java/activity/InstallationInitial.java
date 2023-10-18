@@ -1422,7 +1422,7 @@ public class InstallationInitial extends BaseActivity {
                 imageModel.setBillNo(installationImages.get(i).getBillNo());
                 imageModel.setLatitude(installationImages.get(i).getLatitude());
                 imageModel.setLongitude(installationImages.get(i).getLongitude());
-                imageModel.setPoistion(installationImages.get(i).getPoistion());
+                imageModel.setPoistion(i+1);
                 imageList.add(imageModel);
             }
 
@@ -1510,7 +1510,7 @@ public class InstallationInitial extends BaseActivity {
                             CustomUtility.hideProgressDialog(InstallationInitial.this);
                             Constant.BT_DEVICE_NAME = "";
                             Constant.BT_DEVICE_MAC_ADDRESS = "";
-                            new SyncInstallationData().execute();
+                            SyncInstallation();
 
                         } else {
                             CustomUtility.hideProgressDialog(InstallationInitial.this);
@@ -1542,7 +1542,7 @@ public class InstallationInitial extends BaseActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
-    public void SyncInstalletion() {
+    public void SyncInstallation() {
         CustomUtility.showProgressDialogue(InstallationInitial.this);
 
         InstallationBean param_invc = new InstallationBean();
