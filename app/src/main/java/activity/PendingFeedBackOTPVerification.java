@@ -69,7 +69,7 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getResources().getString(R.string.otpVerification));
+
 
         contactNumber = getIntent().getStringExtra(Constant.PendingFeedbackContact);
         vblen = getIntent().getStringExtra(Constant.PendingFeedbackVblen);
@@ -78,6 +78,12 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
         verificationCode = getIntent().getStringExtra(Constant.VerificationCode);
         isUnloading = getIntent().getStringExtra(Constant.isUnloading);
         regisno = getIntent().getStringExtra(Constant.regisno);
+
+        if(isUnloading.equals("true")) {
+            getSupportActionBar().setTitle(getResources().getString(R.string.pendingUnloadingVerification));
+        }else {
+            getSupportActionBar().setTitle(getResources().getString(R.string.otpVerification));
+        }
         countDownTimer();
     }
 
@@ -225,10 +231,7 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.SendOTP + "&mobiles=" + contactNumber +
-                        "&message=आप अपने खेत में शक्ति पम्प्स (इंडिया) लिमिटेड द्वारा स्थापित " + Hp + " एचपी रेटिंग सोलर पंप सेट के लिए लाभार्थी आईडी " + beneficiary + " के संदर्भ में यह संदेश प्राप्त कर रहे हैं।" +
-                        " यह संदेश केवल आपकी प्रतिक्रिया के उद्देश्य से है शक्ति पंप्स इंस्टालर को सत्यपान कोड साझा करके आप निम्नलिखित की पुष्टि कर रहे हैं 1) आप स्थापना की गुणवत्ता से संतुष्ट हैं" +
-                        " 2) आप सोलर पंप सेट के प्रदर्शन से संतुष्ट हैं 3) इंस्टॉलर ने किसी भी प्रकार की सामग्री या स्थापना कार्य के लिए कोई राशि नहीं ली हैं यदि उपरोक्त सभी तीन कथन सही हैं, " +
-                        "तो कृपया अपने सोलर पम्प सेट की 5 वर्ष की सेवा को सक्रिय करने के लिए इंस्टॉलर के साथ सत्यपान कोड OTP "+generatedVerificationCode+" साझा करें।शक्ति पम्प्स&sender=SHAKTl&route=2&country=91&DLT_TE_ID=1707169658140762656&unicode=1",
+                        "&message="+beneficiary+" के तहत "+Hp+"HP पंप सेट का इंस्टॉलेशन किया गया है यदि आप संतुष्ट हैं तो इंस्टॉलेशन टीम को OTP-"+generatedVerificationCode+" शेयर करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169744934483345",
 
                 null, new Response.Listener<JSONObject>() {
             @Override
@@ -269,7 +272,7 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.SendOTP + "&mobiles=" + contactNumber +
-                        "&message=प्रिय ग्राहक, आपको (shakti energy solution private limited pithampur) द्वारा "+  Hp  +"HP का पूरा सिस्टम आपके कस्टमर -आय डी "+ beneficiary +" के तहत भेज दिया गया है। यदि भेजा गया सिस्टम सफलतापूर्वक आपको पूरा प्राप्त हुआ है तो (shakti energy solution private limited pithampur) द्वारा अधिकृत इंस्टॉलेशन टीम को OTP-"+ generatedVerificationCode +" शेयर कर पुष्टि करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169347351235207",
+                        "&message=" +beneficiary +" के तहत "+Hp+" HP पंप सेट का मटेरियल प्राप्त हुआ है तो इंस्टॉलेशन टीम को OTP-" +generatedVerificationCode +" शेयर करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169744864682632",
 
                 null, new Response.Listener<JSONObject>() {
             @Override
