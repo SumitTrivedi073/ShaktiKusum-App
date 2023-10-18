@@ -1,5 +1,6 @@
 package activity;
 
+import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +25,7 @@ public abstract class  BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         registerReceiver(SwVersionConfigBroadcastReceiver, new IntentFilter(Constant.SwVersionConfig));
     }
 
@@ -42,7 +44,11 @@ public abstract class  BaseActivity extends AppCompatActivity {
             if (!RetrieveFirestoreData.isServiceRunning) {
                 Intent intent = new Intent(BaseActivity.this, RetrieveFirestoreData.class);
 
-                startService(intent);
+                if(Build.VERSION.SDK_INT>Build.VERSION_CODES.O){
+                    getApplicationContext().startForegroundService(intent);
+                }else {
+                    getApplicationContext().startService(intent);
+                }
             }
         }
 

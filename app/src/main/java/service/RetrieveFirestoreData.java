@@ -1,19 +1,28 @@
 package service;
 
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.window.SplashScreen;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.shaktipumplimited.shaktikusum.R;
 
 import bean.AppConfig;
 import debugapp.GlobalValue.Constant;
@@ -21,6 +30,8 @@ import receiver.FirestoreBroadcastReceiver;
 import utility.CustomUtility;
 
 public class RetrieveFirestoreData extends Service {
+
+    public static final String NOTIFICATION_CHANNEL_ID = "1001";
     private final String TAG = "RetrieveFirestoreData";
     public static boolean isServiceRunning;
     public static DocumentReference appConfigRef;
@@ -30,12 +41,34 @@ public class RetrieveFirestoreData extends Service {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate called");
+        prepareForegroundNotification();
         if(CustomUtility.isInternetOn(getApplicationContext())) {
             getFirestoreDatabaseReferance();
         }
         isServiceRunning = true;
     }
+    private void prepareForegroundNotification() {
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel serviceChannel =
+                    new NotificationChannel(NOTIFICATION_CHANNEL_ID, "Location Service Channel",
+                            NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(serviceChannel);
+        }
+
+        final int flag = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;
+        Intent notificationIntent = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            notificationIntent = new Intent(this, SplashScreen.class);
+        }
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1234, notificationIntent, flag);
+
+        Notification notification =
+                new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).setContentTitle(getResources().getString(R.string.app_name)).setContentText(
+                        "App Running Background").setSmallIcon(R.mipmap.ic_notification).setContentIntent(pendingIntent).build();
+        startForeground(111, notification);
+    }
     @Override
     public IBinder onBind(Intent intent) {
         return null;
