@@ -49,25 +49,20 @@ public class RetrieveFirestoreData extends Service {
     }
     private void prepareForegroundNotification() {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel serviceChannel =
-                    new NotificationChannel(NOTIFICATION_CHANNEL_ID, "Location Service Channel",
-                            NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(serviceChannel);
-        }
+        NotificationChannel serviceChannel =
+                new NotificationChannel(NOTIFICATION_CHANNEL_ID, "Location Service Channel",
+                        NotificationManager.IMPORTANCE_DEFAULT);
+        NotificationManager manager = getSystemService(NotificationManager.class);
+        manager.createNotificationChannel(serviceChannel);
 
-        final int flag = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;
-        Intent notificationIntent = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-            notificationIntent = new Intent(this, SplashScreen.class);
-        }
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1234, notificationIntent, flag);
 
         Notification notification =
                 new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).setContentTitle(getResources().getString(R.string.app_name)).setContentText(
-                        "App Running Background").setSmallIcon(R.mipmap.ic_notification).setContentIntent(pendingIntent).build();
+                        "App Running Background").setSmallIcon(R.mipmap.ic_notification).build();
         startForeground(111, notification);
+
+
+
     }
     @Override
     public IBinder onBind(Intent intent) {
