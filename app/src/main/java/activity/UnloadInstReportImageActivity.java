@@ -259,7 +259,6 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     private void listner() {
         btnSave.setOnClickListener(view -> {
 
-
             if (imageArrayList != null && imageArrayList.size() > 0) {
                 if (!imageArrayList.get(0).isImageSelected()) {
                     CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectLR_photo));
@@ -842,8 +841,8 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.SendOTP + "&mobiles=" + ContactNo +
-                        "&message=" +beneficiaryNo +" के तहत "+Hp +" पंप सेट का मटेरियल प्राप्त हुआ है तो इंस्टॉलेशन टीम को OTP-" +generatedVerificationCode +" शेयर करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169744864682632",
-                
+                        "&message=" +beneficiaryNo +" के तहत " +Hp +" HP पंप सेट का मटेरियल प्राप्त हुआ है तो इंस्टॉलेशन टीम को OTP-" +generatedVerificationCode +" शेयर करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169744864682632",
+
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {

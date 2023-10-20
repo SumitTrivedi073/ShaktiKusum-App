@@ -102,10 +102,17 @@ public class Adapter_item_list extends RecyclerView.Adapter<Adapter_item_list.Ho
                         Intent intent = new Intent(context, DeptDocSubActivity.class);
                         context.startActivity(intent);
                     } else if (responseList.get(position).getItem_id().equalsIgnoreCase("017")) {
-                        CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
-                        Intent mIntent1 = new Intent(context, ActivitySurveyList.class);
-                        context.startActivity(mIntent1);
+                        if(CustomUtility.getSharedPreferences(context, "projectid").equals("1111")){
+                            CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
+                            Intent mIntent1 = new Intent(context, KusumCSurveyListActivty.class);
+                            context.startActivity(mIntent1);
+                        }else {
+                            CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
+                            Intent mIntent1 = new Intent(context, ActivitySurveyList.class);
+                            context.startActivity(mIntent1);
+                        }
                     }
+
                     else if (responseList.get(position).getItem_id().equalsIgnoreCase("021")) {
                         CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
                         Intent mIntent1 = new Intent(context, RoutePlanActivity.class);
