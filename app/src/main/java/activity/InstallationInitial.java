@@ -35,9 +35,11 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.angads25.toggle.widget.LabeledSwitch;
@@ -111,7 +113,8 @@ public class InstallationInitial extends BaseActivity {
             city_txt = "", address = "", make = "", custname = "", fathname = "", simno = "", regisno = "", projectno = "", loginno = "", moduleqty = "", mobileno = "", tehvillage = "",
             borewellstatus1 = "", DeviceStatus = "", CUS_CONTACT_NO = "", BeneficiaryNo = "", no_of_module_value = "", rmsdata_status = "", mMOBNUM_1, mMOBNUM_2, mMOBNUM_3, mORG_OTP_VALUE,
             mORG_CONTACT_NO, MEmpType = "null", mAppName = "KUSUM", mInstallerMOB = "", mInstallerName = "", RMS_SERVER_DOWN = "", RMS_DEBUG_EXTRN = "", DEVICE_NO, SIGNL_STREN,
-            INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "", SIM_SR_NO = "", SIM = "", RMS_STATUS = "", RMS_LAST_ONLINE_DATE = "", RMS_CURRENT_ONLINE_STATUS = "", version = "",
+            INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "", SIM_SR_NO = "", SIM = "", RMS_STATUS = "", RMS_LAST_ONLINE_DATE = "",
+            RMS_CURRENT_ONLINE_STATUS = "", version = "",invc_done="",docno_sap="",
 
     mDriveSerialNo = "", mMotorSerialNo = "", mPumpSerialNo = "", delay;
     EditText inst_date, bill_date, bill_no, cust_name, borewellstatus, reasontxt, inst_address, inst_make, inst_village,
@@ -138,7 +141,7 @@ public class InstallationInitial extends BaseActivity {
         }
     };
 
-    List<ImageModel> imageList = new ArrayList<>();
+    List<ImageModel>    imageList = new ArrayList<>();
     boolean isBaseUpdate = false, isControllerIDScan = false, isDebug = false, isSubmit = false;
 
     Handler mHandler = new Handler() {
@@ -408,7 +411,7 @@ public class InstallationInitial extends BaseActivity {
                 mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(inst_controller_ser.getText().toString().trim() + "-0");
                 System.out.println("mBTResonseDataList.size()==>>" + mBTResonseDataList.size());
                 if (mBTResonseDataList.size() > 0) {
-                    vkp = mBTResonseDataList.size()-1;
+                    vkp = mBTResonseDataList.size() - 1;
                     DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
                     SIGNL_STREN = mBTResonseDataList.get(vkp).getSIGNLSTREN();
                     String[] mStrArry = SIGNL_STREN.split("###");
@@ -536,7 +539,7 @@ public class InstallationInitial extends BaseActivity {
                         edit_O.setText(scanContent);
                         scannedDeviceNo.add(scanContent);
                     } else {
-                        CustomUtility.ShowToast("Already done",getApplicationContext());
+                        CustomUtility.ShowToast("Already done", getApplicationContext());
                     }
                 } else {
                     EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
@@ -1404,27 +1407,30 @@ public class InstallationInitial extends BaseActivity {
         }
     }
 
+
     private void retriveArrayList() {
         imageList = new ArrayList<>();
         DatabaseHelper db = new DatabaseHelper(this);
 
         List<ImageModel> installationImages = db.getAllInstallationImages();
+          if(installationImages.size()>0) {
+              for (int i = 0; i < installationImages.size(); i++) {
+                  if (installationImages.get(i).getBillNo().trim().equals(bill_no.getText().toString().trim())) {
+                      ImageModel imageModel = new ImageModel();
+                      imageModel.setName(installationImages.get(i).getName());
+                      imageModel.setImagePath(installationImages.get(i).getImagePath());
+                      imageModel.setImageSelected(true);
+                      imageModel.setBillNo(installationImages.get(i).getBillNo());
+                      imageModel.setLatitude(installationImages.get(i).getLatitude());
+                      imageModel.setLongitude(installationImages.get(i).getLongitude());
+                      imageModel.setPoistion(installationImages.get(i).getPoistion());
+                      imageList.add(imageModel);
+                   }
 
-        for (int i = 0; i < installationImages.size(); i++) {
-            if (installationImages.get(i).getBillNo().trim().equals(bill_no.getText().toString().trim())) {
-                ImageModel imageModel = new ImageModel();
-                imageModel.setName(installationImages.get(i).getName());
-                imageModel.setImagePath(installationImages.get(i).getImagePath());
-                imageModel.setImageSelected(true);
-                imageModel.setBillNo(installationImages.get(i).getBillNo());
-                imageModel.setLatitude(installationImages.get(i).getLatitude());
-                imageModel.setLongitude(installationImages.get(i).getLongitude());
-                imageModel.setPoistion(installationImages.get(i).getPoistion());
-                imageList.add(imageModel);
-            }
+              }
 
-        }
 
+          }
     }
 
 
@@ -1478,30 +1484,28 @@ public class InstallationInitial extends BaseActivity {
             e.printStackTrace();
         }
         Log.e("URL=====>", WebURL.saveDebugData + "?action=" + jsonArray);
-        final ArrayList<NameValuePair> param1 = new ArrayList<NameValuePair>();
-        param1.add(new BasicNameValuePair("action", String.valueOf(jsonArray)));
-
-     try {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
-            StrictMode.setThreadPolicy(policy);
-
-            String obj2 = debugapp.GlobalValue.CustomHttpClient.executeHttpPost1(WebURL.saveDebugData, param1);
-
-            if (!obj2.isEmpty()) {
 
 
-                JSONObject jsonObject = new JSONObject(obj2);
-                Log.e("Response=====>", jsonObject.toString());
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
 
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                WebURL.saveDebugData + "?action=" + jsonArray,
 
-                String mStatus = jsonObject.getString("status");
-                if (mStatus.equals("true")) {
-                   mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
-                    mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
+                null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                try {
 
-                    CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice, "true");
-                    if (mSimDetailsInfoResponse.size() > 0)
-                        mSimDetailsInfoResponse.clear();
+                    if (jsonObject.toString() != null && !jsonObject.toString().isEmpty()) {
+
+                        String mStatus = jsonObject.getString("status");
+                        if (mStatus.equals("true")) {
+                            mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
+                            mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
+
+                            CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice, "true");
+                            if (mSimDetailsInfoResponse.size() > 0)
+                                mSimDetailsInfoResponse.clear();
 
                     mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
                     CustomUtility.hideProgressDialog(InstallationInitial.this);
@@ -1511,18 +1515,36 @@ public class InstallationInitial extends BaseActivity {
 
                     new SyncInstallationData().execute();
 
-                } else {
+                        } else {
+                            CustomUtility.hideProgressDialog(InstallationInitial.this);
+                            CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
+                        }
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                     CustomUtility.hideProgressDialog(InstallationInitial.this);
                     CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
                 }
 
 
             }
-        } catch (Exception e) {
-            CustomUtility.hideProgressDialog(InstallationInitial.this);
-            e.printStackTrace();
-        }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                CustomUtility.hideProgressDialog(InstallationInitial.this);
+                Log.e("error", String.valueOf(error));
+                Toast.makeText(InstallationInitial.this, error.toString(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                60000,
+                5,  /// maxNumRetries = 0 means no retry
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(jsonObjectRequest);
     }
+
 
     private class SyncInstallationData extends AsyncTask<String, String, String> {
 
@@ -1641,83 +1663,19 @@ public class InstallationInitial extends BaseActivity {
 
 
                 if (imageList.size() > 0) {
-                        for (int i=0; i<imageList.size(); i++){
-                            if(imageList.get(i).isImageSelected()){
-                                try {
-                                    jsonObj.put("PHOTO"+imageList.get(i).getPoistion(),  CustomUtility.getBase64FromBitmap(InstallationInitial.this,imageList.get(i).getImagePath()));
-                                    jsonObj.put("LatLng"+imageList.get(i).getPoistion(), imageList.get(i).getLatitude() + "," + imageList.get(i).getLongitude());
+                    for (int i = 0; i < imageList.size(); i++) {
+                        if (imageList.get(i).isImageSelected()) {
+                            try {
+                                jsonObj.put("PHOTO" + imageList.get(i).getPoistion(), CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(i).getImagePath()));
+                                jsonObj.put("LatLng" + imageList.get(i).getPoistion(), imageList.get(i).getLatitude() + "," + imageList.get(i).getLongitude());
 
-                                }catch (Exception e){
-                                    e.printStackTrace();
-                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
-                        Log.e("jsonObj=======>",jsonObj.toString());
                     }
-
-
-                  /*  if (imageList.get(0).isImageSelected()) {
-                        jsonObj.put("PHOTO1", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(0).getImagePath()));
-                        jsonObj.put("LatLng1", imageList.get(0).getLatitude() + "," + imageList.get(0).getLongitude());
-                        //jsonObj.put("photo_name1",imageList.get(0).getName());
-                    }
-                    if (1 < imageList.size() && imageList.get(1).isImageSelected()) {
-                        jsonObj.put("PHOTO2", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(1).getImagePath()));
-                        jsonObj.put("LatLng2", imageList.get(1).getLatitude() + "," + imageList.get(1).getLongitude());
-                        //  jsonObj.put("photo_name2",imageList.get(1).getName());
-                    }
-                    if (2 < imageList.size() && imageList.get(2).isImageSelected()) {
-                        jsonObj.put("PHOTO3", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(2).getImagePath()));
-                        jsonObj.put("LatLng3", imageList.get(2).getLatitude() + "," + imageList.get(2).getLongitude());
-                        //    jsonObj.put("photo_name3",imageList.get(2).getName());
-                    }
-                    if (3 < imageList.size() && imageList.get(3).isImageSelected()) {
-                        jsonObj.put("PHOTO4", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(3).getImagePath()));
-                        jsonObj.put("LatLng4", imageList.get(3).getLatitude() + "," + imageList.get(3).getLongitude());
-                        //   jsonObj.put("photo_name4",imageList.get(3).getName());
-                    }
-                    if (4 < imageList.size() && imageList.get(4).isImageSelected()) {
-                        jsonObj.put("PHOTO5", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(4).getImagePath()));
-                        jsonObj.put("LatLng5", imageList.get(4).getLatitude() + "," + imageList.get(4).getLongitude());
-                        //   jsonObj.put("photo_name5",imageList.get(4).getName());
-                    }
-                    if (5 < imageList.size() && imageList.get(5).isImageSelected()) {
-                        jsonObj.put("PHOTO6", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(5).getImagePath()));
-                        jsonObj.put("LatLng6", imageList.get(5).getLatitude() + "," + imageList.get(5).getLongitude());
-                        //   jsonObj.put("photo_name6",imageList.get(5).getName());
-                    }
-                    if (6 < imageList.size() && imageList.get(6).isImageSelected()) {
-                        jsonObj.put("PHOTO7", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(6).getImagePath()));
-                        jsonObj.put("LatLng7", imageList.get(6).getLatitude() + "," + imageList.get(6).getLongitude());
-                        //  jsonObj.put("photo_name7",imageList.get(6).getName());
-                    }
-                    if (7 < imageList.size() && imageList.get(7).isImageSelected()) {
-                        jsonObj.put("PHOTO8", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(7).getImagePath()));
-                        jsonObj.put("LatLng8", imageList.get(7).getLatitude() + "," + imageList.get(7).getLongitude());
-                        //   jsonObj.put("photo_name8",imageList.get(7).getName());
-                    }
-
-                    if (8 < imageList.size() && imageList.get(8).isImageSelected()) {
-                        jsonObj.put("PHOTO9", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(8).getImagePath()));
-                        jsonObj.put("LatLng9", imageList.get(8).getLatitude() + "," + imageList.get(8).getLongitude());
-                        //  jsonObj.put("photo_name9",imageList.get(8).getName());
-                    }
-                    if (9 < imageList.size() && imageList.get(9).isImageSelected()) {
-                        jsonObj.put("PHOTO10", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(9).getImagePath()));
-                        jsonObj.put("LatLng10", imageList.get(9).getLatitude() + "," + imageList.get(9).getLongitude());
-                        //  jsonObj.put("photo_name10",imageList.get(9).getName());
-                    }
-                    if (10 < imageList.size() && imageList.get(10).isImageSelected()) {
-                        jsonObj.put("PHOTO11", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(10).getImagePath()));
-                        jsonObj.put("LatLng11", imageList.get(10).getLatitude() + "," + imageList.get(10).getLongitude());
-                        //  jsonObj.put("photo_name11",imageList.get(10).getName());
-                    }
-                    if (11 < imageList.size() && imageList.get(11).isImageSelected()) {
-                        jsonObj.put("PHOTO12", CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(11).getImagePath()));
-                        jsonObj.put("LatLng12", imageList.get(11).getLatitude() + "," + imageList.get(11).getLongitude());
-                        //      jsonObj.put("photo_name12",imageList.get(11).getName());
-                    }*/
-
+                    Log.e("jsonObj=======>", jsonObj.toString());
+                }
 
 
                 ja_invc_data.put(jsonObj);
@@ -1842,11 +1800,7 @@ public class InstallationInitial extends BaseActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.SendOTP + "&mobiles=" + ContactNo +
-                        "&message=आप अपने खेत में शक्ति पम्प्स (इंडिया) लिमिटेड द्वारा स्थापित " + Hp + " एचपी रेटिंग सोलर पंप सेट के लिए लाभार्थी आईडी " + beneficiaryNo + " के संदर्भ में यह संदेश प्राप्त कर रहे हैं।" +
-                        " यह संदेश केवल आपकी प्रतिक्रिया के उद्देश्य से है शक्ति पंप्स इंस्टालर को सत्यपान कोड साझा करके आप निम्नलिखित की पुष्टि कर रहे हैं 1) आप स्थापना की गुणवत्ता से संतुष्ट हैं" +
-                        " 2) आप सोलर पंप सेट के प्रदर्शन से संतुष्ट हैं 3) इंस्टॉलर ने किसी भी प्रकार की सामग्री या स्थापना कार्य के लिए कोई राशि नहीं ली हैं यदि उपरोक्त सभी तीन कथन सही हैं, " +
-                        "तो कृपया अपने सोलर पम्प सेट की 5 वर्ष की सेवा को सक्रिय करने के लिए इंस्टॉलर के साथ सत्यपान कोड OTP "+generatedVerificationCode+" साझा करें।शक्ति पम्प्स&sender=SHAKTl&route=2&country=91&DLT_TE_ID=1707169658140762656&unicode=1",
-
+                        "&message="+beneficiaryNo+" के तहत "+Hp+"HP पंप सेट का इंस्टॉलेशन किया गया है यदि आप संतुष्ट हैं तो इंस्टॉलेशन टीम को OTP-"+generatedVerificationCode+" शेयर करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169744934483345",
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {

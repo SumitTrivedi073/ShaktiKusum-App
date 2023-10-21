@@ -167,7 +167,7 @@ public class Adapter_Installation_list extends RecyclerView.Adapter<Adapter_Inst
 
             InstallationBean param_invc = new InstallationBean();
             param_invc = db.getInstallationData(pernr, billno);
-            Log.e("param_invc===>",CustomUtility.getSharedPreferences(context, "INSTSYNC" + billno));
+
             if ((!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude())) && (!TextUtils.isEmpty(param_invc.getSolarpanel_wattage())) && (!TextUtils.isEmpty(param_invc.getNo_of_module_value()))) {
                 holder.status.setImageResource(R.drawable.icn_yellow);
             }
