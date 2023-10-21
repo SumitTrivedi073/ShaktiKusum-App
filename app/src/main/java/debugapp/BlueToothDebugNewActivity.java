@@ -449,10 +449,10 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                     new BluetoothCommunicationForDebugM66().execute(":DEBUG M66#", ":DEBUG M66#", "START");
                 } else if (mIntCheckDeviceType == 2) {
                     new BluetoothCommunicationForDebugM66CommonCode().execute(":DEBUG M66#", ":DEBUG M66#", "START");
-                } else {
+                }/* else {
                     new BluetoothCommunicationForDebugM66ShimhaTwo().execute(":DEBUG M66#", ":DEBUG M66#", "START");
 
-                }
+                }*/
             }
         });
 
@@ -1061,14 +1061,15 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                         public void run() {
                             lvlMainTextContainerID.addView(getTextViewTT(pp, ":DEBUG M66#"));
                             AllCommomSTRContainer = AllCommomSTRContainer + "\n :DEBUG M66#";
+
                             if (mIntCheckDeviceType == 0) {
                                 new BluetoothCommunicationForDebugM66().execute(":DEBUG M66#", ":DEBUG M66#", "START");
                             } else if (mIntCheckDeviceType == 2) {
                                 new BluetoothCommunicationForDebugM66CommonCode().execute(":DEBUG M66#", ":DEBUG M66#", "START");
-                            } else {
+                            }/* else {
                                 new BluetoothCommunicationForDebugM66ShimhaTwo().execute(":DEBUG M66#", ":DEBUG M66#", "START");
 
-                            }
+                            }*/
 
                         }
                     }, 2 * 200);
@@ -1806,12 +1807,18 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                         }
                                     } else if (i == 10) {
                                         String[] ssSubIn1 = sssM[10].split("");
+                                        Log.e("ssSubIn1=====>",sssM[10]);
+                                        if (!sssM[10].isEmpty()) {
 
-                                        if (!ssSubIn1[1].equalsIgnoreCase("")) {
-                                            Log.e("ssSubIn1=====>",sssM[10]);
                                             DONGAL_ID = sssM[10].replace("DID-","");
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id:" + DONGAL_ID;
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + DONGAL_ID));
+                                            if(DONGAL_ID.isEmpty()){
+                                                DONGAL_ID = "Not Available";
+                                                AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
+                                                lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id: Not Available"));
+                                            }else {
+                                                AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id:" + DONGAL_ID;
+                                                lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + DONGAL_ID));
+                                            }
                                         } else {
                                             DONGAL_ID = "Not Available";
                                             AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
@@ -1822,8 +1829,9 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
                                         if (!ssSubIn1[1].equalsIgnoreCase("")) {
                                             SIM_SR_NO = ssSubIn1[1];
-                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Sim Serial Number:" + ssSubIn1[1];
-                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nSim Serial Number:" + ssSubIn1[1]));
+                                            SIM_SR_NO = SIM_SR_NO.substring(0, 20 - 1);  //20== ssSubIn1[1].lenth();
+                                            AllCommomSTRContainer = AllCommomSTRContainer + " :\n Sim Serial Number:" + SIM_SR_NO;
+                                            lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nSim Serial Number:" + SIM_SR_NO));
                                         } else {
                                             SIM_SR_NO = "Not Available";
                                             AllCommomSTRContainer = AllCommomSTRContainer + " :\n Sim Serial Number: Not Available";
@@ -2127,26 +2135,23 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                                 lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nIMEI: Not Available"));
                                             }
                                         } else if (i == 10) {
-                                            /*String[] ssSubIn1 = sssM[10].split("-");
-
-                                            if (!ssSubIn1[1].equalsIgnoreCase("")) {
-                                                DONGAL_ID = ssSubIn1[1];
-                                                AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id:" + ssSubIn1[1];
-                                                lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + ssSubIn1[1]));
-                                            } else {
-                                                DONGAL_ID = "Not Available";
-                                                AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
-                                                lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id: Not Available"));
-                                            }*/
                                             String[] ssSubIn1 = sssM[10].split("");
 
                                             if (!ssSubIn1[1].equalsIgnoreCase("")) {
-                                                Log.e("ssSubIn1=====>",sssM[10]);
+
                                                 DONGAL_ID = sssM[10].replace("DID-","");
-                                                AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id:" + DONGAL_ID;
-                                                lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + DONGAL_ID));
+                                                Log.e("DONGAL_ID2=====>",DONGAL_ID);
+                                                if(DONGAL_ID.isEmpty()){
+                                                    DONGAL_ID = "Not Available";
+                                                    AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
+                                                    lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id: Not Available"));
+                                                }else {
+                                                    AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id:" + DONGAL_ID;
+                                                    lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + DONGAL_ID));
+                                                }
                                             } else {
                                                 DONGAL_ID = "Not Available";
+                                                Log.e("DONGAL_ID22=====>",DONGAL_ID);
                                                 AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
                                                 lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id: Not Available"));
                                             }
@@ -2276,23 +2281,19 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                                 lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nIMEI: Not Available"));
                                             }
                                         } else if (i == 9) {
-                                            /*String[] ssSubIn1 = sssM[9].split("-");
+                                            String[] ssSubIn1 = sssM[9].split("");
 
                                             if (!ssSubIn1[1].equalsIgnoreCase("")) {
-                                                DONGAL_ID = ssSubIn1[1];
-                                                AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id:" + ssSubIn1[1];
-                                                lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + ssSubIn1[1]));
-                                            } else {
-                                                DONGAL_ID = "Not Available";
-                                                AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
-                                                lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id: Not Available"));
-                                            }*/
-                                            String[] ssSubIn1 = sssM[10].split("");
-
-                                            if (!ssSubIn1[1].equalsIgnoreCase("")) {
-                                                DONGAL_ID = sssM[10].replace("DID-","");
-                                                AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id:" + DONGAL_ID;
-                                                lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + DONGAL_ID));
+                                                DONGAL_ID = sssM[9].replace("DID-","");
+                                                Log.e("DONGAL_ID3=====>",DONGAL_ID);
+                                                if(DONGAL_ID.isEmpty()){
+                                                    DONGAL_ID = "Not Available";
+                                                    AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
+                                                    lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id: Not Available"));
+                                                }else {
+                                                    AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id:" + DONGAL_ID;
+                                                    lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + DONGAL_ID));
+                                                }
                                             } else {
                                                 DONGAL_ID = "Not Available";
                                                 AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
