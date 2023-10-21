@@ -670,15 +670,9 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
                 }
                 if (demo.isChecked()) {
                     jsonObj.put( "zcount", "0");
-                } else {
-                    jsonObj.put("zcount", "");
-                }
-                if (road.isChecked()) {
+                } else if (road.isChecked()) {
                     jsonObj.put("zcount", "1");
-                } else {
-                    jsonObj.put("zcount", "");
-                }
-                if (both.isChecked()) {
+                }else if (both.isChecked()) {
                     jsonObj.put("zcount", "2");
                 } else {
                     jsonObj.put("zcount", "");

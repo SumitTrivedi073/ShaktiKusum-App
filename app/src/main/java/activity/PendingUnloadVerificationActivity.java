@@ -225,8 +225,7 @@ public class PendingUnloadVerificationActivity extends BaseActivity implements P
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.SendOTP + "&mobiles=" +response.getContactNo() +
-                        "&message=प्रिय ग्राहक, आपको (shakti energy solution private limited pithampur) द्वारा "+response.getHp() +"HP का पूरा सिस्टम आपके कस्टमर -आय डी "+ response.getBeneficiary() +" के तहत भेज दिया गया है। यदि भेजा गया सिस्टम सफलतापूर्वक आपको पूरा प्राप्त हुआ है तो (shakti energy solution private limited pithampur) द्वारा अधिकृत इंस्टॉलेशन टीम को OTP-"+ generatedVerificationCode +" शेयर कर पुष्टि करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169347351235207",
-
+                        "&message=" +response.getBeneficiary() +" के तहत " +response.getHp() +" HP पंप सेट का मटेरियल प्राप्त हुआ है तो इंस्टॉलेशन टीम को OTP-" +generatedVerificationCode +" शेयर करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169744864682632",
                 null, new Response.Listener<JSONObject >() {
             @Override
             public void onResponse(JSONObject  res) {

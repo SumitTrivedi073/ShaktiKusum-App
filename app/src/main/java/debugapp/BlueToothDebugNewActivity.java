@@ -471,13 +471,17 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         rlvBT_9_ID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String result = DEVICE_NO.substring(0, 2);
+                if(DEVICE_NO!=null){
+                String result = DEVICE_NO.toString().substring(0,1)+DEVICE_NO.toString().substring(1,2);
                 if(result.equals("01")||result.equals("05")||result.equals("07")||result.equals("15")||result.equals("19")
                         ||result.equals("20")||result.equals("21")||result.equals("22")||result.equals("23")||result.equals("26")
                         ||result.equals("65")||result.equals("78")||result.equals("85")||result.equals("93")) {
 
                     deviceDataExtract();
                 }else {
+                    new BlueToothCommunicationForIMEINumber().execute(":GET IMEI#", ":GET IMEI#", "OKAY");
+                }
+                } else {
                     new BlueToothCommunicationForIMEINumber().execute(":GET IMEI#", ":GET IMEI#", "OKAY");
                 }
             }
@@ -3695,7 +3699,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     private void sendDataToServer() {
 
         if (RMS_STATUS.equalsIgnoreCase("YES")) {
-            if (!DEVICE_NO.isEmpty() && !NET_REG.isEmpty() && !LATITUDE.isEmpty() && !LANGITUDE.isEmpty()) {
+            if (DEVICE_NO!=null && !DEVICE_NO.isEmpty() && !NET_REG.isEmpty() && !LATITUDE.isEmpty() && !LANGITUDE.isEmpty()) {
                 WebURL.CHECK_FINAL_ALL_OK = 1;
                 WebURL.BT_DEBUG_CHECK = 1;
                 Constant.DBUG_PER_OFLINE = "";//PER_OFLINE
@@ -3707,7 +3711,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                 Toast.makeText(mContext, "Debug data not properly please try again.", Toast.LENGTH_SHORT).show();
             }
         } else {
-            if (!DEVICE_NO.isEmpty() && !NET_REG.isEmpty() && !LATITUDE.isEmpty() && !LANGITUDE.isEmpty()) {
+            if (DEVICE_NO!=null && !DEVICE_NO.isEmpty() && !NET_REG.isEmpty() && !LATITUDE.isEmpty() && !LANGITUDE.isEmpty()) {
                 WebURL.BT_DEBUG_CHECK = 1;
                 Constant.DBUG_PER_OFLINE = "X";//PER_OFLINE
 

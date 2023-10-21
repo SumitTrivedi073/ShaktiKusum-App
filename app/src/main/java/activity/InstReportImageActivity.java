@@ -439,27 +439,27 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
             imageModel.setLongitude(longitude);
             imageArrayList.set(selectedIndex, imageModel);
 
-            addupdateDatabase(path,latitude,longitude);
+            addupdateDatabase(path,latitude,longitude,imageArrayList.get(selectedIndex).getPoistion());
         }else {
             imageModel.setLatitude("");
             imageModel.setLongitude("");
             imageArrayList.set(selectedIndex, imageModel);
-            addupdateDatabase(path,"","");
+            addupdateDatabase(path,"","",imageArrayList.get(selectedIndex).getPoistion());
         }
         customAdapter.notifyDataSetChanged();
 
     }
 
-    private void addupdateDatabase(String path, String latitude, String longitude) {
+    private void addupdateDatabase(String path, String latitude, String longitude,int position) {
 
         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 
         if (isUpdate) {
             db.updateRecordAlternate(imageArrayList.get(selectedIndex).getName(), path,
-                    true, enqDocno, latitude, longitude,selectedIndex);
+                    true, enqDocno, latitude, longitude,position);
         } else {
             db.insertInstallationImage(imageArrayList.get(selectedIndex).getName(), path,
-                    true, enqDocno, latitude, longitude,selectedIndex);
+                    true, enqDocno, latitude, longitude,position);
         }
 
     }
