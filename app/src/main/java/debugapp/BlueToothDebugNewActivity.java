@@ -449,10 +449,10 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                     new BluetoothCommunicationForDebugM66().execute(":DEBUG M66#", ":DEBUG M66#", "START");
                 } else if (mIntCheckDeviceType == 2) {
                     new BluetoothCommunicationForDebugM66CommonCode().execute(":DEBUG M66#", ":DEBUG M66#", "START");
-                }/* else {
+                } else {
                     new BluetoothCommunicationForDebugM66ShimhaTwo().execute(":DEBUG M66#", ":DEBUG M66#", "START");
 
-                }*/
+                }
             }
         });
 
@@ -1066,10 +1066,10 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                 new BluetoothCommunicationForDebugM66().execute(":DEBUG M66#", ":DEBUG M66#", "START");
                             } else if (mIntCheckDeviceType == 2) {
                                 new BluetoothCommunicationForDebugM66CommonCode().execute(":DEBUG M66#", ":DEBUG M66#", "START");
-                            }/* else {
+                            } else {
                                 new BluetoothCommunicationForDebugM66ShimhaTwo().execute(":DEBUG M66#", ":DEBUG M66#", "START");
 
-                            }*/
+                            }
 
                         }
                     }, 2 * 200);
