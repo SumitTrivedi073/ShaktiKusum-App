@@ -281,7 +281,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         lvlMainTextContainerID = findViewById(R.id.lvlMainTextContainerID);
         edtPutCommandID = findViewById(R.id.edtPutCommandID);
         submitBtnCard = findViewById(R.id.submitBtnCard);
-        mIntCheckDeviceType = 0;
+        //mIntCheckDeviceType = 0;
 
         changeButtonVisibilityRLV(true, 0.5f, rlvBT_S1_ID);
         changeButtonVisibilityRLV(true, 0.5f, rlvBT_S2_ID);
@@ -305,6 +305,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
         }
     }
+
 
     private void setClickEventListner() {
 
@@ -445,14 +446,16 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                 lvlMainTextContainerID.addView(getTextViewTT(pp, ":DEBUG M66#"));
                 AllCommomSTRContainer = AllCommomSTRContainer + "\n :DEBUG M66#";
 
-                if (mIntCheckDeviceType == 0) {
+                /*if (mIntCheckDeviceType == 0) {
                     new BluetoothCommunicationForDebugM66().execute(":DEBUG M66#", ":DEBUG M66#", "START");
                 } else if (mIntCheckDeviceType == 2) {
                     new BluetoothCommunicationForDebugM66CommonCode().execute(":DEBUG M66#", ":DEBUG M66#", "START");
                 } else {
                     new BluetoothCommunicationForDebugM66ShimhaTwo().execute(":DEBUG M66#", ":DEBUG M66#", "START");
 
-                }
+                }*/
+                new BluetoothCommunicationForDebugCheckDevice().execute(":DEBUG M66#", ":DEBUG M66#", "START");
+
             }
         });
 
@@ -734,8 +737,9 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
     public void getGpsLocation() {
         GPSTracker gps = new GPSTracker(mContext);
-        baseRequest.showLoader();
+
         if (gps.canGetLocation()) {
+            baseRequest.showLoader();
             String lat111 = "" + gps.getLatitude();
             String long111 = "" + gps.getLongitude();
 
@@ -759,19 +763,9 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
             if (inst_latitude_double.equalsIgnoreCase("0.0")) {
                 Toast.makeText(mContext, "Lat Long not captured, Please try again", Toast.LENGTH_SHORT).show();
-
+                baseRequest.hideLoader();
             } else {
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-
-                        new BluetoothCommunicationSET_LAT().execute(":LAT :0" + latLenght + "," + inst_latitude_double + "#", ":LAT :" + latLenght + "," + inst_latitude_double + "#", "Start");
-
-                    }
-                }, 10000);//800
-
+                new BluetoothCommunicationSET_LAT().execute(":LAT :0" + latLenght + "," + inst_latitude_double + "#", ":LAT :" + latLenght + "," + inst_latitude_double + "#", "Start");
             }
         } else {
             gps.showSettingsAlert();
@@ -931,7 +925,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
-       disconnectBtSocket();
+      // disconnectBtSocket();
     }
 
     private void disconnectBtSocket() {
@@ -1171,9 +1165,9 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                             ///addHeadersMonths();
                             try {
                                 RMS_ORG_D_F = AllTextSTR;
-
+                               Log.e("AllTextSTR========>",AllTextSTR);
                                 String[] sssM = AllTextSTR.split(",");
-
+                                Log.e("sssM========>",String.valueOf(sssM.length));
                                 for (int i = 0; i < sssM.length; i++) {
 
                                     pp++;
@@ -1252,7 +1246,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                             String[] ssSubIn2 = sssM[5].split("-");
 
 
-                                            if (!ssSubIn2[1].equalsIgnoreCase("")) {
+                                            if (!ssSubIn2[1].equalsIgnoreCase("")|| !ssSubIn2[1].equalsIgnoreCase("null")) {
                                                 LATITUDE = ssSubIn2[1];
 
                                                 if (LATITUDE.equalsIgnoreCase("1.00000000") || LATITUDE.equalsIgnoreCase("1") || LATITUDE.equalsIgnoreCase("0") || LATITUDE.equalsIgnoreCase("0.00000000")) {
@@ -1297,7 +1291,8 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                                 lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nMobile Number: Not Available"));
                                             }
                                         }
-                                    } else {
+                                    }
+                                    else {
                                         if (i == 0) {
                                             DEVICE_NO = sssM[0];
                                             AllCommomSTRContainer = AllCommomSTRContainer + " :\n Device No :" + sssM[0];
@@ -1370,7 +1365,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                         } else if (i == 5) {
                                             String[] ssSubIn2 = sssM[5].split("-");
 
-                                            if (!ssSubIn2[1].equalsIgnoreCase("")) {
+                                            if (!ssSubIn2[1].equalsIgnoreCase("")|| !ssSubIn2[1].equalsIgnoreCase("null")) {
                                                 LATITUDE = ssSubIn2[1];
 
 
@@ -1517,7 +1512,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
                                 String[] stst = AllTextSTR.split(":");
                                 // AllCommomSTRContainer = AllCommomSTRContainer + " :\n "+AllTextSTR;
-
+                                Log.e("AllTextSTR2222========>",AllTextSTR);
                                 IMEI = stst[1];
                                 AllCommomSTRContainer = AllCommomSTRContainer + " :\n " + stst[1];
                                 lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\n" + AllTextSTR));
@@ -1670,7 +1665,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                 System.out.println("Shimha2==>>" + sssM.length);
                                 System.out.println("Shimha2==>>" + AllTextSTR);
 
-
+                                Log.e("AllTextSTR3333========>",AllTextSTR);
                                 for (int i = 0; i < sssM.length; i++) {
 
                                     pp++;
@@ -1762,7 +1757,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                         String[] ssSubIn2 = sssM[6].split("-");
 
 
-                                        if (!ssSubIn2[1].equalsIgnoreCase("")) {
+                                        if (!ssSubIn2[1].equalsIgnoreCase("")|| !ssSubIn2[1].equalsIgnoreCase("null")) {
                                             System.out.println("LATITUDE==>>" + ssSubIn2[1]);
                                             LATITUDE = ssSubIn2[1];
 
@@ -2091,7 +2086,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                             String[] ssSubIn2 = sssM[6].split("-");
 
 
-                                            if (!ssSubIn2[1].equalsIgnoreCase("")) {
+                                            if (!ssSubIn2[1].equalsIgnoreCase("")|| !ssSubIn2[1].equalsIgnoreCase("null")) {
                                                 System.out.println("LATITUDE==>>" + ssSubIn2[1]);
                                                 LATITUDE = ssSubIn2[1];
 
@@ -2250,7 +2245,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                         } else if (i == 6) {
 
                                             String[] ssSubIn2 = sssM[6].split("-");
-                                            if (!ssSubIn2[1].equalsIgnoreCase("")) {
+                                            if (!ssSubIn2[1].equalsIgnoreCase("")|| !ssSubIn2[1].equalsIgnoreCase("null")) {
                                                 System.out.println("LATITUDE==>>" + ssSubIn2[1]);
                                                 LATITUDE = ssSubIn2[1];
                                                 if (LATITUDE.equalsIgnoreCase("1.00000000") || LATITUDE.equalsIgnoreCase("1") || LATITUDE.equalsIgnoreCase("0") || LATITUDE.equalsIgnoreCase("0.00000000")) {
@@ -2473,6 +2468,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                         @Override
                         public void run() {
                             //textView.setText("Your new text");
+                            Log.e("LatWrite","true");
                             new BluetoothCommunicationSET_Long().execute(":LONG :0" + longLenght + "," + inst_longitude_double + "#", ":LONG :" + longLenght + "," + inst_longitude_double + "#", "Start");
 
                         }
@@ -2564,6 +2560,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                         @Override
                         public void run() {
                             //textView.setText("Your new text");
+                            Log.e("LongWrite","true");
                             new BluetoothCommunicationForDebugCheckDevice().execute(":DEBUG M66#", ":DEBUG M66#", "START");
 
                         }
