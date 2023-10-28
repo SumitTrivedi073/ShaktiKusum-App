@@ -788,6 +788,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        disconnectBtSocket();
         finish();
     }
 
@@ -929,6 +930,17 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         super.onDestroy();
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
+        }
+       disconnectBtSocket();
+    }
+
+    private void disconnectBtSocket() {
+        if(btSocket!=null && btSocket.isConnected()){
+            try {
+                btSocket.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
