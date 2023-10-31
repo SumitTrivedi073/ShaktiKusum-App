@@ -152,9 +152,7 @@ public class CustomUtility {
             NetworkInfo[] info = connectivity.getAllNetworkInfo();
             if (info != null) {
                 for (int i = 0; i < info.length; i++) {
-                    Log.e("INTERNET:", String.valueOf(i));
-                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
-                        Log.e("INTERNET123:", "connected!");
+                     if (info[i].getState() == NetworkInfo.State.CONNECTED) {
                         return true;
                     }
                 }

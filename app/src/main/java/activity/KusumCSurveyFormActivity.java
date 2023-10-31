@@ -77,13 +77,15 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
     EditText farmerNameExt, contactNumberExt, applicationNumberExt, addressExt, currentLatLngExt, cropPatternAreaExt, electricConnectionIdentificationNoEXT,
             pumpMakeEXT, voltageV1Ext, voltageV2Ext, voltageV3Ext, lineVoltageV1VoltExt, lineVoltageV2VoltExt, lineVoltageV3VoltExt,
             current1AmpExt, current2AmpExt, current3AmpExt, frequencyHzExt, powerFactor1Ext, powerFactor2Ext, powerFactor3Ext, BorwellDiameterExt, BorwellDepthExt, pumpSetDepthExt, pumpSetDischargeExt,
-            pumpSetDeliveryExt, distanceFromProposedSolarPlantExt;
+            pumpSetDeliveryExt, distanceFromProposedSolarPlantExt,electricConnectionRatingExt,exisCableDetailsExt,deliveryPipeLineExt,totalDynamicHeadExt,transformerRatingExt,
+            serviceLineExt,threePhaseSupplyExt,ElectricityBillMonthlyExt,StructureToWaterSourceExt,feederToFarmerSiteExt,additionalInfoExt;
     Spinner categorySpinner, sourceofWaterSpinner, internetConnectivitySpinner, typesOfIrrigationSpinner, southfacingShadowSpinner,
-            electicConnectionTypeSpinner, typeOfPumpSpinner, pumpSetRatingSpinner;
+            electicConnectionTypeSpinner, typeOfPumpSpinner, pumpSetRatingSpinner,neutralAvailabilitySpinner;
 
     LinearLayout sourceOfWaterLinear;
     String selectedCategory = "", selectedSourceofWater = "", selectedInternetConnectivity = "", selectedTypesOfIrrigation = "", selectedSouthfacingShadow = "",
-            selectedElectricConnectionType = "", selectedTypeOfPump = "", selectedPumpSetRating = "", latitude = "", longitude = "", Photo1 = "", Photo2 = "", Photo3 = "", Photo4 = "";
+            selectedElectricConnectionType = "", selectedTypeOfPump = "", selectedPumpSetRating = "", selectedNeutralAvailability = "", latitude = "", longitude = "",
+            Photo1 = "", Photo2 = "", Photo3 = "", Photo4 = "",Photo5 = "",Photo6 = "";
 
     TextView submitBtn;
     SurveyListModel.Response surveyListModel;
@@ -143,6 +145,18 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
         electicConnectionTypeSpinner = findViewById(R.id.electicConnectionTypeSpinner);
         typeOfPumpSpinner = findViewById(R.id.typeOfPumpSpinner);
         pumpSetRatingSpinner = findViewById(R.id.pumpSetRatingSpinner);
+        electricConnectionRatingExt = findViewById(R.id.electricConnectionRatingExt);
+        exisCableDetailsExt = findViewById(R.id.exisCableDetailsExt);
+        deliveryPipeLineExt = findViewById(R.id.deliveryPipeLineExt);
+        totalDynamicHeadExt = findViewById(R.id.totalDynamicHeadExt);
+        transformerRatingExt = findViewById(R.id.transformerRatingExt);
+        serviceLineExt = findViewById(R.id.serviceLineExt);
+        threePhaseSupplyExt = findViewById(R.id.threePhaseSupplyExt);
+        ElectricityBillMonthlyExt = findViewById(R.id.ElectricityBillMonthlyExt);
+        StructureToWaterSourceExt = findViewById(R.id.StructureToWaterSourceExt);
+        feederToFarmerSiteExt = findViewById(R.id.feederToFarmerSiteExt);
+        additionalInfoExt = findViewById(R.id.additionalInfoExt);
+        neutralAvailabilitySpinner = findViewById(R.id.neutralAvailabilitySpinner);
         submitBtn = findViewById(R.id.submitBtn);
 
         setSupportActionBar(mToolbar);
@@ -196,6 +210,19 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
             electricConnectionIdentificationNoEXT.setText(kusumCSurveyBean.getELEC_IDEN_NO());
             frequencyHzExt.setText(kusumCSurveyBean.getFREQ_HERTZ());
             cropPatternAreaExt.setText(kusumCSurveyBean.getCROP_PATTERN());
+
+            electricConnectionRatingExt .setText(kusumCSurveyBean.getELEC_CONN_RAT());
+            exisCableDetailsExt.setText(kusumCSurveyBean.getCABLE_DET_MAKE());
+            deliveryPipeLineExt.setText(kusumCSurveyBean.getPIPE_LEN_SIZE());
+            totalDynamicHeadExt.setText(kusumCSurveyBean.getDYNAMIC_HEAD());
+
+            transformerRatingExt.setText(kusumCSurveyBean.getTRANSF_RATING());
+            serviceLineExt.setText(kusumCSurveyBean.getSERVICE_LINE());
+            threePhaseSupplyExt.setText(kusumCSurveyBean.getTHREE_PH_SUPPLY());
+            ElectricityBillMonthlyExt.setText(kusumCSurveyBean.getELECTRIC_BILL());
+            StructureToWaterSourceExt.setText(kusumCSurveyBean.getWATER_SOURC_LEN());
+            feederToFarmerSiteExt.setText(kusumCSurveyBean.getDIST_FARMAR());
+            additionalInfoExt.setText(kusumCSurveyBean.getIFNO_REMARK());
 
             List<String> categoryList = Arrays.asList(getResources().getStringArray(R.array.categorySpinner));
 
@@ -268,7 +295,14 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
                     selectedPumpSetRating = kusumCSurveyBean.getPUMP_SET_RATING();
                 }
             }
+            List<String> neutralAvailabilitySpinnerList = Arrays.asList(getResources().getStringArray(R.array.neutralAvailability));
 
+            for (int i = 0; i < neutralAvailabilitySpinnerList.size(); i++) {
+                if (kusumCSurveyBean.getPUMP_SET_RATING().equalsIgnoreCase(neutralAvailabilitySpinnerList.get(i))) {
+                    neutralAvailabilitySpinner.setSelection(i, true);
+                    selectedNeutralAvailability = kusumCSurveyBean.getNEUTRL_GRID_AVBL();
+                }
+            }
 
         }
 
@@ -300,6 +334,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
         electicConnectionTypeSpinner.setOnItemSelectedListener(this);
         typeOfPumpSpinner.setOnItemSelectedListener(this);
         pumpSetRatingSpinner.setOnItemSelectedListener(this);
+        neutralAvailabilitySpinner.setOnItemSelectedListener(this);
 
     }
 
@@ -337,6 +372,10 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
             if (!parent.getSelectedItem().toString().equals("Select Pump Rating")) {
                 selectedPumpSetRating = parent.getSelectedItem().toString();
             }
+        } else if (parent.getId() == R.id.neutralAvailabilitySpinner) {
+            if (!parent.getSelectedItem().toString().equals("Select option for Neutral Availability")) {
+                selectedNeutralAvailability = parent.getSelectedItem().toString();
+            }
         }
     }
 
@@ -372,7 +411,8 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
         itemNameList.add(getResources().getString(R.string.transformer));
         itemNameList.add(getResources().getString(R.string.attechformphoto1));
         itemNameList.add(getResources().getString(R.string.attechformphoto2));
-
+        itemNameList.add(getResources().getString(R.string.attechformphoto3));
+        itemNameList.add(getResources().getString(R.string.attechformphoto4));
 
         for (int i = 0; i < itemNameList.size(); i++) {
             ImageModel imageModel = new ImageModel();
@@ -625,10 +665,14 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
             CustomUtility.ShowToast(getResources().getString(R.string.enter_electricConnectionIdentificationNo), getApplicationContext());
         } else if (selectedTypeOfPump.isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.selectTypeOfPump), getApplicationContext());
+        }else if (electricConnectionRatingExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_electric_connection_rating_hp), getApplicationContext());
         } else if (selectedPumpSetRating.isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.select_pumpsetrating), getApplicationContext());
         } else if (pumpMakeEXT.getText().toString().isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.enter_pumpsetmake), getApplicationContext());
+        }else if (exisCableDetailsExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_existing_cable_details), getApplicationContext());
         } else if (voltageV1Ext.getText().toString().isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.voltageV1Volt), getApplicationContext());
         } else if (voltageV2Ext.getText().toString().isEmpty()) {
@@ -667,6 +711,33 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
             CustomUtility.ShowToast(getResources().getString(R.string.enter_deliveryOfPumpSet), getApplicationContext());
         } else if (distanceFromProposedSolarPlantExt.getText().toString().isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.enter_distanceFromProposedSolarPlantLocation), getApplicationContext());
+        }else if (deliveryPipeLineExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_delivery_pipe_line), getApplicationContext());
+        }else if (totalDynamicHeadExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_total_dynamic_head_meter), getApplicationContext());
+        }
+
+
+        else if (transformerRatingExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_transformer_rating), getApplicationContext());
+        }
+        else if (serviceLineExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_service_line), getApplicationContext());
+        }
+        else if (threePhaseSupplyExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_three_phase_supply_time), getApplicationContext());
+        }
+        else if (ElectricityBillMonthlyExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_electricity_bill), getApplicationContext());
+        }
+        else if (selectedNeutralAvailability.isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.select_option_for_neutral_Availability), getApplicationContext());
+        }
+        else if (StructureToWaterSourceExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_structure_to_water_source), getApplicationContext());
+        }
+        else if (feederToFarmerSiteExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_feeder_to_farmer_site), getApplicationContext());
         } else if (!imageArrayList.get(0).isImageSelected()) {
             CustomUtility.ShowToast(getResources().getString(R.string.attechWaterSourcePhoto), getApplicationContext());
 
@@ -679,12 +750,20 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
         } else if (!imageArrayList.get(3).isImageSelected()) {
             CustomUtility.ShowToast(getResources().getString(R.string.attechFormPhoto), getApplicationContext());
 
+        }else if (!imageArrayList.get(4).isImageSelected()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.attechFormPhoto), getApplicationContext());
+
+        }else if (!imageArrayList.get(5).isImageSelected()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.attechFormPhoto), getApplicationContext());
+
         } else {
 
             Photo1 = CustomUtility.getBase64FromBitmap(getApplicationContext(), imageArrayList.get(0).getImagePath());
             Photo2 = CustomUtility.getBase64FromBitmap(getApplicationContext(), imageArrayList.get(1).getImagePath());
             Photo3 = CustomUtility.getBase64FromBitmap(getApplicationContext(), imageArrayList.get(2).getImagePath());
             Photo4 = CustomUtility.getBase64FromBitmap(getApplicationContext(), imageArrayList.get(3).getImagePath());
+            Photo5 = CustomUtility.getBase64FromBitmap(getApplicationContext(), imageArrayList.get(4).getImagePath());
+            Photo6 = CustomUtility.getBase64FromBitmap(getApplicationContext(), imageArrayList.get(5).getImagePath());
 
 
             if (CustomUtility.isInternetOn(getApplicationContext())) {
@@ -703,7 +782,12 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
                         current2AmpExt.getText().toString().trim(), current3AmpExt.getText().toString().trim(), frequencyHzExt.getText().toString().trim(), powerFactor1Ext.getText().toString().trim(),
                         powerFactor2Ext.getText().toString().trim(), powerFactor3Ext.getText().toString().trim(), BorwellDiameterExt.getText().toString().trim(), BorwellDepthExt.getText().toString().trim(),
                         pumpSetDepthExt.getText().toString().trim(), pumpSetDischargeExt.getText().toString().trim(), pumpSetDeliveryExt.getText().toString().trim(), distanceFromProposedSolarPlantExt.getText().toString().trim(),
-                        imageArrayList.get(0).getImagePath(), imageArrayList.get(1).getImagePath(), imageArrayList.get(2).getImagePath(), imageArrayList.get(3).getImagePath());
+                        electricConnectionRatingExt.getText().toString().trim(),exisCableDetailsExt.getText().toString().trim(),deliveryPipeLineExt.getText().toString().trim(),
+                        totalDynamicHeadExt.getText().toString().trim(),transformerRatingExt.getText().toString().trim(),
+                        serviceLineExt.getText().toString().trim(),threePhaseSupplyExt.getText().toString().trim(),ElectricityBillMonthlyExt.getText().toString().trim(),
+                        selectedNeutralAvailability, StructureToWaterSourceExt.getText().toString().trim(),feederToFarmerSiteExt.getText().toString().trim(),
+                        additionalInfoExt.getText().toString().trim(), imageArrayList.get(0).getImagePath(), imageArrayList.get(1).getImagePath(),
+                        imageArrayList.get(2).getImagePath(), imageArrayList.get(3).getImagePath(), imageArrayList.get(4).getImagePath(), imageArrayList.get(5).getImagePath());
 
 
                 if (db.isRecordExist(DatabaseHelper.TABLE_KUSUMCSURVEYFORM, DatabaseHelper.KEY_APPLICANT_NO, applicationNumberExt.getText().toString().trim())) {
@@ -761,8 +845,10 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
                 jsonObj.put("ELEC_CON", selectedElectricConnectionType);
                 jsonObj.put("ELEC_IDEN_NO", electricConnectionIdentificationNoEXT.getText().toString().trim());
                 jsonObj.put("PUMP_TYPE", selectedTypeOfPump);
+                jsonObj.put("ELEC_CONN_RAT", electricConnectionRatingExt.getText().toString().trim());
                 jsonObj.put("PUMP_SET_RATING", selectedPumpSetRating);
                 jsonObj.put("PUMP_MAKE", pumpMakeEXT.getText().toString().trim());
+                jsonObj.put("CABLE_DET_MAKE", exisCableDetailsExt.getText().toString().trim());
                 jsonObj.put("PHASE_VOL_V1", voltageV1Ext.getText().toString().trim());
                 jsonObj.put("PHASE_VOL_V2", voltageV2Ext.getText().toString().trim());
                 jsonObj.put("PHASE_VOL_V3", voltageV3Ext.getText().toString().trim());
@@ -782,10 +868,27 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
                 jsonObj.put("DIS_PUMP_LPM", pumpSetDischargeExt.getText().toString().trim());
                 jsonObj.put("DEL_PUMP_LPM", pumpSetDeliveryExt.getText().toString().trim());
                 jsonObj.put("DISTANCE", distanceFromProposedSolarPlantExt.getText().toString().trim());
+
+
+                jsonObj.put("PIPE_LEN_SIZE", deliveryPipeLineExt.getText().toString().trim());
+                jsonObj.put("DYNAMIC_HEAD", totalDynamicHeadExt.getText().toString().trim());
+
+                jsonObj.put("TRANSF_RATING", transformerRatingExt.getText().toString().trim());
+                jsonObj.put("SERVICE_LINE", serviceLineExt.getText().toString().trim());
+                jsonObj.put("THREE_PH_SUPPLY", threePhaseSupplyExt.getText().toString().trim());
+                jsonObj.put("ELECTRIC_BILL", ElectricityBillMonthlyExt.getText().toString().trim());
+                jsonObj.put("NEUTRL_GRID_AVBL", selectedNeutralAvailability);
+                jsonObj.put("WATER_SOURC_LEN", StructureToWaterSourceExt.getText().toString().trim());
+                jsonObj.put("DIST_FARMAR", feederToFarmerSiteExt.getText().toString().trim());
+                jsonObj.put("IFNO_REMARK", additionalInfoExt.getText().toString().trim());
+
+
                 jsonObj.put("photo1", Photo1);
                 jsonObj.put("photo2", Photo2);
                 jsonObj.put("photo3", Photo3);
                 jsonObj.put("photo4", Photo4);
+                jsonObj.put("photo5", Photo5);
+                jsonObj.put("photo6", Photo6);
 
                 ja_invc_data.put(jsonObj);
             } catch (Exception e) {

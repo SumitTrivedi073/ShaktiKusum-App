@@ -286,6 +286,8 @@
     <string name="transformer">Transformer</string>
     <string name="attechformphoto1">Attach form photo1</string>
     <string name="attechformphoto2">Attach form photo2</string>
+    <string name="attechformphoto3">Attach form photo3</string>
+    <string name="attechformphoto4">Attach form photo4</string>
     <string name="attachimages">Attach Images</string>
     <string name="shaktiDetail">Shakti Pump Detail</string>
     <string name="submit_feedback">Submit Feedback</string>
@@ -414,6 +416,33 @@
     <string name="ImeiFileToServer">Sending IMEI File To Server...</string>
     <string name="not_ok">NOT OK</string>
     <string name="ok">OK</string>
+    <string name="gps">Please turn on location first</string>
+    <string name="enter_electric_connection_rating_hp">Enter electric connection rating (HP)</string>
+    <string name="electric_connection_rating">Electric Connection Rating</string>
+    <string name="existing_cable_details">Existing Cable Details with make (Size length)</string>
+    <string name="enter_existing_cable_details">Enter Existing Cable Details with make (Size length)</string>
+    <string name="deliveryPipeLine"><![CDATA[Delivery-Pipe Line Length & Size Delivery & Suction]]></string>
+    <string name="enter_delivery_pipe_line"><![CDATA[Enter Delivery-Pipe Line Length & Size Delivery & Suction]]></string>
+    <string name="total_dynamic_head_meter">Total dynamic Head (Meter)</string>
+    <string name="enter_total_dynamic_head_meter">Enter Total Dynamic Head (Meter)</string>
+    <string name="select_option_for_neutral_Availability">Please Select option for Neutral Availability</string>
+    <string name="grid_related_details">Grid Related Details</string>
+    <string name="enter_transformer_rating"><![CDATA[Enter Transformer Rating & Load]]></string>
+    <string name="transformer_rating"><![CDATA[Transformer Rating & Load kVA/kW]]></string>
+    <string name="service_line">Service Line</string>
+    <string name="enter_service_line">Enter Service Line</string>
+    <string name="three_phase_supply"><![CDATA[Three Phase Supply Time & Hrs.]]></string>
+    <string name="enter_three_phase_supply_time"><![CDATA[Enter Three Phase Supply Time & Hrs.]]></string>
+    <string name="electricity_bill_monthly">Electricity Bill (Monthly)</string>
+    <string name="enter_electricity_bill">Enter Electricity Bill (Monthly)</string>
+    <string name="neutral_availability">Neutral Availability With Grid</string>
+    <string name="enter_neutral_availability">Enter Neutral Availability With Grid</string>
+    <string name="structure_to_water_source_length_meter">Structure To Water Source Length (Meter)</string>
+    <string name="enter_structure_to_water_source">Enter Structure To Water Source Length (Meter)</string>
+    <string name="feeder_to_farmer_site">Feeder TO Farmer Site Distance (KM)</string>
+    <string name="enter_feeder_to_farmer_site">Enter Feeder TO Farmer Site Distance (KM)</string>
+    <string name="additional_info">Additional Info</string>
+    <string name="enter_additional_info">Enter Additional Info</string>
 
 
     <string-array name="nav_drawer_labels">
@@ -487,6 +516,13 @@
 
     <string-array name="yesNoSpinner">
         <item>Select option for south facing shadow</item>
+        <item>Yes</item>
+        <item>No</item>
+
+    </string-array>
+
+    <string-array name="neutralAvailability">
+        <item>Select option for Neutral Availability</item>
         <item>Yes</item>
         <item>No</item>
 

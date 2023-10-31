@@ -177,7 +177,6 @@ public class KusumCSurveyListActivty extends AppCompatActivity {
                 WebURL.GET_SURVEY_API +"?project_no="+CustomUtility.getSharedPreferences(getApplicationContext(), "projectid")+"&userid="+CustomUtility.getSharedPreferences(getApplicationContext(), "userid")+"&project_login_no=01", null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject  response) {
-                CustomUtility.hideProgressDialog(KusumCSurveyListActivty.this);
 
 
                 if(response.toString()!=null && !response.toString().isEmpty()) {
@@ -224,9 +223,13 @@ public class KusumCSurveyListActivty extends AppCompatActivity {
             pendingFeedbackList.setAdapter(surveyListAdapter);
             noDataFound.setVisibility(View.GONE);
             pendingFeedbackList.setVisibility(View.VISIBLE);
+            CustomUtility.hideProgressDialog(KusumCSurveyListActivty.this);
+
         }else {
             noDataFound.setVisibility(View.VISIBLE);
             pendingFeedbackList.setVisibility(View.GONE);
+            CustomUtility.hideProgressDialog(KusumCSurveyListActivty.this);
+
         }
     }
 
