@@ -1819,7 +1819,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
                                             DONGAL_ID = sssM[10].replace("DID-","");
                                             if(DONGAL_ID.isEmpty()){
-                                                DONGAL_ID = "Not Available";
+                                                DONGAL_ID = "0";
                                                 AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
                                                 lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id: Not Available"));
                                             }else {
@@ -1827,7 +1827,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                                 lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + DONGAL_ID));
                                             }
                                         } else {
-                                            DONGAL_ID = "Not Available";
+                                            DONGAL_ID = "0";
                                             AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
                                             lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id: Not Available"));
                                         }
@@ -2147,9 +2147,8 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                             if (!ssSubIn1[1].equalsIgnoreCase("")) {
 
                                                 DONGAL_ID = sssM[10].replace("DID-","");
-                                                Log.e("DONGAL_ID2=====>",DONGAL_ID);
                                                 if(DONGAL_ID.isEmpty()){
-                                                    DONGAL_ID = "Not Available";
+                                                    DONGAL_ID = "0";
                                                     AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
                                                     lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id: Not Available"));
                                                 }else {
@@ -2157,8 +2156,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                                     lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + DONGAL_ID));
                                                 }
                                             } else {
-                                                DONGAL_ID = "Not Available";
-                                                Log.e("DONGAL_ID22=====>",DONGAL_ID);
+                                                DONGAL_ID = "0";
                                                 AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
                                                 lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id: Not Available"));
                                             }
@@ -2292,9 +2290,8 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
                                             if (!ssSubIn1[1].equalsIgnoreCase("")) {
                                                 DONGAL_ID = sssM[9].replace("DID-","");
-                                                Log.e("DONGAL_ID3=====>",DONGAL_ID);
                                                 if(DONGAL_ID.isEmpty()){
-                                                    DONGAL_ID = "Not Available";
+                                                    DONGAL_ID = "0";
                                                     AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
                                                     lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id: Not Available"));
                                                 }else {
@@ -2302,7 +2299,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                                     lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id:" + DONGAL_ID));
                                                 }
                                             } else {
-                                                DONGAL_ID = "Not Available";
+                                                DONGAL_ID = "0";
                                                 AllCommomSTRContainer = AllCommomSTRContainer + " :\n Dongle Id: Not Available";
                                                 lvlMainTextContainerID.addView(getTextViewTTpp(pp, "\nDongle Id: Not Available"));
                                             }

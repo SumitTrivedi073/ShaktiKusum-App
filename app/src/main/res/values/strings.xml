@@ -212,7 +212,7 @@
     <string name="enter_allModuleSrno">Please Enter all module serial no.</string>
     <string name="moduleMultipleTime">Module No. are entered multiple times, please change it</string>
     <string name="sitesurvey_B">Site Survey Kusum (B)</string>
-    <string name="sitesurvey_C">Survey</string>
+    <string name="sitesurvey_C">Kusum C Survey List</string>
     <string name="farmer_name">Farmer Name</string>
     <string name="salesName">Employee Code</string>
     <string name="selectRadio">Select any one option</string>
@@ -498,10 +498,17 @@
 
     <string-array name="pumpRating">
         <item>Select Pump Rating</item>
+        <item>1 HP</item>
+        <item>2 HP</item>
         <item>3 HP</item>
         <item>5 HP</item>
         <item>7.5 HP</item>
         <item>10 HP</item>
+        <item>12.5 HP</item>
+        <item>15 HP</item>
+        <item>17.5 HP</item>
+        <item>20 HP</item>
+
 
     </string-array>
 
@@ -578,6 +585,8 @@
         <item>120</item>
         <item>130</item>
         <item>150</item>
+        <item>170</item>
+        <item>200</item>
     </string-array>
 
     <string-array name="acDc">

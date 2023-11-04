@@ -180,6 +180,7 @@ public class KusumCSurveyListActivty extends AppCompatActivity {
 
 
                 if(response.toString()!=null && !response.toString().isEmpty()) {
+                    CustomUtility.hideProgressDialog(KusumCSurveyListActivty.this);
                     SurveyListModel surveyListModel = new Gson().fromJson(response.toString(), SurveyListModel.class);
                     if(surveyListModel.getStatus().equals("true")) {
                         surveyList = surveyListModel.getResponse();
@@ -196,6 +197,7 @@ public class KusumCSurveyListActivty extends AppCompatActivity {
                 }else {
                     noDataFound.setVisibility(View.VISIBLE);
                     pendingFeedbackList.setVisibility(View.GONE);
+                    CustomUtility.hideProgressDialog(KusumCSurveyListActivty.this);
                 }
 
             }
@@ -223,8 +225,6 @@ public class KusumCSurveyListActivty extends AppCompatActivity {
             pendingFeedbackList.setAdapter(surveyListAdapter);
             noDataFound.setVisibility(View.GONE);
             pendingFeedbackList.setVisibility(View.VISIBLE);
-            CustomUtility.hideProgressDialog(KusumCSurveyListActivty.this);
-
         }else {
             noDataFound.setVisibility(View.VISIBLE);
             pendingFeedbackList.setVisibility(View.GONE);

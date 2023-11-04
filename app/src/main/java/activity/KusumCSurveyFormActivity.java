@@ -85,7 +85,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
     LinearLayout sourceOfWaterLinear;
     String selectedCategory = "", selectedSourceofWater = "", selectedInternetConnectivity = "", selectedTypesOfIrrigation = "", selectedSouthfacingShadow = "",
             selectedElectricConnectionType = "", selectedTypeOfPump = "", selectedPumpSetRating = "", selectedNeutralAvailability = "", latitude = "", longitude = "",
-            Photo1 = "", Photo2 = "", Photo3 = "", Photo4 = "",Photo5 = "",Photo6 = "";
+            Photo1 = "", Photo2 = "", Photo3 = "", Photo4 = "",Photo5 = "",Photo6 = "",  docno_sap = null,invc_done,obj2 = null;;
 
     TextView submitBtn;
     SurveyListModel.Response surveyListModel;
@@ -321,7 +321,8 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ValidationCheck();
+                submitSurveyForm();
+            //  ValidationCheck();
 
             }
         });
@@ -390,9 +391,8 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
         if (gps.canGetLocation()) {
             if (!String.valueOf(gps.getLatitude()).isEmpty() && !String.valueOf(gps.getLongitude()).isEmpty()) {
 
-                DecimalFormat decimalFormat = new DecimalFormat("##.#####");
-                latitude = decimalFormat.format(gps.getLatitude());
-                longitude = decimalFormat.format(gps.getLongitude());
+                latitude = String.valueOf(gps.getLatitude());
+                longitude = String.valueOf(gps.getLongitude());
                 currentLatLngExt.setText(latitude + "," + longitude);
             }
         } else {
@@ -767,7 +767,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
 
 
             if (CustomUtility.isInternetOn(getApplicationContext())) {
-                new submitSurveyForm().execute();
+                submitSurveyForm();
             } else {
                 CustomUtility.ShowToast(getResources().getString(R.string.dataSavedOffline), getApplicationContext());
 
@@ -802,24 +802,11 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class submitSurveyForm extends AsyncTask<String, String, String> {
-        ProgressDialog progressDialog;
 
-        @Override
-        protected void onPreExecute() {
-            progressDialog = new ProgressDialog(KusumCSurveyFormActivity.this);
-            progressDialog.setCancelable(false);
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setMessage("Sending Data to server..please wait !");
-            progressDialog.show();
-        }
+    public void submitSurveyForm()  {
+         CustomUtility.showProgressDialogue(KusumCSurveyFormActivity.this);
 
-        @Override
-        protected String doInBackground(String... params) {
-
-            String docno_sap = null;
-            String invc_done;
+           String invc_done;
             String obj2 = null;
 
             JSONArray ja_invc_data = new JSONArray();
@@ -894,63 +881,45 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            Log.e("Param====>", ja_invc_data.toString());
-            final ArrayList<NameValuePair> param1_invc = new ArrayList<>();
+             ArrayList<NameValuePair> param1_invc = new ArrayList<>();
             param1_invc.add(new BasicNameValuePair("survey", String.valueOf(ja_invc_data)));
-            Log.e("DATA", "$$$$" + param1_invc);
-            System.out.println("param1_invc_vihu==>>" + param1_invc);
-            try {
+             try {
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
                 StrictMode.setThreadPolicy(policy);
                 obj2 = CustomHttpClient.executeHttpPost1(WebURL.KusumCSurvey, param1_invc);
-                Log.e("OUTPUT1", "&&&&" + obj2);
-                System.out.println("OUTPUT1==>>" + obj2);
-                progressDialog.dismiss();
-                if (!obj2.equalsIgnoreCase("")) {
+
+                if (!obj2.isEmpty()) {
+                    CustomUtility.hideProgressDialog(KusumCSurveyFormActivity.this);
                     JSONObject object = new JSONObject(obj2);
                     String obj1 = object.getString("data_save");
                     JSONArray ja = new JSONArray(obj1);
-                    Log.e("OUTPUT2", "&&&&" + ja);
                     for (int i = 0; i < ja.length(); i++) {
                         JSONObject jo = ja.getJSONObject(i);
-                        docno_sap = jo.getString("mdocno");
                         invc_done = jo.getString("return");
                         if (invc_done.equalsIgnoreCase("Y")) {
-
-
                             if (db.isRecordExist(DatabaseHelper.TABLE_KUSUMCSURVEYFORM, DatabaseHelper.KEY_APPLICANT_NO, applicationNumberExt.getText().toString().trim())) {
                                 db.deleteKusumCSurveyFrom();
                             }
                             CustomUtility.deleteArrayList(getApplicationContext(), Constant.surveyList);
                             CustomUtility.removeValueFromSharedPref(getApplicationContext(), Constant.currentDate);
-
                             showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
-
-                            finish();
-
+                           onBackPressed();
                         } else if (invc_done.equalsIgnoreCase("N")) {
                             showingMessage(getResources().getString(R.string.dataNotSubmitted));
-                            progressDialog.dismiss();
-
-
                         }
                     }
                 } else {
                     showingMessage(getResources().getString(R.string.somethingWentWrong));
-                    progressDialog.dismiss();
+                    CustomUtility.hideProgressDialog(KusumCSurveyFormActivity.this);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                progressDialog.dismiss();
+                 CustomUtility.hideProgressDialog(KusumCSurveyFormActivity.this);
             }
-            return obj2;
+
         }
 
-        @Override
-        protected void onPostExecute(String result) {
-            progressDialog.dismiss();
-        }
-    }
+
 
     private void showingMessage(String message) {
         runOnUiThread(new Runnable() {
