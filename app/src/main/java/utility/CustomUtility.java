@@ -312,14 +312,16 @@ public class CustomUtility {
     public static void deleteArrayList(Context context,String name){
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);
         SharedPreferences.Editor editor = settings.edit();
-        editor.remove(name).apply();
+        editor.remove(name).commit();
+        editor.apply();
 
     }
 
     public static void removeValueFromSharedPref(Context context,String name){
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);
         SharedPreferences.Editor editor = settings.edit();
-        editor.remove(name).apply();
+        editor.remove(name).commit();
+        editor.apply();
 
     }
     public static Uri getImageUri(Context inContext, Bitmap inImage) {

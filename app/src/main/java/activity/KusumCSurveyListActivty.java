@@ -1,5 +1,6 @@
 package activity;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -80,21 +81,31 @@ public class KusumCSurveyListActivty extends AppCompatActivity {
             if(CustomUtility.getSharedPreferences(KusumCSurveyListActivty.this,Constant.currentDate)!=null
             && !CustomUtility.getSharedPreferences(KusumCSurveyListActivty.this,Constant.currentDate).isEmpty()
                     &&CustomUtility.getSharedPreferences(KusumCSurveyListActivty.this,Constant.currentDate).equals(CustomUtility.getCurrentDate())) {
-
+                Log.e("current date",CustomUtility.getSharedPreferences(KusumCSurveyListActivty.this,Constant.currentDate));
                 getDataFromLocal();
+
             }else {
                 getSurveyList();
             }
         }else {
            getDataFromLocal();
         }
+
+
+
+
     }
 
     private void getDataFromLocal() {
+
+
+
         String json = CustomUtility.getSharedPreferences(KusumCSurveyListActivty.this, Constant.surveyList);
         Type type = new TypeToken<ArrayList<SurveyListModel.Response>>() {}.getType();
 
         surveyList = new Gson().fromJson(json, type);
+
+        Log.e("surveyList",surveyList.toString());
 
             setAdapter();
 
@@ -169,7 +180,11 @@ public class KusumCSurveyListActivty extends AppCompatActivity {
 
 
     private void getSurveyList() {
-        CustomUtility.showProgressDialogue(KusumCSurveyListActivty.this);
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getResources().getString(R.string.loading));
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         Log.e("URL====>",WebURL.GET_SURVEY_API +"?project_no="+CustomUtility.getSharedPreferences(getApplicationContext(), "projectid")+"&userid="+CustomUtility.getSharedPreferences(getApplicationContext(), "userid")+"&project_login_no=01");
         surveyList = new ArrayList<>();
@@ -180,7 +195,9 @@ public class KusumCSurveyListActivty extends AppCompatActivity {
 
 
                 if(response.toString()!=null && !response.toString().isEmpty()) {
-                    CustomUtility.hideProgressDialog(KusumCSurveyListActivty.this);
+                                 if(progressDialog!=null &&progressDialog.isShowing()){
+                                     progressDialog.dismiss();
+                                 }
                     SurveyListModel surveyListModel = new Gson().fromJson(response.toString(), SurveyListModel.class);
                     if(surveyListModel.getStatus().equals("true")) {
                         surveyList = surveyListModel.getResponse();
@@ -197,14 +214,19 @@ public class KusumCSurveyListActivty extends AppCompatActivity {
                 }else {
                     noDataFound.setVisibility(View.VISIBLE);
                     pendingFeedbackList.setVisibility(View.GONE);
-                    CustomUtility.hideProgressDialog(KusumCSurveyListActivty.this);
+                    if(progressDialog!=null &&progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
+
                 }
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                CustomUtility.hideProgressDialog(KusumCSurveyListActivty.this);
+                if(progressDialog!=null &&progressDialog.isShowing()){
+                    progressDialog.dismiss();
+                }
                 noDataFound.setVisibility(View.VISIBLE);
                 pendingFeedbackList.setVisibility(View.GONE);
                 Log.e("error", String.valueOf(error));

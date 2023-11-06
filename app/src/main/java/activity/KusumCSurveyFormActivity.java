@@ -321,8 +321,8 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitSurveyForm();
-            //  ValidationCheck();
+              //submitSurveyForm();
+              ValidationCheck();
 
             }
         });
@@ -804,7 +804,11 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
 
 
     public void submitSurveyForm()  {
-         CustomUtility.showProgressDialogue(KusumCSurveyFormActivity.this);
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getResources().getString(R.string.loading));
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
 
            String invc_done;
             String obj2 = null;
@@ -889,7 +893,9 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
                 obj2 = CustomHttpClient.executeHttpPost1(WebURL.KusumCSurvey, param1_invc);
 
                 if (!obj2.isEmpty()) {
-                    CustomUtility.hideProgressDialog(KusumCSurveyFormActivity.this);
+                    if(progressDialog!=null &&progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
                     JSONObject object = new JSONObject(obj2);
                     String obj1 = object.getString("data_save");
                     JSONArray ja = new JSONArray(obj1);
@@ -903,18 +909,27 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
                             CustomUtility.deleteArrayList(getApplicationContext(), Constant.surveyList);
                             CustomUtility.removeValueFromSharedPref(getApplicationContext(), Constant.currentDate);
                             showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
-                           onBackPressed();
+
+                            Intent intent = new Intent(KusumCSurveyFormActivity.this, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                          // onBackPressed();
+
                         } else if (invc_done.equalsIgnoreCase("N")) {
                             showingMessage(getResources().getString(R.string.dataNotSubmitted));
                         }
                     }
                 } else {
                     showingMessage(getResources().getString(R.string.somethingWentWrong));
-                    CustomUtility.hideProgressDialog(KusumCSurveyFormActivity.this);
+                    if(progressDialog!=null &&progressDialog.isShowing()){
+                        progressDialog.dismiss();
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                 CustomUtility.hideProgressDialog(KusumCSurveyFormActivity.this);
+                 if(progressDialog!=null &&progressDialog.isShowing()){
+                     progressDialog.dismiss();
+                 }
             }
 
         }
