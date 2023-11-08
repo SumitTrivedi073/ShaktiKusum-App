@@ -320,8 +320,8 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //ValidationCheck();
-               submitSurveyForm();
+                ValidationCheck();
+
             }
         });
 
