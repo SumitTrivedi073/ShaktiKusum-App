@@ -241,8 +241,8 @@
     <string name="typesofirrigation">Types of irrigation installed</string>
     <string name="isSouthFacingShadow">Is south facing shadow free land available at site for installation of solar pump</string>
     <string name="existingPumpSetDetails">Existing Pump Set Details</string>
-    <string name="electricConnectionType">electric Connection Type</string>
-    <string name="electricConnectionIdentificationNo">electric Connection Identification No.</string>
+    <string name="electricConnectionType">Electric Connection Type</string>
+    <string name="electricConnectionIdentificationNo">Electric Connection Identification No.</string>
     <string name="enter_electricConnectionIdentificationNo">Enter electric Connection Identification No</string>
     <string name="pumpsetrating">Pump Set Ratings</string>
     <string name="select_pumpsetrating">Select Pump Set Rating</string>
@@ -269,8 +269,8 @@
     <string name="powerFactor1">Enter Power Factor (PF-1)</string>
     <string name="powerFactor2">Enter Power Factor (PF-2)</string>
     <string name="powerFactor3">Enter Power Factor (PF-3)</string>
-    <string name="diameterOfBorwell"> Diameter Of Borewell</string>
-    <string name="enter_diameterOfBorwell">Enter Diameter Of Borwell (inches)</string>
+    <string name="diameterOfBorwell"> Diameter Of Borewell/Water Source</string>
+    <string name="enter_diameterOfBorwell">Enter Diameter Of Borwell/Water Source (inches)</string>
     <string name="depthOfBorwell">Depth Of Borewell</string>
     <string name="enter_depthOfBorewell">Enter Depth Of Borewell (Meter)</string>
     <string name="depthOfPumpSet">Depth Of Pump Set Installed</string>
