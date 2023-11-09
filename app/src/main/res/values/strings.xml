@@ -276,6 +276,8 @@
     <string name="depthOfPumpSet">Depth Of Pump Set Installed</string>
     <string name="enter_depthOfPumpSet">Enter Depth Of Pump Set Installed (Meter)</string>
     <string name="dischargeOfPumpSet">Discharge Of Pump Set</string>
+    <string name="expower">Power In Volt</string>
+    <string name="exEnterpower">Enter Power In Volt</string>
     <string name="enter_dischargeOfPumpSet">Enter Discharge Of Pump Set Installed (LPM)</string>
     <string name="deliveryOfPumpSet">Delivery Of Pump Set</string>
     <string name="enter_deliveryOfPumpSet">Enter Delivery Of Pump Set Installed (inches)</string>
@@ -289,6 +291,7 @@
     <string name="attechformphoto3">Attach form photo3</string>
     <string name="attechformphoto4">Attach form photo4</string>
     <string name="attachimages">Attach Images</string>
+    <string name="pumpSelection">Pumps Selection</string>
     <string name="shaktiDetail">Shakti Pump Detail</string>
     <string name="submit_feedback">Submit Feedback</string>
     <string name="enter_LatLng">Enter Latitude and longitude of current address</string>

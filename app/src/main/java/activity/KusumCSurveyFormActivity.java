@@ -884,10 +884,13 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
             StrictMode.setThreadPolicy(policy);
             obj2 = CustomHttpClient.executeHttpPost1(WebURL.KusumCSurvey, param1_invc);
 
+            Log.e("Response",obj2.toString());
+
             if (!obj2.isEmpty()) {
 
                 JSONObject object = new JSONObject(obj2);
                 String obj1 = object.getString("data_save");
+                Log.e("Response1234",obj1.toString());
                 JSONArray ja = new JSONArray(obj1);
                 for (int i = 0; i < ja.length(); i++) {
                     JSONObject jo = ja.getJSONObject(i);

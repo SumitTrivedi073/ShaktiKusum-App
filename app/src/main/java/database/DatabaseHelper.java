@@ -3688,10 +3688,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteKusumCSurveyFromSpecificItem(String applicationNumber) {
         SQLiteDatabase db = this.getWritableDatabase();
         if (CustomUtility.doesTableExist(db, TABLE_KUSUMCSURVEYFORM)) {
-            String Query = "SELECT * FROM " + TABLE_KUSUMCSURVEYFORM + " WHERE " + DatabaseHelper.KEY_APPLICANT_NO + " = '" + applicationNumber + "'";
-            Cursor cursor = db.rawQuery(Query, null);
+       //  String Query = "DELETE FROM " + TABLE_KUSUMCSURVEYFORM + " WHERE " + DatabaseHelper.KEY_APPLICANT_NO + " = '" + applicationNumber + "'";
 
-            db.delete(TABLE_KUSUMCSURVEYFORM, Query, null);
+            String where = "";
+            where =  DatabaseHelper.KEY_APPLICANT_NO + " = '" + applicationNumber + "'";
+
+            db.delete(TABLE_KUSUMCSURVEYFORM, where, null);
         }
     }
 
