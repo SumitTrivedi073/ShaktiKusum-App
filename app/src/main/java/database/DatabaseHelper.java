@@ -282,7 +282,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_PUMP_SET_RATING = "PUMP_SET_RATING";
     public static final String KEY_PUMP_MAKE = "PUMP_MAKE";
     public static final String KEY_CABLE_DETAIL_WITH_MAKE = "CABLE_DETAIL_WITH_MAKE";
-
+    public static final String KEY_POWER_IN_VOLT = "powerInVolt";
+    public static final String KEY_EXDISCHARGE = "exDischarge";
+    public static final String KEY_EXDYNAMIC = "exDynamic";
     public static final String KEY_PHASE_VOL_V1 = "PHASE_VOL_V1";
     public static final String KEY_PHASE_VOL_V2 = "PHASE_VOL_V2";
     public static final String KEY_PHASE_VOL_V3 = "PHASE_VOL_V3";
@@ -769,6 +771,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_DEL_PUMP_LPM + " TEXT," + KEY_DEL_PIPE_LINE + " TEXT," + KEY_TOTAL_DYNAMIC_HEAD + " TEXT," +KEY_TRANSFORMER_RATING + " TEXT,"
             +KEY_SERVICE_LINE + " TEXT,"+KEY_THREE_PHASE + " TEXT,"+KEY_ELECTRICITY_BILL + " TEXT,"+KEY_NEUTRAL_AVAILABILITY + " TEXT,"
             +KEY_STURCTURE_WATER_SOURCE + " TEXT," +KEY_FEEDER_TO_FARMER + " TEXT," +KEY_ADDITIONAL_INFO + " TEXT,"
+            + KEY_EXDISCHARGE + " TEXT,"+ KEY_POWER_IN_VOLT + " TEXT,"+  KEY_EXDYNAMIC + " TEXT,"
             + KEY_PHOTO1 + " BLOB," + KEY_PHOTO2 + " BLOB," + KEY_PHOTO3 + " BLOB," + KEY_PHOTO4 + " BLOB," + KEY_PHOTO5 + " BLOB," + KEY_PHOTO6 + " BLOB," + KEY_DISTANCE + " TEXT)";
 
 
@@ -2407,7 +2410,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_LAT, kusumCSurveyBean.getLAT());
             values.put(KEY_LNG, kusumCSurveyBean.getLNG());
             values.put(KEY_CATEGORY, kusumCSurveyBean.getCATEGORY());
-
             values.put(KEY_WATER_SOURCE, kusumCSurveyBean.getWATER_SOURCE());
             values.put(KEY_INTERNET_TYPE, kusumCSurveyBean.getINTERNET_TYPE());
             values.put(KEY_CROP_PATTERN, kusumCSurveyBean.getCROP_PATTERN());
@@ -2451,6 +2453,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_STURCTURE_WATER_SOURCE,kusumCSurveyBean.getWATER_SOURC_LEN());
             values.put(KEY_FEEDER_TO_FARMER,kusumCSurveyBean.getDIST_FARMAR());
             values.put(KEY_ADDITIONAL_INFO,kusumCSurveyBean.getIFNO_REMARK());
+
+            values.put(KEY_POWER_IN_VOLT,kusumCSurveyBean.getpowerInVolt());
+            values.put(KEY_EXDISCHARGE,kusumCSurveyBean.getExDischarge());
+            values.put(KEY_EXDYNAMIC,kusumCSurveyBean.getExDynamichead());
 
             values.put(KEY_PHOTO1, kusumCSurveyBean.getPhoto1());
             values.put(KEY_PHOTO2, kusumCSurveyBean.getPhoto2());
@@ -2542,6 +2548,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_FEEDER_TO_FARMER,kusumCSurveyBean.getDIST_FARMAR());
             values.put(KEY_ADDITIONAL_INFO,kusumCSurveyBean.getIFNO_REMARK());
 
+            values.put(KEY_POWER_IN_VOLT,kusumCSurveyBean.getpowerInVolt());
+            values.put(KEY_EXDISCHARGE,kusumCSurveyBean.getExDischarge());
+            values.put(KEY_EXDYNAMIC,kusumCSurveyBean.getExDynamichead());
 
             values.put(KEY_PHOTO1, kusumCSurveyBean.getPhoto1());
             values.put(KEY_PHOTO2, kusumCSurveyBean.getPhoto2());
@@ -3926,6 +3935,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         kusumCSurveyBean.setWATER_SOURC_LEN(cursor.getString(cursor.getColumnIndex(KEY_STURCTURE_WATER_SOURCE)));
                         kusumCSurveyBean.setDIST_FARMAR(cursor.getString(cursor.getColumnIndex(KEY_FEEDER_TO_FARMER)));
                         kusumCSurveyBean.setIFNO_REMARK(cursor.getString(cursor.getColumnIndex(KEY_ADDITIONAL_INFO)));
+
+                        kusumCSurveyBean.setpowerInVolt(cursor.getString(cursor.getColumnIndex(KEY_POWER_IN_VOLT)));
+                        kusumCSurveyBean.setExDischarge(cursor.getString(cursor.getColumnIndex(KEY_EXDISCHARGE)));
+                        kusumCSurveyBean.setExDynamichead(cursor.getString(cursor.getColumnIndex(KEY_EXDYNAMIC)));
+
 
                         kusumCSurveyBean.setPhoto1(cursor.getString(cursor.getColumnIndex(KEY_PHOTO1)));
                         kusumCSurveyBean.setPhoto2(cursor.getString(cursor.getColumnIndex(KEY_PHOTO2)));

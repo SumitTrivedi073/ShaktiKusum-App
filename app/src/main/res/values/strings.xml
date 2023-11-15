@@ -277,7 +277,8 @@
     <string name="enter_depthOfPumpSet">Enter Depth Of Pump Set Installed (Meter)</string>
     <string name="dischargeOfPumpSet">Discharge Of Pump Set</string>
     <string name="expower">Power In Volt</string>
-    <string name="exEnterpower">Enter Power In Volt</string>
+
+    <string name="exEnterpower">Enter Ex Power In Volt</string>
     <string name="enter_dischargeOfPumpSet">Enter Discharge Of Pump Set Installed (LPM)</string>
     <string name="deliveryOfPumpSet">Delivery Of Pump Set</string>
     <string name="enter_deliveryOfPumpSet">Enter Delivery Of Pump Set Installed (inches)</string>
@@ -447,6 +448,9 @@
     <string name="additional_info">Additional Info</string>
     <string name="enter_additional_info">Enter Additional Info</string>
     <string name="loading">Loading</string>
+    <string name="enterPowerIn">Enter Power In Volt</string>
+    <string name="expumpSetDischarge">Enter Discharge of pump set</string>
+    <string name="exDynamic">"Enter Total Dynamic head "</string>
 
 
     <string-array name="nav_drawer_labels">

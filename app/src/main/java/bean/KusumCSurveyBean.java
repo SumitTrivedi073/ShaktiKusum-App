@@ -8,20 +8,10 @@ public class KusumCSurveyBean {
      LINE_VOL_V2 = "", LINE_VOL_V3 = "", LINE_CRNT_AMP1 = "", LINE_CRNT_AMP2 = "", LINE_CRNT_AMP3 = "", FREQ_HERTZ = "", LINE_POWFACT_1 = "", LINE_POWFACT_2 = "",
      LINE_POWFACT_3 = "", BOREWELL_SIZE = "", BOREWELL_DEPTH = "", PUMP_SET_DEPTH = "", DIS_PUMP_LPM = "", DEL_PUMP_LPM = "", DISTANCE = "",ELEC_CONN_RAT="",
             CABLE_DET_MAKE="",PIPE_LEN_SIZE="",DYNAMIC_HEAD="",TRANSF_RATING="",SERVICE_LINE="",THREE_PH_SUPPLY="",ELECTRIC_BILL="",NEUTRL_GRID_AVBL="",
-            WATER_SOURC_LEN="",DIST_FARMAR="",IFNO_REMARK="",
+            WATER_SOURC_LEN="",DIST_FARMAR="",IFNO_REMARK="", powerInVolt = "", exDischarge ="",exDynamichead = "",
             photo1, photo2, photo3, photo4,photo5,photo6;
 
-    public KusumCSurveyBean(String project_no, String userid, String project_login_no, String FARMER_CONTACT_NO,
-                            String APPLICANT_NO, String REGISNO, String BENEFICIARY, String SITE_ADRC, String LAT, String LNG,
-                            String CATEGORY, String WATER_SOURCE, String INTERNET_TYPE, String CROP_PATTERN, String TYPE_OF_IRIGATN,
-                            String SHADOW_FREE_LAND, String ELEC_CON, String ELEC_IDEN_NO, String PUMP_TYPE, String PUMP_SET_RATING,
-                            String PUMP_MAKE, String PHASE_VOL_V1, String PHASE_VOL_V2, String PHASE_VOL_V3, String LINE_VOL_V1, String LINE_VOL_V2,
-                            String LINE_VOL_V3, String LINE_CRNT_AMP1, String LINE_CRNT_AMP2, String LINE_CRNT_AMP3, String FREQ_HERTZ,
-                            String LINE_POWFACT_1, String LINE_POWFACT_2, String LINE_POWFACT_3, String BOREWELL_SIZE, String BOREWELL_DEPTH,
-                            String PUMP_SET_DEPTH, String DIS_PUMP_LPM, String DEL_PUMP_LPM, String DISTANCE, String ELEC_CONN_RAT, String CABLE_DET_MAKE,
-                            String PIPE_LEN_SIZE, String DYNAMIC_HEAD, String TRANSF_RATING, String SERVICE_LINE, String THREE_PH_SUPPLY,
-                            String ELECTRIC_BILL, String NEUTRL_GRID_AVBL, String WATER_SOURC_LEN, String DIST_FARMAR, String IFNO_REMARK,
-                            String photo1, String photo2, String photo3, String photo4, String photo5, String photo6) {
+    public KusumCSurveyBean(String project_no, String userid, String project_login_no, String FARMER_CONTACT_NO, String APPLICANT_NO, String REGISNO, String BENEFICIARY, String SITE_ADRC, String LAT, String LNG, String CATEGORY, String WATER_SOURCE, String INTERNET_TYPE, String CROP_PATTERN, String TYPE_OF_IRIGATN, String SHADOW_FREE_LAND, String ELEC_CON, String ELEC_IDEN_NO, String PUMP_TYPE, String PUMP_SET_RATING, String PUMP_MAKE, String PHASE_VOL_V1, String PHASE_VOL_V2, String PHASE_VOL_V3, String LINE_VOL_V1, String LINE_VOL_V2, String LINE_VOL_V3, String LINE_CRNT_AMP1, String LINE_CRNT_AMP2, String LINE_CRNT_AMP3, String FREQ_HERTZ, String LINE_POWFACT_1, String LINE_POWFACT_2, String LINE_POWFACT_3, String BOREWELL_SIZE, String BOREWELL_DEPTH, String PUMP_SET_DEPTH, String DIS_PUMP_LPM, String DEL_PUMP_LPM, String DISTANCE, String ELEC_CONN_RAT, String CABLE_DET_MAKE, String PIPE_LEN_SIZE, String DYNAMIC_HEAD, String TRANSF_RATING, String SERVICE_LINE, String THREE_PH_SUPPLY, String ELECTRIC_BILL, String NEUTRL_GRID_AVBL, String WATER_SOURC_LEN, String DIST_FARMAR, String IFNO_REMARK, String powerInVolt, String exDischarge, String exDynamichead, String photo1, String photo2, String photo3, String photo4, String photo5, String photo6) {
         this.project_no = project_no;
         this.userid = userid;
         this.project_login_no = project_login_no;
@@ -74,6 +64,9 @@ public class KusumCSurveyBean {
         this.WATER_SOURC_LEN = WATER_SOURC_LEN;
         this.DIST_FARMAR = DIST_FARMAR;
         this.IFNO_REMARK = IFNO_REMARK;
+        this.powerInVolt = powerInVolt;
+        this.exDischarge = exDischarge;
+        this.exDynamichead = exDynamichead;
         this.photo1 = photo1;
         this.photo2 = photo2;
         this.photo3 = photo3;
@@ -111,6 +104,30 @@ public class KusumCSurveyBean {
 
     public String getFARMER_CONTACT_NO() {
         return FARMER_CONTACT_NO;
+    }
+
+    public String getpowerInVolt() {
+        return powerInVolt;
+    }
+
+    public void setpowerInVolt(String powerInVolt) {
+        this.powerInVolt = powerInVolt;
+    }
+
+    public String getExDischarge() {
+        return exDischarge;
+    }
+
+    public void setExDischarge(String exDischarge) {
+        this.exDischarge = exDischarge;
+    }
+
+    public String getExDynamichead() {
+        return exDynamichead;
+    }
+
+    public void setExDynamichead(String exDynamichead) {
+        this.exDynamichead = exDynamichead;
     }
 
     public void setFARMER_CONTACT_NO(String FARMER_CONTACT_NO) {
