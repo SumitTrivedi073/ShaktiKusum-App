@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -13,23 +15,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.shaktipumplimited.shaktikusum.R;
 
+import java.util.ArrayList;
 import java.util.List;
-
 import debugapp.Bean.SurveyListResponse;
 import debugapp.GlobalValue.Constant;
 
 
-public class SurweyListAdapter extends RecyclerView.Adapter<SurweyListAdapter.ViewHolder> {
+public class SurweyListAdapter extends RecyclerView.Adapter<SurweyListAdapter.ViewHolder>  implements Filterable {
 
     private final Context mContext;
-    private final List<SurveyListResponse.Response> mSurveyListResponse;
+    private List<SurveyListResponse.Response> mSurveyListResponse;
+    private final List<SurveyListResponse.Response> arSearch;
 
 
 
     public SurweyListAdapter(Context mContext, List<SurveyListResponse.Response> mLrInvoiceResponse) {
         this.mContext = mContext;
         this.mSurveyListResponse = mLrInvoiceResponse;
-
+        this.arSearch = new ArrayList<>();
+        this.arSearch.addAll(mLrInvoiceResponse);
     }
 
     @Override
@@ -81,6 +85,47 @@ public class SurweyListAdapter extends RecyclerView.Adapter<SurweyListAdapter.Vi
             txtPriceValueID =  v.findViewById(R.id.txtPriceValueID);
 
           }
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    mSurveyListResponse = arSearch;
+                } else {
+                    List<SurveyListResponse.Response> filteredList = new ArrayList<>();
+                    for (SurveyListResponse.Response row : arSearch) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getCustomerName().toLowerCase().contains(charString.toLowerCase())||row.getMobile().toLowerCase().contains(charString.toLowerCase())
+                                ||row.getBeneficiary().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    mSurveyListResponse = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mSurveyListResponse;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                mSurveyListResponse = (ArrayList<SurveyListResponse.Response>) filterResults.values;
+                if (mSurveyListResponse.size()>0){
+                    //noDataFound.setVisibility(View.GONE);
+                }else {
+                   // noDataFound.setVisibility(View.VISIBLE);
+                }
+                notifyDataSetChanged();
+            }
+        };
     }
 }
 

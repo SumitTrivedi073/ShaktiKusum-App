@@ -285,6 +285,7 @@
     <string name="distanceFromProposedSolarPlantLocation">Distance From Proposed Solar Plant Location To Pole</string>
     <string name="enter_distanceFromProposedSolarPlantLocation">Enter Distance From Proposed Solar Plant Location To Pole</string>
     <string name="kusumSurveyform">Kusum C Survey Form</string>
+    <string name="kusumSurveyBform">Kusum B Survey Form</string>
     <string name="watersourcephotograpth">water source photograpth with farmer/Beneficiary</string>
     <string name="transformer">Transformer</string>
     <string name="attechformphoto1">Attach form photo1</string>
@@ -585,6 +586,7 @@
 
     <string-array name="pumpWaterLevel">
         <item>Select Pump water level</item>
+        <item>10</item>
         <item>20</item>
         <item>30</item>
         <item>50</item>
