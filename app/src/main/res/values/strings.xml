@@ -212,7 +212,7 @@
     <string name="enter_allModuleSrno">Please Enter all module serial no.</string>
     <string name="moduleMultipleTime">Module No. are entered multiple times, please change it</string>
     <string name="sitesurvey_B">Site Survey Kusum (B)</string>
-    <string name="sitesurvey_C">Survey</string>
+    <string name="sitesurvey_C">Kusum C Survey List</string>
     <string name="farmer_name">Farmer Name</string>
     <string name="salesName">Employee Code</string>
     <string name="selectRadio">Select any one option</string>
@@ -241,8 +241,8 @@
     <string name="typesofirrigation">Types of irrigation installed</string>
     <string name="isSouthFacingShadow">Is south facing shadow free land available at site for installation of solar pump</string>
     <string name="existingPumpSetDetails">Existing Pump Set Details</string>
-    <string name="electricConnectionType">electric Connection Type</string>
-    <string name="electricConnectionIdentificationNo">electric Connection Identification No.</string>
+    <string name="electricConnectionType">Electric Connection Type</string>
+    <string name="electricConnectionIdentificationNo">Electric Connection Identification No.</string>
     <string name="enter_electricConnectionIdentificationNo">Enter electric Connection Identification No</string>
     <string name="pumpsetrating">Pump Set Ratings</string>
     <string name="select_pumpsetrating">Select Pump Set Rating</string>
@@ -269,24 +269,31 @@
     <string name="powerFactor1">Enter Power Factor (PF-1)</string>
     <string name="powerFactor2">Enter Power Factor (PF-2)</string>
     <string name="powerFactor3">Enter Power Factor (PF-3)</string>
-    <string name="diameterOfBorwell"> Diameter Of Borewell</string>
-    <string name="enter_diameterOfBorwell">Enter Diameter Of Borwell (inches)</string>
+    <string name="diameterOfBorwell"> Diameter Of Borewell/Water Source</string>
+    <string name="enter_diameterOfBorwell">Enter Diameter Of Borwell/Water Source (inches)</string>
     <string name="depthOfBorwell">Depth Of Borewell</string>
     <string name="enter_depthOfBorewell">Enter Depth Of Borewell (Meter)</string>
     <string name="depthOfPumpSet">Depth Of Pump Set Installed</string>
     <string name="enter_depthOfPumpSet">Enter Depth Of Pump Set Installed (Meter)</string>
     <string name="dischargeOfPumpSet">Discharge Of Pump Set</string>
+    <string name="expower">Power In Volt</string>
+
+    <string name="exEnterpower">Enter Ex Power In Volt</string>
     <string name="enter_dischargeOfPumpSet">Enter Discharge Of Pump Set Installed (LPM)</string>
     <string name="deliveryOfPumpSet">Delivery Of Pump Set</string>
     <string name="enter_deliveryOfPumpSet">Enter Delivery Of Pump Set Installed (inches)</string>
     <string name="distanceFromProposedSolarPlantLocation">Distance From Proposed Solar Plant Location To Pole</string>
     <string name="enter_distanceFromProposedSolarPlantLocation">Enter Distance From Proposed Solar Plant Location To Pole</string>
     <string name="kusumSurveyform">Kusum C Survey Form</string>
+    <string name="kusumSurveyBform">Kusum B Survey Form</string>
     <string name="watersourcephotograpth">water source photograpth with farmer/Beneficiary</string>
     <string name="transformer">Transformer</string>
     <string name="attechformphoto1">Attach form photo1</string>
     <string name="attechformphoto2">Attach form photo2</string>
+    <string name="attechformphoto3">Attach form photo3</string>
+    <string name="attechformphoto4">Attach form photo4</string>
     <string name="attachimages">Attach Images</string>
+    <string name="pumpSelection">Pumps Selection</string>
     <string name="shaktiDetail">Shakti Pump Detail</string>
     <string name="submit_feedback">Submit Feedback</string>
     <string name="enter_LatLng">Enter Latitude and longitude of current address</string>
@@ -414,6 +421,37 @@
     <string name="ImeiFileToServer">Sending IMEI File To Server...</string>
     <string name="not_ok">NOT OK</string>
     <string name="ok">OK</string>
+    <string name="gps">Please turn on location first</string>
+    <string name="enter_electric_connection_rating_hp">Enter electric connection rating (HP)</string>
+    <string name="electric_connection_rating">Electric Connection Rating</string>
+    <string name="existing_cable_details">Existing Cable Details with make (Size length)</string>
+    <string name="enter_existing_cable_details">Enter Existing Cable Details with make (Size length)</string>
+    <string name="deliveryPipeLine"><![CDATA[Delivery-Pipe Line Length & Size Delivery & Suction]]></string>
+    <string name="enter_delivery_pipe_line"><![CDATA[Enter Delivery-Pipe Line Length & Size Delivery & Suction]]></string>
+    <string name="total_dynamic_head_meter">Total dynamic Head (Meter)</string>
+    <string name="enter_total_dynamic_head_meter">Enter Total Dynamic Head (Meter)</string>
+    <string name="select_option_for_neutral_Availability">Please Select option for Neutral Availability</string>
+    <string name="grid_related_details">Grid Related Details</string>
+    <string name="enter_transformer_rating"><![CDATA[Enter Transformer Rating & Load]]></string>
+    <string name="transformer_rating"><![CDATA[Transformer Rating & Load kVA/kW]]></string>
+    <string name="service_line">Service Line</string>
+    <string name="enter_service_line">Enter Service Line</string>
+    <string name="three_phase_supply"><![CDATA[Three Phase Supply Time & Hrs.]]></string>
+    <string name="enter_three_phase_supply_time"><![CDATA[Enter Three Phase Supply Time & Hrs.]]></string>
+    <string name="electricity_bill_monthly">Electricity Bill (Monthly)</string>
+    <string name="enter_electricity_bill">Enter Electricity Bill (Monthly)</string>
+    <string name="neutral_availability">Neutral Availability With Grid</string>
+    <string name="enter_neutral_availability">Enter Neutral Availability With Grid</string>
+    <string name="structure_to_water_source_length_meter">Structure To Water Source Length (Meter)</string>
+    <string name="enter_structure_to_water_source">Enter Structure To Water Source Length (Meter)</string>
+    <string name="feeder_to_farmer_site">Feeder TO Farmer Site Distance (KM)</string>
+    <string name="enter_feeder_to_farmer_site">Enter Feeder TO Farmer Site Distance (KM)</string>
+    <string name="additional_info">Additional Info</string>
+    <string name="enter_additional_info">Enter Additional Info</string>
+    <string name="loading">Loading</string>
+    <string name="enterPowerIn">Enter Power In Volt</string>
+    <string name="expumpSetDischarge">Enter Discharge of pump set</string>
+    <string name="exDynamic">"Enter Total Dynamic head "</string>
 
 
     <string-array name="nav_drawer_labels">
@@ -469,10 +507,17 @@
 
     <string-array name="pumpRating">
         <item>Select Pump Rating</item>
+        <item>1 HP</item>
+        <item>2 HP</item>
         <item>3 HP</item>
         <item>5 HP</item>
         <item>7.5 HP</item>
         <item>10 HP</item>
+        <item>12.5 HP</item>
+        <item>15 HP</item>
+        <item>17.5 HP</item>
+        <item>20 HP</item>
+
 
     </string-array>
 
@@ -487,6 +532,13 @@
 
     <string-array name="yesNoSpinner">
         <item>Select option for south facing shadow</item>
+        <item>Yes</item>
+        <item>No</item>
+
+    </string-array>
+
+    <string-array name="neutralAvailability">
+        <item>Select option for Neutral Availability</item>
         <item>Yes</item>
         <item>No</item>
 
@@ -534,6 +586,7 @@
 
     <string-array name="pumpWaterLevel">
         <item>Select Pump water level</item>
+        <item>10</item>
         <item>20</item>
         <item>30</item>
         <item>50</item>
@@ -542,6 +595,8 @@
         <item>120</item>
         <item>130</item>
         <item>150</item>
+        <item>170</item>
+        <item>200</item>
     </string-array>
 
     <string-array name="acDc">

@@ -3,11 +3,17 @@ package debugapp;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -34,8 +40,9 @@ import webservice.WebURL;
 
 public class ActivitySurveyList extends BaseActivity {
     private Context mContext;
+    RelativeLayout searchRelative;
     private RecyclerView rclyTranportListView;
-    
+    SearchView searchUser;
     public static final String GALLERY_DIRECTORY_NAME = "ShaktiTransport";
     private SurweyListAdapter mSurweyListAdapter;
     List<SurveyListResponse.Response> mSurveyListResponse;
@@ -57,7 +64,8 @@ public class ActivitySurveyList extends BaseActivity {
         mproject_login_noID = CustomUtility.getSharedPreferences(mContext, "loginid");
         mproject_noID = CustomUtility.getSharedPreferences(mContext, "projectid");
         mUserID = CustomUtility.getSharedPreferences(mContext, "userid");
-
+        searchRelative = findViewById(R.id.searchRelative);
+        searchUser = findViewById(R.id.searchUser);
         mSurveyListResponse = new ArrayList<>();
 
         rclyTranportListView = findViewById(R.id.rclyTranportListView);
@@ -78,6 +86,63 @@ public class ActivitySurveyList extends BaseActivity {
                 onBackPressed();
             }
         });
+
+        searchRelative.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchUser.setFocusableInTouchMode(true);
+                searchUser.requestFocus();
+                searchUser.onActionViewExpanded();
+
+            }
+        });
+
+        ImageView searchIcon = searchUser.findViewById(R.id.search_button);
+        searchIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.baseline_search_24));
+        searchIcon.setColorFilter(getResources().getColor(R.color.colorPrimary));
+
+        ImageView searchClose = searchUser.findViewById(R.id.search_close_btn);
+        searchClose.setColorFilter(getResources().getColor(R.color.colorPrimary));
+
+
+        EditText searchEditText = searchUser.findViewById(R.id.search_src_text);
+        searchEditText.setTextColor(getResources().getColor(R.color.colorPrimary));
+        searchEditText.setHintTextColor(getResources().getColor(R.color.colorPrimary));
+        searchEditText.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen._14sdp));
+
+        searchUser.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (mSurweyListAdapter != null) {
+                    if(!query.isEmpty()) {
+                        mSurweyListAdapter.getFilter().filter(query);
+                    }}
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (mSurweyListAdapter != null) {
+                    if(!newText.isEmpty()) {
+                        mSurweyListAdapter.getFilter().filter(newText);
+                    }
+                }
+                return false;
+            }
+        });
+
+        searchClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                searchUser.onActionViewCollapsed();
+                if (mSurweyListAdapter != null) {
+                    mSurweyListAdapter.getFilter().filter("");
+                }
+            }
+        });
+
 
     }
 
@@ -113,26 +178,6 @@ public class ActivitySurveyList extends BaseActivity {
 
 
                             mSurveyListResponse = SurveyListResponse.getResponse();
-                            /*JSONArray ja = new JSONArray(jo11);
-                            for (int i = 0; i < ja.length(); i++) {
-
-                                JSONObject join = ja.getJSONObject(i);
-                                SurveyListResponse mmSurweyListResponse = new SurveyListResponse();
-
-                                mmSurweyListResponse.setBeneficiary(join.getString("beneficiary"));
-                                mmSurweyListResponse.setCustomerName(join.getString("customer_name"));
-                                mmSurweyListResponse.setMobile(join.getString("mobile"));
-                                mmSurweyListResponse.setAddress(join.getString("address"));
-                                mmSurweyListResponse.setState(join.getString("state"));
-                                mmSurweyListResponse.setRegioTxt(join.getString("regio_txt"));
-                                mmSurweyListResponse.setCitycTxt(join.getString("cityc_txt"));
-                                mmSurweyListResponse.setCity(join.getString("city"));
-                                mmSurweyListResponse.setProjectNo(join.getString("project_no"));
-                                mmSurweyListResponse.setProcessNo(join.getString("process_no"));
-                                mmSurweyListResponse.setRegisno(join.getString("regisno"));
-                                mmSurweyListResponse.setLifnr(join.getString("lifnr"));
-                                mSurveyListResponse.add(mmSurweyListResponse);
-                            }*/
                             mSurweyListAdapter = new SurweyListAdapter(mContext, mSurveyListResponse);
                             rclyTranportListView.setHasFixedSize(true);
                             rclyTranportListView.setAdapter(mSurweyListAdapter);

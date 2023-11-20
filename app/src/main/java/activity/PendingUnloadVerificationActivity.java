@@ -223,6 +223,7 @@ public class PendingUnloadVerificationActivity extends BaseActivity implements P
     private void sendVerificationCodeAPI(UnloadingFeedbackModel.InstallationDatum response, String generatedVerificationCode) {
         CustomUtility.showProgressDialogue(PendingUnloadVerificationActivity.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
+        Log.e("UnloadingOTP====>",generatedVerificationCode);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.SendOTP + "&mobiles=" +response.getContactNo() +
                         "&message=" +response.getBeneficiary() +" के तहत " +response.getHp() +" HP पंप सेट का मटेरियल प्राप्त हुआ है तो इंस्टॉलेशन टीम को OTP-" +generatedVerificationCode +" शेयर करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169744864682632",
