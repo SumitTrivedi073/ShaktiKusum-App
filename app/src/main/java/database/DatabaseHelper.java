@@ -251,54 +251,71 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_REMARK16 = "remark16";
     public static final String KEY_PMID = "pmId", KEY_PARAMETERS_NAME = "parametersName", KEY_MODBUS_ADDRESS = "modbusaddress", KEY_MOB_BT_ADDRESS = "mobBTAddress", KEY_FACTOR = "factor", KEY_PVALUE = "pValue", KEY_MATERIAL_CODE = "materialCode", KEY_UNIT = "unit", KEY_OFFSET = "app_offset";
 
-    public static final String KEY_INSTALLATION_ID = "installationId",KEY_INSTALLATION_NAME = "installationImageName",
-            KEY_INSTALLATION_PATH = "installtionPath",KEY_INSTALLATION_IMAGE_SELECTED = "installtionImageSelected",
-            KEY_INSTALLATION_BILL_NO = "InstalltionBillNo",KEY_INSTALLATION_LATITUDE = "InstalltionLatitude",
+    public static final String KEY_INSTALLATION_ID = "installationId", KEY_INSTALLATION_NAME = "installationImageName",
+            KEY_INSTALLATION_PATH = "installtionPath", KEY_INSTALLATION_IMAGE_SELECTED = "installtionImageSelected",
+            KEY_INSTALLATION_BILL_NO = "InstalltionBillNo", KEY_INSTALLATION_LATITUDE = "InstalltionLatitude",
             KEY_INSTALLATION_LONGITUDE = "InstalltionLongitude", KEY_INSTALLATION_POSITION = "InstalltionPosition";
 
-    public static final String KEY_UNLOADING_ID = "unloadingId",KEY_UNLOADING_NAME = "unloadingImageName",KEY_UNLOADING_PATH = "unloadingPath",KEY_UNLOADING_IMAGE_SELECTED = "unloadingImageSelected",KEY_UNLOADING_BILL_NO = "unloadingBillNo";
+    public static final String KEY_UNLOADING_ID = "unloadingId", KEY_UNLOADING_NAME = "unloadingImageName", KEY_UNLOADING_PATH = "unloadingPath", KEY_UNLOADING_IMAGE_SELECTED = "unloadingImageSelected", KEY_UNLOADING_BILL_NO = "unloadingBillNo";
 
-    public static final String KEY_PROJEDCT_NO = "project_no" ;
+    public static final String KEY_PROJEDCT_NO = "project_no";
     public static final String KEY_USER_ID_ = "userid";
-    public static final String KEY_PROJECT_LOGIN_NO=  "project_login_no";
-    public static final String  KEY_FARMER_CONTACT_NO= "FARMER_CONTACT_NO";
-    public static final String  KEY_APPLICANT_NO = "APPLICANT_NO";
-    public static final String  KEY_REGIS_NO = "REGISNO";
-    public static final String  KEY_BENEFICIARY = "BENEFICIARY";
-    public static final String  KEY_SITE_ADRC = "SITE_ADRC";
-    public static final String  KEY_LAT = "lat";
+    public static final String KEY_PROJECT_LOGIN_NO = "project_login_no";
+    public static final String KEY_FARMER_CONTACT_NO = "FARMER_CONTACT_NO";
+    public static final String KEY_APPLICANT_NO = "APPLICANT_NO";
+    public static final String KEY_REGIS_NO = "REGISNO";
+    public static final String KEY_BENEFICIARY = "BENEFICIARY";
+    public static final String KEY_SITE_ADRC = "SITE_ADRC";
+    public static final String KEY_LAT = "lat";
     public static final String KEY_LNG = "long";
-    public static final String  KEY_CATEGORY = "CATEGORY";
-    public static final String  KEY_WATER_SOURCE = "WATER_SOURCE";
-    public static final String  KEY_INTERNET_TYPE = "INTERNET_TYPE";
-    public static final String  KEY_CROP_PATTERN = "CROP_PATTERN";
-    public static final String         KEY_TYPE_OF_IRIGATN =  "TYPE_OF_IRIGATN";
-    public static final String  KEY_SHADOW_FREE_LAND = "SHADOW_FREE_LAND";
-    public static final String   KEY_ELEC_CON = "ELEC_CON";
-    public static final String  KEY_ELEC_IDEN_NO = "ELEC_IDEN_NO";
-    public static final String    KEY_PUMP_TYPE ="PUMP_TYPE";
-    public static final String  KEY_PUMP_SET_RATING = "PUMP_SET_RATING";
-    public static final String        KEY_PUMP_MAKE ="PUMP_MAKE";
-    public static final String  KEY_PHASE_VOL_V1 = "PHASE_VOL_V1";
-    public static final String    KEY_PHASE_VOL_V2 = "PHASE_VOL_V2";
-    public static final String  KEY_PHASE_VOL_V3 = "PHASE_VOL_V3";
-    public static final String    KEY_LINE_VOL_V1 = "LINE_VOL_V1";
-    public static final String KEY_LINE_VOL_V2 = "LINE_VOL_V2";
-    public static final String   KEY_LINE_VOL_V3 = "LINE_VOL_V3";
-    public static final String KEY_LINE_CRNT_AMP1 = "LINE_CRNT_AMP1";
-    public static final String       KEY_LINE_CRNT_AMP2 = "LINE_CRNT_AMP2";
-    public static final String   KEY_LINE_CRNT_AMP3 ="LINE_CRNT_AMP3";
-    public static final String       KEY_FREQ_HERTZ ="FREQ_HERTZ";
-    public static final String KEY_LINE_POWFACT_1 = "LINE_POWFACT_1";
-    public static final String       KEY_LINE_POWFACT_2 ="LINE_POWFACT_2";
-    public static final String KEY_LINE_POWFACT_3 = "LINE_POWFACT_3";
-    public static final String         KEY_BOREWELL_SIZE = "BOREWELL_SIZE";
-    public static final String KEY_BOREWELL_DEPTH = "BOREWELL_DEPTH";
-    public static final String         KEY_PUMP_SET_DEPTH = "PUMP_SET_DEPTH";
-    public static final String KEY_DIS_PUMP_LPM = "DIS_PUMP_LPM";
-    public static final String       KEY_DEL_PUMP_LPM = "DEL_PUMP_LPM";
-    public static final String KEY_DISTANCE ="DISTANCE";
+    public static final String KEY_CATEGORY = "CATEGORY";
+    public static final String KEY_WATER_SOURCE = "WATER_SOURCE";
+    public static final String KEY_INTERNET_TYPE = "INTERNET_TYPE";
+    public static final String KEY_CROP_PATTERN = "CROP_PATTERN";
+    public static final String KEY_TYPE_OF_IRIGATN = "TYPE_OF_IRIGATN";
+    public static final String KEY_SHADOW_FREE_LAND = "SHADOW_FREE_LAND";
+    public static final String KEY_ELEC_CON = "ELEC_CON";
+    public static final String KEY_ELEC_IDEN_NO = "ELEC_IDEN_NO";
+    public static final String KEY_ELEC_RATING = "ELEC_RATING";
 
+    public static final String KEY_PUMP_TYPE = "PUMP_TYPE";
+    public static final String KEY_PUMP_SET_RATING = "PUMP_SET_RATING";
+    public static final String KEY_PUMP_MAKE = "PUMP_MAKE";
+    public static final String KEY_CABLE_DETAIL_WITH_MAKE = "CABLE_DETAIL_WITH_MAKE";
+    public static final String KEY_POWER_IN_VOLT = "powerInVolt";
+    public static final String KEY_EXDISCHARGE = "exDischarge";
+    public static final String KEY_EXDYNAMIC = "exDynamic";
+    public static final String KEY_PHASE_VOL_V1 = "PHASE_VOL_V1";
+    public static final String KEY_PHASE_VOL_V2 = "PHASE_VOL_V2";
+    public static final String KEY_PHASE_VOL_V3 = "PHASE_VOL_V3";
+    public static final String KEY_LINE_VOL_V1 = "LINE_VOL_V1";
+    public static final String KEY_LINE_VOL_V2 = "LINE_VOL_V2";
+    public static final String KEY_LINE_VOL_V3 = "LINE_VOL_V3";
+    public static final String KEY_LINE_CRNT_AMP1 = "LINE_CRNT_AMP1";
+    public static final String KEY_LINE_CRNT_AMP2 = "LINE_CRNT_AMP2";
+    public static final String KEY_LINE_CRNT_AMP3 = "LINE_CRNT_AMP3";
+    public static final String KEY_FREQ_HERTZ = "FREQ_HERTZ";
+    public static final String KEY_LINE_POWFACT_1 = "LINE_POWFACT_1";
+    public static final String KEY_LINE_POWFACT_2 = "LINE_POWFACT_2";
+    public static final String KEY_LINE_POWFACT_3 = "LINE_POWFACT_3";
+    public static final String KEY_BOREWELL_SIZE = "BOREWELL_SIZE";
+    public static final String KEY_BOREWELL_DEPTH = "BOREWELL_DEPTH";
+    public static final String KEY_PUMP_SET_DEPTH = "PUMP_SET_DEPTH";
+    public static final String KEY_DIS_PUMP_LPM = "DIS_PUMP_LPM";
+    public static final String KEY_DEL_PUMP_LPM = "DEL_PUMP_LPM";
+    public static final String KEY_DEL_PIPE_LINE = "DEL_PIPE_LINE";
+    public static final String KEY_TOTAL_DYNAMIC_HEAD = "TOTAL_DYNAMIC_HEAD";
+    public static final String KEY_TRANSFORMER_RATING = "TRANSFORMER_RATING";
+    public static final String KEY_SERVICE_LINE = "SERVICE_LINE";
+    public static final String KEY_THREE_PHASE = "THREE_PHASE";
+    public static final String KEY_ELECTRICITY_BILL = "ELECTRICITY_BILL";
+    public static final String KEY_NEUTRAL_AVAILABILITY = "NEUTRAL_AVAILABILITY";
+
+    public static final String KEY_STURCTURE_WATER_SOURCE = "STURCTURE_WATER_SOURCE";
+    public static final String KEY_FEEDER_TO_FARMER = "FEEDER_TO_FARMER";
+    public static final String KEY_ADDITIONAL_INFO = "ADDITIONAL_INFO";
+
+    public static final String KEY_DISTANCE = "DISTANCE";
 
 
     //Sim card Installation field name
@@ -349,8 +366,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_REMARKD3 = "key_remark3";
     public static final String KEY_REMARKD4 = "key_remark4";
     public static final String KEY_REMARKD5 = "key_remark5";
-    public static final String KEY_SITE_AUDIT_ID = "siteAuditId",KEY_SITE_AUDIT_NAME = "siteAuditImageName",KEY_SITE_AUDIT_PATH = "siteAuditPath",KEY_SITE_AUDIT_IMAGE_SELECTED = "siteAuditImageSelected",KEY_SITE_AUDIT_BILL_NO= "siteAuditBillNo";
-    public static final String KEY_KUSUMC_ID = "Id",KEY_KUSUMC_NAME = "ImageName",KEY_KUSUMC_PATH = "Path",KEY_KUSUMC_IMAGE_SELECTED = "ImageSelected",KEY_KUSUMC_BILL_NO= "BillNo";
+    public static final String KEY_SITE_AUDIT_ID = "siteAuditId", KEY_SITE_AUDIT_NAME = "siteAuditImageName", KEY_SITE_AUDIT_PATH = "siteAuditPath", KEY_SITE_AUDIT_IMAGE_SELECTED = "siteAuditImageSelected", KEY_SITE_AUDIT_BILL_NO = "siteAuditBillNo";
+    public static final String KEY_KUSUMC_ID = "Id", KEY_KUSUMC_NAME = "ImageName", KEY_KUSUMC_PATH = "Path", KEY_KUSUMC_IMAGE_SELECTED = "ImageSelected", KEY_KUSUMC_BILL_NO = "BillNo";
 
 
 // Table Create Statements
@@ -740,24 +757,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_PROJECT_LOGIN_NO + " TEXT," +
             KEY_FARMER_CONTACT_NO + " TEXT," +
             KEY_APPLICANT_NO + " TEXT," +
-            KEY_REGISNO + " TEXT," + KEY_BENEFICIARY + " TEXT,"+
+            KEY_REGISNO + " TEXT," + KEY_BENEFICIARY + " TEXT," +
             KEY_SITE_ADRC + " TEXT," + KEY_LAT + " TEXT," + KEY_LNG + " TEXT," +
             KEY_CATEGORY + " TEXT," + KEY_WATER_SOURCE + " TEXT," +
             KEY_INTERNET_TYPE + " TEXT," + KEY_CROP_PATTERN + " TEXT," + KEY_TYPE_OF_IRIGATN + " TEXT,"
-            + KEY_SHADOW_FREE_LAND + " TEXT," + KEY_ELEC_CON + " TEXT," + KEY_ELEC_IDEN_NO + " TEXT," + KEY_PUMP_TYPE + " TEXT,"
-            + KEY_PUMP_SET_RATING + " TEXT," + KEY_PUMP_MAKE + " TEXT," + KEY_PHASE_VOL_V1 + " TEXT," + KEY_PHASE_VOL_V2 + " TEXT,"
+            + KEY_SHADOW_FREE_LAND + " TEXT," + KEY_ELEC_CON + " TEXT," + KEY_ELEC_IDEN_NO + " TEXT," + KEY_ELEC_RATING + " TEXT,"+ KEY_PUMP_TYPE + " TEXT,"
+            + KEY_PUMP_SET_RATING + " TEXT," + KEY_PUMP_MAKE + " TEXT," +KEY_CABLE_DETAIL_WITH_MAKE + " TEXT,"+  KEY_PHASE_VOL_V1 + " TEXT," + KEY_PHASE_VOL_V2 + " TEXT,"
             + KEY_PHASE_VOL_V3 + " TEXT," + KEY_LINE_VOL_V1 + " TEXT," + KEY_LINE_VOL_V2 + " TEXT,"
             + KEY_LINE_VOL_V3 + " TEXT," + KEY_LINE_CRNT_AMP1 + " TEXT," + KEY_LINE_CRNT_AMP2 + " TEXT,"
             + KEY_LINE_CRNT_AMP3 + " TEXT," + KEY_FREQ_HERTZ + " TEXT,"
             + KEY_LINE_POWFACT_1 + " TEXT," + KEY_LINE_POWFACT_2 + " TEXT," + KEY_LINE_POWFACT_3 + " TEXT,"
             + KEY_BOREWELL_SIZE + " TEXT," + KEY_BOREWELL_DEPTH + " TEXT," + KEY_PUMP_SET_DEPTH + " TEXT," + KEY_DIS_PUMP_LPM + " TEXT," +
-            KEY_DEL_PUMP_LPM + " TEXT," + KEY_PHOTO1 + " BLOB," + KEY_PHOTO2 + " BLOB,"
-            + KEY_PHOTO3 + " BLOB," + KEY_PHOTO4 + " BLOB," +
-            KEY_DISTANCE + " TEXT)";
+            KEY_DEL_PUMP_LPM + " TEXT," + KEY_DEL_PIPE_LINE + " TEXT," + KEY_TOTAL_DYNAMIC_HEAD + " TEXT," +KEY_TRANSFORMER_RATING + " TEXT,"
+            +KEY_SERVICE_LINE + " TEXT,"+KEY_THREE_PHASE + " TEXT,"+KEY_ELECTRICITY_BILL + " TEXT,"+KEY_NEUTRAL_AVAILABILITY + " TEXT,"
+            +KEY_STURCTURE_WATER_SOURCE + " TEXT," +KEY_FEEDER_TO_FARMER + " TEXT," +KEY_ADDITIONAL_INFO + " TEXT,"
+            + KEY_EXDISCHARGE + " TEXT,"+ KEY_POWER_IN_VOLT + " TEXT,"+  KEY_EXDYNAMIC + " TEXT,"
+            + KEY_PHOTO1 + " BLOB," + KEY_PHOTO2 + " BLOB," + KEY_PHOTO3 + " BLOB," + KEY_PHOTO4 + " BLOB," + KEY_PHOTO5 + " BLOB," + KEY_PHOTO6 + " BLOB," + KEY_DISTANCE + " TEXT)";
 
 
     private static final String CREATE_TABLE_INSTALLATION_IMAGES = "CREATE TABLE "
-            + TABLE_INSTALLATION_IMAGE_DATA + "("  + KEY_INSTALLATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+            + TABLE_INSTALLATION_IMAGE_DATA + "(" + KEY_INSTALLATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
             + KEY_INSTALLATION_NAME + " TEXT,"
             + KEY_INSTALLATION_PATH + " TEXT,"
             + KEY_INSTALLATION_IMAGE_SELECTED + " BOOLEAN,"
@@ -767,7 +786,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_INSTALLATION_POSITION + " TEXT)";
 
     private static final String CREATE_TABLE_REJECTED_INSTALLATION_IMAGES = "CREATE TABLE "
-            + TABLE_REJECTED_INSTALLATION_IMAGE_DATA+ "("  + KEY_INSTALLATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+            + TABLE_REJECTED_INSTALLATION_IMAGE_DATA + "(" + KEY_INSTALLATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
             + KEY_INSTALLATION_NAME + " TEXT,"
             + KEY_INSTALLATION_PATH + " TEXT,"
             + KEY_INSTALLATION_IMAGE_SELECTED + " BOOLEAN,"
@@ -778,14 +797,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     private static final String CREATE_TABLE_SITE_AUDIT_IMAGES = "CREATE TABLE "
-            + TABLE_SITE_AUDIT + "("  + KEY_SITE_AUDIT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_SITE_AUDIT_NAME + " TEXT," + KEY_SITE_AUDIT_PATH + " TEXT," + KEY_SITE_AUDIT_IMAGE_SELECTED + " BOOLEAN," + KEY_SITE_AUDIT_BILL_NO + " TEXT)";
+            + TABLE_SITE_AUDIT + "(" + KEY_SITE_AUDIT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," + KEY_SITE_AUDIT_NAME + " TEXT," + KEY_SITE_AUDIT_PATH + " TEXT," + KEY_SITE_AUDIT_IMAGE_SELECTED + " BOOLEAN," + KEY_SITE_AUDIT_BILL_NO + " TEXT)";
 
     private static final String CREATE_TABLE_KusumCImages = "CREATE TABLE "
-            + TABLE_KusumCImages + "("  + KEY_KUSUMC_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_KUSUMC_NAME + " TEXT," + KEY_KUSUMC_PATH + " TEXT," + KEY_KUSUMC_IMAGE_SELECTED + " BOOLEAN," + KEY_KUSUMC_BILL_NO + " TEXT)";
+            + TABLE_KusumCImages + "(" + KEY_KUSUMC_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," + KEY_KUSUMC_NAME + " TEXT," + KEY_KUSUMC_PATH + " TEXT," + KEY_KUSUMC_IMAGE_SELECTED + " BOOLEAN," + KEY_KUSUMC_BILL_NO + " TEXT)";
 
     private static final String CREATE_TABLE_UNLOADING_IMAGES = "CREATE TABLE "
-            + TABLE_UNLOADING_IMAGE_DATA + "("  + KEY_UNLOADING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+ KEY_UNLOADING_NAME + " TEXT," + KEY_UNLOADING_PATH + " TEXT," + KEY_UNLOADING_IMAGE_SELECTED + " TEXT," + KEY_UNLOADING_BILL_NO + " TEXT)";
-
+            + TABLE_UNLOADING_IMAGE_DATA + "(" + KEY_UNLOADING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," + KEY_UNLOADING_NAME + " TEXT," + KEY_UNLOADING_PATH + " TEXT," + KEY_UNLOADING_IMAGE_SELECTED + " TEXT," + KEY_UNLOADING_BILL_NO + " TEXT)";
 
 
     private static final String CREATE_TABLE_AUDIT_PUMP = "CREATE TABLE "
@@ -1234,7 +1252,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
     public void insertSimCardData(String key, SimCardBean simCardBean) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
@@ -1315,7 +1332,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_USERID, loginBean.getUserid());
             values.put(KEY_USERNAME, loginBean.getUsername());
             values.put(KEY_USERTYPE, loginBean.getUsertype());
-            if(CustomUtility.doesTableExist(db,TABLE_LOGIN)) {
+            if (CustomUtility.doesTableExist(db, TABLE_LOGIN)) {
                 db.insert(TABLE_LOGIN, null, values);
             }
             db.setTransactionSuccessful();
@@ -1747,9 +1764,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_OFFLINE_USERID, submitOfflineDataInput.getUserId());
             values.put(KEY_OFFLINE_REGISNO, submitOfflineDataInput.getRegisno());
             values.put(KEY_OFFLINE_OFFPHOTO, submitOfflineDataInput.getOffPhoto());
-            if(isInsert) {
+            if (isInsert) {
                 i = db.insert(TABLE_OFFLINE_SUBMITTED_LIST, null, values);
-            }else{
+            } else {
                 where = KEY_OFFLINE_BILL_NO + "='" + billNo + "'";
                 i = db.update(TABLE_OFFLINE_SUBMITTED_LIST, values, where, null);
             }
@@ -1833,7 +1850,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_DISTRICT_TEXT, auditListBean.getCitytxt());
             values.put(KEY_CONTACT_NO, auditListBean.getContact_no());
             values.put(KEY_ADDRESS, auditListBean.getAddress());
-            values.put(KEY_Vendor,auditListBean.getVendor());
+            values.put(KEY_Vendor, auditListBean.getVendor());
             values.put(KEY_ADD1, auditListBean.getRegisno());
             values.put(KEY_ADD2, auditListBean.getProjectno());
             values.put(KEY_ADD3, auditListBean.getBeneficiary());
@@ -1842,7 +1859,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             long i = db.insert(TABLE_AUDITSITE_LIST, null, values);
 
-             db.setTransactionSuccessful();
+            db.setTransactionSuccessful();
         } catch (SQLiteException e) {
             e.printStackTrace();
         } finally {
@@ -2110,7 +2127,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_DISTRICT_TEXT, siteAuditListBean.getCitytxt());
             values.put(KEY_CONTACT_NO, siteAuditListBean.getContact_no());
             values.put(KEY_ADDRESS, siteAuditListBean.getAddress());
-            values.put(KEY_Vendor,siteAuditListBean.getVendor());
+            values.put(KEY_Vendor, siteAuditListBean.getVendor());
             values.put(KEY_ADD1, siteAuditListBean.getRegisno());
             values.put(KEY_ADD2, siteAuditListBean.getProjectno());
             values.put(KEY_ADD3, siteAuditListBean.getBeneficiary());
@@ -2301,7 +2318,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_ADD1, installationBean.getRegis_no());
             values.put(KEY_ADD2, installationBean.getDelay_reason());
             values.put(KEY_ADD3, installationBean.getMake_ins());
-            values.put(KEY_BENEFICIARY_NO,installationBean.getBeneficiaryNo());
+            values.put(KEY_BENEFICIARY_NO, installationBean.getBeneficiaryNo());
             // Insert Row
             long i = db.insert(TABLE_INSTALLATION_PUMP_DATA, null, values);
             // Insert into database successfully.
@@ -2363,7 +2380,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_ADD1, installationBean.getRegis_no());
             values.put(KEY_ADD2, installationBean.getDelay_reason());
             values.put(KEY_ADD3, installationBean.getMake_ins());
-            values.put(KEY_BENEFICIARY_NO,installationBean.getBeneficiaryNo());
+            values.put(KEY_BENEFICIARY_NO, installationBean.getBeneficiaryNo());
             where = KEY_BILL_NO + "='" + billno + "'";
 
             i = db.update(TABLE_INSTALLATION_PUMP_DATA, values, where, null);
@@ -2393,7 +2410,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_LAT, kusumCSurveyBean.getLAT());
             values.put(KEY_LNG, kusumCSurveyBean.getLNG());
             values.put(KEY_CATEGORY, kusumCSurveyBean.getCATEGORY());
-
             values.put(KEY_WATER_SOURCE, kusumCSurveyBean.getWATER_SOURCE());
             values.put(KEY_INTERNET_TYPE, kusumCSurveyBean.getINTERNET_TYPE());
             values.put(KEY_CROP_PATTERN, kusumCSurveyBean.getCROP_PATTERN());
@@ -2402,9 +2418,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_ELEC_CON, kusumCSurveyBean.getELEC_CON());
             values.put(KEY_ELEC_IDEN_NO, kusumCSurveyBean.getELEC_IDEN_NO());
             values.put(KEY_PUMP_TYPE, kusumCSurveyBean.getPUMP_TYPE());
-
+            values.put(KEY_ELEC_RATING,kusumCSurveyBean.getELEC_CONN_RAT());
             values.put(KEY_PUMP_SET_RATING, kusumCSurveyBean.getPUMP_SET_RATING());
             values.put(KEY_PUMP_MAKE, kusumCSurveyBean.getPUMP_MAKE());
+            values.put(KEY_CABLE_DETAIL_WITH_MAKE,kusumCSurveyBean.getCABLE_DET_MAKE());
             values.put(KEY_PHASE_VOL_V1, kusumCSurveyBean.getPHASE_VOL_V1());
             values.put(KEY_PHASE_VOL_V2, kusumCSurveyBean.getPHASE_VOL_V2());
             values.put(KEY_PHASE_VOL_V3, kusumCSurveyBean.getPHASE_VOL_V3());
@@ -2425,10 +2442,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_PUMP_SET_DEPTH, kusumCSurveyBean.getPUMP_SET_DEPTH());
             values.put(KEY_DIS_PUMP_LPM, kusumCSurveyBean.getDIS_PUMP_LPM());
             values.put(KEY_DEL_PUMP_LPM, kusumCSurveyBean.getDEL_PUMP_LPM());
+            values.put(KEY_DEL_PIPE_LINE,kusumCSurveyBean.getPIPE_LEN_SIZE());
+            values.put(KEY_TOTAL_DYNAMIC_HEAD,kusumCSurveyBean.getDYNAMIC_HEAD());
+
+            values.put(KEY_TRANSFORMER_RATING,kusumCSurveyBean.getTRANSF_RATING());
+            values.put(KEY_SERVICE_LINE,kusumCSurveyBean.getSERVICE_LINE());
+            values.put(KEY_THREE_PHASE,kusumCSurveyBean.getTHREE_PH_SUPPLY());
+            values.put(KEY_ELECTRICITY_BILL,kusumCSurveyBean.getELECTRIC_BILL());
+            values.put(KEY_NEUTRAL_AVAILABILITY,kusumCSurveyBean.getNEUTRL_GRID_AVBL());
+            values.put(KEY_STURCTURE_WATER_SOURCE,kusumCSurveyBean.getWATER_SOURC_LEN());
+            values.put(KEY_FEEDER_TO_FARMER,kusumCSurveyBean.getDIST_FARMAR());
+            values.put(KEY_ADDITIONAL_INFO,kusumCSurveyBean.getIFNO_REMARK());
+
+            values.put(KEY_POWER_IN_VOLT,kusumCSurveyBean.getpowerInVolt());
+            values.put(KEY_EXDISCHARGE,kusumCSurveyBean.getExDischarge());
+            values.put(KEY_EXDYNAMIC,kusumCSurveyBean.getExDynamichead());
+
             values.put(KEY_PHOTO1, kusumCSurveyBean.getPhoto1());
             values.put(KEY_PHOTO2, kusumCSurveyBean.getPhoto2());
             values.put(KEY_PHOTO3, kusumCSurveyBean.getPhoto3());
             values.put(KEY_PHOTO4, kusumCSurveyBean.getPhoto4());
+            values.put(KEY_PHOTO5, kusumCSurveyBean.getPhoto5());
+            values.put(KEY_PHOTO6, kusumCSurveyBean.getPhoto6());
             values.put(KEY_DISTANCE, kusumCSurveyBean.getDISTANCE());
 
 
@@ -2475,9 +2510,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_ELEC_CON, kusumCSurveyBean.getELEC_CON());
             values.put(KEY_ELEC_IDEN_NO, kusumCSurveyBean.getELEC_IDEN_NO());
             values.put(KEY_PUMP_TYPE, kusumCSurveyBean.getPUMP_TYPE());
+            values.put(KEY_ELEC_RATING,kusumCSurveyBean.getELEC_CONN_RAT());
 
             values.put(KEY_PUMP_SET_RATING, kusumCSurveyBean.getPUMP_SET_RATING());
             values.put(KEY_PUMP_MAKE, kusumCSurveyBean.getPUMP_MAKE());
+            values.put(KEY_CABLE_DETAIL_WITH_MAKE,kusumCSurveyBean.getCABLE_DET_MAKE());
+
             values.put(KEY_PHASE_VOL_V1, kusumCSurveyBean.getPHASE_VOL_V1());
             values.put(KEY_PHASE_VOL_V2, kusumCSurveyBean.getPHASE_VOL_V2());
             values.put(KEY_PHASE_VOL_V3, kusumCSurveyBean.getPHASE_VOL_V3());
@@ -2498,16 +2536,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_PUMP_SET_DEPTH, kusumCSurveyBean.getPUMP_SET_DEPTH());
             values.put(KEY_DIS_PUMP_LPM, kusumCSurveyBean.getDIS_PUMP_LPM());
             values.put(KEY_DEL_PUMP_LPM, kusumCSurveyBean.getDEL_PUMP_LPM());
+            values.put(KEY_DEL_PIPE_LINE,kusumCSurveyBean.getPIPE_LEN_SIZE());
+            values.put(KEY_TOTAL_DYNAMIC_HEAD,kusumCSurveyBean.getDYNAMIC_HEAD());
+
+            values.put(KEY_TRANSFORMER_RATING,kusumCSurveyBean.getTRANSF_RATING());
+            values.put(KEY_SERVICE_LINE,kusumCSurveyBean.getSERVICE_LINE());
+            values.put(KEY_THREE_PHASE,kusumCSurveyBean.getTHREE_PH_SUPPLY());
+            values.put(KEY_ELECTRICITY_BILL,kusumCSurveyBean.getELECTRIC_BILL());
+            values.put(KEY_NEUTRAL_AVAILABILITY,kusumCSurveyBean.getNEUTRL_GRID_AVBL());
+            values.put(KEY_STURCTURE_WATER_SOURCE,kusumCSurveyBean.getWATER_SOURC_LEN());
+            values.put(KEY_FEEDER_TO_FARMER,kusumCSurveyBean.getDIST_FARMAR());
+            values.put(KEY_ADDITIONAL_INFO,kusumCSurveyBean.getIFNO_REMARK());
+
+            values.put(KEY_POWER_IN_VOLT,kusumCSurveyBean.getpowerInVolt());
+            values.put(KEY_EXDISCHARGE,kusumCSurveyBean.getExDischarge());
+            values.put(KEY_EXDYNAMIC,kusumCSurveyBean.getExDynamichead());
+
             values.put(KEY_PHOTO1, kusumCSurveyBean.getPhoto1());
             values.put(KEY_PHOTO2, kusumCSurveyBean.getPhoto2());
             values.put(KEY_PHOTO3, kusumCSurveyBean.getPhoto3());
             values.put(KEY_PHOTO4, kusumCSurveyBean.getPhoto4());
+            values.put(KEY_PHOTO5, kusumCSurveyBean.getPhoto5());
+            values.put(KEY_PHOTO6, kusumCSurveyBean.getPhoto6());
             values.put(KEY_DISTANCE, kusumCSurveyBean.getDISTANCE());
 
             // Insert Row
             where = KEY_APPLICANT_NO + "='" + enqdoc + "'";
 
-            long i =db.update(TABLE_KUSUMCSURVEYFORM, values, where, null);
+            long i = db.update(TABLE_KUSUMCSURVEYFORM, values, where, null);
             // Insert into database successfully.
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
@@ -2603,6 +2659,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.close();
         }
     }
+
     @SuppressLint("Range")
     public boolean getLogin() {
         LoginBean loginBean = new LoginBean();
@@ -2824,6 +2881,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return result;
     }
+
     @SuppressLint("Range")
     public String getStateDistrictValue(String key, String text) {
         String result = null;
@@ -2870,6 +2928,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return result;
     }
+
     @SuppressLint("Range")
     public ArrayList<ItemNameBean> getItemData() {
 
@@ -2917,6 +2976,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return list_document;
     }
+
     @SuppressLint("Range")
     public ArrayList<String> getStateDistrictList(String key, String text) {
 
@@ -3041,6 +3101,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return registrationBean;
     }
+
     @SuppressLint("Range")
     public ArrayList<InstallationListBean> getInstallationListData(String userid) {
         InstallationListBean installationBean = new InstallationListBean();
@@ -3101,6 +3162,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return list_document;
     }
+
     @SuppressLint("Range")
     public ArrayList<InstallationOfflineBean> getInstallationOfflineListData(String userid) {
         InstallationOfflineBean installationOfflineBean = new InstallationOfflineBean();
@@ -3159,6 +3221,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return list_document;
     }
+
     @SuppressLint("Range")
     public ArrayList<SubmitOfflineDataInput> getInstallationOfflineSubmittedListData() {
         SubmitOfflineDataInput submitOfflineDataInput = new SubmitOfflineDataInput();
@@ -3166,7 +3229,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         db.beginTransaction();
         try {
-            String selectQuery = "SELECT * FROM " + TABLE_OFFLINE_SUBMITTED_LIST ;
+            String selectQuery = "SELECT * FROM " + TABLE_OFFLINE_SUBMITTED_LIST;
             Cursor cursor = db.rawQuery(selectQuery, null);
             Log.e("CURSORCOUNT", "&&&&123" + cursor.getCount() + " " + selectQuery);
             if (cursor.getCount() > 0) {
@@ -3194,6 +3257,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return submitOfflineDataInputArrayList;
     }
+
     @SuppressLint("Range")
     public InstallationOfflineBean getInstallationOfflineData(String billno) {
         InstallationOfflineBean installationOfflineBean = null;
@@ -3248,6 +3312,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return installationOfflineBean;
     }
+
     @SuppressLint("Range")
     public SubmitOfflineDataInput getInstallationOfflineSubmittedData(String billNo) {
         SubmitOfflineDataInput submitOfflineDataInput = new SubmitOfflineDataInput();
@@ -3259,15 +3324,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.e("CURSORCOUNT", "&&&&123" + cursor.getCount() + " " + selectQuery);
             if (cursor.getCount() > 0) {
                 if (cursor.moveToFirst()) {
-                        submitOfflineDataInput = new SubmitOfflineDataInput();
-                        submitOfflineDataInput.setBillNo(cursor.getString(cursor.getColumnIndex(KEY_OFFLINE_BILL_NO)));
-                        submitOfflineDataInput.setBeneficiary(cursor.getString(cursor.getColumnIndex(KEY_OFFLINE_BENEFICIARY)));
-                        submitOfflineDataInput.setCustomerName(cursor.getString(cursor.getColumnIndex(KEY_OFFLINE_CUSTOMER_NAME)));
-                        submitOfflineDataInput.setProjectNo(cursor.getString(cursor.getColumnIndex(KEY_OFFLINE_PROJECT_NO)));
-                        submitOfflineDataInput.setUserId(cursor.getString(cursor.getColumnIndex(KEY_OFFLINE_USERID)));
-                        submitOfflineDataInput.setRegisno(cursor.getString(cursor.getColumnIndex(KEY_OFFLINE_REGISNO)));
-                        submitOfflineDataInput.setOffPhoto(cursor.getString(cursor.getColumnIndex(KEY_OFFLINE_OFFPHOTO)));
-                        cursor.moveToNext();
+                    submitOfflineDataInput = new SubmitOfflineDataInput();
+                    submitOfflineDataInput.setBillNo(cursor.getString(cursor.getColumnIndex(KEY_OFFLINE_BILL_NO)));
+                    submitOfflineDataInput.setBeneficiary(cursor.getString(cursor.getColumnIndex(KEY_OFFLINE_BENEFICIARY)));
+                    submitOfflineDataInput.setCustomerName(cursor.getString(cursor.getColumnIndex(KEY_OFFLINE_CUSTOMER_NAME)));
+                    submitOfflineDataInput.setProjectNo(cursor.getString(cursor.getColumnIndex(KEY_OFFLINE_PROJECT_NO)));
+                    submitOfflineDataInput.setUserId(cursor.getString(cursor.getColumnIndex(KEY_OFFLINE_USERID)));
+                    submitOfflineDataInput.setRegisno(cursor.getString(cursor.getColumnIndex(KEY_OFFLINE_REGISNO)));
+                    submitOfflineDataInput.setOffPhoto(cursor.getString(cursor.getColumnIndex(KEY_OFFLINE_OFFPHOTO)));
+                    cursor.moveToNext();
                 }
                 db.setTransactionSuccessful();
             }
@@ -3278,6 +3343,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return submitOfflineDataInput;
     }
+
     @SuppressLint("Range")
     public ArrayList<SiteAuditListBean> getAuditSiteListData(String userid) {
 
@@ -3343,6 +3409,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return list_document;
     }
+
     @SuppressLint("Range")
     public ArrayList<RejectListBean> getRejectionListData() {
         RejectListBean installationBean = new RejectListBean();
@@ -3409,6 +3476,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return list_document;
     }
+
     @SuppressLint("Range")
     public ArrayList<SurveyListBean> getSurveyListData(String userid) {
         SurveyListBean installationBean = new SurveyListBean();
@@ -3446,6 +3514,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return list_document;
     }
+
     @SuppressLint("Range")
     public ArrayList<RegistrationBean> getRegistrationData() {
         RegistrationBean registrationBean = new RegistrationBean();
@@ -3503,56 +3572,56 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void deleteLoginData() {
         SQLiteDatabase db = this.getWritableDatabase();
-       if(CustomUtility.doesTableExist(db,TABLE_LOGIN)) {
+        if (CustomUtility.doesTableExist(db, TABLE_LOGIN)) {
             db.delete(TABLE_LOGIN, null, null);
         }
     }
 
     public void deleteStateSearchHelpData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(db,TABLE_STATE_SEARCH)) {
+        if (CustomUtility.doesTableExist(db, TABLE_STATE_SEARCH)) {
             db.delete(TABLE_STATE_SEARCH, null, null);
         }
     }
 
     public void deleteStateDistrictData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(db,TABLE_STATE_DISTRICT)) {
-        db.delete(TABLE_STATE_DISTRICT, null, null);
-    }
+        if (CustomUtility.doesTableExist(db, TABLE_STATE_DISTRICT)) {
+            db.delete(TABLE_STATE_DISTRICT, null, null);
+        }
     }
 
     public void deleteLoginSelecData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(db,TABLE_LOGIN_SELECTION)) {
+        if (CustomUtility.doesTableExist(db, TABLE_LOGIN_SELECTION)) {
             db.delete(TABLE_LOGIN_SELECTION, null, null);
         }
     }
 
     public void deleteDashboardData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(db,TABLE_DASHBOARD)) {
+        if (CustomUtility.doesTableExist(db, TABLE_DASHBOARD)) {
             db.delete(TABLE_DASHBOARD, null, null);
         }
     }
 
     public void deleteRegistrationData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(db,TABLE_REGISTRATION)) {
+        if (CustomUtility.doesTableExist(db, TABLE_REGISTRATION)) {
             db.delete(TABLE_REGISTRATION, null, null);
         }
     }
 
     public void deleteInstallationListData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(db,TABLE_INSTALLATION_LIST)) {
+        if (CustomUtility.doesTableExist(db, TABLE_INSTALLATION_LIST)) {
             db.delete(TABLE_INSTALLATION_LIST, null, null);
         }
     }
 
     public void deleteInstallationOfflineListData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(db,TABLE_INSTALLATION_OFFLINE_LIST)) {
+        if (CustomUtility.doesTableExist(db, TABLE_INSTALLATION_OFFLINE_LIST)) {
             db.delete(TABLE_INSTALLATION_OFFLINE_LIST, null, null);
         }
     }
@@ -3561,7 +3630,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_OFFLINE_BILL_NO + "='" + billNo + "'";
-        if(CustomUtility.doesTableExist(db,TABLE_OFFLINE_SUBMITTED_LIST)) {
+        if (CustomUtility.doesTableExist(db, TABLE_OFFLINE_SUBMITTED_LIST)) {
             int value = db.delete(TABLE_OFFLINE_SUBMITTED_LIST, where, null);
             Log.i("DeleteValue", value + "");
         }
@@ -3573,14 +3642,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_BILL_NO + "='" + value + "'";
-        if(CustomUtility.doesTableExist(db,TABLE_INSTALLATION_LIST)) {
+        if (CustomUtility.doesTableExist(db, TABLE_INSTALLATION_LIST)) {
             db.delete(TABLE_INSTALLATION_LIST, where, null);
         }
     }
 
     public void deleteAuditSiteListData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(db,TABLE_AUDITSITE_LIST)) {
+        if (CustomUtility.doesTableExist(db, TABLE_AUDITSITE_LIST)) {
             db.delete(TABLE_AUDITSITE_LIST, null, null);
         }
     }
@@ -3589,16 +3658,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_BILL_NO + "='" + value + "'";
-        if(CustomUtility.doesTableExist(db,TABLE_AUDITSITE_LIST)) {
+        if (CustomUtility.doesTableExist(db, TABLE_AUDITSITE_LIST)) {
             db.delete(TABLE_AUDITSITE_LIST, where, null);
         }
     }
 
-    public void deleteAuditImages(String billNo){
+    public void deleteAuditImages(String billNo) {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_SITE_AUDIT_BILL_NO + "='" + billNo + "'";
-        if(CustomUtility.doesTableExist(db,CREATE_TABLE_SITE_AUDIT_IMAGES)) {
+        if (CustomUtility.doesTableExist(db, CREATE_TABLE_SITE_AUDIT_IMAGES)) {
             db.delete(CREATE_TABLE_SITE_AUDIT_IMAGES, where, null);
         }
     }
@@ -3606,42 +3675,55 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void deleteRejectListData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(db,TABLE_REJECTION_LIST)) {
+        if (CustomUtility.doesTableExist(db, TABLE_REJECTION_LIST)) {
             db.delete(TABLE_REJECTION_LIST, null, null);
         }
     }
 
     public void deleteSurveyListData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(db,TABLE_SURVEY_LIST)) {
+        if (CustomUtility.doesTableExist(db, TABLE_SURVEY_LIST)) {
             db.delete(TABLE_SURVEY_LIST, null, null);
         }
     }
 
     public void deleteInstallationData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(db,TABLE_INSTALLATION_PUMP_DATA)) {
+        if (CustomUtility.doesTableExist(db, TABLE_INSTALLATION_PUMP_DATA)) {
             db.delete(TABLE_INSTALLATION_PUMP_DATA, null, null);
+        }
+    }
+
+    public void deleteKusumCSurveyFromSpecificItem(String applicationNumber) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if (CustomUtility.doesTableExist(db, TABLE_KUSUMCSURVEYFORM)) {
+       //  String Query = "DELETE FROM " + TABLE_KUSUMCSURVEYFORM + " WHERE " + DatabaseHelper.KEY_APPLICANT_NO + " = '" + applicationNumber + "'";
+
+            String where = "";
+            where =  DatabaseHelper.KEY_APPLICANT_NO + " = '" + applicationNumber + "'";
+
+            db.delete(TABLE_KUSUMCSURVEYFORM, where, null);
         }
     }
 
     public void deleteKusumCSurveyFrom() {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(db,TABLE_KUSUMCSURVEYFORM)) {
+        if (CustomUtility.doesTableExist(db, TABLE_KUSUMCSURVEYFORM)) {
+
             db.delete(TABLE_KUSUMCSURVEYFORM, null, null);
         }
     }
 
     public void deleteAuditData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(db,TABLE_AUDIT_PUMP_DATA)) {
+        if (CustomUtility.doesTableExist(db, TABLE_AUDIT_PUMP_DATA)) {
             db.delete(TABLE_AUDIT_PUMP_DATA, null, null);
         }
     }
 
     public void deleteSurveyData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(db,TABLE_SURVEY_PUMP_DATA)) {
+        if (CustomUtility.doesTableExist(db, TABLE_SURVEY_PUMP_DATA)) {
             db.delete(TABLE_SURVEY_PUMP_DATA, null, null);
         }
     }
@@ -3650,7 +3732,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_BILL_NO + "='" + value + "'";
-        if(CustomUtility.doesTableExist(db,TABLE_INSTALLATION_PUMP_DATA)) {
+        if (CustomUtility.doesTableExist(db, TABLE_INSTALLATION_PUMP_DATA)) {
             db.delete(TABLE_INSTALLATION_PUMP_DATA, where, null);
         }
     }
@@ -3659,7 +3741,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_BILL_NO + "='" + value + "'";
-        if(CustomUtility.doesTableExist(db,TABLE_DAMAGE_MISS_COMPLAIN)) {
+        if (CustomUtility.doesTableExist(db, TABLE_DAMAGE_MISS_COMPLAIN)) {
             db.delete(TABLE_DAMAGE_MISS_COMPLAIN, where, null);
         }
     }
@@ -3668,7 +3750,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_BILL_NO + "='" + value + "'";
-        if(CustomUtility.doesTableExist(db,TABLE_AUDIT_PUMP_DATA)) {
+        if (CustomUtility.doesTableExist(db, TABLE_AUDIT_PUMP_DATA)) {
             db.delete(TABLE_AUDIT_PUMP_DATA, where, null);
         }
     }
@@ -3677,7 +3759,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_BILL_NO + "='" + value + "'";
-        if(CustomUtility.doesTableExist(db,TABLE_SURVEY_PUMP_DATA)) {
+        if (CustomUtility.doesTableExist(db, TABLE_SURVEY_PUMP_DATA)) {
             db.delete(TABLE_SURVEY_PUMP_DATA, where, null);
         }
     }
@@ -3686,40 +3768,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_ENQ_DOC + "='" + value + "'";
-        if(CustomUtility.doesTableExist(db,TABLE_REGISTRATION)) {
+        if (CustomUtility.doesTableExist(db, TABLE_REGISTRATION)) {
             db.delete(TABLE_REGISTRATION, where, null);
         }
     }
+
     public void deleteInstallationImages() {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(db,TABLE_INSTALLATION_IMAGE_DATA)) {
+        if (CustomUtility.doesTableExist(db, TABLE_INSTALLATION_IMAGE_DATA)) {
             db.delete(TABLE_INSTALLATION_IMAGE_DATA, null, null);
         }
     }
 
     public void deleteRejectedInstallationImages() {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(db,TABLE_INSTALLATION_IMAGE_DATA)) {
+        if (CustomUtility.doesTableExist(db, TABLE_INSTALLATION_IMAGE_DATA)) {
             db.delete(TABLE_INSTALLATION_IMAGE_DATA, null, null);
         }
     }
+
     public void deleteSiteAuditImages() {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(db,TABLE_SITE_AUDIT)) {
+        if (CustomUtility.doesTableExist(db, TABLE_SITE_AUDIT)) {
             db.delete(TABLE_SITE_AUDIT, null, null);
         }
     }
 
     public void deletekusumCImages() {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(db,TABLE_KusumCImages)) {
+        if (CustomUtility.doesTableExist(db, TABLE_KusumCImages)) {
             db.delete(TABLE_KusumCImages, null, null);
         }
     }
 
     public void deleteUnloadingImages() {
         SQLiteDatabase db = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(db,TABLE_UNLOADING_IMAGE_DATA)) {
+        if (CustomUtility.doesTableExist(db, TABLE_UNLOADING_IMAGE_DATA)) {
             db.delete(TABLE_UNLOADING_IMAGE_DATA, null, null);
         }
     }
@@ -3732,7 +3816,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             String selectQuery = "SELECT  *  FROM " + TABLE_INSTALLATION_PUMP_DATA + " WHERE " + KEY_PERNR + " = '" + user_id + "'" + "AND " + KEY_BILL_NO + " = '" + bill_no + "'";
             Cursor cursor = db.rawQuery(selectQuery, null);
-           if (cursor.getCount() > 0) {
+            if (cursor.getCount() > 0) {
                 if (cursor.moveToFirst()) {
                     while (!cursor.isAfterLast()) {
                         installationBean = new InstallationBean();
@@ -3791,14 +3875,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
     @SuppressLint("Range")
-    public KusumCSurveyBean getKusumCSurvey( String bill_no) {
-        KusumCSurveyBean  kusumCSurveyBean= new KusumCSurveyBean();
+    public KusumCSurveyBean getKusumCSurvey(String bill_no) {
+        KusumCSurveyBean kusumCSurveyBean = new KusumCSurveyBean();
         SQLiteDatabase db = this.getReadableDatabase();
         db.beginTransaction();
         try {
-            String selectQuery = "SELECT  *  FROM " + TABLE_KUSUMCSURVEYFORM + " WHERE " + KEY_APPLICANT_NO  + " = '" + bill_no + "'";
+            String selectQuery = "SELECT  *  FROM " + TABLE_KUSUMCSURVEYFORM + " WHERE " + KEY_APPLICANT_NO + " = '" + bill_no + "'";
             Cursor cursor = db.rawQuery(selectQuery, null);
             Log.e("CURSORCOUNT", "&&&&123" + cursor.getCount() + " " + selectQuery);
             if (cursor.getCount() > 0) {
@@ -3816,8 +3899,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         kusumCSurveyBean.setELEC_IDEN_NO(cursor.getString(cursor.getColumnIndex(KEY_ELEC_IDEN_NO)));
 
                         kusumCSurveyBean.setPUMP_TYPE(cursor.getString(cursor.getColumnIndex(KEY_PUMP_TYPE)));
+                        kusumCSurveyBean.setELEC_CONN_RAT(cursor.getString(cursor.getColumnIndex(KEY_ELEC_RATING)));
                         kusumCSurveyBean.setPUMP_SET_RATING(cursor.getString(cursor.getColumnIndex(KEY_PUMP_SET_RATING)));
                         kusumCSurveyBean.setPUMP_MAKE(cursor.getString(cursor.getColumnIndex(KEY_PUMP_MAKE)));
+                        kusumCSurveyBean.setCABLE_DET_MAKE(cursor.getString(cursor.getColumnIndex(KEY_CABLE_DETAIL_WITH_MAKE)));
                         kusumCSurveyBean.setPHASE_VOL_V1(cursor.getString(cursor.getColumnIndex(KEY_PHASE_VOL_V1)));
                         kusumCSurveyBean.setPHASE_VOL_V2(cursor.getString(cursor.getColumnIndex(KEY_PHASE_VOL_V2)));
                         kusumCSurveyBean.setPHASE_VOL_V3(cursor.getString(cursor.getColumnIndex(KEY_PHASE_VOL_V3)));
@@ -3838,15 +3923,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         kusumCSurveyBean.setDIS_PUMP_LPM(cursor.getString(cursor.getColumnIndex(KEY_DIS_PUMP_LPM)));
                         kusumCSurveyBean.setDEL_PUMP_LPM(cursor.getString(cursor.getColumnIndex(KEY_DEL_PUMP_LPM)));
                         kusumCSurveyBean.setPUMP_SET_DEPTH(cursor.getString(cursor.getColumnIndex(KEY_PUMP_SET_DEPTH)));
+                        kusumCSurveyBean.setPIPE_LEN_SIZE(cursor.getString(cursor.getColumnIndex(KEY_DEL_PIPE_LINE)));
+                        kusumCSurveyBean.setDYNAMIC_HEAD(cursor.getString(cursor.getColumnIndex(KEY_TOTAL_DYNAMIC_HEAD)));
+
+
+                        kusumCSurveyBean.setTRANSF_RATING(cursor.getString(cursor.getColumnIndex(KEY_TRANSFORMER_RATING)));
+                        kusumCSurveyBean.setSERVICE_LINE(cursor.getString(cursor.getColumnIndex(KEY_SERVICE_LINE)));
+                        kusumCSurveyBean.setTHREE_PH_SUPPLY(cursor.getString(cursor.getColumnIndex(KEY_THREE_PHASE)));
+                        kusumCSurveyBean.setELECTRIC_BILL(cursor.getString(cursor.getColumnIndex(KEY_ELECTRICITY_BILL)));
+                        kusumCSurveyBean.setNEUTRL_GRID_AVBL(cursor.getString(cursor.getColumnIndex(KEY_NEUTRAL_AVAILABILITY)));
+                        kusumCSurveyBean.setWATER_SOURC_LEN(cursor.getString(cursor.getColumnIndex(KEY_STURCTURE_WATER_SOURCE)));
+                        kusumCSurveyBean.setDIST_FARMAR(cursor.getString(cursor.getColumnIndex(KEY_FEEDER_TO_FARMER)));
+                        kusumCSurveyBean.setIFNO_REMARK(cursor.getString(cursor.getColumnIndex(KEY_ADDITIONAL_INFO)));
+
+                        kusumCSurveyBean.setpowerInVolt(cursor.getString(cursor.getColumnIndex(KEY_POWER_IN_VOLT)));
+                        kusumCSurveyBean.setExDischarge(cursor.getString(cursor.getColumnIndex(KEY_EXDISCHARGE)));
+                        kusumCSurveyBean.setExDynamichead(cursor.getString(cursor.getColumnIndex(KEY_EXDYNAMIC)));
+
 
                         kusumCSurveyBean.setPhoto1(cursor.getString(cursor.getColumnIndex(KEY_PHOTO1)));
                         kusumCSurveyBean.setPhoto2(cursor.getString(cursor.getColumnIndex(KEY_PHOTO2)));
                         kusumCSurveyBean.setPhoto3(cursor.getString(cursor.getColumnIndex(KEY_PHOTO3)));
                         kusumCSurveyBean.setPhoto4(cursor.getString(cursor.getColumnIndex(KEY_PHOTO4)));
+                        kusumCSurveyBean.setPhoto5(cursor.getString(cursor.getColumnIndex(KEY_PHOTO5)));
+                        kusumCSurveyBean.setPhoto6(cursor.getString(cursor.getColumnIndex(KEY_PHOTO6)));
 
                         kusumCSurveyBean.setLAT(cursor.getString(cursor.getColumnIndex(KEY_LAT)));
                         kusumCSurveyBean.setLNG(cursor.getString(cursor.getColumnIndex(KEY_LNG)));
-                         kusumCSurveyBean.setFREQ_HERTZ(cursor.getString(cursor.getColumnIndex(KEY_FREQ_HERTZ)));
+                        kusumCSurveyBean.setFREQ_HERTZ(cursor.getString(cursor.getColumnIndex(KEY_FREQ_HERTZ)));
 
                         cursor.moveToNext();
                     }
@@ -3910,6 +4014,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return auditSiteBean;
     }
+
     @SuppressLint("Range")
     public SurveyBean getSurveyData(String user_id, String bill_no) {
         SurveyBean surveyBean = new SurveyBean();
@@ -3960,6 +4065,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return true;
     }
+
     @SuppressLint("Range")
     public boolean isImageSaved(String tablename, String where, String docno, String field) {
         String result = null;
@@ -4030,6 +4136,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return index;
     }
+
     @SuppressLint("Range")
     public SimCardBean getSimDataformation(String user_id, String enq_docno) {
         SimCardBean simCardBean = new SimCardBean();
@@ -4165,7 +4272,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void insertRejectedInstallationImage(String name, String path, boolean isSelected, String billNo, String latitude, String longitude, int position) {
-        SQLiteDatabase  database = this.getWritableDatabase();
+        SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_INSTALLATION_NAME, name);
         contentValues.put(KEY_INSTALLATION_PATH, path);
@@ -4189,13 +4296,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_INSTALLATION_LONGITUDE, longitude);
         values.put(KEY_INSTALLATION_POSITION, position);
         // update Row
-        db.update(TABLE_REJECTED_INSTALLATION_IMAGE_DATA,values,"installationImageName = '"+name+"'",null);
+        db.update(TABLE_REJECTED_INSTALLATION_IMAGE_DATA, values, "installationImageName = '" + name + "'", null);
         db.close();
     }
 
 
     public void insertInstallationImage(String name, String path, boolean isSelected, String billNo, String latitude, String longitude, int position) {
-      SQLiteDatabase  database = this.getWritableDatabase();
+        SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_INSTALLATION_NAME, name);
         contentValues.put(KEY_INSTALLATION_PATH, path);
@@ -4219,12 +4326,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_INSTALLATION_LONGITUDE, longitude);
         values.put(KEY_INSTALLATION_POSITION, position);
         // update Row
-        db.update(TABLE_INSTALLATION_IMAGE_DATA,values,"installationImageName = '"+name+"'",null);
+        db.update(TABLE_INSTALLATION_IMAGE_DATA, values, "installationImageName = '" + name + "'", null);
         db.close();
     }
 
-    public void insertSiteAuditImage( String name,String path, boolean isSelected, String billno) {
-        SQLiteDatabase  database = this.getWritableDatabase();
+    public void insertSiteAuditImage(String name, String path, boolean isSelected, String billno) {
+        SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_SITE_AUDIT_NAME, name);
         contentValues.put(KEY_SITE_AUDIT_PATH, path);
@@ -4234,7 +4341,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.close();
     }
 
-    public void updateSiteAuditRecord( String name, String path, boolean isSelected, String billno) {
+    public void updateSiteAuditRecord(String name, String path, boolean isSelected, String billno) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_SITE_AUDIT_NAME, name);
@@ -4242,13 +4349,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_SITE_AUDIT_IMAGE_SELECTED, isSelected);
         values.put(KEY_SITE_AUDIT_BILL_NO, billno);
         // update Row
-        db.update(TABLE_SITE_AUDIT,values,"siteAuditImageName = '"+name+"'",null);
+        db.update(TABLE_SITE_AUDIT, values, "siteAuditImageName = '" + name + "'", null);
         db.close();
     }
 
 
-    public void insertKusumCImages( String name,String path, boolean isSelected, String billno) {
-        SQLiteDatabase  database = this.getWritableDatabase();
+    public void insertKusumCImages(String name, String path, boolean isSelected, String billno) {
+        SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_KUSUMC_NAME, name);
         contentValues.put(KEY_KUSUMC_PATH, path);
@@ -4258,7 +4365,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.close();
     }
 
-    public void updateKusumCImages( String name, String path, boolean isSelected, String billno) {
+    public void updateKusumCImages(String name, String path, boolean isSelected, String billno) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_KUSUMC_NAME, name);
@@ -4266,14 +4373,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_KUSUMC_IMAGE_SELECTED, isSelected);
         values.put(KEY_KUSUMC_BILL_NO, billno);
         // update Row
-        db.update(TABLE_KusumCImages,values,"ImageName = '"+name+"'",null);
+        db.update(TABLE_KusumCImages, values, "ImageName = '" + name + "'", null);
         db.close();
     }
 
     public List<ImageModel> getAllAuditSiteImages() {
         ArrayList<ImageModel> siteAuditImages = new ArrayList<ImageModel>();
-        SQLiteDatabase  database = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(database,TABLE_SITE_AUDIT)) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        if (CustomUtility.doesTableExist(database, TABLE_SITE_AUDIT)) {
             Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_SITE_AUDIT, null);
             ImageModel imageModel;
 
@@ -4298,8 +4405,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public List<ImageModel> getAllkusumCImages() {
         ArrayList<ImageModel> siteAuditImages = new ArrayList<ImageModel>();
-        SQLiteDatabase  database = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(database,TABLE_KusumCImages)) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        if (CustomUtility.doesTableExist(database, TABLE_KusumCImages)) {
             Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_KusumCImages, null);
             ImageModel imageModel;
 
@@ -4322,38 +4429,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return siteAuditImages;
     }
 
-    public void deleteInstallationImages(String billNo){
+    public void deleteInstallationImages(String billNo) {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_INSTALLATION_BILL_NO + "='" + billNo + "'";
-        if(CustomUtility.doesTableExist(db,TABLE_INSTALLATION_IMAGE_DATA)) {
+        if (CustomUtility.doesTableExist(db, TABLE_INSTALLATION_IMAGE_DATA)) {
             db.delete(TABLE_INSTALLATION_IMAGE_DATA, where, null);
         }
     }
 
-    public void deleteRejectedInstallationImages(String billNo){
+    public void deleteRejectedInstallationImages(String billNo) {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_INSTALLATION_BILL_NO + "='" + billNo + "'";
-        if(CustomUtility.doesTableExist(db,TABLE_REJECTED_INSTALLATION_IMAGE_DATA)) {
+        if (CustomUtility.doesTableExist(db, TABLE_REJECTED_INSTALLATION_IMAGE_DATA)) {
             db.delete(TABLE_REJECTED_INSTALLATION_IMAGE_DATA, where, null);
         }
     }
 
 
-    public void deleteUnloadingImages(String billNo){
+    public void deleteUnloadingImages(String billNo) {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_UNLOADING_BILL_NO + "='" + billNo + "'";
-        if(CustomUtility.doesTableExist(db,TABLE_UNLOADING_IMAGE_DATA)) {
+        if (CustomUtility.doesTableExist(db, TABLE_UNLOADING_IMAGE_DATA)) {
             db.delete(TABLE_UNLOADING_IMAGE_DATA, where, null);
         }
     }
 
     public ArrayList<ImageModel> getAllInstallationImages() {
         ArrayList<ImageModel> installationImages = new ArrayList<ImageModel>();
-        SQLiteDatabase  database = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(database,TABLE_INSTALLATION_IMAGE_DATA)) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        if (CustomUtility.doesTableExist(database, TABLE_INSTALLATION_IMAGE_DATA)) {
             Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_INSTALLATION_IMAGE_DATA, null);
 
             installationImages.clear();
@@ -4383,8 +4490,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public ArrayList<ImageModel> getRejectedInstallationImages() {
         ArrayList<ImageModel> installationImages = new ArrayList<ImageModel>();
-        SQLiteDatabase  database = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(database,TABLE_REJECTED_INSTALLATION_IMAGE_DATA)) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        if (CustomUtility.doesTableExist(database, TABLE_REJECTED_INSTALLATION_IMAGE_DATA)) {
             Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_REJECTED_INSTALLATION_IMAGE_DATA, null);
 
             installationImages.clear();
@@ -4413,9 +4520,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
-    public void insertUnloadingImage( String name ,String path,boolean isSelected,  String billNo ) {
-        SQLiteDatabase  database = this.getWritableDatabase();
+    public void insertUnloadingImage(String name, String path, boolean isSelected, String billNo) {
+        SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_UNLOADING_NAME, name);
         contentValues.put(KEY_UNLOADING_PATH, path);
@@ -4425,7 +4531,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.close();
     }
 
-    public void updateUnloadingAlternate(String name ,String path,boolean isSelected,  String billNo ) {
+    public void updateUnloadingAlternate(String name, String path, boolean isSelected, String billNo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_UNLOADING_NAME, name);
@@ -4433,14 +4539,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_UNLOADING_IMAGE_SELECTED, isSelected);
         values.put(KEY_UNLOADING_BILL_NO, billNo);
         // update Row
-        db.update(TABLE_UNLOADING_IMAGE_DATA,values,"unloadingImageName = '"+name+"'",null);
+        db.update(TABLE_UNLOADING_IMAGE_DATA, values, "unloadingImageName = '" + name + "'", null);
         db.close();
     }
 
     public ArrayList<ImageModel> getAllUnloadingImages() {
         ArrayList<ImageModel> UnloadingImages = new ArrayList<ImageModel>();
-        SQLiteDatabase  database = this.getWritableDatabase();
-        if(CustomUtility.doesTableExist(database,TABLE_UNLOADING_IMAGE_DATA)) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        if (CustomUtility.doesTableExist(database, TABLE_UNLOADING_IMAGE_DATA)) {
             Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_UNLOADING_IMAGE_DATA, null);
 
             UnloadingImages.clear();

@@ -110,7 +110,7 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getResources().getString(R.string.kusumSurveyform));
+        getSupportActionBar().setTitle(getResources().getString(R.string.kusumSurveyBform));
 
 
         applicantNameExt = findViewById(R.id.applicantNameExt);

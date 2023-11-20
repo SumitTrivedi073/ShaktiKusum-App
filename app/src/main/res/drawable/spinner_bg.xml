@@ -3,6 +3,8 @@
     <item>
         <layer-list>
             <item android:drawable="@drawable/baseline_arrow_drop_down_24"
+                android:height="@dimen/_20sdp"
+                android:width="@dimen/_20sdp"
                 android:gravity="end" android:right="@dimen/_1sdp" />
         </layer-list>
     </item>

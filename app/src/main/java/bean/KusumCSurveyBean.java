@@ -6,11 +6,12 @@ public class KusumCSurveyBean {
      LAT = "", LNG = "", CATEGORY = "", WATER_SOURCE = "", INTERNET_TYPE = "", CROP_PATTERN = "", TYPE_OF_IRIGATN = "", SHADOW_FREE_LAND = "", ELEC_CON = "",
      ELEC_IDEN_NO = "", PUMP_TYPE = "", PUMP_SET_RATING = "", PUMP_MAKE = "", PHASE_VOL_V1 = "", PHASE_VOL_V2 = "", PHASE_VOL_V3 = "", LINE_VOL_V1 = "",
      LINE_VOL_V2 = "", LINE_VOL_V3 = "", LINE_CRNT_AMP1 = "", LINE_CRNT_AMP2 = "", LINE_CRNT_AMP3 = "", FREQ_HERTZ = "", LINE_POWFACT_1 = "", LINE_POWFACT_2 = "",
-     LINE_POWFACT_3 = "", BOREWELL_SIZE = "", BOREWELL_DEPTH = "", PUMP_SET_DEPTH = "", DIS_PUMP_LPM = "", DEL_PUMP_LPM = "", DISTANCE = "",
-            photo1, photo2, photo3, photo4;
+     LINE_POWFACT_3 = "", BOREWELL_SIZE = "", BOREWELL_DEPTH = "", PUMP_SET_DEPTH = "", DIS_PUMP_LPM = "", DEL_PUMP_LPM = "", DISTANCE = "",ELEC_CONN_RAT="",
+            CABLE_DET_MAKE="",PIPE_LEN_SIZE="",DYNAMIC_HEAD="",TRANSF_RATING="",SERVICE_LINE="",THREE_PH_SUPPLY="",ELECTRIC_BILL="",NEUTRL_GRID_AVBL="",
+            WATER_SOURC_LEN="",DIST_FARMAR="",IFNO_REMARK="", powerInVolt = "", exDischarge ="",exDynamichead = "",
+            photo1, photo2, photo3, photo4,photo5,photo6;
 
-
-    public KusumCSurveyBean(String project_no, String userid, String project_login_no, String FARMER_CONTACT_NO, String APPLICANT_NO, String REGISNO, String BENEFICIARY, String SITE_ADRC, String LAT, String LNG, String CATEGORY, String WATER_SOURCE, String INTERNET_TYPE, String CROP_PATTERN, String TYPE_OF_IRIGATN, String SHADOW_FREE_LAND, String ELEC_CON, String ELEC_IDEN_NO, String PUMP_TYPE, String PUMP_SET_RATING, String PUMP_MAKE, String PHASE_VOL_V1, String PHASE_VOL_V2, String PHASE_VOL_V3, String LINE_VOL_V1, String LINE_VOL_V2, String LINE_VOL_V3, String LINE_CRNT_AMP1, String LINE_CRNT_AMP2, String LINE_CRNT_AMP3, String FREQ_HERTZ, String LINE_POWFACT_1, String LINE_POWFACT_2, String LINE_POWFACT_3, String BOREWELL_SIZE, String BOREWELL_DEPTH, String PUMP_SET_DEPTH, String DIS_PUMP_LPM, String DEL_PUMP_LPM, String DISTANCE, String photo1, String photo2, String photo3, String photo4) {
+    public KusumCSurveyBean(String project_no, String userid, String project_login_no, String FARMER_CONTACT_NO, String APPLICANT_NO, String REGISNO, String BENEFICIARY, String SITE_ADRC, String LAT, String LNG, String CATEGORY, String WATER_SOURCE, String INTERNET_TYPE, String CROP_PATTERN, String TYPE_OF_IRIGATN, String SHADOW_FREE_LAND, String ELEC_CON, String ELEC_IDEN_NO, String PUMP_TYPE, String PUMP_SET_RATING, String PUMP_MAKE, String PHASE_VOL_V1, String PHASE_VOL_V2, String PHASE_VOL_V3, String LINE_VOL_V1, String LINE_VOL_V2, String LINE_VOL_V3, String LINE_CRNT_AMP1, String LINE_CRNT_AMP2, String LINE_CRNT_AMP3, String FREQ_HERTZ, String LINE_POWFACT_1, String LINE_POWFACT_2, String LINE_POWFACT_3, String BOREWELL_SIZE, String BOREWELL_DEPTH, String PUMP_SET_DEPTH, String DIS_PUMP_LPM, String DEL_PUMP_LPM, String DISTANCE, String ELEC_CONN_RAT, String CABLE_DET_MAKE, String PIPE_LEN_SIZE, String DYNAMIC_HEAD, String TRANSF_RATING, String SERVICE_LINE, String THREE_PH_SUPPLY, String ELECTRIC_BILL, String NEUTRL_GRID_AVBL, String WATER_SOURC_LEN, String DIST_FARMAR, String IFNO_REMARK, String powerInVolt, String exDischarge, String exDynamichead, String photo1, String photo2, String photo3, String photo4, String photo5, String photo6) {
         this.project_no = project_no;
         this.userid = userid;
         this.project_login_no = project_login_no;
@@ -51,10 +52,27 @@ public class KusumCSurveyBean {
         this.DIS_PUMP_LPM = DIS_PUMP_LPM;
         this.DEL_PUMP_LPM = DEL_PUMP_LPM;
         this.DISTANCE = DISTANCE;
+        this.ELEC_CONN_RAT = ELEC_CONN_RAT;
+        this.CABLE_DET_MAKE = CABLE_DET_MAKE;
+        this.PIPE_LEN_SIZE = PIPE_LEN_SIZE;
+        this.DYNAMIC_HEAD = DYNAMIC_HEAD;
+        this.TRANSF_RATING = TRANSF_RATING;
+        this.SERVICE_LINE = SERVICE_LINE;
+        this.THREE_PH_SUPPLY = THREE_PH_SUPPLY;
+        this.ELECTRIC_BILL = ELECTRIC_BILL;
+        this.NEUTRL_GRID_AVBL = NEUTRL_GRID_AVBL;
+        this.WATER_SOURC_LEN = WATER_SOURC_LEN;
+        this.DIST_FARMAR = DIST_FARMAR;
+        this.IFNO_REMARK = IFNO_REMARK;
+        this.powerInVolt = powerInVolt;
+        this.exDischarge = exDischarge;
+        this.exDynamichead = exDynamichead;
         this.photo1 = photo1;
         this.photo2 = photo2;
         this.photo3 = photo3;
         this.photo4 = photo4;
+        this.photo5 = photo5;
+        this.photo6 = photo6;
     }
 
     public KusumCSurveyBean() {
@@ -86,6 +104,30 @@ public class KusumCSurveyBean {
 
     public String getFARMER_CONTACT_NO() {
         return FARMER_CONTACT_NO;
+    }
+
+    public String getpowerInVolt() {
+        return powerInVolt;
+    }
+
+    public void setpowerInVolt(String powerInVolt) {
+        this.powerInVolt = powerInVolt;
+    }
+
+    public String getExDischarge() {
+        return exDischarge;
+    }
+
+    public void setExDischarge(String exDischarge) {
+        this.exDischarge = exDischarge;
+    }
+
+    public String getExDynamichead() {
+        return exDynamichead;
+    }
+
+    public void setExDynamichead(String exDynamichead) {
+        this.exDynamichead = exDynamichead;
     }
 
     public void setFARMER_CONTACT_NO(String FARMER_CONTACT_NO) {
@@ -380,6 +422,102 @@ public class KusumCSurveyBean {
         this.DISTANCE = DISTANCE;
     }
 
+    public String getELEC_CONN_RAT() {
+        return ELEC_CONN_RAT;
+    }
+
+    public void setELEC_CONN_RAT(String ELEC_CONN_RAT) {
+        this.ELEC_CONN_RAT = ELEC_CONN_RAT;
+    }
+
+    public String getCABLE_DET_MAKE() {
+        return CABLE_DET_MAKE;
+    }
+
+    public void setCABLE_DET_MAKE(String CABLE_DET_MAKE) {
+        this.CABLE_DET_MAKE = CABLE_DET_MAKE;
+    }
+
+    public String getPIPE_LEN_SIZE() {
+        return PIPE_LEN_SIZE;
+    }
+
+    public void setPIPE_LEN_SIZE(String PIPE_LEN_SIZE) {
+        this.PIPE_LEN_SIZE = PIPE_LEN_SIZE;
+    }
+
+    public String getDYNAMIC_HEAD() {
+        return DYNAMIC_HEAD;
+    }
+
+    public void setDYNAMIC_HEAD(String DYNAMIC_HEAD) {
+        this.DYNAMIC_HEAD = DYNAMIC_HEAD;
+    }
+
+    public String getTRANSF_RATING() {
+        return TRANSF_RATING;
+    }
+
+    public void setTRANSF_RATING(String TRANSF_RATING) {
+        this.TRANSF_RATING = TRANSF_RATING;
+    }
+
+    public String getSERVICE_LINE() {
+        return SERVICE_LINE;
+    }
+
+    public void setSERVICE_LINE(String SERVICE_LINE) {
+        this.SERVICE_LINE = SERVICE_LINE;
+    }
+
+    public String getTHREE_PH_SUPPLY() {
+        return THREE_PH_SUPPLY;
+    }
+
+    public void setTHREE_PH_SUPPLY(String THREE_PH_SUPPLY) {
+        this.THREE_PH_SUPPLY = THREE_PH_SUPPLY;
+    }
+
+    public String getELECTRIC_BILL() {
+        return ELECTRIC_BILL;
+    }
+
+    public void setELECTRIC_BILL(String ELECTRIC_BILL) {
+        this.ELECTRIC_BILL = ELECTRIC_BILL;
+    }
+
+    public String getNEUTRL_GRID_AVBL() {
+        return NEUTRL_GRID_AVBL;
+    }
+
+    public void setNEUTRL_GRID_AVBL(String NEUTRL_GRID_AVBL) {
+        this.NEUTRL_GRID_AVBL = NEUTRL_GRID_AVBL;
+    }
+
+    public String getWATER_SOURC_LEN() {
+        return WATER_SOURC_LEN;
+    }
+
+    public void setWATER_SOURC_LEN(String WATER_SOURC_LEN) {
+        this.WATER_SOURC_LEN = WATER_SOURC_LEN;
+    }
+
+    public String getDIST_FARMAR() {
+        return DIST_FARMAR;
+    }
+
+    public void setDIST_FARMAR(String DIST_FARMAR) {
+        this.DIST_FARMAR = DIST_FARMAR;
+    }
+
+    public String getIFNO_REMARK() {
+        return IFNO_REMARK;
+    }
+
+    public void setIFNO_REMARK(String IFNO_REMARK) {
+        this.IFNO_REMARK = IFNO_REMARK;
+    }
+
     public String getPhoto1() {
         return photo1;
     }
@@ -410,5 +548,21 @@ public class KusumCSurveyBean {
 
     public void setPhoto4(String photo4) {
         this.photo4 = photo4;
+    }
+
+    public String getPhoto5() {
+        return photo5;
+    }
+
+    public void setPhoto5(String photo5) {
+        this.photo5 = photo5;
+    }
+
+    public String getPhoto6() {
+        return photo6;
+    }
+
+    public void setPhoto6(String photo6) {
+        this.photo6 = photo6;
     }
 }

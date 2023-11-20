@@ -152,9 +152,7 @@ public class CustomUtility {
             NetworkInfo[] info = connectivity.getAllNetworkInfo();
             if (info != null) {
                 for (int i = 0; i < info.length; i++) {
-                    Log.e("INTERNET:", String.valueOf(i));
-                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
-                        Log.e("INTERNET123:", "connected!");
+                     if (info[i].getState() == NetworkInfo.State.CONNECTED) {
                         return true;
                     }
                 }
@@ -314,14 +312,16 @@ public class CustomUtility {
     public static void deleteArrayList(Context context,String name){
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);
         SharedPreferences.Editor editor = settings.edit();
-        editor.remove(name).apply();
+        editor.remove(name).commit();
+        editor.apply();
 
     }
 
     public static void removeValueFromSharedPref(Context context,String name){
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);
         SharedPreferences.Editor editor = settings.edit();
-        editor.remove(name).apply();
+        editor.remove(name).commit();
+        editor.apply();
 
     }
     public static Uri getImageUri(Context inContext, Bitmap inImage) {
