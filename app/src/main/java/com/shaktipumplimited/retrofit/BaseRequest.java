@@ -49,9 +49,6 @@ public class BaseRequest extends BaseRequestParser {
         apiInterface =
                 ApiClient.getClient().create(ApiInterface.class);
 
-      /*  apiInterface1 =
-                ApiClient.getClientIMEI().create(ApiInterface.class);*/
-
         dialog = getProgressesDialog(context);
         progress = getProgressesDialog1(context);
     }
@@ -149,17 +146,7 @@ public class BaseRequest extends BaseRequestParser {
         }
     };
 
-    public void callAPIPost(final int APINumber, JsonObject jsonObject, String remainingURL) {
 
-        APINumber_ = APINumber;
-       // showLoader();
-        String baseURL = ApiClient.getClient().baseUrl() + remainingURL;
-        System.out.println("jsonObject_GRAPH==>>"+baseURL);
-
-        Call<JsonElement> call = apiInterface.postData(baseURL, jsonObject);
-
-        call.enqueue(responseCallback);
-    }
 
     public void callAPIPostDebugApp(final int APINumber, JsonObject jsonObject, String remainingURL) {
         APINumber_ = APINumber;
