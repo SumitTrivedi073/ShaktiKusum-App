@@ -2023,7 +2023,7 @@ String mMaterialCode;
             //baseRequest.callAPIPostIMEI(1, jsonObject, NewSolarVFD.MOTOR_PERSMETER_LIST);/////
             System.out.println("jsonObject==>>"+wordsByKey);
            // baseRequest.callAPIGET(1, wordsByKey, WebURL.MOTOR_PERSMETER_LIST);/////
-            baseRequest.callAPIGETIMEI(1, wordsByKey, WebURL.MOTOR_PERSMETER_LIST);/////
+            baseRequest.callAPIGETIMEI(DeviceSettingActivity.this,1, wordsByKey, WebURL.MOTOR_PERSMETER_LIST);/////
 
         } else {
             baseRequest.hideLoader();

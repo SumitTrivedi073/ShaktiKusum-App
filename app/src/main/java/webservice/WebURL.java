@@ -24,7 +24,7 @@ public class WebURL {
     public static String ProjectNo_Con, RegNo_Con, BenificiaryNo_Con;
 
     /************* production server **************/
-    public static final String HOST_NAME_SETTING1 = "https://solar10.shaktisolarrms.com/RMSAppTest/";
+    public static final String RMSAPPURL = "https://shaktirms.com/";
    public static final String BASEURL = "https://spprdsrvr1.shaktipumps.com:8423";
    public static final String BASE_URL_VK= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/";
  public static final String BASE_URL_OPTION_VK= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
@@ -60,7 +60,7 @@ public class WebURL {
     public static final String INST_CMP = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/installation_cmp.htm";
     public static final String AUDIT_SITES = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_site_audit.htm";
     public static final String SERIAL_NUMBER = BASEURL + "/sap/bc/bsp/sap/zmapp_solar/get_serial_no.htm";
-    public static final String DEVICE_DETAILS = "https://solar10.shaktisolarrms.com/Home/SAPOnlineDeviceDetails";
+    public static final String DEVICE_DETAILS = "Home/SAPOnlineDeviceDetails";
     public static final String INSTALLATION_DATA_OFFLINE = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/installation_offline_done.htm";
     public static final String INSTALLATION_OFFLINE_DATA_SUBMIT = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/image_save_for_offline_done.htm";
 

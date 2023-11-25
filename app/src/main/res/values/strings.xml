@@ -452,6 +452,7 @@
     <string name="enterPowerIn">Enter Power In Volt</string>
     <string name="expumpSetDischarge">Enter Discharge of pump set</string>
     <string name="exDynamic">"Enter Total Dynamic head "</string>
+    <string name="fileNotCreated">File Not Created, No Data Available!</string>
 
 
     <string-array name="nav_drawer_labels">
