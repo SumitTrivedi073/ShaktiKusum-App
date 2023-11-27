@@ -84,7 +84,6 @@ import java.util.concurrent.TimeUnit;
 
 import activity.BaseActivity;
 import activity.GPSTracker;
-import activity.MainActivity;
 import bean.BTResonseData;
 import bean.DeviceDetailModel;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -219,7 +218,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bt_new_layout);
-        mContext = getApplicationContext();
+        mContext = this;
         getDateTime();
         telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         initView();
@@ -238,8 +237,8 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         editor = pref.edit();
         project_no = CustomUtility.getSharedPreferences(mContext, "projectid");
-        baseRequest = new BaseRequest(mContext);
-        dialog = new Dialog(mContext);
+        baseRequest = new BaseRequest(BlueToothDebugNewActivity.this);
+        dialog = new Dialog(BlueToothDebugNewActivity.this);
         mBtNameHead = getIntent().getStringExtra("BtNameHead");
         mBtMacAddressHead = getIntent().getStringExtra("BtMacAddressHead");
 
@@ -402,11 +401,9 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                     mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
                     if (SER_CONNECT != null && !SER_CONNECT.isEmpty() && SER_CONNECT.equals("Connected")) {
                         CustomUtility.setSharedPreference(getApplicationContext(), "DeviceStatus", getResources().getString(R.string.online));
-                        if (CustomUtility.isInternetOn(getApplicationContext())) {
-                            sendDataToServer();
-                        } else {
-                            saveDataLocaly();
-                        }
+
+                        saveDataLocaly();
+
                     } else {
                         if (mSimDetailsInfoResponse.size() >= 1) {
                             if (mSimDetailsInfoResponse.size() >= 2) {
@@ -417,11 +414,9 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                         WebURL.BT_DEBUG_CHECK = 1;
                                         Constant.DBUG_PER_OFLINE = "X";//PER_OFLINE
                                         CustomUtility.setSharedPreference(getApplicationContext(), "DeviceStatus", getResources().getString(R.string.offline));
-                                        if (CustomUtility.isInternetOn(getApplicationContext())) {
-                                            sendDataToServer();
-                                        } else {
-                                            saveDataLocaly();
-                                        }
+
+                                        saveDataLocaly();
+
                                     } else {
                                         Toast.makeText(mContext, "Please data extract first than submit.", Toast.LENGTH_SHORT).show();
                                     }
@@ -449,14 +444,6 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                 lvlMainTextContainerID.addView(getTextViewTT(pp, ":DEBUG M66#"));
                 AllCommomSTRContainer = AllCommomSTRContainer + "\n :DEBUG M66#";
 
-                /*if (mIntCheckDeviceType == 0) {
-                    new BluetoothCommunicationForDebugM66().execute(":DEBUG M66#", ":DEBUG M66#", "START");
-                } else if (mIntCheckDeviceType == 2) {
-                    new BluetoothCommunicationForDebugM66CommonCode().execute(":DEBUG M66#", ":DEBUG M66#", "START");
-                } else {
-                    new BluetoothCommunicationForDebugM66ShimhaTwo().execute(":DEBUG M66#", ":DEBUG M66#", "START");
-
-                }*/
                 new BluetoothCommunicationForDebugCheckDevice().execute(":DEBUG M66#", ":DEBUG M66#", "START");
 
             }
@@ -2788,7 +2775,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                         isDataExtract = true;
                                         mBoolflag = true;
                                         sendFileToRMSServer();
-                                    }else {
+                                    } else {
                                         CustomUtility.ShowToast(getResources().getString(R.string.fileNotCreated), BlueToothDebugNewActivity.this);
                                     }
                                     break;
@@ -3666,7 +3653,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                     sendFileToRMSServer();
 
                 }
-            }else {
+            } else {
                 CustomUtility.ShowToast(getResources().getString(R.string.fileNotCreated), BlueToothDebugNewActivity.this);
             }
             super.onPostExecute(result);
@@ -3799,10 +3786,19 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     private void saveDataLocaly() {
         CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice, "true");
         Log.e("DEVICE_NO=========>", DEVICE_NO);
-        mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO, SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC, SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID, MUserId, RMS_STATUS, RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB, RMS_DEBUG_EXTRN, RMS_SERVER_DOWN, RMS_ORG_D_F, true);
-        onBackPressed();
-        Toast.makeText(mContext, " Data save in local Data base", Toast.LENGTH_SHORT).show();
+        mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO,
+                SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC,
+                SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT,
+                CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID, MUserId, RMS_STATUS,
+                RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB,
+                RMS_DEBUG_EXTRN, RMS_SERVER_DOWN, RMS_ORG_D_F, true, FAULT_CODE);
+        if (CustomUtility.isInternetOn(getApplicationContext())) {
 
+            sendDataToServer();
+        } else {
+            onBackPressed();
+            Toast.makeText(mContext, " Data save in local Data base", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -3842,9 +3838,10 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             jsonObj.put("INVOICE_NO", INVOICE_NO_B);
             jsonObj.put("DBUG_EXTRN_STATUS", RMS_DEBUG_EXTRN);
             jsonObj.put("RMS_SERVER_STATUS", RMS_SERVER_DOWN);
+                jsonObj.put("FAULT_CODE", FAULT_CODE);
 
             jsonArray.put(jsonObj);
-            mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO, SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC, SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID, MUserId, RMS_STATUS, RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB, RMS_DEBUG_EXTRN, RMS_SERVER_DOWN, RMS_ORG_D_F, true);
+            mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO, SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC, SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID, MUserId, RMS_STATUS, RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB, RMS_DEBUG_EXTRN, RMS_SERVER_DOWN, RMS_ORG_D_F, true, FAULT_CODE);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -4018,7 +4015,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         stopProgressDialogue();
         showProgressDialogue(getResources().getString(R.string.ImeiFileToServer));
 
-        OkHttpClient client = new OkHttpClient().newBuilder() .connectTimeout(10, TimeUnit.SECONDS)
+        OkHttpClient client = new OkHttpClient().newBuilder().connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
                 .build();
@@ -4043,7 +4040,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
                 try {
                     okhttp3.Response response = client.newCall(request)
-                         .execute();
+                            .execute();
                     String jsonData = response.body().string();
                     JSONObject Jobject = new JSONObject(jsonData);
 
