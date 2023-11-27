@@ -827,7 +827,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
             jsonObj.put("APPLICANT_NO", applicationNumberExt.getText().toString().trim());
             jsonObj.put("REGISNO", surveyListModel.getRegisno());
             jsonObj.put("BENEFICIARY", surveyListModel.getBeneficiary());
-            jsonObj.put("SITE_ADRC", addressExt.getText().toString().trim());
+            jsonObj.put("SITE_ADRC", addressExt.getText().toString().trim().replaceAll("/"," ").replaceAll("-"," "));
             jsonObj.put("LAT", latitude);
             jsonObj.put("LNG", longitude);
             jsonObj.put("CATEGORY", selectedCategory);
@@ -895,9 +895,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
         ArrayList<NameValuePair> param1_invc = new ArrayList<>();
         param1_invc.add(new BasicNameValuePair("survey", String.valueOf(ja_invc_data)));
 
-
-
-     /*   try {
+        try {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
             StrictMode.setThreadPolicy(policy);
             obj2 = CustomHttpClient.executeHttpPost1(WebURL.KusumCSurvey, param1_invc);
@@ -936,7 +934,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
         } catch (Exception e) {
             e.printStackTrace();
             hideProgressDialogue();
-        }*/
+        }
 
     }
 

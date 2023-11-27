@@ -80,6 +80,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import activity.BaseActivity;
 import activity.GPSTracker;
@@ -218,7 +219,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bt_new_layout);
-        mContext = this;
+        mContext = getApplicationContext();
         getDateTime();
         telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         initView();
@@ -242,7 +243,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         mBtNameHead = getIntent().getStringExtra("BtNameHead");
         mBtMacAddressHead = getIntent().getStringExtra("BtMacAddressHead");
 
-        progressDialog = new ProgressDialog(mContext);
+        progressDialog = new ProgressDialog(BlueToothDebugNewActivity.this);
         mBTResonseDataList = new ArrayList<>();
         mMonthHeaderList = new ArrayList<>();
         mSimDetailsInfoResponse = new ArrayList<>();
@@ -3940,6 +3941,9 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         showProgressDialogue(getResources().getString(R.string.dataExtractFileToServer));
 
         OkHttpClient client = new OkHttpClient().newBuilder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
                 .build();
 
         if (type.equals("Month")) {
@@ -4014,8 +4018,11 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         stopProgressDialogue();
         showProgressDialogue(getResources().getString(R.string.ImeiFileToServer));
 
-        OkHttpClient client = new OkHttpClient().newBuilder()
+        OkHttpClient client = new OkHttpClient().newBuilder() .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
                 .build();
+
 
         RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart("deviceNo", ControllerSerialNumber)
@@ -4033,8 +4040,10 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         Thread gfgThread = new Thread(new Runnable() {
             @Override
             public void run() {
+
                 try {
-                    okhttp3.Response response = client.newCall(request).execute();
+                    okhttp3.Response response = client.newCall(request)
+                         .execute();
                     String jsonData = response.body().string();
                     JSONObject Jobject = new JSONObject(jsonData);
 
