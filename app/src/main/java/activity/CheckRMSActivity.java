@@ -22,6 +22,7 @@ import com.shaktipumplimited.shaktikusum.R;
 import org.json.JSONObject;
 
 import bean.DeviceDetailModel;
+import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;
 import webservice.WebURL;
 
@@ -79,8 +80,9 @@ public class CheckRMSActivity extends BaseActivity {
         CustomUtility.showProgressDialogue(CheckRMSActivity.this);
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
+        Log.e("URL===>",   CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl)+WebURL.DEVICE_DETAILS + "?DeviceNo=" + controllerExt.getText().toString());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                WebURL.DEVICE_DETAILS + "?DeviceNo=" + controllerExt.getText().toString(), null, new Response.Listener<JSONObject>() {
+                CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl)+WebURL.DEVICE_DETAILS + "?DeviceNo=" + controllerExt.getText().toString(), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 CustomUtility.hideProgressDialog(CheckRMSActivity.this);

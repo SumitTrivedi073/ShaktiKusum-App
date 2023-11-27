@@ -23,6 +23,7 @@ import com.shaktipumplimited.shaktikusum.R;
 import org.json.JSONObject;
 
 import bean.DeviceDetailModel;
+import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;
 import utility.dialog4;
 import webservice.WebURL;
@@ -107,7 +108,7 @@ public class DeviceStatusActivity extends BaseActivity  {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                WebURL.DEVICE_DETAILS +"?DeviceNo="+textString, null, new Response.Listener<JSONObject >() {
+                CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl)+WebURL.DEVICE_DETAILS +"?DeviceNo="+textString, null, new Response.Listener<JSONObject >() {
             @Override
             public void onResponse(JSONObject  response) {
                 CustomUtility.hideProgressDialog(DeviceStatusActivity.this);
