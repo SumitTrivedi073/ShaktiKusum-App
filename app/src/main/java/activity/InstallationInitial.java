@@ -1231,7 +1231,7 @@ public class InstallationInitial extends BaseActivity {
         inst_pump_ser.setText(pump);
 
         WebURL.mDEvice_Number_CHECK = controller;
-        inst_controller_ser.setText("7E-0029-0-14-08-23");
+        inst_controller_ser.setText(controller);
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {
             spinner_simoprator.setSelection(db.getPosition(spinner_simoprator, installationBean.getSimoprator()));
