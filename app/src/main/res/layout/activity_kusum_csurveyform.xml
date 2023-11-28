@@ -1494,12 +1494,7 @@
 
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="@dimen/_50sdp"
-        android:layout_height="@dimen/_50sdp"
-        android:visibility="gone"
-        android:layout_centerInParent="true"/>
+
     <TextView
         android:id="@+id/submitBtn"
         android:layout_width="match_parent"

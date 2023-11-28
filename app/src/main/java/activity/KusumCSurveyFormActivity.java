@@ -25,7 +25,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -105,7 +105,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
 
     TextView submitBtn;
     SurveyListModel.Response surveyListModel;
-    ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,7 +178,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
         additionalInfoExt = findViewById(R.id.additionalInfoExt);
         neutralAvailabilitySpinner = findViewById(R.id.neutralAvailabilitySpinner);
         submitBtn = findViewById(R.id.submitBtn);
-        progressBar = findViewById(R.id.progressBar);
+
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
