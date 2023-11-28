@@ -115,7 +115,7 @@ public class InstallationInitial extends BaseActivity {
             city_txt = "", address = "", make = "", custname = "", fathname = "", simno = "", regisno = "", projectno = "", loginno = "", moduleqty = "", mobileno = "", tehvillage = "",
             borewellstatus1 = "", DeviceStatus = "", CUS_CONTACT_NO = "", BeneficiaryNo = "", no_of_module_value = "", rmsdata_status = "", mMOBNUM_1, mMOBNUM_2, mMOBNUM_3, mORG_OTP_VALUE,
             mORG_CONTACT_NO, MEmpType = "null", mAppName = "KUSUM", mInstallerMOB = "", mInstallerName = "", RMS_SERVER_DOWN = "", RMS_DEBUG_EXTRN = "", DEVICE_NO, SIGNL_STREN,
-            INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "", SIM_SR_NO = "", SIM = "", RMS_STATUS = "", RMS_LAST_ONLINE_DATE = "",
+            INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "", SIM_SR_NO = "", SIM = "", RMS_STATUS = "", RMS_LAST_ONLINE_DATE = "",FAULT_CODE = "",
             RMS_CURRENT_ONLINE_STATUS = "", version = "",invc_done="",docno_sap="",
 
     mDriveSerialNo = "", mMotorSerialNo = "", mPumpSerialNo = "", delay;
@@ -410,6 +410,7 @@ public class InstallationInitial extends BaseActivity {
             if (CustomUtility.isInternetOn(getApplicationContext())) {
                 if (mBTResonseDataList.size() > 0)
                     mBTResonseDataList.clear();
+                Log.e("inst_controller_ser===>",inst_controller_ser.getText().toString().trim() );
                 mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(inst_controller_ser.getText().toString().trim() + "-0");
                 System.out.println("mBTResonseDataList.size()==>>" + mBTResonseDataList.size());
                 if (mBTResonseDataList.size() > 0) {
@@ -447,16 +448,17 @@ public class InstallationInitial extends BaseActivity {
                     mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
                     RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
                     RMS_SERVER_DOWN = "Working Fine";
-                    System.out.println("VikasVIHU==>>" + mBTResonseDataList.get(vkp).getDEVICENO());
+                    FAULT_CODE = mBTResonseDataList.get(vkp).getmRMS_FAULT_CODE();
 
 
-                    saveDataValidation();
+
+                  saveDataValidation();
                 } else {
                     saveData();
 
                 }
             } else {
-                saveData();
+               saveData();
             }
         });
 
@@ -1480,6 +1482,7 @@ public class InstallationInitial extends BaseActivity {
             jsonObj.put("INVOICE_NO", INVOICE_NO_B);
             jsonObj.put("DBUG_EXTRN_STATUS", RMS_DEBUG_EXTRN);
             jsonObj.put("RMS_SERVER_STATUS", RMS_SERVER_DOWN);
+            jsonObj.put("FAULT_CODE", FAULT_CODE);
 
             jsonArray.put(jsonObj);
         } catch (JSONException e) {
