@@ -337,11 +337,11 @@ public class BaseRequest extends BaseRequestParser {
     public void showLoader() {
         try {
             if (!runInBackground) {
-                if (null != loaderView) {
+                if (loaderView!=null) {
 
                     loaderView.setVisibility(View.VISIBLE);
 
-                } else if (null != dialog) {
+                } else if (dialog != null && !dialog.isShowing()) {
                     dialog.show();
                    // progress.show();
                 }
@@ -354,9 +354,9 @@ public class BaseRequest extends BaseRequestParser {
     public void hideLoader() {
         try {
             if (!runInBackground) {
-                if (null != loaderView) {
+                if (loaderView != null) {
                     loaderView.setVisibility(View.GONE);
-                } else if (null != dialog) {
+                } else if (dialog != null && dialog.isShowing()) {
                    dialog.dismiss();
                     //progress.dismiss();
                 }

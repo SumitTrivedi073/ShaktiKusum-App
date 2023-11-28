@@ -238,8 +238,8 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
         editor = pref.edit();
         project_no = CustomUtility.getSharedPreferences(mContext, "projectid");
-        baseRequest = new BaseRequest(mContext);
-        dialog = new Dialog(mContext);
+        baseRequest = new BaseRequest(BlueToothDebugNewActivity.this);
+        dialog = new Dialog(BlueToothDebugNewActivity.this);
         mBtNameHead = getIntent().getStringExtra("BtNameHead");
         mBtMacAddressHead = getIntent().getStringExtra("BtMacAddressHead");
 
@@ -4018,7 +4018,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         stopProgressDialogue();
         showProgressDialogue(getResources().getString(R.string.ImeiFileToServer));
 
-        OkHttpClient client = new OkHttpClient().newBuilder() .connectTimeout(10, TimeUnit.SECONDS)
+        OkHttpClient client = new OkHttpClient().newBuilder().connectTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
                 .build();
