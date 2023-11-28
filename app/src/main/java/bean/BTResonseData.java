@@ -32,8 +32,6 @@ public class BTResonseData {
     private String mSIM;
     @SerializedName("ID")
     private String mID;
-
-
     @SerializedName("RMS_STATUS")
     private String mRMS_STATUS;
 
@@ -82,6 +80,9 @@ public class BTResonseData {
 
     @SerializedName("RMS_ORG_D_F")
     private String mRMS_ORG_D_F;
+
+    @SerializedName("RMS_Fault_Code")
+    private String mRMS_FAULT_CODE;
 
     public String getRMS_SERVER_DOWN() {
         return mRMS_SERVER_DOWN;
@@ -230,4 +231,11 @@ public class BTResonseData {
         mRMS_LAST_ONLINE_DATE = sRMS_LAST_ONLINE_DATE;
     }
 
+    public String getmRMS_FAULT_CODE() {
+        return mRMS_FAULT_CODE;
+    }
+
+    public void setmRMS_FAULT_CODE(String mRMS_FAULT_CODE) {
+        this.mRMS_FAULT_CODE = mRMS_FAULT_CODE;
+    }
 }
