@@ -897,6 +897,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             intent.putExtra(Constant.VerificationCode, generatedVerificationCode);
             intent.putExtra(Constant.regisno, regisno);
             intent.putExtra(Constant.isUnloading, "true");
+            intent.putExtra(Constant.PendingFeedbackVblen, billNo);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
