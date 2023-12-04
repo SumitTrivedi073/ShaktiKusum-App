@@ -9,9 +9,9 @@ android {
         minSdkVersion 26
         targetSdkVersion 34
         vectorDrawables.useSupportLibrary = true
-        versionCode 34
-        versionName "4.0.2"
-        resConfigs "en"
+        versionCode 36
+        versionName "4.0.4"
+        resourceConfigurations += ['en']
         multiDexEnabled true
         useLibrary 'org.apache.http.legacy'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -29,22 +29,15 @@ android {
             keyAlias 'newkusum'
             keyPassword 'shakti@123'
             storePassword 'shakti@123'
-            storeFile file('D:\\android projects\\ShaktiKusum\\app\\keystore\\kusum.jks')
+            storeFile file('app\\keystore\\kusum.jks')
+        }
+    }
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/DEPENDENCIES.txt', 'META-INF/LICENSE.txt', 'META-INF/NOTICE.txt', 'META-INF/NOTICE', 'META-INF/LICENSE', 'META-INF/DEPENDENCIES', 'META-INF/notice.txt', 'META-INF/license.txt', 'META-INF/dependencies.txt', 'META-INF/LGPL2.1']
         }
     }
 
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES.txt'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/dependencies.txt'
-        exclude 'META-INF/LGPL2.1'
-    }
 
     buildTypes {
         debug {
@@ -58,6 +51,7 @@ android {
 
         }
     }
+    namespace 'com.shaktipumplimited.shaktikusum'
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

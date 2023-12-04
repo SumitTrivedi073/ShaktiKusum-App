@@ -74,6 +74,7 @@ import java.util.List;
 
 import bean.LoginBean;
 import database.DatabaseHelper;
+import debugapp.GlobalValue.Constant;
 import debugapp.OTPGenerationActivity;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
@@ -89,7 +90,7 @@ public class Login extends AppCompatActivity {
     Spinner spinner_login_type, spinner_project_type;
     ProgressDialog progressBar;
     int index, index1,versionCode;
-    String username, password, login, userid, usertype, spinner_login_type_text, spinner_project_type_text, spinner_proj_id, spinner_login_id,version;
+    String username, password, login, userid, usertype,rmsBaseUrl, spinner_login_type_text, spinner_project_type_text, spinner_proj_id, spinner_login_id,version;
     List<String> list = null;
     List<String> projectlist = null;
     List<String> loginlist = null;
@@ -432,6 +433,7 @@ public class Login extends AppCompatActivity {
                     userid = jo.getString("user");
                     username = jo.getString("name");
                     usertype = jo.getString("type");
+                    rmsBaseUrl = jo.getString("base_url");
 
                 }
 //******************************************************************************************/
@@ -454,7 +456,11 @@ public class Login extends AppCompatActivity {
                     CustomUtility.setSharedPreference(context, "userid", userid);
                     CustomUtility.setSharedPreference(context, "username", username);
                     CustomUtility.setSharedPreference(context, "usertype", usertype);
-
+                    if(rmsBaseUrl!=null && !rmsBaseUrl.isEmpty()) {
+                        CustomUtility.setSharedPreference(context, Constant.RmsBaseUrl, rmsBaseUrl);
+                    }else {
+                        CustomUtility.setSharedPreference(context, Constant.RmsBaseUrl, WebURL.RMSAPPURL);
+                    }
                         Intent intent = new Intent(Login.this, OTPGenerationActivity.class);
                         startActivity(intent);
                         finish();

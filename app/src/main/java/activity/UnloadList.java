@@ -75,13 +75,7 @@ public class UnloadList extends BaseActivity {
         lin1 = findViewById(R.id.lin1);
         lin2 = findViewById(R.id.lin2);
 
-        if(CustomUtility.isInternetOn(context)){
-            new GetInstallationDataList_Unload().execute();
-        }else {
-            lin1.setVisibility(View.GONE);
-            lin2.setVisibility(View.VISIBLE);
-            CustomUtility.showToast(context,getResources().getString(R.string.check_internet_connection));
-        }
+
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +85,17 @@ public class UnloadList extends BaseActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(CustomUtility.isInternetOn(context)){
+            new GetInstallationDataList_Unload().execute();
+        }else {
+            lin1.setVisibility(View.GONE);
+            lin2.setVisibility(View.VISIBLE);
+            CustomUtility.showToast(context,getResources().getString(R.string.check_internet_connection));
+        }
+    }
 
     private void listner() {
         editsearch.addTextChangedListener(new TextWatcher() {

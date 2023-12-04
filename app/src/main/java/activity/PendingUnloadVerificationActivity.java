@@ -295,10 +295,7 @@ public class PendingUnloadVerificationActivity extends BaseActivity implements P
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
 
-                /* intent.putExtra(Constant.PendingFeedbackVblen,response.getVbeln());
-                intent.putExtra(Constant.PendingFeedbackHp,response.getHp());
-                intent.putExtra(Constant.PendingFeedbackBeneficiary,response.getBeneficiary());
-                intent.putExtra(Constant.VerificationCode,generatedVerificationCode);*/
+
             }
         });
 

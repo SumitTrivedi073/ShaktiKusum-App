@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.shaktipumplimited.SetParameter.DeviceSettingActivity;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.json.JSONException;
@@ -26,9 +27,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
 
+import debugapp.GlobalValue.Constant;
+import debugapp.NavigateOptionActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import utility.CustomUtility;
 import webservice.WebURL;
 
 
@@ -47,10 +51,7 @@ public class BaseRequest extends BaseRequestParser {
     public BaseRequest(Context context) {
         mContext = context;
         apiInterface =
-                ApiClient.getClient().create(ApiInterface.class);
-
-      /*  apiInterface1 =
-                ApiClient.getClientIMEI().create(ApiInterface.class);*/
+                ApiClient.getClient(context).create(ApiInterface.class);
 
         dialog = getProgressesDialog(context);
         progress = getProgressesDialog1(context);
@@ -96,7 +97,6 @@ public class BaseRequest extends BaseRequestParser {
                 }
             }
 
-           // hideLoader();
         }
 
         @Override
@@ -149,17 +149,7 @@ public class BaseRequest extends BaseRequestParser {
         }
     };
 
-    public void callAPIPost(final int APINumber, JsonObject jsonObject, String remainingURL) {
 
-        APINumber_ = APINumber;
-       // showLoader();
-        String baseURL = ApiClient.getClient().baseUrl() + remainingURL;
-        System.out.println("jsonObject_GRAPH==>>"+baseURL);
-
-        Call<JsonElement> call = apiInterface.postData(baseURL, jsonObject);
-
-        call.enqueue(responseCallback);
-    }
 
     public void callAPIPostDebugApp(final int APINumber, JsonObject jsonObject, String remainingURL) {
         APINumber_ = APINumber;
@@ -171,27 +161,16 @@ public class BaseRequest extends BaseRequestParser {
     }
 
 
-    public void callAPIPostIMEI(final int APINumber, JsonObject jsonObject, String remainingURL) {
-
-        APINumber_ = APINumber;
-        // showLoader();
-      //  String baseURL = ApiClient.getClientIMEI().baseUrl().toString() + remainingURL;
-        String baseURL = "https://pmkapi.hareda.gov.in/api/" + remainingURL;
-        System.out.println("jsonObject_GRAPH==>>"+baseURL);
-
-        Call<JsonElement> call = apiInterface.postData(baseURL, jsonObject);
-
-        call.enqueue(responseCallbackIMEI);
-    }
 
 
 
 
-    public void callAPIGET(final int APINumber, Map<String, String> map, String remainingURL) {
+
+    public void callAPIGET(NavigateOptionActivity navigateOptionActivity, final int APINumber, Map<String, String> map, String remainingURL) {
         APINumber_ = APINumber;
 
        showLoader();
-        String baseURL = ApiClient.getClient().baseUrl() + remainingURL;
+        String baseURL = ApiClient.getClient(navigateOptionActivity).baseUrl() + remainingURL;
         if (!baseURL.endsWith("?")) {
             baseURL = baseURL + "?";
         }
@@ -215,14 +194,12 @@ public class BaseRequest extends BaseRequestParser {
         call.enqueue(responseCallback);
     }
 
-    public void callAPIGETIMEI(final int APINumber, Map<String, String> map, String remainingURL) {
+    public void callAPIGETIMEI(DeviceSettingActivity deviceSettingActivity, final int APINumber, Map<String, String> map, String remainingURL) {
         APINumber_ = APINumber;
 
-      //  showLoader();
-       // String baseURL = "http://111.118.249.190:8080/RMSApp/" + remainingURL;
-        String baseURL = WebURL.HOST_NAME_SETTING1 + remainingURL;
-       // String baseURL = "http://solar10.shaktisolarrms.com:1992/Home/" + remainingURL;
-        if (!baseURL.endsWith("?")) {
+
+        String baseURL = CustomUtility.getSharedPreferences(deviceSettingActivity, Constant.RmsBaseUrl) + remainingURL;
+         if (!baseURL.endsWith("?")) {
             baseURL = baseURL + "?";
         }
         for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -234,24 +211,6 @@ public class BaseRequest extends BaseRequestParser {
         call.enqueue(responseCallbackIMEI);
     }
 
-    public void callAPIGETIMEIOPtion(final int APINumber, Map<String, String> map, String remainingURL) {
-        APINumber_ = APINumber;
-
-        //  showLoader();
-        // String baseURL = "http://111.118.249.190:8080/RMSApp/" + remainingURL;
-        String baseURL = WebURL.BASE_URL_OPTION_VK + remainingURL;
-        // String baseURL = "http://solar10.shaktisolarrms.com:1992/Home/" + remainingURL;
-        if (!baseURL.endsWith("?")) {
-            baseURL = baseURL + "?";
-        }
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            baseURL = baseURL + entry.getKey() + "=" + entry.getValue() + "&";
-        }
-        System.out.println("BaseReq INPUT URL : " + baseURL);
-
-        Call<JsonElement> call = apiInterface.postDataGET(baseURL, map);
-        call.enqueue(responseCallbackIMEI);
-    }
 
     public void callAPIGETDebugApp(final int APINumber, Map<String, String> map, String remainingURL) {
         APINumber_ = APINumber;
@@ -271,43 +230,6 @@ public class BaseRequest extends BaseRequestParser {
         call.enqueue(responseCallback);
     }
 
-
-    public void callAPIGETIMEIAuth(final int APINumber, Map<String, String> map, String remainingURL) {
-        APINumber_ = APINumber;
-
-      // showLoader();
-        String baseURL = ApiClientIMEI.getClientIMEI().baseUrl() + remainingURL;
-        if (!baseURL.endsWith("?")) {
-            baseURL = baseURL + "?";
-        }
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            baseURL = baseURL + entry.getKey() + "=" + entry.getValue() + "&";
-        }
-        System.out.println("BaseReq INPUT URL : " + baseURL);
-
-        Call<JsonElement> call = apiInterface.postDataGET(baseURL, map);
-
-
-        call.enqueue(responseCallbackIMEI);
-    }
-
-    public void callAPIGET1(final int APINumber, Map<String, String> map, String remainingURL) {
-        APINumber_ = APINumber;
-
-      //  showLoader();
-        String baseURL = remainingURL;
-        /*if (!baseURL.endsWith("?")) {
-            baseURL = baseURL + "?";
-        }
-        */
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            baseURL = baseURL + entry.getKey() + "=" + entry.getValue() + "&";
-        }
-        System.out.println("BaseReq INPUT URL : " + baseURL);
-
-        Call<JsonElement> call = apiInterface.postDataGET(remainingURL, map);
-        call.enqueue(responseCallback);
-    }
 
     public void logFullResponse(String response, String inout) {
         final int chunkSize = 3000;
@@ -369,19 +291,9 @@ public class BaseRequest extends BaseRequestParser {
         return sb.toString();
     }
 
-   // public Dialog getProgressesDialog(Context ct)
     public ProgressDialog getProgressesDialog1(Context ct)
     {
-       // Dialog dialog = null;
-        try {
-          /*  dialog = new Dialog(ct);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.progress_dialog_loader);
-//            // Set the progress dialog background color transparent
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//            dialog.setIndeterminate(false);
-            dialog.setCanceledOnTouchOutside(false);*/
-
+       try {
             progress = new ProgressDialog(ct);
             progress.setTitle("Shakti RMS");
             progress.setMessage("Wait geting data from device...");
@@ -410,37 +322,26 @@ public class BaseRequest extends BaseRequestParser {
             dialog = new Dialog(ct);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.progress_dialog_loader);
-//            // Set the progress dialog background color transparent
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-          //  GifView pGif = (GifView) dialog.findViewById(R.id.progressBar);
-           // pGif.setImageResource(R.drawable.loadingvk);
-//            dialog.setIndeterminate(false);
+
             dialog.setCanceledOnTouchOutside(false);
 
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        //loader_tv = (TextView)dialog.findViewById(R.id.loader_tv);
-      /*  WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        Window window = dialog.getWindow();
-        lp.copyFrom(window.getAttributes());
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        window.setAttributes(lp);*/
         return dialog;
     }
 
     public void showLoader() {
         try {
             if (!runInBackground) {
-                if (null != loaderView) {
+                if (loaderView!=null) {
 
                     loaderView.setVisibility(View.VISIBLE);
 
-                } else if (null != dialog) {
+                } else if (dialog != null && !dialog.isShowing()) {
                     dialog.show();
                    // progress.show();
                 }
@@ -453,9 +354,9 @@ public class BaseRequest extends BaseRequestParser {
     public void hideLoader() {
         try {
             if (!runInBackground) {
-                if (null != loaderView) {
+                if (loaderView != null) {
                     loaderView.setVisibility(View.GONE);
-                } else if (null != dialog) {
+                } else if (dialog != null && dialog.isShowing()) {
                    dialog.dismiss();
                     //progress.dismiss();
                 }

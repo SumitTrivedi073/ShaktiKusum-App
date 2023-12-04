@@ -1,6 +1,7 @@
 package com.shaktipumplimited.retrofit;
 
 
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -8,36 +9,26 @@ import androidx.annotation.NonNull;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import debugapp.GlobalValue.Constant;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import utility.CustomUtility;
 import webservice.WebURL;
 
 
 public class ApiClient {
-
-    public static String HEADER_CONTENT_TYPE = "Content-Type";
-    public static String HEADER_KRY = "SHAKTI";
-
-    /////////////////value of header
-    public static String HEADER_CONTENT_TYPE_VALUE = "application/json";
-    public static String HEADER_KRY_VALUE = "123456";
-   // public static final String BASE_URL = "http://a313955b.ngrok.io/fitnessApp/";
-  //  public static final String GET_URL = "http://192.168.4.1/";
-  // public static final String BASE_URL = "http://192.168.2.23:3011/api/";
-
     private static Retrofit retrofit = null;
-    private static Retrofit retrofit1 = null;
     private static Retrofit retrofit2 = null;
-    public static Retrofit getClient() {
+    public static Retrofit getClient(Context context) {
 
         if (retrofit == null) {
 
             retrofit = new Retrofit.Builder()
-                    .baseUrl(WebURL.HOST_NAME_SETTING1)// close by vikas
+                    .baseUrl(CustomUtility.getSharedPreferences(context, Constant.RmsBaseUrl))// close by vikas
                     .client(getRequestHeader())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
@@ -57,21 +48,6 @@ public class ApiClient {
         }
         return retrofit2;
     }
-
-    public static Retrofit getClientFileUpload() {
-
-        if (retrofit1 == null) {
-
-            retrofit1 = new Retrofit.Builder()
-                   .baseUrl(WebURL.HOST_NAME_SETTING1)// close by vikas
-                    //.baseUrl(NewSolarVFD.BASE_URL_UPLOAD)// close by vikas
-                    .client(getRequestHeader())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-        }
-        return retrofit1;
-    }
-
 
 
     public static OkHttpClient okHttpClient = null;

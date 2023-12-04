@@ -448,10 +448,11 @@
     <string name="enter_feeder_to_farmer_site">Enter Feeder TO Farmer Site Distance (KM)</string>
     <string name="additional_info">Additional Info</string>
     <string name="enter_additional_info">Enter Additional Info</string>
-    <string name="loading">Loading</string>
+    <string name="loading">Loading.... </string>
     <string name="enterPowerIn">Enter Power In Volt</string>
     <string name="expumpSetDischarge">Enter Discharge of pump set</string>
     <string name="exDynamic">"Enter Total Dynamic head "</string>
+    <string name="fileNotCreated">File Not Created, No Data Available!</string>
 
 
     <string-array name="nav_drawer_labels">
