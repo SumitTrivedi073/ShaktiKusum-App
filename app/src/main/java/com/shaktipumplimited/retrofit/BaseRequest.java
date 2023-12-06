@@ -51,7 +51,7 @@ public class BaseRequest extends BaseRequestParser {
     public BaseRequest(Context context) {
         mContext = context;
         apiInterface =
-                ApiClient.getClient(context).create(ApiInterface.class);
+                ApiClient.getClient().create(ApiInterface.class);
 
         dialog = getProgressesDialog(context);
         progress = getProgressesDialog1(context);
@@ -161,16 +161,27 @@ public class BaseRequest extends BaseRequestParser {
     }
 
 
+    public void callAPIPostIMEI(final int APINumber, JsonObject jsonObject, String remainingURL) {
+
+        APINumber_ = APINumber;
+        // showLoader();
+      //  String baseURL = ApiClient.getClientIMEI().baseUrl().toString() + remainingURL;
+        String baseURL = "https://pmkapi.hareda.gov.in/api/" + remainingURL;
+        System.out.println("jsonObject_GRAPH==>>"+baseURL);
+
+        Call<JsonElement> call = apiInterface.postData(baseURL, jsonObject);
+
+        call.enqueue(responseCallbackIMEI);
+    }
 
 
 
 
-
-    public void callAPIGET(NavigateOptionActivity navigateOptionActivity, final int APINumber, Map<String, String> map, String remainingURL) {
+    public void callAPIGET(final int APINumber, Map<String, String> map, String remainingURL) {
         APINumber_ = APINumber;
 
        showLoader();
-        String baseURL = ApiClient.getClient(navigateOptionActivity).baseUrl() + remainingURL;
+        String baseURL = ApiClient.getClient().baseUrl() + remainingURL;
         if (!baseURL.endsWith("?")) {
             baseURL = baseURL + "?";
         }
@@ -194,12 +205,14 @@ public class BaseRequest extends BaseRequestParser {
         call.enqueue(responseCallback);
     }
 
-    public void callAPIGETIMEI(DeviceSettingActivity deviceSettingActivity, final int APINumber, Map<String, String> map, String remainingURL) {
+    public void callAPIGETIMEI(final int APINumber, Map<String, String> map, String remainingURL) {
         APINumber_ = APINumber;
 
-
-        String baseURL = CustomUtility.getSharedPreferences(deviceSettingActivity, Constant.RmsBaseUrl) + remainingURL;
-         if (!baseURL.endsWith("?")) {
+      //  showLoader();
+       // String baseURL = "http://111.118.249.190:8080/RMSApp/" + remainingURL;
+        String baseURL = ApiClient.getClient().baseUrl() + remainingURL;
+       // String baseURL = "http://solar10.shaktisolarrms.com:1992/Home/" + remainingURL;
+        if (!baseURL.endsWith("?")) {
             baseURL = baseURL + "?";
         }
         for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -211,6 +224,24 @@ public class BaseRequest extends BaseRequestParser {
         call.enqueue(responseCallbackIMEI);
     }
 
+    public void callAPIGETIMEIOPtion(final int APINumber, Map<String, String> map, String remainingURL) {
+        APINumber_ = APINumber;
+
+        //  showLoader();
+        // String baseURL = "http://111.118.249.190:8080/RMSApp/" + remainingURL;
+        String baseURL = WebURL.BASE_URL_OPTION_VK + remainingURL;
+        // String baseURL = "http://solar10.shaktisolarrms.com:1992/Home/" + remainingURL;
+        if (!baseURL.endsWith("?")) {
+            baseURL = baseURL + "?";
+        }
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            baseURL = baseURL + entry.getKey() + "=" + entry.getValue() + "&";
+        }
+        System.out.println("BaseReq INPUT URL : " + baseURL);
+
+        Call<JsonElement> call = apiInterface.postDataGET(baseURL, map);
+        call.enqueue(responseCallbackIMEI);
+    }
 
     public void callAPIGETDebugApp(final int APINumber, Map<String, String> map, String remainingURL) {
         APINumber_ = APINumber;
@@ -230,6 +261,43 @@ public class BaseRequest extends BaseRequestParser {
         call.enqueue(responseCallback);
     }
 
+
+    public void callAPIGETIMEIAuth(final int APINumber, Map<String, String> map, String remainingURL) {
+        APINumber_ = APINumber;
+
+      // showLoader();
+        String baseURL = ApiClientIMEI.getClientIMEI().baseUrl() + remainingURL;
+        if (!baseURL.endsWith("?")) {
+            baseURL = baseURL + "?";
+        }
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            baseURL = baseURL + entry.getKey() + "=" + entry.getValue() + "&";
+        }
+        System.out.println("BaseReq INPUT URL : " + baseURL);
+
+        Call<JsonElement> call = apiInterface.postDataGET(baseURL, map);
+
+
+        call.enqueue(responseCallbackIMEI);
+    }
+
+    public void callAPIGET1(final int APINumber, Map<String, String> map, String remainingURL) {
+        APINumber_ = APINumber;
+
+      //  showLoader();
+        String baseURL = remainingURL;
+        /*if (!baseURL.endsWith("?")) {
+            baseURL = baseURL + "?";
+        }
+        */
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            baseURL = baseURL + entry.getKey() + "=" + entry.getValue() + "&";
+        }
+        System.out.println("BaseReq INPUT URL : " + baseURL);
+
+        Call<JsonElement> call = apiInterface.postDataGET(remainingURL, map);
+        call.enqueue(responseCallback);
+    }
 
     public void logFullResponse(String response, String inout) {
         final int chunkSize = 3000;
