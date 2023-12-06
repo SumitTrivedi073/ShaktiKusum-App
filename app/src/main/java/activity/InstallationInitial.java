@@ -50,7 +50,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.shaktipumplimited.SetParameter.PairedDeviceActivity;
 import com.shaktipumplimited.SettingModel.AllPopupUtil;
-import com.shaktipumplimited.retrofit.BaseRequest;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
@@ -131,7 +130,7 @@ public class InstallationInitial extends BaseActivity {
     LinearLayout reason, moduleOneLL;
 
     Boolean your_date_is_outdated = false, mStatusBool = false;
-    BaseRequest baseRequest;
+
     private Dialog dialog;
 
     @SuppressLint("HandlerLeak")
@@ -171,9 +170,6 @@ public class InstallationInitial extends BaseActivity {
         project_no1 = CustomUtility.getSharedPreferences(mContext, "projectid");
         MUserId = CustomUtility.getSharedPreferences(mContext, "userid");
         MEmpType = "Vend";
-
-        baseRequest = new BaseRequest(this);
-
 
         try {
             PackageManager manager = getPackageManager();
