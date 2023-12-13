@@ -1,6 +1,8 @@
 package service;
 
 
+import static android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -9,6 +11,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
@@ -59,8 +62,12 @@ public class RetrieveFirestoreData extends Service {
         Notification notification =
                 new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).setContentTitle(getResources().getString(R.string.app_name)).setContentText(
                         "App Running Background").setSmallIcon(R.mipmap.ic_notification).build();
-        startForeground(111, notification);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(111, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+        }else {
+            startForeground(111, notification);
 
+        }
 
 
     }
