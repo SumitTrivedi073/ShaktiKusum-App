@@ -306,13 +306,13 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
                     if (CustomUtility.isInternetOn(getApplicationContext())) {
                         if (isSubmit) {
-                            if (pumpSerNo.getText().toString().isEmpty() || !pumpSerNo.getText().toString().equalsIgnoreCase(installationListBean.getPump_ser())) {
+                            if (pumpSerNo.getText().toString().trim().isEmpty() || !pumpSerNo.getText().toString().equalsIgnoreCase(installationListBean.getPump_ser().trim())) {
                                 CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctPumpSr));
-                            } else if (motorSerNo.getText().toString().isEmpty() || !motorSerNo.getText().toString().equalsIgnoreCase(installationListBean.getMotor_ser())) {
+                            } else if (motorSerNo.getText().toString().trim().isEmpty() || !motorSerNo.getText().toString().equalsIgnoreCase(installationListBean.getMotor_ser().trim())) {
                                 CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctMotorSr));
-                            } else if (controllerSerNo.getText().toString().isEmpty() || !controllerSerNo.getText().toString().equalsIgnoreCase(installationListBean.getController_ser())) {
+                            } else if (controllerSerNo.getText().toString().trim().isEmpty() || !controllerSerNo.getText().toString().equalsIgnoreCase(installationListBean.getController_ser().trim())) {
                                 CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctControllerSr));
-                            }else if (remarkEdt.getText().toString().isEmpty()) {
+                            }else if (remarkEdt.getText().toString().trim().isEmpty()) {
                                 CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
                             }else {
                                 new SyncInstallationData().execute();

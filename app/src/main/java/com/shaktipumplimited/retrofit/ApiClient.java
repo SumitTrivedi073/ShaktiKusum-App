@@ -23,12 +23,12 @@ import webservice.WebURL;
 public class ApiClient {
     private static Retrofit retrofit = null;
     private static Retrofit retrofit2 = null;
-    public static Retrofit getClient(Context context) {
+    public static Retrofit getClient() {
 
         if (retrofit == null) {
 
             retrofit = new Retrofit.Builder()
-                    .baseUrl(CustomUtility.getSharedPreferences(context, Constant.RmsBaseUrl))// close by vikas
+                    .baseUrl(WebURL.RMSAPPURL)// close by vikas
                     .client(getRequestHeader())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
