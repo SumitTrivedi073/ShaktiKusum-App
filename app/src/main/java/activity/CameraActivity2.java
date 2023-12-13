@@ -450,15 +450,6 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(mGoogleApiClient!=null){
-            mGoogleApiClient.disconnect();
-            mGoogleApiClient= null;
-        }
-        releaseCamera();
-    }
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
@@ -480,7 +471,15 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
             return;
         }
         FusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
+    }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mGoogleApiClient!=null){
+            mGoogleApiClient.disconnect();
+            mGoogleApiClient= null;
+        }
+        releaseCamera();
     }
 }
