@@ -29,13 +29,12 @@
         android:name="com.google.android.gms.permission.AD_ID"
         tools:node="remove" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature android:name="android.hardware.camera.front" />
     <uses-feature android:name="android.hardware.location.gps" />
-
 
     <application
         android:name="activity.AppApplication"
@@ -54,11 +53,15 @@
         android:theme="@style/MyMaterialTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu">
-
+        <activity
+            android:name="activity.ComplaintFormActivity"
+            android:exported="false" />
+        <activity
+            android:name="activity.complaintInstallationActivity"
+            android:exported="false" />
         <activity
             android:name="activity.DemoRoadShowActivity"
             android:exported="false" />
-
         <activity
             android:name="activity.RejectInstallationImageActivity"
             android:exported="false" />
@@ -286,9 +289,9 @@
 
         <service
             android:name="service.RetrieveFirestoreData"
-            android:foregroundServiceType="specialUse"
             android:enabled="true"
             android:exported="false"
+            android:foregroundServiceType="specialUse"
             android:stopWithTask="true" />
 
         <receiver
@@ -311,17 +314,16 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/ic_notification" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <!--
+ Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorPrimary" />
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
-
-
     </application>
 
 </manifest>

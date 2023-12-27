@@ -82,9 +82,9 @@
     <string name="menu_simrep">Sim Replacement</string>
     <string name="menu_devicestatus">Device Status</string>
     <string name="menu_rejectsites">Reject Sites</string>
-
+    <string name="complaint_installation">Complaint Before Installation</string>
     <string name="menu_logout">Signout</string>
-    <string name="menu_audit">Site Audit</string>
+    <string name="menu_audit">Site Audit</string>x
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
@@ -354,6 +354,10 @@
     <string name="selectBorewellSize">Select Borewell Size</string>
     <string name="selectPumpWaterLever">Select pump water lever</string>
     <string name="site_audit">Site Audit</string>
+    <string name="pump_serial_number"> pump serial number</string>
+    <string name="motor_serial_number"> motor serial number</string>
+    <string name="controller_serial_number"> controller serial number</string>
+
     <string name="enter_pump_serial_number">Enter pump serial number</string>
     <string name="enter_motor_serial_number">Enter motor serial number</string>
     <string name="enter_controller_serial_number">Enter controller serial number</string>
@@ -453,6 +457,15 @@
     <string name="expumpSetDischarge">Enter Discharge of pump set</string>
     <string name="exDynamic">"Enter Total Dynamic head "</string>
     <string name="fileNotCreated">File Not Created, No Data Available!</string>
+    <string name="complaint_before_installation">Complaint Before Installation</string>
+    <string name="complaint_form">Complaint Form</string>
+    <string name="damage">Damage</string>
+    <string name="missed">Missed</string>
+    <string name="pump">Pump</string>
+    <string name="motor">Motor</string>
+    <string name="controller">Controller</string>
+    <string name="please_select_the_damage_item">Please Select the Damage Item</string>
+    <string name="item_damage_or_missed">Please select if any item damage or missed?</string>
 
 
     <string-array name="nav_drawer_labels">

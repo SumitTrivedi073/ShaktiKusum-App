@@ -14,6 +14,10 @@
             android:icon="@drawable/form"
             android:title="@string/demo_road_show_form" />
 
+        <item
+            android:id="@+id/complaint_installtion"
+            android:icon="@mipmap/complaint_installation"
+            android:title="@string/complaint_installation" />
 
         <item
             android:id="@+id/nav_logout"
