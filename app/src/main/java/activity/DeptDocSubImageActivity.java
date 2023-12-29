@@ -169,6 +169,8 @@ public class DeptDocSubImageActivity extends BaseActivity implements ImageSelect
                 break;
         }
     }
+
+
     private void Init() {
         recyclerview = findViewById(R.id.recyclerview);
         remarkTxt = findViewById(R.id.remarkTxt);
