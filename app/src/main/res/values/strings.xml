@@ -83,6 +83,7 @@
     <string name="menu_devicestatus">Device Status</string>
     <string name="menu_rejectsites">Reject Sites</string>
     <string name="complaint_installation">Complaint Before Installation</string>
+    <string name="complain_delivery_status">Complaint Delivery Status</string>
     <string name="menu_logout">Signout</string>
     <string name="menu_audit">Site Audit</string>x
     <string name="menu_tools">Tools</string>
@@ -471,6 +472,9 @@
     <string name="item_motor_damage_or_missed">Please select if Motor damage or missed?</string>
     <string name="item_Controller_damage_or_missed">Please select if Controller damage or missed?</string>
     <string name="item_Other_damage_or_missed">Please select if Other damage or missed?</string>
+    <string name="select_title_type">Select Status Type</string>
+    <string name="pending">Pending</string>
+    <string name="complete">Complete</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

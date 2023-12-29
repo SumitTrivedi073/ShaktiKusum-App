@@ -20,6 +20,11 @@
             android:title="@string/complaint_installation" />
 
         <item
+            android:id="@+id/complian_status"
+            android:icon="@drawable/form"
+            android:title="@string/complain_delivery_status" />
+
+        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_logout_24dp"
             android:title="@string/menu_logout" />

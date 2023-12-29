@@ -52,7 +52,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import adapter.Adapter_item_list;
-import bean.ComplaintInstModel;
 import bean.ItemNameBean;
 import bean.LoginBean;
 import database.DatabaseHelper;
@@ -251,6 +250,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
         else if (id == R.id.complaint_installtion) {
             Intent intent = new Intent(context, complaintInstallationActivity.class);
+            startActivity(intent);
+        }else if (id == R.id.complian_status) {
+            Intent intent = new Intent(context, compliandeliverystatus.class);
             startActivity(intent);
         }
         else if (id == R.id.nav_logout) {

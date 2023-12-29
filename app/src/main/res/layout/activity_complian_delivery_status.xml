@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="activity.compliandeliverystatus">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar" />
+
+
+        <LinearLayout
+            android:id="@+id/dob1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mobno1"
+            android:layout_alignParentStart="false"
+            android:baselineAligned="false"
+            android:paddingTop="0dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_mid10"
+                android:layout_marginRight="@dimen/space_tinny4"
+                android:layout_weight="1"
+                android:textColorHint="@color/colorPrimary">
+
+                <EditText
+                    android:id="@+id/from"
+                    style="@style/under_line_et"
+                    android:hint="From Date"
+                    android:textStyle="bold"
+                    android:layout_marginTop="18dp"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:textColorHint="@color/colorPrimary" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageButton
+                android:layout_marginTop="18dp"
+                android:id="@+id/bt_frm"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:onClick="setDate"
+                android:src="@drawable/baseline_edit_calendar_24"
+                tools:ignore="OnClick"
+
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/trav_to"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mobno1"
+            android:layout_alignParentStart="false"
+            android:baselineAligned="false"
+            android:paddingTop="0dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_mid10"
+                android:layout_marginRight="@dimen/space_tinny4"
+                android:layout_weight="1"
+                android:textColorHint="@color/colorPrimary">
+
+                <EditText
+                    android:id="@+id/to"
+                    style="@style/under_line_et"
+                    android:layout_marginTop="18dp"
+                    android:hint="To Date"
+                    android:padding="10dp"
+                    android:singleLine="true"
+                    android:textColor="@color/black_trans"
+                    android:textColorHint="@color/colorPrimary"
+                    android:textStyle="bold" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageButton
+                android:id="@+id/bt_to"
+                android:layout_marginTop="18dp"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:onClick="setDate"
+                android:src="@drawable/baseline_edit_calendar_24"
+                tools:ignore="OnClick" />
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/popup_relative"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+            <Spinner
+                android:id="@+id/spinner_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_5sdp"
+                android:textColorHint="@color/colorPrimary"
+                />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/submitBtn"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:gravity="center"
+            android:text="@string/submit"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/blue_btn_round"
+            android:layout_alignParentBottom="true"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14sdp"/>
+
+        <RelativeLayout
+            android:id="@+id/searchRelative"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:background="@drawable/popup_relative">
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchUser"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="text"
+                app:queryHint="@string/action_search"
+                app:defaultQueryHint="@string/action_search"
+                android:backgroundTint="@color/colorPrimary"/>
+
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/deliveryList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/noDataFound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Data Found"
+        android:layout_centerInParent="true"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textSize="@dimen/_14sdp"
+        android:textColor="@android:color/black"/>
+
+
+
+</RelativeLayout>

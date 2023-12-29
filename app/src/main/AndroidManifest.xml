@@ -54,6 +54,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu">
         <activity
+            android:name="activity.compliandeliverystatus"
+            android:exported="false" />
+        <activity
             android:name="activity.ComplaintFormActivity"
             android:exported="false" />
         <activity
