@@ -232,7 +232,7 @@
                         android:textSize="@dimen/_14sdp" />
 
                         <RadioButton
-                            android:id="@+id/pumpRadio"
+                            android:id="@+id/pumpNoneRadio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"    android:checked="true"
@@ -319,10 +319,11 @@
                         android:textSize="@dimen/_14sdp" />
 
                         <RadioButton
-                            android:id="@+id/motorRadio"
+                            android:id="@+id/motorNoneRadio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"    android:checked="true"
+                            android:layout_weight="1"
+                            android:checked="true"
                             android:fontFamily="sans-serif-condensed-medium"
                             android:text="@string/none"
                             android:textColor="@color/black"
@@ -359,7 +360,8 @@
                         android:singleLine="true"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_12sdp"
-                        android:enabled="false"/>
+                        android:enabled="false"
+                        android:importantForAutofill="no" />
 
                 </LinearLayout>
 
@@ -408,7 +410,7 @@
 
 
                         <RadioButton
-                            android:id="@+id/conRadio"
+                            android:id="@+id/conNoneRadio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -462,7 +464,7 @@
                         android:textSize="@dimen/_14sdp" />
 
                         <RadioButton
-                            android:id="@+id/OtherRadio"
+                            android:id="@+id/otherNoneRadio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"    android:checked="true"
@@ -557,6 +559,7 @@
                         android:maxLines="1"
                         android:padding="@dimen/_10sdp"
                         android:singleLine="true"
+                        android:gravity="start"
                         android:textColor="@color/black"
                         android:textSize="@dimen/_12sdp" />
 

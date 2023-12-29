@@ -35,18 +35,14 @@ import webservice.WebURL;
 
 public class ComplaintFormActivity extends AppCompatActivity implements View.OnClickListener {
 
-    RadioButton damageRadio,missedRadio,damageMotorRadio,missedMotorRadio,damageConRadio,missedConRadio,damageOtherRadio,missedOtherRadio,
-    pumpNone,motorNone,controllerNone;
+    RadioButton damageRadio, missedRadio, damageMotorRadio, missedMotorRadio, damageConRadio, missedConRadio, damageOtherRadio, missedOtherRadio,
+            pumpNone, motorNone, controllerNone;
     private Toolbar mToolbar;
     TextView submitBtn;
 
     EditText farmerNameExt, contactNumberExt, applicationNumberExt, addressExt, pumpSrNoExt, motorSrNoExt, controllerSrNoExt, additionalInfoExt;
     ComplaintInstModel.Response complaintInstModel;
-
-    private boolean isDamage = false,isMissed = false,
-            isMDamage = false,isMMissed = false,
-            isCDamage = false,isCMissed = false,
-            isODamage = false,isOMissed = false;
+    String docno_sap, status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +60,7 @@ public class ComplaintFormActivity extends AppCompatActivity implements View.OnC
     }
 
     private void Init() {
-        mToolbar =  findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -87,7 +83,7 @@ public class ComplaintFormActivity extends AppCompatActivity implements View.OnC
         missedOtherRadio = findViewById(R.id.missedOtherRadio);
         pumpNone = findViewById(R.id.pumpRadio);
         motorNone = findViewById(R.id.motorRadio);
-        controllerNone =findViewById(R.id.controllerRadio);
+        controllerNone = findViewById(R.id.controllerRadio);
 
         additionalInfoExt = findViewById(R.id.additionalInfoExt);
         submitBtn = findViewById(R.id.submitBtn);
@@ -108,16 +104,16 @@ public class ComplaintFormActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-
-
-
-
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
 
             case R.id.submitBtn:
-                ValidationCheck();
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
+                    ValidationCheck();
+                } else {
+                    CustomUtility.showToast(ComplaintFormActivity.this, getResources().getString(R.string.check_internet_connection));
+                }
 
                 break;
         }
@@ -126,33 +122,7 @@ public class ComplaintFormActivity extends AppCompatActivity implements View.OnC
     private void ValidationCheck() {
         if (additionalInfoExt.getText().toString().isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.enter_additionalInfoExt), getApplicationContext());
-        }else {
-           new submitComplainForm().execute();
-
-        }
-
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class submitComplainForm extends AsyncTask<String, String, String> {
-        ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog = new ProgressDialog(ComplaintFormActivity.this);
-            progressDialog.setCancelable(false);
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setMessage("Sending Data to server..please wait !");
-            progressDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            String docno_sap = null;
-            String status= null;
-            String obj2 = null;
-
+        } else {
             JSONArray ja_invc_data = new JSONArray();
             JSONObject jsonObj = new JSONObject();
             try {
@@ -160,44 +130,44 @@ public class ComplaintFormActivity extends AppCompatActivity implements View.OnC
 
                 if (damageRadio.isChecked()) {
                     jsonObj.put("DAMAGE_PUMP", complaintInstModel.getPumpSernr());
-                    jsonObj.put( "PUMP", "Damage");
+                    jsonObj.put("PUMP", getResources().getString(R.string.damage));
                 } else if (missedRadio.isChecked()) {
                     jsonObj.put("DAMAGE_PUMP", complaintInstModel.getPumpSernr());
-                    jsonObj.put("PUMP", "Missed");
+                    jsonObj.put("PUMP", getResources().getString(R.string.missed));
                 } else {
                     jsonObj.put("PUMP", "");
                     jsonObj.put("DAMAGE_PUMP", "");
                 }
                 if (damageMotorRadio.isChecked()) {
                     jsonObj.put("DAMAGE_MOTOR", complaintInstModel.getMotorSernr());
-                    jsonObj.put( "MOTOR", "Damage");
-                } else  if (missedMotorRadio.isChecked()) {
-                    jsonObj.put("MOTOR", "Missed");
+                    jsonObj.put("MOTOR", getResources().getString(R.string.damage));
+                } else if (missedMotorRadio.isChecked()) {
+                    jsonObj.put("MOTOR", getResources().getString(R.string.missed));
                     jsonObj.put("DAMAGE_MOTOR", complaintInstModel.getMotorSernr());
                 } else {
                     jsonObj.put("MOTOR", "");
                     jsonObj.put("DAMAGE_MOTOR", "");
                 }
                 if (damageConRadio.isChecked()) {
-                    jsonObj.put( "CONTROLLER", "Damage");
+                    jsonObj.put("CONTROLLER", getResources().getString(R.string.damage));
                     jsonObj.put("DAMAGE_CONT", complaintInstModel.getControllerSernr());
                 } else if (missedConRadio.isChecked()) {
-                    jsonObj.put( "CONTROLLER", "Missed");
+                    jsonObj.put("CONTROLLER", getResources().getString(R.string.missed));
                     jsonObj.put("DAMAGE_CONT", complaintInstModel.getControllerSernr());
-                } else   {
+                } else {
                     jsonObj.put("CONTROLLER", "");
-                    jsonObj.put("DAMAGE_CONT","");
+                    jsonObj.put("DAMAGE_CONT", "");
                 }
                 if (damageOtherRadio.isChecked()) {
-                    jsonObj.put( "OTHER", "Damage");
+                    jsonObj.put("OTHER", getResources().getString(R.string.damage));
                 } else if (missedOtherRadio.isChecked()) {
-                    jsonObj.put( "OTHER", "Missed");
-                } else   {
+                    jsonObj.put("OTHER", getResources().getString(R.string.missed));
+                } else {
                     jsonObj.put("OTHER", "");
                 }
-                jsonObj.put("REGISNO",  complaintInstModel.getRegisno());
-                jsonObj.put("PROJECT_NO",  complaintInstModel.getProjectNo());
-                jsonObj.put("PROCESS_NO",complaintInstModel.getProcessNo());
+                jsonObj.put("REGISNO", complaintInstModel.getRegisno());
+                jsonObj.put("PROJECT_NO", complaintInstModel.getProjectNo());
+                jsonObj.put("PROCESS_NO", complaintInstModel.getProcessNo());
                 jsonObj.put("PROJECT_LOGIN_NO", "01");
                 jsonObj.put("BENEFICIARY", complaintInstModel.getBeneficiary());
                 jsonObj.put("REMARK", additionalInfoExt.getText().toString().trim());
@@ -209,58 +179,74 @@ public class ComplaintFormActivity extends AppCompatActivity implements View.OnC
                 e.printStackTrace();
             }
             Log.e("before1", ja_invc_data.toString());
+            new submitComplainForm(ja_invc_data).execute();
+
+        }
+
+    }
+
+    private class submitComplainForm extends AsyncTask<String, String, String> {
+
+        JSONArray jsonArray;
+
+        public submitComplainForm(JSONArray jaInvcData) {
+            jsonArray = jaInvcData;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            CustomUtility.showProgressDialogue(ComplaintFormActivity.this);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String obj2 = null;
             final ArrayList<NameValuePair> param1_invc = new ArrayList<>();
-            param1_invc.add(new BasicNameValuePair("cmp", String.valueOf(ja_invc_data)));
+            param1_invc.add(new BasicNameValuePair("cmp", String.valueOf(jsonArray)));
 
             System.out.println("before13==>>" + param1_invc);
             try {
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
-                StrictMode.setThreadPolicy(policy);
                 obj2 = CustomHttpClient.executeHttpPost1(WebURL.SavecomplianbeforeURL, param1_invc);
-           //     Log.e("before1OUTPUT1", "&&&&" + obj2);
-                System.out.println("before1OUTPUT1==>>" + obj2);
-                progressDialog.dismiss();
-
-                if (!obj2.equalsIgnoreCase("")) {
-                    JSONObject object = new JSONObject(obj2);
-
-                    docno_sap = object.getString("data_save");
-
-                    JSONArray ja = new JSONArray(docno_sap);
-
-                    //Log.d("ja", "" + ja);
-                    for (int i = 0; i < ja.length(); i++) {
-                        JSONObject jo = ja.getJSONObject(i);
-
-                        status = jo.getString("return");
-                     //   ename = jo.getString("NAME");
-
-                    }
-
-                    Log.e("beforeStatus====>", status.toString());
-
-                    if(status.equalsIgnoreCase("Y")){
-                        showingMessage("Successfully Saved");
-                        finish();
-                    }else{
-                        showingMessage("Not Saved");
-                    }
-
-                } else {
-                    showingMessage(getResources().getString(R.string.somethingWentWrong));
-                    progressDialog.dismiss();
-                }
-
             } catch (Exception e) {
                 e.printStackTrace();
-                progressDialog.dismiss();
             }
             return obj2;
         }
 
         @Override
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+            CustomUtility.hideProgressDialog(ComplaintFormActivity.this);
+            try {
+                if (!result.isEmpty()) {
+                    JSONObject object = new JSONObject(result);
+
+                    docno_sap = object.getString("data_save");
+
+                    JSONArray ja = new JSONArray(docno_sap);
+                    for (int i = 0; i < ja.length(); i++) {
+                        JSONObject jo = ja.getJSONObject(i);
+
+                        status = jo.getString("return");
+
+                    }
+
+                    Log.e("beforeStatus====>", status.toString());
+
+                    if (status.equalsIgnoreCase("Y")) {
+                        CustomUtility.showToast(ComplaintFormActivity.this, getResources().getString(R.string.dataSubmittedSuccessfully));
+                        finish();
+                    } else {
+                        CustomUtility.showToast(ComplaintFormActivity.this, getResources().getString(R.string.dataNotSubmitted));
+
+                    }
+
+                } else {
+                    showingMessage(getResources().getString(R.string.somethingWentWrong));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
