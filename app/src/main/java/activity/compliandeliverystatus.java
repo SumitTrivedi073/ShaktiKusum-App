@@ -2,25 +2,20 @@ package activity;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -30,39 +25,40 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+
 import java.util.List;
+import java.util.Locale;
 
 import adapter.DeliveryListAdapter;
 import bean.ComplianDeliverModel;
 import utility.CustomUtility;
 import webservice.WebURL;
 
-public class compliandeliverystatus extends AppCompatActivity {
+public class compliandeliverystatus extends AppCompatActivity implements View.OnClickListener {
 
     private RecyclerView complainDeliverlyList;
     private Toolbar mToolbar;
-    EditText date_from, date_to;
-    TextView submitBtn,noDataFound;
-    ImageButton bt_frm, bt_to;
+    TextView fromDateTxt, toDateTxt ,submitBtn,noDataFound;
+
     String sendFromDate ,sendToDate,spinner_type_text,statustxt;
     ProgressDialog progressDialog;
     DeliveryListAdapter adapter;
-    SearchView searchUser;
+    SearchView searchUser;    RelativeLayout fromDateRl, toDateRl ;
     RelativeLayout searchRelative;
     private Spinner spinner_type;
-    int index1;
+    int index1;    SimpleDateFormat sdf, senddf;  String myFormat = "dd.MM.yyyy"; String sendFormat = "yyyyMMdd";
     List<String> list = null;
     List<ComplianDeliverModel.ComplaintDatum> complianDeliveryListModels;
+    TextInputLayout date;
    // List<TravelListRequest.Response> travelListModels;
 
     @Override
@@ -74,14 +70,22 @@ public class compliandeliverystatus extends AppCompatActivity {
         mToolbar =  findViewById(R.id.toolbar);
         searchUser = findViewById(R.id.searchUser);
         searchRelative = findViewById(R.id.searchRelative);
-        date_from = findViewById(R.id.from);
-        date_to =  findViewById(R.id.to);
-        bt_frm =  findViewById(R.id.bt_frm);
-        bt_to=  findViewById(R.id.bt_to);
+        fromDateTxt = findViewById(R.id.fromDateTxt);
+        toDateTxt = findViewById(R.id.toDateTxt);
         complainDeliverlyList = findViewById(R.id.deliveryList);
         spinner_type = findViewById(R.id.spinner_type);
+        fromDateRl = findViewById(R.id.fromDateRl);
+        toDateRl = findViewById(R.id.toDateRl);
         submitBtn = findViewById(R.id.submitBtn);
         noDataFound = findViewById(R.id.noDataFound);
+        sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
+        senddf = new SimpleDateFormat(sendFormat, Locale.getDefault());
+        fromDateTxt.setText( sdf.format(Calendar.getInstance().getTime()));
+        toDateTxt.setText( sdf.format(Calendar.getInstance().getTime()));
+        sendFromDate =  senddf.format(Calendar.getInstance().getTime());
+        sendToDate =  senddf.format(Calendar.getInstance().getTime());
+
+
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -89,9 +93,14 @@ public class compliandeliverystatus extends AppCompatActivity {
         getSupportActionBar().setTitle(getResources().getString(R.string.complain_delivery_status));
 
         getUserTypeValue();
+        setlisnser();
         setSpinner();
-        dateCode();
         callAPI();
+    }
+
+    private void setlisnser() {
+        fromDateRl.setOnClickListener(this);
+        toDateRl.setOnClickListener(this);
     }
 
     private void setSpinner() {
@@ -143,12 +152,11 @@ public class compliandeliverystatus extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(date_from.getText().toString().isEmpty() || date_from.getText().toString().equalsIgnoreCase("Travel From")){
-                    CustomUtility.ShowToast("From Date",getApplicationContext());
-                }else if(date_to.getText().toString().isEmpty() || date_to.getText().toString().equalsIgnoreCase("Travel To")){
-                    CustomUtility.ShowToast("To Date",getApplicationContext());
-                }else{
-                     sendData();
+                if(!spinner_type_text.equalsIgnoreCase("Select Status Type")){
+                    sendData();
+                }else
+                {
+                    CustomUtility.showToast(getApplicationContext(),getResources().getString(R.string.select_title_type));
                 }
 
             }
@@ -165,7 +173,7 @@ public class compliandeliverystatus extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         Log.e("Url=========>", WebURL.ComplainRequestListURL +  CustomUtility.getSharedPreferences(compliandeliverystatus.this, "userid") +"&frm_dt=" +sendFromDate+"&to_dt="+sendToDate + "&status=" + statustxt + "&project_login_no=01&project_no=" + CustomUtility.getSharedPreferences(compliandeliverystatus.this, "projectid") );
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.ComplainRequestListURL +  CustomUtility.getSharedPreferences(compliandeliverystatus.this, "userid") +"&frm_dt=" +sendFromDate+"&to_dt="+sendToDate + "&status=" + statustxt + "&project_login_no=01&project_no=" + CustomUtility.getSharedPreferences(compliandeliverystatus.this, "projectid"), null, new Response.Listener<JSONObject>() {
+                WebURL.ComplainRequestListURL +  CustomUtility.getSharedPreferences(compliandeliverystatus.this, "userid") +"&frm_dt=" +sendFromDate +"&to_dt="+ sendToDate + "&status=" + statustxt + "&project_login_no=01&project_no=" + CustomUtility.getSharedPreferences(compliandeliverystatus.this, "projectid"), null, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject  response) {
@@ -215,131 +223,46 @@ public class compliandeliverystatus extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
-    private void dateCode() {
-
-        bt_frm.setOnClickListener(view -> {
-
-            Calendar currentDate;
-            int mDay, mMonth, mYear;
-            currentDate = Calendar.getInstance();
-            mDay = currentDate.get(Calendar.DAY_OF_MONTH);
-            mMonth = currentDate.get(Calendar.MONTH);
-            mYear = currentDate.get(Calendar.YEAR);
-
-            DatePickerDialog datePickerDialog = new DatePickerDialog(compliandeliverystatus.this, (datePicker, i, i1, i2) -> {
-                i1 = i1 + 1;
-
-                try {
-
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                    SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMdd");
-                    String selectedDate = i2 + "/" + i1 + "/" + i;
-
-                    Date date1 = sdf.parse(selectedDate);
-                    assert date1 != null;
-                    date_from.setText(sdf.format(date1));
-
-                    sendFromDate = sdf1.format(date1);
-                    Log.e("sendFromDate",sendFromDate);
-                }
-                catch (ParseException e)
-                {
-                    e.printStackTrace();
-                }
-            }, mYear, mMonth, mDay);
-            datePickerDialog.setTitle("Travel From");
-            datePickerDialog.show();
-        });
 
 
-        bt_to.setOnClickListener(view -> {
-            Calendar currentDate;
-            int mDay, mMonth, mYear;
-            currentDate = Calendar.getInstance();
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
 
-            mDay = currentDate.get(Calendar.DAY_OF_MONTH);
-            mMonth = currentDate.get(Calendar.MONTH);
-            mYear = currentDate.get(Calendar.YEAR);
-            DatePickerDialog datePickerDialog = new DatePickerDialog(compliandeliverystatus.this, (datePicker, i, i1, i2) -> {
-                i1 = i1 + 1;
+            case R.id.fromDateRl:
+                selectDate(true);
+                break;
 
-                try {
-
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                    SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMdd");
-                    String selectedDate = i2 + "/" + i1 + "/" + i;
-
-                    Date date1 = sdf.parse(selectedDate);
-
-                    assert date1 != null;
-                    date_to.setText(sdf.format(date1));
-
-                    sendToDate =sdf1.format(date1);
-                    Log.e("sendToDate",sendToDate);
-                }
-                catch (ParseException e)
-                {
-                    e.printStackTrace();
-                }
+            case R.id.toDateRl:
+                selectDate(false);
+                break;
 
 
-            }, mYear, mMonth, mDay);
-            datePickerDialog.setTitle("Travel To");
-            datePickerDialog.show();
-        });
+        }
+    }
 
-        searchRelative.setOnClickListener(new View.OnClickListener() {
+    public void selectDate(boolean isFromDate) {
+
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog dialog = new DatePickerDialog(compliandeliverystatus.this, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onClick(View v) {
-                searchUser.setFocusableInTouchMode(true);
-                searchUser.requestFocus();
-                searchUser.onActionViewExpanded();
-
-            }
-        });
-
-        ImageView searchIcon = searchUser.findViewById(R.id.search_button);
-        searchIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.baseline_search_24));
-        searchIcon.setColorFilter(getResources().getColor(R.color.colorPrimary));
-
-        ImageView searchClose = searchUser.findViewById(R.id.search_close_btn);
-        searchClose.setColorFilter(getResources().getColor(R.color.colorPrimary));
+            public void onDateSet(DatePicker arg0, int year, int month, int day_of_month) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DAY_OF_MONTH, day_of_month);
 
 
-        EditText searchEditText = searchUser.findViewById(R.id.search_src_text);
-        searchEditText.setTextColor(getResources().getColor(R.color.colorPrimary));
-        searchEditText.setHintTextColor(getResources().getColor(R.color.colorPrimary));
-        searchEditText.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen._14sdp));
-/*
-        searchUser.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                if (adapter != null) {
-                    if(!query.isEmpty()) {
-                        adapter.getFilter().filter(query);
-                    }}
+                if (isFromDate) {
+                    fromDateTxt.setText(sdf.format(calendar.getTime()));
+                    sendFromDate = senddf.format(calendar.getTime());
 
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if (adapter != null) {
-                    if(!newText.isEmpty()) {
-                        adapter.getFilter().filter(newText);
-                    }
+                } else {
+                    toDateTxt.setText(sdf.format(calendar.getTime()));
+                    sendToDate = senddf.format(calendar.getTime());
                 }
-                return false;
             }
-        });*/
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 
-        searchClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                searchUser.onActionViewCollapsed();
-            }
-        });
-
+        dialog.show();
     }
 }
