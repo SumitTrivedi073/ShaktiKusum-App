@@ -5,11 +5,9 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -961,7 +959,6 @@ public class InstallationInitial extends BaseActivity {
     private void saveInstalltion() {
 
 
-        SaveInLocalDataBase();
         String[] arr = no_of_module_value.split(",");
         Set<String> set = new HashSet<>();
         for (int i = 0; i < arr.length; i++) {
@@ -978,6 +975,7 @@ public class InstallationInitial extends BaseActivity {
         }
         if (isSubmit) {
 
+            SaveInLocalDataBase();
 
             if (CustomUtility.isInternetOn(getApplicationContext())) {
 
@@ -1229,7 +1227,7 @@ public class InstallationInitial extends BaseActivity {
         inst_pump_ser.setText(pump);
 
         WebURL.mDEvice_Number_CHECK = controller;
-        inst_controller_ser.setText("7F-0135-0-13-06-23");
+        inst_controller_ser.setText(controller);
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {
             spinner_simoprator.setSelection(db.getPosition(spinner_simoprator, installationBean.getSimoprator()));
@@ -1647,14 +1645,12 @@ public class InstallationInitial extends BaseActivity {
                         try {
                             jsonObj.put("PHOTO" + imageList.get(i).getPoistion(), CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(i).getImagePath()));
                             jsonObj.put("LatLng" + imageList.get(i).getPoistion(), imageList.get(i).getLatitude() + "," + imageList.get(i).getLongitude());
-
-                            Log.e("LatLng=====>",i+"=======>"+imageList.get(i).getPoistion()+"========>"+imageList.get(i).getLatitude() + "," + imageList.get(i).getLongitude());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                 }
-                Log.e("jsonObj=======>", jsonObj.toString());
+              //  Log.e("jsonObj=======>", jsonObj.toString());
             }
 
 
@@ -1711,7 +1707,7 @@ public class InstallationInitial extends BaseActivity {
 
                     JSONArray ja = new JSONArray(obj1);
 
-                    Log.e("OUTPUT2", "&&&&" + ja);
+//                    Log.e("OUTPUT2", "&&&&" + ja);
 
                     for (int i = 0; i < ja.length(); i++) {
 
@@ -1761,7 +1757,7 @@ public class InstallationInitial extends BaseActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-        Log.e("UpdateLatLngRMSURL====>",WebURL.updateLatLngToRms + "?deviceNo="+inst_controller_ser.getText().toString().trim()+"&lat="+imageList.get(2).getLatitude()+"&lon="+imageList.get(2).getLongitude());
+      //  Log.e("UpdateLatLngRMSURL====>",WebURL.updateLatLngToRms + "?deviceNo="+inst_controller_ser.getText().toString().trim()+"&lat="+imageList.get(2).getLatitude()+"&lon="+imageList.get(2).getLongitude());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.updateLatLngToRms + "?deviceNo="+inst_controller_ser.getText().toString().trim()+"&lat="+imageList.get(2).getLatitude()+"&lon="+imageList.get(2).getLongitude(),
 
@@ -1769,7 +1765,7 @@ public class InstallationInitial extends BaseActivity {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 try {
-                    Log.e("UpdateLatLngRMSResponse====>",jsonObject.toString());
+                //    Log.e("UpdateLatLngRMSResponse====>",jsonObject.toString());
                     if (jsonObject.toString() != null && !jsonObject.toString().isEmpty()) {
 
                         String mStatus = jsonObject.getString("status");
