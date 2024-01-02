@@ -82,9 +82,10 @@
     <string name="menu_simrep">Sim Replacement</string>
     <string name="menu_devicestatus">Device Status</string>
     <string name="menu_rejectsites">Reject Sites</string>
-
+    <string name="complaint_installation">Complaint Before Installation</string>
+    <string name="complain_delivery_status">Complaint Delivery Status</string>
     <string name="menu_logout">Signout</string>
-    <string name="menu_audit">Site Audit</string>
+    <string name="menu_audit">Site Audit</string>x
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
@@ -227,6 +228,7 @@
     <string name="both">Both</string>
     <string name="road">Road Show</string>
     <string name="enter_farmar_name">Enter Farmer Name</string>
+    <string name="enter_additionalInfoExt">Enter Additional Info</string>
     <string name="enterSalesPersonSapCode">Enter Sales Person Sap Code</string>
     <string name="enter_application_number">Enter Application Number</string>
     <string name="enter_name_of_village_block_and_district">Enter name of village, block and district</string>
@@ -354,6 +356,10 @@
     <string name="selectBorewellSize">Select Borewell Size</string>
     <string name="selectPumpWaterLever">Select pump water lever</string>
     <string name="site_audit">Site Audit</string>
+    <string name="pump_serial_number"> pump serial number</string>
+    <string name="motor_serial_number"> motor serial number</string>
+    <string name="controller_serial_number"> controller serial number</string>
+
     <string name="enter_pump_serial_number">Enter pump serial number</string>
     <string name="enter_motor_serial_number">Enter motor serial number</string>
     <string name="enter_controller_serial_number">Enter controller serial number</string>
@@ -453,7 +459,22 @@
     <string name="expumpSetDischarge">Enter Discharge of pump set</string>
     <string name="exDynamic">"Enter Total Dynamic head "</string>
     <string name="fileNotCreated">File Not Created, No Data Available!</string>
-
+    <string name="complaint_before_installation">Complaint Before Installation</string>
+    <string name="complaint_form">Complaint Form</string>
+    <string name="damage">Damage</string>
+    <string name="missed">Missed</string>
+    <string name="none">None</string>
+    <string name="pump">Pump</string>
+    <string name="motor">Motor</string>
+    <string name="controller">Controller</string>
+    <string name="please_select_the_damage_item">Please Select the Damage Item</string>
+    <string name="item_damage_or_missed">Please select if Pump damage or missed?</string>
+    <string name="item_motor_damage_or_missed">Please select if Motor damage or missed?</string>
+    <string name="item_Controller_damage_or_missed">Please select if Controller damage or missed?</string>
+    <string name="item_Other_damage_or_missed">Please select if Other damage or missed?</string>
+    <string name="select_title_type">Select Status Type</string>
+    <string name="pending">Pending</string>
+    <string name="complete">Complete</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

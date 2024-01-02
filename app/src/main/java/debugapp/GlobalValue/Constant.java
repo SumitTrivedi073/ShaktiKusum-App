@@ -46,4 +46,6 @@ public class Constant {
     public static String RejectInstallation = "RejectInstallation";
 
     public static String RmsBaseUrl = "RmsBaseUrl";
+
+    public static String InstallationCompData = "InstallationCompData";
 }

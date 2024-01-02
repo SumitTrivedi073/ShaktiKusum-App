@@ -23,7 +23,6 @@ public abstract class  BaseActivity extends AppCompatActivity {
     AlertDialog alertDialog;
 
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
