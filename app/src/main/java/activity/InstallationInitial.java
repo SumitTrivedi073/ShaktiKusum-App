@@ -5,11 +5,9 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -114,8 +112,8 @@ public class InstallationInitial extends BaseActivity {
             city_txt = "", address = "", make = "", custname = "", fathname = "", simno = "", regisno = "", projectno = "", loginno = "", moduleqty = "", mobileno = "", tehvillage = "",
             borewellstatus1 = "", DeviceStatus = "", CUS_CONTACT_NO = "", BeneficiaryNo = "", no_of_module_value = "", rmsdata_status = "", mMOBNUM_1, mMOBNUM_2, mMOBNUM_3, mORG_OTP_VALUE,
             mORG_CONTACT_NO, MEmpType = "null", mAppName = "KUSUM", mInstallerMOB = "", mInstallerName = "", RMS_SERVER_DOWN = "", RMS_DEBUG_EXTRN = "", DEVICE_NO, SIGNL_STREN,
-            INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "", SIM_SR_NO = "", SIM = "", RMS_STATUS = "", RMS_LAST_ONLINE_DATE = "",FAULT_CODE = "",
-            RMS_CURRENT_ONLINE_STATUS = "", version = "",invc_done="",docno_sap="",
+            INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "", SIM_SR_NO = "", SIM = "", RMS_STATUS = "", RMS_LAST_ONLINE_DATE = "", FAULT_CODE = "",
+            RMS_CURRENT_ONLINE_STATUS = "", version = "", invc_done = "", docno_sap = "",
 
     mDriveSerialNo = "", mMotorSerialNo = "", mPumpSerialNo = "", delay;
     EditText inst_date, bill_date, bill_no, cust_name, borewellstatus, reasontxt, inst_address, inst_make, inst_village,
@@ -142,7 +140,7 @@ public class InstallationInitial extends BaseActivity {
         }
     };
 
-    List<ImageModel>    imageList = new ArrayList<>();
+    List<ImageModel> imageList = new ArrayList<>();
     boolean isBaseUpdate = false, isControllerIDScan = false, isDebug = false, isSubmit = false;
 
     Handler mHandler = new Handler() {
@@ -407,7 +405,7 @@ public class InstallationInitial extends BaseActivity {
             if (CustomUtility.isInternetOn(getApplicationContext())) {
                 if (mBTResonseDataList.size() > 0)
                     mBTResonseDataList.clear();
-                Log.e("inst_controller_ser===>",inst_controller_ser.getText().toString().trim() );
+                Log.e("inst_controller_ser===>", inst_controller_ser.getText().toString().trim());
                 mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(inst_controller_ser.getText().toString().trim() + "-0");
                 System.out.println("mBTResonseDataList.size()==>>" + mBTResonseDataList.size());
                 if (mBTResonseDataList.size() > 0) {
@@ -448,14 +446,13 @@ public class InstallationInitial extends BaseActivity {
                     FAULT_CODE = mBTResonseDataList.get(vkp).getmRMS_FAULT_CODE();
 
 
-
-                  saveDataValidation();
+                    saveDataValidation();
                 } else {
                     saveData();
 
                 }
             } else {
-               saveData();
+                saveData();
             }
         });
 
@@ -962,7 +959,6 @@ public class InstallationInitial extends BaseActivity {
     private void saveInstalltion() {
 
 
-        SaveInLocalDataBase();
         String[] arr = no_of_module_value.split(",");
         Set<String> set = new HashSet<>();
         for (int i = 0; i < arr.length; i++) {
@@ -979,25 +975,28 @@ public class InstallationInitial extends BaseActivity {
         }
         if (isSubmit) {
 
+            SaveInLocalDataBase();
 
             if (CustomUtility.isInternetOn(getApplicationContext())) {
 
                 if (reason.getVisibility() == View.VISIBLE) {
                     if (!reasontxt.getText().toString().isEmpty()) {
-                        SubmitDebugData();
+                           SubmitDebugData();
+
                     } else {
                         CustomUtility.ShowToast("Please Enter Installation Delay Reason.", getApplicationContext());
                     }
                 } else {
-                    SubmitDebugData();
+                      SubmitDebugData();
+
                 }
 
             } else {
-                CustomUtility.ShowToast(getResources().getString(R.string.savedInLocalDatabase), mContext);
+               CustomUtility.ShowToast(getResources().getString(R.string.savedInLocalDatabase), mContext);
                 Intent intent = new Intent(mContext, InstallationList.class);
                 startActivity(intent);
                 finish();
-            }
+           }
 
         } else {
             CustomUtility.ShowToast("Installation Not Submitted,Remove duplicate module Number", this);
@@ -1414,24 +1413,24 @@ public class InstallationInitial extends BaseActivity {
         DatabaseHelper db = new DatabaseHelper(this);
 
         List<ImageModel> installationImages = db.getAllInstallationImages();
-          if(installationImages.size()>0) {
-              for (int i = 0; i < installationImages.size(); i++) {
-                  if (installationImages.get(i).getBillNo().trim().equals(bill_no.getText().toString().trim())) {
-                      ImageModel imageModel = new ImageModel();
-                      imageModel.setName(installationImages.get(i).getName());
-                      imageModel.setImagePath(installationImages.get(i).getImagePath());
-                      imageModel.setImageSelected(true);
-                      imageModel.setBillNo(installationImages.get(i).getBillNo());
-                      imageModel.setLatitude(installationImages.get(i).getLatitude());
-                      imageModel.setLongitude(installationImages.get(i).getLongitude());
-                      imageModel.setPoistion(installationImages.get(i).getPoistion());
-                      imageList.add(imageModel);
-                   }
+        if (installationImages.size() > 0) {
+            for (int i = 0; i < installationImages.size(); i++) {
+                if (installationImages.get(i).getBillNo().trim().equals(bill_no.getText().toString().trim())) {
+                    ImageModel imageModel = new ImageModel();
+                    imageModel.setName(installationImages.get(i).getName());
+                    imageModel.setImagePath(installationImages.get(i).getImagePath());
+                    imageModel.setImageSelected(true);
+                    imageModel.setBillNo(installationImages.get(i).getBillNo());
+                    imageModel.setLatitude(installationImages.get(i).getLatitude());
+                    imageModel.setLongitude(installationImages.get(i).getLongitude());
+                    imageModel.setPoistion(installationImages.get(i).getPoistion());
+                    imageList.add(imageModel);
+                }
 
-              }
+            }
 
 
-          }
+        }
     }
 
 
@@ -1509,13 +1508,12 @@ public class InstallationInitial extends BaseActivity {
                             if (mSimDetailsInfoResponse.size() > 0)
                                 mSimDetailsInfoResponse.clear();
 
-                    mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
-                    CustomUtility.hideProgressDialog(InstallationInitial.this);
-                    Constant.BT_DEVICE_NAME = "";
-                    Constant.BT_DEVICE_MAC_ADDRESS = "";
-                    //  CustomUtility.ShowToast(getResources().getString(R.string.dataSubmittedSuccessfully), getApplicationContext());
+                            mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
+                            Constant.BT_DEVICE_NAME = "";
+                            Constant.BT_DEVICE_MAC_ADDRESS = "";
 
-                    new SyncInstallationData().execute();
+
+                            submitInstalltion();
 
                         } else {
                             CustomUtility.hideProgressDialog(InstallationInitial.this);
@@ -1547,168 +1545,169 @@ public class InstallationInitial extends BaseActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
+    private void submitInstalltion() {
 
-    private class SyncInstallationData extends AsyncTask<String, String, String> {
+        JSONArray ja_invc_data = new JSONArray();
+        JSONObject jsonObj = new JSONObject();
+        InstallationBean param_invc = new InstallationBean();
+        param_invc = db.getInstallationData(pernr, billno);
 
-        @Override
-        protected void onPreExecute() {
+        try {
 
-
-            CustomUtility.showProgressDialogue(InstallationInitial.this);
-
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.GINGERBREAD)
-        @Override
-        protected String doInBackground(String... params) {
-            String docno_sap = null;
-            String invc_done = null;
-            String obj2 = null;
-
-            DatabaseHelper db = new DatabaseHelper(mContext);
-
-            InstallationBean param_invc = new InstallationBean();
-
-            param_invc = db.getInstallationData(pernr, billno);
-
-            JSONArray ja_invc_data = new JSONArray();
-
-            JSONObject jsonObj = new JSONObject();
+            if (!Constant.DBUG_MOB_1.equalsIgnoreCase("")) {
+                if (mSimDetailsInfoResponse.size() > 0)
+                    mSimDetailsInfoResponse.clear();
+                mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
+            }
 
             try {
 
-                if (!Constant.DBUG_MOB_1.equalsIgnoreCase("")) {
+                for (int i = 0; i < mSimDetailsInfoResponse.size(); i++) {
 
-                    if (mSimDetailsInfoResponse.size() > 0)
-                        mSimDetailsInfoResponse.clear();
+                    if (i == 0)
+                        mMOBNUM_1 = mSimDetailsInfoResponse.get(i).getDEVICENOSIMMOB();
 
-                    mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
+                    if (i == 1)
+                        mMOBNUM_2 = mSimDetailsInfoResponse.get(i).getDEVICENOSIMMOB();
+
+                    if (i == 2)
+                        mMOBNUM_3 = mSimDetailsInfoResponse.get(i).getDEVICENOSIMMOB();
+
+                    Constant.DBUG_MOB_1 = mMOBNUM_1;
+                    Constant.DBUG_MOB_2 = mMOBNUM_2;
+                    Constant.DBUG_MOB_3 = mMOBNUM_3;
                 }
-
-                try {
-
-                    for (int i = 0; i < mSimDetailsInfoResponse.size(); i++) {
-
-                        if (i == 0)
-                            mMOBNUM_1 = mSimDetailsInfoResponse.get(i).getDEVICENOSIMMOB();
-
-                        if (i == 1)
-                            mMOBNUM_2 = mSimDetailsInfoResponse.get(i).getDEVICENOSIMMOB();
-
-                        if (i == 2)
-                            mMOBNUM_3 = mSimDetailsInfoResponse.get(i).getDEVICENOSIMMOB();
-
-                        Constant.DBUG_MOB_1 = mMOBNUM_1;
-                        Constant.DBUG_MOB_2 = mMOBNUM_2;
-                        Constant.DBUG_MOB_3 = mMOBNUM_3;
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                String date_s = param_invc.getInst_date();
-
-                SimpleDateFormat dt = new SimpleDateFormat("dd.MM.yyyy");
-
-                Date date = dt.parse(date_s);
-                SimpleDateFormat dt1 = new SimpleDateFormat("yyyyMMdd");
-
-                jsonObj.put("userid", param_invc.getPernr());
-                if (param_invc.getBeneficiaryNo() != null && !param_invc.getBeneficiaryNo().isEmpty()) {
-                    jsonObj.put("beneficiary", param_invc.getBeneficiaryNo());
-                } else {
-                    jsonObj.put("beneficiary", BeneficiaryNo);
-                }
-                jsonObj.put("setting_check", "Para Setting Stop");
-                jsonObj.put("project_no", param_invc.getProject_no());
-                jsonObj.put("project_login_no", param_invc.getLogin_no());
-                jsonObj.put("instdate", dt1.format(date));
-                jsonObj.put("total_plate_watt", param_invc.getModule_total_plate_watt());
-                jsonObj.put("lat", param_invc.getLatitude());
-                jsonObj.put("lng", param_invc.getLongitude());
-                jsonObj.put("customer_name", param_invc.getCustomer_name());
-                jsonObj.put("father_name", param_invc.getFathers_name());
-                jsonObj.put("state", param_invc.getState_ins_id());
-                jsonObj.put("city", param_invc.getDistrict_ins_id());
-                jsonObj.put("tehsil", param_invc.getTehsil_ins());
-                jsonObj.put("village", param_invc.getVillage_ins());
-                jsonObj.put("contact_no", param_invc.getMobile_no());
-                jsonObj.put("address", param_invc.getAddress_ins());
-                jsonObj.put("make", param_invc.getMake_ins());
-                jsonObj.put("rms_status", param_invc.getRms_data_status());
-                jsonObj.put("SOLAR_PANNEL_WATT ", param_invc.getSolarpanel_wattage());
-                jsonObj.put("HP", param_invc.getInst_hp());
-                jsonObj.put("PANEL_INSTALL_QTY", param_invc.getSolarpanel_stand_ins_quantity());
-                jsonObj.put("TOTAL_WATT", param_invc.getTotal_watt());
-                jsonObj.put("PANEL_MODULE_QTY", param_invc.getNo_of_module_qty());
-                jsonObj.put("inst_no_of_module_value", param_invc.getNo_of_module_value());
-                jsonObj.put("MOTOR_SERNR", param_invc.getSmmd_sno());
-                jsonObj.put("PUMP_SERNR", param_invc.getSpmd_sno());
-                jsonObj.put("CONTROLLER_SERNR", param_invc.getScm_sno());
-                jsonObj.put("SIM_OPRETOR", param_invc.getSimoprator());
-                jsonObj.put("SIMNO", param_invc.getSimcard_num());
-                jsonObj.put("VBELN", param_invc.getInst_bill_no());
-                jsonObj.put("CONNECTION_TYPE", param_invc.getConntype());
-                jsonObj.put("REGISNO", param_invc.getRegis_no());
-                jsonObj.put("BOREWELLSTATUS", CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno));
-                jsonObj.put("DELAY_REASON", param_invc.getDelay_reason());
-                jsonObj.put("dbug_mob_1 ", Constant.DBUG_MOB_1);
-                jsonObj.put("dbug_mob_2 ", Constant.DBUG_MOB_2);
-                jsonObj.put("dbug_mob_3 ", Constant.DBUG_MOB_3);
-                jsonObj.put("dbug_ofline", Constant.DBUG_PER_OFLINE);
-                jsonObj.put("dbug_ofline", Constant.DBUG_PER_OFLINE);
-                jsonObj.put("app_version", version);
-
-                jsonObj.put("LOGIN_NAME", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonName));
-                jsonObj.put("LOGIN_CONT", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonNumber));
-
-
-                if (imageList.size() > 0) {
-                    for (int i = 0; i < imageList.size(); i++) {
-                        if (imageList.get(i).isImageSelected()) {
-                            try {
-                                jsonObj.put("PHOTO" + imageList.get(i).getPoistion(), CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(i).getImagePath()));
-                                jsonObj.put("LatLng" + imageList.get(i).getPoistion(), imageList.get(i).getLatitude() + "," + imageList.get(i).getLongitude());
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                    Log.e("jsonObj=======>", jsonObj.toString());
-                }
-
-
-                ja_invc_data.put(jsonObj);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
-            param1_invc.add(new BasicNameValuePair("installation", String.valueOf(ja_invc_data)));
-            Log.e("DATA", "$$$$" + param1_invc);
+            String date_s = param_invc.getInst_date();
 
+            SimpleDateFormat dt = new SimpleDateFormat("dd.MM.yyyy");
+
+            Date date = dt.parse(date_s);
+            SimpleDateFormat dt1 = new SimpleDateFormat("yyyyMMdd");
+
+            jsonObj.put("userid", param_invc.getPernr());
+            if (param_invc.getBeneficiaryNo() != null && !param_invc.getBeneficiaryNo().isEmpty()) {
+                jsonObj.put("beneficiary", param_invc.getBeneficiaryNo());
+            } else {
+                jsonObj.put("beneficiary", BeneficiaryNo);
+            }
+            jsonObj.put("setting_check", "Para Setting Stop");
+            jsonObj.put("project_no", param_invc.getProject_no());
+            jsonObj.put("project_login_no", param_invc.getLogin_no());
+            jsonObj.put("instdate", dt1.format(date));
+            jsonObj.put("total_plate_watt", param_invc.getModule_total_plate_watt());
+            jsonObj.put("lat", param_invc.getLatitude());
+            jsonObj.put("lng", param_invc.getLongitude());
+            jsonObj.put("customer_name", param_invc.getCustomer_name());
+            jsonObj.put("father_name", param_invc.getFathers_name());
+            jsonObj.put("state", param_invc.getState_ins_id());
+            jsonObj.put("city", param_invc.getDistrict_ins_id());
+            jsonObj.put("tehsil", param_invc.getTehsil_ins());
+            jsonObj.put("village", param_invc.getVillage_ins());
+            jsonObj.put("contact_no", param_invc.getMobile_no());
+            jsonObj.put("address", param_invc.getAddress_ins());
+            jsonObj.put("make", param_invc.getMake_ins());
+            jsonObj.put("rms_status", param_invc.getRms_data_status());
+            jsonObj.put("SOLAR_PANNEL_WATT ", param_invc.getSolarpanel_wattage());
+            jsonObj.put("HP", param_invc.getInst_hp());
+            jsonObj.put("PANEL_INSTALL_QTY", param_invc.getSolarpanel_stand_ins_quantity());
+            jsonObj.put("TOTAL_WATT", param_invc.getTotal_watt());
+            jsonObj.put("PANEL_MODULE_QTY", param_invc.getNo_of_module_qty());
+            jsonObj.put("inst_no_of_module_value", param_invc.getNo_of_module_value());
+            jsonObj.put("MOTOR_SERNR", param_invc.getSmmd_sno());
+            jsonObj.put("PUMP_SERNR", param_invc.getSpmd_sno());
+            jsonObj.put("CONTROLLER_SERNR", param_invc.getScm_sno());
+            jsonObj.put("SIM_OPRETOR", param_invc.getSimoprator());
+            jsonObj.put("SIMNO", param_invc.getSimcard_num());
+            jsonObj.put("VBELN", param_invc.getInst_bill_no());
+            jsonObj.put("CONNECTION_TYPE", param_invc.getConntype());
+            jsonObj.put("REGISNO", param_invc.getRegis_no());
+            jsonObj.put("BOREWELLSTATUS", CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno));
+            jsonObj.put("DELAY_REASON", param_invc.getDelay_reason());
+            jsonObj.put("dbug_mob_1 ", Constant.DBUG_MOB_1);
+            jsonObj.put("dbug_mob_2 ", Constant.DBUG_MOB_2);
+            jsonObj.put("dbug_mob_3 ", Constant.DBUG_MOB_3);
+            jsonObj.put("dbug_ofline", Constant.DBUG_PER_OFLINE);
+            jsonObj.put("dbug_ofline", Constant.DBUG_PER_OFLINE);
+            jsonObj.put("app_version", version);
+
+            jsonObj.put("LOGIN_NAME", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonName));
+            jsonObj.put("LOGIN_CONT", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonNumber));
+
+
+            if (imageList.size() > 0) {
+                for (int i = 0; i < imageList.size(); i++) {
+                    if (imageList.get(i).isImageSelected()) {
+                        try {
+                            jsonObj.put("PHOTO" + imageList.get(i).getPoistion(), CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(i).getImagePath()));
+                            jsonObj.put("LatLng" + imageList.get(i).getPoistion(), imageList.get(i).getLatitude() + "," + imageList.get(i).getLongitude());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+              //  Log.e("jsonObj=======>", jsonObj.toString());
+            }
+
+
+            ja_invc_data.put(jsonObj);
+
+
+            new syncInstallationData(ja_invc_data).execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    private class syncInstallationData extends AsyncTask<String, String, String> {
+
+        JSONArray jsonArray;
+
+        public syncInstallationData(JSONArray jaInvcData) {
+            jsonArray = jaInvcData;
+        }
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected String doInBackground(String... params) {
+            String obj2 = null;
+            final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
+            param1_invc.add(new BasicNameValuePair("installation", String.valueOf(jsonArray)));
+            Log.e("DATA", "$$$$" + param1_invc);
             System.out.println("param1_invc_vihu==>>" + param1_invc);
             try {
-
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
-                StrictMode.setThreadPolicy(policy);
-
                 obj2 = CustomHttpClient.executeHttpPost1(WebURL.INSTALLATION_DATA, param1_invc);
 
-                Log.e("OUTPUT1", "&&&&" + obj2);
+            } catch (Exception e) {
+                e.printStackTrace();
+                CustomUtility.hideProgressDialog(InstallationInitial.this);
+            }
 
-                // if (obj2 != "")
-                if (!obj2.equalsIgnoreCase("")) {
-                    CustomUtility.hideProgressDialog(InstallationInitial.this);
-                    JSONObject object = new JSONObject(obj2);
+            return obj2;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            try {
+                Log.e("OUTPUT1", "&&&&" + result);
+
+                if (!result.isEmpty()) {
+                    JSONObject object = new JSONObject(result);
                     String obj1 = object.getString("data_return");
 
                     JSONArray ja = new JSONArray(obj1);
 
-                    Log.e("OUTPUT2", "&&&&" + ja);
+//                    Log.e("OUTPUT2", "&&&&" + ja);
 
                     for (int i = 0; i < ja.length(); i++) {
 
@@ -1718,11 +1717,61 @@ public class InstallationInitial extends BaseActivity {
                         invc_done = jo.getString("return");
 
                         if (invc_done.equals("Y")) {
+                          sendLatLngToRmsForFota();
 
-                            Message msg = new Message();
-                            msg.obj = "Data Submitted Successfully...";
-                            mHandler2.sendMessage(msg);
+                        } else {
+                            CustomUtility.hideProgressDialog(InstallationInitial.this);
 
+                            if (invc_done.equals("N")) {
+
+                                CustomUtility.showToast(InstallationInitial.this, "Data Not Submitted, Please try After Sometime.");
+
+                            } else if (invc_done.equals("P")) {
+
+                                CustomUtility.showToast(InstallationInitial.this, "Controller number mismatch. Please update I-base.");
+
+                            } else if (invc_done.equals("I")) {
+
+                                CustomUtility.showToast(InstallationInitial.this, "Camera image quality is very high Please remove it.");
+
+                            } else if (invc_done.equals("A")) {
+
+                                CustomUtility.showToast(InstallationInitial.this, "Data Not Submitted, Please Install latest version of the app from the play store");
+
+                            }
+                        }
+                    }
+
+
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private void sendLatLngToRmsForFota() {
+
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+      //  Log.e("UpdateLatLngRMSURL====>",WebURL.updateLatLngToRms + "?deviceNo="+inst_controller_ser.getText().toString().trim()+"&lat="+imageList.get(2).getLatitude()+"&lon="+imageList.get(2).getLongitude());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                WebURL.updateLatLngToRms + "?deviceNo="+inst_controller_ser.getText().toString().trim()+"&lat="+imageList.get(2).getLatitude()+"&lon="+imageList.get(2).getLongitude(),
+
+                null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                try {
+                //    Log.e("UpdateLatLngRMSResponse====>",jsonObject.toString());
+                    if (jsonObject.toString() != null && !jsonObject.toString().isEmpty()) {
+
+                        String mStatus = jsonObject.getString("status");
+                        if (mStatus.equals("true")) {
+
+                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.dataSubmittedSuccessfully));
                             Log.e("DOCNO", "&&&&" + billno);
                             db.deleteInstallationData(billno);
                             db.deleteInstallationListData1(billno);
@@ -1737,72 +1786,52 @@ public class InstallationInitial extends BaseActivity {
                             Random random = new Random();
                             String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
 
-                            runOnUiThread(() -> {
                                 if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
 
                                     sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
-                                    CustomUtility.removeValueFromSharedPref(mContext, Constant.isDebugDevice);
+                                   CustomUtility.removeValueFromSharedPref(mContext, Constant.isDebugDevice);
                                 } else {
                                     Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
                                     startActivity(intent);
                                     finish();
                                 }
-                            });
 
-
-                        } else if (invc_done.equals("N")) {
-
-                            Message msg = new Message();
-                            msg.obj = "Data Not Submitted, Please try After Sometime.";
-                            mHandler2.sendMessage(msg);
-                        } else if (invc_done.equals("P")) {
-
-                            Message msg = new Message();
-                            msg.obj = "Controller number mismatch. Please update I-base.";
-                            mHandler2.sendMessage(msg);
-
-
-                        } else if (invc_done.equals("I")) {
-
-                            Message msg = new Message();
-                            msg.obj = "Camera image quility is very high Please remove it.";
-                            mHandler2.sendMessage(msg);
-
-
-                        } else if (invc_done.equals("A")) {
-
-                            Message msg = new Message();
-                            msg.obj = "Data Not Submitted, Please Install latest version of the app from the play store";
-                            mHandler2.sendMessage(msg);
-
-
+                            mDatabaseHelperTeacher.deleteAllDataFromTable();
+                        } else {
+                            CustomUtility.hideProgressDialog(InstallationInitial.this);
+                            CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
                         }
 
                     }
-
-                    mDatabaseHelperTeacher.deleteAllDataFromTable();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    CustomUtility.hideProgressDialog(InstallationInitial.this);
+                    CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
                 }
 
-            } catch (Exception e) {
-                e.printStackTrace();
-                CustomUtility.hideProgressDialog(InstallationInitial.this);
+
             }
-
-            return obj2;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-        }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                CustomUtility.hideProgressDialog(InstallationInitial.this);
+                Log.e("error", String.valueOf(error));
+                Toast.makeText(InstallationInitial.this, error.toString(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                60000,
+                5,  /// maxNumRetries = 0 means no retry
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(jsonObjectRequest);
     }
 
     private void sendVerificationCodeAPI(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo, String billNo) {
-        CustomUtility.showProgressDialogue(InstallationInitial.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.SendOTP + "&mobiles=" + ContactNo +
-                        "&message="+beneficiaryNo+" के तहत "+Hp+"HP पंप सेट का इंस्टॉलेशन किया गया है यदि आप संतुष्ट हैं तो इंस्टॉलेशन टीम को OTP-"+generatedVerificationCode+" शेयर करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169744934483345",
+                        "&message=" + beneficiaryNo + " के तहत " + Hp + "HP पंप सेट का इंस्टॉलेशन किया गया है यदि आप संतुष्ट हैं तो इंस्टॉलेशन टीम को OTP-" + generatedVerificationCode + " शेयर करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169744934483345",
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
@@ -1813,7 +1842,7 @@ public class InstallationInitial extends BaseActivity {
                     VerificationCodeModel verificationCodeModel = new Gson().fromJson(res.toString(), VerificationCodeModel.class);
                     if (verificationCodeModel.getStatus().equals("Success")) {
                         CustomUtility.removeValueFromSharedPref(getApplicationContext(), "DeviceStatus");
-                        databaseHelper.deleteInstallationImages(bill_no.getText().toString().trim());
+                        db.deleteInstallationImages(bill_no.getText().toString().trim());
                         ShowAlertResponse(generatedVerificationCode, ContactNo, Hp, beneficiaryNo, billNo);
                     }
 
