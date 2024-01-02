@@ -446,6 +446,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
             imageArrayList.set(selectedIndex, imageModel);
             addupdateDatabase(path,"","",imageArrayList.get(selectedIndex).getPoistion());
         }
+        Log.e("ImageModel======>",imageModel.getPoistion()+"=======>"+imageModel.getLatitude()+"=======>"+imageModel.getLongitude());
         customAdapter.notifyDataSetChanged();
 
     }

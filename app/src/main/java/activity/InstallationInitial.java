@@ -982,20 +982,22 @@ public class InstallationInitial extends BaseActivity {
 
                 if (reason.getVisibility() == View.VISIBLE) {
                     if (!reasontxt.getText().toString().isEmpty()) {
-                        SubmitDebugData();
+                           SubmitDebugData();
+
                     } else {
                         CustomUtility.ShowToast("Please Enter Installation Delay Reason.", getApplicationContext());
                     }
                 } else {
-                    SubmitDebugData();
+                      SubmitDebugData();
+
                 }
 
             } else {
-                CustomUtility.ShowToast(getResources().getString(R.string.savedInLocalDatabase), mContext);
+               CustomUtility.ShowToast(getResources().getString(R.string.savedInLocalDatabase), mContext);
                 Intent intent = new Intent(mContext, InstallationList.class);
                 startActivity(intent);
                 finish();
-            }
+           }
 
         } else {
             CustomUtility.ShowToast("Installation Not Submitted,Remove duplicate module Number", this);
@@ -1226,7 +1228,7 @@ public class InstallationInitial extends BaseActivity {
         inst_pump_ser.setText(pump);
 
         WebURL.mDEvice_Number_CHECK = controller;
-        inst_controller_ser.setText(controller);
+        inst_controller_ser.setText("7F-0135-0-13-06-23");
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {
             spinner_simoprator.setSelection(db.getPosition(spinner_simoprator, installationBean.getSimoprator()));
@@ -1508,7 +1510,6 @@ public class InstallationInitial extends BaseActivity {
                                 mSimDetailsInfoResponse.clear();
 
                             mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
-                            CustomUtility.hideProgressDialog(InstallationInitial.this);
                             Constant.BT_DEVICE_NAME = "";
                             Constant.BT_DEVICE_MAC_ADDRESS = "";
 
@@ -1546,6 +1547,7 @@ public class InstallationInitial extends BaseActivity {
     }
 
     private void submitInstalltion() {
+
         JSONArray ja_invc_data = new JSONArray();
         JSONObject jsonObj = new JSONObject();
         InstallationBean param_invc = new InstallationBean();
@@ -1645,6 +1647,7 @@ public class InstallationInitial extends BaseActivity {
                             jsonObj.put("PHOTO" + imageList.get(i).getPoistion(), CustomUtility.getBase64FromBitmap(InstallationInitial.this, imageList.get(i).getImagePath()));
                             jsonObj.put("LatLng" + imageList.get(i).getPoistion(), imageList.get(i).getLatitude() + "," + imageList.get(i).getLongitude());
 
+                            Log.e("LatLng=====>",i+"=======>"+imageList.get(i).getPoistion()+"========>"+imageList.get(i).getLatitude() + "," + imageList.get(i).getLongitude());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -1675,9 +1678,7 @@ public class InstallationInitial extends BaseActivity {
         }
 
         @Override
-        protected void onPreExecute() {
-            CustomUtility.showProgressDialogue(InstallationInitial.this);
-        }
+        protected void onPreExecute() {}
 
         @Override
         protected String doInBackground(String... params) {
@@ -1704,7 +1705,6 @@ public class InstallationInitial extends BaseActivity {
                 Log.e("OUTPUT1", "&&&&" + result);
 
                 if (!result.isEmpty()) {
-                    CustomUtility.hideProgressDialog(InstallationInitial.this);
                     JSONObject object = new JSONObject(result);
                     String obj1 = object.getString("data_return");
 
@@ -1720,6 +1720,59 @@ public class InstallationInitial extends BaseActivity {
                         invc_done = jo.getString("return");
 
                         if (invc_done.equals("Y")) {
+                          sendLatLngToRmsForFota();
+
+                        } else {
+                            CustomUtility.hideProgressDialog(InstallationInitial.this);
+
+                            if (invc_done.equals("N")) {
+
+                                CustomUtility.showToast(InstallationInitial.this, "Data Not Submitted, Please try After Sometime.");
+
+                            } else if (invc_done.equals("P")) {
+
+                                CustomUtility.showToast(InstallationInitial.this, "Controller number mismatch. Please update I-base.");
+
+                            } else if (invc_done.equals("I")) {
+
+                                CustomUtility.showToast(InstallationInitial.this, "Camera image quality is very high Please remove it.");
+
+                            } else if (invc_done.equals("A")) {
+
+                                CustomUtility.showToast(InstallationInitial.this, "Data Not Submitted, Please Install latest version of the app from the play store");
+
+                            }
+                        }
+                    }
+
+
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private void sendLatLngToRmsForFota() {
+
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        Log.e("UpdateLatLngRMSURL====>",WebURL.updateLatLngToRms + "?deviceNo="+inst_controller_ser.getText().toString().trim()+"&lat="+imageList.get(2).getLatitude()+"&lon="+imageList.get(2).getLongitude());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                WebURL.updateLatLngToRms + "?deviceNo="+inst_controller_ser.getText().toString().trim()+"&lat="+imageList.get(2).getLatitude()+"&lon="+imageList.get(2).getLongitude(),
+
+                null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                try {
+                    Log.e("UpdateLatLngRMSResponse====>",jsonObject.toString());
+                    if (jsonObject.toString() != null && !jsonObject.toString().isEmpty()) {
+
+                        String mStatus = jsonObject.getString("status");
+                        if (mStatus.equals("true")) {
 
                             CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.dataSubmittedSuccessfully));
                             Log.e("DOCNO", "&&&&" + billno);
@@ -1736,51 +1789,48 @@ public class InstallationInitial extends BaseActivity {
                             Random random = new Random();
                             String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
 
-                            runOnUiThread(() -> {
                                 if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
 
                                     sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
-                                    CustomUtility.removeValueFromSharedPref(mContext, Constant.isDebugDevice);
+                                   CustomUtility.removeValueFromSharedPref(mContext, Constant.isDebugDevice);
                                 } else {
                                     Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
                                     startActivity(intent);
                                     finish();
                                 }
-                            });
 
-
-                        } else if (invc_done.equals("N")) {
-
-                            CustomUtility.showToast(InstallationInitial.this, "Data Not Submitted, Please try After Sometime.");
-
-                        } else if (invc_done.equals("P")) {
-
-                            CustomUtility.showToast(InstallationInitial.this, "Controller number mismatch. Please update I-base.");
-
-                        } else if (invc_done.equals("I")) {
-
-                            CustomUtility.showToast(InstallationInitial.this, "Camera image quality is very high Please remove it.");
-
-                        } else if (invc_done.equals("A")) {
-
-                            CustomUtility.showToast(InstallationInitial.this, "Data Not Submitted, Please Install latest version of the app from the play store");
-
+                            mDatabaseHelperTeacher.deleteAllDataFromTable();
+                        } else {
+                            CustomUtility.hideProgressDialog(InstallationInitial.this);
+                            CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
                         }
 
                     }
-
-                    mDatabaseHelperTeacher.deleteAllDataFromTable();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    CustomUtility.hideProgressDialog(InstallationInitial.this);
+                    CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
                 }
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
 
-        }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                CustomUtility.hideProgressDialog(InstallationInitial.this);
+                Log.e("error", String.valueOf(error));
+                Toast.makeText(InstallationInitial.this, error.toString(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                60000,
+                5,  /// maxNumRetries = 0 means no retry
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(jsonObjectRequest);
     }
 
     private void sendVerificationCodeAPI(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo, String billNo) {
-        CustomUtility.showProgressDialogue(InstallationInitial.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.SendOTP + "&mobiles=" + ContactNo +
@@ -1795,7 +1845,7 @@ public class InstallationInitial extends BaseActivity {
                     VerificationCodeModel verificationCodeModel = new Gson().fromJson(res.toString(), VerificationCodeModel.class);
                     if (verificationCodeModel.getStatus().equals("Success")) {
                         CustomUtility.removeValueFromSharedPref(getApplicationContext(), "DeviceStatus");
-                        databaseHelper.deleteInstallationImages(bill_no.getText().toString().trim());
+                        db.deleteInstallationImages(bill_no.getText().toString().trim());
                         ShowAlertResponse(generatedVerificationCode, ContactNo, Hp, beneficiaryNo, billNo);
                     }
 
