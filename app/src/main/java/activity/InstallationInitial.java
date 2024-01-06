@@ -1442,7 +1442,9 @@ public class InstallationInitial extends BaseActivity {
     }
 
     private void SubmitDebugData() {
-        CustomUtility.showProgressDialogue(InstallationInitial.this);
+
+
+    showProgressDialogue();
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObj = new JSONObject();
 
@@ -1543,6 +1545,16 @@ public class InstallationInitial extends BaseActivity {
                 5,  /// maxNumRetries = 0 means no retry
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(jsonObjectRequest);
+    }
+
+    private void showProgressDialogue() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                CustomUtility.showProgressDialogue(InstallationInitial.this);
+
+            }
+        });
     }
 
     private void submitInstalltion() {
@@ -1759,7 +1771,7 @@ public class InstallationInitial extends BaseActivity {
 
       //  Log.e("UpdateLatLngRMSURL====>",WebURL.updateLatLngToRms + "?deviceNo="+inst_controller_ser.getText().toString().trim()+"&lat="+imageList.get(2).getLatitude()+"&lon="+imageList.get(2).getLongitude());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.updateLatLngToRms + "?deviceNo="+inst_controller_ser.getText().toString().trim()+"&lat="+imageList.get(2).getLatitude()+"&lon="+imageList.get(2).getLongitude(),
+                CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) +WebURL.updateLatLngToRms + "?deviceNo="+inst_controller_ser.getText().toString().trim()+"&lat="+imageList.get(2).getLatitude()+"&lon="+imageList.get(2).getLongitude(),
 
                 null, new Response.Listener<JSONObject>() {
             @Override

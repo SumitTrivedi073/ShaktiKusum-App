@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,7 +30,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.shaktipumplimited.shaktikusum.R;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -41,6 +42,7 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
 import activity.BaseActivity;
 import activity.CameraActivity2;
 import activity.GPSTracker;
@@ -221,7 +223,69 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
             Photo4 = CustomUtility.getBase64FromBitmap(getApplicationContext(), imageArrayList.get(3).getImagePath());
 
             if (CustomUtility.isInternetOn(getApplicationContext())) {
-              new submitSurveyForm().execute();
+                try {
+
+                    JSONArray ja_invc_data = new JSONArray();
+                    JSONObject jsonObj = new JSONObject();
+
+                    jsonObj.put("project_no", CustomUtility.getSharedPreferences(getApplicationContext(), "projectid"));
+                    jsonObj.put("userid", CustomUtility.getSharedPreferences(getApplicationContext(), "userid"));
+                    jsonObj.put("project_login_no", "01");
+                    jsonObj.put("FARMER_CONTACT_NO", contactNumberExt.getText().toString().trim());
+                    jsonObj.put("APPLICANT_NO", applicationNumberExt.getText().toString().trim());
+                    jsonObj.put("REGISNO", surveyListResponse.getRegisno());
+                    jsonObj.put("BENEFICIARY", surveyListResponse.getBeneficiary());
+                    jsonObj.put("SITE_ADRC", addressExt.getText().toString().trim());
+                    jsonObj.put("LAT", latitude);
+                    jsonObj.put("LNG", longitude);
+                    jsonObj.put("SURVEYOR_SAP", CustomUtility.getSharedPreferences(getApplicationContext(), "userid"));
+                    jsonObj.put("APPLICANT_NAME", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonName));
+                    jsonObj.put("CONTACT_NO", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonNumber));
+                    jsonObj.put("APPLICANT_NO", CustomUtility.getSharedPreferences(getApplicationContext(), "userid"));
+                    jsonObj.put("WATER_LVL", selectedPumpWaterLevel);
+                    jsonObj.put("FARMER_SIGNATURE", surveyListResponse.getCustomerName());
+                    jsonObj.put("WATER_SOURCE", selectedSourceofWater);
+                    jsonObj.put("INTERNET_TYPE", selectedInternetConnectivity);
+                    jsonObj.put("TYPE_OF_IRIGATN", selectedTypesOfIrrigation);
+                    jsonObj.put("PUMP_TYPE", selectedSourceofWater);
+                    jsonObj.put("BOREWELL_SIZE", selectedBorewellSize);
+                    jsonObj.put("PUMP_SET_RATING", selectedPumpSetRating);
+                    jsonObj.put("PUMP_WATER_LVL", siteWaterLevelExt.getText().toString().trim());
+                    jsonObj.put("PUMP_AC_DC", selectedAcDc);
+                    jsonObj.put("VILLAGE", surveyListResponse.getCitycTxt());//userID
+                    jsonObj.put("SHADOW_FREE_LAND", selectedSouthfacingShadow);
+                    jsonObj.put("REMARK_ANY_OTH", releventInfoExt.getText().toString());//userID
+                    jsonObj.put("photo1", Photo1);
+                    jsonObj.put("photo2", Photo2);
+                    jsonObj.put("photo3", Photo3);
+                    jsonObj.put("photo4", Photo4);
+
+
+                    if (radio_DarkZone_yesID.isChecked()) {
+                        jsonObj.put("DARK_ZONE_OR_NOT", "Yes");
+                    } else {
+                        jsonObj.put("DARK_ZONE_OR_NOT", "No");
+                    }
+
+                    if (electricConnection_yesID.isChecked()) {
+                        jsonObj.put("ELEC_CON", "Yes");
+                    } else {
+                        jsonObj.put("ELEC_CON", "No");
+                    }
+                    if (InstallSolarPump_NoID.isChecked()) {
+                        jsonObj.put("SOLAR_PUMP_CONTROLLER", "Yes");
+                    } else {
+                        jsonObj.put("SOLAR_PUMP_CONTROLLER", "No");
+                    }
+
+
+                    ja_invc_data.put(jsonObj);
+                    new submitSurveyForm(ja_invc_data).execute();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             } else {
                 CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection), getApplicationContext());
         }
@@ -514,16 +578,19 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
         }else {
             db.insertKusumCImages(imageArrayList.get(selectedIndex).getName(), path,true, applicationNumberExt.getText().toString());
         }
-
         customAdapter.notifyDataSetChanged();
-
 
     }
 
 
- private class submitSurveyForm extends AsyncTask<String, String, String> {
+    private class submitSurveyForm extends AsyncTask<String, String, String> {
 
         ProgressDialog progressDialog;
+        JSONArray jsonArray;
+
+        public submitSurveyForm(JSONArray jaInvcData) {
+            this.jsonArray = jaInvcData;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -537,125 +604,22 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
 
         @Override
         protected String doInBackground(String... params) {
-           String invc_done = null;
             String obj2 = null;
 
-            JSONArray ja_invc_data = new JSONArray();
-            JSONObject jsonObj = new JSONObject();
-
-            try {
-                jsonObj.put("project_no", CustomUtility.getSharedPreferences(getApplicationContext(), "projectid"));
-                jsonObj.put("userid", CustomUtility.getSharedPreferences(getApplicationContext(), "userid"));
-                jsonObj.put("project_login_no", "01");
-                jsonObj.put("FARMER_CONTACT_NO", contactNumberExt.getText().toString().trim());
-                jsonObj.put("APPLICANT_NO", applicationNumberExt.getText().toString().trim());
-                jsonObj.put("REGISNO", surveyListResponse.getRegisno());
-                jsonObj.put("BENEFICIARY", surveyListResponse.getBeneficiary());
-                jsonObj.put("SITE_ADRC", addressExt.getText().toString().trim());
-                jsonObj.put("LAT", latitude);
-                jsonObj.put("LNG", longitude);
-                jsonObj.put("SURVEYOR_SAP", CustomUtility.getSharedPreferences(getApplicationContext(), "userid"));
-                jsonObj.put("APPLICANT_NAME", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonName));
-                jsonObj.put("CONTACT_NO", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonNumber));
-                jsonObj.put("APPLICANT_NO", CustomUtility.getSharedPreferences(getApplicationContext(), "userid"));
-                jsonObj.put("WATER_LVL", selectedPumpWaterLevel);
-                jsonObj.put("FARMER_SIGNATURE", surveyListResponse.getCustomerName());
-                jsonObj.put("WATER_SOURCE", selectedSourceofWater);
-                jsonObj.put("INTERNET_TYPE", selectedInternetConnectivity);
-                jsonObj.put("TYPE_OF_IRIGATN", selectedTypesOfIrrigation);
-                jsonObj.put("PUMP_TYPE", selectedSourceofWater);
-                jsonObj.put("BOREWELL_SIZE", selectedBorewellSize);
-                jsonObj.put("PUMP_SET_RATING", selectedPumpSetRating);
-                jsonObj.put("PUMP_WATER_LVL", siteWaterLevelExt.getText().toString().trim());
-                jsonObj.put("PUMP_AC_DC", selectedAcDc);
-                jsonObj.put("VILLAGE", surveyListResponse.getCitycTxt());//userID
-                jsonObj.put("SHADOW_FREE_LAND", selectedSouthfacingShadow);
-                jsonObj.put("REMARK_ANY_OTH", releventInfoExt.getText().toString());//userID
-                jsonObj.put("photo1", Photo1);
-                jsonObj.put("photo2", Photo2);
-                jsonObj.put("photo3", Photo3);
-                jsonObj.put("photo4", Photo4);
-
-
-                if(radio_DarkZone_yesID.isChecked()){
-                    jsonObj.put("DARK_ZONE_OR_NOT", "Yes");
-                }else {
-                    jsonObj.put("DARK_ZONE_OR_NOT", "No");
-                }
-
-                if(electricConnection_yesID.isChecked()){
-                    jsonObj.put("ELEC_CON", "Yes");
-                }else {
-                    jsonObj.put("ELEC_CON", "No");
-                }
-                if(InstallSolarPump_NoID.isChecked()){
-                    jsonObj.put("SOLAR_PUMP_CONTROLLER", "Yes");
-                }else {
-                    jsonObj.put("SOLAR_PUMP_CONTROLLER", "No");
-                }
-
-                
-                ja_invc_data.put(jsonObj);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
             final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
-            param1_invc.add(new BasicNameValuePair("survey", String.valueOf(ja_invc_data)));
+            param1_invc.add(new BasicNameValuePair("survey", String.valueOf(jsonArray)));
             Log.e("DATA", "$$$$" + param1_invc);
 
             System.out.println(param1_invc);
 
          try {
+             obj2 = CustomHttpClient.executeHttpPost1(WebURL.SAVE_SURVEY_DATA, param1_invc);
 
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
-                StrictMode.setThreadPolicy(policy);
-
-                obj2 = CustomHttpClient.executeHttpPost1(WebURL.SAVE_SURVEY_DATA, param1_invc);
-
-                Log.e("OUTPUT1", "&&&&" + obj2);
-
-                if (!obj2.equalsIgnoreCase("")) {
-
-                    JSONObject object = new JSONObject(obj2);
-                    String obj1 = object.getString("data_save");
-
-
-                    JSONArray ja = new JSONArray(obj1);
-
-
-                    Log.e("OUTPUT2", "&&&&" + ja);
-
-                    for (int i = 0; i < ja.length(); i++) {
-
-                        JSONObject jo = ja.getJSONObject(i);
-
-
-                        invc_done = jo.getString("return");
-
-
-                        if (invc_done.equalsIgnoreCase("Y")) {
-
-                            showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
-
-                            progressDialog.dismiss();
-                            finish();
-
-                        } else if (invc_done.equalsIgnoreCase("N")) {
-
-                            showingMessage(getResources().getString(R.string.dataNotSubmitted));
-                            progressDialog.dismiss();
-                            finish();
-                        }
-
-                    }
-                }
-
-            } catch (Exception e) {
+         } catch (Exception e) {
                 e.printStackTrace();
-                progressDialog.dismiss();
+                if(progressDialog!=null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
                 showingMessage(getResources().getString(R.string.somethingWentWrong));
             }
 
@@ -664,9 +628,40 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
 
         @Override
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();  // dismiss dialog
 
+            String invc_done = null;
+            if (!result.isEmpty()) {
+                try {
+                    if(progressDialog!=null && progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
+                    JSONObject object = new JSONObject(result);
+                    String obj1 = object.getString("data_save");
+                    JSONArray ja = new JSONArray(obj1);
+                    Log.e("OUTPUT2", "&&&&" + ja);
 
+                    for (int i = 0; i < ja.length(); i++) {
+
+                        JSONObject jo = ja.getJSONObject(i);
+                        invc_done = jo.getString("return");
+                        if (invc_done.equalsIgnoreCase("Y")) {
+                            showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
+                            finish();
+
+                        } else if (invc_done.equalsIgnoreCase("N")) {
+
+                            showingMessage(getResources().getString(R.string.dataNotSubmitted));
+                            finish();
+                        }
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    if(progressDialog!=null && progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
+                }
+            }
         }
     }
 
@@ -674,7 +669,6 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
     private void showingMessage(String message) {
         runOnUiThread(new Runnable() {
             public void run() {
-
                 CustomUtility.showToast(Add_Survey_Activity.this, message);
 
             }
