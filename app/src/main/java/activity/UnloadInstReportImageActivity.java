@@ -306,12 +306,12 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
                     if (CustomUtility.isInternetOn(getApplicationContext())) {
                         if (isSubmit) {
-                            if (pumpSerNo.getText().toString().trim().isEmpty() || !pumpSerNo.getText().toString().equalsIgnoreCase(installationListBean.getPump_ser().trim())) {
-                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctPumpSr));
-                            } else if (motorSerNo.getText().toString().trim().isEmpty() || !motorSerNo.getText().toString().equalsIgnoreCase(installationListBean.getMotor_ser().trim())) {
-                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctMotorSr));
-                            } else if (controllerSerNo.getText().toString().trim().isEmpty() || !controllerSerNo.getText().toString().equalsIgnoreCase(installationListBean.getController_ser().trim())) {
-                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctControllerSr));
+                            if (pumpSerNo.getText().toString().trim().isEmpty() || !pumpSerNo.getText().toString().trim().equals(installationListBean.getPump_ser().trim())) {
+                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctPumpSr) +" "+ installationListBean.getPump_ser().trim());
+                            } else if (motorSerNo.getText().toString().trim().isEmpty() || !motorSerNo.getText().toString().trim().equals(installationListBean.getMotor_ser().trim())) {
+                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctMotorSr)+" "+ installationListBean.getMotor_ser().trim());
+                            } else if (controllerSerNo.getText().toString().trim().isEmpty() || !controllerSerNo.getText().toString().trim().equals(installationListBean.getController_ser().trim())) {
+                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctControllerSr)+" "+ installationListBean.getController_ser().trim());
                             }else if (remarkEdt.getText().toString().trim().isEmpty()) {
                                 CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
                             }else {
