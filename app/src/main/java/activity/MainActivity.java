@@ -10,6 +10,7 @@ import android.content.IntentSender;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -85,6 +87,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             siteAuditCard, simReplacementCard;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -243,6 +246,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         } else if (id == R.id.nav_demoRoadShow) {
             Intent intent = new Intent(context,DemoRoadShowActivity.class);
+            startActivity(intent);
+        }
+        else if (id == R.id.complaint_installtion) {
+            Intent intent = new Intent(context, complaintInstallationActivity.class);
+            startActivity(intent);
+        }else if (id == R.id.complian_status) {
+            Intent intent = new Intent(context, compliandeliverystatus.class);
             startActivity(intent);
         }
         else if (id == R.id.nav_logout) {
