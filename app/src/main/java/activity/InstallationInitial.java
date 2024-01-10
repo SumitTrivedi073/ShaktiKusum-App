@@ -1717,8 +1717,33 @@ public class InstallationInitial extends BaseActivity {
                         invc_done = jo.getString("return");
 
                         if (invc_done.equals("Y")) {
-                          sendLatLngToRmsForFota();
+                        //  sendLatLngToRmsForFota();
+                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.dataSubmittedSuccessfully));
+                            Log.e("DOCNO", "&&&&" + billno);
+                            db.deleteInstallationData(billno);
+                            db.deleteInstallationListData1(billno);
+                            CustomUtility.setSharedPreference(mContext, "INSTSYNC" + billno, "");
+                            CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, "");
+                            CustomUtility.setSharedPreference(mContext, "borewellstatus", "");
 
+                            CustomUtility.setSharedPreference(mContext, "SYNCLIST", "1");
+
+                            mDatabaseHelperTeacher.deleteSimInfoData(billno);
+
+                            Random random = new Random();
+                            String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
+
+                            if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
+
+                                sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
+                                CustomUtility.removeValueFromSharedPref(mContext, Constant.isDebugDevice);
+                            } else {
+                                Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+
+                            mDatabaseHelperTeacher.deleteAllDataFromTable();
                         } else {
                             CustomUtility.hideProgressDialog(InstallationInitial.this);
 
