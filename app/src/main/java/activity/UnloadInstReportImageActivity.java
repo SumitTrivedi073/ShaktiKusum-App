@@ -31,6 +31,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -106,6 +107,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     Toolbar mToolbar;
     boolean isUpdate = false, isPumpMotorController = false;
     InstallationListBean installationListBean;
+    RadioButton materialStatusOk, materialStatusNotOk, materialStatusDamage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,6 +217,9 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         pump_scanner = findViewById(R.id.pump_scanner);
         motor_scanner = findViewById(R.id.motor_scanner);
         controllerScanner = findViewById(R.id.controllerScanner);
+        materialStatusOk = findViewById(R.id.materialStatusOk);
+        materialStatusNotOk = findViewById(R.id.materialStatusNotOk);
+        materialStatusDamage = findViewById(R.id.materialStatusDamage);
 
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -315,7 +320,40 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                             }else if (remarkEdt.getText().toString().trim().isEmpty()) {
                                 CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
                             }else {
-                                new SyncInstallationData().execute();
+                                InstallationBean param_invc = new InstallationBean();
+                                JSONArray ja_invc_data = new JSONArray();
+                                JSONObject jsonObj = new JSONObject();
+                                try {
+                                    SimpleDateFormat dt = new SimpleDateFormat("dd.MM.yyyy");
+                                    jsonObj.put("userid", userID);
+                                    jsonObj.put("vbeln", billNo);
+                                    jsonObj.put("project_no", projectNo);
+                                    jsonObj.put("beneficiary", beneficiary);
+                                    jsonObj.put("regisno", regNO);
+                                    jsonObj.put("unload_remark", remarkEdt.getText().toString().trim());
+                                    jsonObj.put("customer_name ", customerName);
+                                    jsonObj.put("project_login_no ", CustomUtility.getSharedPreferences(UnloadInstReportImageActivity.this, "loginid"));
+                                    jsonObj.put("inst_no_of_module_value ", noOfModules);
+
+
+                                    if (imageArrayList.size() > 0) {
+
+
+                                        if (imageArrayList.get(0).isImageSelected()) {
+                                            jsonObj.put("unld_photo1", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(0).getImagePath()));
+                                        }
+                                        if (1 < imageArrayList.size() && imageArrayList.get(1).isImageSelected()) {
+                                            jsonObj.put("unld_photo2", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(1).getImagePath()));
+                                        }
+                                        if (2 < imageArrayList.size() && imageArrayList.get(2).isImageSelected()) {
+                                            jsonObj.put("unld_photo3", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(2).getImagePath()));
+                                        }
+                                    }
+                                    ja_invc_data.put(jsonObj);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                new SyncInstallationData(ja_invc_data).execute();
                             }
                         }
                     } else {
@@ -593,6 +631,10 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     @SuppressLint("StaticFieldLeak")
     private class SyncInstallationData extends AsyncTask<String, String, String> {
         ProgressDialog progressDialog;
+         JSONArray jsonArray;
+        public SyncInstallationData(JSONArray jaInvcData) {
+            jsonArray = jaInvcData;
+        }
 
         @Override
         protected void onPreExecute() {
@@ -605,60 +647,36 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
         @Override
         protected String doInBackground(String... params) {
-
-            String docno_sap = null;
-            String invc_done = null;
             String obj2 = null;
-            InstallationBean param_invc = new InstallationBean();
-            JSONArray ja_invc_data = new JSONArray();
-            JSONObject jsonObj = new JSONObject();
-            try {
-                SimpleDateFormat dt = new SimpleDateFormat("dd.MM.yyyy");
-                jsonObj.put("userid", userID);
-                jsonObj.put("vbeln", billNo);
-                jsonObj.put("project_no", projectNo);
-                jsonObj.put("beneficiary", beneficiary);
-                jsonObj.put("regisno", regNO);
-                jsonObj.put("unload_remark", remarkEdt.getText().toString().trim());
-                jsonObj.put("customer_name ", customerName);
-                jsonObj.put("project_login_no ", CustomUtility.getSharedPreferences(UnloadInstReportImageActivity.this, "loginid"));
-                jsonObj.put("inst_no_of_module_value ", noOfModules);
-
-
-                if (imageArrayList.size() > 0) {
-
-
-                   if (imageArrayList.get(0).isImageSelected()) {
-                        jsonObj.put("unld_photo1", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(0).getImagePath()));
-                    }
-                    if (1 < imageArrayList.size() && imageArrayList.get(1).isImageSelected()) {
-                        jsonObj.put("unld_photo2", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(1).getImagePath()));
-                    }
-                    if (2 < imageArrayList.size() && imageArrayList.get(2).isImageSelected()) {
-                        jsonObj.put("unld_photo3", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(2).getImagePath()));
-                    }
-                }
-                ja_invc_data.put(jsonObj);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            Log.e("Param====>", ja_invc_data.toString());
+            Log.e("Param====>", jsonArray.toString());
             final ArrayList<NameValuePair> param1_invc = new ArrayList<>();
-            param1_invc.add(new BasicNameValuePair("unloading", String.valueOf(ja_invc_data)));
+            param1_invc.add(new BasicNameValuePair("unloading", String.valueOf(jsonArray)));
             Log.e("DATA", "$$$$" + param1_invc);
             System.out.println("param1_invc_vihu==>>" + param1_invc);
           try {
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
-                StrictMode.setThreadPolicy(policy);
                 obj2 = CustomHttpClient.executeHttpPost1(WebURL.INSTALLATION_DATA_UNLOAD, param1_invc);
-                Log.e("OUTPUT1", "&&&&" + obj2);
-                System.out.println("OUTPUT1==>>" + obj2);
+
+            } catch (Exception e) {
+                e.printStackTrace();
                 progressDialog.dismiss();
-                if (!obj2.equalsIgnoreCase("")) {
-                    JSONObject object = new JSONObject(obj2);
+            }
+            return obj2;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            String docno_sap = null;
+            String invc_done = null;
+            try {
+                if (!result.isEmpty()) {
+                    JSONObject object = new JSONObject(result);
                     String obj1 = object.getString("data_return");
                     JSONArray ja = new JSONArray(obj1);
                     Log.e("OUTPUT2", "&&&&" + ja);
+                    if(progressDialog!=null && progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
                     for (int i = 0; i < ja.length(); i++) {
                         JSONObject jo = ja.getJSONObject(i);
                         docno_sap = jo.getString("mdocno");
@@ -686,25 +704,26 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
                         } else if (invc_done.equalsIgnoreCase("N")) {
                             showingMessage(getResources().getString(R.string.dataNotSubmitted));
-                            progressDialog.dismiss();
+                            if(progressDialog!=null && progressDialog.isShowing()) {
+                                progressDialog.dismiss();
+                            }
 
 
                         }
                     }
                 } else {
                     CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.somethingWentWrong));
+                    if(progressDialog!=null && progressDialog.isShowing()) {
+                        progressDialog.dismiss();
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                if(progressDialog!=null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                progressDialog.dismiss();
             }
-            return obj2;
-        }
 
-        @Override
-        protected void onPostExecute(String result) {
-            progressDialog.dismiss();
         }
     }
 
