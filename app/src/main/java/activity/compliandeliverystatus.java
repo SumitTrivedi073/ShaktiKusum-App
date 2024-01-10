@@ -101,6 +101,7 @@ public class compliandeliverystatus extends AppCompatActivity implements View.On
     private void setlisnser() {
         fromDateRl.setOnClickListener(this);
         toDateRl.setOnClickListener(this);
+        mToolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void setSpinner() {

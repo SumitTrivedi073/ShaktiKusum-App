@@ -1442,9 +1442,7 @@ public class InstallationInitial extends BaseActivity {
     }
 
     private void SubmitDebugData() {
-
-
-    showProgressDialogue();
+        CustomUtility.showProgressDialogue(InstallationInitial.this);
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObj = new JSONObject();
 
@@ -1514,7 +1512,7 @@ public class InstallationInitial extends BaseActivity {
                             Constant.BT_DEVICE_NAME = "";
                             Constant.BT_DEVICE_MAC_ADDRESS = "";
 
-
+                            CustomUtility.hideProgressDialog(InstallationInitial.this);
                             submitInstalltion();
 
                         } else {
@@ -1522,6 +1520,9 @@ public class InstallationInitial extends BaseActivity {
                             CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
                         }
 
+                    } else {
+                        CustomUtility.hideProgressDialog(InstallationInitial.this);
+                        CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1547,17 +1548,10 @@ public class InstallationInitial extends BaseActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
-    private void showProgressDialogue() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                CustomUtility.showProgressDialogue(InstallationInitial.this);
 
-            }
-        });
-    }
 
     private void submitInstalltion() {
+        CustomUtility.showProgressDialogue(InstallationInitial.this);
 
         JSONArray ja_invc_data = new JSONArray();
         JSONObject jsonObj = new JSONObject();
@@ -1714,6 +1708,8 @@ public class InstallationInitial extends BaseActivity {
                 Log.e("OUTPUT1", "&&&&" + result);
 
                 if (!result.isEmpty()) {
+                    CustomUtility.hideProgressDialog(InstallationInitial.this);
+
                     JSONObject object = new JSONObject(result);
                     String obj1 = object.getString("data_return");
 
@@ -1766,22 +1762,23 @@ public class InstallationInitial extends BaseActivity {
 
     private void sendLatLngToRmsForFota() {
 
+        CustomUtility.showProgressDialogue(InstallationInitial.this);
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
-      //  Log.e("UpdateLatLngRMSURL====>",WebURL.updateLatLngToRms + "?deviceNo="+inst_controller_ser.getText().toString().trim()+"&lat="+imageList.get(2).getLatitude()+"&lon="+imageList.get(2).getLongitude());
+        Log.e("UpdateLatLngRMSURL====>", WebURL.updateLatLngToRms + "?deviceNo=" + inst_controller_ser.getText().toString().trim() + "&lat=" + imageList.get(2).getLatitude() + "&lon=" + imageList.get(2).getLongitude());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) +WebURL.updateLatLngToRms + "?deviceNo="+inst_controller_ser.getText().toString().trim()+"&lat="+imageList.get(2).getLatitude()+"&lon="+imageList.get(2).getLongitude(),
-
+                WebURL.updateLatLngToRms + "?deviceNo=" + inst_controller_ser.getText().toString().trim() + "&lat=" + imageList.get(2).getLatitude() + "&lon=" + imageList.get(2).getLongitude(),
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 try {
-                //    Log.e("UpdateLatLngRMSResponse====>",jsonObject.toString());
+                    Log.e("UpdateLatLngRMSResponse====>", jsonObject.toString());
                     if (jsonObject.toString() != null && !jsonObject.toString().isEmpty()) {
 
                         String mStatus = jsonObject.getString("status");
                         if (mStatus.equals("true")) {
+                            CustomUtility.hideProgressDialog(InstallationInitial.this);
 
                             CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.dataSubmittedSuccessfully));
                             Log.e("DOCNO", "&&&&" + billno);
@@ -1840,6 +1837,8 @@ public class InstallationInitial extends BaseActivity {
     }
 
     private void sendVerificationCodeAPI(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo, String billNo) {
+        CustomUtility.showProgressDialogue(InstallationInitial.this);
+
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.SendOTP + "&mobiles=" + ContactNo +
