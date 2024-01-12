@@ -94,6 +94,7 @@ public class RetrieveFirestoreData extends Service {
                     return;
                 }
 
+                Log.e("snapshot======>",snapshot.getId());
                 if (snapshot != null && snapshot.exists()) {
                     AppConfig appConfig = snapshot.toObject(AppConfig.class);
 
@@ -111,9 +112,14 @@ public class RetrieveFirestoreData extends Service {
 
                                 }
                             }
+                            Log.e("versionCode", String.valueOf(pInfo.versionCode));
+                            Log.e("getMinSalesAppVersion   ",appConfig.getMinKusumAppVersion().toString());
+                            Log.e("getSalesAppUrl   ",appConfig.getKusumAppUrl().toString());
+
                         } catch (Exception exception) {
                             exception.printStackTrace();
                         }
+
                     }
                 } else {
                     Log.d(TAG, "Current data: null");
