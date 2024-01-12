@@ -475,6 +475,7 @@
     <string name="select_title_type">Select Status Type</string>
     <string name="pending">Pending</string>
     <string name="complete">Complete</string>
+    <string name="partialDamage">Partial Damage</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>
