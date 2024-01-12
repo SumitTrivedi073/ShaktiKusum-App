@@ -102,7 +102,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     boolean isSubmit = false;
     List<String> itemNameList = new ArrayList<>();
     String customerName, beneficiary, regNO, projectNo, userID, billNo, moduleqty, custMobile, regisno,
-            no_of_module_value, noOfModules = "", Hp;
+            no_of_module_value, noOfModules = "", Hp,unloadingMaterialStatus="";
     int value, currentScannerFor = -1;
     Toolbar mToolbar;
     boolean isUpdate = false, isPumpMotorController = false;
@@ -320,6 +320,15 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                             }else if (remarkEdt.getText().toString().trim().isEmpty()) {
                                 CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
                             }else {
+                                if(materialStatusOk.isChecked()){
+                                    unloadingMaterialStatus = materialStatusOk.getText().toString();
+                                }
+                                if(materialStatusNotOk.isChecked()){
+                                    unloadingMaterialStatus = materialStatusNotOk.getText().toString();
+                                }
+                                if(materialStatusDamage.isChecked()){
+                                    unloadingMaterialStatus = materialStatusDamage.getText().toString();
+                                }
                                 InstallationBean param_invc = new InstallationBean();
                                 JSONArray ja_invc_data = new JSONArray();
                                 JSONObject jsonObj = new JSONObject();
@@ -334,6 +343,9 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                                     jsonObj.put("customer_name ", customerName);
                                     jsonObj.put("project_login_no ", CustomUtility.getSharedPreferences(UnloadInstReportImageActivity.this, "loginid"));
                                     jsonObj.put("inst_no_of_module_value ", noOfModules);
+                                    jsonObj.put("UNLOAD_MAT_STATS ", unloadingMaterialStatus);
+
+
 
 
                                     if (imageArrayList.size() > 0) {
@@ -350,10 +362,11 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                                         }
                                     }
                                     ja_invc_data.put(jsonObj);
+                                    Log.e("ja_invc_data=====>",ja_invc_data.toString());
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                new SyncInstallationData(ja_invc_data).execute();
+                               new SyncInstallationData(ja_invc_data).execute();
                             }
                         }
                     } else {

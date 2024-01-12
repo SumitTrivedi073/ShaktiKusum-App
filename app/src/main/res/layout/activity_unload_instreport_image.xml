@@ -243,6 +243,7 @@
                            android:text="@string/ok"
                            android:textSize="@dimen/_12sdp"
                            android:layout_weight="1"
+                           android:checked="true"
                            android:fontFamily="sans-serif-condensed-medium"
                            android:textColor="@color/colorPrimary"/>
 
