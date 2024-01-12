@@ -45,8 +45,6 @@ public abstract class  BaseActivity extends AppCompatActivity {
 
     private void getFirestoreData() {
         databaseHelper = new DatabaseHelper(this);
-
-        Log.e("ServerStart22222=====>","true");
         if (databaseHelper.getLogin() &&  CustomUtility.getSharedPreferences(getApplicationContext(), "CHECK_OTP_VERIFED").equals("Y"))  {
 
             if (!RetrieveFirestoreData.isServiceRunning) {

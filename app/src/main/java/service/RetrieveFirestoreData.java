@@ -1,21 +1,16 @@
 package service;
 
 
-import static android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION;
-
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
-import android.window.SplashScreen;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -93,8 +88,6 @@ public class RetrieveFirestoreData extends Service {
                     Log.w(TAG, "Listen failed.", e);
                     return;
                 }
-
-                Log.e("snapshot======>",snapshot.getId());
                 if (snapshot != null && snapshot.exists()) {
                     AppConfig appConfig = snapshot.toObject(AppConfig.class);
 
@@ -112,10 +105,6 @@ public class RetrieveFirestoreData extends Service {
 
                                 }
                             }
-                            Log.e("versionCode", String.valueOf(pInfo.versionCode));
-                            Log.e("getMinSalesAppVersion   ",appConfig.getMinKusumAppVersion().toString());
-                            Log.e("getSalesAppUrl   ",appConfig.getKusumAppUrl().toString());
-
                         } catch (Exception exception) {
                             exception.printStackTrace();
                         }
