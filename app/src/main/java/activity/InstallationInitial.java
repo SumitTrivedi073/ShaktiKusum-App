@@ -405,12 +405,16 @@ public class InstallationInitial extends BaseActivity {
             if (CustomUtility.isInternetOn(getApplicationContext())) {
                 if (mBTResonseDataList.size() > 0)
                     mBTResonseDataList.clear();
-                Log.e("inst_controller_ser===>", inst_controller_ser.getText().toString().trim());
+               // Log.e("inst_controller_ser===>", inst_controller_ser.getText().toString().trim());
+              //  Log.e("mDatabaseHelperTeacher=====>", String.valueOf(mDatabaseHelperTeacher.getDeviceInfoDATABT()));
                 mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(inst_controller_ser.getText().toString().trim() + "-0");
-                System.out.println("mBTResonseDataList.size()==>>" + mBTResonseDataList.size());
+               // System.out.println("mBTResonseDataList.size()==>>" + mBTResonseDataList.size());
                 if (mBTResonseDataList.size() > 0) {
                     vkp = mBTResonseDataList.size() - 1;
-                    DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
+                 //   Log.e("vkp1111====>",String.valueOf(vkp));
+
+
+                   DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
                     SIGNL_STREN = mBTResonseDataList.get(vkp).getSIGNLSTREN();
                     String[] mStrArry = SIGNL_STREN.split("###");
                     if (mStrArry.length > 0) {
@@ -444,9 +448,7 @@ public class InstallationInitial extends BaseActivity {
                     RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
                     RMS_SERVER_DOWN = "Working Fine";
                     FAULT_CODE = mBTResonseDataList.get(vkp).getmRMS_FAULT_CODE();
-
-
-                    saveDataValidation();
+                      saveDataValidation();
                 } else {
                     saveData();
 
@@ -1227,7 +1229,8 @@ public class InstallationInitial extends BaseActivity {
         inst_pump_ser.setText(pump);
 
         WebURL.mDEvice_Number_CHECK = controller;
-        inst_controller_ser.setText(controller);
+     //  inst_controller_ser.setText("7E-0029-0-14-08-23");
+       inst_controller_ser.setText("7F-0135-0-13-06-23");
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {
             spinner_simoprator.setSelection(db.getPosition(spinner_simoprator, installationBean.getSimoprator()));
@@ -1478,7 +1481,7 @@ public class InstallationInitial extends BaseActivity {
             jsonObj.put("INVOICE_NO", INVOICE_NO_B);
             jsonObj.put("DBUG_EXTRN_STATUS", RMS_DEBUG_EXTRN);
             jsonObj.put("RMS_SERVER_STATUS", RMS_SERVER_DOWN);
-            jsonObj.put("FAULT_CODE", FAULT_CODE);
+            jsonObj.put("FAULT_CODE", FAULT_CODE.trim());
 
             jsonArray.put(jsonObj);
         } catch (JSONException e) {
@@ -1743,7 +1746,7 @@ public class InstallationInitial extends BaseActivity {
                                 finish();
                             }
 
-                            mDatabaseHelperTeacher.deleteAllDataFromTable();
+                            mDatabaseHelperTeacher.deleteAllDataFromTable(inst_controller_ser.getText().toString().trim()+ "-0");
                         } else {
                             CustomUtility.hideProgressDialog(InstallationInitial.this);
 
@@ -1821,7 +1824,7 @@ public class InstallationInitial extends BaseActivity {
                                     finish();
                                 }
 
-                            mDatabaseHelperTeacher.deleteAllDataFromTable();
+                            mDatabaseHelperTeacher.deleteAllDataFromTable(inst_controller_ser.getText().toString().trim()+ "-0");
                         } else {
                             CustomUtility.hideProgressDialog(InstallationInitial.this);
                             CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());

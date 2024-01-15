@@ -322,13 +322,7 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
     public List<BTResonseData> getDeviceInfoDATABTFindDebug(String mDeviceNo) {
         List<BTResonseData> mBTResonseDataList = new ArrayList<>();
         BTResonseData mBTResonseData;
-        String id = "";
 
-        String mDEVICE_DEVICE_NO, mDEVICE_SIGNL_STREN, mDEVICE_SIM, mDEVICE_NET_REG, mDEVICE_SER_CONNECT,
-                mDEVICE_CAB_CONNECT,
-                mDEVICE_LATITUDE, mDEVICE_LANGITUDE, mDEVICE_MOBILE, mDEVICE_IMEI,
-                mDEVICE_DONGAL_ID, mDEVICE_MUserId, RMS_STATUS, RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mDEVICE_INS_NAME, mDEVICE_INS_MOBILE, RMS_SERVER_DOWN, RMS_DEBUG_EXTRN, RMS_ORG_D_F;
-        boolean mCheckFirst;
         SQLiteDatabase db = this.getReadableDatabase();
         try {
             Cursor cursor = db.rawQuery("SELECT * FROM " + DEVICE_DEVICE_INFO_NAME + " WHERE DEVICE_NO ='" + mDeviceNo + "'", null);
@@ -381,10 +375,10 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
     }
 
 
-    public long deleteAllDataFromTable() {
+    public long deleteAllDataFromTable(String mDeviceNo) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("DELETE FROM " + DEVICE_DEVICE_INFO_NAME, null);
+        Cursor cursor = db.rawQuery("DELETE FROM " + DEVICE_DEVICE_INFO_NAME+ " WHERE DEVICE_NO ='" + mDeviceNo + "'", null);
         //   Cursor cursor = db.rawQuery(selectQuery, null);
         int ccccc = cursor.getCount();
         return ccccc;

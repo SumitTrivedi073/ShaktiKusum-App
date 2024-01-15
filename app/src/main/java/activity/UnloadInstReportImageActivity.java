@@ -345,12 +345,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                                     jsonObj.put("inst_no_of_module_value ", noOfModules);
                                     jsonObj.put("UNLOAD_MAT_STATS ", unloadingMaterialStatus);
 
-
-
-
                                     if (imageArrayList.size() > 0) {
-
-
                                         if (imageArrayList.get(0).isImageSelected()) {
                                             jsonObj.put("unld_photo1", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(0).getImagePath()));
                                         }
