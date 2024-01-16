@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -23,12 +24,15 @@ public abstract class  BaseActivity extends AppCompatActivity {
     AlertDialog alertDialog;
 
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        registerReceiver(SwVersionConfigBroadcastReceiver, new IntentFilter(Constant.SwVersionConfig), Context.RECEIVER_NOT_EXPORTED);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(SwVersionConfigBroadcastReceiver, new IntentFilter(Constant.SwVersionConfig), Context.RECEIVER_NOT_EXPORTED);
+        }else {
+            registerReceiver(SwVersionConfigBroadcastReceiver, new IntentFilter(Constant.SwVersionConfig), Context.RECEIVER_EXPORTED);
+        }
     }
 
     @Override
@@ -47,13 +51,12 @@ public abstract class  BaseActivity extends AppCompatActivity {
                 Intent intent = new Intent(BaseActivity.this, RetrieveFirestoreData.class);
 
                 if(Build.VERSION.SDK_INT>Build.VERSION_CODES.O){
-                    getApplicationContext().startForegroundService(intent);
+                      startForegroundService(intent);
                 }else {
-                    getApplicationContext().startService(intent);
+                    startService(intent);
                 }
             }
         }
-
     }
 
     BroadcastReceiver SwVersionConfigBroadcastReceiver = new BroadcastReceiver() {

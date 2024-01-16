@@ -4053,8 +4053,10 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                    stopProgressDialogue();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    stopProgressDialogue();
                 }
             }
         });
