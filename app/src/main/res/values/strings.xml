@@ -125,7 +125,7 @@
     <string name="Set_text">Set</string>
     <string name="Set_edt_scan">Scan or Enter material number</string>
     <string name="Scan_Device">Scan Device</string>
-    <string name="pendingFeedback">Pending Feedback</string>
+    <string name="pendingInstallationVerification">Pending Installation Verification</string>
     <string name="pendingUnloadingVerification">Pending Unloading Verification</string>
     <string name="otpVerification">Installation Verification</string>
     <string name="Loading">loading…</string>
@@ -427,6 +427,8 @@
     <string name="ImeiFileToServer">Sending IMEI File To Server...</string>
     <string name="not_ok">NOT OK</string>
     <string name="ok">OK</string>
+    <string name="write">Write</string>
+    <string name="read">Read</string>
     <string name="gps">Please turn on location first</string>
     <string name="enter_electric_connection_rating_hp">Enter electric connection rating (HP)</string>
     <string name="electric_connection_rating">Electric Connection Rating</string>
@@ -479,6 +481,9 @@
     <string name="submittingDebugData">Debug Data sending to server…</string>
     <string name="submittingInatallation">Installation data sending to server…</string>
     <string name="sendingOtpToCustomer">Sending otp to customer…</string>
+    <string name="installation_complete_msg">Installation Complete please verify OTP from Pending Installation Screen</string>
+    <string name="update_device_with_latest_version">Update Device with latest Version</string>
+    <string name="check_device_status">Check device status</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

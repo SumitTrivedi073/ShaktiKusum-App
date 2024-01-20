@@ -78,7 +78,7 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getResources().getString(R.string.pendingFeedback));
+        getSupportActionBar().setTitle(getResources().getString(R.string.pendingInstallationVerification));
         if(CustomUtility.isInternetOn(getApplicationContext())) {
             getPendingFeedbackList();
         }else {

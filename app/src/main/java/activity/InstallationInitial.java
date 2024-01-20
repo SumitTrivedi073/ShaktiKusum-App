@@ -1912,33 +1912,7 @@ public class InstallationInitial extends BaseActivity {
                         invc_done = jo.getString("return");
 
                         if (invc_done.equals("Y")) {
-                        //  sendLatLngToRmsForFota();
-                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.dataSubmittedSuccessfully));
-                            Log.e("DOCNO", "&&&&" + billno);
-                            db.deleteInstallationData(billno);
-                            db.deleteInstallationListData1(billno);
-                            CustomUtility.setSharedPreference(mContext, "INSTSYNC" + billno, "");
-                            CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, "");
-                            CustomUtility.setSharedPreference(mContext, "borewellstatus", "");
-
-                            CustomUtility.setSharedPreference(mContext, "SYNCLIST", "1");
-
-                            mDatabaseHelperTeacher.deleteSimInfoData(billno);
-
-                            Random random = new Random();
-                            String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
-
-                            if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
-
-                                sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
-                                CustomUtility.removeValueFromSharedPref(mContext, Constant.isDebugDevice);
-                            } else {
-                                Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }
-
-                            mDatabaseHelperTeacher.deleteAllDataFromTable(inst_controller_ser.getText().toString().trim()+ "-0");
+                          sendLatLngToRmsForFota();
                         } else {
                             stopProgressDialogue();
 
@@ -2000,33 +1974,32 @@ public class InstallationInitial extends BaseActivity {
 
                             CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.dataSubmittedSuccessfully));
                             Log.e("DOCNO", "&&&&" + billno);
-                            db.deleteInstallationData(billno);
-                            db.deleteInstallationListData1(billno);
                             CustomUtility.setSharedPreference(mContext, "INSTSYNC" + billno, "");
                             CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, "");
                             CustomUtility.setSharedPreference(mContext, "borewellstatus", "");
 
                             CustomUtility.setSharedPreference(mContext, "SYNCLIST", "1");
 
+                            db.deleteInstallationData(billno);
+                            db.deleteInstallationListData1(billno);
                             mDatabaseHelperTeacher.deleteSimInfoData(billno);
+                            mDatabaseHelperTeacher.deleteAllDataFromTable(inst_controller_ser.getText().toString().trim()+ "-0");
+
 
                             Random random = new Random();
                             String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
 
-                                if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
+                            if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
+                                sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
+                                CustomUtility.removeValueFromSharedPref(mContext, Constant.isDebugDevice);
+                            } else {
+                                ShowAlertResponse2((getResources().getString(R.string.installation_complete_msg)));
+                            }
 
-                                    sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
-                                   CustomUtility.removeValueFromSharedPref(mContext, Constant.isDebugDevice);
-                                } else {
-                                    Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-
-                            mDatabaseHelperTeacher.deleteAllDataFromTable(inst_controller_ser.getText().toString().trim()+ "-0");
                         } else {
                             stopProgressDialogue();
-                            CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
+                            ShowAlertResponse2((getResources().getString(R.string.installation_complete_msg)));
+
                         }
 
                     }
@@ -2120,6 +2093,36 @@ public class InstallationInitial extends BaseActivity {
             intent.putExtra(Constant.VerificationCode, generatedVerificationCode);
             intent.putExtra(Constant.isUnloading, "false");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+
+        });
+
+    }
+
+    private void ShowAlertResponse2(String message) {
+        LayoutInflater inflater = (LayoutInflater) InstallationInitial.this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.send_successfully_layout,
+                null);
+        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(InstallationInitial.this, R.style.MyDialogTheme);
+
+        builder.setView(layout);
+        builder.setCancelable(false);
+        android.app.AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        alertDialog.show();
+
+
+        TextView OK_txt = layout.findViewById(R.id.OK_txt);
+        TextView title_txt = layout.findViewById(R.id.title_txt);
+
+        title_txt.setText(message);
+
+        OK_txt.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
             startActivity(intent);
             finish();
 
