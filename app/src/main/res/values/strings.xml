@@ -476,6 +476,9 @@
     <string name="pending">Pending</string>
     <string name="complete">Complete</string>
     <string name="partialDamage">Partial Damage</string>
+    <string name="submittingDebugData">Debug Data sending to server…</string>
+    <string name="submittingInatallation">Installation data sending to server…</string>
+    <string name="sendingOtpToCustomer">Sending otp to customer…</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

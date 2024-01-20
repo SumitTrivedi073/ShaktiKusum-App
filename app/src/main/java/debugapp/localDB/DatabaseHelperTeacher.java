@@ -58,6 +58,14 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
 
     private static final String FAULTCODE = "faultcode";
 
+    private static final String MOBILE_ONLINE_STATUS = "mobileOnlineStatus";
+
+    private static final String CONTROLLER_ONLINE_STATUS = "ControllerOnlineStatus";
+
+    private static final String ExtractFileDirPath = "ExtractFileDirPath";
+
+    private static final String DongleDataExtract = "DongleDataExtract";
+
     private static final String DEVICE_DEVICE_INFO_NAME = "deviceinfotable";////////////////table name
     private static final String DEVICE_SAVE_SIM_INFO_NAME = "devicesiminfotable";////////////////table name
 
@@ -214,7 +222,11 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
             DEVICE_RMS_DEBUG_EXTRN + " VARCHAR, " +
             DEVICE_RMS_CURRENT_ONLINE_STATUS + " VARCHAR, " +
             DEVICE_RMS_LAST_ONLINE_DATE + " VARCHAR, " +
-            FAULTCODE + " VARCHAR " +
+            FAULTCODE + " VARCHAR, " +
+            MOBILE_ONLINE_STATUS + " VARCHAR, " +
+            CONTROLLER_ONLINE_STATUS + " VARCHAR, " +
+            ExtractFileDirPath + " VARCHAR, " +
+            DongleDataExtract + " VARCHAR " +
             "); ";
 
 
@@ -226,7 +238,8 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
                                            String mDEVICE_DONGAL_ID, String mDEVICE_MUserId, String RMS_STATUS,
                                            String RMS_CURRENT_ONLINE_STATUS, String RMS_LAST_ONLINE_DATE,
                                            String mDEVICE_INS_NAME, String mDEVICE_INS_MOBILE,
-                                           String RMS_DEBUG_EXTRN, String RMS_SERVER_DOWN, String RMS_ORG_D_F, boolean mCheckFirst, String FAULT_CODE) {
+                                           String RMS_DEBUG_EXTRN, String RMS_SERVER_DOWN, String FAULT_CODE,
+                                           String MobileOnline,String  ControllerOnline,String dirPath,String dongleDataExtract) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -252,6 +265,10 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
         values.put(DEVICE_RMS_CURRENT_ONLINE_STATUS, RMS_CURRENT_ONLINE_STATUS);
         values.put(DEVICE_RMS_LAST_ONLINE_DATE, RMS_LAST_ONLINE_DATE);
         values.put(FAULTCODE, FAULT_CODE);
+        values.put(MOBILE_ONLINE_STATUS, MobileOnline);
+        values.put(CONTROLLER_ONLINE_STATUS, ControllerOnline);
+        values.put(ExtractFileDirPath,dirPath);
+        values.put(DongleDataExtract,dongleDataExtract);
 
         //insert row in table
         long insert = db.insert(DEVICE_DEVICE_INFO_NAME, null, values);
@@ -297,6 +314,10 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
                         mBTResonseData.setRMS_CURRENT_ONLINE_STATUS(cursor.getString(cursor.getColumnIndex(DEVICE_RMS_CURRENT_ONLINE_STATUS)));
                         mBTResonseData.setRMS_LAST_ONLINE_DATE(cursor.getString(cursor.getColumnIndex(DEVICE_RMS_LAST_ONLINE_DATE)));
                         mBTResonseData.setmRMS_FAULT_CODE(cursor.getString(cursor.getColumnIndex(FAULTCODE)));
+                        mBTResonseData.setMobileOnline(cursor.getString(cursor.getColumnIndex(MOBILE_ONLINE_STATUS)));
+                        mBTResonseData.setControllerOnline(cursor.getString(cursor.getColumnIndex(CONTROLLER_ONLINE_STATUS)));
+                        mBTResonseData.setDirPath(cursor.getString(cursor.getColumnIndex(ExtractFileDirPath)));
+                        mBTResonseData.setDongleDataExtract(cursor.getString(cursor.getColumnIndex(DongleDataExtract)));
 
                         mBTResonseDataList.add(mBTResonseData);
                         cursor.moveToNext();
@@ -353,6 +374,11 @@ public class DatabaseHelperTeacher extends SQLiteOpenHelper {
                         mBTResonseData.setRMS_CURRENT_ONLINE_STATUS(cursor.getString(cursor.getColumnIndex(DEVICE_RMS_CURRENT_ONLINE_STATUS)));
                         mBTResonseData.setRMS_LAST_ONLINE_DATE(cursor.getString(cursor.getColumnIndex(DEVICE_RMS_LAST_ONLINE_DATE)));
                         mBTResonseData.setmRMS_FAULT_CODE(cursor.getString(cursor.getColumnIndex(FAULTCODE)));
+                        mBTResonseData.setMobileOnline(cursor.getString(cursor.getColumnIndex(MOBILE_ONLINE_STATUS)));
+                        mBTResonseData.setControllerOnline(cursor.getString(cursor.getColumnIndex(CONTROLLER_ONLINE_STATUS)));
+                        mBTResonseData.setDirPath(cursor.getString(cursor.getColumnIndex(ExtractFileDirPath)));
+                        mBTResonseData.setDongleDataExtract(cursor.getString(cursor.getColumnIndex(DongleDataExtract)));
+
 
                         mBTResonseDataList.add(mBTResonseData);
                         cursor.moveToNext();
