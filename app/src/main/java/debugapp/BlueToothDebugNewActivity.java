@@ -400,9 +400,9 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                         mSimDetailsInfoResponse.clear();
                     mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
                     if (SER_CONNECT != null && !SER_CONNECT.isEmpty() && SER_CONNECT.equals("Connected")) {
-                        CustomUtility.setSharedPreference(getApplicationContext(), "DeviceStatus", getResources().getString(R.string.online));
+                        CustomUtility.setSharedPreference(getApplicationContext(), Constant.deviceStatus, getResources().getString(R.string.online));
 
-                        saveDataLocaly();
+                        saveDataLocaly(getResources().getString(R.string.online));
 
                     } else {
                         if (mSimDetailsInfoResponse.size() >= 1) {
@@ -413,9 +413,9 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                                     if (isDataExtract) {
                                         WebURL.BT_DEBUG_CHECK = 1;
                                         Constant.DBUG_PER_OFLINE = "X";//PER_OFLINE
-                                        CustomUtility.setSharedPreference(getApplicationContext(), "DeviceStatus", getResources().getString(R.string.offline));
+                                        CustomUtility.setSharedPreference(getApplicationContext(), Constant.deviceStatus, getResources().getString(R.string.offline));
 
-                                        saveDataLocaly();
+                                        saveDataLocaly(getResources().getString(R.string.offline));
 
                                     } else {
                                         Toast.makeText(mContext, "Please data extract first than submit.", Toast.LENGTH_SHORT).show();
@@ -464,18 +464,39 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         rlvBT_9_ID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (DEVICE_NO != null) {
-                    String result = DEVICE_NO.toString().substring(0, 1) + DEVICE_NO.toString().substring(1, 2);
-                    if (result.equals("01") || result.equals("05") || result.equals("07") || result.equals("15") || result.equals("19")
-                            || result.equals("20") || result.equals("21") || result.equals("22") || result.equals("23") || result.equals("26")
-                            || result.equals("65") || result.equals("78") || result.equals("85") || result.equals("93")) {
+                if (mSimDetailsInfoResponse.size() > 0)
+                    mSimDetailsInfoResponse.clear();
+                mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
 
-                        deviceDataExtract();
+                if (mSimDetailsInfoResponse.size() >= 1) {
+                    if (mSimDetailsInfoResponse.size() >= 2) {
+                        if (mSimDetailsInfoResponse.size() >= 3) {
+
+
+                            if (DEVICE_NO != null) {
+                                String result = DEVICE_NO.toString().substring(0, 1) + DEVICE_NO.toString().substring(1, 2);
+                                if (result.equals("01") || result.equals("05") || result.equals("07") || result.equals("15") || result.equals("19")
+                                        || result.equals("20") || result.equals("21") || result.equals("22") || result.equals("23") || result.equals("26")
+                                        || result.equals("65") || result.equals("78") || result.equals("85") || result.equals("93")) {
+
+                                    deviceDataExtract();
+                                } else {
+                                    new BlueToothCommunicationForIMEINumber().execute(":GET IMEI#", ":GET IMEI#", "OKAY");
+                                }
+                            } else {
+                                new BlueToothCommunicationForIMEINumber().execute(":GET IMEI#", ":GET IMEI#", "OKAY");
+                            }
+
+
+                        } else {
+                            CustomUtility.ShowToast(getResources().getString(R.string.insertThirdSim), getApplicationContext());
+                        }
                     } else {
-                        new BlueToothCommunicationForIMEINumber().execute(":GET IMEI#", ":GET IMEI#", "OKAY");
+                        CustomUtility.ShowToast(getResources().getString(R.string.insertSecondSim), getApplicationContext());
                     }
                 } else {
-                    new BlueToothCommunicationForIMEINumber().execute(":GET IMEI#", ":GET IMEI#", "OKAY");
+                    CustomUtility.ShowToast(getResources().getString(R.string.sim_insertMsg), getApplicationContext());
+
                 }
             }
         });
@@ -887,7 +908,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         OK_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CustomUtility.setSharedPreference(getApplicationContext(), "DeviceStatus", getResources().getString(R.string.offline));
+                CustomUtility.setSharedPreference(getApplicationContext(), Constant.deviceStatus, getResources().getString(R.string.offline));
                 alertDialog.dismiss();
                 finish();
             }
@@ -920,6 +941,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         if (btSocket != null && btSocket.isConnected()) {
             try {
                 btSocket.close();
+
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -3317,7 +3339,6 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     }
 
     // UI thread
-    @SuppressLint("StaticFieldLeak")
     private class BluetoothCommunicationForGetDongleData extends AsyncTask<String, Void, Boolean> {
         public int RetryCount = 0;
         private int bytesRead;
@@ -3783,19 +3804,26 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
     }
 
-    private void saveDataLocaly() {
+    private void saveDataLocaly(String deviceStauts) {
         CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice, "true");
         Log.e("DEVICE_NO=========>", DEVICE_NO);
-        mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO,
-                SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC,
-                SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT,
-                CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID, MUserId, RMS_STATUS,
-                RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB,
-                RMS_DEBUG_EXTRN, RMS_SERVER_DOWN, RMS_ORG_D_F, true, FAULT_CODE);
         if (CustomUtility.isInternetOn(getApplicationContext())) {
+            mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO,
+                    SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC,
+                    SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT,
+                    CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID, MUserId, RMS_STATUS,
+                    RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB,
+                    RMS_DEBUG_EXTRN, RMS_SERVER_DOWN, FAULT_CODE, getResources().getString(R.string.online), deviceStauts, dirName,String.valueOf(isDataExtract));
 
             sendDataToServer();
         } else {
+            mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO,
+                    SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC,
+                    SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT,
+                    CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID, MUserId, RMS_STATUS,
+                    RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB,
+                    RMS_DEBUG_EXTRN, RMS_SERVER_DOWN, FAULT_CODE, getResources().getString(R.string.offline), deviceStauts, dirName,String.valueOf(isDataExtract));
+
             onBackPressed();
             Toast.makeText(mContext, " Data save in local Data base", Toast.LENGTH_SHORT).show();
         }
@@ -3838,10 +3866,14 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             jsonObj.put("INVOICE_NO", INVOICE_NO_B);
             jsonObj.put("DBUG_EXTRN_STATUS", RMS_DEBUG_EXTRN);
             jsonObj.put("RMS_SERVER_STATUS", RMS_SERVER_DOWN);
-                jsonObj.put("FAULT_CODE", FAULT_CODE);
+            jsonObj.put("FAULT_CODE", FAULT_CODE.trim());
 
             jsonArray.put(jsonObj);
-            mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO, SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC, SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID, MUserId, RMS_STATUS, RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB, RMS_DEBUG_EXTRN, RMS_SERVER_DOWN, RMS_ORG_D_F, true, FAULT_CODE);
+            mDatabaseHelperTeacher.insertDeviceDebugInforData(DEVICE_NO, SIGNL_STREN + "###" + Constant.BILL_NUMBER_UNIC,
+                    SIM + "###" + SIM_SR_NO, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID,
+                    MUserId, RMS_STATUS, RMS_CURRENT_ONLINE_STATUS, RMS_LAST_ONLINE_DATE, mInstallerName, mInstallerMOB, RMS_DEBUG_EXTRN,
+                    RMS_SERVER_DOWN, FAULT_CODE.trim(), getResources().getString(R.string.online),
+                    CustomUtility.getSharedPreferences(BlueToothDebugNewActivity.this, Constant.deviceStatus), dirName,String.valueOf(isDataExtract));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -3884,7 +3916,6 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
             }
         } catch (Exception e) {
-            saveDataLocaly();
             stopProgressDialogue();
             e.printStackTrace();
         }

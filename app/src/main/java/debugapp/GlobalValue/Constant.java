@@ -48,4 +48,6 @@ public class Constant {
     public static String RmsBaseUrl = "RmsBaseUrl";
 
     public static String InstallationCompData = "InstallationCompData";
+
+    public static String deviceStatus = "DeviceStatus";
 }
