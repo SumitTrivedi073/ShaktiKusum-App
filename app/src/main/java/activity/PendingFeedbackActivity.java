@@ -3,7 +3,6 @@ package activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -15,7 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -211,19 +209,27 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
     @Override
     public void sendOtpListener(List<PendingFeedback.Response> pendingFeedbackList,int position, String generatedVerificationCode) {
 
-        Log.e("BillNo=====>",pendingFeedbackList.get(position).getVbeln());
-          Intent intent = new Intent(PendingFeedbackActivity.this,DeviceMappingActivity.class);
-          intent.putExtra(Constant.deviceMappingData,pendingFeedbackList.get(position));
-        intent.putExtra(Constant.deviceMappingData2, "2");
+        Log.e("BillNo=====>", pendingFeedbackList.get(position).getVbeln());
 
-        startActivity(intent);
-        /*if(CustomUtility.isValidMobile(pendingFeedbackList.get(position).getContactNo())) {
+        String dongleType = pendingFeedbackList.get(position).getDongle().charAt(0) + pendingFeedbackList.get(position).getDongle().substring(1, 2);
 
-            sendVerificationCodeAPI(pendingFeedbackList.get(position),generatedVerificationCode);
-        }else {
-            CustomUtility.ShowToast(getResources().getString(R.string.mobile_number_not_valid), PendingFeedbackActivity.this);
-        }*/
+        if (dongleType.equals("99")) {
+            Intent intent = new Intent(PendingFeedbackActivity.this, DeviceMappingActivity.class);
+            intent.putExtra(Constant.deviceMappingData, pendingFeedbackList.get(position));
+            intent.putExtra(Constant.deviceMappingData2, "2");
+            startActivity(intent);
 
+        } else {
+
+            if (CustomUtility.isValidMobile(pendingFeedbackList.get(position).getContactNo())) {
+
+                sendVerificationCodeAPI(pendingFeedbackList.get(position), generatedVerificationCode);
+            } else {
+                CustomUtility.ShowToast(getResources().getString(R.string.mobile_number_not_valid), PendingFeedbackActivity.this);
+            }
+
+
+        }
     }
 
     private void sendVerificationCodeAPI(PendingFeedback.Response response, String generatedVerificationCode) {

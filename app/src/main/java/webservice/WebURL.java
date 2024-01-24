@@ -105,6 +105,9 @@ public class WebURL {
     public static final String SavecomplianbeforeURL = BASEURL +   "/sap/bc/bsp/sap/zmapp_solar_pro/save_complaint_before_inst.htm";
     public static final String ComplainRequestListURL = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/complaint_status_list.htm?userid=";
 
+
+    public static final String SyncOfflineDeviceData = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/shifting_remark_save.htm";
+
     public static final String DEVICE_DETAILS = "Home/SAPOnlineDeviceDetails";
 
     public static String deviceMappingAPIS ="Home/DeviceSettingParam";

@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
 import android.provider.Settings;
@@ -80,7 +79,6 @@ import bean.InstallationBean;
 import database.DatabaseHelper;
 import de.hdodenhof.circleimageview.CircleImageView;
 import debugapp.Bean.SimDetailsInfoResponse;
-import debugapp.BlueToothDebugNewActivity;
 import debugapp.GlobalValue.Constant;
 import debugapp.VerificationCodeModel;
 import debugapp.localDB.DatabaseHelperTeacher;
@@ -1912,9 +1910,12 @@ public class InstallationInitial extends BaseActivity {
                         invc_done = jo.getString("return");
 
                         if (invc_done.equals("Y")) {
-//                          sendLatLngToRmsForFota();
-
-                            InstallationDone();
+                            if (DONGAL_ID.equals("99")) {
+                                InstallationDone();
+                                ShowAlertResponse2((getResources().getString(R.string.installation_complete_msg)));
+                            } else {
+                                sendLatLngToRmsForFota();
+                            }
 
                         } else {
                             stopProgressDialogue();
@@ -1957,6 +1958,7 @@ public class InstallationInitial extends BaseActivity {
 
 
     private void sendLatLngToRmsForFota() {
+        showProgressDialogue(getResources().getString(R.string.device_initialization_processing));
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.updateLatLngToRms + "?deviceNo="+inst_controller_ser.getText().toString().trim()+"&lat="+imageList.get(2).getLatitude()+"&lon="+imageList.get(2).getLongitude(),
@@ -1970,7 +1972,15 @@ public class InstallationInitial extends BaseActivity {
                         String mStatus = jsonObject.getString("status");
                         if (mStatus.equals("true")) {
 
-                          InstallationDone();
+                            if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
+                                Random random = new Random();
+                                String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
+
+                                sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
+                            } else {
+                                InstallationDone();
+                                ShowAlertResponse2((getResources().getString(R.string.installation_complete_msg)));
+                            }
                         } else {
                             stopProgressDialogue();
                             CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
@@ -2018,10 +2028,7 @@ public class InstallationInitial extends BaseActivity {
         db.deleteInstallationListData1(billno);
         mDatabaseHelperTeacher.deleteSimInfoData(billno);
         mDatabaseHelperTeacher.deleteAllDataFromTable(inst_controller_ser.getText().toString().trim()+ "-0");
-
-
         CustomUtility.removeValueFromSharedPref(mContext, Constant.isDebugDevice);
-        ShowAlertResponse2((getResources().getString(R.string.installation_complete_msg)));
 
     }
 
@@ -2052,6 +2059,78 @@ public class InstallationInitial extends BaseActivity {
             intent.putExtra(Constant.deviceMappingData, param_invc);
             intent.putExtra(Constant.deviceMappingData2, "1");
 
+            startActivity(intent);
+            finish();
+
+        });
+
+    }
+
+    /*-------------------------------------------------------------Send Verification Code-----------------------------------------------------------------------------*/
+
+
+    private void sendVerificationCodeAPI(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo, String billNo) {
+        stopProgressDialogue();
+        showProgressDialogue(getResources().getString(R.string.sendingOtpToCustomer));
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                WebURL.SendOTP + "&mobiles=" + ContactNo +
+                        "&message=" + beneficiaryNo + " के तहत " + Hp + "HP पंप सेट का इंस्टॉलेशन किया गया है यदि आप संतुष्ट हैं तो इंस्टॉलेशन टीम को OTP-" + generatedVerificationCode + " शेयर करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169744934483345",
+                null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                stopProgressDialogue();
+
+
+                if (!res.toString().isEmpty()) {
+                    VerificationCodeModel verificationCodeModel = new Gson().fromJson(res.toString(), VerificationCodeModel.class);
+                    if (verificationCodeModel.getStatus().equals("Success")) {
+                        InstallationDone();
+                        ShowAlertResponse(generatedVerificationCode, ContactNo, Hp, beneficiaryNo, billNo);
+                    }
+
+                }
+
+            }
+        }, error -> {
+            stopProgressDialogue();
+            Log.e("error", String.valueOf(error));
+            Toast.makeText(InstallationInitial.this, error.getMessage(),
+                    Toast.LENGTH_LONG).show();
+        });
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    private void ShowAlertResponse(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo, String billNo) {
+        LayoutInflater inflater = (LayoutInflater) InstallationInitial.this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.send_successfully_layout,
+                null);
+        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(InstallationInitial.this, R.style.MyDialogTheme);
+
+        builder.setView(layout);
+        builder.setCancelable(false);
+        android.app.AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        alertDialog.show();
+
+
+        TextView OK_txt = layout.findViewById(R.id.OK_txt);
+        TextView title_txt = layout.findViewById(R.id.title_txt);
+
+        title_txt.setText(getResources().getString(R.string.otp_send_successfully));
+
+        OK_txt.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            Intent intent = new Intent(InstallationInitial.this, PendingFeedBackOTPVerification.class);
+            intent.putExtra(Constant.PendingFeedbackContact, ContactNo);
+            intent.putExtra(Constant.PendingFeedbackVblen, billNo);
+            intent.putExtra(Constant.PendingFeedbackHp, Hp);
+            intent.putExtra(Constant.PendingFeedbackBeneficiary, beneficiaryNo);
+            intent.putExtra(Constant.VerificationCode, generatedVerificationCode);
+            intent.putExtra(Constant.isUnloading, "false");
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
 

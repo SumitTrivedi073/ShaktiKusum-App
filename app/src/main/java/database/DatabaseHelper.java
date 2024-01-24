@@ -61,6 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_REJECTED_INSTALLATION_IMAGE_DATA = "tbl_rejectinstallation_image_data";
 
     public static final String TABLE_UNLOADING_IMAGE_DATA = "tbl_unloading_image_data";
+    public static final String TABLE_OFFLINE_CONTROLLER_IMAGE_DATA = "tbl_offline_controller_image_data";
     public static final String TABLE_AUDIT_PUMP_DATA = "tbl_audit_pump_data";
     public static final String TABLE_SURVEY_PUMP_DATA = "tbl_survey_pump_data";
     public static final String TABLE_SIM_REPLACMENT_DATA = "tbl_sim_card_replacement";
@@ -806,6 +807,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + TABLE_UNLOADING_IMAGE_DATA + "(" + KEY_UNLOADING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," + KEY_UNLOADING_NAME + " TEXT," + KEY_UNLOADING_PATH + " TEXT," + KEY_UNLOADING_IMAGE_SELECTED + " TEXT," + KEY_UNLOADING_BILL_NO + " TEXT)";
 
 
+    private static final String CREATE_TABLE_OFFLINE_CONTROLLER_IMAGE = "CREATE TABLE "
+            + TABLE_OFFLINE_CONTROLLER_IMAGE_DATA + "(" + KEY_UNLOADING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," + KEY_UNLOADING_NAME + " TEXT," + KEY_UNLOADING_PATH + " TEXT," + KEY_UNLOADING_IMAGE_SELECTED + " TEXT," + KEY_UNLOADING_BILL_NO + " TEXT)";
+
     private static final String CREATE_TABLE_AUDIT_PUMP = "CREATE TABLE "
             + TABLE_AUDIT_PUMP_DATA + "("
             + KEY_BILL_NO + " TEXT,"
@@ -1204,6 +1208,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_SITE_AUDIT_IMAGES);
         db.execSQL(CREATE_TABLE_KusumCImages);
         db.execSQL(CREATE_TABLE_UNLOADING_IMAGES);
+        db.execSQL(CREATE_TABLE_OFFLINE_CONTROLLER_IMAGE);
     }
 
     @Override
@@ -1234,6 +1239,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_SITE_AUDIT);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_KusumCImages);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_UNLOADING_IMAGE_DATA);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_OFFLINE_CONTROLLER_IMAGE_DATA);
             // create newworkorder tables
             onCreate(db);
         }
@@ -4544,6 +4550,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<ImageModel> getAllUnloadingImages() {
+        ArrayList<ImageModel> UnloadingImages = new ArrayList<ImageModel>();
+        SQLiteDatabase database = this.getWritableDatabase();
+        if (CustomUtility.doesTableExist(database, TABLE_UNLOADING_IMAGE_DATA)) {
+            Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_UNLOADING_IMAGE_DATA, null);
+
+            UnloadingImages.clear();
+            ImageModel imageModel;
+
+            if (mcursor.getCount() > 0) {
+                for (int i = 0; i < mcursor.getCount(); i++) {
+                    mcursor.moveToNext();
+
+                    imageModel = new ImageModel();
+                    imageModel.setID(mcursor.getString(0));
+                    imageModel.setName(mcursor.getString(1));
+                    imageModel.setImagePath(mcursor.getString(2));
+                    imageModel.setImageSelected(Boolean.parseBoolean(mcursor.getString(3)));
+                    imageModel.setBillNo(mcursor.getString(4));
+                    UnloadingImages.add(imageModel);
+                }
+            }
+            mcursor.close();
+            database.close();
+        }
+        return UnloadingImages;
+    }
+
+
+
+    public void insertOfflineControllerImage(String name, String path, boolean isSelected, String billNo) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_UNLOADING_NAME, name);
+        contentValues.put(KEY_UNLOADING_PATH, path);
+        contentValues.put(KEY_UNLOADING_IMAGE_SELECTED, isSelected);
+        contentValues.put(KEY_UNLOADING_BILL_NO, billNo);
+        database.insert(TABLE_UNLOADING_IMAGE_DATA, null, contentValues);
+        database.close();
+    }
+
+    public void updateOfflineControllerImage(String name, String path, boolean isSelected, String billNo) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_UNLOADING_NAME, name);
+        values.put(KEY_UNLOADING_PATH, path);
+        values.put(KEY_UNLOADING_IMAGE_SELECTED, isSelected);
+        values.put(KEY_UNLOADING_BILL_NO, billNo);
+        // update Row
+        db.update(TABLE_UNLOADING_IMAGE_DATA, values, "unloadingImageName = '" + name + "'", null);
+        db.close();
+    }
+
+    public ArrayList<ImageModel> getAllOfflineControllerImages() {
         ArrayList<ImageModel> UnloadingImages = new ArrayList<ImageModel>();
         SQLiteDatabase database = this.getWritableDatabase();
         if (CustomUtility.doesTableExist(database, TABLE_UNLOADING_IMAGE_DATA)) {

@@ -16,7 +16,7 @@
 
 
         <LinearLayout
-            android:id="@+id/DeviceOfflineLinear"
+            android:id="@+id/deviceOfflineLinear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -29,13 +29,13 @@
 
 
             <EditText
-                android:id="@+id/edtRemarkVKID"
+                android:id="@+id/RemarkExt"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_100sdp"
                 android:layout_margin="@dimen/_10sdp"
                 android:background="@drawable/popup_relative"
                 android:gravity="start"
-                android:hint="Enter Remark"
+                android:hint="@string/enter_remark"
                 android:imeOptions="actionDone"
                 android:padding="@dimen/_10sdp"
                 android:textColor="@color/black"
@@ -58,7 +58,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/DeviceOnlineLinear"
+            android:id="@+id/deviceOnlineLinear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -149,7 +149,7 @@
 
 
                 <TextView
-                    android:id="@+id/UpdateDeviceBtn"
+                    android:id="@+id/updateDeviceBtn"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_30sdp"
                     android:background="@drawable/rounded_corner_blue"

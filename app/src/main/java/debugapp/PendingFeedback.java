@@ -203,58 +203,13 @@ public class PendingFeedback implements Serializable {
         @SerializedName("ver_otp_dats")
         @Expose
         private String verOtpDats;
+        @SerializedName("imei")
+        @Expose
+        private String imei;
 
-        protected Response(Parcel in) {
-            mandt = in.readString();
-            vbeln = in.readString();
-            projectNo = in.readString();
-            regisno = in.readString();
-            processNo = in.readString();
-            beneficiary = in.readString();
-            userid = in.readString();
-            projectLoginNo = in.readString();
-            instdate = in.readString();
-            customerName = in.readString();
-            fatherName = in.readString();
-            state = in.readString();
-            city = in.readString();
-            tehsilCode = in.readString();
-            tehsil = in.readString();
-            village = in.readString();
-            contactNo = in.readString();
-            address = in.readString();
-            make = in.readString();
-            rmsStatus = in.readString();
-            lat = in.readString();
-            lng = in.readString();
-            erdat = in.readString();
-            ertim = in.readString();
-            solarPannelWatt = in.readString();
-            hp = in.readString();
-            panelInstallQty = in.readString();
-            totalWatt = in.readString();
-            panelModuleQty = in.readString();
-            motorSernr = in.readString();
-            pumpSernr = in.readString();
-            controllerSernr = in.readString();
-            simOpretor = in.readString();
-            simno = in.readString();
-            connectionType = in.readString();
-            borewellstatus = in.readString();
-            totalPlateWatt = in.readString();
-            delayReason = in.readString();
-            settingCheck = in.readString();
-            dbugMob1 = in.readString();
-            dbugMob2 = in.readString();
-            dbugMob3 = in.readString();
-            dbugOfline = in.readString();
-            appVersion = in.readString();
-            otpStatus = in.readString();
-            otpRemark = in.readString();
-            offlinephoto = in.readString();
-            verOtp = in.readString();
-            verOtpDats = in.readString();
-        }
+        @SerializedName("dongle")
+        @Expose
+        private String dongle;
 
 
         public String getMandt() {
@@ -649,5 +604,20 @@ public class PendingFeedback implements Serializable {
             this.verOtpDats = verOtpDats;
         }
 
-          }
+        public String getImei() {
+            return imei;
+        }
+
+        public void setImei(String imei) {
+            this.imei = imei;
+        }
+
+        public String getDongle() {
+            return dongle;
+        }
+
+        public void setDongle(String dongle) {
+            this.dongle = dongle;
+        }
+    }
 }

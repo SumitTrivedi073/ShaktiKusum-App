@@ -6,7 +6,6 @@ import static android.Manifest.permission.READ_MEDIA_AUDIO;
 import static android.Manifest.permission.READ_MEDIA_IMAGES;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION.SDK_INT;
-
 import static activity.Config.TAG;
 import static utility.FileUtils.getPath;
 
@@ -18,6 +17,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -53,6 +54,9 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.shaktipumplimited.shaktikusum.R;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -68,11 +72,13 @@ import adapter.ImageSelectionAdapter;
 import bean.DeviceDetailModel;
 import bean.ImageModel;
 import bean.InstallationBean;
+import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
 import debugapp.PendingFeedback;
 import debugapp.VerificationCodeModel;
 import utility.AppController;
 import utility.CustomUtility;
+import webservice.CustomHttpClient;
 import webservice.WebURL;
 
 public class DeviceMappingActivity extends AppCompatActivity implements View.OnClickListener, ImageSelectionAdapter.ImageSelectionListener {
@@ -81,17 +87,21 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     private static final int PICK_FROM_FILE = 102;
     List<ImageModel> imageArrayList = new ArrayList<>();
     List<String> itemNameList = new ArrayList<>();
+    List<ImageModel> imageList = new ArrayList<>();
+
     RecyclerView recyclerview;
-    LinearLayout DeviceOnlineLinear, DeviceOfflineLinear;
-    TextView write_btn, read_btn, UpdateDeviceBtn, countDownTimerTxt, checkDeviceStatusBtn;
+    LinearLayout deviceOnlineLinear, deviceOfflineLinear;
+    TextView write_btn, read_btn, updateDeviceBtn, countDownTimerTxt, checkDeviceStatusBtn, btnSave;
+    EditText remarkExt;
     ImageView writeImg, read_img;
     CountDownTimer timer;
     Toolbar mToolbar;
 
+    DatabaseHelper databaseHelper;
     PendingFeedback.Response pendingInstallationData;
     InstallationBean installationBean;
 
-    String billNo = "", beneficiaryNo = "", contactNo = "", hp = "", regisNo = "", controllerSerialNo = "7F-0135-0-13-06-23-0",customerName = "";
+    String billNo = "", beneficiaryNo = "", contactNo = "", hp = "", regisNo = "", controllerSerialNo = "", customerName = "",customerMobile = "";
 
     int selectedIndex;
     boolean isUpdate = false;
@@ -119,18 +129,22 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     }
 
     private void inIt() {
+        progressDialog = new ProgressDialog(this);
+        databaseHelper = new DatabaseHelper(this);
         mToolbar = findViewById(R.id.toolbar);
 
         write_btn = findViewById(R.id.write_btn);
         writeImg = findViewById(R.id.writeImg);
         read_btn = findViewById(R.id.read_btn);
         read_img = findViewById(R.id.read_img);
-        UpdateDeviceBtn = findViewById(R.id.UpdateDeviceBtn);
+        updateDeviceBtn = findViewById(R.id.updateDeviceBtn);
         countDownTimerTxt = findViewById(R.id.countDownTimerTxt);
         checkDeviceStatusBtn = findViewById(R.id.checkDeviceStatusBtn);
         recyclerview = findViewById(R.id.recycler_view);
-        DeviceOnlineLinear = findViewById(R.id.DeviceOnlineLinear);
-        DeviceOfflineLinear = findViewById(R.id.DeviceOfflineLinear);
+        deviceOnlineLinear = findViewById(R.id.deviceOnlineLinear);
+        deviceOfflineLinear = findViewById(R.id.deviceOfflineLinear);
+        remarkExt = findViewById(R.id.RemarkExt);
+        btnSave = findViewById(R.id.btnSave);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -142,9 +156,10 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     private void listner() {
         write_btn.setOnClickListener(this);
         read_btn.setOnClickListener(this);
-        UpdateDeviceBtn.setOnClickListener(this);
+        updateDeviceBtn.setOnClickListener(this);
         countDownTimerTxt.setOnClickListener(this);
         checkDeviceStatusBtn.setOnClickListener(this);
+        btnSave.setOnClickListener(this);
         mToolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
@@ -157,8 +172,9 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 contactNo = installationBean.getMobile_no();
                 hp = installationBean.getInst_hp();
                 regisNo = installationBean.getRegis_no();
-             //   controllerSerialNo = installationBean.getScm_sno() + "-0";
+                controllerSerialNo = installationBean.getScm_sno() + "-0";
                 customerName = installationBean.getCustomer_name();
+                customerMobile = installationBean.getMobile_no();
             }
 
             if (Objects.equals(getIntent().getStringExtra(Constant.deviceMappingData2), "2")) {
@@ -169,8 +185,10 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 contactNo = pendingInstallationData.getContactNo();
                 hp = pendingInstallationData.getHp();
                 regisNo = pendingInstallationData.getRegisno();
-               // controllerSerialNo = pendingInstallationData.getControllerSernr() + "-0";
+                controllerSerialNo = pendingInstallationData.getControllerSernr() + "-0";
                 customerName = pendingInstallationData.getCustomerName();
+                customerMobile = pendingInstallationData.getContactNo();
+
                 Log.e("controllerSerialNo====>", controllerSerialNo);
             }
 
@@ -211,14 +229,28 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
                 break;
             case R.id.read_btn:
-                write_read_fotaAPI("1","1.0","1.0","2");
+                write_read_fotaAPI("1", "1.0", "1.0", "2");
                 break;
-            case R.id.UpdateDeviceBtn:
-                write_read_fotaAPI("1","1","0.0","3");
+            case R.id.updateDeviceBtn:
+                write_read_fotaAPI("1", "1", "0.0", "3");
 
                 break;
             case R.id.checkDeviceStatusBtn:
 
+                break;
+            case R.id.btnSave:
+                if (CustomUtility.isInternetOn(DeviceMappingActivity.this)) {
+                    if (!imageArrayList.get(0).isImageSelected()) {
+                        CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.select_image));
+                    } else if (remarkExt.getText().toString().trim().isEmpty()) {
+                        CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.enter_remark));
+
+                    } else {
+                        submitOfflineDeviceData();
+                    }
+                } else {
+                    CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.check_internet_connection));
+                }
                 break;
         }
     }
@@ -232,8 +264,8 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 write_btn.setAlpha(1f);
                 read_btn.setEnabled(false);
                 read_btn.setAlpha(0.5f);
-                UpdateDeviceBtn.setEnabled(false);
-                UpdateDeviceBtn.setAlpha(0.5f);
+                updateDeviceBtn.setEnabled(false);
+                updateDeviceBtn.setAlpha(0.5f);
                 checkDeviceStatusBtn.setEnabled(false);
                 checkDeviceStatusBtn.setAlpha(0.5f);
                 break;
@@ -242,8 +274,8 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 write_btn.setAlpha(0.5f);
                 read_btn.setEnabled(true);
                 read_btn.setAlpha(1f);
-                UpdateDeviceBtn.setEnabled(false);
-                UpdateDeviceBtn.setAlpha(0.5f);
+                updateDeviceBtn.setEnabled(false);
+                updateDeviceBtn.setAlpha(0.5f);
                 checkDeviceStatusBtn.setEnabled(false);
                 checkDeviceStatusBtn.setAlpha(0.5f);
                 writeImg.setImageResource(R.drawable.right_mark_icn_green);
@@ -254,8 +286,8 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 write_btn.setAlpha(0.5f);
                 read_btn.setEnabled(false);
                 read_btn.setAlpha(0.5f);
-                UpdateDeviceBtn.setEnabled(true);
-                UpdateDeviceBtn.setAlpha(1f);
+                updateDeviceBtn.setEnabled(true);
+                updateDeviceBtn.setAlpha(1f);
                 checkDeviceStatusBtn.setEnabled(false);
                 checkDeviceStatusBtn.setAlpha(0.5f);
                 read_img.setImageResource(R.drawable.right_mark_icn_green);
@@ -267,8 +299,8 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 write_btn.setAlpha(0.5f);
                 read_btn.setEnabled(false);
                 read_btn.setAlpha(0.5f);
-                UpdateDeviceBtn.setEnabled(false);
-                UpdateDeviceBtn.setAlpha(0.5f);
+                updateDeviceBtn.setEnabled(false);
+                updateDeviceBtn.setAlpha(0.5f);
                 startCountDownTimer();
                 break;
 
@@ -277,13 +309,13 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 write_btn.setAlpha(0.5f);
                 read_btn.setEnabled(false);
                 read_btn.setAlpha(0.5f);
-                UpdateDeviceBtn.setEnabled(false);
-                UpdateDeviceBtn.setAlpha(0.5f);
+                updateDeviceBtn.setEnabled(false);
+                updateDeviceBtn.setAlpha(0.5f);
                 checkDeviceStatusBtn.setEnabled(true);
                 checkDeviceStatusBtn.setAlpha(1f);
 
                 break;
-            }
+        }
     }
 
     @Override
@@ -397,13 +429,34 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
             imageArrayList.add(imageModel);
         }
 
-        
+        imageList = databaseHelper.getAllOfflineControllerImages();
+
+
+        if (itemNameList.size() > 0 && imageList != null && imageList.size() > 0) {
+
+
+            for (int i = 0; i < imageList.size(); i++) {
+                for (int j = 0; j < itemNameList.size(); j++) {
+                    if (imageList.get(i).getBillNo().trim().equals(billNo)) {
+                        if (imageList.get(i).getName().equals(itemNameList.get(j))) {
+                            ImageModel imageModel = new ImageModel();
+                            imageModel.setName(imageList.get(i).getName());
+                            imageModel.setImagePath(imageList.get(i).getImagePath());
+                            imageModel.setImageSelected(true);
+                            imageModel.setBillNo(imageList.get(i).getBillNo());
+                            imageArrayList.set(j, imageModel);
+                        }
+                    }
+                }
+            }
+        }
+
         customAdapter = new ImageSelectionAdapter(DeviceMappingActivity.this, imageArrayList);
         recyclerview.setHasFixedSize(true);
         recyclerview.setAdapter(customAdapter);
         customAdapter.ImageSelection(this);
-        DeviceOfflineLinear.setVisibility(View.VISIBLE);
-        DeviceOnlineLinear.setVisibility(View.GONE);
+        deviceOfflineLinear.setVisibility(View.VISIBLE);
+        deviceOnlineLinear.setVisibility(View.GONE);
     }
 
     @Override
@@ -439,6 +492,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
         TextView cancel = layout.findViewById(R.id.cancel);
 
         if (value.equals("0")) {
+            gallery.setVisibility(View.GONE);
             title.setText(getResources().getString(R.string.select_image));
             gallery.setText(getResources().getString(R.string.gallery));
             gamera.setText(getResources().getString(R.string.camera));
@@ -549,6 +603,13 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
         imageArrayList.set(selectedIndex, imageModel);
         customAdapter.notifyItemChanged(selectedIndex);
 
+        if (isUpdate) {
+            databaseHelper.updateOfflineControllerImage(imageArrayList.get(selectedIndex).getName(), path,
+                    true, billNo);
+        } else {
+            databaseHelper.insertOfflineControllerImage(imageArrayList.get(selectedIndex).getName(), path,
+                    true, billNo);
+        }
 
     }
 
@@ -574,8 +635,8 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
                         if (deviceDetailModel.getResponse().getIsLogin()) {
                             changeButtonVisibility("0");
-                            DeviceOnlineLinear.setVisibility(View.VISIBLE);
-                            DeviceOfflineLinear.setVisibility(View.GONE);
+                            deviceOnlineLinear.setVisibility(View.VISIBLE);
+                            deviceOfflineLinear.setVisibility(View.GONE);
                         } else {
                             SetAdapter();
 
@@ -598,6 +659,126 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
         });
         requestQueue.add(jsonObjectRequest);
     }
+
+
+    /*-------------------------------------------------------------Offline Controller Data Send API-----------------------------------------------------------------------------*/
+
+    private void submitOfflineDeviceData() {
+        showProgressDialogue(getResources().getString(R.string.sendingDataServer));
+        JSONArray ja_invc_data = new JSONArray();
+        JSONObject jsonObj = new JSONObject();
+        try {
+            jsonObj.put("SHIFTING_REMARK", remarkExt.getText().toString().trim());
+            jsonObj.put("regisno", regisNo);
+            jsonObj.put("project_no", CustomUtility.getSharedPreferences(getApplicationContext(), "projectid"));
+            jsonObj.put("vbeln", billNo);
+
+
+            if (imageArrayList.size() > 0) {
+                if (imageArrayList.get(0).isImageSelected()) {
+                    jsonObj.put("photo1", CustomUtility.getBase64FromBitmap(DeviceMappingActivity.this, imageArrayList.get(0).getImagePath()));
+                }
+
+            }
+            ja_invc_data.put(jsonObj);
+            Log.e("ja_invc_data=====>", ja_invc_data.toString());
+            new SyncOfflineDeviceData(ja_invc_data).execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private class SyncOfflineDeviceData extends AsyncTask<String, String, String> {
+        ProgressDialog progressDialog;
+        JSONArray jsonArray;
+
+        public SyncOfflineDeviceData(JSONArray jaInvcData) {
+            jsonArray = jaInvcData;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String obj2 = null;
+            Log.e("Param====>", jsonArray.toString());
+            final ArrayList<NameValuePair> param1_invc = new ArrayList<>();
+            param1_invc.add(new BasicNameValuePair("shifting", String.valueOf(jsonArray)));
+            Log.e("DATA", "$$$$" + param1_invc);
+            System.out.println("param1_invc_vihu==>>" + param1_invc);
+            try {
+                obj2 = CustomHttpClient.executeHttpPost1(WebURL.SyncOfflineDeviceData, param1_invc);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                progressDialog.dismiss();
+            }
+            return obj2;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            String docno_sap = null;
+            String invc_done = null;
+            try {
+                if (!result.isEmpty()) {
+                    Log.e("result=====>", result.trim());
+                    stopProgressDialogue();
+                    JSONObject object = new JSONObject(result);
+                    String obj1 = object.getString("data_return");
+                    JSONArray ja = new JSONArray(obj1);
+                    Log.e("OUTPUT2", "&&&&" + ja);
+
+                    for (int i = 0; i < ja.length(); i++) {
+                        JSONObject jo = ja.getJSONObject(i);
+                        docno_sap = jo.getString("mdocno");
+                        invc_done = jo.getString("return");
+                        if (invc_done.equalsIgnoreCase("Y")) {
+
+
+                            showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
+
+                            runOnUiThread(() -> {
+                                if (CustomUtility.isValidMobile(customerMobile)) {
+                                    Random random = new Random();
+                                    String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
+
+                                    sendVerificationCodeAPI(generatedVerificationCode, customerMobile, hp, beneficiaryNo,billNo);
+
+                                } else {
+                                    Intent intent = new Intent(DeviceMappingActivity.this, PendingFeedbackActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
+
+                        } else if (invc_done.equalsIgnoreCase("N")) {
+                            showingMessage(getResources().getString(R.string.dataNotSubmitted));
+                            stopProgressDialogue();
+
+
+                        }
+                    }
+                } else {
+                    CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.somethingWentWrong));
+                    stopProgressDialogue();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+            }
+
+        }
+    }
+
 
     /*-------------------------------------------------------------Write Data On Controller API-----------------------------------------------------------------------------*/
 
@@ -754,6 +935,15 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 if (progressDialog != null && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
+            }
+        });
+    }
+    private void showingMessage(String message) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+
+                CustomUtility.showToast(DeviceMappingActivity.this, message);
+
             }
         });
     }
