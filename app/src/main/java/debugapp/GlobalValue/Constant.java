@@ -50,4 +50,8 @@ public class Constant {
     public static String InstallationCompData = "InstallationCompData";
 
     public static String deviceStatus = "DeviceStatus";
+
+    public static String deviceMappingData = "deviceMappingData";
+
+    public static String deviceMappingData2 = "deviceMappingData2";
 }

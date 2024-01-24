@@ -1,57 +1,18 @@
 package bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 12/30/2016.
  */
-public class InstallationBean {
+public class InstallationBean implements Serializable {
 
 
-    public String pernr = "";
-    public String latitude = "";
-    public String longitude = "";
-    public String project_no = "";
-    public String login_no = "";
-    public String inst_bill_no = "";
-    public String inst_date = "";
-    public String bill_date = "";
-    public String delay_reason = "";
-    public String rms_data_status = "";
-    public String customer_name = "";
-    public String fathers_name = "";
-    public String mobile_no = "";
-    public String state_ins_id = "";
-    public String state_ins_txt = "";
-    public String district_ins_id = "";
-    public String district_ins_txt = "";
-    public String tehsil_ins = "";
-    public String village_ins = "";
-    public String address_ins = "";
-    public String make_ins = "";
-
-    public String solarpanel_wattage = "";
-    public String solarpanel_stand_ins_quantity = "";
-    public String total_watt = "";
-    public String inst_hp = "";
-
-    public String no_of_module_qty = "";
-    public String no_of_module_value = "";
-
-    public String module_total_plate_watt = "";
-
-    public String solar_motor_model_details = "";
-    public String smmd_sno = "";
-
-    public String splar_pump_model_details = "";
-    public String spmd_sno = "";
-
-    public String solar_controller_model = "";
-    public String scm_sno = "";
-
-    public String simoprator = "";
-    public String conntype = "";
-    public String simcard_num = "";
-    public String regis_no = "";
-    public String BeneficiaryNo = "";
+    public String pernr, latitude, longitude, project_no, login_no, inst_bill_no, inst_date, bill_date, delay_reason, rms_data_status,
+            customer_name, fathers_name, mobile_no, state_ins_id, state_ins_txt, district_ins_id, district_ins_txt, tehsil_ins, village_ins,
+            address_ins, make_ins, solarpanel_wattage, solarpanel_stand_ins_quantity, total_watt, inst_hp, no_of_module_qty, no_of_module_value,
+            module_total_plate_watt, solar_motor_model_details, smmd_sno, splar_pump_model_details, spmd_sno, solar_controller_model, scm_sno,
+            simoprator, conntype, simcard_num, regis_no, BeneficiaryNo;
 
 
     public InstallationBean() {

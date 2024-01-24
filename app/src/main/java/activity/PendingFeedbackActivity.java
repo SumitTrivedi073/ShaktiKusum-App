@@ -155,6 +155,7 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
         CustomUtility.showProgressDialogue(PendingFeedbackActivity.this);
         pendingFeedbacks = new ArrayList<>();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
+        Log.e("PendingInstallation=====>",WebURL.PendingFeedback +"?project_no="+CustomUtility.getSharedPreferences(getApplicationContext(), "projectid")+"&userid="+CustomUtility.getSharedPreferences(getApplicationContext(), "userid")+"&project_login_no=01");
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.PendingFeedback +"?project_no="+CustomUtility.getSharedPreferences(getApplicationContext(), "projectid")+"&userid="+CustomUtility.getSharedPreferences(getApplicationContext(), "userid")+"&project_login_no=01", null, new Response.Listener<JSONObject >() {
             @Override
@@ -210,11 +211,18 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
     @Override
     public void sendOtpListener(List<PendingFeedback.Response> pendingFeedbackList,int position, String generatedVerificationCode) {
 
-        if(CustomUtility.isValidMobile(pendingFeedbackList.get(position).getContactNo())) {
+        Log.e("BillNo=====>",pendingFeedbackList.get(position).getVbeln());
+          Intent intent = new Intent(PendingFeedbackActivity.this,DeviceMappingActivity.class);
+          intent.putExtra(Constant.deviceMappingData,pendingFeedbackList.get(position));
+        intent.putExtra(Constant.deviceMappingData2, "2");
+
+        startActivity(intent);
+        /*if(CustomUtility.isValidMobile(pendingFeedbackList.get(position).getContactNo())) {
+
             sendVerificationCodeAPI(pendingFeedbackList.get(position),generatedVerificationCode);
         }else {
             CustomUtility.ShowToast(getResources().getString(R.string.mobile_number_not_valid), PendingFeedbackActivity.this);
-        }
+        }*/
 
     }
 
@@ -296,11 +304,7 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
 
-                /* intent.putExtra(Constant.PendingFeedbackVblen,response.getVbeln());
-                intent.putExtra(Constant.PendingFeedbackHp,response.getHp());
-                intent.putExtra(Constant.PendingFeedbackBeneficiary,response.getBeneficiary());
-                intent.putExtra(Constant.VerificationCode,generatedVerificationCode);*/
-            }
+                 }
         });
 
     }

@@ -60,11 +60,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginTop="@dimen/_5sdp"
             android:weightSum="2">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_5sdp"
                 android:layout_weight="1">
 
                 <TextView
@@ -73,6 +75,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-condensed-medium"
                     android:gravity="start"
+                    android:layout_gravity="center"
                     android:text="beneficiary:-1022"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp" />
@@ -81,17 +84,19 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_height="wrap_content"
+                android:gravity="end"
                 android:layout_weight="1">
 
                 <TextView
                     android:id="@+id/sendOTP"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_30sdp"
                     android:fontFamily="sans-serif-condensed-medium"
-                    android:gravity="end"
-                    android:text="Send OTP"
-                    android:textColor="@color/blue_fb"
+                    android:gravity="center"
+                    android:text="Verification"
+                    android:textColor="@color/white"
+                    android:background="@drawable/blue_btn_round"
                     android:textSize="@dimen/_12sdp" />
 
             </LinearLayout>
@@ -102,6 +107,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
             android:layout_weight="1">
 
             <TextView

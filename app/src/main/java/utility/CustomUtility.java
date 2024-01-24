@@ -414,4 +414,10 @@ public class CustomUtility {
     }
 
 
+    public static String getDeviceId(Context mContext) {
+        String androidId;
+        androidId = "" + android.provider.Settings.Secure.getString(mContext.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+
+        return androidId;
+    }
 }

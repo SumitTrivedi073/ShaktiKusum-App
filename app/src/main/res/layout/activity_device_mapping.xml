@@ -15,16 +15,65 @@
         <include layout="@layout/toolbar" />
 
 
-        <androidx.cardview.widget.CardView
+        <LinearLayout
+            android:id="@+id/DeviceOfflineLinear"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_50sdp"
-            app:cardCornerRadius="@dimen/_10sdp"
-            android:layout_margin="@dimen/_10sdp"
-            android:elevation="@dimen/_10sdp"
-            android:translationZ="@dimen/_5sdp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <RelativeLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+
+            <EditText
+                android:id="@+id/edtRemarkVKID"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_100sdp"
+                android:layout_margin="@dimen/_10sdp"
+                android:background="@drawable/popup_relative"
+                android:gravity="start"
+                android:hint="Enter Remark"
+                android:imeOptions="actionDone"
+                android:padding="@dimen/_10sdp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_16ssp"
+                android:textStyle="normal" />
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/_30sdp"
+                android:background="@drawable/blue_btn_round"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="@string/btn_save_dsr"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/DeviceOnlineLinear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_margin="@dimen/_10sdp"
+                android:elevation="@dimen/_10sdp"
+                android:translationZ="@dimen/_5sdp"
+                app:cardCornerRadius="@dimen/_10sdp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="@dimen/_10sdp"
@@ -150,13 +199,13 @@
                 android:textColor="@color/white"
                 android:layout_marginEnd="@dimen/_20sdp"
                 android:layout_marginStart="@dimen/_20sdp"
-                android:fontFamily="sans-serif-condensed-medium"/>
-
+                android:fontFamily="sans-serif-condensed-medium" />
 
 
         </androidx.cardview.widget.CardView>
 
 
+        </LinearLayout>
 
     </LinearLayout>
 

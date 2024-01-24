@@ -481,9 +481,11 @@
     <string name="submittingDebugData">Debug Data sending to server…</string>
     <string name="submittingInatallation">Installation data sending to server…</string>
     <string name="sendingOtpToCustomer">Sending otp to customer…</string>
-    <string name="installation_complete_msg">Installation Complete please verify OTP from Pending Installation Screen</string>
+    <string name="installation_complete_msg">Installation Complete please Proceed for Verification</string>
     <string name="update_device_with_latest_version">Update Device with latest Version</string>
     <string name="check_device_status">Check device status</string>
+    <string name="please_attach_controller_image">Please Attach Controller Image</string>
+    <string name="writing_data_please_wait">Writing Data Please wait...</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

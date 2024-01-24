@@ -60,7 +60,6 @@ public class WebURL {
     public static final String INST_CMP = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/installation_cmp.htm";
     public static final String AUDIT_SITES = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_site_audit.htm";
     public static final String SERIAL_NUMBER = BASEURL + "/sap/bc/bsp/sap/zmapp_solar/get_serial_no.htm";
-    public static final String DEVICE_DETAILS = "Home/SAPOnlineDeviceDetails";
     public static final String INSTALLATION_DATA_OFFLINE = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/installation_offline_done.htm";
     public static final String INSTALLATION_OFFLINE_DATA_SUBMIT = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/image_save_for_offline_done.htm";
 
@@ -105,4 +104,8 @@ public class WebURL {
 
     public static final String SavecomplianbeforeURL = BASEURL +   "/sap/bc/bsp/sap/zmapp_solar_pro/save_complaint_before_inst.htm";
     public static final String ComplainRequestListURL = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/complaint_status_list.htm?userid=";
+
+    public static final String DEVICE_DETAILS = "Home/SAPOnlineDeviceDetails";
+
+    public static String deviceMappingAPIS ="Home/DeviceSettingParam";
 }
