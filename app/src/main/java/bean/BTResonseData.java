@@ -84,6 +84,8 @@ public class BTResonseData {
     @SerializedName("RMS_Fault_Code")
     private String mRMS_FAULT_CODE;
 
+    String mobileOnline,controllerOnline,dirPath,dongleDataExtract;
+
     public String getRMS_SERVER_DOWN() {
         return mRMS_SERVER_DOWN;
     }
@@ -239,31 +241,35 @@ public class BTResonseData {
         this.mRMS_FAULT_CODE = mRMS_FAULT_CODE;
     }
 
-    @Override
-    public String toString() {
-        return "BTResonseData{" +
-                "mCABCONNECT='" + mCABCONNECT + '\'' +
-                ", mDEVICENO='" + mDEVICENO + '\'' +
-                ", mDONGALID='" + mDONGALID + '\'' +
-                ", mIMEI='" + mIMEI + '\'' +
-                ", mKUNNR='" + mKUNNR + '\'' +
-                ", mLANGITUDE='" + mLANGITUDE + '\'' +
-                ", mLATITUDE='" + mLATITUDE + '\'' +
-                ", mMOBILE='" + mMOBILE + '\'' +
-                ", mNETREG='" + mNETREG + '\'' +
-                ", mSERCONNECT='" + mSERCONNECT + '\'' +
-                ", mSIGNLSTREN='" + mSIGNLSTREN + '\'' +
-                ", mSIM='" + mSIM + '\'' +
-                ", mID='" + mID + '\'' +
-                ", mRMS_STATUS='" + mRMS_STATUS + '\'' +
-                ", mRMS_CURRENT_ONLINE_STATUS='" + mRMS_CURRENT_ONLINE_STATUS + '\'' +
-                ", mRMS_LAST_ONLINE_DATE='" + mRMS_LAST_ONLINE_DATE + '\'' +
-                ", mDEVICE_INS_NAME='" + mDEVICE_INS_NAME + '\'' +
-                ", mDEVICE_INS_MOBILE='" + mDEVICE_INS_MOBILE + '\'' +
-                ", mRMS_DEBUG_EXTRN='" + mRMS_DEBUG_EXTRN + '\'' +
-                ", mRMS_SERVER_DOWN='" + mRMS_SERVER_DOWN + '\'' +
-                ", mRMS_ORG_D_F='" + mRMS_ORG_D_F + '\'' +
-                ", mRMS_FAULT_CODE='" + mRMS_FAULT_CODE + '\'' +
-                '}';
+    public String getMobileOnline() {
+        return mobileOnline;
+    }
+
+    public void setMobileOnline(String mobileOnline) {
+        this.mobileOnline = mobileOnline;
+    }
+
+    public String getControllerOnline() {
+        return controllerOnline;
+    }
+
+    public void setControllerOnline(String controllerOnline) {
+        this.controllerOnline = controllerOnline;
+    }
+
+    public String getDirPath() {
+        return dirPath;
+    }
+
+    public void setDirPath(String dirPath) {
+        this.dirPath = dirPath;
+    }
+
+    public String getDongleDataExtract() {
+        return dongleDataExtract;
+    }
+
+    public void setDongleDataExtract(String dongleDataExtract) {
+        this.dongleDataExtract = dongleDataExtract;
     }
 }

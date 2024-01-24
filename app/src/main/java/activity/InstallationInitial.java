@@ -3,11 +3,13 @@ package activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -56,6 +58,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -68,6 +72,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import bean.BTResonseData;
 import bean.ImageModel;
@@ -75,10 +80,16 @@ import bean.InstallationBean;
 import database.DatabaseHelper;
 import de.hdodenhof.circleimageview.CircleImageView;
 import debugapp.Bean.SimDetailsInfoResponse;
+import debugapp.BlueToothDebugNewActivity;
 import debugapp.GlobalValue.Constant;
 import debugapp.VerificationCodeModel;
 import debugapp.localDB.DatabaseHelperTeacher;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import utility.CustomUtility;
+import utility.FileUtils;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
@@ -110,12 +121,12 @@ public class InstallationInitial extends BaseActivity {
             inst_longitude = "", module_ser_no = "", inst_bill_no = "", inst_bill_date = "", inst_delay_reason = "", hp = "", current_date = "", simoprator_text = "", conntype_text = "", billno = "",
             set_matno = "", simha2 = "", kunnr = "", gstbillno = "", billdate = "", dispdate = "", name = "", state = "", city = "", controller = "", motor = "", pump = "", state_txt = "",
             city_txt = "", address = "", make = "", custname = "", fathname = "", simno = "", regisno = "", projectno = "", loginno = "", moduleqty = "", mobileno = "", tehvillage = "",
-            borewellstatus1 = "", DeviceStatus = "", CUS_CONTACT_NO = "", BeneficiaryNo = "", no_of_module_value = "", rmsdata_status = "", mMOBNUM_1, mMOBNUM_2, mMOBNUM_3, mORG_OTP_VALUE,
-            mORG_CONTACT_NO, MEmpType = "null", mAppName = "KUSUM", mInstallerMOB = "", mInstallerName = "", RMS_SERVER_DOWN = "", RMS_DEBUG_EXTRN = "", DEVICE_NO, SIGNL_STREN,
+            borewellstatus1 = "", DeviceStatus = "", CUS_CONTACT_NO = "", BeneficiaryNo = "", no_of_module_value = "", rmsdata_status = "", mMOBNUM_1, mMOBNUM_2, mMOBNUM_3,
+             MEmpType = "null", mAppName = "KUSUM", mInstallerMOB = "", mInstallerName = "", RMS_SERVER_DOWN = "", RMS_DEBUG_EXTRN = "", DEVICE_NO, SIGNL_STREN,
             INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "", SIM_SR_NO = "", SIM = "", RMS_STATUS = "", RMS_LAST_ONLINE_DATE = "", FAULT_CODE = "",
-            RMS_CURRENT_ONLINE_STATUS = "", version = "", invc_done = "", docno_sap = "",
-
-    mDriveSerialNo = "", mMotorSerialNo = "", mPumpSerialNo = "", delay;
+            RMS_CURRENT_ONLINE_STATUS = "", version = "", invc_done = "", docno_sap = "", mDriveSerialNo = "", mMotorSerialNo = "", mPumpSerialNo = "", delay = "",mobileOnlineStatus = "",
+            controllerOnlineStatus = "",dirPath = "",finalFileName="",filePath ="",type ="",columnCount ="";
+    File selectedFile;
     EditText inst_date, bill_date, bill_no, cust_name, borewellstatus, reasontxt, inst_address, inst_make, inst_village,
             inst_state, inst_district, inst_tehsil, inst_mob_no, inst_panel_stand_qty, inst_panel_watt, inst_total_watt, inst_module_total_plate_watt, inst_no_of_module, inst_module_ser_no,
             inst_motor_model, inst_motor_ser, inst_pump_model, inst_pump_ser, inst_controller_model, inst_simcard_num, inst_hp, inst_fathers_name;
@@ -127,9 +138,13 @@ public class InstallationInitial extends BaseActivity {
 
     LinearLayout reason, moduleOneLL;
 
-    Boolean your_date_is_outdated = false, mStatusBool = false;
+    Boolean your_date_is_outdated = false, isDongleExtract = false;
 
     private Dialog dialog;
+
+    ProgressDialog progressDialog;
+
+
 
     @SuppressLint("HandlerLeak")
     android.os.Handler mHandler2 = new android.os.Handler() {
@@ -143,22 +158,18 @@ public class InstallationInitial extends BaseActivity {
     List<ImageModel> imageList = new ArrayList<>();
     boolean isBaseUpdate = false, isControllerIDScan = false, isDebug = false, isSubmit = false;
 
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            String mString = (String) msg.obj;
-            Toast.makeText(mContext, mString, Toast.LENGTH_LONG).show();
-
-        }
-    };
-
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_installation_initial);
+
+
+
         mContext = this;
+        progressDialog = new ProgressDialog(InstallationInitial.this);
+
         WebURL.GALLERY_DIRECTORY_NAME_COMMON = "ShaktiKusum";
         dialog = new Dialog(mContext);
         WebURL.mSettingCheckValue = "0";
@@ -224,13 +235,6 @@ public class InstallationInitial extends BaseActivity {
             e.printStackTrace();
         }
 
-        mORG_OTP_VALUE = getRandomNumberString();
-        mORG_CONTACT_NO = CUS_CONTACT_NO;
-        if (mORG_CONTACT_NO.equalsIgnoreCase("")) {
-            mORG_CONTACT_NO = "7389919738";
-        } else {
-            mORG_CONTACT_NO = "7389919738";
-        }
         mSimDetailsInfoResponse = new ArrayList<>();
         CustomUtility.setSharedPreference(mContext, "SYNCLIST", "0");
 
@@ -400,18 +404,17 @@ public class InstallationInitial extends BaseActivity {
         });
 
         save.setOnClickListener(v -> {
-            DeviceStatus = CustomUtility.getSharedPreferences(mContext, "DeviceStatus");
+            DeviceStatus = CustomUtility.getSharedPreferences(mContext, Constant.deviceStatus);
 
             if (CustomUtility.isInternetOn(getApplicationContext())) {
                 if (mBTResonseDataList.size() > 0)
                     mBTResonseDataList.clear();
-               // Log.e("inst_controller_ser===>", inst_controller_ser.getText().toString().trim());
-              //  Log.e("mDatabaseHelperTeacher=====>", String.valueOf(mDatabaseHelperTeacher.getDeviceInfoDATABT()));
+                Log.e("inst_controller_ser===>", inst_controller_ser.getText().toString().trim());
+                Log.e("mDatabaseHelperTeacher=====>", String.valueOf(mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(inst_controller_ser.getText().toString().trim() + "-0")));
                 mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(inst_controller_ser.getText().toString().trim() + "-0");
-               // System.out.println("mBTResonseDataList.size()==>>" + mBTResonseDataList.size());
                 if (mBTResonseDataList.size() > 0) {
                     vkp = mBTResonseDataList.size() - 1;
-                 //   Log.e("vkp1111====>",String.valueOf(vkp));
+                    Log.e("vkp1111====>",String.valueOf(vkp));
 
 
                    DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
@@ -445,16 +448,31 @@ public class InstallationInitial extends BaseActivity {
                     RMS_LAST_ONLINE_DATE = mBTResonseDataList.get(vkp).getRMS_LAST_ONLINE_DATE();
                     mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
                     mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
+                    FAULT_CODE = mBTResonseDataList.get(vkp).getmRMS_FAULT_CODE();
+                    mobileOnlineStatus = mBTResonseDataList.get(vkp).getMobileOnline();
+                    controllerOnlineStatus = mBTResonseDataList.get(vkp).getControllerOnline();
+                    dirPath = mBTResonseDataList.get(vkp).getDirPath();
                     RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
                     RMS_SERVER_DOWN = "Working Fine";
-                    FAULT_CODE = mBTResonseDataList.get(vkp).getmRMS_FAULT_CODE();
-                      saveDataValidation();
+
+                    if(mBTResonseDataList.get(vkp).getDongleDataExtract().equals("true")){
+                        isDongleExtract = true;
+                    }
+
+                    Log.e("mobileOnlineStatus======>",mobileOnlineStatus);
+
+                    Log.e("controllerOnlineStatus======>",controllerOnlineStatus);
+                    Log.e("dirPath======>",dirPath);
+                    Log.e("isDongleExtract======>", String.valueOf(isDongleExtract));
+
+
+                    saveDataValidation();
                 } else {
-                    saveData();
+                   saveData();
 
                 }
             } else {
-                saveData();
+               saveData();
             }
         });
 
@@ -983,13 +1001,13 @@ public class InstallationInitial extends BaseActivity {
 
                 if (reason.getVisibility() == View.VISIBLE) {
                     if (!reasontxt.getText().toString().isEmpty()) {
-                           SubmitDebugData();
+                           SubmitData();
 
                     } else {
                         CustomUtility.ShowToast("Please Enter Installation Delay Reason.", getApplicationContext());
                     }
                 } else {
-                      SubmitDebugData();
+                      SubmitData();
 
                 }
 
@@ -1002,6 +1020,45 @@ public class InstallationInitial extends BaseActivity {
 
         } else {
             CustomUtility.ShowToast("Installation Not Submitted,Remove duplicate module Number", this);
+        }
+
+
+    }
+
+    private void SubmitData() {
+        if(mobileOnlineStatus.equals(getResources().getString(R.string.offline))&& controllerOnlineStatus.equals(getResources().getString(R.string.offline))){
+            sendFileToRMSServer();
+        }else {
+            SubmitDebugData();
+        }
+    }
+
+    void sendFileToRMSServer() {
+        Uri uri = Uri.parse(dirPath);
+        String[] fileName = FileUtils.getPath(InstallationInitial.this, uri).split("/");
+        finalFileName = fileName[fileName.length - 1];
+        filePath = FileUtils.getPath(InstallationInitial.this, uri);
+        Log.e("uri=========>", uri.toString());
+        Log.e("finalFileName=========>", finalFileName);
+        Log.e("filePath=========>", filePath);
+
+        if (finalFileName.contains(".xls")) {
+            selectedFile = new File(filePath);
+            if (finalFileName.contains("Dongle_") || finalFileName.contains("Dongle")) {
+                type = "DongleMonth";
+            } else {
+                type = "Month";
+            }
+
+            if (CustomUtility.isInternetOn(InstallationInitial.this)) {
+                uploadFile();
+
+            } else {
+                CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection), InstallationInitial.this);
+            }
+        } else {
+
+            CustomUtility.ShowToast("Please Select file from Data Logger Folder this file is not valid", getApplicationContext());
         }
 
 
@@ -1229,8 +1286,8 @@ public class InstallationInitial extends BaseActivity {
         inst_pump_ser.setText(pump);
 
         WebURL.mDEvice_Number_CHECK = controller;
-     //  inst_controller_ser.setText("7E-0029-0-14-08-23");
        inst_controller_ser.setText(controller);
+       //inst_controller_ser.setText(controller);
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {
             spinner_simoprator.setSelection(db.getPosition(spinner_simoprator, installationBean.getSimoprator()));
@@ -1365,7 +1422,7 @@ public class InstallationInitial extends BaseActivity {
                     Log.d("check_error", obj);
                     Log.e("check_error", obj);
 
-                    CustomUtility.hideProgressDialog(InstallationInitial.this);
+                    stopProgressDialogue();
                     JSONObject object = new JSONObject(obj);
                     String mStatus = object.getString("status");
                     final String mMessage = object.getString("message");
@@ -1385,7 +1442,7 @@ public class InstallationInitial extends BaseActivity {
                 } catch (Exception e) {
                     isBaseUpdate = false;
                     e.printStackTrace();
-                    CustomUtility.hideProgressDialog(InstallationInitial.this);
+                    stopProgressDialogue();
                 }
             }
 
@@ -1398,9 +1455,9 @@ public class InstallationInitial extends BaseActivity {
 
         retriveArrayList();
 
-        if (CustomUtility.getSharedPreferences(mContext, "DeviceStatus") != null &&
-                !CustomUtility.getSharedPreferences(mContext, "DeviceStatus").isEmpty()) {
-            DeviceStatus = CustomUtility.getSharedPreferences(mContext, "DeviceStatus");
+        if (CustomUtility.getSharedPreferences(mContext, Constant.deviceStatus) != null &&
+                !CustomUtility.getSharedPreferences(mContext, Constant.deviceStatus).isEmpty()) {
+            DeviceStatus = CustomUtility.getSharedPreferences(mContext, Constant.deviceStatus);
 
             if (DeviceStatus.equals(getResources().getString(R.string.online))) {
                 labeledSwitch.setOn(true);
@@ -1437,15 +1494,145 @@ public class InstallationInitial extends BaseActivity {
     }
 
 
-    @SuppressLint("DefaultLocale")
-    private String getRandomNumberString() {
-        Random rnd = new Random();
-        int number = rnd.nextInt(9999);
-        return String.format("%04d", number);
+    /*-------------------------------------------------------------Upload Excel Sheet TO RMS Server-----------------------------------------------------------------------------*/
+
+    public void uploadFile() {
+
+        showProgressDialogue(getResources().getString(R.string.dataExtractFileToServer));
+
+        OkHttpClient client = new OkHttpClient().newBuilder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .build();
+
+        if (type.equals("Month")) {
+            columnCount = "15";
+
+        } else if (type.equals("Fault")) {
+            columnCount = "6";
+
+        } else {
+            columnCount = "35";
+
+        }
+        RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("DeviceNO", DEVICE_NO)
+                .addFormDataPart("type", type)
+                .addFormDataPart("columnCount", columnCount)
+                .addFormDataPart("excel", filePath,
+                        RequestBody.create(MediaType.parse("application/vnd.ms-excel"),
+                                new File(filePath))).build();
+
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .url(CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) + "RMSApp/ExcelUploadNew")
+                .method("POST", body)
+                .build();
+
+        Thread gfgThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    okhttp3.Response response = client.newCall(request).execute();
+                    String jsonData = response.body().string();
+                    JSONObject Jobject = new JSONObject(jsonData);
+                    Log.e("Jobject========>", Jobject.toString());
+
+                    if (Jobject.getString("status").equals("true")) {
+
+                        if (isDongleExtract) {
+                            uploadIEMIFile();
+
+
+                            ShowToast("File Upload Successfully now Uploading IMEI File To Server");
+
+                        } else {
+                            stopProgressDialogue();
+                            ShowToast("File Upload Successfully");
+
+                        }
+
+                    } else {
+                        stopProgressDialogue();
+                        ShowToast("File Upload Failed, please try again!");
+                    }
+
+                } catch (IOException e) {
+                    stopProgressDialogue();
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    stopProgressDialogue();
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        gfgThread.start();
+
     }
 
+    /*-------------------------------------------------------------Upload IMEI & Excel Sheet-----------------------------------------------------------------------------*/
+
+
+    public void uploadIEMIFile() {
+        stopProgressDialogue();
+        showProgressDialogue(getResources().getString(R.string.ImeiFileToServer));
+
+        OkHttpClient client = new OkHttpClient().newBuilder().connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .build();
+
+
+        RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("deviceNo", DEVICE_NO.trim())
+                .addFormDataPart("simimei", IMEI.trim())
+                .addFormDataPart("file", filePath,
+                        RequestBody.create(MediaType.parse("application/vnd.ms-excel"),
+                                new File(filePath)))
+                .build();
+
+        okhttp3.Request request = new okhttp3.Request.Builder()
+                .url(CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) + "NewShakti/BTData")
+                .method("POST", body)
+                .build();
+
+        Thread gfgThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    okhttp3.Response response = client.newCall(request)
+                            .execute();
+                    String jsonData = response.body().string();
+                    JSONObject Jobject = new JSONObject(jsonData);
+
+                    if (Jobject.getString("status").equals("true")) {
+                        stopProgressDialogue();
+                        ShowToast("File Upload Successfully");
+                        SubmitDebugData();
+                    } else {
+                        ShowToast("File Upload Failed, please try again!");
+                        stopProgressDialogue();
+                    }
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                    stopProgressDialogue();
+                }
+            }
+        });
+
+        gfgThread.start();
+
+
+    }
+
+
+    /*-------------------------------------------------------------Submit Debug Data-----------------------------------------------------------------------------*/
+
     private void SubmitDebugData() {
-        CustomUtility.showProgressDialogue(InstallationInitial.this);
+        showProgressDialogue(getResources().getString(R.string.submittingDebugData));
+
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObj = new JSONObject();
 
@@ -1519,14 +1706,14 @@ public class InstallationInitial extends BaseActivity {
                             submitInstalltion();
 
                         } else {
-                            CustomUtility.hideProgressDialog(InstallationInitial.this);
+                            stopProgressDialogue();
                             CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
                         }
 
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    CustomUtility.hideProgressDialog(InstallationInitial.this);
+                    stopProgressDialogue();
                     CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
                 }
 
@@ -1535,7 +1722,7 @@ public class InstallationInitial extends BaseActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                CustomUtility.hideProgressDialog(InstallationInitial.this);
+                stopProgressDialogue();
                 Log.e("error", String.valueOf(error));
                 Toast.makeText(InstallationInitial.this, error.toString(),
                         Toast.LENGTH_LONG).show();
@@ -1547,6 +1734,8 @@ public class InstallationInitial extends BaseActivity {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(jsonObjectRequest);
     }
+
+    /*-------------------------------------------------------------Submit Installation-----------------------------------------------------------------------------*/
 
     private void submitInstalltion() {
 
@@ -1653,7 +1842,6 @@ public class InstallationInitial extends BaseActivity {
                         }
                     }
                 }
-              //  Log.e("jsonObj=======>", jsonObj.toString());
             }
 
 
@@ -1678,7 +1866,11 @@ public class InstallationInitial extends BaseActivity {
         }
 
         @Override
-        protected void onPreExecute() {}
+        protected void onPreExecute() {
+            stopProgressDialogue();
+            showProgressDialogue(getResources().getString(R.string.submittingInatallation));
+
+        }
 
         @Override
         protected String doInBackground(String... params) {
@@ -1692,7 +1884,7 @@ public class InstallationInitial extends BaseActivity {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                CustomUtility.hideProgressDialog(InstallationInitial.this);
+                stopProgressDialogue();
             }
 
             return obj2;
@@ -1748,7 +1940,7 @@ public class InstallationInitial extends BaseActivity {
 
                             mDatabaseHelperTeacher.deleteAllDataFromTable(inst_controller_ser.getText().toString().trim()+ "-0");
                         } else {
-                            CustomUtility.hideProgressDialog(InstallationInitial.this);
+                            stopProgressDialogue();
 
                             if (invc_done.equals("N")) {
 
@@ -1771,6 +1963,10 @@ public class InstallationInitial extends BaseActivity {
                     }
 
 
+                }else {
+                    stopProgressDialogue();
+                    CustomUtility.showToast(InstallationInitial.this, "Data Not Submitted, Please try After Sometime.");
+
                 }
 
             } catch (Exception e) {
@@ -1779,6 +1975,9 @@ public class InstallationInitial extends BaseActivity {
 
         }
     }
+
+    /*-------------------------------------------------------------Send Lat Lng to Rms Server-----------------------------------------------------------------------------*/
+
 
     private void sendLatLngToRmsForFota() {
 
@@ -1826,14 +2025,14 @@ public class InstallationInitial extends BaseActivity {
 
                             mDatabaseHelperTeacher.deleteAllDataFromTable(inst_controller_ser.getText().toString().trim()+ "-0");
                         } else {
-                            CustomUtility.hideProgressDialog(InstallationInitial.this);
+                            stopProgressDialogue();
                             CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
                         }
 
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    CustomUtility.hideProgressDialog(InstallationInitial.this);
+                    stopProgressDialogue();
                     CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
                 }
 
@@ -1842,7 +2041,7 @@ public class InstallationInitial extends BaseActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                CustomUtility.hideProgressDialog(InstallationInitial.this);
+                stopProgressDialogue();
                 Log.e("error", String.valueOf(error));
                 Toast.makeText(InstallationInitial.this, error.toString(),
                         Toast.LENGTH_LONG).show();
@@ -1855,7 +2054,12 @@ public class InstallationInitial extends BaseActivity {
         requestQueue.add(jsonObjectRequest);
     }
 
+    /*-------------------------------------------------------------Send OTP to customer-----------------------------------------------------------------------------*/
+
     private void sendVerificationCodeAPI(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo, String billNo) {
+        stopProgressDialogue();
+        showProgressDialogue(getResources().getString(R.string.sendingOtpToCustomer));
+
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.SendOTP + "&mobiles=" + ContactNo +
@@ -1863,13 +2067,13 @@ public class InstallationInitial extends BaseActivity {
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
-                CustomUtility.hideProgressDialog(InstallationInitial.this);
+                stopProgressDialogue();
 
 
                 if (!res.toString().isEmpty()) {
                     VerificationCodeModel verificationCodeModel = new Gson().fromJson(res.toString(), VerificationCodeModel.class);
                     if (verificationCodeModel.getStatus().equals("Success")) {
-                        CustomUtility.removeValueFromSharedPref(getApplicationContext(), "DeviceStatus");
+                        CustomUtility.removeValueFromSharedPref(getApplicationContext(), Constant.deviceStatus);
                         db.deleteInstallationImages(bill_no.getText().toString().trim());
                         ShowAlertResponse(generatedVerificationCode, ContactNo, Hp, beneficiaryNo, billNo);
                     }
@@ -1878,7 +2082,7 @@ public class InstallationInitial extends BaseActivity {
 
             }
         }, error -> {
-            CustomUtility.hideProgressDialog(InstallationInitial.this);
+            stopProgressDialogue();
             Log.e("error", String.valueOf(error));
             Toast.makeText(InstallationInitial.this, error.getMessage(),
                     Toast.LENGTH_LONG).show();
@@ -1923,5 +2127,41 @@ public class InstallationInitial extends BaseActivity {
 
     }
 
+    /*-------------------------------------------------------------Show Progress Dialogue-----------------------------------------------------------------------------*/
 
+    public void showProgressDialogue(String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.setMessage(message);
+                progressDialog.setCancelable(false);
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
+            }
+        });
+
+    }
+
+    public void stopProgressDialogue() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+            }
+        });
+    }
+
+    private void ShowToast(String message) {
+        Message msg = new Message();
+        msg.obj = message;
+        mHandler2.sendMessage(msg);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopProgressDialogue();
+    }
 }
