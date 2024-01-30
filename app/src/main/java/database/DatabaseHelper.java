@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bean.AuditSiteBean;
+import bean.BTResonseData;
+import bean.DeviceMappingModel;
 import bean.ImageModel;
 import bean.InstallationBean;
 import bean.InstallationListBean;
@@ -69,6 +71,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_SITE_AUDIT = "tbl_site_audit";
     public static final String TABLE_KusumCImages = "tbl_kusumCImages";
+
+    public static final String TABLE_DEVICE_MAPPING_DATA = "tbl_device_mapping_data";
+
     //TABLE_OFFLINE_SUBMITTED_LIST field name
     public static final String KEY_OFFLINE_BILL_NO = "bill_no";
     public static final String KEY_OFFLINE_BENEFICIARY = "beneficiary";
@@ -252,6 +257,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_REMARK16 = "remark16";
     public static final String KEY_PMID = "pmId", KEY_PARAMETERS_NAME = "parametersName", KEY_MODBUS_ADDRESS = "modbusaddress", KEY_MOB_BT_ADDRESS = "mobBTAddress", KEY_FACTOR = "factor", KEY_PVALUE = "pValue", KEY_MATERIAL_CODE = "materialCode", KEY_UNIT = "unit", KEY_OFFSET = "app_offset";
 
+
     public static final String KEY_INSTALLATION_ID = "installationId", KEY_INSTALLATION_NAME = "installationImageName",
             KEY_INSTALLATION_PATH = "installtionPath", KEY_INSTALLATION_IMAGE_SELECTED = "installtionImageSelected",
             KEY_INSTALLATION_BILL_NO = "InstalltionBillNo", KEY_INSTALLATION_LATITUDE = "InstalltionLatitude",
@@ -406,7 +412,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_PHOTO4 + " BLOB,"
             + KEY_PHOTO5 + " BLOB)";
 
-    //dataHelper.insertDamageMissData(billno,mDropDownList.get(i),mRoadioList.get(i),mQuentityList.get(i),mRemarkList.get(i),mPhotoList.get(i));
     public void insertDamageMissData(DamageMissResponse mDamageMissResponse) {
         // Open the database for writing
         SQLiteDatabase db = this.getWritableDatabase();
@@ -1177,6 +1182,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_SIM_OLD_PHOTO + " BLOB)";
 
 
+    public static final String KEY_DEVICE_MAPPING_ID = "unloadingId",KEY_DEVICE_MAPPING_READ ="read",KEY_DEVICE_MAPPING_WRITE ="write",KEY_DEVICE_MAPPING_UPDATE ="updates";
+    private static final String CREATE_TABLE_DEVICE_MAPPING_DATA = "CREATE TABLE "
+            + TABLE_DEVICE_MAPPING_DATA + "(" + KEY_DEVICE_MAPPING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," + KEY_DEVICE_MAPPING_READ + " TEXT," + KEY_DEVICE_MAPPING_WRITE + " TEXT,"  + KEY_DEVICE_MAPPING_UPDATE + " TEXT,"  + KEY_BILL_NO + " TEXT)";
+
+
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -1209,6 +1220,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_KusumCImages);
         db.execSQL(CREATE_TABLE_UNLOADING_IMAGES);
         db.execSQL(CREATE_TABLE_OFFLINE_CONTROLLER_IMAGE);
+        db.execSQL(CREATE_TABLE_DEVICE_MAPPING_DATA);
     }
 
     @Override
@@ -1240,15 +1252,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_KusumCImages);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_UNLOADING_IMAGE_DATA);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_OFFLINE_CONTROLLER_IMAGE_DATA);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_DEVICE_MAPPING_DATA);
             // create newworkorder tables
             onCreate(db);
         }
     }
 
-    public void deleteSIMData() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_SIM_REPLACMENT_DATA, null, null);
-    }
 
     public void deleteSimData(String value) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -1423,38 +1432,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             // Insert Row
             long i = db.insert(TABLE_DASHBOARD, null, values);
-
-            // Insert into database successfully.
-            db.setTransactionSuccessful();
-
-        } catch (SQLiteException e) {
-
-            e.printStackTrace();
-
-        } finally {
-            // End the transaction.
-            db.endTransaction();
-            // Close database
-            db.close();
-        }
-    }
-
-    public void insertStateDistrictData(String state, String state_text, String district, String district_text) {
-        // Open the database for writing
-        SQLiteDatabase db = this.getWritableDatabase();
-        // Start the transaction.
-        db.beginTransaction();
-        ContentValues values;
-
-        try {
-            values = new ContentValues();
-            values.put(KEY_STATE, state);
-            values.put(KEY_STATE_TEXT, state_text);
-            values.put(KEY_DISTRICT, district);
-            values.put(KEY_DISTRICT_TEXT, district_text);
-
-            // Insert Row
-            long i = db.insert(TABLE_STATE_DISTRICT, null, values);
 
             // Insert into database successfully.
             db.setTransactionSuccessful();
@@ -4463,6 +4440,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void deleteOfflineControllerImages(String billNo) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String where = "";
+        where = KEY_UNLOADING_BILL_NO + "='" + billNo + "'";
+        if (CustomUtility.doesTableExist(db, TABLE_OFFLINE_CONTROLLER_IMAGE_DATA)) {
+            db.delete(TABLE_OFFLINE_CONTROLLER_IMAGE_DATA, where, null);
+        }
+    }
+
     public ArrayList<ImageModel> getAllInstallationImages() {
         ArrayList<ImageModel> installationImages = new ArrayList<ImageModel>();
         SQLiteDatabase database = this.getWritableDatabase();
@@ -4579,34 +4565,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    public void insertOfflineControllerImage(String name, String path, boolean isSelected, String billNo) {
+    public void insertOfflineControllerImage(ImageModel imageModel, boolean bool) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(KEY_UNLOADING_NAME, name);
-        contentValues.put(KEY_UNLOADING_PATH, path);
-        contentValues.put(KEY_UNLOADING_IMAGE_SELECTED, isSelected);
-        contentValues.put(KEY_UNLOADING_BILL_NO, billNo);
-        database.insert(TABLE_UNLOADING_IMAGE_DATA, null, contentValues);
+        contentValues.put(KEY_UNLOADING_NAME, imageModel.getName());
+        contentValues.put(KEY_UNLOADING_PATH, imageModel.getImagePath());
+        contentValues.put(KEY_UNLOADING_IMAGE_SELECTED, bool);
+        contentValues.put(KEY_UNLOADING_BILL_NO, imageModel.getBillNo());
+        database.insert(TABLE_OFFLINE_CONTROLLER_IMAGE_DATA, null, contentValues);
         database.close();
     }
 
-    public void updateOfflineControllerImage(String name, String path, boolean isSelected, String billNo) {
+    public void updateOfflineControllerImage(ImageModel imageModel, boolean bool) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_UNLOADING_NAME, name);
-        values.put(KEY_UNLOADING_PATH, path);
-        values.put(KEY_UNLOADING_IMAGE_SELECTED, isSelected);
-        values.put(KEY_UNLOADING_BILL_NO, billNo);
+        values.put(KEY_UNLOADING_NAME,  imageModel.getName());
+        values.put(KEY_UNLOADING_PATH, imageModel.getImagePath());
+        values.put(KEY_UNLOADING_IMAGE_SELECTED, bool);
+        values.put(KEY_UNLOADING_BILL_NO, imageModel.getBillNo());
         // update Row
-        db.update(TABLE_UNLOADING_IMAGE_DATA, values, "unloadingImageName = '" + name + "'", null);
+        db.update(TABLE_OFFLINE_CONTROLLER_IMAGE_DATA, values, "unloadingImageName = '" + imageModel.getName() + "'", null);
         db.close();
     }
 
     public ArrayList<ImageModel> getAllOfflineControllerImages() {
         ArrayList<ImageModel> UnloadingImages = new ArrayList<ImageModel>();
         SQLiteDatabase database = this.getWritableDatabase();
-        if (CustomUtility.doesTableExist(database, TABLE_UNLOADING_IMAGE_DATA)) {
-            Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_UNLOADING_IMAGE_DATA, null);
+        if (CustomUtility.doesTableExist(database, TABLE_OFFLINE_CONTROLLER_IMAGE_DATA)) {
+            Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_OFFLINE_CONTROLLER_IMAGE_DATA, null);
 
             UnloadingImages.clear();
             ImageModel imageModel;
@@ -4628,6 +4614,60 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             database.close();
         }
         return UnloadingImages;
+    }
+
+
+    public void insertDeviceMappingData(DeviceMappingModel deviceMappingModel) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_DEVICE_MAPPING_READ, deviceMappingModel.getRead());
+        contentValues.put(KEY_DEVICE_MAPPING_WRITE, deviceMappingModel.getWrite());
+        contentValues.put(KEY_DEVICE_MAPPING_UPDATE, deviceMappingModel.getUpdate());
+        contentValues.put(KEY_BILL_NO, deviceMappingModel.getBillNo());
+        database.insert(TABLE_DEVICE_MAPPING_DATA, null, contentValues);
+        database.close();
+    }
+
+    public void updateDeviceMappingData(DeviceMappingModel deviceMappingModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_DEVICE_MAPPING_READ, deviceMappingModel.getRead());
+        values.put(KEY_DEVICE_MAPPING_WRITE, deviceMappingModel.getWrite());
+        values.put(KEY_DEVICE_MAPPING_UPDATE, deviceMappingModel.getUpdate());
+        values.put(KEY_BILL_NO, deviceMappingModel.getBillNo());
+        // update Row
+        db.update(TABLE_DEVICE_MAPPING_DATA, values, KEY_BILL_NO + " = '" + deviceMappingModel.getBillNo() + "'", null);
+        db.close();
+    }
+
+    @SuppressLint("Range")
+    public ArrayList<DeviceMappingModel> getAllDeviceMappingData() {
+        ArrayList<DeviceMappingModel> deviceMappingList = new ArrayList<DeviceMappingModel>();
+        SQLiteDatabase database = this.getWritableDatabase();
+        if (CustomUtility.doesTableExist(database, TABLE_DEVICE_MAPPING_DATA)) {
+            Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_DEVICE_MAPPING_DATA, null);
+
+            deviceMappingList.clear();
+            DeviceMappingModel deviceMappingModel;
+
+            if (mcursor.getCount() > 0) {
+                for (int i = 0; i < mcursor.getCount(); i++) {
+                    mcursor.moveToNext();
+
+                    deviceMappingModel = new DeviceMappingModel();
+                    deviceMappingModel.setId(mcursor.getString(0));
+                    deviceMappingModel.setRead(mcursor.getString(1));
+                    deviceMappingModel.setWrite(mcursor.getString(2));
+                    deviceMappingModel.setUpdate(mcursor.getString(3));
+                    deviceMappingModel.setBillNo(mcursor.getString(4));
+                    deviceMappingList.add(deviceMappingModel);
+                }
+            }
+            mcursor.close();
+            database.close();
+        }
+        return deviceMappingList;
+
     }
 
 }

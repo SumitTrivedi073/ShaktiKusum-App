@@ -38,7 +38,7 @@
     <uses-feature android:name="android.hardware.location.gps" />
 
     <application
-        android:name="activity.AppApplication"
+        android:name="utility.AppController"
         android:allowBackup="true"
         android:configChanges="orientation"
         android:dataExtractionRules="@xml/data_extraction_rules"

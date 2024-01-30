@@ -6,7 +6,6 @@ import static android.Manifest.permission.READ_MEDIA_AUDIO;
 import static android.Manifest.permission.READ_MEDIA_IMAGES;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION.SDK_INT;
-import static activity.Config.TAG;
 import static utility.FileUtils.getPath;
 
 import android.Manifest;
@@ -50,6 +49,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.shaktipumplimited.shaktikusum.R;
@@ -64,19 +64,21 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
 import adapter.ImageSelectionAdapter;
 import bean.DeviceDetailModel;
+import bean.DeviceMappingModel;
 import bean.ImageModel;
 import bean.InstallationBean;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
 import debugapp.PendingFeedback;
 import debugapp.VerificationCodeModel;
-import utility.AppController;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
@@ -101,7 +103,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     PendingFeedback.Response pendingInstallationData;
     InstallationBean installationBean;
 
-    String billNo = "", beneficiaryNo = "", contactNo = "", hp = "", regisNo = "", controllerSerialNo = "", customerName = "",customerMobile = "";
+    String billNo = "", beneficiaryNo = "", contactNo = "", hp = "", regisNo = "", controllerSerialNo = "", customerName = "", customerMobile = "";
 
     int selectedIndex;
     boolean isUpdate = false;
@@ -110,6 +112,8 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     ProgressDialog progressDialog;
     ImageSelectionAdapter customAdapter;
 
+    List<DeviceMappingModel> deviceMappingList = new ArrayList<>();
+    List<DeviceMappingModel> deviceMappingData = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,7 +176,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 contactNo = installationBean.getMobile_no();
                 hp = installationBean.getInst_hp();
                 regisNo = installationBean.getRegis_no();
-                controllerSerialNo = installationBean.getScm_sno() + "-0";
+                 controllerSerialNo = installationBean.getScm_sno() + "-0";
                 customerName = installationBean.getCustomer_name();
                 customerMobile = installationBean.getMobile_no();
             }
@@ -185,12 +189,11 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 contactNo = pendingInstallationData.getContactNo();
                 hp = pendingInstallationData.getHp();
                 regisNo = pendingInstallationData.getRegisno();
-                controllerSerialNo = pendingInstallationData.getControllerSernr() + "-0";
+                  controllerSerialNo = pendingInstallationData.getControllerSernr() + "-0";
                 customerName = pendingInstallationData.getCustomerName();
                 customerMobile = pendingInstallationData.getContactNo();
 
-                Log.e("controllerSerialNo====>", controllerSerialNo);
-            }
+             }
 
             if(CustomUtility.isInternetOn(DeviceMappingActivity.this)){
                 getDeviceOnlineStatus();
@@ -225,15 +228,13 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.write_btn:
-                write_read_fotaAPI("0","0","0","1");
-
+                write_read_fotaAPI("254", "0", "0", "0", "1");
                 break;
             case R.id.read_btn:
-                write_read_fotaAPI("1", "1.0", "1.0", "2");
+                write_read_fotaAPI("254", "1", "1.0", "1.0", "2");
                 break;
             case R.id.updateDeviceBtn:
-                write_read_fotaAPI("1", "1", "0.0", "3");
-
+                write_read_fotaAPI("255", "1", "1", "0.0", "3");
                 break;
             case R.id.checkDeviceStatusBtn:
 
@@ -268,6 +269,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 updateDeviceBtn.setAlpha(0.5f);
                 checkDeviceStatusBtn.setEnabled(false);
                 checkDeviceStatusBtn.setAlpha(0.5f);
+
                 break;
             case "1":
                 write_btn.setEnabled(false);
@@ -279,6 +281,13 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 checkDeviceStatusBtn.setEnabled(false);
                 checkDeviceStatusBtn.setAlpha(0.5f);
                 writeImg.setImageResource(R.drawable.right_mark_icn_green);
+                DeviceMappingModel deviceMappingModel = new DeviceMappingModel();
+                deviceMappingModel.setRead("false");
+                deviceMappingModel.setWrite("true");
+                deviceMappingModel.setUpdate("false");
+                deviceMappingModel.setBillNo(billNo);
+                insUpdateData(deviceMappingModel, false);
+
                 break;
 
             case "2":
@@ -291,6 +300,12 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 checkDeviceStatusBtn.setEnabled(false);
                 checkDeviceStatusBtn.setAlpha(0.5f);
                 read_img.setImageResource(R.drawable.right_mark_icn_green);
+                DeviceMappingModel deviceMappingModel1 = new DeviceMappingModel();
+                deviceMappingModel1.setRead("true");
+                deviceMappingModel1.setWrite("true");
+                deviceMappingModel1.setUpdate("false");
+                deviceMappingModel1.setBillNo(billNo);
+                insUpdateData(deviceMappingModel1, true);
 
                 break;
 
@@ -301,6 +316,13 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 read_btn.setAlpha(0.5f);
                 updateDeviceBtn.setEnabled(false);
                 updateDeviceBtn.setAlpha(0.5f);
+                DeviceMappingModel deviceMappingModel2 = new DeviceMappingModel();
+                deviceMappingModel2.setRead("true");
+                deviceMappingModel2.setWrite("true");
+                deviceMappingModel2.setUpdate("true");
+                deviceMappingModel2.setBillNo(billNo);
+                insUpdateData(deviceMappingModel2, true);
+
                 startCountDownTimer();
                 break;
 
@@ -315,6 +337,14 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 checkDeviceStatusBtn.setAlpha(1f);
 
                 break;
+        }
+    }
+
+    private void insUpdateData(DeviceMappingModel deviceMappingModel, boolean isUpdate) {
+        if (isUpdate) {
+            databaseHelper.updateDeviceMappingData(deviceMappingModel);
+        } else {
+            databaseHelper.insertDeviceMappingData(deviceMappingModel);
         }
     }
 
@@ -604,11 +634,9 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
         customAdapter.notifyItemChanged(selectedIndex);
 
         if (isUpdate) {
-            databaseHelper.updateOfflineControllerImage(imageArrayList.get(selectedIndex).getName(), path,
-                    true, billNo);
+            databaseHelper.updateOfflineControllerImage(imageModel, true);
         } else {
-            databaseHelper.insertOfflineControllerImage(imageArrayList.get(selectedIndex).getName(), path,
-                    true, billNo);
+            databaseHelper.insertOfflineControllerImage(imageModel, true);
         }
 
     }
@@ -634,16 +662,12 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                     if (deviceDetailModel != null && deviceDetailModel.getResponse() != null && String.valueOf(deviceDetailModel.getStatus()).equals("true")) {
 
                         if (deviceDetailModel.getResponse().getIsLogin()) {
-                            changeButtonVisibility("0");
+                            setDeviceData();
                             deviceOnlineLinear.setVisibility(View.VISIBLE);
                             deviceOfflineLinear.setVisibility(View.GONE);
                         } else {
                             SetAdapter();
-
-
                         }
-
-
                     }
                 }
             }
@@ -658,6 +682,48 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
             }
         });
         requestQueue.add(jsonObjectRequest);
+    }
+
+    private void setDeviceData() {
+        deviceMappingList = new ArrayList<>();
+        deviceMappingData = new ArrayList<>();
+        deviceMappingData = databaseHelper.getAllDeviceMappingData();
+
+        Log.e("deviceMappingData======>", deviceMappingData.toString());
+        for (int i = 0; i < deviceMappingData.size(); i++) {
+            if (deviceMappingData.get(i).getBillNo().trim().equals(billNo)) {
+                DeviceMappingModel deviceMappingModel = new DeviceMappingModel();
+                deviceMappingModel.setId(deviceMappingData.get(i).getId());
+                deviceMappingModel.setRead(deviceMappingData.get(i).getRead());
+                deviceMappingModel.setWrite(deviceMappingData.get(i).getWrite());
+                deviceMappingModel.setUpdate(deviceMappingData.get(i).getUpdate());
+                deviceMappingModel.setBillNo(deviceMappingData.get(i).getBillNo());
+                deviceMappingList.add(deviceMappingModel);
+            }
+
+
+        }
+
+        Log.e("deviceMappingList=======>", String.valueOf(deviceMappingList.size()));
+        Log.e("deviceMappingList======>", deviceMappingList.toString());
+
+        if (deviceMappingList != null && deviceMappingList.size() > 0) {
+            if (deviceMappingList.get(0).getWrite().equals("true")) {
+                changeButtonVisibility("1");
+            }
+            if (deviceMappingList.get(0).getRead().equals("true")) {
+                changeButtonVisibility("2");
+            }
+
+            if (deviceMappingList.get(0).getUpdate().equals("true")) {
+                changeButtonVisibility("3");
+            }
+        } else {
+            changeButtonVisibility("0");
+
+        }
+
+
     }
 
 
@@ -745,16 +811,17 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                             showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
 
                             runOnUiThread(() -> {
+                                databaseHelper.deleteOfflineControllerImages(billNo);
                                 if (CustomUtility.isValidMobile(customerMobile)) {
+
                                     Random random = new Random();
                                     String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
 
                                     sendVerificationCodeAPI(generatedVerificationCode, customerMobile, hp, beneficiaryNo,billNo);
 
                                 } else {
-                                    Intent intent = new Intent(DeviceMappingActivity.this, PendingFeedbackActivity.class);
-                                    startActivity(intent);
-                                    finish();
+                                    stopProgressDialogue();
+                                    CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.mobile_number_not_valid));
                                 }
                             });
 
@@ -782,60 +849,72 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
     /*-------------------------------------------------------------Write Data On Controller API-----------------------------------------------------------------------------*/
 
-    public void write_read_fotaAPI(String RW, String data1, String oldData, String value){
-        String deviceType = controllerSerialNo.charAt(0)+ controllerSerialNo.substring(1,2);
-
-        JSONObject mainObject = new JSONObject();
-        try {
-            //mainObject.put("user_id", sessionParam.user_id);
-            mainObject.put("address1", "501");
-            mainObject.put("offset1","0" );
-
-
-            mainObject.put("NewGateway", "true");
-            mainObject.put("did1", controllerSerialNo);
-            mainObject.put("RW", RW);
-            mainObject.put("data1", data1);
-            mainObject.put("OldData", oldData);
-            mainObject.put("DeviceType", deviceType);
-            mainObject.put("UserId", "22");
-            mainObject.put("IPAddress", CustomUtility.getDeviceId(getApplicationContext()));
-
-            Log.e("mainObject", String.valueOf(mainObject));
-        } catch (
-                JSONException e) {
-            e.printStackTrace();
+    public void write_read_fotaAPI(String address, String RW, String data1, String oldData, String value) {
+        stopProgressDialogue();
+        if (value.equals("1")) {
+            showProgressDialogue(getResources().getString(R.string.writing_data_please_wait));
+        } else if (value.equals("2")) {
+            showProgressDialogue(getResources().getString(R.string.reading_data_please_wait));
         }
+        String deviceType = controllerSerialNo.charAt(0) + controllerSerialNo.substring(1, 2);
 
-        showProgressDialogue(getResources().getString(R.string.writing_data_please_wait));
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
-                CustomUtility.getSharedPreferences(this,Constant.RmsBaseUrl)+ WebURL.deviceMappingAPIS, mainObject,
-                new Response.Listener<JSONObject>() {
+        Log.e("deviceMappingAPIS=====>", CustomUtility.getSharedPreferences(this, Constant.RmsBaseUrl) + WebURL.deviceMappingAPIS);
+        RequestQueue queue = Volley.newRequestQueue(DeviceMappingActivity.this);
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,
+                CustomUtility.getSharedPreferences(this, Constant.RmsBaseUrl) + WebURL.deviceMappingAPIS,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, "Get Acknow list response=" + response.toString());
+                    public void onResponse(String response) {
                         stopProgressDialogue();
-
-                        changeButtonVisibility(value);
-
-
+                        // array to JsonArray
+                        Log.e("response=====>", response);
+                        try {
+                            JSONArray jsonarray = new JSONArray(response);
+                            JSONObject jsonObj = jsonarray.getJSONObject(0);
+                            Log.e("Result=====>", jsonObj.getString("Result"));
+                            if (jsonObj.getString("Result").equals("2.0")) {
+                                changeButtonVisibility(value);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                VolleyLog.d("volley", "Error: " + error.getMessage());
+                error.printStackTrace();
                 stopProgressDialogue();
-
-                CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong),getApplicationContext());
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
-
+                CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.somethingWentWrong));
             }
-        });
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("address1", address);
+                params.put("offset1", "0");
+                params.put("NewGateway", "true");
+                params.put("did1", controllerSerialNo);
+                params.put("RW", RW);
+                params.put("data1", data1);
+                params.put("OldData", oldData);
+                params.put("DeviceType", deviceType);
+                params.put("UserId", "22");
+                params.put("IPAddress", CustomUtility.getDeviceId(getApplicationContext()));
+
+                Log.e("param=====>", params.toString());
+                return params;
+            }
+
+        };
+        queue.add(stringRequest);
 // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(jsonObjReq);
-        jsonObjReq.setShouldCache(false);
-        jsonObjReq.setRetryPolicy(new DefaultRetryPolicy(
+        // AppController.getInstance().addToRequestQueue(stringRequest);
+        stringRequest.setShouldCache(false);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
                 10000, 2, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
     }
 

@@ -831,7 +831,7 @@ public class InstallationInitial extends BaseActivity {
     public void saveData() {
         InstallationBean param_invc = new InstallationBean();
         param_invc = db.getInstallationData(pernr, billno);
-        Log.e("param_invc", param_invc.getLatitude());
+      //  Log.e("param_invc", param_invc.getLatitude().toString());
         if ((!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude())) && (!TextUtils.isEmpty(param_invc.getSolarpanel_wattage())) && (!TextUtils.isEmpty(param_invc.getNo_of_module_value()))) {
             saveDataValidation();
         } else {
@@ -1284,7 +1284,7 @@ public class InstallationInitial extends BaseActivity {
         inst_pump_ser.setText(pump);
 
         WebURL.mDEvice_Number_CHECK = controller;
-       inst_controller_ser.setText(controller);
+       inst_controller_ser.setText("7F-0135-0-13-06-23");
        //inst_controller_ser.setText(controller);
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {
@@ -1910,7 +1910,9 @@ public class InstallationInitial extends BaseActivity {
                         invc_done = jo.getString("return");
 
                         if (invc_done.equals("Y")) {
-                            if (DONGAL_ID.equals("99")) {
+                            String dongleType = DONGAL_ID.charAt(0) + DONGAL_ID.substring(1, 2);
+
+                            if (dongleType.equals("99")) {
                                 InstallationDone();
                                 ShowAlertResponse2((getResources().getString(R.string.installation_complete_msg)));
                             } else {
