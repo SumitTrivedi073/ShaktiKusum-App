@@ -487,8 +487,10 @@
     <string name="please_attach_controller_image">Please Attach Controller Image</string>
     <string name="writing_data_please_wait">Writing Data Please wait…</string>
     <string name="reading_data_please_wait">Reading Data Please wait…</string>
-    <string name="device_initialization_processing">Device initialization Processing....</string>
+    <string name="device_initialization_processing">Device initialization Processing…</string>
     <string name="enter_remark">Please Enter Remark</string>
+    <string name="device_shifting_successfully">Device Shifting Successfully</string>
+    <string name="checkDeviceShiftingStatus">Check Device Shifting Status…</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

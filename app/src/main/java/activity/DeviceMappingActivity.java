@@ -176,7 +176,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 contactNo = installationBean.getMobile_no();
                 hp = installationBean.getInst_hp();
                 regisNo = installationBean.getRegis_no();
-                 controllerSerialNo = installationBean.getScm_sno() + "-0";
+                // controllerSerialNo = installationBean.getScm_sno() + "-0";
                 customerName = installationBean.getCustomer_name();
                 customerMobile = installationBean.getMobile_no();
             }
@@ -189,12 +189,12 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 contactNo = pendingInstallationData.getContactNo();
                 hp = pendingInstallationData.getHp();
                 regisNo = pendingInstallationData.getRegisno();
-                  controllerSerialNo = pendingInstallationData.getControllerSernr() + "-0";
+                //  controllerSerialNo = pendingInstallationData.getControllerSernr() + "-0";
                 customerName = pendingInstallationData.getCustomerName();
                 customerMobile = pendingInstallationData.getContactNo();
 
-             }
-
+                Log.e("controllerSerialNo====>", controllerSerialNo);
+            }
             if(CustomUtility.isInternetOn(DeviceMappingActivity.this)){
                 getDeviceOnlineStatus();
             }else {
@@ -228,15 +228,32 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.write_btn:
-                write_read_fotaAPI("254", "0", "0", "0", "1");
+                if (CustomUtility.isInternetOn(DeviceMappingActivity.this)) {
+                    write_read_fotaAPI("254", "0", "0", "0", "1");
+                } else {
+                    CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.check_internet_connection));
+                }
                 break;
             case R.id.read_btn:
-                write_read_fotaAPI("254", "1", "1.0", "1.0", "2");
+                if (CustomUtility.isInternetOn(DeviceMappingActivity.this)) {
+                    write_read_fotaAPI("254", "1", "1.0", "1.0", "2");
+                } else {
+                    CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.check_internet_connection));
+                }
                 break;
             case R.id.updateDeviceBtn:
-                write_read_fotaAPI("255", "1", "1", "0.0", "3");
+                if (CustomUtility.isInternetOn(DeviceMappingActivity.this)) {
+                    write_read_fotaAPI("255", "1", "1", "0.0", "3");
+                } else {
+                    CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.check_internet_connection));
+                }
                 break;
             case R.id.checkDeviceStatusBtn:
+                if (CustomUtility.isInternetOn(DeviceMappingActivity.this)) {
+                    checkDeviceShiftingStatusAPI();
+                } else {
+                    CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.check_internet_connection));
+                }
 
                 break;
             case R.id.btnSave:
@@ -811,7 +828,6 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                             showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
 
                             runOnUiThread(() -> {
-                                databaseHelper.deleteOfflineControllerImages(billNo);
                                 if (CustomUtility.isValidMobile(customerMobile)) {
 
                                     Random random = new Random();
@@ -919,6 +935,56 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     }
 
 
+    /*-------------------------------------------------------------Device Shifting Status API-----------------------------------------------------------------------------*/
+
+    private void checkDeviceShiftingStatusAPI() {
+        stopProgressDialogue();
+        showProgressDialogue(getResources().getString(R.string.checkDeviceShiftingStatus));
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                CustomUtility.getSharedPreferences(this, Constant.RmsBaseUrl) + WebURL.deviceShiftingStatusCheck + "?deviceno=" + controllerSerialNo,
+                null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                stopProgressDialogue();
+                if (!res.toString().isEmpty()) {
+                    try {
+                        if(res.getString("status").equals("true")){
+                            showingMessage(getResources().getString(R.string.device_shifting_successfully));
+
+                            runOnUiThread(() -> {
+                                if (CustomUtility.isValidMobile(customerMobile)) {
+
+                                    Random random = new Random();
+                                    String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
+
+                                    sendVerificationCodeAPI(generatedVerificationCode, customerMobile, hp, beneficiaryNo,billNo);
+
+                                } else {
+                                    CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.mobile_number_not_valid));
+                                }
+                            });
+                        }else {
+                            showingMessage(getResources().getString(R.string.device_shifting_successfully));
+
+                        }
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+
+            }
+        }, error -> {
+            stopProgressDialogue();
+            Log.e("error", String.valueOf(error));
+            Toast.makeText(DeviceMappingActivity.this, error.getMessage(),
+                    Toast.LENGTH_LONG).show();
+        });
+        requestQueue.add(jsonObjectRequest);
+    }
+
+
     /*-------------------------------------------------------------Send OTP to customer-----------------------------------------------------------------------------*/
 
     private void sendVerificationCodeAPI(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo, String billNo) {
@@ -936,6 +1002,8 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
 
                 if (!res.toString().isEmpty()) {
+                    databaseHelper.deleteOfflineControllerImages(billNo);
+                    databaseHelper.deleteDeviceMappingRecords(billNo);
                     VerificationCodeModel verificationCodeModel = new Gson().fromJson(res.toString(), VerificationCodeModel.class);
                     if (verificationCodeModel.getStatus().equals("Success")) {
                         ShowAlertResponse(generatedVerificationCode, ContactNo, Hp, beneficiaryNo, billNo);

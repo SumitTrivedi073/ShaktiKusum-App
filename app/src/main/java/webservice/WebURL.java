@@ -111,4 +111,6 @@ public class WebURL {
     public static final String DEVICE_DETAILS = "Home/SAPOnlineDeviceDetails";
 
     public static String deviceMappingAPIS ="Home/DeviceSettingParam";
+
+    public static String deviceShiftingStatusCheck ="NewShakti/RMSApp/shiftingCheck";
 }

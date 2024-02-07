@@ -4449,6 +4449,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void deleteDeviceMappingRecords(String billNo) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String where = "";
+        where = KEY_BILL_NO + "='" + billNo + "'";
+        if (CustomUtility.doesTableExist(db, TABLE_DEVICE_MAPPING_DATA)) {
+            db.delete(TABLE_DEVICE_MAPPING_DATA, where, null);
+        }
+    }
+
+
+    public void deleteOfflineControllerData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if (CustomUtility.doesTableExist(db, TABLE_OFFLINE_CONTROLLER_IMAGE_DATA)) {
+            db.delete(TABLE_OFFLINE_CONTROLLER_IMAGE_DATA, null, null);
+        }
+    }
+
+        public void deleteDeviceMappingData() {
+            SQLiteDatabase db = this.getWritableDatabase();
+            if (CustomUtility.doesTableExist(db, TABLE_DEVICE_MAPPING_DATA)) {
+                db.delete(TABLE_DEVICE_MAPPING_DATA, null, null);
+            }
+    }
+
     public ArrayList<ImageModel> getAllInstallationImages() {
         ArrayList<ImageModel> installationImages = new ArrayList<ImageModel>();
         SQLiteDatabase database = this.getWritableDatabase();
