@@ -20,7 +20,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -704,7 +703,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                                     sendVerificationCodeAPI(generatedVerificationCode, custMobile, Hp, beneficiary);
 
                                 } else {
-                                    Intent intent = new Intent(UnloadInstReportImageActivity.this, PendingFeedbackActivity.class);
+                                    Intent intent = new Intent(UnloadInstReportImageActivity.this, PendingInstallationVerificationActivity.class);
                                     startActivity(intent);
                                     finish();
                                 }
@@ -917,7 +916,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
         OK_txt.setOnClickListener(v -> {
             alertDialog.dismiss();
-            Intent intent = new Intent(UnloadInstReportImageActivity.this, PendingFeedBackOTPVerification.class);
+            Intent intent = new Intent(UnloadInstReportImageActivity.this, PendingInsUnlOTPVerification.class);
             intent.putExtra(Constant.PendingFeedbackContact, ContactNo);
             intent.putExtra(Constant.PendingFeedbackHp, Hp);
             intent.putExtra(Constant.PendingFeedbackBeneficiary, beneficiaryNo);

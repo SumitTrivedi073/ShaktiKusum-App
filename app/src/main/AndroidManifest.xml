@@ -120,11 +120,11 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.PendingFeedBackOTPVerification"
+            android:name="activity.PendingInsUnlOTPVerification"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.PendingFeedbackActivity"
+            android:name="activity.PendingInstallationVerificationActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity

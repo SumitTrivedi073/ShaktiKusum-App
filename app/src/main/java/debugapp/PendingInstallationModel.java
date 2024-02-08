@@ -1,9 +1,6 @@
 package debugapp;
 
 import android.os.Parcel;
-import android.os.Parcelable;
-
-import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -11,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import java.util.List;
 
-public class PendingFeedback implements Serializable {
+public class PendingInstallationModel implements Serializable {
     @SerializedName("status")
     @Expose
     private String status;
@@ -22,7 +19,7 @@ public class PendingFeedback implements Serializable {
     @Expose
     private List<Response> response;
 
-    protected PendingFeedback(Parcel in) {
+    protected PendingInstallationModel(Parcel in) {
         status = in.readString();
         message = in.readString();
     }
@@ -210,7 +207,9 @@ public class PendingFeedback implements Serializable {
         @SerializedName("dongle")
         @Expose
         private String dongle;
-
+        @SerializedName("latlng")
+        @Expose
+        private String latlng;
 
         public String getMandt() {
             return mandt;
@@ -618,6 +617,14 @@ public class PendingFeedback implements Serializable {
 
         public void setDongle(String dongle) {
             this.dongle = dongle;
+        }
+
+        public String getLatlng() {
+            return latlng;
+        }
+
+        public void setLatlng(String latlng) {
+            this.latlng = latlng;
         }
     }
 }

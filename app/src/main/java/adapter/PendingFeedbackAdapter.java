@@ -15,19 +15,18 @@ import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import debugapp.PendingFeedback;
+import debugapp.PendingInstallationModel;
 
 public class PendingFeedbackAdapter extends RecyclerView.Adapter<PendingFeedbackAdapter.ViewHolder> implements Filterable {
     Context mContext;
-    private List<PendingFeedback.Response> pendingFeedbackList;
-    private final List<PendingFeedback.Response> arSearch;
+    private List<PendingInstallationModel.Response> pendingFeedbackList;
+    private final List<PendingInstallationModel.Response> arSearch;
     private SendOTPListner sendOTPListener;
 
     TextView noDataFound;
 
-    public PendingFeedbackAdapter(Context context, List<PendingFeedback.Response> listdata, TextView noDataFound) {
+    public PendingFeedbackAdapter(Context context, List<PendingInstallationModel.Response> listdata, TextView noDataFound) {
         pendingFeedbackList = listdata;
         mContext = context;
         this.arSearch = new ArrayList<>();
@@ -46,7 +45,7 @@ public class PendingFeedbackAdapter extends RecyclerView.Adapter<PendingFeedback
     @SuppressLint("DefaultLocale")
     @Override
     public void onBindViewHolder(ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        final PendingFeedback.Response response = pendingFeedbackList.get(position);
+        final PendingInstallationModel.Response response = pendingFeedbackList.get(position);
         holder.customerName.setText(response.getCustomerName());
         holder.mobileNumber.setText(response.getContactNo());
         holder.beneficiaryNo.setText("Beneficiary No:- "+response.getBeneficiary());
@@ -55,9 +54,7 @@ public class PendingFeedbackAdapter extends RecyclerView.Adapter<PendingFeedback
       holder.sendOTP.setOnClickListener(new View.OnClickListener() {
           @Override
            public void onClick(View view) {
-              Random random = new Random();
-              String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
-              sendOTPListener.sendOtpListener(pendingFeedbackList,position, generatedVerificationCode);
+              sendOTPListener.sendOtpListener(pendingFeedbackList,position);
 
            }
        });
@@ -72,7 +69,7 @@ public class PendingFeedbackAdapter extends RecyclerView.Adapter<PendingFeedback
         }
     }
     public interface SendOTPListner {
-        void sendOtpListener(List<PendingFeedback.Response> pendingFeedbackList, int position ,String generatedVerificationCode);
+        void sendOtpListener(List<PendingInstallationModel.Response> pendingFeedbackList, int position);
 
     }
 
@@ -106,8 +103,8 @@ public class PendingFeedbackAdapter extends RecyclerView.Adapter<PendingFeedback
                 if (charString.isEmpty()) {
                     pendingFeedbackList = arSearch;
                 } else {
-                    List<PendingFeedback.Response> filteredList = new ArrayList<>();
-                    for (PendingFeedback.Response row : arSearch) {
+                    List<PendingInstallationModel.Response> filteredList = new ArrayList<>();
+                    for (PendingInstallationModel.Response row : arSearch) {
 
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
@@ -127,7 +124,7 @@ public class PendingFeedbackAdapter extends RecyclerView.Adapter<PendingFeedback
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                pendingFeedbackList = (ArrayList<PendingFeedback.Response>) filterResults.values;
+                pendingFeedbackList = (ArrayList<PendingInstallationModel.Response>) filterResults.values;
                 if (pendingFeedbackList.size()>0){
                     noDataFound.setVisibility(View.GONE);
                 }else {

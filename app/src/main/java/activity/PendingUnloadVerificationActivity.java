@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import adapter.PendingUnloadVerificationAdapter;
 import debugapp.GlobalValue.Constant;
-import debugapp.PendingFeedback;
+import debugapp.PendingInstallationModel;
 import debugapp.UnloadingFeedbackModel;
 import debugapp.VerificationCodeModel;
 import utility.CustomUtility;
@@ -45,7 +45,7 @@ public class PendingUnloadVerificationActivity extends BaseActivity implements P
 
     private  RecyclerView pendingFeedbackList;
     private Toolbar mToolbar;
-    ArrayList<PendingFeedback> pendingFeedbacks;
+    ArrayList<PendingInstallationModel> pendingInstallationModels;
     AlertDialog alertDialog;
 
     TextView noDataFound;
@@ -59,7 +59,7 @@ public class PendingUnloadVerificationActivity extends BaseActivity implements P
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pending_feedbacck);
+        setContentView(R.layout.activity_pending_installation_verification);
 
         Init();
         listner();
@@ -153,7 +153,7 @@ public class PendingUnloadVerificationActivity extends BaseActivity implements P
             param.add(new BasicNameValuePair("PROJECT_LOGIN_NO", CustomUtility.getSharedPreferences(context, "loginid")));*/
     private void getUnloadingFeedbackList() {
         CustomUtility.showProgressDialogue(PendingUnloadVerificationActivity.this);
-        pendingFeedbacks = new ArrayList<>();
+        pendingInstallationModels = new ArrayList<>();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         Log.e("URL========>",WebURL.unloading_list_verification_pend +"?project_no="+CustomUtility.getSharedPreferences(getApplicationContext(), "projectid")+"&userid="+CustomUtility.getSharedPreferences(getApplicationContext(), "userid")+"&project_login_no=01");
@@ -284,7 +284,7 @@ public class PendingUnloadVerificationActivity extends BaseActivity implements P
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
-                Intent intent = new Intent(PendingUnloadVerificationActivity.this, PendingFeedBackOTPVerification.class);
+                Intent intent = new Intent(PendingUnloadVerificationActivity.this, PendingInsUnlOTPVerification.class);
                 intent.putExtra(Constant.PendingFeedbackContact,response.getContactNo());
                 intent.putExtra(Constant.PendingFeedbackVblen,response.getVbeln());
                 intent.putExtra(Constant.PendingFeedbackHp,response.getHp());

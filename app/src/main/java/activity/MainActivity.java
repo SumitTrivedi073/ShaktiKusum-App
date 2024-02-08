@@ -323,7 +323,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.pendingInstallationVerification:
-                Intent mIntent2 = new Intent(context, PendingFeedbackActivity.class);
+                Intent mIntent2 = new Intent(context, PendingInstallationVerificationActivity.class);
                 startActivity(mIntent2);
                 break;
 

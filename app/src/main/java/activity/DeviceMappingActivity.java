@@ -77,7 +77,7 @@ import bean.ImageModel;
 import bean.InstallationBean;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
-import debugapp.PendingFeedback;
+import debugapp.PendingInstallationModel;
 import debugapp.VerificationCodeModel;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
@@ -100,10 +100,10 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     Toolbar mToolbar;
 
     DatabaseHelper databaseHelper;
-    PendingFeedback.Response pendingInstallationData;
+    PendingInstallationModel.Response pendingInstallationData;
     InstallationBean installationBean;
 
-    String billNo = "", beneficiaryNo = "", contactNo = "", hp = "", regisNo = "", controllerSerialNo = "", customerName = "", customerMobile = "";
+    String billNo = "", beneficiaryNo = "", contactNo = "", hp = "", regisNo = "", controllerSerialNo = "7F-0135-0-13-06-23-0", customerName = "", customerMobile = "";
 
     int selectedIndex;
     boolean isUpdate = false;
@@ -182,7 +182,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
             }
 
             if (Objects.equals(getIntent().getStringExtra(Constant.deviceMappingData2), "2")) {
-                pendingInstallationData = (PendingFeedback.Response) getIntent().getSerializableExtra(Constant.deviceMappingData);
+                pendingInstallationData = (PendingInstallationModel.Response) getIntent().getSerializableExtra(Constant.deviceMappingData);
 
                 billNo = pendingInstallationData.getVbeln();
                 beneficiaryNo = pendingInstallationData.getBeneficiary();
@@ -229,14 +229,14 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
         switch (v.getId()) {
             case R.id.write_btn:
                 if (CustomUtility.isInternetOn(DeviceMappingActivity.this)) {
-                    write_read_fotaAPI("254", "0", "0", "0", "1");
+                    write_read_fotaAPI("254", "1", "0", "0", "1");
                 } else {
                     CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.check_internet_connection));
                 }
                 break;
             case R.id.read_btn:
                 if (CustomUtility.isInternetOn(DeviceMappingActivity.this)) {
-                    write_read_fotaAPI("254", "1", "1.0", "1.0", "2");
+                    write_read_fotaAPI("254", "0", "1.0", "1.0", "2");
                 } else {
                     CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.check_internet_connection));
                 }
@@ -1043,7 +1043,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
         OK_txt.setOnClickListener(v -> {
             alertDialog.dismiss();
-            Intent intent = new Intent(DeviceMappingActivity.this, PendingFeedBackOTPVerification.class);
+            Intent intent = new Intent(DeviceMappingActivity.this, PendingInsUnlOTPVerification.class);
             intent.putExtra(Constant.PendingFeedbackContact, ContactNo);
             intent.putExtra(Constant.PendingFeedbackVblen, billNo);
             intent.putExtra(Constant.PendingFeedbackHp, Hp);

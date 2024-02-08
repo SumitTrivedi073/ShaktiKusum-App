@@ -1911,7 +1911,7 @@ public class InstallationInitial extends BaseActivity {
 
                         if (invc_done.equals("Y")) {
                             String dongleType = DONGAL_ID.charAt(0) + DONGAL_ID.substring(1, 2);
-
+                           //dongle type 99 defile 2G dongles and 6B define 4G dongle
                             if (dongleType.equals("99")) {
                                 InstallationDone();
                                 ShowAlertResponse2((getResources().getString(R.string.installation_complete_msg)));
@@ -2125,7 +2125,7 @@ public class InstallationInitial extends BaseActivity {
 
         OK_txt.setOnClickListener(v -> {
             alertDialog.dismiss();
-            Intent intent = new Intent(InstallationInitial.this, PendingFeedBackOTPVerification.class);
+            Intent intent = new Intent(InstallationInitial.this, PendingInsUnlOTPVerification.class);
             intent.putExtra(Constant.PendingFeedbackContact, ContactNo);
             intent.putExtra(Constant.PendingFeedbackVblen, billNo);
             intent.putExtra(Constant.PendingFeedbackHp, Hp);

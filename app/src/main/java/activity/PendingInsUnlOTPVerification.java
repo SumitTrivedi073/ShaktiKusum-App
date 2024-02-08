@@ -24,7 +24,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.json.JSONArray;
@@ -39,7 +38,7 @@ import debugapp.VerificationCodeModel;
 import utility.CustomUtility;
 import webservice.WebURL;
 
-public class PendingFeedBackOTPVerification extends BaseActivity {
+public class PendingInsUnlOTPVerification extends BaseActivity {
 
     Toolbar mToolbar;
     LinearLayout resendLinear;
@@ -52,7 +51,7 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pending_feed_back_otpverification);
+        setContentView(R.layout.activity_pending_ins_unl_otpverification);
 
         Init();
         listner();
@@ -141,13 +140,13 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
 
         jsonArray.put(mainObject);
 
-        CustomUtility.showProgressDialogue(PendingFeedBackOTPVerification.this);
+        CustomUtility.showProgressDialogue(PendingInsUnlOTPVerification.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.SendOTPToServer + jsonArray, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
-                CustomUtility.hideProgressDialog(PendingFeedBackOTPVerification.this);
+                CustomUtility.hideProgressDialog(PendingInsUnlOTPVerification.this);
 
 
                 if (!res.toString().isEmpty()) {
@@ -160,9 +159,9 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                CustomUtility.hideProgressDialog(PendingFeedBackOTPVerification.this);
+                CustomUtility.hideProgressDialog(PendingInsUnlOTPVerification.this);
                 Log.e("error", String.valueOf(error));
-                Toast.makeText(PendingFeedBackOTPVerification.this, error.toString(),
+                Toast.makeText(PendingInsUnlOTPVerification.this, error.toString(),
                         Toast.LENGTH_LONG).show();
             }
         });
@@ -192,13 +191,13 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
 
         jsonArray.put(mainObject);
 
-        CustomUtility.showProgressDialogue(PendingFeedBackOTPVerification.this);
+        CustomUtility.showProgressDialogue(PendingInsUnlOTPVerification.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.sendOTPForUnLoading + jsonArray, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
-                CustomUtility.hideProgressDialog(PendingFeedBackOTPVerification.this);
+                CustomUtility.hideProgressDialog(PendingInsUnlOTPVerification.this);
 
 
                 if (!res.toString().isEmpty()) {
@@ -211,9 +210,9 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                CustomUtility.hideProgressDialog(PendingFeedBackOTPVerification.this);
+                CustomUtility.hideProgressDialog(PendingInsUnlOTPVerification.this);
                 Log.e("error", String.valueOf(error));
-                Toast.makeText(PendingFeedBackOTPVerification.this, error.toString(),
+                Toast.makeText(PendingInsUnlOTPVerification.this, error.toString(),
                         Toast.LENGTH_LONG).show();
             }
         });
@@ -226,7 +225,7 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
 
 
     private void sendVerificationCodeAPI(String generatedVerificationCode) {
-        CustomUtility.showProgressDialogue(PendingFeedBackOTPVerification.this);
+        CustomUtility.showProgressDialogue(PendingInsUnlOTPVerification.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
@@ -236,7 +235,7 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
-                CustomUtility.hideProgressDialog(PendingFeedBackOTPVerification.this);
+                CustomUtility.hideProgressDialog(PendingInsUnlOTPVerification.this);
 
 
                 if (!res.toString().isEmpty()) {
@@ -252,9 +251,9 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                CustomUtility.hideProgressDialog(PendingFeedBackOTPVerification.this);
+                CustomUtility.hideProgressDialog(PendingInsUnlOTPVerification.this);
                 Log.e("error", String.valueOf(error));
-                Toast.makeText(PendingFeedBackOTPVerification.this, error.getMessage(),
+                Toast.makeText(PendingInsUnlOTPVerification.this, error.getMessage(),
                         Toast.LENGTH_LONG).show();
             }
         });
@@ -266,7 +265,7 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
     }
 
     private void sendVerificationCodeUnloadAPI(String generatedVerificationCode) {
-        CustomUtility.showProgressDialogue(PendingFeedBackOTPVerification.this);
+        CustomUtility.showProgressDialogue(PendingInsUnlOTPVerification.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
 
@@ -277,7 +276,7 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {
-                CustomUtility.hideProgressDialog(PendingFeedBackOTPVerification.this);
+                CustomUtility.hideProgressDialog(PendingInsUnlOTPVerification.this);
 
 
 
@@ -294,9 +293,9 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                CustomUtility.hideProgressDialog(PendingFeedBackOTPVerification.this);
+                CustomUtility.hideProgressDialog(PendingInsUnlOTPVerification.this);
                 Log.e("error", String.valueOf(error));
-                Toast.makeText(PendingFeedBackOTPVerification.this, error.getMessage(),
+                Toast.makeText(PendingInsUnlOTPVerification.this, error.getMessage(),
                         Toast.LENGTH_LONG).show();
             }
         });
@@ -309,11 +308,11 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
 
 
     private void ShowAlertResponse(String value) {
-        LayoutInflater inflater = (LayoutInflater) PendingFeedBackOTPVerification.this
+        LayoutInflater inflater = (LayoutInflater) PendingInsUnlOTPVerification.this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.send_successfully_layout,
                 null);
-        final AlertDialog.Builder builder = new AlertDialog.Builder(PendingFeedBackOTPVerification.this, R.style.MyDialogTheme);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(PendingInsUnlOTPVerification.this, R.style.MyDialogTheme);
 
         builder.setView(layout);
         builder.setCancelable(false);
@@ -340,7 +339,7 @@ public class PendingFeedBackOTPVerification extends BaseActivity {
                     countDownTimer();
                 } else {
                     alertDialog.dismiss();
-                    Intent intent = new Intent(PendingFeedBackOTPVerification.this, MainActivity.class);
+                    Intent intent = new Intent(PendingInsUnlOTPVerification.this, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 }
