@@ -123,7 +123,7 @@ public class InstallationInitial extends BaseActivity {
              MEmpType = "null", mAppName = "KUSUM", mInstallerMOB = "", mInstallerName = "", RMS_SERVER_DOWN = "", RMS_DEBUG_EXTRN = "", DEVICE_NO, SIGNL_STREN,
             INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "", SIM_SR_NO = "", SIM = "", RMS_STATUS = "", RMS_LAST_ONLINE_DATE = "", FAULT_CODE = "",
             RMS_CURRENT_ONLINE_STATUS = "", version = "", invc_done = "", docno_sap = "", mDriveSerialNo = "", mMotorSerialNo = "", mPumpSerialNo = "", delay = "",mobileOnlineStatus = "",
-            controllerOnlineStatus = "",dirPath = "",finalFileName="",filePath ="",type ="",columnCount ="";
+            controllerOnlineStatus = "",dirPath = "",finalFileName="",filePath ="",type ="",columnCount ="", dongleType="";
     File selectedFile;
     EditText inst_date, bill_date, bill_no, cust_name, borewellstatus, reasontxt, inst_address, inst_make, inst_village,
             inst_state, inst_district, inst_tehsil, inst_mob_no, inst_panel_stand_qty, inst_panel_watt, inst_total_watt, inst_module_total_plate_watt, inst_no_of_module, inst_module_ser_no,
@@ -1910,7 +1910,7 @@ public class InstallationInitial extends BaseActivity {
                         invc_done = jo.getString("return");
 
                         if (invc_done.equals("Y")) {
-                            String dongleType = DONGAL_ID.charAt(0) + DONGAL_ID.substring(1, 2);
+                             dongleType = DONGAL_ID.charAt(0) + DONGAL_ID.substring(1, 2);
                            //dongle type 99 defile 2G dongles and 6B define 4G dongle
                             if (dongleType.equals("99")) {
                                 InstallationDone();
@@ -2057,13 +2057,18 @@ public class InstallationInitial extends BaseActivity {
 
         OK_txt.setOnClickListener(v -> {
             alertDialog.dismiss();
-            Intent intent = new Intent(InstallationInitial.this, DeviceMappingActivity.class);
-            intent.putExtra(Constant.deviceMappingData, param_invc);
-            intent.putExtra(Constant.deviceMappingData2, "1");
+                    if (dongleType.equals("99")) {
+                        Intent intent = new Intent(InstallationInitial.this, DeviceMappingActivity.class);
+                        intent.putExtra(Constant.deviceMappingData, param_invc);
+                        intent.putExtra(Constant.deviceMappingData2, "1");
 
-            startActivity(intent);
-            finish();
-
+                        startActivity(intent);
+                        finish();
+                    }else {
+                        Intent intent = new Intent(InstallationInitial.this, PendingInstallationVerificationActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
         });
 
     }

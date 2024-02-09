@@ -703,7 +703,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                                     sendVerificationCodeAPI(generatedVerificationCode, custMobile, Hp, beneficiary);
 
                                 } else {
-                                    Intent intent = new Intent(UnloadInstReportImageActivity.this, PendingInstallationVerificationActivity.class);
+                                    Intent intent = new Intent(UnloadInstReportImageActivity.this, PendingUnloadVerificationActivity.class);
                                     startActivity(intent);
                                     finish();
                                 }
