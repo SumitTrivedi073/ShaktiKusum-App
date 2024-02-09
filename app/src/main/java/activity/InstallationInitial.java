@@ -1963,7 +1963,7 @@ public class InstallationInitial extends BaseActivity {
         showProgressDialogue(getResources().getString(R.string.device_initialization_processing));
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.updateLatLngToRms + "?deviceNo="+inst_controller_ser.getText().toString().trim()+"&lat="+imageList.get(2).getLatitude()+"&lon="+imageList.get(2).getLongitude(),
+                CustomUtility.getSharedPreferences(this, Constant.RmsBaseUrl) + WebURL.updateLatLngToRms + "?deviceNo="+inst_controller_ser.getText().toString().trim()+"&lat="+imageList.get(2).getLatitude()+"&lon="+imageList.get(2).getLongitude(),
 
                 null, new Response.Listener<JSONObject>() {
             @Override

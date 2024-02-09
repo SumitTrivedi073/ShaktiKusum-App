@@ -217,7 +217,9 @@ public class PendingInstallationVerificationActivity extends BaseActivity implem
 
         Log.e("BillNo=====>", pendingFeedbackList.get(position).getVbeln());
 
-        String dongleType = pendingFeedbackList.get(position).getDongle().charAt(0) + pendingFeedbackList.get(position).getDongle().substring(1, 2);
+    //    String dongleType = pendingFeedbackList.get(position).getDongle().charAt(0) + pendingFeedbackList.get(position).getDongle().substring(1, 2);
+         String DongleNo = "99-0070-0-07-06-23";
+        String dongleType = DongleNo.charAt(0) + DongleNo.substring(1, 2);;
 
         //dongle type 99 defile 2G dongles and 6B define 4G dongle
         if (dongleType.equals("99")) {
@@ -248,14 +250,18 @@ public class PendingInstallationVerificationActivity extends BaseActivity implem
     /*-------------------------------------------------------------Send Lat Lng to Rms Server-----------------------------------------------------------------------------*/
     private void sendLatLngToRmsForFota(PendingInstallationModel.Response response, String generatedVerificationCode) {
 
-        String [] tempArray = response.getLatlng().substring(response.getLatlng().indexOf("(")+1, response.getLatlng().lastIndexOf(")")).split(",");
-        double longitude = Double.parseDouble(tempArray[0]);
-        double latitude = Double.parseDouble(tempArray[1]);
+    //    String [] tempArray = response.getLatlng().substring(response.getLatlng(), response.getLatlng().lastIndexOf(")")).split(",");
+        String[] latlong =  response.getLatlng().split(",");
+        double latitude = Double.parseDouble(latlong[0]);
+        double longitude = Double.parseDouble(latlong[1]);
+
+        Log.e("latitude======>", String.valueOf(latitude));
+        Log.e("longitude======>", String.valueOf(longitude));
 
         showProgressDialogue(getResources().getString(R.string.device_initialization_processing));
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.updateLatLngToRms + "?deviceNo=" + "7F-0135-0-13-06-23-0" + "&lat=" + latitude + "&lon=" + longitude,
+                CustomUtility.getSharedPreferences(this, Constant.RmsBaseUrl) + WebURL.updateLatLngToRms + "?deviceNo=" + "7F-0135-0-13-06-23-0" + "&lat=" + latitude + "&lon=" + longitude,
 
                 null, new Response.Listener<JSONObject>() {
             @Override

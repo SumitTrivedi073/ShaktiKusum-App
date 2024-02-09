@@ -97,8 +97,6 @@ public class WebURL {
     public static final String saveDebugData = BASE_URL_VK +"save.htm";
 
     public static final String DemoRoadURL = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/demo_road_show.htm";
-    public static String updateLatLngToRms = "https://quality.shaktirms.com/NewShakti/RMSApp/LatLongUpdate";
-
 
     public static final String ComplaintBeforeInstallationAPI = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/complaint_before_inst.htm";
 
@@ -113,4 +111,6 @@ public class WebURL {
     public static String deviceMappingAPIS ="Home/DeviceSettingParam";
 
     public static String deviceShiftingStatusCheck ="NewShakti/RMSApp/shiftingCheck";
+
+    public static String updateLatLngToRms = "Home/LatLongUpdate";
 }

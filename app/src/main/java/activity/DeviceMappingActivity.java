@@ -871,6 +871,8 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
             showProgressDialogue(getResources().getString(R.string.writing_data_please_wait));
         } else if (value.equals("2")) {
             showProgressDialogue(getResources().getString(R.string.reading_data_please_wait));
+        }else if (value.equals("3")) {
+            showProgressDialogue(getResources().getString(R.string.updating_controller));
         }
         String deviceType = controllerSerialNo.charAt(0) + controllerSerialNo.substring(1, 2);
 
