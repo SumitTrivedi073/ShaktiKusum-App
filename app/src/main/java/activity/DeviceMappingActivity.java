@@ -205,7 +205,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
 
     private void startCountDownTimer() {
-        timer = new CountDownTimer(900000, 1000) {
+        timer = new CountDownTimer(10000, 1000) {
             public void onTick(long millisUntilFinished) {
                 // Used for formatting digit to be in 2 digits only
                 NumberFormat f = new DecimalFormat("00");
@@ -229,14 +229,14 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
         switch (v.getId()) {
             case R.id.write_btn:
                 if (CustomUtility.isInternetOn(DeviceMappingActivity.this)) {
-                    write_read_fotaAPI("254", "1", "0", "0", "1");
+                    write_read_fotaAPI("254", "1", "1.0", "0", "1");
                 } else {
                     CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.check_internet_connection));
                 }
                 break;
             case R.id.read_btn:
                 if (CustomUtility.isInternetOn(DeviceMappingActivity.this)) {
-                    write_read_fotaAPI("254", "0", "1.0", "1.0", "2");
+                    write_read_fotaAPI("254", "0", "0.0", "1.0", "2");
                 } else {
                     CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.check_internet_connection));
                 }
