@@ -205,7 +205,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
 
     private void startCountDownTimer() {
-        timer = new CountDownTimer(10000, 1000) {
+        timer = new CountDownTimer(900000, 1000) {
             public void onTick(long millisUntilFinished) {
                 // Used for formatting digit to be in 2 digits only
                 NumberFormat f = new DecimalFormat("00");

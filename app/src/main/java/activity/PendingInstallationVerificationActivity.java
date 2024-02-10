@@ -217,10 +217,10 @@ public class PendingInstallationVerificationActivity extends BaseActivity implem
 
         Log.e("BillNo=====>", pendingFeedbackList.get(position).getVbeln());
 
-        String dongleType = pendingFeedbackList.get(position).getDongle().charAt(0) + pendingFeedbackList.get(position).getDongle().substring(1, 2);
-      /*   String DongleNo = "99-0070-0-07-06-23";
+      //  String dongleType = pendingFeedbackList.get(position).getDongle().charAt(0) + pendingFeedbackList.get(position).getDongle().substring(1, 2);
+         String DongleNo = "99-0070-0-07-06-23";
         String dongleType = DongleNo.charAt(0) + DongleNo.substring(1, 2);;
-*/
+
         //dongle type 99 defile 2G dongles and 6B define 4G dongle
         if (dongleType.equals("99")) {
             Intent intent = new Intent(PendingInstallationVerificationActivity.this, DeviceMappingActivity.class);
