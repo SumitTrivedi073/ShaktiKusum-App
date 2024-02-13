@@ -103,7 +103,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     PendingInstallationModel.Response pendingInstallationData;
     InstallationBean installationBean;
 
-    String billNo = "", beneficiaryNo = "", contactNo = "", hp = "", regisNo = "", controllerSerialNo = "7F-0135-0-13-06-23-0", customerName = "", customerMobile = "";
+    String billNo = "", beneficiaryNo = "", contactNo = "", hp = "", regisNo = "", controllerSerialNo = "", customerName = "", customerMobile = "";
 
     int selectedIndex;
     boolean isUpdate = false;
@@ -176,7 +176,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 contactNo = installationBean.getMobile_no();
                 hp = installationBean.getInst_hp();
                 regisNo = installationBean.getRegis_no();
-                // controllerSerialNo = installationBean.getScm_sno() + "-0";
+                 controllerSerialNo = installationBean.getScm_sno() + "-0";
                 customerName = installationBean.getCustomer_name();
                 customerMobile = installationBean.getMobile_no();
             }
@@ -189,7 +189,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 contactNo = pendingInstallationData.getContactNo();
                 hp = pendingInstallationData.getHp();
                 regisNo = pendingInstallationData.getRegisno();
-                //  controllerSerialNo = pendingInstallationData.getControllerSernr() + "-0";
+                  controllerSerialNo = pendingInstallationData.getControllerSernr() + "-0";
                 customerName = pendingInstallationData.getCustomerName();
                 customerMobile = pendingInstallationData.getContactNo();
 

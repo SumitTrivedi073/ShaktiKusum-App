@@ -215,12 +215,13 @@ public class PendingInstallationVerificationActivity extends BaseActivity implem
     @Override
     public void sendOtpListener(List<PendingInstallationModel.Response> pendingFeedbackList, int position) {
 
-        Log.e("BillNo=====>", pendingFeedbackList.get(position).getVbeln());
+      //  Log.e("Dongle=====>", pendingFeedbackList.get(position).getDongle());
 
-      //  String dongleType = pendingFeedbackList.get(position).getDongle().charAt(0) + pendingFeedbackList.get(position).getDongle().substring(1, 2);
-         String DongleNo = "99-0070-0-07-06-23";
-        String dongleType = DongleNo.charAt(0) + DongleNo.substring(1, 2);;
+       String dongleType = pendingFeedbackList.get(position).getDongle().charAt(0) + pendingFeedbackList.get(position).getDongle().substring(1, 2);
+        // String DongleNo = "99-0070-0-07-06-23";
+       // String dongleType = DongleNo.charAt(0) + DongleNo.substring(1, 2);;
 
+        //Log.e("dongleType======>",dongleType);
         //dongle type 99 defile 2G dongles and 6B define 4G dongle
         if (dongleType.equals("99")) {
             Intent intent = new Intent(PendingInstallationVerificationActivity.this, DeviceMappingActivity.class);
@@ -249,8 +250,6 @@ public class PendingInstallationVerificationActivity extends BaseActivity implem
 
     /*-------------------------------------------------------------Send Lat Lng to Rms Server-----------------------------------------------------------------------------*/
     private void sendLatLngToRmsForFota(PendingInstallationModel.Response response, String generatedVerificationCode) {
-
-    //    String [] tempArray = response.getLatlng().substring(response.getLatlng(), response.getLatlng().lastIndexOf(")")).split(",");
         String[] latlong =  response.getLatlng().split(",");
         double latitude = Double.parseDouble(latlong[0]);
         double longitude = Double.parseDouble(latlong[1]);
@@ -258,10 +257,12 @@ public class PendingInstallationVerificationActivity extends BaseActivity implem
         Log.e("latitude======>", String.valueOf(latitude));
         Log.e("longitude======>", String.valueOf(longitude));
 
+        Log.e("URL======>",CustomUtility.getSharedPreferences(this, Constant.RmsBaseUrl) + WebURL.updateLatLngToRms + "?deviceNo=" + response.getControllerSernr()+ "&lat=" + latitude + "&lon=" + longitude);
+
         showProgressDialogue(getResources().getString(R.string.device_initialization_processing));
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                CustomUtility.getSharedPreferences(this, Constant.RmsBaseUrl) + WebURL.updateLatLngToRms + "?deviceNo=" + "7F-0135-0-13-06-23-0" + "&lat=" + latitude + "&lon=" + longitude,
+                CustomUtility.getSharedPreferences(this, Constant.RmsBaseUrl) + WebURL.updateLatLngToRms + "?deviceNo=" + response.getControllerSernr()+ "&lat=" + latitude + "&lon=" + longitude,
 
                 null, new Response.Listener<JSONObject>() {
             @Override
