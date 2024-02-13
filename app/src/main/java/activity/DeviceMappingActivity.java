@@ -92,8 +92,9 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     List<ImageModel> imageList = new ArrayList<>();
 
     RecyclerView recyclerview;
-    LinearLayout deviceOnlineLinear, deviceOfflineLinear;
-    TextView write_btn, read_btn, updateDeviceBtn, countDownTimerTxt, checkDeviceStatusBtn, btnSave;
+    LinearLayout deviceOnlineLinear, deviceOfflineLinear,deviceStatusLinear;
+    TextView write_btn, read_btn, updateDeviceBtn, countDownTimerTxt,countDownTimerTxt1, checkDeviceStatusBtn,checkDeviceStatusBtn1,
+            update4GDeviceBtn, btnSave;
     EditText remarkExt;
     ImageView writeImg, read_img;
     CountDownTimer timer;
@@ -103,7 +104,8 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     PendingInstallationModel.Response pendingInstallationData;
     InstallationBean installationBean;
 
-    String billNo = "", beneficiaryNo = "", contactNo = "", hp = "", regisNo = "", controllerSerialNo = "", customerName = "", customerMobile = "";
+    String billNo = "", beneficiaryNo = "", contactNo = "", hp = "", regisNo = "",
+            controllerSerialNo = "7E-0029-0-14-08-23-0", customerName = "", customerMobile = "",latitude="",longitude="";
 
     int selectedIndex;
     boolean isUpdate = false;
@@ -114,6 +116,9 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
     List<DeviceMappingModel> deviceMappingList = new ArrayList<>();
     List<DeviceMappingModel> deviceMappingData = new ArrayList<>();
+    boolean is2Gdevice,is4Gupdate = false;
+
+    int countDownTimer2G = 900000,countDownTimer4G = 10000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,10 +148,14 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
         read_img = findViewById(R.id.read_img);
         updateDeviceBtn = findViewById(R.id.updateDeviceBtn);
         countDownTimerTxt = findViewById(R.id.countDownTimerTxt);
+        countDownTimerTxt1 = findViewById(R.id.countDownTimerTxt1);
         checkDeviceStatusBtn = findViewById(R.id.checkDeviceStatusBtn);
+        checkDeviceStatusBtn1 = findViewById(R.id.checkDeviceStatusBtn1);
+        update4GDeviceBtn = findViewById(R.id.update4GDeviceBtn);
         recyclerview = findViewById(R.id.recycler_view);
         deviceOnlineLinear = findViewById(R.id.deviceOnlineLinear);
         deviceOfflineLinear = findViewById(R.id.deviceOfflineLinear);
+        deviceStatusLinear = findViewById(R.id.deviceStatusLinear);
         remarkExt = findViewById(R.id.RemarkExt);
         btnSave = findViewById(R.id.btnSave);
 
@@ -162,7 +171,10 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
         read_btn.setOnClickListener(this);
         updateDeviceBtn.setOnClickListener(this);
         countDownTimerTxt.setOnClickListener(this);
+        countDownTimerTxt1.setOnClickListener(this);
         checkDeviceStatusBtn.setOnClickListener(this);
+        checkDeviceStatusBtn1.setOnClickListener(this);
+        update4GDeviceBtn.setOnClickListener(this);
         btnSave.setOnClickListener(this);
         mToolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
@@ -176,9 +188,16 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 contactNo = installationBean.getMobile_no();
                 hp = installationBean.getInst_hp();
                 regisNo = installationBean.getRegis_no();
-                 controllerSerialNo = installationBean.getScm_sno() + "-0";
+               //  controllerSerialNo = installationBean.getScm_sno() + "-0";
                 customerName = installationBean.getCustomer_name();
                 customerMobile = installationBean.getMobile_no();
+                latitude = getIntent().getStringExtra(Constant.latitude);
+                longitude = getIntent().getStringExtra(Constant.longitude);
+                if(Objects.equals(getIntent().getStringExtra(Constant.is2GDevice), "true")){
+                    is2Gdevice = true;
+                }else {
+                    is2Gdevice = false;
+                }
             }
 
             if (Objects.equals(getIntent().getStringExtra(Constant.deviceMappingData2), "2")) {
@@ -189,9 +208,16 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 contactNo = pendingInstallationData.getContactNo();
                 hp = pendingInstallationData.getHp();
                 regisNo = pendingInstallationData.getRegisno();
-                  controllerSerialNo = pendingInstallationData.getControllerSernr() + "-0";
+               //   controllerSerialNo = pendingInstallationData.getControllerSernr() + "-0";
                 customerName = pendingInstallationData.getCustomerName();
                 customerMobile = pendingInstallationData.getContactNo();
+                latitude = getIntent().getStringExtra(Constant.latitude);
+                longitude = getIntent().getStringExtra(Constant.longitude);
+                if(Objects.equals(getIntent().getStringExtra(Constant.is2GDevice), "true")){
+                    is2Gdevice = true;
+                }else {
+                    is2Gdevice = false;
+                }
 
                 Log.e("controllerSerialNo====>", controllerSerialNo);
             }
@@ -204,22 +230,32 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     }
 
 
-    private void startCountDownTimer() {
-        timer = new CountDownTimer(10000, 1000) {
+    private void startCountDownTimer(int millisecond, TextView countDownTimer) {
+        countDownTimer.setVisibility(View.VISIBLE );
+        timer = new CountDownTimer(millisecond, 1000) {
             public void onTick(long millisUntilFinished) {
                 // Used for formatting digit to be in 2 digits only
                 NumberFormat f = new DecimalFormat("00");
                 long hour = (millisUntilFinished / 3600000) % 24;
                 long min = (millisUntilFinished / 60000) % 60;
                 long sec = (millisUntilFinished / 1000) % 60;
-                countDownTimerTxt.setText("Please Wait \n" + f.format(min) + " Min. " + f.format(sec) + " Sec. \nDevice Installing latest vesion ");
+                if(millisecond==countDownTimer2G) {
+                    countDownTimer.setText("Please Wait \n" + f.format(min) + " Min. " + f.format(sec) + " Sec. \nDevice Installing latest vesion ");
+                }else {
+                    countDownTimer.setText( f.format(min) + " Min. " + f.format(sec) + " Sec. ");
+
+                }
             }
 
             // When the task is over it will print 00:00:00 there
             public void onFinish() {
-                countDownTimerTxt.setVisibility(View.GONE);
-                changeButtonVisibility("4");
-
+                countDownTimer.setVisibility(View.GONE);
+                if(millisecond==countDownTimer2G) {
+                    changeButtonVisibility("4");
+                }else {
+                    checkDeviceStatusBtn1.setEnabled(true);
+                    checkDeviceStatusBtn1.setAlpha(1f);
+                }
             }
         }.start();
     }
@@ -249,8 +285,18 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 }
                 break;
             case R.id.checkDeviceStatusBtn:
+            case R.id.checkDeviceStatusBtn1:
                 if (CustomUtility.isInternetOn(DeviceMappingActivity.this)) {
                     checkDeviceShiftingStatusAPI();
+                } else {
+                    CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.check_internet_connection));
+                }
+
+                break;
+
+            case R.id.update4GDeviceBtn:
+                if (CustomUtility.isInternetOn(DeviceMappingActivity.this)) {
+                    sendLatLngToRmsForFota();
                 } else {
                     CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.check_internet_connection));
                 }
@@ -302,6 +348,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 deviceMappingModel.setRead("false");
                 deviceMappingModel.setWrite("true");
                 deviceMappingModel.setUpdate("false");
+                deviceMappingModel.setUpdate4G("false");
                 deviceMappingModel.setBillNo(billNo);
                 insUpdateData(deviceMappingModel, false);
 
@@ -321,6 +368,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 deviceMappingModel1.setRead("true");
                 deviceMappingModel1.setWrite("true");
                 deviceMappingModel1.setUpdate("false");
+                deviceMappingModel1.setUpdate4G("false");
                 deviceMappingModel1.setBillNo(billNo);
                 insUpdateData(deviceMappingModel1, true);
 
@@ -337,10 +385,11 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 deviceMappingModel2.setRead("true");
                 deviceMappingModel2.setWrite("true");
                 deviceMappingModel2.setUpdate("true");
+                deviceMappingModel2.setUpdate4G("false");
                 deviceMappingModel2.setBillNo(billNo);
                 insUpdateData(deviceMappingModel2, true);
 
-                startCountDownTimer();
+                startCountDownTimer(countDownTimer2G,countDownTimerTxt);
                 break;
 
             case "4":
@@ -352,6 +401,27 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 updateDeviceBtn.setAlpha(0.5f);
                 checkDeviceStatusBtn.setEnabled(true);
                 checkDeviceStatusBtn.setAlpha(1f);
+
+                break;
+            case "5":
+                update4GDeviceBtn.setEnabled(true);
+                update4GDeviceBtn.setAlpha(1f);
+                checkDeviceStatusBtn1.setEnabled(false);
+                checkDeviceStatusBtn1.setAlpha(0.5f);
+                break;
+            case "6":
+                update4GDeviceBtn.setEnabled(false);
+                update4GDeviceBtn.setAlpha(0.5f);
+                checkDeviceStatusBtn1.setEnabled(true);
+                checkDeviceStatusBtn1.setAlpha(1f);
+                DeviceMappingModel deviceMappingModel3 = new DeviceMappingModel();
+                deviceMappingModel3.setRead("false");
+                deviceMappingModel3.setWrite("false");
+                deviceMappingModel3.setUpdate("false");
+                deviceMappingModel3.setUpdate4G("true");
+                deviceMappingModel3.setBillNo(billNo);
+                insUpdateData(deviceMappingModel3, is4Gupdate);
+                startCountDownTimer(countDownTimer4G,countDownTimerTxt1);
 
                 break;
         }
@@ -504,6 +574,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
         customAdapter.ImageSelection(this);
         deviceOfflineLinear.setVisibility(View.VISIBLE);
         deviceOnlineLinear.setVisibility(View.GONE);
+        deviceStatusLinear.setVisibility(View.GONE);
     }
 
     @Override
@@ -718,24 +789,41 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
 
         }
+        if(is2Gdevice) {
+            deviceOnlineLinear.setVisibility(View.VISIBLE);
+            deviceOfflineLinear.setVisibility(View.GONE);
+            deviceStatusLinear.setVisibility(View.GONE);
 
-        Log.e("deviceMappingList=======>", String.valueOf(deviceMappingList.size()));
-        Log.e("deviceMappingList======>", deviceMappingList.toString());
+            if (deviceMappingList != null && deviceMappingList.size() > 0) {
+                if (deviceMappingList.get(0).getWrite().equals("true")) {
+                    changeButtonVisibility("1");
+                }
+                if (deviceMappingList.get(0).getRead().equals("true")) {
+                    changeButtonVisibility("2");
+                }
 
-        if (deviceMappingList != null && deviceMappingList.size() > 0) {
-            if (deviceMappingList.get(0).getWrite().equals("true")) {
-                changeButtonVisibility("1");
+                if (deviceMappingList.get(0).getUpdate().equals("true")) {
+                    changeButtonVisibility("3");
+                }
+            } else {
+                changeButtonVisibility("0");
+
             }
-            if (deviceMappingList.get(0).getRead().equals("true")) {
-                changeButtonVisibility("2");
-            }
+        }else {
+            deviceOnlineLinear.setVisibility(View.GONE);
+            deviceOfflineLinear.setVisibility(View.GONE);
+            deviceStatusLinear.setVisibility(View.VISIBLE);
 
-            if (deviceMappingList.get(0).getUpdate().equals("true")) {
-                changeButtonVisibility("3");
+            if (deviceMappingList != null && deviceMappingList.size() > 0) {
+                if (deviceMappingList.get(0).getUpdate4G().equals("true")) {
+                    is4Gupdate = true;
+                    changeButtonVisibility("6");
+                }else {
+                    changeButtonVisibility("5");
+                }
+            }else {
+                changeButtonVisibility("5");
             }
-        } else {
-            changeButtonVisibility("0");
-
         }
 
 
@@ -967,8 +1055,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                             });
                         }else {
                             setDeviceData();
-                            deviceOnlineLinear.setVisibility(View.VISIBLE);
-                            deviceOfflineLinear.setVisibility(View.GONE);
+
                         }
                     } catch (JSONException e) {
                        e.printStackTrace();
@@ -981,8 +1068,8 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
         }, error -> {
             stopProgressDialogue();
             Log.e("error", String.valueOf(error));
-            Toast.makeText(DeviceMappingActivity.this, error.getMessage(),
-                    Toast.LENGTH_LONG).show();
+           /* Toast.makeText(DeviceMappingActivity.this, error.getMessage(),
+                    Toast.LENGTH_LONG).show();*/
         });
         requestQueue.add(jsonObjectRequest);
     }
@@ -1062,6 +1149,54 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
         });
 
     }
+
+    /*-------------------------------------------------------------Send Lat Lng to Rms Server 4G device Fota-----------------------------------------------------------------------------*/
+    private void sendLatLngToRmsForFota() {
+        stopProgressDialogue();
+        showProgressDialogue(getResources().getString(R.string.device_initialization_processing));
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                CustomUtility.getSharedPreferences(this, Constant.RmsBaseUrl) + WebURL.updateLatLngToRms + "?deviceNo="+controllerSerialNo+"&lat="+latitude+"&lon="+longitude,
+
+                null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                try {
+                    if (jsonObject.toString() != null && !jsonObject.toString().isEmpty()) {
+
+                        String mStatus = jsonObject.getString("status");
+                        if (mStatus.equals("true")) {
+                            stopProgressDialogue();
+                            changeButtonVisibility("6");
+                        } else {
+                            stopProgressDialogue();
+                        }
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    stopProgressDialogue();
+                    CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                stopProgressDialogue();
+                Log.e("error", String.valueOf(error));
+                Toast.makeText(DeviceMappingActivity.this, error.toString(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                60000,
+                5,  /// maxNumRetries = 0 means no retry
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(jsonObjectRequest);
+    }
+
 
     /*-------------------------------------------------------------Show Progress Dialogue-----------------------------------------------------------------------------*/
 

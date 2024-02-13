@@ -2,7 +2,7 @@ package bean;
 
 public class DeviceMappingModel {
 
-   private  String id,read,write,update,billNo;
+   private  String id,read,write,update,billNo,update4G;
 
    public String getId() {
       return id;
@@ -43,6 +43,15 @@ public class DeviceMappingModel {
    public void setBillNo(String billNo) {
       this.billNo = billNo;
    }
+
+   public String getUpdate4G() {
+      return update4G;
+   }
+
+   public void setUpdate4G(String update4G) {
+      this.update4G = update4G;
+   }
+
    @Override
    public String toString() {
       return "DeviceMappingModel{" +
@@ -51,7 +60,7 @@ public class DeviceMappingModel {
               ", write='" + write + '\'' +
               ", update='" + update + '\'' +
               ", billNo='" + billNo + '\'' +
+              ", update4G='" + update4G + '\'' +
               '}';
    }
-
 }

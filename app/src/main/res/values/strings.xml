@@ -492,6 +492,7 @@
     <string name="enter_remark">Please Enter Remark</string>
     <string name="device_shifting_successfully">Device Shifting Successfully</string>
     <string name="checkDeviceShiftingStatus">Check Device Shifting Status…</string>
+    <string name="check_device_shifting_status_within">check Device Shifting status within</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

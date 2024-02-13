@@ -1182,9 +1182,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_SIM_OLD_PHOTO + " BLOB)";
 
 
-    public static final String KEY_DEVICE_MAPPING_ID = "unloadingId",KEY_DEVICE_MAPPING_READ ="read",KEY_DEVICE_MAPPING_WRITE ="write",KEY_DEVICE_MAPPING_UPDATE ="updates";
+    public static final String KEY_DEVICE_MAPPING_ID = "unloadingId",KEY_DEVICE_MAPPING_READ ="read",KEY_DEVICE_MAPPING_WRITE ="write",
+            KEY_DEVICE_MAPPING_UPDATE ="updates",KEY_DEVICE_MAPPING_4GUPDATE ="fourg_Updates";
     private static final String CREATE_TABLE_DEVICE_MAPPING_DATA = "CREATE TABLE "
-            + TABLE_DEVICE_MAPPING_DATA + "(" + KEY_DEVICE_MAPPING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," + KEY_DEVICE_MAPPING_READ + " TEXT," + KEY_DEVICE_MAPPING_WRITE + " TEXT,"  + KEY_DEVICE_MAPPING_UPDATE + " TEXT,"  + KEY_BILL_NO + " TEXT)";
+            + TABLE_DEVICE_MAPPING_DATA + "(" + KEY_DEVICE_MAPPING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," + KEY_DEVICE_MAPPING_READ + " TEXT," + KEY_DEVICE_MAPPING_WRITE + " TEXT,"  + KEY_DEVICE_MAPPING_UPDATE + " TEXT,"  +KEY_DEVICE_MAPPING_4GUPDATE + " TEXT,"  + KEY_BILL_NO + " TEXT)";
 
 
 
@@ -4647,6 +4648,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(KEY_DEVICE_MAPPING_READ, deviceMappingModel.getRead());
         contentValues.put(KEY_DEVICE_MAPPING_WRITE, deviceMappingModel.getWrite());
         contentValues.put(KEY_DEVICE_MAPPING_UPDATE, deviceMappingModel.getUpdate());
+        contentValues.put(KEY_DEVICE_MAPPING_4GUPDATE, deviceMappingModel.getUpdate4G());
+
         contentValues.put(KEY_BILL_NO, deviceMappingModel.getBillNo());
         database.insert(TABLE_DEVICE_MAPPING_DATA, null, contentValues);
         database.close();
@@ -4658,6 +4661,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_DEVICE_MAPPING_READ, deviceMappingModel.getRead());
         values.put(KEY_DEVICE_MAPPING_WRITE, deviceMappingModel.getWrite());
         values.put(KEY_DEVICE_MAPPING_UPDATE, deviceMappingModel.getUpdate());
+        values.put(KEY_DEVICE_MAPPING_4GUPDATE, deviceMappingModel.getUpdate4G());
         values.put(KEY_BILL_NO, deviceMappingModel.getBillNo());
         // update Row
         db.update(TABLE_DEVICE_MAPPING_DATA, values, KEY_BILL_NO + " = '" + deviceMappingModel.getBillNo() + "'", null);
@@ -4683,7 +4687,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     deviceMappingModel.setRead(mcursor.getString(1));
                     deviceMappingModel.setWrite(mcursor.getString(2));
                     deviceMappingModel.setUpdate(mcursor.getString(3));
-                    deviceMappingModel.setBillNo(mcursor.getString(4));
+                    deviceMappingModel.setUpdate(mcursor.getString(4));
+                    deviceMappingModel.setBillNo(mcursor.getString(5));
                     deviceMappingList.add(deviceMappingModel);
                 }
             }

@@ -69,7 +69,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -1910,14 +1909,9 @@ public class InstallationInitial extends BaseActivity {
                         invc_done = jo.getString("return");
 
                         if (invc_done.equals("Y")) {
-                             dongleType = DONGAL_ID.charAt(0) + DONGAL_ID.substring(1, 2);
-                           //dongle type 99 defile 2G dongles and 6B define 4G dongle
-                            if (dongleType.equals("99")) {
-                                InstallationDone();
-                                ShowAlertResponse2((getResources().getString(R.string.installation_complete_msg)));
-                            } else {
-                                sendLatLngToRmsForFota();
-                            }
+                            InstallationDone();
+                            ShowAlertResponse2((getResources().getString(R.string.installation_complete_msg)));
+
 
                         } else {
                             stopProgressDialogue();
@@ -1956,65 +1950,6 @@ public class InstallationInitial extends BaseActivity {
         }
     }
 
-    /*-------------------------------------------------------------Send Lat Lng to Rms Server-----------------------------------------------------------------------------*/
-
-
-    private void sendLatLngToRmsForFota() {
-        stopProgressDialogue();
-        showProgressDialogue(getResources().getString(R.string.device_initialization_processing));
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                CustomUtility.getSharedPreferences(this, Constant.RmsBaseUrl) + WebURL.updateLatLngToRms + "?deviceNo="+inst_controller_ser.getText().toString().trim()+"&lat="+imageList.get(2).getLatitude()+"&lon="+imageList.get(2).getLongitude(),
-
-                null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-                try {
-                    if (jsonObject.toString() != null && !jsonObject.toString().isEmpty()) {
-
-                        String mStatus = jsonObject.getString("status");
-                        if (mStatus.equals("true")) {
-
-                            if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
-                                Random random = new Random();
-                                String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
-
-                                sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
-                            } else {
-                                InstallationDone();
-                                ShowAlertResponse2((getResources().getString(R.string.installation_complete_msg)));
-                            }
-                        } else {
-                            stopProgressDialogue();
-                            CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
-
-
-                        }
-
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    stopProgressDialogue();
-                    CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
-                }
-
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                stopProgressDialogue();
-                Log.e("error", String.valueOf(error));
-                Toast.makeText(InstallationInitial.this, error.toString(),
-                        Toast.LENGTH_LONG).show();
-            }
-        });
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
-                60000,
-                5,  /// maxNumRetries = 0 means no retry
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        requestQueue.add(jsonObjectRequest);
-    }
 
     private void InstallationDone() {
         CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.dataSubmittedSuccessfully));
@@ -2058,18 +1993,18 @@ public class InstallationInitial extends BaseActivity {
 
         OK_txt.setOnClickListener(v -> {
             alertDialog.dismiss();
-                    if (dongleType.equals("99")) {
-                        Intent intent = new Intent(InstallationInitial.this, DeviceMappingActivity.class);
-                        intent.putExtra(Constant.deviceMappingData, param_invc);
-                        intent.putExtra(Constant.deviceMappingData2, "1");
-
-                        startActivity(intent);
-                        finish();
-                    }else {
-                        Intent intent = new Intent(InstallationInitial.this, PendingInstallationVerificationActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
+            Intent intent = new Intent(InstallationInitial.this, DeviceMappingActivity.class);
+            intent.putExtra(Constant.deviceMappingData, param_invc);
+            intent.putExtra(Constant.deviceMappingData2, "1");
+            intent.putExtra(Constant.latitude, imageList.get(2).getLatitude());
+            intent.putExtra(Constant.longitude, imageList.get(2).getLongitude());
+            if (dongleType.equals("99")) {
+                intent.putExtra(Constant.is2GDevice, "true");
+            } else {
+                intent.putExtra(Constant.is2GDevice, "false");
+            }
+            startActivity(intent);
+            finish();
         });
 
     }
