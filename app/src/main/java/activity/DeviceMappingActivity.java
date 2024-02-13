@@ -205,7 +205,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
 
     private void startCountDownTimer() {
-        timer = new CountDownTimer(900000, 1000) {
+        timer = new CountDownTimer(10000, 1000) {
             public void onTick(long millisUntilFinished) {
                 // Used for formatting digit to be in 2 digits only
                 NumberFormat f = new DecimalFormat("00");
@@ -679,9 +679,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                     if (deviceDetailModel != null && deviceDetailModel.getResponse() != null && String.valueOf(deviceDetailModel.getStatus()).equals("true")) {
 
                         if (deviceDetailModel.getResponse().getIsLogin()) {
-                            setDeviceData();
-                            deviceOnlineLinear.setVisibility(View.VISIBLE);
-                            deviceOfflineLinear.setVisibility(View.GONE);
+                           checkDeviceShiftingStatusAPI();
                         } else {
                             SetAdapter();
                         }
@@ -963,15 +961,18 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                                     sendVerificationCodeAPI(generatedVerificationCode, customerMobile, hp, beneficiaryNo,billNo);
 
                                 } else {
+
                                     CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.mobile_number_not_valid));
                                 }
                             });
                         }else {
-                            showingMessage(getResources().getString(R.string.device_shifting_successfully));
-
+                            setDeviceData();
+                            deviceOnlineLinear.setVisibility(View.VISIBLE);
+                            deviceOfflineLinear.setVisibility(View.GONE);
                         }
                     } catch (JSONException e) {
-                        throw new RuntimeException(e);
+                       e.printStackTrace();
+                       CustomUtility.showToast(DeviceMappingActivity.this,getResources().getString(R.string.somethingWentWrong));
                     }
 
                 }

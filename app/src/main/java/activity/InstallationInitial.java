@@ -1960,6 +1960,7 @@ public class InstallationInitial extends BaseActivity {
 
 
     private void sendLatLngToRmsForFota() {
+        stopProgressDialogue();
         showProgressDialogue(getResources().getString(R.string.device_initialization_processing));
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
