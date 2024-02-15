@@ -4687,7 +4687,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     deviceMappingModel.setRead(mcursor.getString(1));
                     deviceMappingModel.setWrite(mcursor.getString(2));
                     deviceMappingModel.setUpdate(mcursor.getString(3));
-                    deviceMappingModel.setUpdate(mcursor.getString(4));
+                    deviceMappingModel.setUpdate4G(mcursor.getString(4));
                     deviceMappingModel.setBillNo(mcursor.getString(5));
                     deviceMappingList.add(deviceMappingModel);
                 }

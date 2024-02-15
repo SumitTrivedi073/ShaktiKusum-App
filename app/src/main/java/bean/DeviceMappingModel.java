@@ -59,8 +59,8 @@ public class DeviceMappingModel {
               ", read='" + read + '\'' +
               ", write='" + write + '\'' +
               ", update='" + update + '\'' +
-              ", billNo='" + billNo + '\'' +
               ", update4G='" + update4G + '\'' +
+              ", billNo='" + billNo + '\'' +
               '}';
    }
 }

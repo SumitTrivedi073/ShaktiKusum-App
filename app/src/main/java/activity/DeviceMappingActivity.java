@@ -783,6 +783,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 deviceMappingModel.setRead(deviceMappingData.get(i).getRead());
                 deviceMappingModel.setWrite(deviceMappingData.get(i).getWrite());
                 deviceMappingModel.setUpdate(deviceMappingData.get(i).getUpdate());
+                deviceMappingModel.setUpdate4G(deviceMappingData.get(i).getUpdate4G());
                 deviceMappingModel.setBillNo(deviceMappingData.get(i).getBillNo());
                 deviceMappingList.add(deviceMappingModel);
             }
@@ -1029,6 +1030,8 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
         stopProgressDialogue();
         showProgressDialogue(getResources().getString(R.string.checkDeviceShiftingStatus));
         RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        Log.e("DeviceShiftingStatus====>",CustomUtility.getSharedPreferences(this, Constant.RmsBaseUrl) + WebURL.deviceShiftingStatusCheck + "?deviceno=" + controllerSerialNo);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 CustomUtility.getSharedPreferences(this, Constant.RmsBaseUrl) + WebURL.deviceShiftingStatusCheck + "?deviceno=" + controllerSerialNo,
                 null, new Response.Listener<JSONObject>() {
