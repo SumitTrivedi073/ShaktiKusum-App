@@ -105,7 +105,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     InstallationBean installationBean;
 
     String billNo = "", beneficiaryNo = "", contactNo = "", hp = "", regisNo = "",
-            controllerSerialNo = "7E-0029-0-14-08-23-0", customerName = "", customerMobile = "",latitude="",longitude="";
+            controllerSerialNo = "7F-0135-0-13-06-23-0", customerName = "", customerMobile = "",latitude="",longitude="";
 
     int selectedIndex;
     boolean isUpdate = false;
@@ -287,7 +287,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
             case R.id.checkDeviceStatusBtn:
             case R.id.checkDeviceStatusBtn1:
                 if (CustomUtility.isInternetOn(DeviceMappingActivity.this)) {
-                    checkDeviceShiftingStatusAPI();
+                    checkDeviceShiftingStatusAPI(true);
                 } else {
                     CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.check_internet_connection));
                 }
@@ -381,6 +381,8 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 read_btn.setAlpha(0.5f);
                 updateDeviceBtn.setEnabled(false);
                 updateDeviceBtn.setAlpha(0.5f);
+                checkDeviceStatusBtn.setEnabled(true);
+                checkDeviceStatusBtn.setAlpha(1f);
                 DeviceMappingModel deviceMappingModel2 = new DeviceMappingModel();
                 deviceMappingModel2.setRead("true");
                 deviceMappingModel2.setWrite("true");
@@ -414,6 +416,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 update4GDeviceBtn.setAlpha(0.5f);
                 checkDeviceStatusBtn1.setEnabled(true);
                 checkDeviceStatusBtn1.setAlpha(1f);
+
                 DeviceMappingModel deviceMappingModel3 = new DeviceMappingModel();
                 deviceMappingModel3.setRead("false");
                 deviceMappingModel3.setWrite("false");
@@ -750,7 +753,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                     if (deviceDetailModel != null && deviceDetailModel.getResponse() != null && String.valueOf(deviceDetailModel.getStatus()).equals("true")) {
 
                         if (deviceDetailModel.getResponse().getIsLogin()) {
-                           checkDeviceShiftingStatusAPI();
+                           checkDeviceShiftingStatusAPI(false);
                         } else {
                             SetAdapter();
                         }
@@ -1026,7 +1029,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
     /*-------------------------------------------------------------Device Shifting Status API-----------------------------------------------------------------------------*/
 
-    private void checkDeviceShiftingStatusAPI() {
+    private void checkDeviceShiftingStatusAPI(boolean isButtonClick) {
         stopProgressDialogue();
         showProgressDialogue(getResources().getString(R.string.checkDeviceShiftingStatus));
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -1039,6 +1042,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
             public void onResponse(JSONObject res) {
                 stopProgressDialogue();
                 if (!res.toString().isEmpty()) {
+                    Log.e("response======>",res.toString());
                     try {
                         if(res.getString("status").equals("true")){
                             showingMessage(getResources().getString(R.string.device_shifting_successfully));
@@ -1057,7 +1061,11 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                                 }
                             });
                         }else {
-                            setDeviceData();
+                            if (!isButtonClick){
+                                setDeviceData();
+                        }else {
+                                CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.latest_version_insta));
+                            }
 
                         }
                     } catch (JSONException e) {
