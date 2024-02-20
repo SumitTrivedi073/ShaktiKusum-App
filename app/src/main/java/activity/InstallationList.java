@@ -65,9 +65,10 @@ import webservice.WebURL;
         setContentView(R.layout.activity_installation_list);
 
         Init();
-        getValueFromDatatbase();
         listner();
     }
+
+
      private void Init() {
          context = this;
          progressDialog = new ProgressDialog(context);
@@ -141,11 +142,11 @@ import webservice.WebURL;
          });
      }
 
-     @SuppressLint("WrongConstant")
     @Override
     protected void onResume() {
         super.onResume();
         CustomUtility.removeValueFromSharedPref(context, Constant.isDebugDevice);
+         getValueFromDatatbase();
     }
 
     @Override

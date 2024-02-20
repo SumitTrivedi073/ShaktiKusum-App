@@ -5,7 +5,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -16,18 +15,19 @@ import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import debugapp.RoutePlanModel;
+import debugapp.PendingInstallationModel;
 
-public class RoutePlanAdapter extends RecyclerView.Adapter<RoutePlanAdapter.ViewHolder> implements Filterable {
+public class PendingInstallationVerificationAdapter extends RecyclerView.Adapter<PendingInstallationVerificationAdapter.ViewHolder> implements Filterable {
     Context mContext;
-    private List<RoutePlanModel.InstallationDatum> pendingFeedbackList;
-    private final List<RoutePlanModel.InstallationDatum> arSearch;
-    private SelectRouteListner selectRouteListener;
+    private List<PendingInstallationModel.Response> pendingFeedbackList;
+    private final List<PendingInstallationModel.Response> arSearch;
+    private SendOTPListner sendOTPListener;
 
     TextView noDataFound;
 
-    public RoutePlanAdapter(Context context, List<RoutePlanModel.InstallationDatum> listdata, TextView noDataFound) {
+    public PendingInstallationVerificationAdapter(Context context, List<PendingInstallationModel.Response> listdata, TextView noDataFound) {
         pendingFeedbackList = listdata;
         mContext = context;
         this.arSearch = new ArrayList<>();
@@ -40,39 +40,39 @@ public class RoutePlanAdapter extends RecyclerView.Adapter<RoutePlanAdapter.View
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View listItem = layoutInflater.inflate(R.layout.routeplan_item, parent, false);
+        View listItem = layoutInflater.inflate(R.layout.pending_feedback_item, parent, false);
         return new ViewHolder(listItem);
     }
     @SuppressLint("DefaultLocale")
     @Override
     public void onBindViewHolder(ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        final RoutePlanModel.InstallationDatum response = pendingFeedbackList.get(position);
+        final PendingInstallationModel.Response response = pendingFeedbackList.get(position);
+        holder.customerName.setText(response.getCustomerName());
+        holder.mobileNumber.setText(response.getContactNo());
         holder.beneficiaryNo.setText("Beneficiary No:- "+response.getBeneficiary());
-        holder.regisno.setText("registration No:- "+response.getRegisno());
+        holder.billNo.setText("Bill No:- "+response.getVbeln());
 
-        if(response.isChecked()){
-            holder.checkbox.setChecked(true);
-        }
-
-      holder.checkbox.setOnClickListener(new View.OnClickListener() {
+      holder.sendOTP.setOnClickListener(new View.OnClickListener() {
           @Override
            public void onClick(View view) {
-              selectRouteListener.selectRouteListener(pendingFeedbackList.get(position),position);
+              Random random = new Random();
+              String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
+              sendOTPListener.sendOtpListener(pendingFeedbackList,position, generatedVerificationCode);
 
            }
        });
 
 
     }
-    public void SelectRoute(SelectRouteListner response) {
+    public void SendOTP(SendOTPListner response) {
         try {
-            selectRouteListener = response;
+            sendOTPListener = response;
         } catch (ClassCastException e) {
             e.printStackTrace();
         }
     }
-    public interface SelectRouteListner {
-        void selectRouteListener(RoutePlanModel.InstallationDatum installationDatum, int position);
+    public interface SendOTPListner {
+        void sendOtpListener(List<PendingInstallationModel.Response> pendingFeedbackList, int position , String generatedVerificationCode);
 
     }
 
@@ -85,14 +85,15 @@ public class RoutePlanAdapter extends RecyclerView.Adapter<RoutePlanAdapter.View
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView beneficiaryNo,regisno;
-        CheckBox checkbox;
+        public TextView customerName,mobileNumber,beneficiaryNo,sendOTP,billNo;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            checkbox = itemView.findViewById(R.id.checkbox);
+            customerName = itemView.findViewById(R.id.customerName);
+            mobileNumber = itemView.findViewById(R.id.mobileNumber);
             beneficiaryNo = itemView.findViewById(R.id.beneficiaryNo);
-            regisno = itemView.findViewById(R.id.regisno);
+            sendOTP = itemView.findViewById(R.id.sendOTP);
+            billNo = itemView.findViewById(R.id.billNo);
         }
     }
 
@@ -105,12 +106,13 @@ public class RoutePlanAdapter extends RecyclerView.Adapter<RoutePlanAdapter.View
                 if (charString.isEmpty()) {
                     pendingFeedbackList = arSearch;
                 } else {
-                    List<RoutePlanModel.InstallationDatum> filteredList = new ArrayList<>();
-                    for (RoutePlanModel.InstallationDatum row : arSearch) {
+                    List<PendingInstallationModel.Response> filteredList = new ArrayList<>();
+                    for (PendingInstallationModel.Response row : arSearch) {
 
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
-                        if (row.getBeneficiary().toLowerCase().contains(charString.toLowerCase())||row.getRegisno().toLowerCase().contains(charString.toLowerCase())) {
+                        if (row.getCustomerName().toLowerCase().contains(charString.toLowerCase())||row.getContactNo().toLowerCase().contains(charString.toLowerCase())
+                        ||row.getBeneficiary().toLowerCase().contains(charString.toLowerCase())||row.getVbeln().toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(row);
                         }
                     }
@@ -125,7 +127,7 @@ public class RoutePlanAdapter extends RecyclerView.Adapter<RoutePlanAdapter.View
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                pendingFeedbackList = (ArrayList<RoutePlanModel.InstallationDatum>) filterResults.values;
+                pendingFeedbackList = (ArrayList<PendingInstallationModel.Response>) filterResults.values;
                 if (pendingFeedbackList.size()>0){
                     noDataFound.setVisibility(View.GONE);
                 }else {

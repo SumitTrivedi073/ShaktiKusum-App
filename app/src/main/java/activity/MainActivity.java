@@ -284,6 +284,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 dataHelper.deleteUnloadingImages();
                 dataHelper.deletekusumCImages();
                 dataHelper.deleteKusumCSurveyFrom();
+                dataHelper.deleteDeviceMappingData();
+                dataHelper.deleteOfflineControllerData();
                 CustomUtility.clearSharedPrefrences(context);
 
                 Intent intent = new Intent(context, Login.class);
@@ -321,7 +323,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.pendingInstallationVerification:
-                Intent mIntent2 = new Intent(context, PendingFeedbackActivity.class);
+                Intent mIntent2 = new Intent(context, PendingInstallationActivity.class);
                 startActivity(mIntent2);
                 break;
 

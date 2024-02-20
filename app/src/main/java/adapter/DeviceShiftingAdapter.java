@@ -17,18 +17,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import debugapp.PendingFeedback;
+import bean.DeviceShiftingModel;
 
-public class PendingFeedbackAdapter extends RecyclerView.Adapter<PendingFeedbackAdapter.ViewHolder> implements Filterable {
+
+public class DeviceShiftingAdapter extends RecyclerView.Adapter<DeviceShiftingAdapter.ViewHolder> implements Filterable {
     Context mContext;
-    private List<PendingFeedback.Response> pendingFeedbackList;
-    private final List<PendingFeedback.Response> arSearch;
-    private SendOTPListner sendOTPListener;
+    private List<DeviceShiftingModel.Response> deviceShiftingList;
+    private final List<DeviceShiftingModel.Response> arSearch;
+    private ShiftingListner shiftingListener;
 
     TextView noDataFound;
 
-    public PendingFeedbackAdapter(Context context, List<PendingFeedback.Response> listdata, TextView noDataFound) {
-        pendingFeedbackList = listdata;
+    public DeviceShiftingAdapter(Context context, List<DeviceShiftingModel.Response> listdata, TextView noDataFound) {
+        deviceShiftingList = listdata;
         mContext = context;
         this.arSearch = new ArrayList<>();
         this.arSearch.addAll(listdata);
@@ -40,59 +41,59 @@ public class PendingFeedbackAdapter extends RecyclerView.Adapter<PendingFeedback
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View listItem = layoutInflater.inflate(R.layout.pending_feedback_item, parent, false);
+        View listItem = layoutInflater.inflate(R.layout.device_shifting_item, parent, false);
         return new ViewHolder(listItem);
     }
     @SuppressLint("DefaultLocale")
     @Override
     public void onBindViewHolder(ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        final PendingFeedback.Response response = pendingFeedbackList.get(position);
+        final DeviceShiftingModel.Response response = deviceShiftingList.get(position);
         holder.customerName.setText(response.getCustomerName());
         holder.mobileNumber.setText(response.getContactNo());
         holder.beneficiaryNo.setText("Beneficiary No:- "+response.getBeneficiary());
         holder.billNo.setText("Bill No:- "+response.getVbeln());
 
-      holder.sendOTP.setOnClickListener(new View.OnClickListener() {
+      holder.shiftingBtn.setOnClickListener(new View.OnClickListener() {
           @Override
            public void onClick(View view) {
               Random random = new Random();
               String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
-              sendOTPListener.sendOtpListener(pendingFeedbackList,position, generatedVerificationCode);
+              shiftingListener.shiftingListener(deviceShiftingList,position, generatedVerificationCode);
 
            }
        });
 
 
     }
-    public void SendOTP(SendOTPListner response) {
+    public void Deviceshifting(ShiftingListner response) {
         try {
-            sendOTPListener = response;
+            shiftingListener = response;
         } catch (ClassCastException e) {
             e.printStackTrace();
         }
     }
-    public interface SendOTPListner {
-        void sendOtpListener(List<PendingFeedback.Response> pendingFeedbackList, int position ,String generatedVerificationCode);
+    public interface ShiftingListner {
+        void shiftingListener(List<DeviceShiftingModel.Response> deviceShiftingList, int position , String generatedVerificationCode);
 
     }
 
 
     @Override
     public int getItemCount() {
-        return pendingFeedbackList.size();
+        return deviceShiftingList.size();
     }
 
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView customerName,mobileNumber,beneficiaryNo,sendOTP,billNo;
+        public TextView customerName,mobileNumber,beneficiaryNo,shiftingBtn,billNo;
 
         public ViewHolder(View itemView) {
             super(itemView);
             customerName = itemView.findViewById(R.id.customerName);
             mobileNumber = itemView.findViewById(R.id.mobileNumber);
             beneficiaryNo = itemView.findViewById(R.id.beneficiaryNo);
-            sendOTP = itemView.findViewById(R.id.sendOTP);
+            shiftingBtn = itemView.findViewById(R.id.shiftingBtn);
             billNo = itemView.findViewById(R.id.billNo);
         }
     }
@@ -104,10 +105,10 @@ public class PendingFeedbackAdapter extends RecyclerView.Adapter<PendingFeedback
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();
                 if (charString.isEmpty()) {
-                    pendingFeedbackList = arSearch;
+                    deviceShiftingList = arSearch;
                 } else {
-                    List<PendingFeedback.Response> filteredList = new ArrayList<>();
-                    for (PendingFeedback.Response row : arSearch) {
+                    List<DeviceShiftingModel.Response> filteredList = new ArrayList<>();
+                    for (DeviceShiftingModel.Response row : arSearch) {
 
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
@@ -117,18 +118,18 @@ public class PendingFeedbackAdapter extends RecyclerView.Adapter<PendingFeedback
                         }
                     }
 
-                    pendingFeedbackList = filteredList;
+                    deviceShiftingList = filteredList;
                 }
 
                 FilterResults filterResults = new FilterResults();
-                filterResults.values = pendingFeedbackList;
+                filterResults.values = deviceShiftingList;
                 return filterResults;
             }
 
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-                pendingFeedbackList = (ArrayList<PendingFeedback.Response>) filterResults.values;
-                if (pendingFeedbackList.size()>0){
+                deviceShiftingList = (ArrayList<DeviceShiftingModel.Response>) filterResults.values;
+                if (deviceShiftingList.size()>0){
                     noDataFound.setVisibility(View.GONE);
                 }else {
                     noDataFound.setVisibility(View.VISIBLE);

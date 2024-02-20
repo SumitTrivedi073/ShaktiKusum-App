@@ -1,25 +1,21 @@
 package activity;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -36,51 +32,48 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import adapter.PendingFeedbackAdapter;
+import adapter.DeviceShiftingAdapter;
+import bean.DeviceShiftingModel;
 import debugapp.GlobalValue.Constant;
-import debugapp.PendingFeedback;
-import debugapp.VerificationCodeModel;
 import utility.CustomUtility;
 import webservice.WebURL;
 
-public class PendingFeedbackActivity extends BaseActivity implements PendingFeedbackAdapter.SendOTPListner{
+public class DeviceShiftingActivity extends BaseActivity implements DeviceShiftingAdapter.ShiftingListner {
 
-    private  RecyclerView pendingFeedbackList;
+    private RecyclerView DeviceShiftingList;
     private Toolbar mToolbar;
-    ArrayList<PendingFeedback> pendingFeedbacks;
-    AlertDialog alertDialog;
-
+    ArrayList<DeviceShiftingModel> DeviceShiftingModels;
     TextView noDataFound;
 
     SearchView searchUser;
 
-    PendingFeedbackAdapter pendingFeedbackAdapter;
+    DeviceShiftingAdapter deviceShiftingAdapter;
 
     RelativeLayout searchRelative;
 
+    int SelectedIndex;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pending_feedbacck);
-
+        setContentView(R.layout.activity_device_shifting);
         Init();
         listner();
-
     }
+
 
 
     private void Init() {
         mToolbar =  findViewById(R.id.toolbar);
-        pendingFeedbackList = findViewById(R.id.pendingfeedbacklist);
+        DeviceShiftingList = findViewById(R.id.DeviceShiftingList);
         noDataFound = findViewById(R.id.noDataFound);
         searchUser = findViewById(R.id.searchUser);
         searchRelative = findViewById(R.id.searchRelative);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getResources().getString(R.string.pendingFeedback));
+        getSupportActionBar().setTitle(getResources().getString(R.string.deviceShifting));
         if(CustomUtility.isInternetOn(getApplicationContext())) {
-            getPendingFeedbackList();
+            getDeviceShiftingList();
         }else {
             CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection),getApplicationContext());
         }
@@ -120,9 +113,9 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
         searchUser.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (pendingFeedbackAdapter != null) {
+                if (deviceShiftingAdapter != null) {
                     if(!query.isEmpty()) {
-                        pendingFeedbackAdapter.getFilter().filter(query);
+                        deviceShiftingAdapter.getFilter().filter(query);
                     }}
 
                 return false;
@@ -130,9 +123,9 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (pendingFeedbackAdapter != null) {
+                if (deviceShiftingAdapter != null) {
                     if(!newText.isEmpty()) {
-                        pendingFeedbackAdapter.getFilter().filter(newText);
+                        deviceShiftingAdapter.getFilter().filter(newText);
                     }
                 }
                 return false;
@@ -151,51 +144,54 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
 
 
 
-    private void getPendingFeedbackList() {
-        CustomUtility.showProgressDialogue(PendingFeedbackActivity.this);
-        pendingFeedbacks = new ArrayList<>();
+    private void getDeviceShiftingList() {
+        CustomUtility.showProgressDialogue(DeviceShiftingActivity.this);
+        DeviceShiftingModels = new ArrayList<>();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.PendingFeedback +"?project_no="+CustomUtility.getSharedPreferences(getApplicationContext(), "projectid")+"&userid="+CustomUtility.getSharedPreferences(getApplicationContext(), "userid")+"&project_login_no=01", null, new Response.Listener<JSONObject >() {
+                WebURL.DeviceShiftingList +"?project_no="+CustomUtility.getSharedPreferences(getApplicationContext(), "projectid")+"&userid="+CustomUtility.getSharedPreferences(getApplicationContext(), "userid")+"&project_login_no=01", null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject  response) {
-                CustomUtility.hideProgressDialog(PendingFeedbackActivity.this);
-
-
                 if(response.toString()!=null && !response.toString().isEmpty()) {
-                    PendingFeedback pendingFeedback = new Gson().fromJson(response.toString(), PendingFeedback.class);
-                    if(pendingFeedback.getStatus().equals("true")) {
+                    DeviceShiftingModel deviceShiftingModel = new Gson().fromJson(response.toString(), DeviceShiftingModel.class);
+                    if(deviceShiftingModel.getStatus().equals("true")) {
 
-                         pendingFeedbackAdapter = new PendingFeedbackAdapter(getApplicationContext(),pendingFeedback.getResponse(),noDataFound);
-                        pendingFeedbackList.setHasFixedSize(true);
-                        pendingFeedbackList.setAdapter(pendingFeedbackAdapter);
-                        pendingFeedbackAdapter.SendOTP(PendingFeedbackActivity.this);
+                        deviceShiftingAdapter = new DeviceShiftingAdapter(getApplicationContext(), deviceShiftingModel.getResponse(),noDataFound);
+                        DeviceShiftingList.setHasFixedSize(true);
+                        DeviceShiftingList.setAdapter(deviceShiftingAdapter);
+                        deviceShiftingAdapter.Deviceshifting(DeviceShiftingActivity.this);
                         noDataFound.setVisibility(View.GONE);
-                        pendingFeedbackList.setVisibility(View.VISIBLE);
+                        DeviceShiftingList.setVisibility(View.VISIBLE);
+                        CustomUtility.hideProgressDialog(DeviceShiftingActivity.this);
+
                     }else {
                         noDataFound.setVisibility(View.VISIBLE);
-                        pendingFeedbackList.setVisibility(View.GONE);
+                        DeviceShiftingList.setVisibility(View.GONE);
+                        CustomUtility.hideProgressDialog(DeviceShiftingActivity.this);
+
                     }
 
                 }else {
                     noDataFound.setVisibility(View.VISIBLE);
-                    pendingFeedbackList.setVisibility(View.GONE);
+                    DeviceShiftingList.setVisibility(View.GONE);
+                    CustomUtility.hideProgressDialog(DeviceShiftingActivity.this);
+
                 }
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                CustomUtility.hideProgressDialog(PendingFeedbackActivity.this);
+                CustomUtility.hideProgressDialog(DeviceShiftingActivity.this);
                 noDataFound.setVisibility(View.VISIBLE);
-                pendingFeedbackList.setVisibility(View.GONE);
+                DeviceShiftingList.setVisibility(View.GONE);
                 Log.e("error", String.valueOf(error));
 
             }
         });
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
-                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,  // maxNumRetries = 0 means no retry
+                60000,
+                2,  // maxNumRetries = 0 means no retry
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(jsonObjectRequest);
     }
@@ -208,22 +204,23 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
     }
 
     @Override
-    public void sendOtpListener(List<PendingFeedback.Response> pendingFeedbackList,int position, String generatedVerificationCode) {
+    public void shiftingListener(List<DeviceShiftingModel.Response> deviceShiftingModel, int position, String generatedVerificationCode) {
 
-        if(CustomUtility.isValidMobile(pendingFeedbackList.get(position).getContactNo())) {
-            sendVerificationCodeAPI(pendingFeedbackList.get(position),generatedVerificationCode);
-        }else {
-            CustomUtility.ShowToast(getResources().getString(R.string.mobile_number_not_valid), PendingFeedbackActivity.this);
-        }
+        SelectedIndex = position;
 
-    }
 
-    private void sendVerificationCodeAPI(PendingFeedback.Response response, String generatedVerificationCode) {
-        CustomUtility.showProgressDialogue(PendingFeedbackActivity.this);
+        Intent intent = new Intent(DeviceShiftingActivity.this, DeviceMappingActivity.class);
+        intent.putExtra(Constant.deviceMappingData, deviceShiftingModel.get(position));
+        startActivity(intent);
+
+    }/*
+
+    private void sendVerificationCodeAPI(DeviceShiftingModel.Response response, String generatedVerificationCode) {
+        CustomUtility.showProgressDialogue(DeviceShiftingActivity.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         Log.e("PendingInstalltionURL====>",WebURL.SendOTP +"&mobiles="+response.getContactNo()+
-                        "&message="+response.getBeneficiary()+" के तहत "+response.getHp()+"HP पंप सेट का इंस्टॉलेशन किया गया है यदि आप संतुष्ट हैं तो इंस्टॉलेशन टीम को OTP-"+generatedVerificationCode+" शेयर करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169744934483345"
-                );
+                "&message="+response.getBeneficiary()+" के तहत "+response.getHp()+"HP पंप सेट का इंस्टॉलेशन किया गया है यदि आप संतुष्ट हैं तो इंस्टॉलेशन टीम को OTP-"+generatedVerificationCode+" शेयर करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169744934483345"
+        );
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.SendOTP +"&mobiles="+response.getContactNo()+
                         "&message="+response.getBeneficiary()+" के तहत "+response.getHp()+"HP पंप सेट का इंस्टॉलेशन किया गया है यदि आप संतुष्ट हैं तो इंस्टॉलेशन टीम को OTP-"+generatedVerificationCode+" शेयर करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169744934483345",
@@ -231,7 +228,7 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
                 null, new Response.Listener<JSONObject >() {
             @Override
             public void onResponse(JSONObject  res) {
-                CustomUtility.hideProgressDialog(PendingFeedbackActivity.this);
+                CustomUtility.hideProgressDialog(DeviceShiftingActivity.this);
 
 
                 if(res.toString()!=null && !res.toString().isEmpty()) {
@@ -247,9 +244,9 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                CustomUtility.hideProgressDialog(PendingFeedbackActivity.this);
+                CustomUtility.hideProgressDialog(DeviceShiftingActivity.this);
                 Log.e("error", String.valueOf(error));
-                Toast.makeText(PendingFeedbackActivity.this, error.getMessage(),
+                Toast.makeText(DeviceShiftingActivity.this, error.getMessage(),
                         Toast.LENGTH_LONG).show();
             }
         });
@@ -261,12 +258,12 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
     }
 
 
-    private void ShowAlertResponse(PendingFeedback.Response response, String generatedVerificationCode) {
-        LayoutInflater inflater = (LayoutInflater) PendingFeedbackActivity.this
+    private void ShowAlertResponse(DeviceShiftingModel.Response response, String generatedVerificationCode) {
+        LayoutInflater inflater = (LayoutInflater) DeviceShiftingActivity.this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.send_successfully_layout,
                 null);
-        final AlertDialog.Builder builder = new AlertDialog.Builder(PendingFeedbackActivity.this, R.style.MyDialogTheme);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(DeviceShiftingActivity.this, R.style.MyDialogTheme);
 
         builder.setView(layout);
         builder.setCancelable(false);
@@ -285,7 +282,7 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
             @Override
             public void onClick(View v) {
                 alertDialog.dismiss();
-                Intent intent = new Intent(PendingFeedbackActivity.this, PendingFeedBackOTPVerification.class);
+                Intent intent = new Intent(DeviceShiftingActivity.this, PendingInsUnlOTPVerification.class);
                 intent.putExtra(Constant.PendingFeedbackContact,response.getContactNo());
                 intent.putExtra(Constant.PendingFeedbackVblen,response.getVbeln());
                 intent.putExtra(Constant.PendingFeedbackHp,response.getHp());
@@ -296,12 +293,13 @@ public class PendingFeedbackActivity extends BaseActivity implements PendingFeed
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
 
-                /* intent.putExtra(Constant.PendingFeedbackVblen,response.getVbeln());
+                *//* intent.putExtra(Constant.PendingFeedbackVblen,response.getVbeln());
                 intent.putExtra(Constant.PendingFeedbackHp,response.getHp());
                 intent.putExtra(Constant.PendingFeedbackBeneficiary,response.getBeneficiary());
-                intent.putExtra(Constant.VerificationCode,generatedVerificationCode);*/
+                intent.putExtra(Constant.VerificationCode,generatedVerificationCode);*//*
             }
         });
 
-    }
+    }*/
+    
 }

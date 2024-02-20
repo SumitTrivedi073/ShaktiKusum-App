@@ -125,7 +125,7 @@
     <string name="Set_text">Set</string>
     <string name="Set_edt_scan">Scan or Enter material number</string>
     <string name="Scan_Device">Scan Device</string>
-    <string name="pendingFeedback">Pending Feedback</string>
+    <string name="pendingInstallationVerification">Pending Installation Verification</string>
     <string name="pendingUnloadingVerification">Pending Unloading Verification</string>
     <string name="otpVerification">Installation Verification</string>
     <string name="Loading">loading…</string>
@@ -137,6 +137,7 @@
     <string name="photoGallery">Photo Gallery</string>
     <string name="take_photo">Take Photo</string>
     <string name="select_image">Please Select Image</string>
+    <string name="select_atlist_5_image">Please Select at-list 5 Images</string>
     <string name="select_all_image">Please Select All Images</string>
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
@@ -424,9 +425,11 @@
     <string name="enterdeliveryofPump">Enter Delivery of pump</string>
 
     <string name="dataExtractFileToServer">Sending Data Extract File To Server......</string>
-    <string name="ImeiFileToServer">Sending IMEI File To Server...</string>
+    <string name="ImeiFileToServer">Sending IMEI File To Server…</string>
     <string name="not_ok">NOT OK</string>
     <string name="ok">OK</string>
+    <string name="write">Write</string>
+    <string name="read">Read</string>
     <string name="gps">Please turn on location first</string>
     <string name="enter_electric_connection_rating_hp">Enter electric connection rating (HP)</string>
     <string name="electric_connection_rating">Electric Connection Rating</string>
@@ -479,6 +482,25 @@
     <string name="submittingDebugData">Debug Data sending to server…</string>
     <string name="submittingInatallation">Installation data sending to server…</string>
     <string name="sendingOtpToCustomer">Sending otp to customer…</string>
+    <string name="installation_complete_msg">Installation Complete please Proceed for Verification</string>
+    <string name="update_device_with_latest_version">Update Device with latest Version</string>
+    <string name="updating_controller">Controller Updating…</string>
+    <string name="check_device_status">Check device status</string>
+    <string name="please_attach_controller_image">Please Attach Controller Image</string>
+    <string name="writing_data_please_wait">Writing Data Please wait…</string>
+    <string name="reading_data_please_wait">Reading Data Please wait…</string>
+    <string name="device_initialization_processing">Device initialization Processing…</string>
+    <string name="enter_remark">Please Enter Remark</string>
+    <string name="device_shifting_successfully">Device Shifting Successfully</string>
+    <string name="device_shifting_unsuccessfully">Device not shifted, please try again…</string>
+    <string name="checkDeviceShiftingStatus">Check Device Shifting Status…</string>
+    <string name="check_device_shifting_status_within">check Device Shifting status within</string>
+    <string name="latest_version_insta">Latest version installting please wait…</string>
+    <string name="deviceShifting">Device Shifting</string>
+    <string name="shifting">Shifting</string>
+    <string name="empty_latlng">Can\'t Proceed for Device update because lat lng is empty!</string>
+    <string name="permanent_offline">PERMANENT OFFLINE</string>
+    <string name="online_and_shifted">ONLINE AND SHIFTED</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

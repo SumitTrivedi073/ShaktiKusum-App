@@ -32,7 +32,7 @@ import bean.RejectInstallationModel;
 import utility.CustomUtility;
 import webservice.WebURL;
 
-public class RejectionInstallation extends AppCompatActivity {
+public class RejectionInstallation extends BaseActivity {
 
     private RecyclerView rejectionInstList;
     private Toolbar mToolbar;

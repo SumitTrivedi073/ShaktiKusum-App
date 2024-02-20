@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
 import android.provider.Settings;
@@ -80,7 +79,6 @@ import bean.InstallationBean;
 import database.DatabaseHelper;
 import de.hdodenhof.circleimageview.CircleImageView;
 import debugapp.Bean.SimDetailsInfoResponse;
-import debugapp.BlueToothDebugNewActivity;
 import debugapp.GlobalValue.Constant;
 import debugapp.VerificationCodeModel;
 import debugapp.localDB.DatabaseHelperTeacher;
@@ -459,12 +457,6 @@ public class InstallationInitial extends BaseActivity {
                         isDongleExtract = true;
                     }
 
-                    Log.e("mobileOnlineStatus======>",mobileOnlineStatus);
-
-                    Log.e("controllerOnlineStatus======>",controllerOnlineStatus);
-                    Log.e("dirPath======>",dirPath);
-                    Log.e("isDongleExtract======>", String.valueOf(isDongleExtract));
-
 
                     saveDataValidation();
                 } else {
@@ -683,7 +675,7 @@ public class InstallationInitial extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        saveData1();
+       // saveData1();
     }
 
     private void ViewInflate(int value, int new_value) {
@@ -888,13 +880,13 @@ public class InstallationInitial extends BaseActivity {
                                                                     if (!DeviceStatus.isEmpty()) {
 
                                                                         if (DeviceStatus.equals(getResources().getString(R.string.online))) {
-                                                                            if (imageList.size() > 0) {
+                                                                            if (imageList.size() > 7) {
 
 
                                                                                 saveInstalltion();
 
                                                                             } else {
-                                                                                CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                                                                                CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_all_image));
                                                                             }
                                                                         } else {
 
@@ -906,11 +898,11 @@ public class InstallationInitial extends BaseActivity {
                                                                                     if (mSimDetailsInfoResponse.size() >= 3) {
 
 
-                                                                                        if (imageList.size() > 0) {
+                                                                                        if (imageList.size() > 7) {
                                                                                             saveInstalltion();
 
                                                                                         } else {
-                                                                                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_image));
+                                                                                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_all_image));
                                                                                         }
 
                                                                                     } else {
@@ -1912,7 +1904,6 @@ public class InstallationInitial extends BaseActivity {
                         invc_done = jo.getString("return");
 
                         if (invc_done.equals("Y")) {
-                        //  sendLatLngToRmsForFota();
                             CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.dataSubmittedSuccessfully));
                             Log.e("DOCNO", "&&&&" + billno);
                             db.deleteInstallationData(billno);
@@ -1933,7 +1924,7 @@ public class InstallationInitial extends BaseActivity {
                                 sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
                                 CustomUtility.removeValueFromSharedPref(mContext, Constant.isDebugDevice);
                             } else {
-                                Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
+                                Intent intent = new Intent(InstallationInitial.this, PendingInstallationActivity.class);
                                 startActivity(intent);
                                 finish();
                             }
@@ -1948,11 +1939,11 @@ public class InstallationInitial extends BaseActivity {
 
                             } else if (invc_done.equals("P")) {
 
-                                CustomUtility.showToast(InstallationInitial.this, "Controller number mismatch. Please update I-base.");
+                                CustomUtility.showToast(InstallationInitial.this, "Data Not Submitted, Controller number mismatch. Please update I-base.");
 
                             } else if (invc_done.equals("I")) {
 
-                                CustomUtility.showToast(InstallationInitial.this, "Camera image quality is very high Please remove it.");
+                                CustomUtility.showToast(InstallationInitial.this, "Data Not Submitted, Please Select or Capture All Images First");
 
                             } else if (invc_done.equals("A")) {
 
@@ -1976,83 +1967,6 @@ public class InstallationInitial extends BaseActivity {
         }
     }
 
-    /*-------------------------------------------------------------Send Lat Lng to Rms Server-----------------------------------------------------------------------------*/
-
-
-    private void sendLatLngToRmsForFota() {
-
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-
-      //  Log.e("UpdateLatLngRMSURL====>",WebURL.updateLatLngToRms + "?deviceNo="+inst_controller_ser.getText().toString().trim()+"&lat="+imageList.get(2).getLatitude()+"&lon="+imageList.get(2).getLongitude());
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.updateLatLngToRms + "?deviceNo="+inst_controller_ser.getText().toString().trim()+"&lat="+imageList.get(2).getLatitude()+"&lon="+imageList.get(2).getLongitude(),
-
-                null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-                try {
-                //    Log.e("UpdateLatLngRMSResponse====>",jsonObject.toString());
-                    if (jsonObject.toString() != null && !jsonObject.toString().isEmpty()) {
-
-                        String mStatus = jsonObject.getString("status");
-                        if (mStatus.equals("true")) {
-
-                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.dataSubmittedSuccessfully));
-                            Log.e("DOCNO", "&&&&" + billno);
-                            db.deleteInstallationData(billno);
-                            db.deleteInstallationListData1(billno);
-                            CustomUtility.setSharedPreference(mContext, "INSTSYNC" + billno, "");
-                            CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, "");
-                            CustomUtility.setSharedPreference(mContext, "borewellstatus", "");
-
-                            CustomUtility.setSharedPreference(mContext, "SYNCLIST", "1");
-
-                            mDatabaseHelperTeacher.deleteSimInfoData(billno);
-
-                            Random random = new Random();
-                            String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
-
-                                if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
-
-                                    sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
-                                   CustomUtility.removeValueFromSharedPref(mContext, Constant.isDebugDevice);
-                                } else {
-                                    Intent intent = new Intent(InstallationInitial.this, PendingFeedbackActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-
-                            mDatabaseHelperTeacher.deleteAllDataFromTable(inst_controller_ser.getText().toString().trim()+ "-0");
-                        } else {
-                            stopProgressDialogue();
-                            CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
-                        }
-
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    stopProgressDialogue();
-                    CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
-                }
-
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                stopProgressDialogue();
-                Log.e("error", String.valueOf(error));
-                Toast.makeText(InstallationInitial.this, error.toString(),
-                        Toast.LENGTH_LONG).show();
-            }
-        });
-        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
-                60000,
-                5,  /// maxNumRetries = 0 means no retry
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        requestQueue.add(jsonObjectRequest);
-    }
 
     /*-------------------------------------------------------------Send OTP to customer-----------------------------------------------------------------------------*/
 
@@ -2112,7 +2026,7 @@ public class InstallationInitial extends BaseActivity {
 
         OK_txt.setOnClickListener(v -> {
             alertDialog.dismiss();
-            Intent intent = new Intent(InstallationInitial.this, PendingFeedBackOTPVerification.class);
+            Intent intent = new Intent(InstallationInitial.this, PendingInsUnlOTPVerification.class);
             intent.putExtra(Constant.PendingFeedbackContact, ContactNo);
             intent.putExtra(Constant.PendingFeedbackVblen, billNo);
             intent.putExtra(Constant.PendingFeedbackHp, Hp);

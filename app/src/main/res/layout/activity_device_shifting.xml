@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="activity.PendingInstallationActivity">
+    tools:context="activity.DeviceShiftingActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -37,7 +37,7 @@
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/complaintInstallationList"
+            android:id="@+id/DeviceShiftingList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
@@ -53,7 +53,7 @@
         android:id="@+id/noDataFound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_data_found"
+        android:text="No Data Found"
         android:layout_centerInParent="true"
         android:fontFamily="sans-serif-condensed-medium"
         android:textSize="@dimen/_14sdp"
