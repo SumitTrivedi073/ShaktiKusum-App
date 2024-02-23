@@ -148,6 +148,7 @@ public class DeviceShiftingActivity extends BaseActivity implements DeviceShifti
         CustomUtility.showProgressDialogue(DeviceShiftingActivity.this);
         DeviceShiftingModels = new ArrayList<>();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
+        Log.e("DeviceShiftingAPI",WebURL.DeviceShiftingList +"?project_no="+CustomUtility.getSharedPreferences(getApplicationContext(), "projectid")+"&userid="+CustomUtility.getSharedPreferences(getApplicationContext(), "userid")+"&project_login_no=01");
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.DeviceShiftingList +"?project_no="+CustomUtility.getSharedPreferences(getApplicationContext(), "projectid")+"&userid="+CustomUtility.getSharedPreferences(getApplicationContext(), "userid")+"&project_login_no=01", null, new Response.Listener<JSONObject>() {
             @Override

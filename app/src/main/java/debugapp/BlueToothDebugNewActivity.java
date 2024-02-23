@@ -353,7 +353,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             }
         });
 
-        imgBTSyncFILEID.setOnClickListener(new View.OnClickListener() {
+        /*imgBTSyncFILEID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mBTResonseDataList.size() > 0)
@@ -367,7 +367,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                     Toast.makeText(mContext, "Local database is  empty!", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
 
         rlvBackViewID.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -908,7 +908,6 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         OK_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CustomUtility.setSharedPreference(getApplicationContext(), Constant.deviceStatus, getResources().getString(R.string.offline));
                 alertDialog.dismiss();
                 finish();
             }
@@ -3498,7 +3497,6 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                             if (vkFinalcheck) {
                                 System.out.println("Nothing do it ...");
                                 CustomUtility.hideProgressDialog(BlueToothDebugNewActivity.this);
-                                sendDataToServer();
                                 break;
                             } else {
                                 if (mPostionFinal == 0) {

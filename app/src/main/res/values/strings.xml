@@ -179,6 +179,7 @@
     <string name="select_delay_installtion_photo">Please select delay installation with delay photo.</string>
     <string name="select_inside_controllerID">Please select inside IMEI number photo.</string>
     <string name="select_outside_controllerID">Please select outside controller id number photo.</string>
+    <string name="select_name_plate_with_farmer">Please select name plate with farmer photo</string>
     <string name="selectPhoto1">Please Select photo 1.</string>
     <string name="selectPhoto2">Please Select photo 2.</string>
     <string name="selectPhoto3">Please Select photo 3.</string>
@@ -501,6 +502,8 @@
     <string name="empty_latlng">Can\'t Proceed for Device update because lat lng is empty!</string>
     <string name="permanent_offline">PERMANENT OFFLINE</string>
     <string name="online_and_shifted">ONLINE AND SHIFTED</string>
+    <string name="I_base_update">I Base Updating…</string>
+    <string name="please_wait">Please Wait…</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

@@ -337,7 +337,7 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
             }
         }
 
-        customAdapter = new ImageSelectionAdapter(Add_Survey_Activity.this, imageArrayList);
+        customAdapter = new ImageSelectionAdapter(Add_Survey_Activity.this, imageArrayList, false);
         photoListView.setHasFixedSize(true);
         photoListView.setAdapter(customAdapter);
         customAdapter.ImageSelection(this);

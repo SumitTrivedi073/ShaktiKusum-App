@@ -22,10 +22,12 @@ public class ImageSelectionAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private final List<ImageModel> imageModelList;
     Context mcontext;
     private ImageSelectionListener docSelectionListener;
+    boolean isInstallation;
 
-    public ImageSelectionAdapter(Context contact_, List<ImageModel> listdata) {
+    public ImageSelectionAdapter(Context contact_, List<ImageModel> listdata, boolean isInstallation) {
         this.imageModelList = listdata;
         this.mcontext = contact_;
+        this.isInstallation = isInstallation;
 
     }
 
@@ -49,6 +51,12 @@ public class ImageSelectionAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             final ImageModel imageModel = imageModelList.get(position);
 
             ((ViewHolder) holder).title.setText(imageModel.getName());
+
+            if(isInstallation){
+                if(position==0||position==1||position==2||position==3||position==4||position==11){
+                    ((ViewHolder) holder).star_icon.setVisibility(View.VISIBLE);
+                }
+            }
 
             if(imageModel.isImageSelected()){
                 ((ViewHolder) holder).image.setImageResource(R.drawable.right_mark_icn_green);
@@ -75,7 +83,7 @@ public class ImageSelectionAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView title;
-        ImageView image;
+        ImageView image,star_icon;
         CardView cardView;
 
         public ViewHolder(View itemView) {
@@ -84,6 +92,7 @@ public class ImageSelectionAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             title = itemView.findViewById(R.id.title);
             image = itemView.findViewById(R.id.image);
             cardView = itemView.findViewById(R.id.cardView);
+            star_icon = itemView.findViewById(R.id.star_icon);
         }
     }
     public void ImageSelection(ImageSelectionListener actDocList) {

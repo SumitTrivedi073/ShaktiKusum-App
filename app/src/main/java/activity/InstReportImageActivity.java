@@ -31,12 +31,10 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.os.BuildCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.shaktipumplimited.shaktikusum.R;
@@ -257,7 +255,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
                 }
             }
         }
-        customAdapter = new ImageSelectionAdapter(InstReportImageActivity.this, imageArrayList);
+        customAdapter = new ImageSelectionAdapter(InstReportImageActivity.this, imageArrayList,true);
         recyclerview.setHasFixedSize(true);
         recyclerview.setAdapter(customAdapter);
         customAdapter.ImageSelection(this);
@@ -471,7 +469,60 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
 
     public boolean Save() {
         String DeviceStatus = CustomUtility.getSharedPreferences(InstReportImageActivity.this, "DeviceStatus");
+        if (DeviceStatus.equals(getResources().getString(R.string.online))) {
+            if (!imageArrayList.get(0).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_photosOfCivilMaterial), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(1).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_pannel_photo), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(2).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_controller_photo), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(3).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_discharge_photo), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(4).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_foundation_photo), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(6).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_nodues_signature), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(9).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_inside_controllerID), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(10).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_outside_controllerID), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(11).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_name_plate_with_farmer), Toast.LENGTH_SHORT).show();
+            } else {
+                CustomUtility.setSharedPreference(InstReportImageActivity.this, "INSTSYNC" + enqDocno, "1");
+                isBackPressed = true;
+            }
+        } else {
 
+            if (!imageArrayList.get(0).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_photosOfCivilMaterial), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(1).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_pannel_photo), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(2).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_controller_photo), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(3).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_discharge_photo), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(4).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_foundation_photo), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(6).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_nodues_signature), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(7).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_noNetworkNoc), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(9).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_inside_controllerID), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(10).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_outside_controllerID), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(11).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_name_plate_with_farmer), Toast.LENGTH_SHORT).show();
+            } else {
+                CustomUtility.setSharedPreference(InstReportImageActivity.this, "INSTSYNC" + enqDocno, "1");
+                isBackPressed = true;
+            }
+
+        }
+        return isBackPressed;
+    }
+/*
         if (DeviceStatus.equals(getResources().getString(R.string.online))){
 
             if (CustomUtility.getSharedPreferences(InstReportImageActivity.this, "borewellstatus").equalsIgnoreCase("2")) {
@@ -485,8 +536,8 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
                     Toast.makeText(this, getResources().getString(R.string.select_discharge_photo), Toast.LENGTH_SHORT).show();
                 } else if (!imageArrayList.get(4).isImageSelected()) {
                     Toast.makeText(this, getResources().getString(R.string.select_foundation_photo), Toast.LENGTH_SHORT).show();
-                } else if (!imageArrayList.get(5).isImageSelected()) {
-                    Toast.makeText(this, getResources().getString(R.string.select_ethr_light_photo), Toast.LENGTH_SHORT).show();
+                } else if (!imageArrayList.get(11).isImageSelected()) {
+                    Toast.makeText(this, getResources().getString(R.string.select_name_plate_with_farmer), Toast.LENGTH_SHORT).show();
                 } else {
                     CustomUtility.setSharedPreference(InstReportImageActivity.this, "INSTSYNC" + enqDocno, "1");
                     isBackPressed = true;
@@ -622,10 +673,10 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
 
             }
 
-        }
-        return isBackPressed;
+        }*/
 
-    }
+
+
 
 
 }

@@ -158,7 +158,7 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
                 }
             }
         }
-        siteAuditAdapter = new ImageSelectionAdapter(SiteAuditImageActivity.this, imageArrayList);
+        siteAuditAdapter = new ImageSelectionAdapter(SiteAuditImageActivity.this, imageArrayList, false);
         recyclerview.setHasFixedSize(true);
         recyclerview.setAdapter(siteAuditAdapter);
         siteAuditAdapter.ImageSelection(this);

@@ -67,7 +67,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import adapter.ImageSelectionAdapter;
 import bean.DeviceDetailModel;
@@ -77,7 +76,6 @@ import bean.ImageModel;
 import bean.InstallationBean;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
-import debugapp.VerificationCodeModel;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
@@ -104,7 +102,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     InstallationBean installationBean;
 
     String billNo = "", beneficiaryNo = "", contactNo = "", hp = "", regisNo = "",
-            controllerSerialNo = "", customerName = "", customerMobile = "", latitude = "", longitude = "";
+            controllerSerialNo = "7F-0135-0-13-06-23-0", customerName = "", customerMobile = "", latitude = "", longitude = "";
 
     int selectedIndex;
     boolean isUpdate = false;
@@ -187,7 +185,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
             contactNo = deviceShiftingData.getContactNo();
             hp = deviceShiftingData.getHp();
             regisNo = deviceShiftingData.getRegisno();
-            controllerSerialNo = deviceShiftingData.getControllerSernr() + "-0";
+         //   controllerSerialNo = deviceShiftingData.getControllerSernr() + "-0";
             customerName = deviceShiftingData.getCustomerName();
             customerMobile = deviceShiftingData.getContactNo();
 
@@ -565,7 +563,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
             }
         }
 
-        customAdapter = new ImageSelectionAdapter(DeviceMappingActivity.this, imageArrayList);
+        customAdapter = new ImageSelectionAdapter(DeviceMappingActivity.this, imageArrayList, false);
         recyclerview.setHasFixedSize(true);
         recyclerview.setAdapter(customAdapter);
         customAdapter.ImageSelection(this);

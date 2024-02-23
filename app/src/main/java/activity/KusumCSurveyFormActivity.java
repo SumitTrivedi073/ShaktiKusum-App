@@ -1,8 +1,5 @@
 package activity;
 
-import static com.android.volley.Request.Method.GET;
-import static com.android.volley.Request.Method.POST;
-import static activity.Config.TAG;
 import static utility.FileUtils.getPath;
 
 import android.app.Activity;
@@ -14,7 +11,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Message;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -40,30 +36,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.RequestQueue;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import adapter.ImageSelectionAdapter;
 import bean.ImageModel;
-import bean.InstallationBean;
 import bean.KusumCSurveyBean;
 import bean.SurveyListModel;
 import database.DatabaseHelper;
@@ -468,7 +455,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
             }
         }
 
-        customAdapter = new ImageSelectionAdapter(KusumCSurveyFormActivity.this, imageArrayList);
+        customAdapter = new ImageSelectionAdapter(KusumCSurveyFormActivity.this, imageArrayList, false);
         photoListView.setHasFixedSize(true);
         photoListView.setAdapter(customAdapter);
         customAdapter.ImageSelection(this);

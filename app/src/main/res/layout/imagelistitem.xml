@@ -13,6 +13,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/star_icon"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:visibility="gone"
+            android:src="@mipmap/imp_star"/>
+
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
@@ -22,6 +31,7 @@
             android:layout_marginEnd="@dimen/_30sdp"
             android:text="@string/app_name"
             android:textColor="@color/black"
+            android:layout_toEndOf="@+id/star_icon"
             android:fontFamily="sans-serif-condensed-medium"/>
 
         <ImageView

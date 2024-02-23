@@ -446,7 +446,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                 }
             }
         }
-        customAdapter = new ImageSelectionAdapter(UnloadInstReportImageActivity.this, imageArrayList);
+        customAdapter = new ImageSelectionAdapter(UnloadInstReportImageActivity.this, imageArrayList, false);
         recyclerview.setHasFixedSize(true);
         recyclerview.setAdapter(customAdapter);
         customAdapter.ImageSelection(this);
