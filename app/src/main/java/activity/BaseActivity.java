@@ -21,8 +21,6 @@ import utility.CustomUtility;
 
 public abstract class  BaseActivity extends AppCompatActivity {
     DatabaseHelper databaseHelper;
-    AlertDialog alertDialog;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,10 +60,7 @@ public abstract class  BaseActivity extends AppCompatActivity {
     BroadcastReceiver SwVersionConfigBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (alertDialog != null && alertDialog.isShowing()) {
-                alertDialog.dismiss();
-                alertDialog = null;
-            }
+
            Intent intent1 = new Intent(getApplicationContext(),SwVersionCheckActivity.class);
             startActivity(intent1);
             finish();
