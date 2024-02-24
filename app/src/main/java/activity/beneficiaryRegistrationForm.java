@@ -9,12 +9,16 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -32,7 +36,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.shaktipumplimited.shaktikusum.R;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +50,10 @@ import adapter.ImageSelectionAdapter;
 import bean.BeneficiaryRegistrationBean;
 import bean.ImageModel;
 import database.DatabaseHelper;
+import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;
+import webservice.CustomHttpClient;
+import webservice.WebURL;
 
 public class beneficiaryRegistrationForm extends BaseActivity implements ImageSelectionAdapter.ImageSelectionListener, AdapterView.OnItemSelectedListener{
     private static final int PICK_FROM_FILE = 102;
@@ -52,6 +65,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     DatabaseHelper db;
     List<String> itemNameList = new ArrayList<>();
     List<ImageModel> imageArrayList = new ArrayList<>();
+    List<ImageModel> imageList = new ArrayList<>();
     ImageSelectionAdapter customAdapter;
     int selectedIndex;
     boolean isUpdate = false;
@@ -116,8 +130,6 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
             @Override
             public void onClick(View v) {
                 ValidationCheck();
-                Intent intent=new Intent(getApplicationContext(),beneficiaryRegistrationList.class);
-                startActivity(intent);
             }
         });
         controllerTypeSpinner.setOnItemSelectedListener(this);
@@ -143,6 +155,30 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
             imageModel.setBillNo("");
             imageModel.setPoistion(i+1);
             imageArrayList.add(imageModel);
+        }
+
+        imageList = db.getAllInstallationImages();
+
+
+        if (itemNameList.size() > 0 && imageList != null && imageList.size() > 0) {
+
+            for (int i = 0; i < imageList.size(); i++) {
+                for (int j = 0; j < itemNameList.size(); j++) {
+//                    if (imageList.get(i).getBillNo().trim().equals()) {  //intent add
+                        if (imageList.get(i).getName().equals(itemNameList.get(j))) {
+                            ImageModel imageModel = new ImageModel();
+                            imageModel.setName(imageList.get(i).getName());
+                            imageModel.setImagePath(imageList.get(i).getImagePath());
+                            imageModel.setImageSelected(true);
+                            imageModel.setBillNo(imageList.get(i).getBillNo());
+                            imageModel.setLatitude(imageList.get(i).getLatitude());
+                            imageModel.setLongitude(imageList.get(i).getLongitude());
+                            imageModel.setPoistion(imageList.get(i).getPoistion());
+                            imageArrayList.set(j, imageModel);
+                        }
+//                    }
+                }
+            }
         }
         customAdapter = new ImageSelectionAdapter(beneficiaryRegistrationForm.this, imageArrayList);
         photoListView.setHasFixedSize(true);
@@ -308,8 +344,24 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
         imageModel.setPoistion(imageArrayList.get(selectedIndex).getPoistion());
         imageModel.setBillNo(serialIdExt.getText().toString());
         imageArrayList.set(selectedIndex, imageModel);
+
+        imageArrayList.set(selectedIndex, imageModel);
+        addupdateDatabase(path,"","",imageArrayList.get(selectedIndex).getPoistion());
+
         customAdapter.notifyDataSetChanged();
 
+    }
+    private void addupdateDatabase(String path, String latitude, String longitude,int position) {
+
+        DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+
+        if (isUpdate) {
+            db.updateRecordBeneficiary(imageArrayList.get(selectedIndex).getName(), path,
+                    true, serialIdExt.getText().toString(),position);
+        } else {
+            db.insertBeneficiaryImage(imageArrayList.get(selectedIndex).getName(), path,
+                    true, serialIdExt.getText().toString(),position);
+        }
 
     }
     @Override
@@ -381,16 +433,10 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                     } else if (!imageArrayList.get(5).isImageSelected()) {
                         Toast.makeText(this, getResources().getString(R.string.select_attachment_6), Toast.LENGTH_SHORT).show();
                     }
-//                    else {
-//                        if(!latitude.isEmpty()&& !latitude.equals("0")&& !latitude.equals("0.0")) {
-//                            new DemoRoadShowActivity.submitDemoRoadForm().execute();
-//                        }else {
-//                            CustomUtility.showToast(this,"we are trying to fetch your location please try after some time");
-//                        }
-//                    }
-//                }
                     else{
                         saveDataLocally();
+                        new submitDemoRoadForm().execute();
+
                     }
 
                 }
@@ -400,20 +446,131 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
     private void saveDataLocally() {
         BeneficiaryRegistrationBean beneficiaryRegistrationBean=new BeneficiaryRegistrationBean(serialId,
-                familyId,
-                beneficiaryApplicantName,
-                applicantFatherName,
-                applicantMobile,
-                applicantVillage,
-                 applicantBlock,
-                 applicantTehsil,
-                applicantDistrict,
-                 pumpCapacity,
-                applicantAccountNo,
-                applicantIFSC,
+                familyIdExt.getText().toString(),
+                beneficiaryFormApplicantName.getText().toString(),
+                applicantFatherNameExt.getText().toString(),
+                applicantMobileExt.getText().toString(),
+                applicantVillageExt.getText().toString(),
+                 applicantBlockExt.getText().toString(),
+                 applicantTehsilExt.getText().toString(),
+                applicantDistrictExt.getText().toString(),
+                 pumpCapacityExt.getText().toString(),
+                applicantAccountNoExt.getText().toString(),
+                applicantIFSCExt.getText().toString(),
                 selectedControllerType,
                  selectedPumpType,
                 selectedAcDc);
         db.insertBeneficiaryRegistrationData(beneficiaryRegistrationBean);
+
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class submitDemoRoadForm extends AsyncTask<String, String, String> {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(beneficiaryRegistrationForm.this);
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setMessage("Sending Data to server..please wait !");
+            progressDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            String docno_sap = null;
+            String invc_done;
+            String obj2 = null;
+
+            JSONArray ja_invc_data = new JSONArray();
+            JSONObject jsonObj = new JSONObject();
+            try {
+                SimpleDateFormat dt = new SimpleDateFormat("dd.MM.yyyy");
+
+                jsonObj.put("BENEFICIARY",  serialIdExt.getText().toString().trim());
+                jsonObj.put("FAMILY_ID",  familyIdExt.getText().toString().trim());
+                jsonObj.put("APPLICANT_NAME", beneficiaryFormApplicantName.getText().toString().trim());
+                jsonObj.put("APPLICANT_FNAME", applicantFatherNameExt.getText().toString().trim());
+                jsonObj.put("APPLICANT_MOB", applicantMobileExt.getText().toString().trim());
+                jsonObj.put("APPLICANT_VILLAGE", applicantVillageExt.getText().toString().trim());
+                jsonObj.put("APPLICANT_BLOCK", applicantBlockExt.getText().toString().trim());
+                jsonObj.put("APPLICANT_TEHSIL", applicantTehsilExt.getText().toString().trim());
+                jsonObj.put("APPLICANT_DISTRICT", applicantDistrictExt.getText().toString().trim());
+                jsonObj.put("PUMP_CAP", pumpCapacityExt.getText().toString().trim());
+                jsonObj.put("PUMP_ACDC", selectedAcDc);
+                jsonObj.put("CONT_TYPE", selectedControllerType);
+                jsonObj.put("PUMP_TYPE", selectedPumpType);
+                jsonObj.put("APPLICANT_BANKAC", applicantAccountNoExt.getText().toString().trim());
+                jsonObj.put("APPLICANT_IFSC", applicantIFSCExt.getText().toString().trim());
+                jsonObj.put("PROJECT_NO", "01");
+
+
+
+
+                if(imageArrayList.size()>0){
+                    for (int i=0; i<imageArrayList.size(); i++){
+                        if(imageArrayList.get(i).isImageSelected()) {
+                            jsonObj.put("PHOTO" + imageArrayList.get(i).getPoistion(), CustomUtility.getBase64FromBitmap(beneficiaryRegistrationForm.this,imageArrayList.get(i).getImagePath()));
+                        }
+                    }
+                }
+                ja_invc_data.put(jsonObj);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Log.e("BeneParam====>", ja_invc_data.toString());
+            final ArrayList<NameValuePair> param1_invc = new ArrayList<>();
+            param1_invc.add(new BasicNameValuePair("post", String.valueOf(ja_invc_data)));
+            Log.e("DATA", "$$$$" + param1_invc);
+            System.out.println("param1_invc_vihu==>>" + param1_invc);
+            try {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
+                StrictMode.setThreadPolicy(policy);
+                obj2 = CustomHttpClient.executeHttpPost1(WebURL.BeneficiaryRegistrationURL, param1_invc);
+                Log.e("OUTPUT1", "&&&&" + obj2);
+                System.out.println("OUTPUT1==>>" + obj2);
+                progressDialog.dismiss();
+                if (!obj2.equalsIgnoreCase("")) {
+                    JSONObject object = new JSONObject(obj2);
+
+                    docno_sap = object.getString("status");
+                    invc_done = object.getString("message");
+                    if (docno_sap.equalsIgnoreCase("True")) {
+                        showingMessage( invc_done);
+                        finish();
+                    }
+                    else {
+                        showingMessage(getResources().getString(R.string.dataNotSubmitted));
+                        progressDialog.dismiss();
+
+
+                    }
+
+                } else {
+                    showingMessage(getResources().getString(R.string.somethingWentWrong));
+                    progressDialog.dismiss();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                progressDialog.dismiss();
+            }
+            return obj2;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+        }
+    }
+    private void showingMessage(String message) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+
+                CustomUtility.showToast(beneficiaryRegistrationForm.this, message);
+
+            }
+        });
     }
 }

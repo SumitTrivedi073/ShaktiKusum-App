@@ -97,7 +97,7 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
     }
     private void getValueFromDatatbase() {
         db = new DatabaseHelper(this);
-        if (db.getcount(DatabaseHelper.TABLE_INSTALLATION_LIST)) {
+        if (db.getcount(DatabaseHelper.TABLE_BENEFICIARY_REGISTRATION)) {
             beneficiaryBean = new ArrayList<BeneficiaryRegistrationBean>();
             beneficiaryBean = db.getBeneficiaryListData();
             Log.e("SIZE", "&&&&" + beneficiaryBean.size());
