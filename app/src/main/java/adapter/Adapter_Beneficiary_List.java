@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,15 +29,15 @@ import utility.CustomUtility;
 
 public class Adapter_Beneficiary_List  extends RecyclerView.Adapter<Adapter_Beneficiary_List.HomeCategoryViewHolder> {
     DatabaseHelper db;
-    private final Context context;
+    private final Context mcontext;
     private final ArrayList<BeneficiaryRegistrationBean> responseList;
     private List<BeneficiaryRegistrationBean> SearchesList = null;
 
 
     public Adapter_Beneficiary_List(Context context, ArrayList<BeneficiaryRegistrationBean> responseList) {
-        this.context = context;
+        this.mcontext = context;
         this.responseList = responseList;
-        db = new DatabaseHelper(context);
+        db = new DatabaseHelper(mcontext);
         this.SearchesList = new ArrayList<BeneficiaryRegistrationBean>();
         this.SearchesList.addAll(responseList);
     }
@@ -47,7 +48,7 @@ public class Adapter_Beneficiary_List  extends RecyclerView.Adapter<Adapter_Bene
     @NonNull
     @Override
     public Adapter_Beneficiary_List.HomeCategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.activity_adapter_beneficiary_list, parent, false);
+        View view = LayoutInflater.from(mcontext).inflate(R.layout.activity_adapter_beneficiary_list, parent, false);
         return new Adapter_Beneficiary_List.HomeCategoryViewHolder(view);
     }
 
@@ -61,9 +62,9 @@ public class Adapter_Beneficiary_List  extends RecyclerView.Adapter<Adapter_Bene
             }if (!TextUtils.isEmpty(responseList.get(position).getApplicantMobile())) {
                 holder.applicant_mobile.setText(responseList.get(position).getApplicantMobile());
             }
-            holder.status.setImageResource(R.drawable.red_icn);
+            Log.e("responseList.serialId==>",responseList.get(position).getSerialId());
             holder.cardView.setOnClickListener(view -> {
-                Intent in = new Intent(context, beneficiaryRegistrationForm.class);
+                Intent in = new Intent(mcontext, beneficiaryRegistrationForm.class);
                 Bundle extras = new Bundle();
                 extras.putString("serial_id", responseList.get(position).getSerialId());
                 extras.putString("family_id", responseList.get(position).getFamilyId());
@@ -82,7 +83,7 @@ public class Adapter_Beneficiary_List  extends RecyclerView.Adapter<Adapter_Bene
                 extras.putString("applicant_ifsc_code", responseList.get(position).getApplicantIFSC());
 
                 in.putExtras(extras);
-                context.startActivity(in);
+                mcontext.startActivity(in);
             });
 
         }
@@ -94,19 +95,17 @@ public class Adapter_Beneficiary_List  extends RecyclerView.Adapter<Adapter_Bene
 
     @Override
     public int getItemCount() {
-        return 0;
+        return responseList.size();
     }
 
     public class HomeCategoryViewHolder extends RecyclerView.ViewHolder {
         TextView serial_id, applicant_name,applicant_mobile;
-        ImageView status;
         CardView cardView;
         public HomeCategoryViewHolder(@NonNull View itemView) {
             super(itemView);
             serial_id=itemView.findViewById(R.id.serial_id);
             applicant_name=itemView.findViewById(R.id.applicant_name);
             applicant_mobile=itemView.findViewById(R.id.applicant_mobile);
-            status=itemView.findViewById(R.id.status);
             cardView=itemView.findViewById(R.id.card_view);
         }
     }

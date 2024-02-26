@@ -61,7 +61,6 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     private Toolbar mToolbar;
     RecyclerView photoListView;
     AlertDialog alertDialog;
-
     DatabaseHelper db;
     List<String> itemNameList = new ArrayList<>();
     List<ImageModel> imageArrayList = new ArrayList<>();
@@ -72,7 +71,6 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     EditText serialIdExt,familyIdExt,beneficiaryFormApplicantName,applicantFatherNameExt,applicantMobileExt,applicantVillageExt,applicantBlockExt,applicantTehsilExt,applicantDistrictExt,pumpCapacityExt,applicantAccountNoExt,applicantIFSCExt;
     Spinner controllerTypeSpinner,pumpTypeSpinner,pumpAcDcSpinner;
     TextView save;
-
     String selectedControllerType="",selectedPumpType="",selectedAcDc="",serialId="",familyId="",beneficiaryApplicantName="",
             applicantFatherName="",applicantMobile="",applicantVillage="",applicantBlock="",applicantTehsil="",
             applicantDistrict="",pumpCapacity="",applicantAccountNo="",applicantIFSC="";
@@ -83,8 +81,59 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_beneficiary_registration_form);
+
         Init();
         listner();
+        setdata();
+    }
+
+    private void setdata() {
+        Bundle extras = getIntent().getExtras();
+
+            if( getIntent().getExtras() != null){
+                serialId=extras.getString("serial_id");
+                serialIdExt.setText(extras.getString("serial_id"));
+                familyIdExt.setText(extras.getString("family_id"));
+                beneficiaryFormApplicantName.setText(extras.getString("applicant_name"));
+                applicantFatherNameExt.setText(extras.getString("applicant_father_name"));
+                applicantMobileExt.setText(extras.getString("applicant_mobile_no"));
+                applicantVillageExt.setText(extras.getString("applicant_village"));
+                applicantBlockExt.setText(extras.getString("applicant_block"));
+                applicantTehsilExt.setText(extras.getString("applicant_tehsil"));
+                applicantDistrictExt.setText(extras.getString("applicant_district"));
+                pumpCapacityExt.setText(extras.getString("pump_capacity"));
+                applicantAccountNoExt.setText(extras.getString("applicant_account_no"));
+                applicantIFSCExt.setText(extras.getString("applicant_ifsc_code"));
+                selectedAcDc=extras.getString("pump_ac_dc");
+                if(selectedAcDc=="AC"){
+                    pumpAcDcSpinner.setSelection(1);
+                }
+                else{
+                    pumpAcDcSpinner.setSelection(2);
+                }
+                selectedPumpType=extras.getString("pump_type");
+                if(selectedPumpType=="Submersible")
+                {
+                    pumpTypeSpinner.setSelection(1);
+                }
+                else{
+                    pumpTypeSpinner.setSelection(1);
+                }
+                selectedControllerType=extras.getString("controller_type");
+                if(selectedControllerType=="Normal")
+                {
+                    controllerTypeSpinner.setSelection(1);
+                }
+                else{
+                    controllerTypeSpinner.setSelection(2);
+                }
+            }
+
+//        extras.putString("pump_ac_dc", responseList.get(position).getPumpAcDc());
+//        extras.putString("pump_type", responseList.get(position).getPumpType());
+//        extras.putString("controller_type", responseList.get(position).getControllerType());
+
+
     }
 
     private void Init() {
@@ -156,16 +205,20 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
             imageModel.setPoistion(i+1);
             imageArrayList.add(imageModel);
         }
-
-        imageList = db.getAllInstallationImages();
-
+serialId=serialIdExt.getText().toString();
+        imageList = db.getAllBeneficiaryImages();
+        Log.e("imageList==>", String.valueOf(imageList.size()));
+        Log.e("imagearrayList==>", String.valueOf(imageArrayList.size()));
 
         if (itemNameList.size() > 0 && imageList != null && imageList.size() > 0) {
-
             for (int i = 0; i < imageList.size(); i++) {
                 for (int j = 0; j < itemNameList.size(); j++) {
-//                    if (imageList.get(i).getBillNo().trim().equals()) {  //intent add
+                    Log.e("1imageList.get(i)==>",imageList.get(i).getBillNo());
+                    Log.e("1serial_id==>",serialId);
+                    if (imageList.get(i).getBillNo().trim().equals(serialId)) {
+                        Log.e("2imageList.get(i)==>",imageList.get(i).getBillNo());//intent add
                         if (imageList.get(i).getName().equals(itemNameList.get(j))) {
+                            Log.e("3imageList.get(i)==>",imageList.get(i).getBillNo());
                             ImageModel imageModel = new ImageModel();
                             imageModel.setName(imageList.get(i).getName());
                             imageModel.setImagePath(imageList.get(i).getImagePath());
@@ -176,7 +229,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                             imageModel.setPoistion(imageList.get(i).getPoistion());
                             imageArrayList.set(j, imageModel);
                         }
-//                    }
+                    }
                 }
             }
         }
@@ -418,34 +471,33 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
             CustomUtility.ShowToast(getResources().getString(R.string.enter_ifsc_code), getApplicationContext());
         } else {
 
-            if (CustomUtility.isInternetOn(getApplicationContext())) {
+
                 if (imageArrayList.size() > 0) {
                     if (!imageArrayList.get(0).isImageSelected()) {
                         Toast.makeText(this, getResources().getString(R.string.select_acknowledgment_challan_image), Toast.LENGTH_SHORT).show();
                     } else if (!imageArrayList.get(1).isImageSelected()) {
                         Toast.makeText(this, getResources().getString(R.string.select_land_proof), Toast.LENGTH_SHORT).show();
-                    } else if (!imageArrayList.get(2).isImageSelected()) {
-                        Toast.makeText(this, getResources().getString(R.string.select_beneficiary_id_proof), Toast.LENGTH_SHORT).show();
-                    } else if (!imageArrayList.get(3).isImageSelected()) {
-                        Toast.makeText(this, getResources().getString(R.string.select_payment_receipt), Toast.LENGTH_SHORT).show();
-                    } else if (!imageArrayList.get(4).isImageSelected()) {
-                        Toast.makeText(this, getResources().getString(R.string.select_attachment_5), Toast.LENGTH_SHORT).show();
-                    } else if (!imageArrayList.get(5).isImageSelected()) {
-                        Toast.makeText(this, getResources().getString(R.string.select_attachment_6), Toast.LENGTH_SHORT).show();
                     }
+//                    else if (!imageArrayList.get(2).isImageSelected()) {
+//                        Toast.makeText(this, getResources().getString(R.string.select_beneficiary_id_proof), Toast.LENGTH_SHORT).show();
+//                    } else if (!imageArrayList.get(3).isImageSelected()) {
+//                        Toast.makeText(this, getResources().getString(R.string.select_payment_receipt), Toast.LENGTH_SHORT).show();
+//                    } else if (!imageArrayList.get(4).isImageSelected()) {
+//                        Toast.makeText(this, getResources().getString(R.string.select_attachment_5), Toast.LENGTH_SHORT).show();
+//                    } else if (!imageArrayList.get(5).isImageSelected()) {
+//                        Toast.makeText(this, getResources().getString(R.string.select_attachment_6), Toast.LENGTH_SHORT).show();
+//                    }
                     else{
-                        saveDataLocally();
-                        new submitDemoRoadForm().execute();
-
+                   saveDataLocally();
                     }
 
-                }
             }
         }
     }
 
     private void saveDataLocally() {
-        BeneficiaryRegistrationBean beneficiaryRegistrationBean=new BeneficiaryRegistrationBean(serialId,
+        BeneficiaryRegistrationBean beneficiaryRegistrationBean=new BeneficiaryRegistrationBean(
+                serialIdExt.getText().toString(),
                 familyIdExt.getText().toString(),
                 beneficiaryFormApplicantName.getText().toString(),
                 applicantFatherNameExt.getText().toString(),
@@ -460,7 +512,15 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                 selectedControllerType,
                  selectedPumpType,
                 selectedAcDc);
+
         db.insertBeneficiaryRegistrationData(beneficiaryRegistrationBean);
+
+        if(CustomUtility.isInternetOn(getApplicationContext())){
+            new submitDemoRoadForm().execute();
+        }else {
+            CustomUtility.ShowToast("Data saved In local database", getApplicationContext());
+            onBackPressed();
+        }
 
     }
 
@@ -508,7 +568,6 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
 
 
-
                 if(imageArrayList.size()>0){
                     for (int i=0; i<imageArrayList.size(); i++){
                         if(imageArrayList.get(i).isImageSelected()) {
@@ -544,8 +603,6 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                     else {
                         showingMessage(getResources().getString(R.string.dataNotSubmitted));
                         progressDialog.dismiss();
-
-
                     }
 
                 } else {

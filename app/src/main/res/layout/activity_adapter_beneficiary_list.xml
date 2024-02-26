@@ -44,15 +44,6 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="13sp" />
 
-            <ImageView
-                android:id="@+id/status"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_weight="0.05"
-                android:gravity="center"
-                android:src="@drawable/red_icn" />
-
         </LinearLayout>
 
         <LinearLayout

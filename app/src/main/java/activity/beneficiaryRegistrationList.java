@@ -1,6 +1,6 @@
 package activity;
 
-import static debugapp.GlobalValue.UtilMethod.context;
+import android.content.Context;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -42,6 +42,7 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
     FloatingActionButton newBeneficiaryAddButton;
     Adapter_Beneficiary_List adapterBeneficiaryList;
     Intent intent;
+    Context context;
     RecyclerView beneficiaryListView;
     DatabaseHelper db;
     ArrayList<BeneficiaryRegistrationBean> beneficiaryBean;
@@ -59,6 +60,7 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
     }
 
     private void Init() {
+        context = this;
         linear1=findViewById(R.id.linear1);
         mToolbar = findViewById(R.id.toolbar);
         noDataFound = findViewById(R.id.noDataFound);
@@ -100,11 +102,13 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
         if (db.getcount(DatabaseHelper.TABLE_BENEFICIARY_REGISTRATION)) {
             beneficiaryBean = new ArrayList<BeneficiaryRegistrationBean>();
             beneficiaryBean = db.getBeneficiaryListData();
-            Log.e("SIZE", "&&&&" + beneficiaryBean.size());
+            Log.e("SIZE1", "&&&&" + beneficiaryBean.size());
+
             if (beneficiaryBean != null && beneficiaryBean.size() > 0) {
 //                lin1.setVisibility(View.VISIBLE);
 //                lin2.setVisibility(View.GONE);
-                beneficiaryListView.setAdapter(null);
+//                beneficiaryListView.setAdapter(null);
+                noDataFound.setVisibility(View.GONE);
                 Log.e("SIZE", "&&&&" + beneficiaryBean.size());
                 adapterBeneficiaryList = new Adapter_Beneficiary_List(context, beneficiaryBean);
                 layoutManagerSubCategory = new LinearLayoutManager(context);
@@ -114,6 +118,7 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
                 adapterBeneficiaryList.notifyDataSetChanged();
                 WebURL.CHECK_DATA_UNOLAD = 0;
             } else {
+                Log.e("SIZE===>", "&&&&" + beneficiaryBean.size());
                 linear1.setVisibility(View.GONE);
                 noDataFound.setVisibility(View.VISIBLE);
             }

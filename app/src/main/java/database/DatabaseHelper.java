@@ -4561,11 +4561,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             installationImages.clear();
             ImageModel imageModel;
-
             if (mcursor.getCount() > 0) {
                 for (int i = 0; i < mcursor.getCount(); i++) {
                     mcursor.moveToNext();
-
                     imageModel = new ImageModel();
                     imageModel.setID(mcursor.getString(0));
                     imageModel.setName(mcursor.getString(1));
@@ -4588,7 +4586,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<ImageModel> beneficiaryImages = new ArrayList<ImageModel>();
         SQLiteDatabase database = this.getWritableDatabase();
         if (CustomUtility.doesTableExist(database, TABLE_BENEFICIARY_IMAGE_DATA)) {
-            Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_BENEFICIARY_IMAGE_DATA, null);
+            Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_BENEFICIARY_IMAGE_DATA ,null);
 
             beneficiaryImages.clear();
             ImageModel imageModel;
@@ -4721,6 +4719,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             // Insert Row
             long i = db.insert(TABLE_BENEFICIARY_REGISTRATION, null, values);
+            db.setTransactionSuccessful();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+    }
+
+    public void updateBeneficiaryRegistrationData(BeneficiaryRegistrationBean beneficiaryRegistrationBean) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        ContentValues values;
+        try {
+            values = new ContentValues();
+            values.put(KEY_SERIAL_ID, beneficiaryRegistrationBean.getSerialId());
+            values.put(KEY_FAMILY_ID, beneficiaryRegistrationBean.getFamilyId());
+            values.put(KEY_APPLICANT_NAME, beneficiaryRegistrationBean.getBeneficiaryFormApplicantName());
+            values.put(KEY_APPLICANT_FATHER_NAME, beneficiaryRegistrationBean.getApplicantFatherName());
+            values.put(KEY_APPLICANT_MOBILE_NO, beneficiaryRegistrationBean.getApplicantMobile());
+            values.put(KEY_APPLICANT_VILLAGE, beneficiaryRegistrationBean.getApplicantVillage());
+            values.put(KEY_APPLICANT_BLOCK, beneficiaryRegistrationBean.getApplicantBlock());
+            values.put(KEY_APPLICANT_TEHSIL, beneficiaryRegistrationBean.getApplicantTehsil());
+            values.put(KEY_APPLICANT_DISTRICT, beneficiaryRegistrationBean.getApplicantDistrict());
+            values.put(KEY_PUMP_CAPACITY, beneficiaryRegistrationBean.getPumpCapacity());
+            values.put(KEY_PUMP_AC_DC, beneficiaryRegistrationBean.getPumpAcDc());
+            values.put(KEY_PUMP_TYPE, beneficiaryRegistrationBean.getPumpType());
+            values.put(KEY_CONTROLLER_TYPE, beneficiaryRegistrationBean.getControllerType());
+            values.put(KEY_APPLICANT_ACCOUNT_NO, beneficiaryRegistrationBean.getApplicantAccountNo());
+            values.put(KEY_APPLICANT_IFSC_CODE, beneficiaryRegistrationBean.getApplicantIFSC());
+
+            // Insert Row
+            db.update(TABLE_BENEFICIARY_REGISTRATION, values, "serial_id = '" + beneficiaryRegistrationBean.getSerialId() + "'", null);
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
             e.printStackTrace();
