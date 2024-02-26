@@ -4695,6 +4695,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return UnloadingImages;
     }
+
     public void insertBeneficiaryRegistrationData(BeneficiaryRegistrationBean beneficiaryRegistrationBean) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();

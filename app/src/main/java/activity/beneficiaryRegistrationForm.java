@@ -84,14 +84,14 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
         Init();
         listner();
-        setdata();
+
     }
 
     private void setdata() {
         Bundle extras = getIntent().getExtras();
 
             if( getIntent().getExtras() != null){
-                serialId=extras.getString("serial_id");
+
                 serialIdExt.setText(extras.getString("serial_id"));
                 familyIdExt.setText(extras.getString("family_id"));
                 beneficiaryFormApplicantName.setText(extras.getString("applicant_name"));
@@ -163,6 +163,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.beneficiary_registration_list);
+        setdata();
         SetAdapter();
     }
 
@@ -205,7 +206,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
             imageModel.setPoistion(i+1);
             imageArrayList.add(imageModel);
         }
-serialId=serialIdExt.getText().toString();
+
         imageList = db.getAllBeneficiaryImages();
         Log.e("imageList==>", String.valueOf(imageList.size()));
         Log.e("imagearrayList==>", String.valueOf(imageArrayList.size()));
@@ -214,8 +215,8 @@ serialId=serialIdExt.getText().toString();
             for (int i = 0; i < imageList.size(); i++) {
                 for (int j = 0; j < itemNameList.size(); j++) {
                     Log.e("1imageList.get(i)==>",imageList.get(i).getBillNo());
-                    Log.e("1serial_id==>",serialId);
-                    if (imageList.get(i).getBillNo().trim().equals(serialId)) {
+                    Log.e("1serial_id==>",serialIdExt.getText().toString().trim());
+                    if (imageList.get(i).getBillNo().trim().equals(serialIdExt.getText().toString().trim())) {
                         Log.e("2imageList.get(i)==>",imageList.get(i).getBillNo());//intent add
                         if (imageList.get(i).getName().equals(itemNameList.get(j))) {
                             Log.e("3imageList.get(i)==>",imageList.get(i).getBillNo());
@@ -513,10 +514,20 @@ serialId=serialIdExt.getText().toString();
                  selectedPumpType,
                 selectedAcDc);
 
-        db.insertBeneficiaryRegistrationData(beneficiaryRegistrationBean);
+        if (db.isRecordExist(DatabaseHelper.TABLE_BENEFICIARY_REGISTRATION, DatabaseHelper.KEY_SERIAL_ID, serialIdExt.getText().toString())) {
+           // db.updateInstallationData(inst_bill_no, installationBean);
+            db.updateBeneficiaryRegistrationData(beneficiaryRegistrationBean);
+
+        } else {
+         //   db.insertInstallationData(inst_bill_no, installationBean);
+            db.insertBeneficiaryRegistrationData(beneficiaryRegistrationBean);
+        }
+
+
 
         if(CustomUtility.isInternetOn(getApplicationContext())){
             new submitDemoRoadForm().execute();
+
         }else {
             CustomUtility.ShowToast("Data saved In local database", getApplicationContext());
             onBackPressed();
