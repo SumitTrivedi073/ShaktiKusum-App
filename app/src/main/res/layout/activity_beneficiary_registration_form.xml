@@ -476,13 +476,13 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/space_tinny4"
+                        android:layout_marginStart="@dimen/space_tinny4"
                         android:layout_marginBottom="@dimen/space_large15"
                         android:layout_weight="1"
                         android:background="@color/header_color"
                         android:gravity="center"
                         android:padding="@dimen/space_mid10"
-                        android:text="Save"
+                        android:text="@string/submit"
                         android:textColor="@color/white"
                         android:textSize="@dimen/size_xlarge20" />
 

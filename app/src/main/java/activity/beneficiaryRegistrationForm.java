@@ -2,13 +2,6 @@ package activity;
 
 import static utility.FileUtils.getPath;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -18,7 +11,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,6 +23,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,7 +39,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,38 +83,41 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     private void setdata() {
         Bundle extras = getIntent().getExtras();
         if (getIntent().getExtras() != null) {
-            beneficiaryBeanList = (BeneficiaryRegistrationBean) extras.getSerializable("list");
-            Log.e("beneficiaryBeanList==>", beneficiaryBeanList.applicantAccountNo);
+            assert extras != null;
+            beneficiaryBeanList = (BeneficiaryRegistrationBean) extras.getSerializable(Constant.beneficiaryData);
+            if (beneficiaryBeanList != null) {
+                Log.e("beneficiaryBeanList==>", beneficiaryBeanList.applicantAccountNo);
 
-            serialIdExt.setText(beneficiaryBeanList.getSerialId());
-            familyIdExt.setText(beneficiaryBeanList.getFamilyId());
-            beneficiaryFormApplicantName.setText(beneficiaryBeanList.getBeneficiaryFormApplicantName());
-            applicantFatherNameExt.setText(beneficiaryBeanList.getApplicantFatherName());
-            applicantMobileExt.setText(beneficiaryBeanList.getApplicantMobile());
-            applicantVillageExt.setText(beneficiaryBeanList.getApplicantVillage());
-            applicantBlockExt.setText(beneficiaryBeanList.getApplicantBlock());
-            applicantTehsilExt.setText(beneficiaryBeanList.getApplicantTehsil());
-            applicantDistrictExt.setText(beneficiaryBeanList.getApplicantDistrict());
-            pumpCapacityExt.setText(beneficiaryBeanList.getPumpCapacity());
-            applicantAccountNoExt.setText(beneficiaryBeanList.getApplicantAccountNo());
-            applicantIFSCExt.setText(beneficiaryBeanList.getApplicantIFSC());
-            selectedAcDc = beneficiaryBeanList.getPumpAcDc();
-            if (selectedAcDc == "AC") {
-                pumpAcDcSpinner.setSelection(1);
-            } else {
-                pumpAcDcSpinner.setSelection(2);
-            }
-            selectedPumpType = beneficiaryBeanList.getPumpType();
-            if (selectedPumpType == "Submersible") {
-                pumpTypeSpinner.setSelection(1);
-            } else {
-                pumpTypeSpinner.setSelection(1);
-            }
-            selectedControllerType = beneficiaryBeanList.getControllerType();
-            if (selectedControllerType == "Normal") {
-                controllerTypeSpinner.setSelection(1);
-            } else {
-                controllerTypeSpinner.setSelection(2);
+                serialIdExt.setText(beneficiaryBeanList.getSerialId());
+                familyIdExt.setText(beneficiaryBeanList.getFamilyId());
+                beneficiaryFormApplicantName.setText(beneficiaryBeanList.getBeneficiaryFormApplicantName());
+                applicantFatherNameExt.setText(beneficiaryBeanList.getApplicantFatherName());
+                applicantMobileExt.setText(beneficiaryBeanList.getApplicantMobile());
+                applicantVillageExt.setText(beneficiaryBeanList.getApplicantVillage());
+                applicantBlockExt.setText(beneficiaryBeanList.getApplicantBlock());
+                applicantTehsilExt.setText(beneficiaryBeanList.getApplicantTehsil());
+                applicantDistrictExt.setText(beneficiaryBeanList.getApplicantDistrict());
+                pumpCapacityExt.setText(beneficiaryBeanList.getPumpCapacity());
+                applicantAccountNoExt.setText(beneficiaryBeanList.getApplicantAccountNo());
+                applicantIFSCExt.setText(beneficiaryBeanList.getApplicantIFSC());
+                selectedAcDc = beneficiaryBeanList.getPumpAcDc();
+                if (selectedAcDc.equals("AC")) {
+                    pumpAcDcSpinner.setSelection(1);
+                } else {
+                    pumpAcDcSpinner.setSelection(2);
+                }
+                selectedPumpType = beneficiaryBeanList.getPumpType();
+                if (selectedPumpType.equals("Submersible")) {
+                    pumpTypeSpinner.setSelection(1);
+                } else {
+                    pumpTypeSpinner.setSelection(1);
+                }
+                selectedControllerType = beneficiaryBeanList.getControllerType();
+                if (selectedControllerType.equals("Normal")) {
+                    controllerTypeSpinner.setSelection(1);
+                } else {
+                    controllerTypeSpinner.setSelection(2);
+                }
             }
         }
 
@@ -157,18 +156,8 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
 
     private void listner() {
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ValidationCheck();
-            }
-        });
+        mToolbar.setNavigationOnClickListener(v -> onBackPressed());
+        save.setOnClickListener(v -> ValidationCheck());
         controllerTypeSpinner.setOnItemSelectedListener(this);
         pumpTypeSpinner.setOnItemSelectedListener(this);
         pumpAcDcSpinner.setOnItemSelectedListener(this);
@@ -261,7 +250,6 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
         TextView cancel = layout.findViewById(R.id.cancel);
 
         if (value.equals("0")) {
-//            camera.setVisibility(View.GONE);
             title.setText(getResources().getString(R.string.select_image));
             gallery.setText(getResources().getString(R.string.gallery));
             camera.setText(getResources().getString(R.string.camera));
@@ -390,22 +378,17 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
         imageArrayList.set(selectedIndex, imageModel);
 
         imageArrayList.set(selectedIndex, imageModel);
-        addupdateDatabase(path, "", "", imageArrayList.get(selectedIndex).getPoistion());
+        addupdateDatabase(imageModel);
 
         customAdapter.notifyDataSetChanged();
 
     }
 
-    private void addupdateDatabase(String path, String latitude, String longitude, int position) {
-
-        DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-
+    private void addupdateDatabase(ImageModel imageModel) {
         if (isUpdate) {
-            db.updateRecordBeneficiary(imageArrayList.get(selectedIndex).getName(), path,
-                    true, serialIdExt.getText().toString(), position);
+            db.updateRecordBeneficiary(imageModel);
         } else {
-            db.insertBeneficiaryImage(imageArrayList.get(selectedIndex).getName(), path,
-                    true, serialIdExt.getText().toString(), position);
+            db.insertBeneficiaryImage(imageModel);
         }
 
     }
@@ -476,10 +459,6 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                     Toast.makeText(this, getResources().getString(R.string.select_beneficiary_id_proof), Toast.LENGTH_SHORT).show();
                 } else if (!imageArrayList.get(3).isImageSelected()) {
                     Toast.makeText(this, getResources().getString(R.string.select_payment_receipt), Toast.LENGTH_SHORT).show();
-                } else if (!imageArrayList.get(4).isImageSelected()) {
-                    Toast.makeText(this, getResources().getString(R.string.select_attachment_5), Toast.LENGTH_SHORT).show();
-                } else if (!imageArrayList.get(5).isImageSelected()) {
-                    Toast.makeText(this, getResources().getString(R.string.select_attachment_6), Toast.LENGTH_SHORT).show();
                 } else {
                     saveDataLocally();
                 }
@@ -516,40 +495,9 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
 
         if (CustomUtility.isInternetOn(getApplicationContext())) {
-            new submitDemoRoadForm().execute();
-
-        } else {
-            CustomUtility.ShowToast("Data saved In local database", getApplicationContext());
-            onBackPressed();
-        }
-
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class submitDemoRoadForm extends AsyncTask<String, String, String> {
-        ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog = new ProgressDialog(beneficiaryRegistrationForm.this);
-            progressDialog.setCancelable(false);
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setMessage("Sending Data to server..please wait !");
-            progressDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            String docno_sap = null;
-            String invc_done;
-            String obj2 = null;
-
             JSONArray ja_invc_data = new JSONArray();
             JSONObject jsonObj = new JSONObject();
             try {
-                SimpleDateFormat dt = new SimpleDateFormat("dd.MM.yyyy");
-
                 jsonObj.put("BENEFICIARY", serialIdExt.getText().toString().trim());
                 jsonObj.put("FAMILY_ID", familyIdExt.getText().toString().trim());
                 jsonObj.put("APPLICANT_NAME", beneficiaryFormApplicantName.getText().toString().trim());
@@ -569,7 +517,6 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                 jsonObj.put("LIFNR", CustomUtility.getSharedPreferences(getApplicationContext(), "userid"));
 
 
-
                 if (imageArrayList.size() > 0) {
                     for (int i = 0; i < imageArrayList.size(); i++) {
                         if (imageArrayList.get(i).isImageSelected()) {
@@ -582,27 +529,61 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                 e.printStackTrace();
             }
             Log.e("BeneParam====>", ja_invc_data.toString());
-            final ArrayList<NameValuePair> param1_invc = new ArrayList<>();
-            param1_invc.add(new BasicNameValuePair("post", String.valueOf(ja_invc_data)));
-            Log.e("DATA", "$$$$" + param1_invc);
-            System.out.println("param1_invc_vihu==>>" + param1_invc);
-            try {
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
-                StrictMode.setThreadPolicy(policy);
-                obj2 = CustomHttpClient.executeHttpPost1(WebURL.BeneficiaryRegistrationURL, param1_invc);
-                Log.e("OUTPUT1", "&&&&" + obj2);
-                System.out.println("OUTPUT1==>>" + obj2);
-                progressDialog.dismiss();
-                if (!obj2.equalsIgnoreCase("")) {
-                    JSONObject object = new JSONObject(obj2);
+            new submitDemoRoadForm(ja_invc_data).execute();
 
-                    docno_sap = object.getString("status");
-                    invc_done = object.getString("message");
-                    if (docno_sap.equalsIgnoreCase("True")) {
-                        showingMessage(invc_done);
+        } else {
+            CustomUtility.ShowToast("Data saved In local database", getApplicationContext());
+            onBackPressed();
+        }
+
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class submitDemoRoadForm extends AsyncTask<String, String, String> {
+        ProgressDialog progressDialog;
+        JSONArray jsonArray;
+
+        public submitDemoRoadForm(JSONArray jaInvcData) {
+            this.jsonArray = jaInvcData;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(beneficiaryRegistrationForm.this);
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setMessage("Sending Data to server..please wait !");
+            progressDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String obj2 = null;
+
+
+            final ArrayList<NameValuePair> param1_invc = new ArrayList<>();
+            param1_invc.add(new BasicNameValuePair("post", String.valueOf(jsonArray)));
+            Log.e("DATA", "$$$$" + param1_invc);
+            try {
+                obj2 = CustomHttpClient.executeHttpPost1(WebURL.BeneficiaryRegistrationURL, param1_invc);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            return obj2;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+            try {
+                if (!result.isEmpty()) {
+                    JSONObject object = new JSONObject(result);
+                    if (object.getString("status").equalsIgnoreCase("True")) {
+                        showingMessage(object.getString("message"));
                         db.deleteBeneficiaryRegistration(serialIdExt.getText().toString().trim());
                         db.deleteBeneficiaryImages(serialIdExt.getText().toString().trim());
-                        finish();
+                       onBackPressed();
                     } else {
                         showingMessage(getResources().getString(R.string.dataNotSubmitted));
                         progressDialog.dismiss();
@@ -614,14 +595,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                progressDialog.dismiss();
             }
-            return obj2;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            progressDialog.dismiss();
         }
     }
 
