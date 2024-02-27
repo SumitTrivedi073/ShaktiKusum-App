@@ -1,5 +1,7 @@
 package adapter;
 
+import static debugapp.GlobalValue.UtilMethod.context;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,13 +14,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import activity.InstallationInitial;
 import activity.beneficiaryRegistrationForm;
@@ -30,16 +36,17 @@ import utility.CustomUtility;
 public class Adapter_Beneficiary_List  extends RecyclerView.Adapter<Adapter_Beneficiary_List.HomeCategoryViewHolder> {
     DatabaseHelper db;
     private final Context mcontext;
-    private final ArrayList<BeneficiaryRegistrationBean> responseList;
-    private List<BeneficiaryRegistrationBean> SearchesList = null;
+    private ArrayList<BeneficiaryRegistrationBean> responseList;
+    private ArrayList<BeneficiaryRegistrationBean> SearchesList;
 
 
     public Adapter_Beneficiary_List(Context context, ArrayList<BeneficiaryRegistrationBean> responseList) {
+        this.SearchesList = new ArrayList<>();
+        this.SearchesList.addAll(responseList);
         this.mcontext = context;
         this.responseList = responseList;
         db = new DatabaseHelper(mcontext);
-        this.SearchesList = new ArrayList<BeneficiaryRegistrationBean>();
-        this.SearchesList.addAll(responseList);
+
     }
     @Override
     public int getItemViewType(int position) {
@@ -80,16 +87,32 @@ public class Adapter_Beneficiary_List  extends RecyclerView.Adapter<Adapter_Bene
     public int getItemCount() {
         return responseList.size();
     }
+    public void filter(String charText) {
+        charText = charText.toLowerCase(Locale.getDefault());
+        responseList.clear();
+        if (charText.length() == 0) {
+            responseList.addAll(SearchesList);
+        } else {
+            for (BeneficiaryRegistrationBean cs : SearchesList) {
+                if (cs.getSerialId().toLowerCase(Locale.getDefault()).contains(charText) || cs.getBeneficiaryFormApplicantName().toLowerCase(Locale.getDefault()).contains(charText)) {
+                    responseList.add(cs);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
 
     public class HomeCategoryViewHolder extends RecyclerView.ViewHolder {
         TextView serial_id, applicant_name,applicant_mobile;
         CardView cardView;
+        ImageView edit;
         public HomeCategoryViewHolder(@NonNull View itemView) {
             super(itemView);
             serial_id=itemView.findViewById(R.id.serial_id);
             applicant_name=itemView.findViewById(R.id.applicant_name);
             applicant_mobile=itemView.findViewById(R.id.applicant_mobile);
             cardView=itemView.findViewById(R.id.card_view);
+            edit=itemView.findViewById(R.id.edit);
         }
     }
 }

@@ -362,7 +362,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                         file = "";
                     }
                     if (TextUtils.isEmpty(file)) {
-                        Toast.makeText(beneficiaryRegistrationForm.this, "File not valid!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(beneficiaryRegistrationForm.this, getResources().getString(R.string.file_not_valid), Toast.LENGTH_LONG).show();
                     } else {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mImageCaptureUri);
                         File file1 = CustomUtility.saveFile(bitmap, "BeneficiaryRegistration", "Images");
@@ -390,7 +390,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
         imageArrayList.set(selectedIndex, imageModel);
 
         imageArrayList.set(selectedIndex, imageModel);
-        addupdateDatabase(path, "", "", imageArrayList.get(selectedIndex).getPoistion());
+        addupdateDatabase(path, imageArrayList.get(selectedIndex).getLatitude(), imageArrayList.get(selectedIndex).getLongitude(), imageArrayList.get(selectedIndex).getPoistion());
 
         customAdapter.notifyDataSetChanged();
 
@@ -401,10 +401,10 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
 
         if (isUpdate) {
-            db.updateRecordBeneficiary(imageArrayList.get(selectedIndex).getName(), path,
+            db.updateRecordBeneficiary(imageArrayList.get(selectedIndex).getName(), path,latitude,longitude,
                     true, serialIdExt.getText().toString(), position);
         } else {
-            db.insertBeneficiaryImage(imageArrayList.get(selectedIndex).getName(), path,
+            db.insertBeneficiaryImage(imageArrayList.get(selectedIndex).getName(), path,latitude,longitude,
                     true, serialIdExt.getText().toString(), position);
         }
 
@@ -413,15 +413,15 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (parent.getId() == R.id.pumpTypeSpinner) {
-            if (!parent.getSelectedItem().toString().equals("Select Pump Type")) {
+            if (!parent.getSelectedItem().toString().equals(getResources().getString(R.string.select_pump_type))) {
                 selectedPumpType = parent.getSelectedItem().toString();
             }
         } else if (parent.getId() == R.id.pumpAcDcSpinner) {
-            if (!parent.getSelectedItem().toString().equals("Select AC/DC Pump")) {
+            if (!parent.getSelectedItem().toString().equals(getResources().getString(R.string.selec_pump_ac_dc))) {
                 selectedAcDc = parent.getSelectedItem().toString();
             }
         } else if (parent.getId() == R.id.controllerTypeSpinner) {
-            if (!parent.getSelectedItem().toString().equals("Select Controller Type")) {
+            if (!parent.getSelectedItem().toString().equals(getResources().getString(R.string.selec_controller_type))) {
                 selectedControllerType = parent.getSelectedItem().toString();
             }
         }
@@ -519,7 +519,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
             new submitDemoRoadForm().execute();
 
         } else {
-            CustomUtility.ShowToast("Data saved In local database", getApplicationContext());
+            CustomUtility.ShowToast(getResources().getString(R.string.data_save_in_local), getApplicationContext());
             onBackPressed();
         }
 
@@ -534,7 +534,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
             progressDialog = new ProgressDialog(beneficiaryRegistrationForm.this);
             progressDialog.setCancelable(false);
             progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setMessage("Sending Data to server..please wait !");
+            progressDialog.setMessage(getResources().getString(R.string.sending_data_to_server));
             progressDialog.show();
         }
 

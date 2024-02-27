@@ -482,7 +482,8 @@
                         android:background="@color/header_color"
                         android:gravity="center"
                         android:padding="@dimen/space_mid10"
-                        android:text="Save"
+                        android:text="Submit"
+                        android:fontFamily="sans-serif-condensed-medium"
                         android:textColor="@color/white"
                         android:textSize="@dimen/size_xlarge20" />
 

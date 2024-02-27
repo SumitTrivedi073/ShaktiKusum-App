@@ -26,14 +26,20 @@
             android:layout_marginEnd="@dimen/_10sdp"
             android:background="@drawable/popup_relative">
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/searchUser"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="text"
-                app:queryHint="@string/action_search"
-                app:defaultQueryHint="@string/action_search"
-                android:backgroundTint="@color/colorPrimary"/>
+            <EditText
+                android:id="@+id/search"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:hint="Search by Serial id"
+                android:textSize="15sp"
+                android:textStyle="bold">
+
+                <requestFocus />
+            </EditText>
+
 
         </RelativeLayout>
 
@@ -63,8 +69,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
         android:clickable="true"
         app:srcCompat="@drawable/add" />
 

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,8 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,6 +27,7 @@ import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import adapter.Adapter_Beneficiary_List;
 import adapter.Adapter_Installation_list;
@@ -36,7 +42,7 @@ import webservice.WebURL;
 public class beneficiaryRegistrationList extends AppCompatActivity {
     private Toolbar mToolbar;
     TextView noDataFound;
-    SearchView searchUser;
+    EditText editsearch;
     RelativeLayout searchRelative;
     LinearLayout linear1;
     FloatingActionButton newBeneficiaryAddButton;
@@ -63,6 +69,7 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getValueFromDatatbase();
+        Log.e("onREsume=>","heello");
     }
 
     private void Init() {
@@ -71,7 +78,7 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
         linear1=findViewById(R.id.linear1);
         mToolbar = findViewById(R.id.toolbar);
         noDataFound = findViewById(R.id.noDataFound);
-        searchUser = findViewById(R.id.searchUser);
+        editsearch=findViewById(R.id.search);
         searchRelative = findViewById(R.id.searchRelative);
         beneficiaryListView=findViewById(R.id.beneficiaryListView);
         newBeneficiaryAddButton=findViewById(R.id.newBeneficiaryAddButton);
@@ -97,8 +104,33 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
+        editsearch.addTextChangedListener(new TextWatcher() {
 
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                // TODO Auto-generated method stub
+                String text = editsearch.getText().toString().toLowerCase(Locale.getDefault());
+                try {
+                    adapterBeneficiaryList.filter(text);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1,
+                                          int arg2, int arg3) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void onTextChanged(CharSequence arg0, int arg1, int arg2,
+                                      int arg3) {
+                // TODO Auto-generated method stub
+            }
+        });
+    }
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -123,7 +155,6 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
                 WebURL.CHECK_DATA_UNOLAD = 0;
             } else {
                 Log.e("SIZE===>", "&&&&" + beneficiaryBean.size());
-                linear1.setVisibility(View.GONE);
                 noDataFound.setVisibility(View.VISIBLE);
             }
         }
