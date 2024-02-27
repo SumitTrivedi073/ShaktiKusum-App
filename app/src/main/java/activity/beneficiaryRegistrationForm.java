@@ -153,7 +153,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.beneficiary_registration_list);
+        getSupportActionBar().setTitle(R.string.beneficiary_registration_form);
         setdata();
         SetAdapter();
     }
@@ -383,7 +383,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
         imageArrayList.set(selectedIndex, imageModel);
 
         imageArrayList.set(selectedIndex, imageModel);
-        addupdateDatabase(path, "", "", imageArrayList.get(selectedIndex).getPoistion());
+        addupdateDatabase(imageModel);
 
         customAdapter.notifyDataSetChanged();
 
@@ -392,12 +392,8 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     private void addupdateDatabase(ImageModel imageModel) {
         if (isUpdate) {
             db.updateRecordBeneficiary(imageModel);
-            db.updateRecordBeneficiary(imageArrayList.get(selectedIndex).getName(), path,latitude,longitude,
-                    true, serialIdExt.getText().toString(), position);
         } else {
             db.insertBeneficiaryImage(imageModel);
-            db.insertBeneficiaryImage(imageArrayList.get(selectedIndex).getName(), path,latitude,longitude,
-                    true, serialIdExt.getText().toString(), position);
         }
 
     }
@@ -468,10 +464,6 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                     Toast.makeText(this, getResources().getString(R.string.select_beneficiary_id_proof), Toast.LENGTH_SHORT).show();
                 } else if (!imageArrayList.get(3).isImageSelected()) {
                     Toast.makeText(this, getResources().getString(R.string.select_payment_receipt), Toast.LENGTH_SHORT).show();
-                } else if (!imageArrayList.get(4).isImageSelected()) {
-                    Toast.makeText(this, getResources().getString(R.string.select_attachment_5), Toast.LENGTH_SHORT).show();
-                } else if (!imageArrayList.get(5).isImageSelected()) {
-                    Toast.makeText(this, getResources().getString(R.string.select_attachment_6), Toast.LENGTH_SHORT).show();
                 } else {
                     saveDataLocally();
                 }
@@ -508,40 +500,9 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
 
         if (CustomUtility.isInternetOn(getApplicationContext())) {
-            new submitDemoRoadForm().execute();
-
-        } else {
-            CustomUtility.ShowToast("Data saved In local database", getApplicationContext());
-            onBackPressed();
-        }
-
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class submitDemoRoadForm extends AsyncTask<String, String, String> {
-        ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog = new ProgressDialog(beneficiaryRegistrationForm.this);
-            progressDialog.setCancelable(false);
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setMessage("Sending Data to server..please wait !");
-            progressDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            String docno_sap = null;
-            String invc_done;
-            String obj2 = null;
-
             JSONArray ja_invc_data = new JSONArray();
             JSONObject jsonObj = new JSONObject();
             try {
-                SimpleDateFormat dt = new SimpleDateFormat("dd.MM.yyyy");
-
                 jsonObj.put("BENEFICIARY", serialIdExt.getText().toString().trim());
                 jsonObj.put("FAMILY_ID", familyIdExt.getText().toString().trim());
                 jsonObj.put("APPLICANT_NAME", beneficiaryFormApplicantName.getText().toString().trim());
@@ -561,7 +522,6 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                 jsonObj.put("LIFNR", CustomUtility.getSharedPreferences(getApplicationContext(), "userid"));
 
 
-
                 if (imageArrayList.size() > 0) {
                     for (int i = 0; i < imageArrayList.size(); i++) {
                         if (imageArrayList.get(i).isImageSelected()) {
@@ -574,7 +534,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                 e.printStackTrace();
             }
             Log.e("BeneParam====>", ja_invc_data.toString());
-            new submitDemoRoadForm(ja_invc_data).execute();
+            new submitBeneficiaryForm(ja_invc_data).execute();
 
         } else {
             CustomUtility.ShowToast("Data saved In local database", getApplicationContext());
@@ -583,12 +543,13 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
     }
 
+
     @SuppressLint("StaticFieldLeak")
-    private class submitDemoRoadForm extends AsyncTask<String, String, String> {
+    private class submitBeneficiaryForm extends AsyncTask<String, String, String> {
         ProgressDialog progressDialog;
         JSONArray jsonArray;
 
-        public submitDemoRoadForm(JSONArray jaInvcData) {
+        public submitBeneficiaryForm(JSONArray jaInvcData) {
             this.jsonArray = jaInvcData;
         }
 

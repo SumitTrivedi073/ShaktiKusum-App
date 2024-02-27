@@ -1,44 +1,38 @@
 package activity;
 
 import android.content.Context;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Locale;
 
 import adapter.Adapter_Beneficiary_List;
-import adapter.Adapter_Installation_list;
-import adapter.ComplaintInstAdapter;
 import bean.BeneficiaryRegistrationBean;
-import bean.ComplaintInstModel;
-import bean.InstallationListBean;
 import database.DatabaseHelper;
-import utility.CustomUtility;
-import webservice.WebURL;
 
 public class beneficiaryRegistrationList extends AppCompatActivity {
     private Toolbar mToolbar;
     TextView noDataFound;
     EditText editsearch;
     RelativeLayout searchRelative;
-    LinearLayout linear1;
+    LinearLayout linear2;
     FloatingActionButton newBeneficiaryAddButton;
     Adapter_Beneficiary_List adapterBeneficiaryList;
     Intent intent;
@@ -47,7 +41,7 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
     DatabaseHelper db;
     ArrayList<BeneficiaryRegistrationBean> beneficiaryBean;
     private LinearLayoutManager layoutManagerSubCategory;
-    String serialID="";
+    String serialID = "";
 
 
     @Override
@@ -62,24 +56,25 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.e("onresume1==>", "hello");
         getValueFromDatatbase();
-        Log.e("onREsume=>","heello");
+        Log.e("onresume2==>", "hello");
     }
 
     private void Init() {
 
         context = this;
-        linear1=findViewById(R.id.linear1);
         mToolbar = findViewById(R.id.toolbar);
         noDataFound = findViewById(R.id.noDataFound);
-        editsearch=findViewById(R.id.search);
+        linear2 = findViewById(R.id.linear2);
+        editsearch = findViewById(R.id.search);
         searchRelative = findViewById(R.id.searchRelative);
-        beneficiaryListView=findViewById(R.id.beneficiaryListView);
-        newBeneficiaryAddButton=findViewById(R.id.newBeneficiaryAddButton);
+        beneficiaryListView = findViewById(R.id.beneficiaryListView);
+        newBeneficiaryAddButton = findViewById(R.id.newBeneficiaryAddButton);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.beneficiary_registration_form);
+        getSupportActionBar().setTitle(R.string.beneficiary_registration_list);
 
     }
 
@@ -94,7 +89,7 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
         newBeneficiaryAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent=new Intent(getApplicationContext(), beneficiaryRegistrationForm.class);
+                intent = new Intent(getApplicationContext(), beneficiaryRegistrationForm.class);
                 startActivity(intent);
             }
         });
@@ -125,35 +120,31 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
     }
+
     private void getValueFromDatatbase() {
         db = new DatabaseHelper(this);
         if (db.getcount(DatabaseHelper.TABLE_BENEFICIARY_REGISTRATION)) {
             beneficiaryBean = new ArrayList<BeneficiaryRegistrationBean>();
             beneficiaryBean = db.getBeneficiaryListData();
-            Log.e("SIZE1", "&&&&" + beneficiaryBean.size());
-
+            Log.e("SIZE1234", "&&&&" + beneficiaryBean.size());
             if (beneficiaryBean != null && beneficiaryBean.size() > 0) {
+                linear2.setVisibility(View.VISIBLE);
                 noDataFound.setVisibility(View.GONE);
                 Log.e("SIZE", "&&&&" + beneficiaryBean.size());
                 adapterBeneficiaryList = new Adapter_Beneficiary_List(context, beneficiaryBean);
                 beneficiaryListView.setHasFixedSize(true);
                 beneficiaryListView.setAdapter(adapterBeneficiaryList);
-
             } else {
-                Log.e("SIZE===>", "&&&&" + beneficiaryBean.size());
-                linear1.setVisibility(View.GONE);
+                Log.e("SIZE===>", "&&&&");
+                linear2.setVisibility(View.GONE);
                 noDataFound.setVisibility(View.VISIBLE);
             }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+        }
     }
 }

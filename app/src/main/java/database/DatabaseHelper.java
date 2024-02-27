@@ -4391,6 +4391,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(KEY_BENEFICIARY_NAME, imageModel.getName());
         contentValues.put(KEY_BENEFICIARY_PATH, imageModel.getImagePath());
+        contentValues.put(KEY_BENEFICIARY_LATITUDE, imageModel.getLatitude());
+        contentValues.put(KEY_BENEFICIARY_LONGITUDE, imageModel.getLongitude());
         contentValues.put(KEY_BENEFICIARY_IMAGE_SELECTED, imageModel.isImageSelected());
         contentValues.put(KEY_BENEFICIARY_BILL_NO, imageModel.getBillNo());
         contentValues.put(KEY_BENEFICIARY_POSITION, imageModel.getPoistion());
@@ -4418,12 +4420,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_BENEFICIARY_NAME, imageModel.getName());
         values.put(KEY_BENEFICIARY_PATH, imageModel.getImagePath());
+        values.put(KEY_BENEFICIARY_LATITUDE, imageModel.getLatitude());
+        values.put(KEY_BENEFICIARY_LONGITUDE, imageModel.getLongitude());
         values.put(KEY_BENEFICIARY_IMAGE_SELECTED, imageModel.isImageSelected());
         values.put(KEY_BENEFICIARY_BILL_NO, imageModel.getBillNo());
         values.put(KEY_BENEFICIARY_POSITION, imageModel.getPoistion());
         // update Row
-        db.update(TABLE_BENEFICIARY_IMAGE_DATA, values, "installationImageName = '" + imageModel.getName() + "'", null);
-        db.update(TABLE_BENEFICIARY_IMAGE_DATA, values, "BENEFICIARYImageName = '" + name + "'", null);
+        db.update(TABLE_BENEFICIARY_IMAGE_DATA, values, "BENEFICIARYImageName = '" + imageModel.getName() + "'", null);
         db.close();
     }
 

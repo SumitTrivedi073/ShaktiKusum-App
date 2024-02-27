@@ -19,12 +19,14 @@ import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import activity.InstallationInitial;
 import activity.beneficiaryRegistrationForm;
 import bean.BeneficiaryRegistrationBean;
 import bean.InstallationListBean;
 import database.DatabaseHelper;
+import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;
 
 public class Adapter_Beneficiary_List  extends RecyclerView.Adapter<Adapter_Beneficiary_List.HomeCategoryViewHolder> {
@@ -66,7 +68,7 @@ public class Adapter_Beneficiary_List  extends RecyclerView.Adapter<Adapter_Bene
             Log.e("responseList.serialId==>",responseList.get(position).getSerialId());
             holder.cardView.setOnClickListener(view -> {
                 Intent in = new Intent(mcontext, beneficiaryRegistrationForm.class);
-                in.putExtra("list",responseList.get(position));
+                in.putExtra(Constant.beneficiaryData,responseList.get(position));
                 mcontext.startActivity(in);
             });
 
