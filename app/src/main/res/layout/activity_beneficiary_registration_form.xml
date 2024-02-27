@@ -293,7 +293,7 @@
                     android:background="@drawable/edt_bg_shape"
                     android:hint="@string/pump_capacity"
                     android:imeOptions="actionNext"
-                    android:inputType="text"
+                    android:inputType="numberDecimal"
                     android:maxLines="1"
                     android:padding="@dimen/_10sdp"
                     android:singleLine="true"

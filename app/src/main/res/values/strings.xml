@@ -123,7 +123,8 @@
     <string name="enter_serial_id">Please Enter Serial ID</string>
     <string name="enter_family_id">Please Enter Family ID</string>
     <string name="enter_father_name">Please Enter Applicant\'s father name</string>
-    <string name="enter_mobile_no">Please EnterMobile number</string>
+    <string name="enter_mobile_no">Please Enter Mobile number</string>
+    <string name="valid_mobile_no">Please Enter Valid Mobile number</string>
     <string name="enter_village_name">Please Enter Village name</string>
     <string name="enter_block_name">Please Enter Block name</string>
     <string name="enter_tehsil_name">Please Enter Tehsil name</string>

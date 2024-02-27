@@ -65,24 +65,7 @@ public class Adapter_Beneficiary_List  extends RecyclerView.Adapter<Adapter_Bene
             Log.e("responseList.serialId==>",responseList.get(position).getSerialId());
             holder.cardView.setOnClickListener(view -> {
                 Intent in = new Intent(mcontext, beneficiaryRegistrationForm.class);
-                Bundle extras = new Bundle();
-                extras.putString("serial_id", responseList.get(position).getSerialId());
-                extras.putString("family_id", responseList.get(position).getFamilyId());
-                extras.putString("applicant_name", responseList.get(position).getBeneficiaryFormApplicantName());
-                extras.putString("applicant_father_name", responseList.get(position).getApplicantFatherName());
-                extras.putString("applicant_mobile_no", responseList.get(position).getApplicantMobile());
-                extras.putString("applicant_village", responseList.get(position).getApplicantVillage());
-                extras.putString("applicant_block", responseList.get(position).getApplicantBlock());
-                extras.putString("applicant_tehsil", responseList.get(position).getApplicantTehsil());
-                extras.putString("applicant_district", responseList.get(position).getApplicantDistrict());
-                extras.putString("pump_capacity", responseList.get(position).getPumpCapacity());
-                extras.putString("pump_ac_dc", responseList.get(position).getPumpAcDc());
-                extras.putString("pump_type", responseList.get(position).getPumpType());
-                extras.putString("controller_type", responseList.get(position).getControllerType());
-                extras.putString("applicant_account_no", responseList.get(position).getApplicantAccountNo());
-                extras.putString("applicant_ifsc_code", responseList.get(position).getApplicantIFSC());
-
-                in.putExtras(extras);
+                in.putExtra("list",responseList.get(position));
                 mcontext.startActivity(in);
             });
 

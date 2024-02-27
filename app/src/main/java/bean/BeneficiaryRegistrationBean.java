@@ -1,6 +1,8 @@
 package bean;
 
-public class BeneficiaryRegistrationBean {
+import java.io.Serializable;
+
+public class BeneficiaryRegistrationBean implements Serializable {
     public String serialId,familyId,beneficiaryFormApplicantName,applicantFatherName,
             applicantMobile,applicantVillage,applicantBlock,applicantTehsil,
             applicantDistrict,pumpCapacity,applicantAccountNo,applicantIFSC,controllerType,pumpType,pumpAcDc;

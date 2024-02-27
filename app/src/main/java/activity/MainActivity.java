@@ -287,6 +287,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 dataHelper.deleteUnloadingImages();
                 dataHelper.deletekusumCImages();
                 dataHelper.deleteKusumCSurveyFrom();
+                dataHelper.deleteBeneficiaryregistration();
                 CustomUtility.clearSharedPrefrences(context);
 
                 Intent intent = new Intent(context, Login.class);

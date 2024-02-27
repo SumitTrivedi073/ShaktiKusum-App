@@ -55,11 +55,18 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_beneficiary_registration_list);
         Init();
-        getValueFromDatatbase();
+
         listner();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getValueFromDatatbase();
+    }
+
     private void Init() {
+
         context = this;
         linear1=findViewById(R.id.linear1);
         mToolbar = findViewById(R.id.toolbar);
@@ -105,9 +112,6 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
             Log.e("SIZE1", "&&&&" + beneficiaryBean.size());
 
             if (beneficiaryBean != null && beneficiaryBean.size() > 0) {
-//                lin1.setVisibility(View.VISIBLE);
-//                lin2.setVisibility(View.GONE);
-//                beneficiaryListView.setAdapter(null);
                 noDataFound.setVisibility(View.GONE);
                 Log.e("SIZE", "&&&&" + beneficiaryBean.size());
                 adapterBeneficiaryList = new Adapter_Beneficiary_List(context, beneficiaryBean);
@@ -123,10 +127,5 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
                 noDataFound.setVisibility(View.VISIBLE);
             }
         }
-//        else {
-//            beneficiaryListView.setAdapter(null);
-//            db.deleteInstallationListData();
-//            new InstallationList.GetInstallationDataList_Task().execute();
-//        }
     }
 }

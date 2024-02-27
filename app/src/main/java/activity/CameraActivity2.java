@@ -401,7 +401,6 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
                             "Longitude : " + longitudetxt + "\n" + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
                             + "\n" + "Customer: " + customer_name);
 
-
                 }
 
             } catch (IOException e) {

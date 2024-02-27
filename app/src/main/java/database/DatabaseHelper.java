@@ -3770,6 +3770,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.delete(TABLE_KUSUMCSURVEYFORM, null, null);
         }
     }
+    public void deleteBeneficiaryregistration() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if (CustomUtility.doesTableExist(db, TABLE_BENEFICIARY_REGISTRATION)) {
+            db.delete(TABLE_BENEFICIARY_REGISTRATION, null, null);
+        }
+        if (CustomUtility.doesTableExist(db, TABLE_BENEFICIARY_IMAGE_DATA)) {
+            db.delete(TABLE_BENEFICIARY_IMAGE_DATA, null, null);
+        }
+    }
 
     public void deleteAuditData() {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -4759,6 +4768,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
             db.close();
+        }
+    }
+    public void deleteBeneficiaryRegistration(String serialId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String where = "";
+        where = KEY_SERIAL_ID + "='" + serialId + "'";
+        if (CustomUtility.doesTableExist(db, TABLE_BENEFICIARY_REGISTRATION)) {
+            db.delete(TABLE_BENEFICIARY_REGISTRATION, where, null);
         }
     }
     @SuppressLint("Range")
