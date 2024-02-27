@@ -4386,16 +4386,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.close();
     }
 
-    public void insertBeneficiaryImage(String name, String path,String latitude, String longitude, boolean isSelected, String billNo, int position) {
+    public void insertBeneficiaryImage(ImageModel imageModel) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(KEY_BENEFICIARY_NAME, name);
-        contentValues.put(KEY_BENEFICIARY_PATH, path);
-        contentValues.put(KEY_BENEFICIARY_LATITUDE, latitude);
-        contentValues.put(KEY_BENEFICIARY_LONGITUDE, longitude);
-        contentValues.put(KEY_BENEFICIARY_IMAGE_SELECTED, isSelected);
-        contentValues.put(KEY_BENEFICIARY_BILL_NO, billNo);
-        contentValues.put(KEY_BENEFICIARY_POSITION, position);
+        contentValues.put(KEY_BENEFICIARY_NAME, imageModel.getName());
+        contentValues.put(KEY_BENEFICIARY_PATH, imageModel.getImagePath());
+        contentValues.put(KEY_BENEFICIARY_IMAGE_SELECTED, imageModel.isImageSelected());
+        contentValues.put(KEY_BENEFICIARY_BILL_NO, imageModel.getBillNo());
+        contentValues.put(KEY_BENEFICIARY_POSITION, imageModel.getPoistion());
         database.insert(TABLE_BENEFICIARY_IMAGE_DATA, null, contentValues);
         database.close();
     }
@@ -4415,17 +4413,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateRecordBeneficiary(String name, String path,String latitude, String longitude, boolean isSelected, String billNo, int position) {
+    public void updateRecordBeneficiary(ImageModel imageModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_BENEFICIARY_NAME, name);
-        values.put(KEY_BENEFICIARY_PATH, path);
-        values.put(KEY_BENEFICIARY_LATITUDE, latitude);
-        values.put(KEY_BENEFICIARY_LONGITUDE, longitude);
-        values.put(KEY_BENEFICIARY_IMAGE_SELECTED, isSelected);
-        values.put(KEY_BENEFICIARY_BILL_NO, billNo);
-        values.put(KEY_BENEFICIARY_POSITION, position);
+        values.put(KEY_BENEFICIARY_NAME, imageModel.getName());
+        values.put(KEY_BENEFICIARY_PATH, imageModel.getImagePath());
+        values.put(KEY_BENEFICIARY_IMAGE_SELECTED, imageModel.isImageSelected());
+        values.put(KEY_BENEFICIARY_BILL_NO, imageModel.getBillNo());
+        values.put(KEY_BENEFICIARY_POSITION, imageModel.getPoistion());
         // update Row
+        db.update(TABLE_BENEFICIARY_IMAGE_DATA, values, "installationImageName = '" + imageModel.getName() + "'", null);
         db.update(TABLE_BENEFICIARY_IMAGE_DATA, values, "BENEFICIARYImageName = '" + name + "'", null);
         db.close();
     }

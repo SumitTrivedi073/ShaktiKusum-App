@@ -1,7 +1,5 @@
 package adapter;
 
-import static debugapp.GlobalValue.UtilMethod.context;
-
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,17 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import activity.InstallationInitial;
 import activity.beneficiaryRegistrationForm;
@@ -36,8 +30,8 @@ import utility.CustomUtility;
 public class Adapter_Beneficiary_List  extends RecyclerView.Adapter<Adapter_Beneficiary_List.HomeCategoryViewHolder> {
     DatabaseHelper db;
     private final Context mcontext;
-    private ArrayList<BeneficiaryRegistrationBean> responseList;
-    private ArrayList<BeneficiaryRegistrationBean> SearchesList;
+    private final ArrayList<BeneficiaryRegistrationBean> responseList;
+    private List<BeneficiaryRegistrationBean> SearchesList = null;
 
 
     public Adapter_Beneficiary_List(Context context, ArrayList<BeneficiaryRegistrationBean> responseList) {

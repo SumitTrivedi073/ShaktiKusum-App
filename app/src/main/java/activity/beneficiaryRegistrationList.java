@@ -4,7 +4,6 @@ import android.content.Context;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,12 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,7 +22,6 @@ import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import adapter.Adapter_Beneficiary_List;
 import adapter.Adapter_Installation_list;
@@ -147,16 +141,19 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
                 noDataFound.setVisibility(View.GONE);
                 Log.e("SIZE", "&&&&" + beneficiaryBean.size());
                 adapterBeneficiaryList = new Adapter_Beneficiary_List(context, beneficiaryBean);
-                layoutManagerSubCategory = new LinearLayoutManager(context);
-                layoutManagerSubCategory.setOrientation(LinearLayoutManager.VERTICAL);
-                beneficiaryListView.setLayoutManager(layoutManagerSubCategory);
+                beneficiaryListView.setHasFixedSize(true);
                 beneficiaryListView.setAdapter(adapterBeneficiaryList);
-                adapterBeneficiaryList.notifyDataSetChanged();
-                WebURL.CHECK_DATA_UNOLAD = 0;
+
             } else {
                 Log.e("SIZE===>", "&&&&" + beneficiaryBean.size());
+                linear1.setVisibility(View.GONE);
                 noDataFound.setVisibility(View.VISIBLE);
             }
-        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }
