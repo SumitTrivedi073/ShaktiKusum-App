@@ -480,6 +480,9 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     private void saveData() {
 
         if (CustomUtility.isInternetOn(getApplicationContext())) {
+            showprogressDialogue();
+            saveInLocalDatabase();
+
             JSONArray ja_invc_data = new JSONArray();
             JSONObject jsonObj = new JSONObject();
             try {
@@ -515,7 +518,6 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
             }
             Log.e("BeneParam====>", ja_invc_data.toString());
             new submitBeneficiaryForm(ja_invc_data).execute();
-             saveInLocalDatabase();
 
 
         } else {
