@@ -68,7 +68,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     Spinner controllerTypeSpinner, pumpTypeSpinner, pumpAcDcSpinner;
     TextView save;
     String selectedControllerType = "", selectedPumpType = "", selectedAcDc = "";
-
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,7 +220,13 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     @Override
     public void ImageSelectionListener(ImageModel imageModelList, int position) {
         selectedIndex = position;
-        if (!serialIdExt.getText().toString().trim().isEmpty()) {
+        if (serialIdExt.getText().toString().trim().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_serial_id), getApplicationContext());
+
+        }else if (beneficiaryFormApplicantName.getText().toString().trim().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_applicant_name), getApplicationContext());
+
+        }else {
             if (imageModelList.isImageSelected()) {
                 isUpdate = true;
                 selectImage("1");
@@ -228,9 +234,6 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                 isUpdate = false;
                 selectImage("0");
             }
-        } else {
-            CustomUtility.ShowToast(getResources().getString(R.string.enter_serial_id), getApplicationContext());
-
         }
     }
 
@@ -310,7 +313,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     private void cameraIntent() {
 
         camraLauncher.launch(new Intent(beneficiaryRegistrationForm.this, CameraActivity2.class)
-                .putExtra("cust_name", beneficiaryFormApplicantName.getText().toString()));
+                .putExtra("cust_name", beneficiaryFormApplicantName.getText().toString().trim()));
 
     }
 
@@ -394,9 +397,9 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     private void addupdateDatabase(ImageModel imageModel) {
         Log.e("imageModel======>", imageModel.toString());
         if (isUpdate) {
-            db.updateRecordBeneficiary(imageModel);
+            db.updateRecordBeneficiary(imageModel,true);
         } else {
-            db.insertBeneficiaryImage(imageModel);
+            db.insertBeneficiaryImage(imageModel,true);
         }
 
     }
@@ -468,39 +471,13 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                 } else if (!imageArrayList.get(3).isImageSelected()) {
                     Toast.makeText(this, getResources().getString(R.string.select_payment_receipt), Toast.LENGTH_SHORT).show();
                 } else {
-                    saveDataLocally();
+                    saveData();
                 }
             }
         }
     }
 
-    private void saveDataLocally() {
-        BeneficiaryRegistrationBean beneficiaryRegistrationBean = new BeneficiaryRegistrationBean(
-                serialIdExt.getText().toString(),
-                familyIdExt.getText().toString(),
-                beneficiaryFormApplicantName.getText().toString(),
-                applicantFatherNameExt.getText().toString(),
-                applicantMobileExt.getText().toString(),
-                applicantVillageExt.getText().toString(),
-                applicantBlockExt.getText().toString(),
-                applicantTehsilExt.getText().toString(),
-                applicantDistrictExt.getText().toString(),
-                pumpCapacityExt.getText().toString(),
-                applicantAccountNoExt.getText().toString(),
-                applicantIFSCExt.getText().toString(),
-                selectedControllerType,
-                selectedPumpType,
-                selectedAcDc);
-
-        if (db.isRecordExist(DatabaseHelper.TABLE_BENEFICIARY_REGISTRATION, DatabaseHelper.KEY_SERIAL_ID, serialIdExt.getText().toString())) {
-            // db.updateInstallationData(inst_bill_no, installationBean);
-            db.updateBeneficiaryRegistrationData(beneficiaryRegistrationBean);
-
-        } else {
-            //   db.insertInstallationData(inst_bill_no, installationBean);
-            db.insertBeneficiaryRegistrationData(beneficiaryRegistrationBean);
-        }
-
+    private void saveData() {
 
         if (CustomUtility.isInternetOn(getApplicationContext())) {
             JSONArray ja_invc_data = new JSONArray();
@@ -538,19 +515,49 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
             }
             Log.e("BeneParam====>", ja_invc_data.toString());
             new submitBeneficiaryForm(ja_invc_data).execute();
+             saveInLocalDatabase();
+
 
         } else {
+            saveInLocalDatabase();
             CustomUtility.ShowToast(getResources().getString(R.string.data_save_in_local), getApplicationContext());
             onBackPressed();
         }
 
     }
 
+    private void saveInLocalDatabase() {
+        BeneficiaryRegistrationBean beneficiaryRegistrationBean = new BeneficiaryRegistrationBean(
+                serialIdExt.getText().toString(),
+                familyIdExt.getText().toString(),
+                beneficiaryFormApplicantName.getText().toString(),
+                applicantFatherNameExt.getText().toString(),
+                applicantMobileExt.getText().toString(),
+                applicantVillageExt.getText().toString(),
+                applicantBlockExt.getText().toString(),
+                applicantTehsilExt.getText().toString(),
+                applicantDistrictExt.getText().toString(),
+                pumpCapacityExt.getText().toString(),
+                applicantAccountNoExt.getText().toString(),
+                applicantIFSCExt.getText().toString(),
+                selectedControllerType,
+                selectedPumpType,
+                selectedAcDc);
+
+        if (db.isRecordExist(DatabaseHelper.TABLE_BENEFICIARY_REGISTRATION, DatabaseHelper.KEY_SERIAL_ID, serialIdExt.getText().toString())) {
+            db.updateBeneficiaryRegistrationData(beneficiaryRegistrationBean);
+
+        } else {
+            db.insertBeneficiaryRegistrationData(beneficiaryRegistrationBean);
+        }
+    }
+
 
     @SuppressLint("StaticFieldLeak")
     private class submitBeneficiaryForm extends AsyncTask<String, String, String> {
-        ProgressDialog progressDialog;
+
         JSONArray jsonArray;
+
 
         public submitBeneficiaryForm(JSONArray jaInvcData) {
             this.jsonArray = jaInvcData;
@@ -558,11 +565,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
         @Override
         protected void onPreExecute() {
-            progressDialog = new ProgressDialog(beneficiaryRegistrationForm.this);
-            progressDialog.setCancelable(false);
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setMessage(getResources().getString(R.string.sending_data_to_server));
-            progressDialog.show();
+            showprogressDialogue();
         }
 
         @Override
@@ -584,7 +587,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
         @Override
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+            stopProgressDialogue();
             try {
                 if (!result.isEmpty()) {
                     JSONObject object = new JSONObject(result);
@@ -592,15 +595,13 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                         showingMessage(object.getString("message"));
                         db.deleteBeneficiaryRegistration(serialIdExt.getText().toString().trim());
                         db.deleteBeneficiaryImages(serialIdExt.getText().toString().trim());
-                        onBackPressed();
+                        finish();
                     } else {
                         showingMessage(getResources().getString(R.string.dataNotSubmitted));
-                        progressDialog.dismiss();
                     }
 
                 } else {
                     showingMessage(getResources().getString(R.string.somethingWentWrong));
-                    progressDialog.dismiss();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -616,5 +617,35 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
             }
         });
+    }
+
+    private void showprogressDialogue() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog = new ProgressDialog(beneficiaryRegistrationForm.this);
+                progressDialog.setCancelable(false);
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.setMessage(getResources().getString(R.string.sending_data_to_server));
+                progressDialog.show();
+            }
+        });
+    }
+
+    public void stopProgressDialogue(){
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(progressDialog!=null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+            }
+        });
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

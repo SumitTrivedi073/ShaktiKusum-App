@@ -276,7 +276,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     public void onPictureTaken(byte[] bytes, android.hardware.Camera camera) {
 
         bitmap = saveImageWithTimeStamp(bytes);
-        save = saveFile(bitmap,customer_name.trim(),customer_name.trim());
+        save = saveFile(bitmap,customer_name.trim());
         onBackPressed();
     }
 
@@ -311,8 +311,8 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         return bmp;
     }
 
-    public static File saveFile(Bitmap bitmap, String type, String name) {
-        File file = new File(getMediaFilePath(type,name));
+    public static File saveFile(Bitmap bitmap,  String name) {
+        File file = new File(getMediaFilePath(name));
         try {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(file));
         } catch (FileNotFoundException e) {
@@ -333,11 +333,11 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         super.onPointerCaptureChanged(hasCapture);
     }
 
-    public static String getMediaFilePath(String type, String name) {
+    public static String getMediaFilePath( String name) {
 
         File root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), GALLERY_DIRECTORY_NAME_COMMON);
 
-        File dir = new File(root.getAbsolutePath() + "/Images/" + type); //it is my root directory
+        File dir = new File(root.getAbsolutePath() + "/Images/" + name); //it is my root directory
 
         try {
             if (!dir.exists()) {

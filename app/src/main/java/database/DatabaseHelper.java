@@ -818,14 +818,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_INSTALLATION_POSITION + " TEXT)";
 
     private static final String CREATE_TABLE_BENEFICIARY_IMAGES = "CREATE TABLE "
-            + TABLE_BENEFICIARY_IMAGE_DATA + "(" + KEY_BENEFICIARY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
-            + KEY_BENEFICIARY_NAME + " TEXT,"
-            + KEY_BENEFICIARY_PATH + " TEXT,"
-            + KEY_BENEFICIARY_IMAGE_SELECTED + " BOOLEAN,"
-            + KEY_BENEFICIARY_BILL_NO + " TEXT,"
-            + KEY_BENEFICIARY_LATITUDE + " TEXT,"
-            + KEY_BENEFICIARY_LONGITUDE + " TEXT,"
-            + KEY_BENEFICIARY_POSITION + " TEXT)";
+            + TABLE_BENEFICIARY_IMAGE_DATA + "(" + KEY_INSTALLATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+            + KEY_INSTALLATION_NAME + " TEXT,"
+            + KEY_INSTALLATION_PATH + " TEXT,"
+            + KEY_INSTALLATION_IMAGE_SELECTED + " BOOLEAN,"
+            + KEY_INSTALLATION_BILL_NO + " TEXT,"
+            + KEY_INSTALLATION_LATITUDE + " TEXT,"
+            + KEY_INSTALLATION_LONGITUDE + " TEXT,"
+            + KEY_INSTALLATION_POSITION + " TEXT)";
 
     private static final String CREATE_TABLE_REJECTED_INSTALLATION_IMAGES = "CREATE TABLE "
             + TABLE_REJECTED_INSTALLATION_IMAGE_DATA + "(" + KEY_INSTALLATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
@@ -4370,19 +4370,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.close();
     }
 
-    public void insertBeneficiaryImage(ImageModel imageModel) {
+    public void insertBeneficiaryImage(ImageModel imageModel,boolean bool) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(KEY_BENEFICIARY_NAME, imageModel.getName());
-        contentValues.put(KEY_BENEFICIARY_PATH, imageModel.getImagePath());
-        contentValues.put(KEY_BENEFICIARY_LATITUDE, imageModel.getLatitude());
-        contentValues.put(KEY_BENEFICIARY_LONGITUDE, imageModel.getLongitude());
-        contentValues.put(KEY_BENEFICIARY_IMAGE_SELECTED, imageModel.isImageSelected());
-        contentValues.put(KEY_BENEFICIARY_BILL_NO, imageModel.getBillNo());
-        contentValues.put(KEY_BENEFICIARY_POSITION, imageModel.getPoistion());
+        contentValues.put(KEY_INSTALLATION_NAME, imageModel.getName());
+        contentValues.put(KEY_INSTALLATION_PATH, imageModel.getImagePath());
+        contentValues.put(KEY_INSTALLATION_IMAGE_SELECTED, bool);
+        contentValues.put(KEY_INSTALLATION_BILL_NO, imageModel.getBillNo());
+        contentValues.put(KEY_INSTALLATION_LATITUDE, imageModel.getLatitude());
+        contentValues.put(KEY_INSTALLATION_LONGITUDE, imageModel.getLongitude());
+        contentValues.put(KEY_INSTALLATION_POSITION, imageModel.getPoistion());
         database.insert(TABLE_BENEFICIARY_IMAGE_DATA, null, contentValues);
         database.close();
     }
+
+    public void updateRecordBeneficiary(ImageModel imageModel, boolean bool) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_INSTALLATION_NAME, imageModel.getName());
+        values.put(KEY_INSTALLATION_PATH, imageModel.getImagePath());
+        values.put(KEY_INSTALLATION_IMAGE_SELECTED, bool);
+        values.put(KEY_INSTALLATION_BILL_NO, imageModel.getBillNo());
+        values.put(KEY_INSTALLATION_LATITUDE, imageModel.getLatitude());
+        values.put(KEY_INSTALLATION_LONGITUDE, imageModel.getLongitude());
+        values.put(KEY_INSTALLATION_POSITION, imageModel.getPoistion());
+        // update Row
+        db.update(TABLE_BENEFICIARY_IMAGE_DATA, values, "installationImageName = '" + imageModel.getName() + "'", null);
+        db.close();
+    }
+
 
     public void updateRecordAlternate(String name, String path, boolean isSelected, String billNo, String latitude, String longitude, int position) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -4399,20 +4415,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateRecordBeneficiary(ImageModel imageModel) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(KEY_BENEFICIARY_NAME, imageModel.getName());
-        values.put(KEY_BENEFICIARY_PATH, imageModel.getImagePath());
-        values.put(KEY_BENEFICIARY_LATITUDE, imageModel.getLatitude());
-        values.put(KEY_BENEFICIARY_LONGITUDE, imageModel.getLongitude());
-        values.put(KEY_BENEFICIARY_IMAGE_SELECTED, imageModel.isImageSelected());
-        values.put(KEY_BENEFICIARY_BILL_NO, imageModel.getBillNo());
-        values.put(KEY_BENEFICIARY_POSITION, imageModel.getPoistion());
-        // update Row
-        db.update(TABLE_BENEFICIARY_IMAGE_DATA, values, "BENEFICIARYImageName = '" + imageModel.getName() + "'", null);
-        db.close();
-    }
+
 
     public void insertSiteAuditImage(String name, String path, boolean isSelected, String billno) {
         SQLiteDatabase database = this.getWritableDatabase();
@@ -4525,7 +4528,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteBeneficiaryImages(String serialId) {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
-        where = KEY_BENEFICIARY_BILL_NO + "='" + serialId + "'";
+        where = KEY_INSTALLATION_BILL_NO + "='" + serialId + "'";
         if (CustomUtility.doesTableExist(db, TABLE_BENEFICIARY_IMAGE_DATA)) {
             db.delete(TABLE_BENEFICIARY_IMAGE_DATA, where, null);
         }
@@ -4616,31 +4619,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<ImageModel> beneficiaryImages = new ArrayList<ImageModel>();
         SQLiteDatabase database = this.getWritableDatabase();
         if (CustomUtility.doesTableExist(database, TABLE_BENEFICIARY_IMAGE_DATA)) {
-            Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_BENEFICIARY_IMAGE_DATA ,null);
+            Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_BENEFICIARY_IMAGE_DATA, null);
 
             beneficiaryImages.clear();
             ImageModel imageModel;
-
             if (mcursor.getCount() > 0) {
                 for (int i = 0; i < mcursor.getCount(); i++) {
                     mcursor.moveToNext();
-
                     imageModel = new ImageModel();
-                    imageModel.setID(mcursor.getColumnName(0));
-                    imageModel.setName(mcursor.getColumnName(1));
-                    imageModel.setImagePath(mcursor.getColumnName(2));
-                    imageModel.setImageSelected(Boolean.parseBoolean(mcursor.getColumnName(3)));
-                    imageModel.setBillNo(mcursor.getColumnName(4));
-                    imageModel.setLatitude(mcursor.getColumnName(5));
-                    imageModel.setLongitude(mcursor.getColumnName(6));
+                    imageModel.setID(mcursor.getString(0));
+                    imageModel.setName(mcursor.getString(1));
+                    imageModel.setImagePath(mcursor.getString(2));
+                    imageModel.setImageSelected(Boolean.parseBoolean(mcursor.getString(3)));
+                    imageModel.setBillNo(mcursor.getString(4));
+                    imageModel.setLatitude(mcursor.getString(5));
+                    imageModel.setLongitude(mcursor.getString(6));
                     imageModel.setPoistion(mcursor.getInt(7));
                     beneficiaryImages.add(imageModel);
                 }
             }
             mcursor.close();
             database.close();
-        }
-        return beneficiaryImages;
+    }
+        return  beneficiaryImages;
     }
 
     public ArrayList<ImageModel> getRejectedInstallationImages() {
@@ -4787,7 +4788,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(KEY_DEVICE_MAPPING_WRITE, deviceMappingModel.getWrite());
         contentValues.put(KEY_DEVICE_MAPPING_UPDATE, deviceMappingModel.getUpdate());
         contentValues.put(KEY_DEVICE_MAPPING_4GUPDATE, deviceMappingModel.getUpdate4G());
-
         contentValues.put(KEY_BILL_NO, deviceMappingModel.getBillNo());
         database.insert(TABLE_DEVICE_MAPPING_DATA, null, contentValues);
         database.close();
