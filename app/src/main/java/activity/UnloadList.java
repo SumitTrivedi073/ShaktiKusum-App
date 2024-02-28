@@ -8,9 +8,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
@@ -66,9 +69,9 @@ public class UnloadList extends BaseActivity {
         progressDialog = new ProgressDialog(context);
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        mToolbar.setTitle(R.string.unloading_material);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(getResources().getString(R.string.unloading_list));
 
         recyclerView = findViewById(R.id.emp_list);
         editsearch = findViewById(R.id.search);
@@ -95,6 +98,36 @@ public class UnloadList extends BaseActivity {
             lin2.setVisibility(View.VISIBLE);
             CustomUtility.showToast(context,getResources().getString(R.string.check_internet_connection));
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_unsync, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.action_menu_unsync:
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
+                    recyclerView.setAdapter(null);
+                    //db.deleteInstallationListData();
+                    WebURL.CHECK_DATA_UNOLAD = 0;
+                    new UnloadList.GetInstallationDataList_Unload().execute();
+                } else {
+                    Toast.makeText(getApplicationContext(), "No internet Connection....", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void listner() {
@@ -252,6 +285,8 @@ public class UnloadList extends BaseActivity {
                     progressDialog.dismiss();
                     progressDialog = null;
                 }
+                Log.e("UnloadingListsize===>", String.valueOf(installationBeans.size()));
+
                 if(installationBeans.size()>0) {
                     lin1.setVisibility(View.VISIBLE);
                     lin2.setVisibility(View.GONE);

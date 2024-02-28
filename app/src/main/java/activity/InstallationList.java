@@ -112,6 +112,8 @@ import webservice.WebURL;
              new GetInstallationDataList_Task().execute();
          }
      }
+
+
      private void listner() {
          editsearch.addTextChangedListener(new TextWatcher() {
 
