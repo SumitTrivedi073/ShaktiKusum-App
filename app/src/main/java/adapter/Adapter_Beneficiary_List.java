@@ -30,10 +30,9 @@ import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;
 
 public class Adapter_Beneficiary_List  extends RecyclerView.Adapter<Adapter_Beneficiary_List.HomeCategoryViewHolder> {
-    DatabaseHelper db;
     private final Context mcontext;
     private final ArrayList<BeneficiaryRegistrationBean> responseList;
-    private List<BeneficiaryRegistrationBean> SearchesList = null;
+    private List<BeneficiaryRegistrationBean> SearchesList = new ArrayList<>();
 
 
     public Adapter_Beneficiary_List(Context context, ArrayList<BeneficiaryRegistrationBean> responseList) {
@@ -41,7 +40,7 @@ public class Adapter_Beneficiary_List  extends RecyclerView.Adapter<Adapter_Bene
         this.SearchesList.addAll(responseList);
         this.mcontext = context;
         this.responseList = responseList;
-        db = new DatabaseHelper(mcontext);
+
 
     }
     @Override
@@ -58,14 +57,13 @@ public class Adapter_Beneficiary_List  extends RecyclerView.Adapter<Adapter_Bene
     @Override
     public void onBindViewHolder(@NonNull Adapter_Beneficiary_List.HomeCategoryViewHolder holder, int position) {
         try {
-            if (!TextUtils.isEmpty(responseList.get(position).getSerialId())) {
+            if (responseList.get(position).getSerialId().isEmpty()) {
                 holder.serial_id.setText(responseList.get(position).getSerialId());
-            }if (!TextUtils.isEmpty(responseList.get(position).getBeneficiaryFormApplicantName())) {
+            }if (responseList.get(position).getBeneficiaryFormApplicantName().isEmpty()) {
                 holder.applicant_name.setText(responseList.get(position).getBeneficiaryFormApplicantName());
-            }if (!TextUtils.isEmpty(responseList.get(position).getApplicantMobile())) {
+            }if (responseList.get(position).getApplicantMobile().isEmpty()) {
                 holder.applicant_mobile.setText(responseList.get(position).getApplicantMobile());
             }
-            Log.e("responseList.serialId==>",responseList.get(position).getSerialId());
             holder.cardView.setOnClickListener(view -> {
                 Intent in = new Intent(mcontext, beneficiaryRegistrationForm.class);
                 in.putExtra(Constant.beneficiaryData,responseList.get(position));

@@ -30,11 +30,11 @@
                 android:id="@+id/search"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_10sdp"
                 android:hint="Search by Serial id"
-                android:textSize="15sp"
+                android:textSize="@dimen/_15sdp"
                 android:textStyle="bold">
 
                 <requestFocus />

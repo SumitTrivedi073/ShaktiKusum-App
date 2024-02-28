@@ -56,9 +56,7 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e("onresume1==>", "hello");
         getValueFromDatatbase();
-        Log.e("onresume2==>", "hello");
     }
 
     private void Init() {
@@ -129,22 +127,20 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
 
     private void getValueFromDatatbase() {
         db = new DatabaseHelper(this);
-        if (db.getcount(DatabaseHelper.TABLE_BENEFICIARY_REGISTRATION)) {
+
             beneficiaryBean = new ArrayList<BeneficiaryRegistrationBean>();
             beneficiaryBean = db.getBeneficiaryListData();
-            Log.e("SIZE1234", "&&&&" + beneficiaryBean.size());
             if (beneficiaryBean != null && beneficiaryBean.size() > 0) {
-                linear2.setVisibility(View.VISIBLE);
+                beneficiaryListView.setVisibility(View.VISIBLE);
                 noDataFound.setVisibility(View.GONE);
                 Log.e("SIZE", "&&&&" + beneficiaryBean.size());
                 adapterBeneficiaryList = new Adapter_Beneficiary_List(context, beneficiaryBean);
                 beneficiaryListView.setHasFixedSize(true);
                 beneficiaryListView.setAdapter(adapterBeneficiaryList);
             } else {
-                Log.e("SIZE===>", "&&&&");
-                linear2.setVisibility(View.GONE);
+                beneficiaryListView.setVisibility(View.GONE);
                 noDataFound.setVisibility(View.VISIBLE);
             }
         }
-    }
+
 }

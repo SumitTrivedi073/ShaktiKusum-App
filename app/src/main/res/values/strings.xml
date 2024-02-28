@@ -150,6 +150,10 @@
     <string name="sending_data_to_server">Sending Data to server..please wait !</string>
     <string name="data_save_in_local">Data saved In local database</string>
     <string name="file_not_valid">File not valid!</string>
+    <string name="AC">AC</string>
+    <string name="submersible">Submersible</string>
+    <string name="Normal">Normal</string>
+    <string name="BeneficiaryRegistration">BeneficiaryRegistration</string>
 
 
 

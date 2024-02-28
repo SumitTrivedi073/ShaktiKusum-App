@@ -90,7 +90,6 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
             assert extras != null;
             beneficiaryBeanList = (BeneficiaryRegistrationBean) extras.getSerializable(Constant.beneficiaryData);
             if (beneficiaryBeanList != null) {
-                Log.e("beneficiaryBeanList==>", beneficiaryBeanList.applicantAccountNo);
 
                 serialIdExt.setText(beneficiaryBeanList.getSerialId());
                 familyIdExt.setText(beneficiaryBeanList.getFamilyId());
@@ -105,19 +104,19 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                 applicantAccountNoExt.setText(beneficiaryBeanList.getApplicantAccountNo());
                 applicantIFSCExt.setText(beneficiaryBeanList.getApplicantIFSC());
                 selectedAcDc = beneficiaryBeanList.getPumpAcDc();
-                if (selectedAcDc.equals("AC")) {
+                if (selectedAcDc.equals(getResources().getString(R.string.AC))) {
                     pumpAcDcSpinner.setSelection(1);
                 } else {
                     pumpAcDcSpinner.setSelection(2);
                 }
                 selectedPumpType = beneficiaryBeanList.getPumpType();
-                if (selectedPumpType.equals("Submersible")) {
+                if (selectedPumpType.equals(getResources().getString(R.string.submersible))) {
                     pumpTypeSpinner.setSelection(1);
                 } else {
                     pumpTypeSpinner.setSelection(1);
                 }
                 selectedControllerType = beneficiaryBeanList.getControllerType();
-                if (selectedControllerType.equals("Normal")) {
+                if (selectedControllerType.equals(getResources().getString(R.string.Normal))) {
                     controllerTypeSpinner.setSelection(1);
                 } else {
                     controllerTypeSpinner.setSelection(2);
@@ -188,18 +187,12 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
         }
 
         imageList = db.getAllBeneficiaryImages();
-        Log.e("imageList==>", String.valueOf(imageList.size()));
-        Log.e("imagearrayList==>", String.valueOf(imageArrayList.size()));
 
         if (itemNameList.size() > 0 && imageList != null && imageList.size() > 0) {
             for (int i = 0; i < imageList.size(); i++) {
                 for (int j = 0; j < itemNameList.size(); j++) {
-                    Log.e("1imageList.get(i)==>", imageList.get(i).getBillNo());
-                    Log.e("1serial_id==>", serialIdExt.getText().toString().trim());
                     if (imageList.get(i).getBillNo().trim().equals(serialIdExt.getText().toString().trim())) {
-                        Log.e("2imageList.get(i)==>", imageList.get(i).getBillNo());//intent add
                         if (imageList.get(i).getName().equals(itemNameList.get(j))) {
-                            Log.e("3imageList.get(i)==>", imageList.get(i).getBillNo());
                             ImageModel imageModel = new ImageModel();
                             imageModel.setName(imageList.get(i).getName());
                             imageModel.setImagePath(imageList.get(i).getImagePath());
@@ -355,10 +348,10 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                         file = "";
                     }
                     if (TextUtils.isEmpty(file)) {
-                        Toast.makeText(beneficiaryRegistrationForm.this, "File not valid!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(beneficiaryRegistrationForm.this, getResources().getString(R.string.file_not_valid), Toast.LENGTH_LONG).show();
                     } else {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mImageCaptureUri);
-                        File file1 = CustomUtility.saveFile(bitmap, "BeneficiaryRegistration", "Images");
+                        File file1 = CustomUtility.saveFile(bitmap, getResources().getString(R.string.BeneficiaryRegistration), "Images");
 
                         UpdateArrayList(file1.getPath());
 
@@ -431,7 +424,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
             CustomUtility.ShowToast(getResources().getString(R.string.enter_father_name), getApplicationContext());
         } else if (applicantMobileExt.getText().toString().isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.enter_mobile_no), getApplicationContext());
-        }else if (applicantMobileExt.getText().toString().length()!=10) {
+        } else if (applicantMobileExt.getText().toString().length() != 10) {
             CustomUtility.ShowToast(getResources().getString(R.string.valid_mobile_no), getApplicationContext());
         } else if (applicantVillageExt.getText().toString().isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.enter_village_name), getApplicationContext());
@@ -537,7 +530,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
             new submitBeneficiaryForm(ja_invc_data).execute();
 
         } else {
-            CustomUtility.ShowToast("Data saved In local database", getApplicationContext());
+            CustomUtility.ShowToast(getResources().getString(R.string.data_save_in_local), getApplicationContext());
             onBackPressed();
         }
 
@@ -558,7 +551,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
             progressDialog = new ProgressDialog(beneficiaryRegistrationForm.this);
             progressDialog.setCancelable(false);
             progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setMessage("Sending Data to server..please wait !");
+            progressDialog.setMessage(getResources().getString(R.string.sending_data_to_server));
             progressDialog.show();
         }
 
@@ -589,7 +582,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                         showingMessage(object.getString("message"));
                         db.deleteBeneficiaryRegistration(serialIdExt.getText().toString().trim());
                         db.deleteBeneficiaryImages(serialIdExt.getText().toString().trim());
-                       onBackPressed();
+                        onBackPressed();
                     } else {
                         showingMessage(getResources().getString(R.string.dataNotSubmitted));
                         progressDialog.dismiss();
