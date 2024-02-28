@@ -48,6 +48,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_STATE_DISTRICT = "tbl_state_district";
     public static final String TABLE_REGISTRATION = "tbl_registration";
     public static final String TABLE_INSTALLATION_LIST = "tbl_installation_list";
+    public static final String TABLE_INSTALLATION_UNLOAD_LIST = "tbl_installation_unload_list";
     public static final String TABLE_INSTALLATION_OFFLINE_LIST = "tbl_installation_offline_list";
     public static final String TABLE_OFFLINE_SUBMITTED_LIST = "tbl_offline_submitted_list";
     public static final String TABLE_SETTING_PARAMETER_LIST = "tbl_setting_parameter_list";
@@ -970,6 +971,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_ADD15 + " TEXT,"
             + KEY_ADD16 + " TEXT)";
 
+    private static final String CREATE_TABLE_INSTALLATION_UNLOAD_LIST = "CREATE TABLE "
+            + TABLE_INSTALLATION_UNLOAD_LIST + "("
+            + KEY_ENQ_DOC + " TEXT,"
+            + KEY_PERNR + " TEXT,"
+            + KEY_GST_BILL_NO + " TEXT,"
+            + KEY_BILL_NO + " TEXT,"
+            + KEY_KUNNR + " TEXT,"
+            + KEY_BILL_DATE + " TEXT,"
+            + KEY_CUST_NAME + " TEXT,"
+            + KEY_FATH_NAME + " TEXT,"
+            + KEY_STATE_TEXT + " TEXT,"
+            + KEY_STATE + " TEXT,"
+            + KEY_DISTRICT_TEXT + " TEXT,"
+            + KEY_DISTRICT + " TEXT,"
+            + KEY_TEHSIL_TEXT + " TEXT,"
+            + KEY_VILLAGE + " TEXT,"
+            + KEY_CONTACT_NO + " TEXT,"
+            + KEY_CONTROLLER + " TEXT,"
+            + KEY_MOTOR + " TEXT,"
+            + KEY_PUMP + " TEXT,"
+            + KEY_ADDRESS + " TEXT,"
+            + KEY_SYNC + " TEXT,"
+            + KEY_SET_MATNO + " TEXT,"
+            + KEY_SIMHA2 + " TEXT,"
+            + KEY_CUS_CONTACT_NO + " TEXT,"
+            + KEY_PANEL_MODULE_SER_NO + " TEXT,"
+            + KEY_HP + " TEXT,"
+            + KEY_ADD1 + " TEXT,"
+            + KEY_ADD2 + " TEXT,"
+            + KEY_ADD3 + " TEXT,"
+            + KEY_ADD4 + " TEXT,"
+            + KEY_ADD5 + " TEXT,"
+            + KEY_ADD6 + " TEXT,"
+            + KEY_ADD7 + " TEXT,"
+            + KEY_ADD8 + " TEXT,"
+            + KEY_ADD9 + " TEXT,"
+            + KEY_ADD10 + " TEXT,"
+            + KEY_ADD11 + " TEXT,"
+            + KEY_ADD12 + " TEXT,"
+            + KEY_ADD13 + " TEXT,"
+            + KEY_ADD14 + " TEXT,"
+            + KEY_ADD15 + " TEXT,"
+            + KEY_ADD16 + " TEXT)";
+
+
     private static final String CREATE_TABLE_INSTALLATION_OFFLINE_LIST = "CREATE TABLE "
             + TABLE_INSTALLATION_OFFLINE_LIST + "("
             + KEY_BILL_NO + " TEXT,"
@@ -1187,6 +1233,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_STATE_DISTRICT);
         db.execSQL(CREATE_TABLE_REGISTRATION);
         db.execSQL(CREATE_TABLE_INSTALLATION_LIST);
+        db.execSQL(CREATE_TABLE_INSTALLATION_UNLOAD_LIST);
         db.execSQL(CREATE_TABLE_INSTALLATION_OFFLINE_LIST);
         db.execSQL(CREATE_TABLE_OFFLINE_SUBMITTED_LIST);
         db.execSQL(CREATE_TABLE_SETTING_PARAMETER_LIST);
@@ -1217,6 +1264,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_STATE_DISTRICT);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_REGISTRATION);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_INSTALLATION_LIST);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_INSTALLATION_UNLOAD_LIST);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_INSTALLATION_OFFLINE_LIST);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_OFFLINE_SUBMITTED_LIST);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_SETTING_PARAMETER_LIST);
@@ -1703,6 +1751,54 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void insertUnloadInstallationListData(String enqdoc, InstallationListBean installationBean) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        ContentValues values;
+        try {
+            values = new ContentValues();
+            values.put(KEY_ENQ_DOC, enqdoc);
+            values.put(KEY_PERNR, installationBean.getPernr());
+            values.put(KEY_CUST_NAME, installationBean.getCustomer_name());
+            values.put(KEY_FATH_NAME, installationBean.getFather_name());
+            values.put(KEY_BILL_NO, installationBean.getBillno());
+            values.put(KEY_KUNNR, installationBean.getKunnr());
+            values.put(KEY_GST_BILL_NO, installationBean.getGstbillno());
+            values.put(KEY_BILL_DATE, installationBean.getBilldate());
+            values.put(KEY_STATE, installationBean.getState());
+            values.put(KEY_STATE_TEXT, installationBean.getStatetxt());
+            values.put(KEY_DISTRICT, installationBean.getCity());
+            values.put(KEY_DISTRICT_TEXT, installationBean.getCitytxt());
+            values.put(KEY_TEHSIL_TEXT, installationBean.getTehsil());
+            values.put(KEY_VILLAGE, installationBean.getVillage());
+            values.put(KEY_CONTACT_NO, installationBean.getContact_no());
+            values.put(KEY_CONTROLLER, installationBean.getController());
+            values.put(KEY_MOTOR, installationBean.getMotor());
+            values.put(KEY_PUMP, installationBean.getPump());
+            values.put(KEY_ADDRESS, installationBean.getAddress());
+            values.put(KEY_ADD1, installationBean.getSimno());
+            values.put(KEY_ADD2, installationBean.getRegisno());
+            values.put(KEY_ADD3, installationBean.getProjectno());
+            values.put(KEY_ADD4, installationBean.getLoginno());
+            values.put(KEY_ADD5, installationBean.getModuleqty());
+            values.put(KEY_ADD6, installationBean.getBeneficiary());
+            values.put(KEY_ADD7, installationBean.getDispdate());
+            values.put(KEY_SYNC, installationBean.getSync());
+            values.put(KEY_SET_MATNO, installationBean.getSet_matno());
+            values.put(KEY_SIMHA2, installationBean.getSimha2());
+            values.put(KEY_CUS_CONTACT_NO, installationBean.getCUS_CONTACT_NO());
+            values.put(KEY_PANEL_MODULE_SER_NO, installationBean.getNoOfModule());
+            values.put(KEY_HP, installationBean.getHP());
+            long i = db.insert(TABLE_INSTALLATION_UNLOAD_LIST, null, values);
+            db.setTransactionSuccessful();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+    }
+
     public void insertInstallationOfflineListData(InstallationOfflineBean installationOfflineBean) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
@@ -2040,6 +2136,57 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_HP, installationBean.getHP());
             where = KEY_ENQ_DOC + "='" + enqdoc + "'";
             i = db.update(TABLE_INSTALLATION_LIST, values, where, null);
+            db.setTransactionSuccessful();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+    }
+
+    public void updateUnloadInstallationListData(String enqdoc, InstallationListBean installationBean) {
+        long i = 0;
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        ContentValues values;
+        String where = " ";
+        try {
+            values = new ContentValues();
+            values.put(KEY_ENQ_DOC, enqdoc);
+            values.put(KEY_PERNR, installationBean.getPernr());
+            values.put(KEY_CUST_NAME, installationBean.getCustomer_name());
+            values.put(KEY_FATH_NAME, installationBean.getFather_name());
+            values.put(KEY_BILL_NO, installationBean.getBillno());
+            values.put(KEY_KUNNR, installationBean.getKunnr());
+            values.put(KEY_GST_BILL_NO, installationBean.getGstbillno());
+            values.put(KEY_BILL_DATE, installationBean.getBilldate());
+            values.put(KEY_STATE, installationBean.getState());
+            values.put(KEY_STATE_TEXT, installationBean.getStatetxt());
+            values.put(KEY_DISTRICT, installationBean.getCity());
+            values.put(KEY_DISTRICT_TEXT, installationBean.getCitytxt());
+            values.put(KEY_TEHSIL_TEXT, installationBean.getTehsil());
+            values.put(KEY_VILLAGE, installationBean.getVillage());
+            values.put(KEY_CONTACT_NO, installationBean.getContact_no());
+            values.put(KEY_CONTROLLER, installationBean.getController());
+            values.put(KEY_MOTOR, installationBean.getMotor());
+            values.put(KEY_PUMP, installationBean.getPump());
+            values.put(KEY_ADDRESS, installationBean.getAddress());
+            values.put(KEY_ADD1, installationBean.getSimno());
+            values.put(KEY_ADD2, installationBean.getRegisno());
+            values.put(KEY_ADD3, installationBean.getProjectno());
+            values.put(KEY_ADD4, installationBean.getLoginno());
+            values.put(KEY_ADD5, installationBean.getModuleqty());
+            values.put(KEY_ADD6, installationBean.getBeneficiary());
+            values.put(KEY_ADD7, installationBean.getDispdate());
+            values.put(KEY_SYNC, installationBean.getSync());
+            values.put(KEY_SET_MATNO, installationBean.getSet_matno());
+            values.put(KEY_SIMHA2, installationBean.getSimha2());
+            values.put(KEY_CUS_CONTACT_NO, installationBean.getCUS_CONTACT_NO());
+            values.put(KEY_PANEL_MODULE_SER_NO, installationBean.getNoOfModule());
+            values.put(KEY_HP, installationBean.getHP());
+            where = KEY_ENQ_DOC + "='" + enqdoc + "'";
+            i = db.update(TABLE_INSTALLATION_UNLOAD_LIST, values, where, null);
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
             e.printStackTrace();
@@ -3164,6 +3311,67 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @SuppressLint("Range")
+    public ArrayList<InstallationListBean> getUnloadInstallationListData(String userid) {
+        InstallationListBean installationBean = new InstallationListBean();
+        ArrayList<InstallationListBean> list_document = new ArrayList<>();
+        list_document.clear();
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.beginTransaction();
+        try {
+            String selectQuery = "SELECT * FROM " + TABLE_INSTALLATION_UNLOAD_LIST + " WHERE " + KEY_PERNR + " = '" + userid + "'" + " AND " + KEY_SYNC + " = '" + "" + "'";
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            Log.e("CURSORCOUNT", "&&&&123" + cursor.getCount() + " " + selectQuery);
+            if (cursor.getCount() > 0) {
+                if (cursor.moveToFirst()) {
+                    while (!cursor.isAfterLast()) {
+                        installationBean = new InstallationListBean();
+                        installationBean.setPernr(cursor.getString(cursor.getColumnIndex(KEY_PERNR)));
+                        installationBean.setEnqdoc(cursor.getString(cursor.getColumnIndex(KEY_BILL_NO)));
+                        installationBean.setBillno(cursor.getString(cursor.getColumnIndex(KEY_BILL_NO)));
+                        installationBean.setKunnr(cursor.getString(cursor.getColumnIndex(KEY_KUNNR)));
+                        installationBean.setGstbillno(cursor.getString(cursor.getColumnIndex(KEY_GST_BILL_NO)));
+                        installationBean.setBilldate(cursor.getString(cursor.getColumnIndex(KEY_BILL_DATE)));
+                        installationBean.setCustomer_name(cursor.getString(cursor.getColumnIndex(KEY_CUST_NAME)));
+                        installationBean.setFather_name(cursor.getString(cursor.getColumnIndex(KEY_FATH_NAME)));
+                        installationBean.setState(cursor.getString(cursor.getColumnIndex(KEY_STATE)));
+                        installationBean.setStatetxt(cursor.getString(cursor.getColumnIndex(KEY_STATE_TEXT)));
+                        installationBean.setCity(cursor.getString(cursor.getColumnIndex(KEY_DISTRICT)));
+                        installationBean.setCitytxt(cursor.getString(cursor.getColumnIndex(KEY_DISTRICT_TEXT)));
+                        installationBean.setTehsil(cursor.getString(cursor.getColumnIndex(KEY_TEHSIL_TEXT)));
+                        installationBean.setVillage(cursor.getString(cursor.getColumnIndex(KEY_VILLAGE)));
+                        installationBean.setContact_no(cursor.getString(cursor.getColumnIndex(KEY_CONTACT_NO)));
+                        installationBean.setController(cursor.getString(cursor.getColumnIndex(KEY_CONTROLLER)));
+                        installationBean.setPump(cursor.getString(cursor.getColumnIndex(KEY_PUMP)));
+                        installationBean.setSimno(cursor.getString(cursor.getColumnIndex(KEY_ADD1)));
+                        installationBean.setRegisno(cursor.getString(cursor.getColumnIndex(KEY_ADD2)));
+                        installationBean.setProjectno(cursor.getString(cursor.getColumnIndex(KEY_ADD3)));
+                        installationBean.setLoginno(cursor.getString(cursor.getColumnIndex(KEY_ADD4)));
+                        installationBean.setModuleqty(cursor.getString(cursor.getColumnIndex(KEY_ADD5)));
+                        installationBean.setBeneficiary(cursor.getString(cursor.getColumnIndex(KEY_ADD6)));
+                        installationBean.setMotor(cursor.getString(cursor.getColumnIndex(KEY_MOTOR)));
+                        installationBean.setAddress(cursor.getString(cursor.getColumnIndex(KEY_ADDRESS)));
+                        installationBean.setDispdate(cursor.getString(cursor.getColumnIndex(KEY_ADD7)));
+                        installationBean.setSync(cursor.getString(cursor.getColumnIndex(KEY_SYNC)));
+                        installationBean.setSet_matno(cursor.getString(cursor.getColumnIndex(KEY_SET_MATNO)));
+                        installationBean.setSimha2(cursor.getString(cursor.getColumnIndex(KEY_SIMHA2)));
+                        installationBean.setCUS_CONTACT_NO(cursor.getString(cursor.getColumnIndex(KEY_CUS_CONTACT_NO)));
+                        installationBean.setNoOfModule(cursor.getString(cursor.getColumnIndex(KEY_PANEL_MODULE_SER_NO)));
+                        installationBean.setHP(cursor.getString(cursor.getColumnIndex(KEY_HP)));
+                        list_document.add(installationBean);
+                        cursor.moveToNext();
+                    }
+                }
+                db.setTransactionSuccessful();
+            }
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        } finally {
+            closeDb(db);
+        }
+        return list_document;
+    }
+
+    @SuppressLint("Range")
     public ArrayList<InstallationOfflineBean> getInstallationOfflineListData(String userid) {
         InstallationOfflineBean installationOfflineBean = new InstallationOfflineBean();
         ArrayList<InstallationOfflineBean> list_document = new ArrayList<>();
@@ -3619,6 +3827,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void deleteUnloadInstallationListData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if (CustomUtility.doesTableExist(db, TABLE_INSTALLATION_UNLOAD_LIST)) {
+            db.delete(TABLE_INSTALLATION_UNLOAD_LIST, null, null);
+        }
+    }
+
     public void deleteInstallationOfflineListData() {
         SQLiteDatabase db = this.getWritableDatabase();
         if (CustomUtility.doesTableExist(db, TABLE_INSTALLATION_OFFLINE_LIST)) {
@@ -3644,6 +3859,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         where = KEY_BILL_NO + "='" + value + "'";
         if (CustomUtility.doesTableExist(db, TABLE_INSTALLATION_LIST)) {
             db.delete(TABLE_INSTALLATION_LIST, where, null);
+        }
+    }
+
+    public void deleteUnloadInstallationListData1(String value) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String where = "";
+        where = KEY_BILL_NO + "='" + value + "'";
+        if (CustomUtility.doesTableExist(db, TABLE_INSTALLATION_UNLOAD_LIST)) {
+            db.delete(TABLE_INSTALLATION_UNLOAD_LIST, where, null);
         }
     }
 
