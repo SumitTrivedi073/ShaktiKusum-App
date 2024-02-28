@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 public class UtilMethod {
 
-    private  static Context context;
+    public static Context context;
     private static final String PREFERENCE = "DealLizard";
 
     public static String getDeviceName() {

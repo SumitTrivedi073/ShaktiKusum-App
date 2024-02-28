@@ -66,4 +66,6 @@ public class Constant {
     public static String is2GDevice = "is2GDevice";
     public static String latitude = "latitude";
     public static String longitude = "longitude";
+
+    public static String beneficiaryData ="beneficiaryData";
 }

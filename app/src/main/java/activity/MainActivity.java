@@ -257,6 +257,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }else if (id == R.id.complian_status) {
             Intent intent = new Intent(context, compliandeliverystatus.class);
             startActivity(intent);
+        }else if (id == R.id.beneficiary_registration_form) {
+            Intent intent = new Intent(context, beneficiaryRegistrationList.class);
+            startActivity(intent);
         }
         else if (id == R.id.nav_logout) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(context, R.style.MyDialogTheme);
@@ -289,6 +292,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 dataHelper.deleteKusumCSurveyFrom();
                 dataHelper.deleteDeviceMappingData();
                 dataHelper.deleteOfflineControllerData();
+                dataHelper.deleteBeneficiaryregistration();
                 CustomUtility.clearSharedPrefrences(context);
 
                 Intent intent = new Intent(context, Login.class);
