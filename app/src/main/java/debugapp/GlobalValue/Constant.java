@@ -16,6 +16,14 @@ public class Constant {
     public static String BT_DEVICE_NAME = "";
     public static String BT_DEVICE_MAC_ADDRESS = "";
 
+    public static final String TAG = "jisunLog";
+    public static final String TIME_STAMP_FORMAT_DATE = "dd.MM.yyyy ";
+    public static final String TIME_STAMP_FORMAT_TIME= "h:mm a ";
+
+    public static final String SHARED_PREF_NAME = "setting_data";
+    public static final String PREF_KEY_PICTURE_SIZE = "pref_key_picture_size";
+    public static final String PREF_KEY_PICTURE_SIZE_LIST = "pref_key_picture_size_list";
+
     public static String PendingFeedbackContact = "pendingFeedbackContact";
     public static String PendingFeedbackVblen = "pendingFeedbackVblen";
     public static String PendingFeedbackHp = "pendingFeedbackHp";

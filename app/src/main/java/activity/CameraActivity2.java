@@ -65,25 +65,18 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     private static final String TAG = "LocationService";
     private SurfaceHolder surfaceHolder;
     private android.hardware.Camera camera;
-    private boolean safeToTakePicture = false;
-
     public static final int REQUEST_CODE = 100;
     private final static int RESULT_CODE = 100;
     private SurfaceView surfaceView;
     LinearLayout layoutpreview;
     TextView display;
-    // FusedLocationProviderClient location;
     String latitudetxt, longitudetxt, addresstxt, state, country, postalcode, customer_name, canvasText;
     SimpleDateFormat getDate, getTime;
     Bitmap bitmap;
     File save;
     public int TIME_INTERVAL =  1000;
     private LocationRequest locationRequest;
-
-
     private GoogleApiClient mGoogleApiClient;
-    private FusedLocationProviderClient fusedLocationClient;
-
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
