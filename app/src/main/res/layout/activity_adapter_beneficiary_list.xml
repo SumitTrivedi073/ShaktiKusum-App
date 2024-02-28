@@ -38,15 +38,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginStart="@dimen/_13sdp"
                 android:layout_weight="0.60"
                 android:text=""
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/_13sdp" />
             <ImageView
                 android:id="@+id/edit"
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_15sdp"
+                android:layout_width="@dimen/_17sdp"
+                android:layout_height="@dimen/_17sdp"
                 android:background="@drawable/edit"
                 />
 
