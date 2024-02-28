@@ -57,11 +57,11 @@ public class Adapter_Beneficiary_List  extends RecyclerView.Adapter<Adapter_Bene
     @Override
     public void onBindViewHolder(@NonNull Adapter_Beneficiary_List.HomeCategoryViewHolder holder, int position) {
         try {
-            if (responseList.get(position).getSerialId().isEmpty()) {
+            if (!responseList.get(position).getSerialId().isEmpty()) {
                 holder.serial_id.setText(responseList.get(position).getSerialId());
-            }if (responseList.get(position).getBeneficiaryFormApplicantName().isEmpty()) {
+            }if (!responseList.get(position).getBeneficiaryFormApplicantName().isEmpty()) {
                 holder.applicant_name.setText(responseList.get(position).getBeneficiaryFormApplicantName());
-            }if (responseList.get(position).getApplicantMobile().isEmpty()) {
+            }if (!responseList.get(position).getApplicantMobile().isEmpty()) {
                 holder.applicant_mobile.setText(responseList.get(position).getApplicantMobile());
             }
             holder.cardView.setOnClickListener(view -> {
