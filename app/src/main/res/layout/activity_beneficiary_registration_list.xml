@@ -26,27 +26,17 @@
             android:layout_marginEnd="@dimen/_10sdp"
             android:background="@drawable/popup_relative">
 
-            <EditText
-                android:id="@+id/search"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginRight="@dimen/_10sdp"
-                android:hint="Search by Serial id"
-                android:textSize="@dimen/_15sdp"
-                android:textStyle="bold">
-
-                <requestFocus />
-            </EditText>
-
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchUser"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="text"
+                app:queryHint="@string/action_search"
+                app:defaultQueryHint="@string/action_search"
+                android:backgroundTint="@color/colorPrimary"/>
 
         </RelativeLayout>
-    <LinearLayout
-        android:id="@+id/linear2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/beneficiaryListView"
             android:layout_width="match_parent"
@@ -54,7 +44,6 @@
             android:layout_marginTop="@dimen/_5sdp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-    </LinearLayout>
     </LinearLayout>
 
     <TextView

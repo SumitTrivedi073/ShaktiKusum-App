@@ -4626,13 +4626,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     mcursor.moveToNext();
 
                     imageModel = new ImageModel();
-                    imageModel.setID(mcursor.getString(0));
-                    imageModel.setName(mcursor.getString(1));
-                    imageModel.setImagePath(mcursor.getString(2));
-                    imageModel.setImageSelected(Boolean.parseBoolean(mcursor.getString(3)));
-                    imageModel.setBillNo(mcursor.getString(4));
-                    imageModel.setLatitude(mcursor.getString(5));
-                    imageModel.setLongitude(mcursor.getString(6));
+                    imageModel.setID(mcursor.getColumnName(0));
+                    imageModel.setName(mcursor.getColumnName(1));
+                    imageModel.setImagePath(mcursor.getColumnName(2));
+                    imageModel.setImageSelected(Boolean.parseBoolean(mcursor.getColumnName(3)));
+                    imageModel.setBillNo(mcursor.getColumnName(4));
+                    imageModel.setLatitude(mcursor.getColumnName(5));
+                    imageModel.setLongitude(mcursor.getColumnName(6));
                     imageModel.setPoistion(mcursor.getInt(7));
                     beneficiaryImages.add(imageModel);
                 }

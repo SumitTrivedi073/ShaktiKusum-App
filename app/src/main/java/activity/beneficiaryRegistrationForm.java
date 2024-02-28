@@ -2,13 +2,6 @@ package activity;
 
 import static utility.FileUtils.getPath;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -18,7 +11,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,6 +23,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,7 +39,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -188,11 +184,18 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
         imageList = db.getAllBeneficiaryImages();
 
+         Log.e("imageList=====>", String.valueOf(imageList.toString()));
         if (itemNameList.size() > 0 && imageList != null && imageList.size() > 0) {
             for (int i = 0; i < imageList.size(); i++) {
                 for (int j = 0; j < itemNameList.size(); j++) {
-                    if (imageList.get(i).getBillNo().trim().equals(serialIdExt.getText().toString().trim())) {
+
+                    Log.e("imageList=====>", imageList.get(i).getBillNo() + "======>" + serialIdExt.getText().toString());
+
+                    if (!imageList.get(i).getBillNo().isEmpty() && imageList.get(i).getBillNo().trim().equals(serialIdExt.getText().toString().trim())) {
+
                         if (imageList.get(i).getName().equals(itemNameList.get(j))) {
+                            Log.e("isImageSelected=====>", String.valueOf(imageList.get(i).isImageSelected()));
+
                             ImageModel imageModel = new ImageModel();
                             imageModel.setName(imageList.get(i).getName());
                             imageModel.setImagePath(imageList.get(i).getImagePath());
@@ -207,7 +210,8 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                 }
             }
         }
-        customAdapter = new ImageSelectionAdapter(beneficiaryRegistrationForm.this, imageArrayList);
+     //   Log.e("imageArrayList=====>", String.valueOf(imageArrayList.toString()));
+        customAdapter = new ImageSelectionAdapter(beneficiaryRegistrationForm.this, imageArrayList, false);
         photoListView.setHasFixedSize(true);
         photoListView.setAdapter(customAdapter);
         customAdapter.ImageSelection(this);
@@ -216,13 +220,17 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     @Override
     public void ImageSelectionListener(ImageModel imageModelList, int position) {
         selectedIndex = position;
-
-        if (imageModelList.isImageSelected()) {
-            isUpdate = true;
-            selectImage("1");
+        if (!serialIdExt.getText().toString().trim().isEmpty()) {
+            if (imageModelList.isImageSelected()) {
+                isUpdate = true;
+                selectImage("1");
+            } else {
+                isUpdate = false;
+                selectImage("0");
+            }
         } else {
-            isUpdate = false;
-            selectImage("0");
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_serial_id), getApplicationContext());
+
         }
     }
 
@@ -316,7 +324,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
                             Bundle bundle = result.getData().getExtras();
                             Log.e("bundle====>", bundle.get("data").toString());
-                            UpdateArrayList(bundle.get("data").toString());
+                            UpdateArrayList(bundle.get("data").toString(), bundle.get("latitude").toString(), bundle.get("longitude").toString());
 
                         }
 
@@ -353,7 +361,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mImageCaptureUri);
                         File file1 = CustomUtility.saveFile(bitmap, getResources().getString(R.string.BeneficiaryRegistration), "Images");
 
-                        UpdateArrayList(file1.getPath());
+                        UpdateArrayList(file1.getPath(), "", "");
 
                     }
                 } catch (Exception e) {
@@ -365,7 +373,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
     }
 
-    private void UpdateArrayList(String path) {
+    private void UpdateArrayList(String path, String latitude, String longitude) {
 
         ImageModel imageModel = new ImageModel();
         imageModel.setName(imageArrayList.get(selectedIndex).getName());
@@ -373,9 +381,10 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
         imageModel.setImageSelected(true);
         imageModel.setPoistion(imageArrayList.get(selectedIndex).getPoistion());
         imageModel.setBillNo(serialIdExt.getText().toString());
+        imageModel.setLatitude(latitude);
+        imageModel.setLongitude(longitude);
         imageArrayList.set(selectedIndex, imageModel);
 
-        imageArrayList.set(selectedIndex, imageModel);
         addupdateDatabase(imageModel);
 
         customAdapter.notifyDataSetChanged();
@@ -383,6 +392,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     }
 
     private void addupdateDatabase(ImageModel imageModel) {
+        Log.e("imageModel======>", imageModel.toString());
         if (isUpdate) {
             db.updateRecordBeneficiary(imageModel);
         } else {
