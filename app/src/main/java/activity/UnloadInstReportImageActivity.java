@@ -361,7 +361,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                               new SyncInstallationData(ja_invc_data).execute();
+//                               new SyncInstallationData(ja_invc_data).execute();
                             }
                         }
                     } else {
