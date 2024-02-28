@@ -199,7 +199,6 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
             camera.setPreviewDisplay(surfaceHolder);
             camera.startPreview();
             setCamFocusMode();
-            safeToTakePicture = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
