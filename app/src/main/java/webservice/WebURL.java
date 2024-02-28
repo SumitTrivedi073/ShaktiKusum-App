@@ -25,17 +25,17 @@ public class WebURL {
 
     /************* production server **************/
     public static final String RMSAPPURL = "https://shaktirms.com/";
-   public static final String BASEURL = "https://spprdsrvr1.shaktipumps.com:8423";
+    public static final String BASEURL = "https://spprdsrvr1.shaktipumps.com:8423";
    public static final String BASE_URL_VK= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/";
- public static final String BASE_URL_OPTION_VK= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
+   public static final String BASE_URL_OPTION_VK= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
 
     /************* development server **************/
-  //  public static final String BASEURL = "https://spquasrvr1.shaktipumps.com:8423";
- //   public static final String BASE_URL_VK= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/";
-   // public static final String BASE_URL_VK1= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/";
+   /* public static final String BASEURL = "https://spquasrvr1.shaktipumps.com:8423";
+    public static final String BASE_URL_VK= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/";
+    public static final String BASE_URL_VK1= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/";
 
-  // public static final String BASE_URL_OPTION_VK= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
-
+   public static final String BASE_URL_OPTION_VK= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
+*/
 
 
 
@@ -98,6 +98,9 @@ public class WebURL {
     public static final String saveDebugData = BASE_URL_VK +"save.htm";
 
     public static final String DemoRoadURL = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/demo_road_show.htm";
+
+    public static final String BeneficiaryRegistrationURL = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/beneficary_registration_har.htm";
+
     public static String updateLatLngToRms = "https://quality.shaktirms.com/NewShakti/RMSApp/LatLongUpdate";
 
 

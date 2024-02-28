@@ -305,6 +305,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         mTextPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 
+        Log.e("displaytext===>",display.getText().toString());
         mTextPaint.setTextSize(70);
         StaticLayout mTextLayout = new StaticLayout(display.getText().toString().trim(), mTextPaint, canvas.getWidth(),
                 Layout.Alignment.ALIGN_NORMAL, 1.0f, 1.0f, true);
@@ -399,7 +400,6 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
                     display.setText(" Latitude : " + latitudetxt + "\n" +
                             "Longitude : " + longitudetxt + "\n" + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
                             + "\n" + "Customer: " + customer_name);
-
 
                 }
 

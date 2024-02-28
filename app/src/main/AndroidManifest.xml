@@ -54,6 +54,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu">
         <activity
+            android:name="activity.beneficiaryRegistrationForm"
+            android:exported="false" />
+        <activity
+            android:name="activity.beneficiaryRegistrationList"
+            android:exported="false" />
+        <activity
             android:name="activity.compliandeliverystatus"
             android:exported="false" />
         <activity

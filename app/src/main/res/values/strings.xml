@@ -84,6 +84,7 @@
     <string name="menu_rejectsites">Reject Sites</string>
     <string name="complaint_installation">Complaint Before Installation</string>
     <string name="complain_delivery_status">Complaint Delivery Status</string>
+    <string name="beneficiary_registration_form">Beneficiary Registration Form</string>
     <string name="menu_logout">Signout</string>
     <string name="menu_audit">Site Audit</string>x
     <string name="menu_tools">Tools</string>
@@ -95,6 +96,65 @@
     <string name="rationale_doc_picker" translatable="false">We need this pemission to read documents from device.</string>
     <string name="file_thumbnail" translatable="false">File thumbnail</string>
     <string name="path" translatable="false">Path : %1$s</string>
+
+
+    <string name="serial_id">Serial Id</string>
+    <string name="family_Id">Family Id</string>
+    <string name="applicant_father_name">Applicant\'s Father Name</string>
+    <string name="applicant_mobile_no">Applicant\'s Mobile Number</string>
+    <string name="applicant_village">Applicant\'s Village</string>
+    <string name="applicant_block">Applicant\'s Block</string>
+    <string name="applicant_tehsil">Applicant\'s Tehsil</string>
+    <string name="applicant_district">Applicant\'s District</string>
+    <string name="pump_capacity">Pump Capacity(HP)</string>
+    <string name="pump_ad_dc">Pump AC/DC</string>
+    <string name="pump_type">Pump Type</string>
+    <string name="controller_type">Controller Type</string>
+    <string name="applicant_bank_account">Applicant\'s Bank Account No.</string>
+    <string name="applicant_IFSC">Applicant\'s IFSC Code</string>
+    <string name="beneficiary_registration_list">Beneficiary Registration List</string>
+    <string name="acknowledgement_challan_details">Acknowledgement challan Details</string>
+    <string name="fard_land_proof">Fard (Land proof)</string>
+    <string name="beneficiary_id_proof">Beneficiary ID Proof (Aadhar card)</string>
+    <string name="payment_receipt">Payment Receipt</string>
+    <string name="attachment5">Attachment 5</string>
+    <string name="attachment6">Attachment 6</string>
+
+
+    <string name="enter_serial_id">Please Enter Serial ID</string>
+    <string name="enter_family_id">Please Enter Family ID</string>
+    <string name="enter_father_name">Please Enter Applicant\'s father name</string>
+    <string name="enter_mobile_no">Please Enter Mobile number</string>
+    <string name="valid_mobile_no">Please Enter Valid Mobile number</string>
+    <string name="enter_village_name">Please Enter Village name</string>
+    <string name="enter_block_name">Please Enter Block name</string>
+    <string name="enter_tehsil_name">Please Enter Tehsil name</string>
+    <string name="enter_district_name">Please Enter District name</string>
+    <string name="enter_pump_capacity">Please Enter Pump Capacity</string>
+    <string name="enter_pump_ac_dc">Please Select Pump AC/DC</string>
+    <string name="enter_pump_type">Please Select Pump Type</string>
+    <string name="enter_conrtoller_type">Please Select Controller Type</string>
+    <string name="enter_account_no">Please Enter Account Number</string>
+    <string name="enter_ifsc_code">Please Enter IFSC Code</string>
+    <string name="select_acknowledgment_challan_image">Please Select Acknowledgement Challan Details Image</string>
+    <string name="select_land_proof">Please Select FARD (Land Proof) Image</string>
+    <string name="select_beneficiary_id_proof">Please Select Beneficiary ID Proof Image</string>
+    <string name="select_payment_receipt">Please Select Payment Receipt Image</string>
+    <string name="select_attachment_5">Please Select Attachment 5 Image</string>
+    <string name="select_attachment_6">Please Select Attachment 6 Image</string>
+
+
+    <string name="select_pump_type">Select Pump Type</string>
+    <string name="selec_pump_ac_dc">Select AC/DC Pump</string>
+    <string name="selec_controller_type">Select Controller Type</string>
+    <string name="sending_data_to_server">Sending Data to server..please wait !</string>
+    <string name="data_save_in_local">Data saved In local database</string>
+    <string name="file_not_valid">File not valid!</string>
+    <string name="AC">AC</string>
+    <string name="submersible">Submersible</string>
+    <string name="Normal">Normal</string>
+    <string name="BeneficiaryRegistration">BeneficiaryRegistration</string>
+
 
 
     <string name="size" translatable="false">Size :  %1$d</string>
@@ -554,6 +614,26 @@
         <item>Drip</item>
         <item>Flood</item>
 
+    </string-array>
+
+    <string-array name="pumpTypeSpinner">
+        <item>Select Pump Type</item>
+        <item>Submersible</item>
+        <item>Surface</item>
+
+
+    </string-array>
+
+    <string-array name="pumpAcDcSpinner">
+        <item>Select AC/DC Pump</item>
+        <item>AC</item>
+        <item>DC</item>
+    </string-array>
+
+    <string-array name="controllerTypeSpinner">
+        <item>Select Controller Type</item>
+        <item>Normal</item>
+        <item>USPC</item>
     </string-array>
 
     <string-array name="yesNoSpinner">

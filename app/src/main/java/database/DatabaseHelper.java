@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bean.AuditSiteBean;
+import bean.BeneficiaryRegistrationBean;
 import bean.ImageModel;
 import bean.InstallationBean;
 import bean.InstallationListBean;
@@ -58,6 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_KUSUMCSURVEYFORM = "tbl_kusumcsurvetform";
 
     public static final String TABLE_INSTALLATION_IMAGE_DATA = "tbl_installation_image_data";
+    public static final String TABLE_BENEFICIARY_IMAGE_DATA = "tbl_beneficiary_image_data";
     public static final String TABLE_REJECTED_INSTALLATION_IMAGE_DATA = "tbl_rejectinstallation_image_data";
 
     public static final String TABLE_UNLOADING_IMAGE_DATA = "tbl_unloading_image_data";
@@ -68,6 +70,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_SITE_AUDIT = "tbl_site_audit";
     public static final String TABLE_KusumCImages = "tbl_kusumCImages";
+    public static final String TABLE_BENEFICIARY_REGISTRATION = "tbl_Beneficiary_Registration";
+
     //TABLE_OFFLINE_SUBMITTED_LIST field name
     public static final String KEY_OFFLINE_BILL_NO = "bill_no";
     public static final String KEY_OFFLINE_BENEFICIARY = "beneficiary";
@@ -92,6 +96,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_PROJ_NM = "proj_nm";
     public static final String KEY_LOGIN_NO = "login_no";
     public static final String KEY_LOGIN_NM = "login_nm";
+
+    //TABLE_BENEFICIARY_REGISTRATION Fields
+    public static final String KEY_SERIAL_ID = "serial_id";
+    public static final String KEY_FAMILY_ID = "family_id";
+    public static final String KEY_APPLICANT_NAME = "applicant_name";
+    public static final String KEY_APPLICANT_FATHER_NAME = "applicant_father_name";
+    public static final String KEY_APPLICANT_MOBILE_NO = "applicant_mobile_no";
+    public static final String KEY_APPLICANT_VILLAGE = "applicant_village";
+    public static final String KEY_APPLICANT_BLOCK = "applicant_block";
+    public static final String KEY_APPLICANT_TEHSIL = "applicant_tehsil";
+    public static final String KEY_APPLICANT_DISTRICT = "applicant_district";
+    public static final String KEY_PUMP_CAPACITY = "pump_capacity";
+    public static final String KEY_PUMP_AC_DC = "pump_ac_dc";
+    public static final String KEY_CONTROLLER_TYPE = "controller_type";
+    public static final String KEY_APPLICANT_ACCOUNT_NO = "applicant_account_no";
+    public static final String KEY_APPLICANT_IFSC_CODE = "applicant_ifsc_code";
+
 
     public static final String KEY_PROJ_TXT = "project_txt";
     public static final String KEY_LOGIN_TXT = "login_txt";
@@ -255,6 +276,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_INSTALLATION_PATH = "installtionPath", KEY_INSTALLATION_IMAGE_SELECTED = "installtionImageSelected",
             KEY_INSTALLATION_BILL_NO = "InstalltionBillNo", KEY_INSTALLATION_LATITUDE = "InstalltionLatitude",
             KEY_INSTALLATION_LONGITUDE = "InstalltionLongitude", KEY_INSTALLATION_POSITION = "InstalltionPosition";
+
+    public static final String KEY_BENEFICIARY_ID = "BENEFICIARYId", KEY_BENEFICIARY_NAME = "BENEFICIARYImageName",
+            KEY_BENEFICIARY_PATH = "BENEFICIARYPath", KEY_BENEFICIARY_IMAGE_SELECTED = "BENEFICIARYImageSelected",
+            KEY_BENEFICIARY_BILL_NO = "BENEFICIARYBillNo", KEY_BENEFICIARY_LATITUDE = "BENEFICIARYLatitude",
+            KEY_BENEFICIARY_LONGITUDE = "BENEFICIARYLongitude", KEY_BENEFICIARY_POSITION = "BENEFICIARYPosition";
 
     public static final String KEY_UNLOADING_ID = "unloadingId", KEY_UNLOADING_NAME = "unloadingImageName", KEY_UNLOADING_PATH = "unloadingPath", KEY_UNLOADING_IMAGE_SELECTED = "unloadingImageSelected", KEY_UNLOADING_BILL_NO = "unloadingBillNo";
 
@@ -785,6 +811,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_INSTALLATION_LONGITUDE + " TEXT,"
             + KEY_INSTALLATION_POSITION + " TEXT)";
 
+    private static final String CREATE_TABLE_BENEFICIARY_IMAGES = "CREATE TABLE "
+            + TABLE_BENEFICIARY_IMAGE_DATA + "(" + KEY_BENEFICIARY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+            + KEY_BENEFICIARY_NAME + " TEXT,"
+            + KEY_BENEFICIARY_PATH + " TEXT,"
+            + KEY_BENEFICIARY_IMAGE_SELECTED + " BOOLEAN,"
+            + KEY_BENEFICIARY_BILL_NO + " TEXT,"
+            + KEY_BENEFICIARY_LATITUDE + " TEXT,"
+            + KEY_BENEFICIARY_LONGITUDE + " TEXT,"
+            + KEY_BENEFICIARY_POSITION + " TEXT)";
+
     private static final String CREATE_TABLE_REJECTED_INSTALLATION_IMAGES = "CREATE TABLE "
             + TABLE_REJECTED_INSTALLATION_IMAGE_DATA + "(" + KEY_INSTALLATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
             + KEY_INSTALLATION_NAME + " TEXT,"
@@ -1173,6 +1209,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_SIM_OLD_PHOTO + " BLOB)";
 
 
+    private static final String CREATE_BENEFICIARY_REGISTRAION = "CREATE TABLE " + TABLE_BENEFICIARY_REGISTRATION + "("
+            + KEY_SERIAL_ID + " TEXT,"
+            + KEY_FAMILY_ID + " TEXT,"
+            + KEY_APPLICANT_NAME + " TEXT,"
+            + KEY_APPLICANT_FATHER_NAME + " TEXT,"
+            + KEY_APPLICANT_MOBILE_NO + " TEXT,"
+            + KEY_APPLICANT_VILLAGE + " TEXT,"
+            + KEY_APPLICANT_BLOCK + " TEXT,"
+            + KEY_APPLICANT_TEHSIL + " TEXT,"
+            + KEY_APPLICANT_DISTRICT + " TEXT,"
+            + KEY_PUMP_CAPACITY + " TEXT,"
+            + KEY_PUMP_AC_DC + " TEXT,"
+            + KEY_PUMP_TYPE + " TEXT,"
+            + KEY_CONTROLLER_TYPE + " TEXT,"
+            + KEY_APPLICANT_ACCOUNT_NO + " TEXT,"
+            + KEY_APPLICANT_IFSC_CODE + " TEXT)";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -1200,10 +1253,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_SIM_CARD_REPLACEMENT);
         db.execSQL(CREATE_TABLE_SURVEY_DATA);
         db.execSQL(CREATE_TABLE_INSTALLATION_IMAGES);
+        db.execSQL(CREATE_TABLE_BENEFICIARY_IMAGES);
         db.execSQL(CREATE_TABLE_REJECTED_INSTALLATION_IMAGES);
         db.execSQL(CREATE_TABLE_SITE_AUDIT_IMAGES);
         db.execSQL(CREATE_TABLE_KusumCImages);
         db.execSQL(CREATE_TABLE_UNLOADING_IMAGES);
+        db.execSQL(CREATE_BENEFICIARY_REGISTRAION);
     }
 
     @Override
@@ -1230,10 +1285,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_AUDITSITE_LIST);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_AUDIT_PUMP_DATA);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_INSTALLATION_IMAGE_DATA);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_BENEFICIARY_IMAGE_DATA);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_REJECTED_INSTALLATION_IMAGE_DATA);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_SITE_AUDIT);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_KusumCImages);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_UNLOADING_IMAGE_DATA);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_BENEFICIARY_REGISTRATION);
             // create newworkorder tables
             onCreate(db);
         }
@@ -3713,6 +3770,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.delete(TABLE_KUSUMCSURVEYFORM, null, null);
         }
     }
+    public void deleteBeneficiaryregistration() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if (CustomUtility.doesTableExist(db, TABLE_BENEFICIARY_REGISTRATION)) {
+            db.delete(TABLE_BENEFICIARY_REGISTRATION, null, null);
+        }
+        if (CustomUtility.doesTableExist(db, TABLE_BENEFICIARY_IMAGE_DATA)) {
+            db.delete(TABLE_BENEFICIARY_IMAGE_DATA, null, null);
+        }
+    }
 
     public void deleteAuditData() {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -3786,7 +3852,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.delete(TABLE_INSTALLATION_IMAGE_DATA, null, null);
         }
     }
-
+    public void deleteBeneficiaryImages() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if (CustomUtility.doesTableExist(db, TABLE_BENEFICIARY_IMAGE_DATA)) {
+            db.delete(TABLE_BENEFICIARY_IMAGE_DATA, null, null);
+        }
+    }
     public void deleteSiteAuditImages() {
         SQLiteDatabase db = this.getWritableDatabase();
         if (CustomUtility.doesTableExist(db, TABLE_SITE_AUDIT)) {
@@ -4315,6 +4386,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.close();
     }
 
+    public void insertBeneficiaryImage(ImageModel imageModel) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_BENEFICIARY_NAME, imageModel.getName());
+        contentValues.put(KEY_BENEFICIARY_PATH, imageModel.getImagePath());
+        contentValues.put(KEY_BENEFICIARY_LATITUDE, imageModel.getLatitude());
+        contentValues.put(KEY_BENEFICIARY_LONGITUDE, imageModel.getLongitude());
+        contentValues.put(KEY_BENEFICIARY_IMAGE_SELECTED, imageModel.isImageSelected());
+        contentValues.put(KEY_BENEFICIARY_BILL_NO, imageModel.getBillNo());
+        contentValues.put(KEY_BENEFICIARY_POSITION, imageModel.getPoistion());
+        database.insert(TABLE_BENEFICIARY_IMAGE_DATA, null, contentValues);
+        database.close();
+    }
+
     public void updateRecordAlternate(String name, String path, boolean isSelected, String billNo, String latitude, String longitude, int position) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -4327,6 +4412,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_INSTALLATION_POSITION, position);
         // update Row
         db.update(TABLE_INSTALLATION_IMAGE_DATA, values, "installationImageName = '" + name + "'", null);
+        db.close();
+    }
+
+    public void updateRecordBeneficiary(ImageModel imageModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_BENEFICIARY_NAME, imageModel.getName());
+        values.put(KEY_BENEFICIARY_PATH, imageModel.getImagePath());
+        values.put(KEY_BENEFICIARY_LATITUDE, imageModel.getLatitude());
+        values.put(KEY_BENEFICIARY_LONGITUDE, imageModel.getLongitude());
+        values.put(KEY_BENEFICIARY_IMAGE_SELECTED, imageModel.isImageSelected());
+        values.put(KEY_BENEFICIARY_BILL_NO, imageModel.getBillNo());
+        values.put(KEY_BENEFICIARY_POSITION, imageModel.getPoistion());
+        // update Row
+        db.update(TABLE_BENEFICIARY_IMAGE_DATA, values, "BENEFICIARYImageName = '" + imageModel.getName() + "'", null);
         db.close();
     }
 
@@ -4438,6 +4538,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void deleteBeneficiaryImages(String serialId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String where = "";
+        where = KEY_BENEFICIARY_BILL_NO + "='" + serialId + "'";
+        if (CustomUtility.doesTableExist(db, TABLE_BENEFICIARY_IMAGE_DATA)) {
+            db.delete(TABLE_BENEFICIARY_IMAGE_DATA, where, null);
+        }
+    }
+
     public void deleteRejectedInstallationImages(String billNo) {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
@@ -4465,11 +4574,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             installationImages.clear();
             ImageModel imageModel;
-
             if (mcursor.getCount() > 0) {
                 for (int i = 0; i < mcursor.getCount(); i++) {
                     mcursor.moveToNext();
-
                     imageModel = new ImageModel();
                     imageModel.setID(mcursor.getString(0));
                     imageModel.setName(mcursor.getString(1));
@@ -4486,6 +4593,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             database.close();
         }
         return installationImages;
+    }
+
+    public ArrayList<ImageModel> getAllBeneficiaryImages() {
+        ArrayList<ImageModel> beneficiaryImages = new ArrayList<ImageModel>();
+        SQLiteDatabase database = this.getWritableDatabase();
+        if (CustomUtility.doesTableExist(database, TABLE_BENEFICIARY_IMAGE_DATA)) {
+            Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_BENEFICIARY_IMAGE_DATA ,null);
+
+            beneficiaryImages.clear();
+            ImageModel imageModel;
+
+            if (mcursor.getCount() > 0) {
+                for (int i = 0; i < mcursor.getCount(); i++) {
+                    mcursor.moveToNext();
+
+                    imageModel = new ImageModel();
+                    imageModel.setID(mcursor.getString(0));
+                    imageModel.setName(mcursor.getString(1));
+                    imageModel.setImagePath(mcursor.getString(2));
+                    imageModel.setImageSelected(Boolean.parseBoolean(mcursor.getString(3)));
+                    imageModel.setBillNo(mcursor.getString(4));
+                    imageModel.setLatitude(mcursor.getString(5));
+                    imageModel.setLongitude(mcursor.getString(6));
+                    imageModel.setPoistion(mcursor.getInt(7));
+                    beneficiaryImages.add(imageModel);
+                }
+            }
+            mcursor.close();
+            database.close();
+        }
+        return beneficiaryImages;
     }
 
     public ArrayList<ImageModel> getRejectedInstallationImages() {
@@ -4571,4 +4709,121 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return UnloadingImages;
     }
 
+    public void insertBeneficiaryRegistrationData(BeneficiaryRegistrationBean beneficiaryRegistrationBean) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        ContentValues values;
+        try {
+            values = new ContentValues();
+            values.put(KEY_SERIAL_ID, beneficiaryRegistrationBean.getSerialId());
+            values.put(KEY_FAMILY_ID, beneficiaryRegistrationBean.getFamilyId());
+            values.put(KEY_APPLICANT_NAME, beneficiaryRegistrationBean.getBeneficiaryFormApplicantName());
+            values.put(KEY_APPLICANT_FATHER_NAME, beneficiaryRegistrationBean.getApplicantFatherName());
+            values.put(KEY_APPLICANT_MOBILE_NO, beneficiaryRegistrationBean.getApplicantMobile());
+            values.put(KEY_APPLICANT_VILLAGE, beneficiaryRegistrationBean.getApplicantVillage());
+            values.put(KEY_APPLICANT_BLOCK, beneficiaryRegistrationBean.getApplicantBlock());
+            values.put(KEY_APPLICANT_TEHSIL, beneficiaryRegistrationBean.getApplicantTehsil());
+            values.put(KEY_APPLICANT_DISTRICT, beneficiaryRegistrationBean.getApplicantDistrict());
+            values.put(KEY_PUMP_CAPACITY, beneficiaryRegistrationBean.getPumpCapacity());
+            values.put(KEY_PUMP_AC_DC, beneficiaryRegistrationBean.getPumpAcDc());
+            values.put(KEY_PUMP_TYPE, beneficiaryRegistrationBean.getPumpType());
+            values.put(KEY_CONTROLLER_TYPE, beneficiaryRegistrationBean.getControllerType());
+            values.put(KEY_APPLICANT_ACCOUNT_NO, beneficiaryRegistrationBean.getApplicantAccountNo());
+            values.put(KEY_APPLICANT_IFSC_CODE, beneficiaryRegistrationBean.getApplicantIFSC());
+
+            // Insert Row
+            long i = db.insert(TABLE_BENEFICIARY_REGISTRATION, null, values);
+            db.setTransactionSuccessful();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+    }
+
+    public void updateBeneficiaryRegistrationData(BeneficiaryRegistrationBean beneficiaryRegistrationBean) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        ContentValues values;
+        try {
+            values = new ContentValues();
+            values.put(KEY_SERIAL_ID, beneficiaryRegistrationBean.getSerialId());
+            values.put(KEY_FAMILY_ID, beneficiaryRegistrationBean.getFamilyId());
+            values.put(KEY_APPLICANT_NAME, beneficiaryRegistrationBean.getBeneficiaryFormApplicantName());
+            values.put(KEY_APPLICANT_FATHER_NAME, beneficiaryRegistrationBean.getApplicantFatherName());
+            values.put(KEY_APPLICANT_MOBILE_NO, beneficiaryRegistrationBean.getApplicantMobile());
+            values.put(KEY_APPLICANT_VILLAGE, beneficiaryRegistrationBean.getApplicantVillage());
+            values.put(KEY_APPLICANT_BLOCK, beneficiaryRegistrationBean.getApplicantBlock());
+            values.put(KEY_APPLICANT_TEHSIL, beneficiaryRegistrationBean.getApplicantTehsil());
+            values.put(KEY_APPLICANT_DISTRICT, beneficiaryRegistrationBean.getApplicantDistrict());
+            values.put(KEY_PUMP_CAPACITY, beneficiaryRegistrationBean.getPumpCapacity());
+            values.put(KEY_PUMP_AC_DC, beneficiaryRegistrationBean.getPumpAcDc());
+            values.put(KEY_PUMP_TYPE, beneficiaryRegistrationBean.getPumpType());
+            values.put(KEY_CONTROLLER_TYPE, beneficiaryRegistrationBean.getControllerType());
+            values.put(KEY_APPLICANT_ACCOUNT_NO, beneficiaryRegistrationBean.getApplicantAccountNo());
+            values.put(KEY_APPLICANT_IFSC_CODE, beneficiaryRegistrationBean.getApplicantIFSC());
+
+            // Insert Row
+            db.update(TABLE_BENEFICIARY_REGISTRATION, values, "serial_id = '" + beneficiaryRegistrationBean.getSerialId() + "'", null);
+            db.setTransactionSuccessful();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+    }
+    public void deleteBeneficiaryRegistration(String serialId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String where = "";
+        where = KEY_SERIAL_ID + "='" + serialId + "'";
+        if (CustomUtility.doesTableExist(db, TABLE_BENEFICIARY_REGISTRATION)) {
+            db.delete(TABLE_BENEFICIARY_REGISTRATION, where, null);
+        }
+    }
+    @SuppressLint("Range")
+    public ArrayList<BeneficiaryRegistrationBean> getBeneficiaryListData() {
+        BeneficiaryRegistrationBean beneficiaryRegistrationBean=new BeneficiaryRegistrationBean();
+        ArrayList<BeneficiaryRegistrationBean> list_beneficiary = new ArrayList<>();
+        list_beneficiary.clear();
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.beginTransaction();
+        try {
+            String selectQuery = "SELECT * FROM " + TABLE_BENEFICIARY_REGISTRATION ;
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            Log.e("CURSORCOUNT", "&&&&123" + cursor.getCount() + " " + selectQuery);
+            if (cursor.getCount() > 0) {
+                if (cursor.moveToFirst()) {
+                    while (!cursor.isAfterLast()) {
+                        beneficiaryRegistrationBean = new BeneficiaryRegistrationBean();
+                        beneficiaryRegistrationBean.setSerialId(cursor.getString(cursor.getColumnIndex(KEY_SERIAL_ID)));
+                        beneficiaryRegistrationBean.setFamilyId(cursor.getString(cursor.getColumnIndex(KEY_FAMILY_ID)));
+                        beneficiaryRegistrationBean.setBeneficiaryFormApplicantName(cursor.getString(cursor.getColumnIndex(KEY_APPLICANT_NAME)));
+                        beneficiaryRegistrationBean.setApplicantFatherName(cursor.getString(cursor.getColumnIndex(KEY_APPLICANT_FATHER_NAME)));
+                        beneficiaryRegistrationBean.setApplicantMobile(cursor.getString(cursor.getColumnIndex(KEY_APPLICANT_MOBILE_NO)));
+                        beneficiaryRegistrationBean.setApplicantVillage(cursor.getString(cursor.getColumnIndex(KEY_APPLICANT_VILLAGE)));
+                        beneficiaryRegistrationBean.setApplicantBlock(cursor.getString(cursor.getColumnIndex(KEY_APPLICANT_BLOCK)));
+                        beneficiaryRegistrationBean.setApplicantTehsil(cursor.getString(cursor.getColumnIndex(KEY_APPLICANT_TEHSIL)));
+                        beneficiaryRegistrationBean.setApplicantDistrict(cursor.getString(cursor.getColumnIndex(KEY_APPLICANT_DISTRICT)));
+                        beneficiaryRegistrationBean.setPumpCapacity(cursor.getString(cursor.getColumnIndex(KEY_PUMP_CAPACITY)));
+                        beneficiaryRegistrationBean.setPumpAcDc(cursor.getString(cursor.getColumnIndex(KEY_PUMP_AC_DC)));
+                        beneficiaryRegistrationBean.setPumpType(cursor.getString(cursor.getColumnIndex(KEY_PUMP_TYPE)));
+                        beneficiaryRegistrationBean.setControllerType(cursor.getString(cursor.getColumnIndex(KEY_CONTROLLER_TYPE)));
+                        beneficiaryRegistrationBean.setApplicantAccountNo(cursor.getString(cursor.getColumnIndex(KEY_APPLICANT_ACCOUNT_NO)));
+                        beneficiaryRegistrationBean.setApplicantIFSC(cursor.getString(cursor.getColumnIndex(KEY_APPLICANT_IFSC_CODE)));
+
+                        list_beneficiary.add(beneficiaryRegistrationBean);
+                        cursor.moveToNext();
+                    }
+                }
+                db.setTransactionSuccessful();
+            }
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        } finally {
+            closeDb(db);
+        }
+        return list_beneficiary;
+    }
 }
