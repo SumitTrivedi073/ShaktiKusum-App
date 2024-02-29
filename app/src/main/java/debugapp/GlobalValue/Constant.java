@@ -50,4 +50,7 @@ public class Constant {
     public static String InstallationCompData = "InstallationCompData";
 
     public static String deviceStatus = "DeviceStatus";
+    public static String partialDamage = "Partial Damage";
+    public static String ok = "OK";
+    public static String not_ok = "NOT OK";
 }

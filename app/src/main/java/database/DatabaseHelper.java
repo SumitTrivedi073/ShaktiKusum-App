@@ -31,6 +31,7 @@ import bean.SiteAuditListBean;
 import bean.SubmitOfflineDataInput;
 import bean.SurveyBean;
 import bean.SurveyListBean;
+import bean.unloadingDataBean;
 import utility.CustomUtility;
 
 
@@ -61,6 +62,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_REJECTED_INSTALLATION_IMAGE_DATA = "tbl_rejectinstallation_image_data";
 
     public static final String TABLE_UNLOADING_IMAGE_DATA = "tbl_unloading_image_data";
+    public static final String TABLE_UNLOADING_FORM_DATA = "tbl_unloading_form_data";
     public static final String TABLE_AUDIT_PUMP_DATA = "tbl_audit_pump_data";
     public static final String TABLE_SURVEY_PUMP_DATA = "tbl_survey_pump_data";
     public static final String TABLE_SIM_REPLACMENT_DATA = "tbl_sim_card_replacement";
@@ -258,6 +260,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String KEY_UNLOADING_ID = "unloadingId", KEY_UNLOADING_NAME = "unloadingImageName", KEY_UNLOADING_PATH = "unloadingPath", KEY_UNLOADING_IMAGE_SELECTED = "unloadingImageSelected", KEY_UNLOADING_BILL_NO = "unloadingBillNo";
 
+    public static final String KEY_MODULE_QTY="unloading_Module_Qty", KEY_MODULE_VALUES="unloading_module_values", KEY_PUMP_SERIAL_NO="unloading_Pump_Serial_no", KEY_MOTOR_SERIAL_NO="unloading_Motor_Serial_no", KEY_CONTROLLER_SERIAL_NO="unloading_Controlling_Serial_no",KEY_MATERIAL_STATUS="unloading_Material_status", KEY_UNLOADING_REAMRK="unloading_Remark";
     public static final String KEY_PROJEDCT_NO = "project_no";
     public static final String KEY_USER_ID_ = "userid";
     public static final String KEY_PROJECT_LOGIN_NO = "project_login_no";
@@ -805,6 +808,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_UNLOADING_IMAGES = "CREATE TABLE "
             + TABLE_UNLOADING_IMAGE_DATA + "(" + KEY_UNLOADING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," + KEY_UNLOADING_NAME + " TEXT," + KEY_UNLOADING_PATH + " TEXT," + KEY_UNLOADING_IMAGE_SELECTED + " TEXT," + KEY_UNLOADING_BILL_NO + " TEXT)";
 
+    private static final String CREATE_TABLE_UNLOADING_FORM_DATA = "CREATE TABLE "
+            + TABLE_UNLOADING_FORM_DATA + "(" + KEY_UNLOADING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," +KEY_BILL_NO+ " TEXT, " + KEY_MODULE_QTY+ " TEXT, " +KEY_MODULE_VALUES+" TEXT, "+KEY_PUMP_SERIAL_NO+" TEXT, "+KEY_MOTOR_SERIAL_NO+" TEXT, "+KEY_CONTROLLER_SERIAL_NO+" TEXT, "+KEY_MATERIAL_STATUS+" TEXT, "+KEY_UNLOADING_REAMRK+" TEXT)";
 
     private static final String CREATE_TABLE_AUDIT_PUMP = "CREATE TABLE "
             + TABLE_AUDIT_PUMP_DATA + "("
@@ -1204,6 +1209,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_SITE_AUDIT_IMAGES);
         db.execSQL(CREATE_TABLE_KusumCImages);
         db.execSQL(CREATE_TABLE_UNLOADING_IMAGES);
+        db.execSQL(CREATE_TABLE_UNLOADING_FORM_DATA);
     }
 
     @Override
@@ -1234,6 +1240,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_SITE_AUDIT);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_KusumCImages);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_UNLOADING_IMAGE_DATA);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_UNLOADING_FORM_DATA);
             // create newworkorder tables
             onCreate(db);
         }
@@ -3162,6 +3169,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return list_document;
     }
+    @SuppressLint("Range")
+    public ArrayList<unloadingDataBean> getUnloadingData(String billno) {
+        unloadingDataBean unloadingBean = new unloadingDataBean();
+        ArrayList<unloadingDataBean> list_document = new ArrayList<>();
+        list_document.clear();
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.beginTransaction();
+        try {
+            String selectQuery = "SELECT * FROM " + TABLE_UNLOADING_FORM_DATA + " WHERE " + KEY_BILL_NO + " = '" + billno + "'";
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            Log.e("CURSORCOUNT", "&&&&123" + cursor.getCount() + " " + selectQuery);
+            if (cursor.getCount() > 0) {
+                if (cursor.moveToFirst()) {
+                    while (!cursor.isAfterLast()) {
+                        unloadingBean = new unloadingDataBean();
+                        unloadingBean.setPanel_module_qty(cursor.getString(cursor.getColumnIndex(KEY_MODULE_QTY)));
+                        unloadingBean.setPanel_values(cursor.getString(cursor.getColumnIndex(KEY_MODULE_VALUES)));
+                        unloadingBean.setPump_serial_no(cursor.getString(cursor.getColumnIndex(KEY_PUMP_SERIAL_NO)));
+                        unloadingBean.setMotor_serial_no(cursor.getString(cursor.getColumnIndex(KEY_MOTOR_SERIAL_NO)));
+                        unloadingBean.setController_serial_no(cursor.getString(cursor.getColumnIndex(KEY_CONTROLLER_SERIAL_NO)));
+                        unloadingBean.setMaterial_status(cursor.getString(cursor.getColumnIndex(KEY_MATERIAL_STATUS)));
+                        unloadingBean.setRemark(cursor.getString(cursor.getColumnIndex(KEY_UNLOADING_REAMRK)));
+                        unloadingBean.setBill_no(cursor.getString(cursor.getColumnIndex(KEY_BILL_NO)));
+                        list_document.add(unloadingBean);
+                        cursor.moveToNext();
+                    }
+                }
+                db.setTransactionSuccessful();
+            }
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        } finally {
+            closeDb(db);
+        }
+        return list_document;
+    }
 
     @SuppressLint("Range")
     public ArrayList<InstallationOfflineBean> getInstallationOfflineListData(String userid) {
@@ -3808,6 +3851,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void deleteUnloadingFormData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if (CustomUtility.doesTableExist(db, TABLE_UNLOADING_FORM_DATA)) {
+            db.delete(TABLE_UNLOADING_FORM_DATA, null, null);
+        }
+    }
+
     @SuppressLint("Range")
     public InstallationBean getInstallationData(String user_id, String bill_no) {
         InstallationBean installationBean = new InstallationBean();
@@ -4271,6 +4321,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return icount > 0;
     }
 
+
+
     public void insertRejectedInstallationImage(String name, String path, boolean isSelected, String billNo, String latitude, String longitude, int position) {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -4528,6 +4580,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(KEY_UNLOADING_IMAGE_SELECTED, isSelected);
         contentValues.put(KEY_UNLOADING_BILL_NO, billNo);
         database.insert(TABLE_UNLOADING_IMAGE_DATA, null, contentValues);
+        database.close();
+    }
+
+    public void insertUnloadingFormData(unloadingDataBean unloadingBean) {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_MODULE_QTY, unloadingBean.getPanel_module_qty());
+        contentValues.put(KEY_MODULE_VALUES, unloadingBean.getPanel_values());
+        contentValues.put(KEY_PUMP_SERIAL_NO, unloadingBean.getPump_serial_no());
+        contentValues.put(KEY_MOTOR_SERIAL_NO, unloadingBean.getMotor_serial_no());
+        contentValues.put(KEY_CONTROLLER_SERIAL_NO, unloadingBean.getController_serial_no());
+        contentValues.put(KEY_MATERIAL_STATUS, unloadingBean.getMaterial_status());
+        contentValues.put(KEY_UNLOADING_REAMRK, unloadingBean.getRemark());
+        contentValues.put(KEY_BILL_NO, unloadingBean.getBill_no());
+        database.insert(TABLE_UNLOADING_FORM_DATA, null, contentValues);
         database.close();
     }
 

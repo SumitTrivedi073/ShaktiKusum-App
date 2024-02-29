@@ -67,6 +67,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
 
@@ -74,6 +75,7 @@ import adapter.ImageSelectionAdapter;
 import bean.ImageModel;
 import bean.InstallationBean;
 import bean.InstallationListBean;
+import bean.unloadingDataBean;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
 import debugapp.VerificationCodeModel;
@@ -93,6 +95,8 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     EditText remarkEdt;
     TextView inst_module_ser_no, pumpSerNo, motorSerNo, controllerSerNo;
 
+    ArrayList<unloadingDataBean> unloadingListdata;
+    DatabaseHelper db;
     ImageView pump_scanner, motor_scanner, controllerScanner;
     LinearLayout moduleOneLL;
     Button btnSave;
@@ -113,6 +117,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_unload_instreport_image);
+
         Init();
     }
 
@@ -220,17 +225,46 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         materialStatusOk = findViewById(R.id.materialStatusOk);
         materialStatusNotOk = findViewById(R.id.materialStatusNotOk);
         materialStatusDamage = findViewById(R.id.materialStatusDamage);
-
+        db=new DatabaseHelper(getApplicationContext());
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setTitle(getResources().getString(R.string.material_unloading_img));
 
+
         retriveValue();
         SetAdapter();
+        setUnloadData();
         listner();
+
     }
+
+    private void setUnloadData() {
+        unloadingListdata = db.getUnloadingData(billNo);
+        Log.e("Hellooo==>", String.valueOf(unloadingListdata.size()));
+
+        if(unloadingListdata.size()>0){
+        Log.e("module_qty===>", unloadingListdata.toString());
+        if (db.isRecordExist(db.TABLE_UNLOADING_FORM_DATA,db.KEY_BILL_NO,billNo)) {
+            unloadingListdata = db.getUnloadingData(billNo);
+            inst_module_ser_no.setText(unloadingListdata.get(0).getPanel_module_qty());
+            pumpSerNo.setText(unloadingListdata.get(0).getPump_serial_no());
+            motorSerNo.setText(unloadingListdata.get(0).getMotor_serial_no());
+            controllerSerNo.setText(unloadingListdata.get(0).getController_serial_no());
+            remarkEdt.setText(unloadingListdata.get(0).getRemark());
+            Log.e("materialStatus==>",unloadingListdata.get(0).getMaterial_status());
+            if(unloadingListdata.get(0).getMaterial_status().equals(Constant.partialDamage)) {
+                materialStatusDamage.setChecked(true);
+            } else if (unloadingListdata.get(0).getMaterial_status().equals(Constant.ok)) {
+                materialStatusOk.setChecked(true);
+            } else if (unloadingListdata.get(0).getMaterial_status().equals(Constant.not_ok)) {
+                materialStatusNotOk.setChecked(true);
+            }
+        }
+        }
+    }
+
 
     private void retriveValue() {
         Bundle bundle = getIntent().getExtras();
@@ -310,16 +344,17 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                     }
 
                     if (CustomUtility.isInternetOn(getApplicationContext())) {
-                        if (isSubmit) {
-                            if (pumpSerNo.getText().toString().trim().isEmpty() || !pumpSerNo.getText().toString().trim().equals(installationListBean.getPump_ser().trim())) {
-                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctPumpSr) +" "+ installationListBean.getPump_ser().trim());
-                            } else if (motorSerNo.getText().toString().trim().isEmpty() || !motorSerNo.getText().toString().trim().equals(installationListBean.getMotor_ser().trim())) {
-                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctMotorSr)+" "+ installationListBean.getMotor_ser().trim());
-                            } else if (controllerSerNo.getText().toString().trim().isEmpty() || !controllerSerNo.getText().toString().trim().equals(installationListBean.getController_ser().trim())) {
-                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctControllerSr)+" "+ installationListBean.getController_ser().trim());
-                            }else if (remarkEdt.getText().toString().trim().isEmpty()) {
-                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
-                            }else {
+//                        if (isSubmit) {
+//                            if (pumpSerNo.getText().toString().trim().isEmpty() || !pumpSerNo.getText().toString().trim().equals(installationListBean.getPump_ser().trim())) {
+//                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctPumpSr) +" "+ installationListBean.getPump_ser().trim());
+//                            } else if (motorSerNo.getText().toString().trim().isEmpty() || !motorSerNo.getText().toString().trim().equals(installationListBean.getMotor_ser().trim())) {
+//                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctMotorSr)+" "+ installationListBean.getMotor_ser().trim());
+//                            } else if (controllerSerNo.getText().toString().trim().isEmpty() || !controllerSerNo.getText().toString().trim().equals(installationListBean.getController_ser().trim())) {
+//                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctControllerSr)+" "+ installationListBean.getController_ser().trim());
+//                            }else if (remarkEdt.getText().toString().trim().isEmpty()) {
+//                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
+//                            }else
+                            {
                                 if(materialStatusOk.isChecked()){
                                     unloadingMaterialStatus = materialStatusOk.getText().toString();
                                 }
@@ -361,9 +396,10 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
+                                saveDataLocally();
 //                               new SyncInstallationData(ja_invc_data).execute();
                             }
-                        }
+//                        }
                     } else {
                         CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection), getApplicationContext());
                     }
@@ -398,6 +434,30 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                 startScanner(3000);
             }
         });
+    }
+
+    private void saveDataLocally() {
+        unloadingDataBean unloadingBean=new unloadingDataBean(
+                inst_module_ser_no.getText().toString(),
+                noOfModules,
+                pumpSerNo.getText().toString(),
+                motorSerNo.getText().toString(),
+                controllerSerNo.getText().toString(),
+                unloadingMaterialStatus,
+                remarkEdt.getText().toString(),
+                billNo
+        );
+        Log.e("Billno==>",billNo);
+        Log.e("noOfModules",noOfModules);
+        Log.e("unloadingBean==>", unloadingBean.getPanel_module_qty());
+        Log.e("unloadingBean==>", unloadingBean.getPanel_values());
+        Log.e("unloadingBean==>", unloadingBean.getPump_serial_no());
+        Log.e("unloadingBean==>", unloadingBean.getMotor_serial_no());
+        Log.e("unloadingBean==>", unloadingBean.getMaterial_status());
+        db.insertUnloadingFormData(unloadingBean);
+        ArrayList<unloadingDataBean> unload= new ArrayList<>();
+        unload=db.getUnloadingData(billNo);
+        Log.e("unload==>", String.valueOf(unload.size()));
     }
 
     @Override
