@@ -350,16 +350,16 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
                     }
 
-                    if (CustomUtility.isInternetOn(getApplicationContext())) {
+
                         if (isSubmit) {
                             Log.e("pumprSERNO==>",pumpSerNo.getText().toString().trim());
-                            Log.e("installationListBean==>",installationListBean.getPump_ser());
-                            if (pumpSerNo.getText().toString().trim().isEmpty() || !pumpSerNo.getText().toString().trim().equals(installationListBean.getPump_ser().trim())) {
-                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctPumpSr) +" "+ installationListBean.getPump_ser().trim());
-                            } else if (motorSerNo.getText().toString().trim().isEmpty() || !motorSerNo.getText().toString().trim().equals(installationListBean.getMotor_ser().trim())) {
-                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctMotorSr)+" "+ installationListBean.getMotor_ser().trim());
-                            } else if (controllerSerNo.getText().toString().trim().isEmpty() || !controllerSerNo.getText().toString().trim().equals(installationListBean.getController_ser().trim())) {
-                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctControllerSr)+" "+ installationListBean.getController_ser().trim());
+                        Log.e("installationListBean==>",installationListBean.getPump());
+                            if (pumpSerNo.getText().toString().trim().isEmpty() || !pumpSerNo.getText().toString().trim().equals(installationListBean.getPump().trim())) {
+                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctPumpSr) +" "+ installationListBean.getPump().trim());
+                            } else if (motorSerNo.getText().toString().trim().isEmpty() || !motorSerNo.getText().toString().trim().equals(installationListBean.getMotor().trim())) {
+                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctMotorSr)+" "+ installationListBean.getMotor().trim());
+                            } else if (controllerSerNo.getText().toString().trim().isEmpty() || !controllerSerNo.getText().toString().trim().equals(installationListBean.getController().trim())) {
+                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctControllerSr)+" "+ installationListBean.getController().trim());
                             }else if (remarkEdt.getText().toString().trim().isEmpty()) {
                                 CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
                             }else
@@ -405,16 +405,20 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                saveDataLocally();
-//                               new SyncInstallationData(ja_invc_data).execute();
+
+                                if (CustomUtility.isInternetOn(getApplicationContext())) {
+                                    saveDataLocally();
+                                    new SyncInstallationData(ja_invc_data).execute();
+
+                                } else {
+                                    saveDataLocally();
+                                    CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection), getApplicationContext());
+                                    CustomUtility.ShowToast(getResources().getString(R.string.savedInLocalDatabase), getApplicationContext());
+                                    finish();
+                                }
+
                             }
                         }
-                    } else {
-                        saveDataLocally();
-                        CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection), getApplicationContext());
-                        CustomUtility.ShowToast(getResources().getString(R.string.savedInLocalDatabase), getApplicationContext());
-                        finish();
-                    }
 
 
                 }
@@ -461,12 +465,23 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         );
         Log.e("Billno==>",billNo);
         Log.e("noOfModules",noOfModules);
+        Log.e("unloadingMaterialStatus",unloadingMaterialStatus);
         Log.e("unloadingBean==>", unloadingBean.getPanel_module_qty());
         Log.e("unloadingBean==>", unloadingBean.getPanel_values());
         Log.e("unloadingBean==>", unloadingBean.getPump_serial_no());
         Log.e("unloadingBean==>", unloadingBean.getMotor_serial_no());
         Log.e("unloadingBean==>", unloadingBean.getMaterial_status());
-        db.insertUnloadingFormData(unloadingBean);
+
+
+        if(db.isRecordExist(db.TABLE_UNLOADING_FORM_DATA, db.KEY_BILL_NO, unloadingBean.getBill_no())){
+            db.updateUnloadingForm(unloadingBean);
+        }else{
+            db.insertUnloadingFormData(unloadingBean);
+        }
+
+
+
+
         ArrayList<unloadingDataBean> unload= new ArrayList<>();
         unload=db.getUnloadingData(billNo);
         Log.e("unload==>", String.valueOf(unload.size()));

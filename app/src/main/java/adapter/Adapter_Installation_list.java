@@ -94,7 +94,7 @@ public class Adapter_Installation_list extends RecyclerView.Adapter<Adapter_Inst
             holder.cardView.setOnClickListener(view -> {
                     if (WebURL.CHECK_DATA_UNOLAD == 0) {
                         WebURL.mSettingCheckValue = "0";
-                        Log.e("sync==>",responseList.get(position).getSync()) ;
+
                     if (responseList.get(position).getSync().equalsIgnoreCase("X")) {
                             Toast.makeText(context, "Installation Already Completed...", Toast.LENGTH_SHORT).show();
                         } else {

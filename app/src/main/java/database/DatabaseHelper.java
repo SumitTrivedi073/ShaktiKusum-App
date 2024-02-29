@@ -4843,6 +4843,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+        public void updateUnloadingForm(unloadingDataBean unloadingBean) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+            contentValues.put(KEY_MODULE_QTY, unloadingBean.getPanel_module_qty());
+            contentValues.put(KEY_MODULE_VALUES, unloadingBean.getPanel_values());
+            contentValues.put(KEY_PUMP_SERIAL_NO, unloadingBean.getPump_serial_no());
+            contentValues.put(KEY_MOTOR_SERIAL_NO, unloadingBean.getMotor_serial_no());
+            contentValues.put(KEY_CONTROLLER_SERIAL_NO, unloadingBean.getController_serial_no());
+            contentValues.put(KEY_MATERIAL_STATUS, unloadingBean.getMaterial_status());
+            contentValues.put(KEY_UNLOADING_REAMRK, unloadingBean.getRemark());
+            contentValues.put(KEY_BILL_NO, unloadingBean.getBill_no());
+        // update Row
+        db.update(TABLE_UNLOADING_FORM_DATA, contentValues, KEY_BILL_NO + "= '" + unloadingBean.getBill_no() + "'", null);
+        db.close();
+    }
+
+
+
     public ArrayList<ImageModel> getAllUnloadingImages() {
         ArrayList<ImageModel> UnloadingImages = new ArrayList<ImageModel>();
         SQLiteDatabase database = this.getWritableDatabase();
