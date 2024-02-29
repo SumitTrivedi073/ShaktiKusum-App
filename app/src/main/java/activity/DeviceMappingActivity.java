@@ -102,7 +102,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     InstallationBean installationBean;
 
     String billNo = "", beneficiaryNo = "", contactNo = "", hp = "", regisNo = "",
-            controllerSerialNo = "7F-0135-0-13-06-23-0", customerName = "", customerMobile = "", latitude = "", longitude = "";
+            controllerSerialNo = "", customerName = "", customerMobile = "", latitude = "", longitude = "";
 
     int selectedIndex;
     boolean isUpdate = false;
@@ -185,7 +185,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
             contactNo = deviceShiftingData.getContactNo();
             hp = deviceShiftingData.getHp();
             regisNo = deviceShiftingData.getRegisno();
-         //   controllerSerialNo = deviceShiftingData.getControllerSernr() + "-0";
+            controllerSerialNo = deviceShiftingData.getControllerSernr() + "-0";
             customerName = deviceShiftingData.getCustomerName();
             customerMobile = deviceShiftingData.getContactNo();
 
