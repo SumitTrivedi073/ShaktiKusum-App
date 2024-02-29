@@ -65,6 +65,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -241,6 +242,9 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     }
 
     private void setUnloadData() {
+        String panel_Value;
+        List<String> PanelList=new ArrayList<>();
+
         unloadingListdata = db.getUnloadingData(billNo);
         Log.e("Hellooo==>", String.valueOf(unloadingListdata.size()));
 
@@ -261,6 +265,9 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             } else if (unloadingListdata.get(0).getMaterial_status().equals(Constant.not_ok)) {
                 materialStatusNotOk.setChecked(true);
             }
+            no_of_module_value=unloadingListdata.get(0).getPanel_values();
+            ViewInflate(Integer.parseInt(unloadingListdata.get(0).getPanel_module_qty()));
+
         }
         }
     }
@@ -344,16 +351,18 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                     }
 
                     if (CustomUtility.isInternetOn(getApplicationContext())) {
-//                        if (isSubmit) {
-//                            if (pumpSerNo.getText().toString().trim().isEmpty() || !pumpSerNo.getText().toString().trim().equals(installationListBean.getPump_ser().trim())) {
-//                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctPumpSr) +" "+ installationListBean.getPump_ser().trim());
-//                            } else if (motorSerNo.getText().toString().trim().isEmpty() || !motorSerNo.getText().toString().trim().equals(installationListBean.getMotor_ser().trim())) {
-//                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctMotorSr)+" "+ installationListBean.getMotor_ser().trim());
-//                            } else if (controllerSerNo.getText().toString().trim().isEmpty() || !controllerSerNo.getText().toString().trim().equals(installationListBean.getController_ser().trim())) {
-//                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctControllerSr)+" "+ installationListBean.getController_ser().trim());
-//                            }else if (remarkEdt.getText().toString().trim().isEmpty()) {
-//                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
-//                            }else
+                        if (isSubmit) {
+                            Log.e("pumprSERNO==>",pumpSerNo.getText().toString().trim());
+                            Log.e("installationListBean==>",installationListBean.getPump_ser());
+                            if (pumpSerNo.getText().toString().trim().isEmpty() || !pumpSerNo.getText().toString().trim().equals(installationListBean.getPump_ser().trim())) {
+                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctPumpSr) +" "+ installationListBean.getPump_ser().trim());
+                            } else if (motorSerNo.getText().toString().trim().isEmpty() || !motorSerNo.getText().toString().trim().equals(installationListBean.getMotor_ser().trim())) {
+                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctMotorSr)+" "+ installationListBean.getMotor_ser().trim());
+                            } else if (controllerSerNo.getText().toString().trim().isEmpty() || !controllerSerNo.getText().toString().trim().equals(installationListBean.getController_ser().trim())) {
+                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctControllerSr)+" "+ installationListBean.getController_ser().trim());
+                            }else if (remarkEdt.getText().toString().trim().isEmpty()) {
+                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
+                            }else
                             {
                                 if(materialStatusOk.isChecked()){
                                     unloadingMaterialStatus = materialStatusOk.getText().toString();
@@ -399,9 +408,12 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                                 saveDataLocally();
 //                               new SyncInstallationData(ja_invc_data).execute();
                             }
-//                        }
+                        }
                     } else {
+                        saveDataLocally();
                         CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection), getApplicationContext());
+                        CustomUtility.ShowToast(getResources().getString(R.string.savedInLocalDatabase), getApplicationContext());
+                        finish();
                     }
 
 
@@ -752,12 +764,13 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                         if (invc_done.equalsIgnoreCase("Y")) {
 
                             databaseHelper.deleteUnloadingImages(billNo);
+                            db.deleteUnloadingForm(billNo);
+
                             showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
                             WebURL.CHECK_DATA_UNOLAD = 0;
 
                             Random random = new Random();
                             String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
-
                             runOnUiThread(() -> {
                                 if (CustomUtility.isValidMobile(custMobile)) {
 

@@ -68,7 +68,7 @@ public class UnloadList extends BaseActivity {
         if (CustomUtility.isInternetOn(getApplicationContext())) {
             recyclerView.setAdapter(null);
             db.deleteUnloadInstallationListData();
-            WebURL.CHECK_DATA_UNOLAD = 0;
+            WebURL.CHECK_DATA_UNOLAD = 1;
             new GetInstallationDataList_Unload().execute();
         } else {
             getValueFromDatabase();
@@ -90,10 +90,11 @@ public class UnloadList extends BaseActivity {
                 lin2.setVisibility(View.GONE);
                 recyclerView.setAdapter(null);
                 Log.e("SIZE", "&&&&" + installationBeans.size());
+                Log.e("pumpserno====>",installationBeans.get(3).getPump());
                 adapterInstallationList = new Adapter_Installation_list(context, installationBeans);
                 recyclerView.setAdapter(adapterInstallationList);
                 adapterInstallationList.notifyDataSetChanged();
-                WebURL.CHECK_DATA_UNOLAD = 0;
+                WebURL.CHECK_DATA_UNOLAD = 1;
             } else {
                 lin1.setVisibility(View.GONE);
                 lin2.setVisibility(View.VISIBLE);
@@ -157,7 +158,7 @@ public class UnloadList extends BaseActivity {
                 if (CustomUtility.isInternetOn(getApplicationContext())) {
                     recyclerView.setAdapter(null);
                     db.deleteUnloadInstallationListData();
-                    WebURL.CHECK_DATA_UNOLAD = 0;
+                    WebURL.CHECK_DATA_UNOLAD = 1;
                     new GetInstallationDataList_Unload().execute();
                 } else {
                     Toast.makeText(getApplicationContext(), "No internet Connection....", Toast.LENGTH_SHORT).show();
@@ -336,7 +337,7 @@ public class UnloadList extends BaseActivity {
                 adapterInstallationList = new Adapter_Installation_list(context, installationBeans);
                 recyclerView.setAdapter(adapterInstallationList);
                 adapterInstallationList.notifyDataSetChanged();
-                WebURL.CHECK_DATA_UNOLAD = 0;
+                WebURL.CHECK_DATA_UNOLAD = 1;
             } else {
                 lin1.setVisibility(View.GONE);
                 lin2.setVisibility(View.VISIBLE);

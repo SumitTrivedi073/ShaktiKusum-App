@@ -4732,6 +4732,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.delete(TABLE_UNLOADING_IMAGE_DATA, where, null);
         }
     }
+    public void deleteUnloadingForm(String billNo) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String where = "";
+        where = KEY_BILL_NO + "='" + billNo + "'";
+        if (CustomUtility.doesTableExist(db, TABLE_UNLOADING_FORM_DATA)) {
+            db.delete(TABLE_UNLOADING_FORM_DATA, where, null);
+        }
+    }
+
 
     public ArrayList<ImageModel> getAllInstallationImages() {
         ArrayList<ImageModel> installationImages = new ArrayList<ImageModel>();

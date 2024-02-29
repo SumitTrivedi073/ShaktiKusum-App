@@ -282,6 +282,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 dataHelper.deleteInstallationImages();
                 dataHelper.deleteSiteAuditImages();
                 dataHelper.deleteUnloadingImages();
+                dataHelper.deleteUnloadingFormData();
+                dataHelper.deleteUnloadInstallationListData();
                 dataHelper.deletekusumCImages();
                 dataHelper.deleteKusumCSurveyFrom();
                 CustomUtility.clearSharedPrefrences(context);
