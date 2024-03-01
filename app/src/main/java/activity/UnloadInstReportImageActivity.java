@@ -339,7 +339,6 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                                 JSONArray ja_invc_data = new JSONArray();
                                 JSONObject jsonObj = new JSONObject();
                                 try {
-                                    SimpleDateFormat dt = new SimpleDateFormat("dd.MM.yyyy");
                                     jsonObj.put("userid", userID);
                                     jsonObj.put("vbeln", billNo);
                                     jsonObj.put("project_no", projectNo);
@@ -703,7 +702,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
                             databaseHelper.deleteUnloadingImages(billNo);
                             showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
-                            WebURL.CHECK_DATA_UNOLAD = 0;
+                            WebURL.CHECK_DATA_UNOLAD = 1;
 
                             Random random = new Random();
                             String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
