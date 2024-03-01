@@ -384,8 +384,11 @@ public class CustomUtility {
         return ""+release;
     }
 
-    public static File saveFile(Bitmap bitmap, String type, String name) {
-        File file = new File(getMediaFilePath(type,name));
+    public static File saveFile(Bitmap bitmap, String name, String folder) {
+
+        String firstname = CustomUtility.getUserFirstName(name);
+        Log.e("fname=====>",firstname);
+        File file = new File(getMediaFilePath(folder,firstname));
         try {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(file));
         } catch (FileNotFoundException e) {
@@ -394,11 +397,13 @@ public class CustomUtility {
         return file;
     }
 
-    public static String getMediaFilePath(String type, String name) {
+    public static String getMediaFilePath(String folder, String name) {
+
+
 
         File root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Shakti Kusum App");
 
-        File dir = new File(root.getAbsolutePath() + "/"+name+"/" + type); //it is my root directory
+        File dir = new File(root.getAbsolutePath() + "/"+folder+"/" + name); //it is my root directory
 
         try {
             if (!dir.exists()) {
@@ -419,5 +424,24 @@ public class CustomUtility {
         androidId = "" + android.provider.Settings.Secure.getString(mContext.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
 
         return androidId;
+    }
+
+    public static String getUserFirstName(String fullname){
+        String firstName;
+        String[] fullNameArray = fullname.split("\\s+");
+        if(fullNameArray.length>1) {
+            StringBuilder firstNameBuilder = new StringBuilder();
+            for (int i = 0; i < fullNameArray.length - 1; i++) {
+                firstNameBuilder.append(fullNameArray[i]);
+                if(i != fullNameArray.length - 2){
+                    firstNameBuilder.append(" ");
+                }
+            }
+            firstName = firstNameBuilder.toString();
+        }
+        else{
+            firstName = fullNameArray[0];
+        }
+        return firstName;
     }
 }

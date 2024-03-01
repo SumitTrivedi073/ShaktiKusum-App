@@ -312,7 +312,11 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     }
 
     public static File saveFile(Bitmap bitmap,  String name) {
-        File file = new File(getMediaFilePath(name));
+
+        String firstname = CustomUtility.getUserFirstName(name);
+        Log.e("fname=====>",firstname);
+
+        File file = new File(getMediaFilePath(firstname));
         try {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(file));
         } catch (FileNotFoundException e) {
@@ -333,11 +337,11 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         super.onPointerCaptureChanged(hasCapture);
     }
 
-    public static String getMediaFilePath( String name) {
+    public static String getMediaFilePath( String fname) {
 
         File root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), GALLERY_DIRECTORY_NAME_COMMON);
 
-        File dir = new File(root.getAbsolutePath() + "/Images/" + name); //it is my root directory
+        File dir = new File(root.getAbsolutePath() + "/Images/" + fname.trim()); //it is my root directory
 
         try {
             if (!dir.exists()) {

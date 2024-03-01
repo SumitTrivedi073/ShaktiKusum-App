@@ -381,7 +381,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
                         if (result.getData() != null && result.getData().getExtras() != null) {
 
                             Bundle bundle = result.getData().getExtras();
-                            Log.e("bundle====>", bundle.get("data").toString()+"latitude=====>"+latitude+"longitude========>"+longitude);
+                           // Log.e("bundle====>", bundle.get("data").toString()+"latitude=====>"+latitude+"longitude========>"+longitude);
                             if(!bundle.get("latitude").toString().isEmpty() && !bundle.get("longitude").toString().isEmpty()) {
                                 UpdateArrayList(bundle.get("data").toString(), "0", bundle.get("latitude").toString(), bundle.get("longitude").toString());
                             }else {
