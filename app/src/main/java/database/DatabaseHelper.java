@@ -166,6 +166,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_SOLAR_PANEL_WATT = "solarpanelwatt";
     public static final String KEY_SOLAR_PANEL_STAND_INSTALL_QTY = "solarpanelinstallqty";
     public static final String KEY_HP = "hp";
+    public static final String KEY_PUMPLoad = "pumpLoad";
     public static final String KEY_TOTAL_WATT = "totalwatt";
     public static final String KEY_PANEL_MODULE_QTY = "panelmoduleqty";
     public static final String KEY_PANEL_MODULE_SER_NO = "panelmoduleserialno";
@@ -779,7 +780,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_PHOTO8 + " BLOB," + KEY_PHOTO9 + " BLOB," + KEY_PHOTO10 + " BLOB," + KEY_PHOTO11 + " BLOB," + KEY_PHOTO12 + " BLOB,"
             + KEY_ADD1 + " TEXT," + KEY_ADD2 + " TEXT," + KEY_ADD3 + " TEXT," + KEY_ADD4 + " TEXT," + KEY_ADD5 + " TEXT,"
             + KEY_ADD6 + " TEXT," + KEY_ADD7 + " TEXT," + KEY_ADD8 + " TEXT," + KEY_ADD9 + " TEXT," + KEY_ADD10 + " TEXT,"
-            + KEY_ADD11 + " TEXT," + KEY_ADD12 + " TEXT," + KEY_ADD13 + " TEXT," + KEY_ADD14 + " TEXT," + KEY_ADD15 + " TEXT," + KEY_ADD16 + " TEXT," + KEY_BENEFICIARY_NO + " TEXT)";
+            + KEY_ADD11 + " TEXT," + KEY_ADD12 + " TEXT," + KEY_ADD13 + " TEXT," + KEY_ADD14 + " TEXT," + KEY_ADD15 + " TEXT," + KEY_ADD16 + " TEXT," + KEY_BENEFICIARY_NO + " TEXT," + KEY_PUMPLoad + " TEXT)";
 
 
     private static final String CREATE_TABLE_KUSUMCSURVEYFORM = "CREATE TABLE "
@@ -998,6 +999,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_CUS_CONTACT_NO + " TEXT,"
             + KEY_PANEL_MODULE_SER_NO + " TEXT,"
             + KEY_HP + " TEXT,"
+            + KEY_PUMPLoad + " TEXT,"
             + KEY_ADD1 + " TEXT,"
             + KEY_ADD2 + " TEXT,"
             + KEY_ADD3 + " TEXT,"
@@ -1734,6 +1736,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_CUS_CONTACT_NO, installationBean.getCUS_CONTACT_NO());
             values.put(KEY_PANEL_MODULE_SER_NO, installationBean.getNoOfModule());
             values.put(KEY_HP, installationBean.getHP());
+            values.put(KEY_PUMPLoad, installationBean.getPump_load());
             long i = db.insert(TABLE_INSTALLATION_LIST, null, values);
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
@@ -2079,6 +2082,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_CUS_CONTACT_NO, installationBean.getCUS_CONTACT_NO());
             values.put(KEY_PANEL_MODULE_SER_NO, installationBean.getNoOfModule());
             values.put(KEY_HP, installationBean.getHP());
+            values.put(KEY_PUMPLoad, installationBean.getPump_load());
             where = KEY_ENQ_DOC + "='" + enqdoc + "'";
             i = db.update(TABLE_INSTALLATION_LIST, values, where, null);
             db.setTransactionSuccessful();
@@ -2360,6 +2364,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_ADD2, installationBean.getDelay_reason());
             values.put(KEY_ADD3, installationBean.getMake_ins());
             values.put(KEY_BENEFICIARY_NO, installationBean.getBeneficiaryNo());
+            values.put(KEY_PUMPLoad, installationBean.getPumpLoad());
             // Insert Row
             long i = db.insert(TABLE_INSTALLATION_PUMP_DATA, null, values);
             // Insert into database successfully.
@@ -2422,6 +2427,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_ADD2, installationBean.getDelay_reason());
             values.put(KEY_ADD3, installationBean.getMake_ins());
             values.put(KEY_BENEFICIARY_NO, installationBean.getBeneficiaryNo());
+            values.put(KEY_PUMPLoad, installationBean.getPumpLoad());
             where = KEY_BILL_NO + "='" + billno + "'";
 
             i = db.update(TABLE_INSTALLATION_PUMP_DATA, values, where, null);
@@ -3190,6 +3196,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         installationBean.setCUS_CONTACT_NO(cursor.getString(cursor.getColumnIndex(KEY_CUS_CONTACT_NO)));
                         installationBean.setNoOfModule(cursor.getString(cursor.getColumnIndex(KEY_PANEL_MODULE_SER_NO)));
                         installationBean.setHP(cursor.getString(cursor.getColumnIndex(KEY_HP)));
+                        installationBean.setPump_load(cursor.getString(cursor.getColumnIndex(KEY_PUMPLoad)));
                         list_document.add(installationBean);
                         cursor.moveToNext();
                     }
@@ -3915,6 +3922,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         installationBean.setDelay_reason(cursor.getString(cursor.getColumnIndex(KEY_ADD2)));
                         installationBean.setMake_ins(cursor.getString(cursor.getColumnIndex(KEY_ADD3)));
                         installationBean.setBeneficiaryNo(cursor.getString(cursor.getColumnIndex(KEY_BENEFICIARY_NO)));
+                        installationBean.setPumpLoad(cursor.getString(cursor.getColumnIndex(KEY_PUMPLoad)));
                         cursor.moveToNext();
                     }
                 }

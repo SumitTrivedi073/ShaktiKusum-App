@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import activity.DeptDocSubActivity;
 import activity.DeviceShiftingActivity;
 import activity.GovtOffVisitActivity;
-import activity.InstReportImageActivity;
 import activity.InstallationList;
 import activity.KusumCSurveyListActivty;
 import activity.RejectionInstallation;

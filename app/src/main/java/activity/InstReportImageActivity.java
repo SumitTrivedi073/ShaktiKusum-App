@@ -67,7 +67,8 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
 
     List<String> itemNameList = new ArrayList<>();
 
-    String customerName, enqDocno, status,latitude = "",longitude = "";
+    String customerName = "", enqDocno = "",latitude = "",longitude = "",
+            pump_sernr = "",BeneficiaryNo = "",PumpLoad ="";
 
     Toolbar mToolbar;
 
@@ -180,13 +181,20 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setTitle(getResources().getString(R.string.installationImg));
 
-        Bundle bundle = getIntent().getExtras();
-        customerName = bundle.getString("cust_name");
-        enqDocno = bundle.getString("inst_id");
-        status = bundle.getString("delay_status");
-
+        retrieveValue();
         SetAdapter();
         listner();
+    }
+
+    private void retrieveValue() {
+
+        if(getIntent().getExtras()!=null) {
+            customerName = getIntent().getStringExtra("cust_name");
+            enqDocno = getIntent().getStringExtra("inst_id");
+            BeneficiaryNo = getIntent().getStringExtra("BeneficiaryNo");
+            pump_sernr = getIntent().getStringExtra("pump_sernr");
+            PumpLoad = getIntent().getStringExtra("PumpLoad");
+        }
     }
 
 
@@ -368,7 +376,9 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
     private void cameraIntent() {
 
         camraLauncher.launch(new Intent(InstReportImageActivity.this, CameraActivity2.class)
-                .putExtra("cust_name", customerName));
+                .putExtra("cust_name", customerName)
+                .putExtra("BeneficiaryNo", BeneficiaryNo)
+                .putExtra("pump_sernr", pump_sernr).putExtra("PumpLoad",PumpLoad));
 
     }
 

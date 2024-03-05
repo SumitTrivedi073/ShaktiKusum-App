@@ -35,7 +35,7 @@ public class UnloadList extends BaseActivity {
     public String bill_no = "", gst_bill_no = "", bill_date = "", disp_date = "", kunnr = "", name = ""
             , fathname = "", state = "", state_txt = "", district = "", district_txt = "", address = ""
             , contactno = "", controller = "", motor = "", simno = "", pump = "", regisno = "", projectno = ""
-            , loginno = "", module_qty = "", sync = "", CONTACT_NO = "",inst_no_of_module_value="",HP, simha2 = ""
+            , loginno = "", module_qty = "", sync = "", CONTACT_NO = "",inst_no_of_module_value="",HP="", simha2 = "",pumpLoad =""
             , set_matno = "", village = "", tehsil = "",beneficiary = "",pump_ser,motor_ser,controller_ser,
             version;
     Context context;
@@ -183,10 +183,12 @@ public class UnloadList extends BaseActivity {
                         motor_ser = jo.getString("motor_sernr");
                         controller_ser = jo.getString("controller_sernr");
                         HP = jo.getString("hp");
+                        pumpLoad = jo.getString("pump_load");
+
                         installationBean = new InstallationListBean(bill_no, CustomUtility.getSharedPreferences(context, "userid"),
                                 name, fathname, bill_no, kunnr, gst_bill_no, bill_date, disp_date, state, state_txt, district, district_txt, tehsil, village,
                                 contactno, controller, motor, pump, regisno, projectno, loginno, module_qty, address, simno, beneficiary, set_matno,
-                                simha2, sync, CONTACT_NO,"",HP,pump_ser,motor_ser,controller_ser);
+                                simha2, sync, CONTACT_NO,"",HP,pump_ser,motor_ser,controller_ser,pumpLoad);
 
                         InstallationListBean installationBean = new InstallationListBean();
                         installationBean.setPernr(CustomUtility.getSharedPreferences(context, "userid"));
@@ -224,6 +226,7 @@ public class UnloadList extends BaseActivity {
                         installationBean.setPump_ser(pump_ser);
                         installationBean.setMotor_ser(motor_ser);
                         installationBean.setController_ser(controller_ser);
+                        installationBean.setPump_load(pumpLoad);
                         installationBeans.add(installationBean);
                     }
 

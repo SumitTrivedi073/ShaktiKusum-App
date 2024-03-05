@@ -116,7 +116,7 @@ public class InstallationInitial extends BaseActivity {
             village_ins = "", mobile_no_ins = "", solarpanel_wattage = "", no_of_module = "", total_watt = "", solarpanel_stand_ins_quantity = "", module_total_plate_watt = "",
             smmd_sno = "", solar_motor_model_details = "", splar_pump_model_details = "", spmd_sno = "", simcard_num = "", solar_controller_model = "", scm_sno = "", inst_latitude = "",
             inst_longitude = "", module_ser_no = "", inst_bill_no = "", inst_bill_date = "", inst_delay_reason = "", hp = "", current_date = "", simoprator_text = "", conntype_text = "", billno = "",
-            set_matno = "", simha2 = "", kunnr = "", gstbillno = "", billdate = "", dispdate = "", name = "", state = "", city = "", controller = "", motor = "", pump = "", state_txt = "",
+            set_matno = "", simha2 = "", kunnr = "", gstbillno = "", billdate = "", dispdate = "", name = "", state = "", city = "", controller = "", motor = "", pump = "", state_txt = "",PumpLoad ="",
             city_txt = "", address = "", make = "", custname = "", fathname = "", simno = "", regisno = "", projectno = "", loginno = "", moduleqty = "", mobileno = "", tehvillage = "",
             borewellstatus1 = "", DeviceStatus = "", CUS_CONTACT_NO = "", BeneficiaryNo = "", no_of_module_value = "", rmsdata_status = "", mMOBNUM_1, mMOBNUM_2, mMOBNUM_3,
              MEmpType = "null", mAppName = "KUSUM", mInstallerMOB = "", mInstallerName = "", RMS_SERVER_DOWN = "", RMS_DEBUG_EXTRN = "", DEVICE_NO, SIGNL_STREN,
@@ -218,6 +218,7 @@ public class InstallationInitial extends BaseActivity {
         moduleqty = extras.getString("moduleqty");
         CUS_CONTACT_NO = extras.getString("CUS_CONTACT_NO");
         BeneficiaryNo = extras.getString("BeneficiaryNo");
+        PumpLoad = extras.getString("PumpLoad");
         try {
             Constant.BILL_NUMBER_UNIC = billno;
             String[] custnmStr = name.split("S/O", 2);
@@ -658,7 +659,9 @@ public class InstallationInitial extends BaseActivity {
                     Intent intent = new Intent(InstallationInitial.this, InstReportImageActivity.class);
                     intent.putExtra("inst_id", bill_no.getText().toString().trim());
                     intent.putExtra("cust_name", custname);
-                    intent.putExtra("delay_status", delay);
+                    intent.putExtra("BeneficiaryNo", BeneficiaryNo);
+                    intent.putExtra("pump_sernr",pump);
+                    intent.putExtra("PumpLoad",PumpLoad);
                     startActivity(intent);
 
                 } else {
@@ -1043,7 +1046,7 @@ public class InstallationInitial extends BaseActivity {
         InstallationBean installationBean = new InstallationBean(pernr, project_no, login_no, inst_latitude, inst_longitude, inst_bill_no, installation_date, inst_bill_date,
                 inst_delay_reason, rmsdata_status, customer_name, fathname, mobileno, state, state_txt, city, city_txt, tehsil_ins, village_ins, address, make, solarpanel_wattage,
                 solarpanel_stand_ins_quantity, total_watt, hp, no_of_module, no_of_module_value, module_total_plate_watt, solar_motor_model_details, smmd_sno, splar_pump_model_details,
-                spmd_sno, solar_controller_model, scm_sno, simoprator_text, conntype_text, simcard_num, regisno, BeneficiaryNo
+                spmd_sno, solar_controller_model, scm_sno, simoprator_text, conntype_text, simcard_num, regisno, BeneficiaryNo,PumpLoad
         );
 
         if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_PUMP_DATA, DatabaseHelper.KEY_BILL_NO, inst_bill_no)) {
