@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -52,7 +52,13 @@
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme"
         android:usesCleartextTraffic="true"
-        tools:targetApi="tiramisu">
+        tools:targetApi="tiramisu" >
+        <activity
+            android:name="activity.DeviceShiftingActivity"
+            android:exported="false" />
+        <activity
+            android:name="activity.DeviceMappingActivity"
+            android:exported="false" />
         <activity
             android:name="activity.beneficiaryRegistrationForm"
             android:exported="false" />
@@ -122,11 +128,11 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.PendingFeedBackOTPVerification"
+            android:name="activity.PendingInsUnlOTPVerification"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name="activity.PendingFeedbackActivity"
+            android:name="activity.PendingInstallationActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
@@ -140,7 +146,7 @@
         <activity
             android:name="activity.SplashActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -290,7 +296,7 @@
             android:name="androidx.core.content.FileProvider"
             android:authorities="provider"
             android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true" >
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
@@ -306,7 +312,7 @@
         <receiver
             android:name="receiver.FirestoreBroadcastReceiver"
             android:enabled="true"
-            android:exported="false">
+            android:exported="false" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -314,7 +320,7 @@
 
         <service
             android:name="firebase_notification.MyFirebaseMessagingService"
-            android:exported="false">
+            android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

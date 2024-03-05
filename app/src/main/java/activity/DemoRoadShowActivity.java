@@ -260,7 +260,7 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
             imageArrayList.add(imageModel);
         }
 
-        customAdapter = new ImageSelectionAdapter(DemoRoadShowActivity.this, imageArrayList);
+        customAdapter = new ImageSelectionAdapter(DemoRoadShowActivity.this, imageArrayList, false);
         photoListView.setHasFixedSize(true);
         photoListView.setAdapter(customAdapter);
         customAdapter.ImageSelection(this);

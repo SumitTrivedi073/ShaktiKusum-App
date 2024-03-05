@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import debugapp.GlobalValue.Constant;
+import utility.CustomUtility;
 import webservice.WebURL;
 
 
@@ -63,17 +65,17 @@ public class ImageManager {
             }
 
             // 사진 사이즈 리스트 저장되어 있지 않을 경우에만 저장
-            if (Config.getSharedPreferenceString(context, Config.PREF_KEY_PICTURE_SIZE_LIST).isEmpty()) {
+            if (CustomUtility.getSharedPreferences(context, Constant.PREF_KEY_PICTURE_SIZE_LIST).isEmpty()) {
                 StringBuilder sb = new StringBuilder();
                 for (Camera.Size size : validPictureSizeList) {
                     sb.append(size.width).append("x").append(size.height).append("|");
                 }
-                Config.putSharedPreference(context, Config.PREF_KEY_PICTURE_SIZE_LIST, sb.toString());
+                CustomUtility.setSharedPreference(context, Constant.PREF_KEY_PICTURE_SIZE_LIST, sb.toString());
             }
 
         // 최초에는 가장 작은 사이즈 설정
             Camera.Size currentSize = parameters.getPictureSize();
-            String currentSizeStr = Config.getSharedPreferenceString(context, Config.PREF_KEY_PICTURE_SIZE);
+            String currentSizeStr = CustomUtility.getSharedPreferences(context, Constant.PREF_KEY_PICTURE_SIZE);
             int newWidth, newHeight;
             if (currentSizeStr.isEmpty()) {
 //            Camera.Size newSize = validPictureSizeList.get(validPictureSizeList.size() - 1);
@@ -88,12 +90,12 @@ public class ImageManager {
             if ((currentSize.width != newWidth) || (currentSize.height != newHeight)) {
                 parameters.setPictureSize(newWidth, newHeight);
             }
-            Config.putSharedPreference(context, Config.PREF_KEY_PICTURE_SIZE, newWidth + "x" + newHeight);
+            CustomUtility.setSharedPreference(context, Constant.PREF_KEY_PICTURE_SIZE, newWidth + "x" + newHeight);
             Log.e("jisunLog", "new picture size ] " + newWidth + "x" + newHeight);
         } else {
             String[] temp = pictureSizeStr.split("x");
             parameters.setPictureSize(Integer.parseInt(temp[0]), Integer.parseInt(temp[1]));
-            Config.putSharedPreference(context, Config.PREF_KEY_PICTURE_SIZE, pictureSizeStr);
+            CustomUtility.setSharedPreference(context, Constant.PREF_KEY_PICTURE_SIZE, pictureSizeStr);
         }
 
         // 4:3으로 preview 비율 설정
@@ -149,7 +151,7 @@ public class ImageManager {
             try {
                 camera.setParameters(parameters);
                 // parameter 변경 성공하면 shared preferences도 변경
-                Config.putSharedPreference(context, Config.PREF_KEY_PICTURE_SIZE, newSizeStr);
+                CustomUtility.setSharedPreference(context, Constant.PREF_KEY_PICTURE_SIZE, newSizeStr);
             } catch (RuntimeException e) {
                 Log.e("jisunLog", "RuntimeException ] " + e.getLocalizedMessage());
                 // setParameter시 죽는 단말기 존재(Nexus5)
@@ -240,8 +242,8 @@ public class ImageManager {
         Bitmap bmp = BitmapFactory.decodeByteArray(data, 0, data.length, options);
 
         bmp = rotateBitmap(bmp,90);
-        SimpleDateFormat sdf = new SimpleDateFormat(Config.TIME_STAMP_FORMAT_DATE, Locale.getDefault());
-        SimpleDateFormat sdf1 = new SimpleDateFormat(Config.TIME_STAMP_FORMAT_TIME, Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat(Constant.TIME_STAMP_FORMAT_DATE, Locale.getDefault());
+        SimpleDateFormat sdf1 = new SimpleDateFormat(Constant.TIME_STAMP_FORMAT_TIME, Locale.getDefault());
         String date = sdf.format(new Date());
         String time = sdf1.format(new Date());
 

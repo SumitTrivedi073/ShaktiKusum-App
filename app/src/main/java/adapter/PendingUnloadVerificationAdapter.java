@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import debugapp.PendingFeedback;
 import debugapp.UnloadingFeedbackModel;
 
 public class PendingUnloadVerificationAdapter extends RecyclerView.Adapter<PendingUnloadVerificationAdapter.ViewHolder> implements Filterable {

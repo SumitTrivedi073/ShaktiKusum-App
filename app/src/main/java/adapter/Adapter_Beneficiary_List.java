@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,19 +29,22 @@ import bean.BeneficiaryRegistrationBean;
 import bean.InstallationListBean;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
+import debugapp.PendingInstallationModel;
 import utility.CustomUtility;
 
-public class Adapter_Beneficiary_List  extends RecyclerView.Adapter<Adapter_Beneficiary_List.HomeCategoryViewHolder> {
+public class Adapter_Beneficiary_List  extends RecyclerView.Adapter<Adapter_Beneficiary_List.HomeCategoryViewHolder>implements Filterable {
     private final Context mcontext;
-    private final ArrayList<BeneficiaryRegistrationBean> responseList;
+    private  List<BeneficiaryRegistrationBean> responseList;
     private List<BeneficiaryRegistrationBean> SearchesList = new ArrayList<>();
+    TextView noDataFound;
 
 
-    public Adapter_Beneficiary_List(Context context, ArrayList<BeneficiaryRegistrationBean> responseList) {
+    public Adapter_Beneficiary_List(Context context, List<BeneficiaryRegistrationBean> responseList,TextView noDataFound) {
         this.SearchesList = new ArrayList<>();
         this.SearchesList.addAll(responseList);
         this.mcontext = context;
         this.responseList = responseList;
+        this.noDataFound = noDataFound;
 
 
     }
@@ -81,19 +86,46 @@ public class Adapter_Beneficiary_List  extends RecyclerView.Adapter<Adapter_Bene
     public int getItemCount() {
         return responseList.size();
     }
-    public void filter(String charText) {
-        charText = charText.toLowerCase(Locale.getDefault());
-        responseList.clear();
-        if (charText.length() == 0) {
-            responseList.addAll(SearchesList);
-        } else {
-            for (BeneficiaryRegistrationBean cs : SearchesList) {
-                if (cs.getSerialId().toLowerCase(Locale.getDefault()).contains(charText) || cs.getBeneficiaryFormApplicantName().toLowerCase(Locale.getDefault()).contains(charText)) {
-                    responseList.add(cs);
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    responseList = SearchesList;
+                } else {
+                    List<BeneficiaryRegistrationBean> filteredList = new ArrayList<>();
+                    for (BeneficiaryRegistrationBean row : SearchesList) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getSerialId().toLowerCase().contains(charString.toLowerCase())||row.getApplicantMobile().toLowerCase().contains(charString.toLowerCase())
+                                ||row.getBeneficiaryFormApplicantName().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    responseList = filteredList;
                 }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = responseList;
+                return filterResults;
             }
-        }
-        notifyDataSetChanged();
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                responseList = (ArrayList<BeneficiaryRegistrationBean>) filterResults.values;
+                if (responseList.size()>0){
+                    noDataFound.setVisibility(View.GONE);
+                }else {
+                    noDataFound.setVisibility(View.VISIBLE);
+                }
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class HomeCategoryViewHolder extends RecyclerView.ViewHolder {

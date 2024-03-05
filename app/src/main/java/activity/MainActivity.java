@@ -81,10 +81,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     NavigationView navigationView;
     private int progressBarStatus = 0;
     private final Handler progressBarHandler = new Handler();
-    ProgressDialog progressBar;
+    ProgressDialog progressBar,progressDialog;
 
     CardView pendingFeedback, pendingUnloadingVerification, checkRMSStatus, debugDataExtract,
             siteAuditCard, simReplacementCard;
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
@@ -94,6 +95,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
+
+        progressDialog = new ProgressDialog(this);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         recyclerView = findViewById(R.id.item_list);
@@ -287,6 +290,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 dataHelper.deleteUnloadingImages();
                 dataHelper.deletekusumCImages();
                 dataHelper.deleteKusumCSurveyFrom();
+                dataHelper.deleteDeviceMappingData();
+                dataHelper.deleteOfflineControllerData();
                 dataHelper.deleteBeneficiaryregistration();
                 CustomUtility.clearSharedPrefrences(context);
 
@@ -325,7 +330,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.pendingInstallationVerification:
-                Intent mIntent2 = new Intent(context, PendingFeedbackActivity.class);
+                Intent mIntent2 = new Intent(context, PendingInstallationActivity.class);
                 startActivity(mIntent2);
                 break;
 
@@ -380,12 +385,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @SuppressLint("StaticFieldLeak")
     private class Dashboard extends AsyncTask<String, String, String> {
-        private ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
-            progressDialog = new ProgressDialog(context);
-            progressDialog = ProgressDialog.show(context, "", "Please Wait...");
+            stopProgressDialogue();
+            showProgressDialogue(getResources().getString(R.string.please_wait));
+
         }
 
         @Override
@@ -413,11 +418,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     } else {
                         dataHelper.insertDashboardData(project_no, process_no, process_nm);
                     }
-                    progressDialog.dismiss();
+                   stopProgressDialogue();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                progressDialog.dismiss();
+                stopProgressDialogue();
             }
             return login_selec;
         }
@@ -426,7 +431,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         protected void onPostExecute(String result) {
             // write display tracks logic here
             getListData();
-            progressDialog.dismiss();  // dismiss dialog
+            stopProgressDialogue();  // dismiss dialog
         }
     }
 
@@ -489,5 +494,31 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             Log.d("msg", "" + e);
         }
 
+    }
+
+    /*-------------------------------------------------------------Show Progress Dialogue-----------------------------------------------------------------------------*/
+
+    public void showProgressDialogue(String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.setMessage(message);
+                progressDialog.setCancelable(false);
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
+            }
+        });
+
+    }
+
+    public void stopProgressDialogue() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+            }
+        });
     }
 }

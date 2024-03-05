@@ -242,7 +242,7 @@ public class RegReportImageActivity extends BaseActivity implements EasyPermissi
                 }
             }
         }
-        customAdapter = new ImageSelectionAdapter(RegReportImageActivity.this, imageArrayList);
+        customAdapter = new ImageSelectionAdapter(RegReportImageActivity.this, imageArrayList, false);
         recyclerview.setHasFixedSize(true);
         recyclerview.setAdapter(customAdapter);
         customAdapter.ImageSelection(this);

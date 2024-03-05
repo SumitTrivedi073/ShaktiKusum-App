@@ -1,5 +1,7 @@
 package activity;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_MEDIA_AUDIO;
@@ -31,12 +33,10 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.os.BuildCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.shaktipumplimited.shaktikusum.R;
@@ -67,7 +67,8 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
 
     List<String> itemNameList = new ArrayList<>();
 
-    String customerName, enqDocno, status,latitude = "",longitude = "";
+    String customerName = "", enqDocno = "",latitude = "",longitude = "",
+            pump_sernr = "",BeneficiaryNo = "",PumpLoad ="";
 
     Toolbar mToolbar;
 
@@ -94,38 +95,40 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
     private void requestPermission() {
         if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA,
-                            Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_AUDIO},
+                    new String[]{Manifest.permission.CAMERA,  Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_MEDIA_AUDIO,
+                            Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_CODE_PERMISSION);
-        } else {
+        }  else {
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA,
-                            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    REQUEST_CODE_PERMISSION);
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISSION);
 
         }
     }
 
 
     private boolean checkPermission() {
-        int cameraPermission =
-                ContextCompat.checkSelfPermission(InstReportImageActivity.this, CAMERA);
-        int ReadMediaImages =
-                ContextCompat.checkSelfPermission(InstReportImageActivity.this, READ_MEDIA_IMAGES);
-        int ReadAudioImages =
-                ContextCompat.checkSelfPermission(InstReportImageActivity.this, READ_MEDIA_AUDIO);
-        int writeExternalStorage =
-                ContextCompat.checkSelfPermission(InstReportImageActivity.this, WRITE_EXTERNAL_STORAGE);
-        int ReadExternalStorage =
-                ContextCompat.checkSelfPermission(InstReportImageActivity.this, READ_EXTERNAL_STORAGE);
+        int FineLocation = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_FINE_LOCATION);
+        int CoarseLocation = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_COARSE_LOCATION);
+        int Camera = ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA);
+        int ReadExternalStorage = ContextCompat.checkSelfPermission(getApplicationContext(), READ_EXTERNAL_STORAGE);
+        int WriteExternalStorage = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
+        int ReadMediaImages = ContextCompat.checkSelfPermission(getApplicationContext(), READ_MEDIA_IMAGES);
+        int ReadMediaAudio = ContextCompat.checkSelfPermission(getApplicationContext(), READ_MEDIA_AUDIO);
+
+
+
+
 
         if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            return cameraPermission == PackageManager.PERMISSION_GRANTED&& ReadMediaImages == PackageManager.PERMISSION_GRANTED
-                    && ReadAudioImages == PackageManager.PERMISSION_GRANTED;
-        } else {
-            return cameraPermission == PackageManager.PERMISSION_GRANTED && writeExternalStorage == PackageManager.PERMISSION_GRANTED
-                    && ReadExternalStorage == PackageManager.PERMISSION_GRANTED;
-
+            return CoarseLocation == PackageManager.PERMISSION_GRANTED
+                    && Camera == PackageManager.PERMISSION_GRANTED  && ReadMediaImages == PackageManager.PERMISSION_GRANTED
+                    && ReadMediaAudio == PackageManager.PERMISSION_GRANTED ;
+        }else {
+            return FineLocation == PackageManager.PERMISSION_GRANTED && CoarseLocation == PackageManager.PERMISSION_GRANTED
+                    && Camera == PackageManager.PERMISSION_GRANTED && ReadExternalStorage == PackageManager.PERMISSION_GRANTED
+                    && WriteExternalStorage == PackageManager.PERMISSION_GRANTED;
         }
 
     }
@@ -135,32 +138,35 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-
             case REQUEST_CODE_PERMISSION:
-
                 if (grantResults.length > 0) {
+
                     if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        boolean ACCESSCAMERA = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                        boolean ReadMediaImages = grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                        boolean ReadAudioImages = grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
-                        if (!ACCESSCAMERA && !ReadMediaImages && !ReadAudioImages) {
+                        boolean CoarseLocationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                        boolean  Camera = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                        boolean  ReadMediaImages = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                        boolean  ReadMediaAudio = grantResults[3] == PackageManager.PERMISSION_GRANTED;
+
+                        if ( !CoarseLocationAccepted &&  !Camera && !ReadMediaImages && !ReadMediaAudio) {
+                            // perform action when allow permission success
                             Toast.makeText(InstReportImageActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
-                        }
-                    } else {
-                        boolean ACCESSCAMERA = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                        boolean writeExternalStorage =
-                                grantResults[1] == PackageManager.PERMISSION_GRANTED;
-                        boolean ReadExternalStorage =
-                                grantResults[2] == PackageManager.PERMISSION_GRANTED;
 
-                        if (!ACCESSCAMERA && !writeExternalStorage && !ReadExternalStorage) {
+                        }
+                    } else  {
+                        boolean  FineLocationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                        boolean CoarseLocationAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                        boolean  Camera = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                        boolean ReadPhoneStorage = grantResults[3] == PackageManager.PERMISSION_GRANTED;
+                        boolean WritePhoneStorage = grantResults[4] == PackageManager.PERMISSION_GRANTED;
+
+
+                        if(!FineLocationAccepted && !CoarseLocationAccepted && !Camera && !ReadPhoneStorage && !WritePhoneStorage ){
                             Toast.makeText(InstReportImageActivity.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
-                        }
 
+                        }
                     }
                 }
-
                 break;
         }
     }
@@ -175,13 +181,20 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setTitle(getResources().getString(R.string.installationImg));
 
-        Bundle bundle = getIntent().getExtras();
-        customerName = bundle.getString("cust_name");
-        enqDocno = bundle.getString("inst_id");
-        status = bundle.getString("delay_status");
-
+        retrieveValue();
         SetAdapter();
         listner();
+    }
+
+    private void retrieveValue() {
+
+        if(getIntent().getExtras()!=null) {
+            customerName = getIntent().getStringExtra("cust_name");
+            enqDocno = getIntent().getStringExtra("inst_id");
+            BeneficiaryNo = getIntent().getStringExtra("BeneficiaryNo");
+            pump_sernr = getIntent().getStringExtra("pump_sernr");
+            PumpLoad = getIntent().getStringExtra("PumpLoad");
+        }
     }
 
 
@@ -257,7 +270,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
                 }
             }
         }
-        customAdapter = new ImageSelectionAdapter(InstReportImageActivity.this, imageArrayList);
+        customAdapter = new ImageSelectionAdapter(InstReportImageActivity.this, imageArrayList,true);
         recyclerview.setHasFixedSize(true);
         recyclerview.setAdapter(customAdapter);
         customAdapter.ImageSelection(this);
@@ -268,13 +281,18 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
     public void ImageSelectionListener(ImageModel imageModelList, int position) {
         selectedIndex = position;
 
-        if (imageModelList.isImageSelected()) {
-            isUpdate = true;
-            selectImage("1");
+        if (checkPermission()) {
+            if (imageModelList.isImageSelected()) {
+                isUpdate = true;
+                selectImage("1");
+            } else {
+                isUpdate = false;
+                selectImage("0");
+            }
         } else {
-            isUpdate = false;
-            selectImage("0");
+            requestPermission();
         }
+
 
     }
 
@@ -358,7 +376,9 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
     private void cameraIntent() {
 
         camraLauncher.launch(new Intent(InstReportImageActivity.this, CameraActivity2.class)
-                .putExtra("cust_name", customerName));
+                .putExtra("cust_name", customerName)
+                .putExtra("BeneficiaryNo", BeneficiaryNo)
+                .putExtra("pump_sernr", pump_sernr).putExtra("PumpLoad",PumpLoad));
 
     }
 
@@ -371,7 +391,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
                         if (result.getData() != null && result.getData().getExtras() != null) {
 
                             Bundle bundle = result.getData().getExtras();
-                            Log.e("bundle====>", bundle.get("data").toString()+"latitude=====>"+latitude+"longitude========>"+longitude);
+                           // Log.e("bundle====>", bundle.get("data").toString()+"latitude=====>"+latitude+"longitude========>"+longitude);
                             if(!bundle.get("latitude").toString().isEmpty() && !bundle.get("longitude").toString().isEmpty()) {
                                 UpdateArrayList(bundle.get("data").toString(), "0", bundle.get("latitude").toString(), bundle.get("longitude").toString());
                             }else {
@@ -471,7 +491,60 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
 
     public boolean Save() {
         String DeviceStatus = CustomUtility.getSharedPreferences(InstReportImageActivity.this, "DeviceStatus");
+        if (DeviceStatus.equals(getResources().getString(R.string.online))) {
+            if (!imageArrayList.get(0).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_photosOfCivilMaterial), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(1).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_pannel_photo), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(2).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_controller_photo), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(3).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_discharge_photo), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(4).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_foundation_photo), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(6).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_nodues_signature), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(9).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_inside_controllerID), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(10).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_outside_controllerID), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(11).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_name_plate_with_farmer), Toast.LENGTH_SHORT).show();
+            } else {
+                CustomUtility.setSharedPreference(InstReportImageActivity.this, "INSTSYNC" + enqDocno, "1");
+                isBackPressed = true;
+            }
+        } else {
 
+            if (!imageArrayList.get(0).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_photosOfCivilMaterial), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(1).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_pannel_photo), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(2).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_controller_photo), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(3).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_discharge_photo), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(4).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_foundation_photo), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(6).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_nodues_signature), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(7).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_noNetworkNoc), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(9).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_inside_controllerID), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(10).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_outside_controllerID), Toast.LENGTH_SHORT).show();
+            } else if (!imageArrayList.get(11).isImageSelected()) {
+                Toast.makeText(this, getResources().getString(R.string.select_name_plate_with_farmer), Toast.LENGTH_SHORT).show();
+            } else {
+                CustomUtility.setSharedPreference(InstReportImageActivity.this, "INSTSYNC" + enqDocno, "1");
+                isBackPressed = true;
+            }
+
+        }
+        return isBackPressed;
+    }
+/*
         if (DeviceStatus.equals(getResources().getString(R.string.online))){
 
             if (CustomUtility.getSharedPreferences(InstReportImageActivity.this, "borewellstatus").equalsIgnoreCase("2")) {
@@ -485,8 +558,8 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
                     Toast.makeText(this, getResources().getString(R.string.select_discharge_photo), Toast.LENGTH_SHORT).show();
                 } else if (!imageArrayList.get(4).isImageSelected()) {
                     Toast.makeText(this, getResources().getString(R.string.select_foundation_photo), Toast.LENGTH_SHORT).show();
-                } else if (!imageArrayList.get(5).isImageSelected()) {
-                    Toast.makeText(this, getResources().getString(R.string.select_ethr_light_photo), Toast.LENGTH_SHORT).show();
+                } else if (!imageArrayList.get(11).isImageSelected()) {
+                    Toast.makeText(this, getResources().getString(R.string.select_name_plate_with_farmer), Toast.LENGTH_SHORT).show();
                 } else {
                     CustomUtility.setSharedPreference(InstReportImageActivity.this, "INSTSYNC" + enqDocno, "1");
                     isBackPressed = true;
@@ -622,10 +695,10 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
 
             }
 
-        }
-        return isBackPressed;
+        }*/
 
-    }
+
+
 
 
 }

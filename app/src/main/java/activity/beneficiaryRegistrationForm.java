@@ -1,24 +1,31 @@
 package activity;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.BLUETOOTH;
+import static android.Manifest.permission.BLUETOOTH_CONNECT;
+import static android.Manifest.permission.BLUETOOTH_SCAN;
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.READ_MEDIA_AUDIO;
+import static android.Manifest.permission.READ_MEDIA_IMAGES;
+import static android.Manifest.permission.READ_PHONE_STATE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.os.Build.VERSION.SDK_INT;
 import static utility.FileUtils.getPath;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,7 +38,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.shaktipumplimited.shaktikusum.R;
@@ -42,7 +57,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +71,8 @@ import webservice.WebURL;
 
 public class beneficiaryRegistrationForm extends BaseActivity implements ImageSelectionAdapter.ImageSelectionListener, AdapterView.OnItemSelectedListener {
     private static final int PICK_FROM_FILE = 102;
+    private static final int REQUEST_CODE_PERMISSION = 101;
+
     private Toolbar mToolbar;
     RecyclerView photoListView;
     AlertDialog alertDialog;
@@ -72,7 +88,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     Spinner controllerTypeSpinner, pumpTypeSpinner, pumpAcDcSpinner;
     TextView save;
     String selectedControllerType = "", selectedPumpType = "", selectedAcDc = "";
-
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,11 +204,18 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
         imageList = db.getAllBeneficiaryImages();
 
+         Log.e("imageList=====>", String.valueOf(imageList.toString()));
         if (itemNameList.size() > 0 && imageList != null && imageList.size() > 0) {
             for (int i = 0; i < imageList.size(); i++) {
                 for (int j = 0; j < itemNameList.size(); j++) {
-                    if (imageList.get(i).getBillNo().trim().equals(serialIdExt.getText().toString().trim())) {
+
+                    Log.e("imageList=====>", imageList.get(i).getBillNo() + "======>" + serialIdExt.getText().toString());
+
+                    if (!imageList.get(i).getBillNo().isEmpty() && imageList.get(i).getBillNo().trim().equals(serialIdExt.getText().toString().trim())) {
+
                         if (imageList.get(i).getName().equals(itemNameList.get(j))) {
+                            Log.e("isImageSelected=====>", String.valueOf(imageList.get(i).isImageSelected()));
+
                             ImageModel imageModel = new ImageModel();
                             imageModel.setName(imageList.get(i).getName());
                             imageModel.setImagePath(imageList.get(i).getImagePath());
@@ -207,7 +230,8 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                 }
             }
         }
-        customAdapter = new ImageSelectionAdapter(beneficiaryRegistrationForm.this, imageArrayList);
+     //   Log.e("imageArrayList=====>", String.valueOf(imageArrayList.toString()));
+        customAdapter = new ImageSelectionAdapter(beneficiaryRegistrationForm.this, imageArrayList, false);
         photoListView.setHasFixedSize(true);
         photoListView.setAdapter(customAdapter);
         customAdapter.ImageSelection(this);
@@ -216,13 +240,25 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     @Override
     public void ImageSelectionListener(ImageModel imageModelList, int position) {
         selectedIndex = position;
+        if (serialIdExt.getText().toString().trim().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_serial_id), getApplicationContext());
 
-        if (imageModelList.isImageSelected()) {
-            isUpdate = true;
-            selectImage("1");
-        } else {
-            isUpdate = false;
-            selectImage("0");
+        }else if (beneficiaryFormApplicantName.getText().toString().trim().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_applicant_name), getApplicationContext());
+
+        }else {
+            if (checkPermission()) {
+                if (imageModelList.isImageSelected()) {
+                    isUpdate = true;
+                    selectImage("1");
+                } else {
+                    isUpdate = false;
+                    selectImage("0");
+                }
+            } else {
+                requestPermission();
+            }
+
         }
     }
 
@@ -302,7 +338,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     private void cameraIntent() {
 
         camraLauncher.launch(new Intent(beneficiaryRegistrationForm.this, CameraActivity2.class)
-                .putExtra("cust_name", beneficiaryFormApplicantName.getText().toString()));
+                .putExtra("cust_name", beneficiaryFormApplicantName.getText().toString().trim()));
 
     }
 
@@ -316,7 +352,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
                             Bundle bundle = result.getData().getExtras();
                             Log.e("bundle====>", bundle.get("data").toString());
-                            UpdateArrayList(bundle.get("data").toString());
+                            UpdateArrayList(bundle.get("data").toString(), bundle.get("latitude").toString(), bundle.get("longitude").toString());
 
                         }
 
@@ -353,7 +389,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mImageCaptureUri);
                         File file1 = CustomUtility.saveFile(bitmap, getResources().getString(R.string.BeneficiaryRegistration), "Images");
 
-                        UpdateArrayList(file1.getPath());
+                        UpdateArrayList(file1.getPath(), "", "");
 
                     }
                 } catch (Exception e) {
@@ -365,7 +401,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
     }
 
-    private void UpdateArrayList(String path) {
+    private void UpdateArrayList(String path, String latitude, String longitude) {
 
         ImageModel imageModel = new ImageModel();
         imageModel.setName(imageArrayList.get(selectedIndex).getName());
@@ -373,9 +409,10 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
         imageModel.setImageSelected(true);
         imageModel.setPoistion(imageArrayList.get(selectedIndex).getPoistion());
         imageModel.setBillNo(serialIdExt.getText().toString());
+        imageModel.setLatitude(latitude);
+        imageModel.setLongitude(longitude);
         imageArrayList.set(selectedIndex, imageModel);
 
-        imageArrayList.set(selectedIndex, imageModel);
         addupdateDatabase(imageModel);
 
         customAdapter.notifyDataSetChanged();
@@ -383,10 +420,11 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     }
 
     private void addupdateDatabase(ImageModel imageModel) {
+        Log.e("imageModel======>", imageModel.toString());
         if (isUpdate) {
-            db.updateRecordBeneficiary(imageModel);
+            db.updateRecordBeneficiary(imageModel,true);
         } else {
-            db.insertBeneficiaryImage(imageModel);
+            db.insertBeneficiaryImage(imageModel,true);
         }
 
     }
@@ -458,41 +496,18 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                 } else if (!imageArrayList.get(3).isImageSelected()) {
                     Toast.makeText(this, getResources().getString(R.string.select_payment_receipt), Toast.LENGTH_SHORT).show();
                 } else {
-                    saveDataLocally();
+                    saveData();
                 }
             }
         }
     }
 
-    private void saveDataLocally() {
-        BeneficiaryRegistrationBean beneficiaryRegistrationBean = new BeneficiaryRegistrationBean(
-                serialIdExt.getText().toString(),
-                familyIdExt.getText().toString(),
-                beneficiaryFormApplicantName.getText().toString(),
-                applicantFatherNameExt.getText().toString(),
-                applicantMobileExt.getText().toString(),
-                applicantVillageExt.getText().toString(),
-                applicantBlockExt.getText().toString(),
-                applicantTehsilExt.getText().toString(),
-                applicantDistrictExt.getText().toString(),
-                pumpCapacityExt.getText().toString(),
-                applicantAccountNoExt.getText().toString(),
-                applicantIFSCExt.getText().toString(),
-                selectedControllerType,
-                selectedPumpType,
-                selectedAcDc);
-
-        if (db.isRecordExist(DatabaseHelper.TABLE_BENEFICIARY_REGISTRATION, DatabaseHelper.KEY_SERIAL_ID, serialIdExt.getText().toString())) {
-            // db.updateInstallationData(inst_bill_no, installationBean);
-            db.updateBeneficiaryRegistrationData(beneficiaryRegistrationBean);
-
-        } else {
-            //   db.insertInstallationData(inst_bill_no, installationBean);
-            db.insertBeneficiaryRegistrationData(beneficiaryRegistrationBean);
-        }
-
+    private void saveData() {
 
         if (CustomUtility.isInternetOn(getApplicationContext())) {
+            showprogressDialogue();
+            saveInLocalDatabase();
+
             JSONArray ja_invc_data = new JSONArray();
             JSONObject jsonObj = new JSONObject();
             try {
@@ -529,18 +544,47 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
             Log.e("BeneParam====>", ja_invc_data.toString());
             new submitBeneficiaryForm(ja_invc_data).execute();
 
+
         } else {
+            saveInLocalDatabase();
             CustomUtility.ShowToast(getResources().getString(R.string.data_save_in_local), getApplicationContext());
             onBackPressed();
         }
 
     }
 
+    private void saveInLocalDatabase() {
+        BeneficiaryRegistrationBean beneficiaryRegistrationBean = new BeneficiaryRegistrationBean(
+                serialIdExt.getText().toString(),
+                familyIdExt.getText().toString(),
+                beneficiaryFormApplicantName.getText().toString(),
+                applicantFatherNameExt.getText().toString(),
+                applicantMobileExt.getText().toString(),
+                applicantVillageExt.getText().toString(),
+                applicantBlockExt.getText().toString(),
+                applicantTehsilExt.getText().toString(),
+                applicantDistrictExt.getText().toString(),
+                pumpCapacityExt.getText().toString(),
+                applicantAccountNoExt.getText().toString(),
+                applicantIFSCExt.getText().toString(),
+                selectedControllerType,
+                selectedPumpType,
+                selectedAcDc);
+
+        if (db.isRecordExist(DatabaseHelper.TABLE_BENEFICIARY_REGISTRATION, DatabaseHelper.KEY_SERIAL_ID, serialIdExt.getText().toString())) {
+            db.updateBeneficiaryRegistrationData(beneficiaryRegistrationBean);
+
+        } else {
+            db.insertBeneficiaryRegistrationData(beneficiaryRegistrationBean);
+        }
+    }
+
 
     @SuppressLint("StaticFieldLeak")
     private class submitBeneficiaryForm extends AsyncTask<String, String, String> {
-        ProgressDialog progressDialog;
+
         JSONArray jsonArray;
+
 
         public submitBeneficiaryForm(JSONArray jaInvcData) {
             this.jsonArray = jaInvcData;
@@ -548,11 +592,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
         @Override
         protected void onPreExecute() {
-            progressDialog = new ProgressDialog(beneficiaryRegistrationForm.this);
-            progressDialog.setCancelable(false);
-            progressDialog.setCanceledOnTouchOutside(false);
-            progressDialog.setMessage(getResources().getString(R.string.sending_data_to_server));
-            progressDialog.show();
+            showprogressDialogue();
         }
 
         @Override
@@ -574,7 +614,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
         @Override
         protected void onPostExecute(String result) {
-            progressDialog.dismiss();
+            stopProgressDialogue();
             try {
                 if (!result.isEmpty()) {
                     JSONObject object = new JSONObject(result);
@@ -582,15 +622,13 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                         showingMessage(object.getString("message"));
                         db.deleteBeneficiaryRegistration(serialIdExt.getText().toString().trim());
                         db.deleteBeneficiaryImages(serialIdExt.getText().toString().trim());
-                        onBackPressed();
+                        finish();
                     } else {
                         showingMessage(getResources().getString(R.string.dataNotSubmitted));
-                        progressDialog.dismiss();
                     }
 
                 } else {
                     showingMessage(getResources().getString(R.string.somethingWentWrong));
-                    progressDialog.dismiss();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -606,5 +644,117 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
             }
         });
+    }
+
+    private void showprogressDialogue() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog = new ProgressDialog(beneficiaryRegistrationForm.this);
+                progressDialog.setCancelable(false);
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.setMessage(getResources().getString(R.string.sending_data_to_server));
+                progressDialog.show();
+            }
+        });
+    }
+
+    public void stopProgressDialogue(){
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+            }
+        });
+    }
+
+
+
+    private void requestPermission() {
+        if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA,  Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.READ_MEDIA_AUDIO,
+                            Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_CODE_PERMISSION);
+        }  else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISSION);
+
+        }
+    }
+
+
+    private boolean checkPermission() {
+        int FineLocation = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_FINE_LOCATION);
+        int CoarseLocation = ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_COARSE_LOCATION);
+        int Camera = ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA);
+        int ReadExternalStorage = ContextCompat.checkSelfPermission(getApplicationContext(), READ_EXTERNAL_STORAGE);
+        int WriteExternalStorage = ContextCompat.checkSelfPermission(getApplicationContext(), WRITE_EXTERNAL_STORAGE);
+        int ReadMediaImages = ContextCompat.checkSelfPermission(getApplicationContext(), READ_MEDIA_IMAGES);
+        int ReadMediaAudio = ContextCompat.checkSelfPermission(getApplicationContext(), READ_MEDIA_AUDIO);
+
+
+
+
+
+        if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return CoarseLocation == PackageManager.PERMISSION_GRANTED
+                    && Camera == PackageManager.PERMISSION_GRANTED  && ReadMediaImages == PackageManager.PERMISSION_GRANTED
+                    && ReadMediaAudio == PackageManager.PERMISSION_GRANTED ;
+        }else {
+            return FineLocation == PackageManager.PERMISSION_GRANTED && CoarseLocation == PackageManager.PERMISSION_GRANTED
+                    && Camera == PackageManager.PERMISSION_GRANTED && ReadExternalStorage == PackageManager.PERMISSION_GRANTED
+                    && WriteExternalStorage == PackageManager.PERMISSION_GRANTED;
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CODE_PERMISSION:
+                if (grantResults.length > 0) {
+
+                    if (SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+
+                        boolean CoarseLocationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                        boolean  Camera = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                        boolean  ReadMediaImages = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                        boolean  ReadMediaAudio = grantResults[3] == PackageManager.PERMISSION_GRANTED;
+
+                        if ( !CoarseLocationAccepted &&  !Camera && !ReadMediaImages && !ReadMediaAudio) {
+                            // perform action when allow permission success
+                            Toast.makeText(beneficiaryRegistrationForm.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
+
+                        }
+                    } else  {
+                        boolean  FineLocationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                        boolean CoarseLocationAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                        boolean  Camera = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                        boolean ReadPhoneStorage = grantResults[3] == PackageManager.PERMISSION_GRANTED;
+                        boolean WritePhoneStorage = grantResults[4] == PackageManager.PERMISSION_GRANTED;
+
+
+                        if(!FineLocationAccepted && !CoarseLocationAccepted && !Camera && !ReadPhoneStorage && !WritePhoneStorage ){
+                            Toast.makeText(beneficiaryRegistrationForm.this, "Please allow all the permission", Toast.LENGTH_LONG).show();
+
+                        }
+                    }
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

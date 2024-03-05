@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="activity.PendingInsUnlOTPVerification">
+
+    <include layout="@layout/toolbar"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="@dimen/_80sdp"
+            android:layout_height="@dimen/_70sdp"
+            android:src="@drawable/phone_icon"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_16sdp"
+            android:text="Verification"
+            android:textColor="@color/colorPrimary"
+            android:fontFamily="@font/open_sans_bold"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_12sdp"
+            android:text="You will get a verification code via sms"
+            android:textColor="@color/colorPrimary"
+            android:fontFamily="@font/open_sans_semibold"
+            android:gravity="center"/>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:background="@drawable/popup_relative">
+
+            <EditText
+                android:id="@+id/et_verification_code"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:background="@color/transparent"
+                android:fontFamily="@font/open_sans_bold"
+                android:gravity="center|start"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:inputType="number"
+                android:maxLength="4"
+                android:hint="Please enter verification code"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12sdp" />
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/verifyOTP"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"
+            android:background="@drawable/blueroundedbtn"
+            android:fontFamily="@font/open_sans_bold"
+            android:gravity="center"
+            android:text="@string/verify"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14sdp" />
+
+
+       <LinearLayout
+           android:id="@+id/resendLinear"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:layout_marginTop="@dimen/_10sdp">
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textSize="@dimen/_10sdp"
+               android:text="Didn't Receive the verificaton code? "
+               android:textColor="@color/black"
+               android:fontFamily="@font/open_sans_semibold"
+               android:gravity="center"
+               android:layout_gravity="center"/>
+           <TextView
+               android:id="@+id/resend_btn"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:textSize="@dimen/_12sdp"
+               android:text="Resend"
+               android:textColor="@color/colorPrimary"
+               android:fontFamily="@font/open_sans_semibold"
+               android:gravity="center"/>
+
+       </LinearLayout>
+
+        <TextView
+            android:id="@+id/countdownTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_12sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:text=""
+            android:textColor="@color/black"
+            android:fontFamily="@font/open_sans_semibold"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_marginRight="@dimen/_20sdp"/>
+
+    </LinearLayout>
+
+
+
+
+
+</RelativeLayout>

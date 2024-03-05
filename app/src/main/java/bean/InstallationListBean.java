@@ -9,7 +9,7 @@ public class InstallationListBean implements Serializable {
     public String enqdoc, pernr, customer_name, father_name, billno, kunnr, gstbillno, billdate, dispdate,
             state, statetxt, city, citytxt, tehsil, village, contact_no, controller, motor, pump, regisno,
             projectno, loginno, moduleqty, address, simno, beneficiary, set_matno, simha2, sync, CONTACT_NO, noOfModule, HP,
-            pump_ser,motor_ser,controller_ser;
+            pump_ser,motor_ser,controller_ser,pump_load;
 
 
     public InstallationListBean() {
@@ -20,7 +20,7 @@ public class InstallationListBean implements Serializable {
                                 String city_text, String tehsil_text, String village_text, String contact_no_text, String controller_text, String motor_text,
                                 String pump_text, String regisno_text, String projectno_text, String loginno_text, String moduleqty_text, String address_text,
                                 String simno_text, String beneficiary_text, String set_matno_text, String simha2_text, String sync_text,
-                                String mCONTACT_NO, String NoOfModule, String hp, String pump_ser, String motor_ser, String controller_ser) {
+                                String mCONTACT_NO, String NoOfModule, String hp, String pump_ser, String motor_ser, String controller_ser,String pump_load) {
         this.enqdoc = enqdoc_text;
         this.pernr = pernr_text;
         this.customer_name = customer_name_text;
@@ -56,6 +56,7 @@ public class InstallationListBean implements Serializable {
         this.pump_ser = pump_ser;
         this.motor_ser = motor_ser;
         this.controller_ser = controller_ser;
+        this.pump_load = pump_load;
     }
 
     public String getCUS_CONTACT_NO() {
@@ -344,5 +345,13 @@ public class InstallationListBean implements Serializable {
 
     public void setController_ser(String controller_ser) {
         this.controller_ser = controller_ser;
+    }
+
+    public String getPump_load() {
+        return pump_load;
+    }
+
+    public void setPump_load(String pump_load) {
+        this.pump_load = pump_load;
     }
 }
