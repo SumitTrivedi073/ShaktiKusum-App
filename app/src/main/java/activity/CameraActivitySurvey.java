@@ -27,6 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import debugapp.GlobalValue.Constant;
+
 public class CameraActivitySurvey extends BaseActivity {
 
     private static final int REQUEST_CODE_CHANGE_SETTING = 1;
@@ -93,8 +95,8 @@ public class CameraActivitySurvey extends BaseActivity {
 
         txtData = findViewById(R.id.txtDate);
         image = findViewById(R.id.sw);
-        sdf = new SimpleDateFormat(Config.TIME_STAMP_FORMAT_DATE, Locale.getDefault());
-        sdf1 = new SimpleDateFormat(Config.TIME_STAMP_FORMAT_TIME, Locale.getDefault());
+        sdf = new SimpleDateFormat(Constant.TIME_STAMP_FORMAT_DATE, Locale.getDefault());
+        sdf1 = new SimpleDateFormat(Constant.TIME_STAMP_FORMAT_TIME, Locale.getDefault());
         txtData.setText("Latitude: "+lat+"\n"+"Longitude: "+lng+"\n"+"Date: "+sdf.format(new Date())+" "+"Time: "+sdf1.format(new Date()));
         handler.postDelayed(runnableSetDateText, TIME_STAMP_UPDATE_INTERVAL);
 
@@ -239,7 +241,7 @@ public class CameraActivitySurvey extends BaseActivity {
 
             } catch (RuntimeException ex) {
                 Toast.makeText(this, "camera_not_found ] " + ex.getMessage(), Toast.LENGTH_LONG).show();
-                Log.d(Config.TAG, "camera_not_found ] " + ex.getMessage());
+                Log.d(Constant.TAG, "camera_not_found ] " + ex.getMessage());
             }
         }
 
@@ -253,7 +255,7 @@ public class CameraActivitySurvey extends BaseActivity {
 
                 Log.e("DTATA","&&&&"+data);
 
-                String str = data.getStringExtra(Config.PREF_KEY_PICTURE_SIZE);
+                String str = data.getStringExtra(Constant.PREF_KEY_PICTURE_SIZE);
 
                 Log.e("STR","&&&&"+str);
 

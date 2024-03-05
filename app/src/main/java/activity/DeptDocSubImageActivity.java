@@ -243,7 +243,7 @@ public class DeptDocSubImageActivity extends BaseActivity implements ImageSelect
             imageModel.setLongitude("");
             imageArrayList.add(imageModel);
         }
-        customAdapter = new ImageSelectionAdapter(DeptDocSubImageActivity.this, imageArrayList);
+        customAdapter = new ImageSelectionAdapter(DeptDocSubImageActivity.this, imageArrayList, false);
         recyclerview.setHasFixedSize(true);
         recyclerview.setAdapter(customAdapter);
         customAdapter.ImageSelection(this);

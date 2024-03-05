@@ -25,6 +25,11 @@
             android:title="@string/complain_delivery_status" />
 
         <item
+            android:id="@+id/beneficiary_registration_form"
+            android:icon="@drawable/form"
+            android:title="@string/beneficiary_registration_form" />
+
+        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_logout_24dp"
             android:title="@string/menu_logout" />

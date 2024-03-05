@@ -17,8 +17,8 @@ import com.shaktipumplimited.shaktikusum.R;
 import java.util.ArrayList;
 
 import activity.DeptDocSubActivity;
+import activity.DeviceShiftingActivity;
 import activity.GovtOffVisitActivity;
-import activity.InstReportImageActivity;
 import activity.InstallationList;
 import activity.KusumCSurveyListActivty;
 import activity.RejectionInstallation;
@@ -76,6 +76,8 @@ public class Adapter_item_list extends RecyclerView.Adapter<Adapter_item_list.Ho
                      holder.icon_img.setImageResource(R.mipmap.unloading_material);
                  }  else if (responseList.get(position).getItem_id().equalsIgnoreCase("024")) {
                      holder.icon_img.setImageResource(R.mipmap.rejected_installtion);
+                 } else if (responseList.get(position).getItem_id().equalsIgnoreCase("026")) {
+                     holder.icon_img.setImageResource(R.mipmap.solar_device);
                  }
             }
             if (!TextUtils.isEmpty(responseList.get(position).getItem_name())) {
@@ -127,25 +129,12 @@ public class Adapter_item_list extends RecyclerView.Adapter<Adapter_item_list.Ho
                         CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
                         Intent intent = new Intent(context, RejectionInstallation.class);
                         context.startActivity(intent);
+                    } else if (responseList.get(position).getItem_id().equalsIgnoreCase("026")) {
+                        CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
+                        Intent mIntent1 = new Intent(context, DeviceShiftingActivity.class);
+                        context.startActivity(mIntent1);
                     }
-/*if (responseList.get(position).getItem_id().equalsIgnoreCase("001")) {
-                        CustomUtility.setSharedPreference(context, "enqdocid", "");
-                        CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
-                        Intent register_form = new Intent(context, CustomerRegistrationActivity.class);
-                        context.startActivity(register_form);
-                    } else if (responseList.get(position).getItem_id().equalsIgnoreCase("004")) {
-                        CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
-                        Intent dd_sub = new Intent(context, DDSubmissionActivity.class);
-                        context.startActivity(dd_sub);
-                    } else if (responseList.get(position).getItem_id().equalsIgnoreCase("000")) {
-                        CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
-                        Intent inst_list = new Intent(context, InstallationListOfflineActivity.class);
-                        context.startActivity(inst_list);
-                    }else if (responseList.get(position).getItem_id().equalsIgnoreCase("011")) {
-                        CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
-                        Intent inst_list = new Intent(context, OffSubDocActivity.class);
-                        context.startActivity(inst_list);
-                    }  */
+
                 }
 
             });

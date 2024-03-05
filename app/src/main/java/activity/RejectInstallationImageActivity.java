@@ -291,7 +291,7 @@ public class RejectInstallationImageActivity extends BaseActivity implements Ima
             }
         }
 
-        customAdapter = new ImageSelectionAdapter(RejectInstallationImageActivity.this, imageArrayList);
+        customAdapter = new ImageSelectionAdapter(RejectInstallationImageActivity.this, imageArrayList, false);
         recyclerview.setHasFixedSize(true);
         recyclerview.setAdapter(customAdapter);
         customAdapter.ImageSelection(this);
