@@ -18,6 +18,7 @@ import java.util.List;
 
 import bean.AuditSiteBean;
 import bean.BTResonseData;
+import bean.DeviceInformationModel;
 import bean.DeviceMappingModel;
 import bean.BeneficiaryRegistrationBean;
 import bean.ImageModel;
@@ -77,6 +78,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_DEVICE_MAPPING_DATA = "tbl_device_mapping_data";
 
     public static final String TABLE_BENEFICIARY_REGISTRATION = "tbl_Beneficiary_Registration";
+
+    public static final String TABLE_DEVICE_INFORMATION = "tbl_device_information";
 
     //TABLE_OFFLINE_SUBMITTED_LIST field name
     public static final String KEY_OFFLINE_BILL_NO = "bill_no";
@@ -285,10 +288,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_INSTALLATION_BILL_NO = "InstalltionBillNo", KEY_INSTALLATION_LATITUDE = "InstalltionLatitude",
             KEY_INSTALLATION_LONGITUDE = "InstalltionLongitude", KEY_INSTALLATION_POSITION = "InstalltionPosition";
 
-    public static final String KEY_BENEFICIARY_ID = "BENEFICIARYId", KEY_BENEFICIARY_NAME = "BENEFICIARYImageName",
-            KEY_BENEFICIARY_PATH = "BENEFICIARYPath", KEY_BENEFICIARY_IMAGE_SELECTED = "BENEFICIARYImageSelected",
-            KEY_BENEFICIARY_BILL_NO = "BENEFICIARYBillNo", KEY_BENEFICIARY_LATITUDE = "BENEFICIARYLatitude",
-            KEY_BENEFICIARY_LONGITUDE = "BENEFICIARYLongitude", KEY_BENEFICIARY_POSITION = "BENEFICIARYPosition";
+    public static final String KEY_DEVICE_INFO_ID = "DeviceInfoID",KEY_DEVICE_NO = "device_no", KEY_DONGLE_FIRM_VER = "DongleFirmVer", KEY_DEVICE_FIRM_VER = "DeviceFirmVer",
+            KEY_DONGLE_APN = "DongleAPN", KEY_DONGLE_MODE = "DongleMode", KEY_DONGLE_CONNECTIVITY = "DongleConnectivity",
+            KEY_DONGLE_MQTT1_IP = "DongleMQTTIP1", KEY_DONGLE_MQTT2_IP = "DongleMQTTIP2",KEY_DONGLE_D_FOTA ="DongleDFota",KEY_TCP_IP ="TCPIP";
+
 
     public static final String KEY_UNLOADING_ID = "unloadingId", KEY_UNLOADING_NAME = "unloadingImageName", KEY_UNLOADING_PATH = "unloadingPath", KEY_UNLOADING_IMAGE_SELECTED = "unloadingImageSelected", KEY_UNLOADING_BILL_NO = "unloadingBillNo";
 
@@ -359,7 +362,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_SIM_CARD_REP_DATE = "sim_card_rep_date";
     public static final String KEY_SIM_CARD_LAT = "sim_card_lat";
     public static final String KEY_SIM_CARD_LNG = "sim_card_lng";
-    public static final String KEY_DEVICE_NO = "device_no";
+
     public static final String KEY_CUST_MOBILE = "cust_no";
     public static final String KEY_CUST_ADDRESS = "cust_address";
     public static final String KEY_SIM_OLD_NO = "sim_old_no";
@@ -1244,6 +1247,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_APPLICANT_ACCOUNT_NO + " TEXT,"
             + KEY_APPLICANT_IFSC_CODE + " TEXT)";
 
+
+    private static final String CREATE_TABLE_DEVICE_INFORMATION = "CREATE TABLE "
+            + TABLE_DEVICE_INFORMATION + "(" + KEY_DEVICE_INFO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," + KEY_DEVICE_NO + " TEXT," + KEY_DONGLE_FIRM_VER + " TEXT,"
+            + KEY_DEVICE_FIRM_VER + " TEXT,"   + KEY_DONGLE_APN + " TEXT,"
+            + KEY_DONGLE_MODE + " TEXT,"
+            + KEY_DONGLE_CONNECTIVITY + " TEXT,"
+            + KEY_DONGLE_MQTT1_IP + " TEXT,"
+            + KEY_DONGLE_MQTT2_IP + " TEXT,"
+            + KEY_DONGLE_D_FOTA + " TEXT,"
+            + KEY_TCP_IP + " TEXT,"
+            + KEY_BILL_NO + " TEXT,"
+            + KEY_REMARK1 + " TEXT)";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -1279,6 +1295,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_OFFLINE_CONTROLLER_IMAGE);
         db.execSQL(CREATE_TABLE_DEVICE_MAPPING_DATA);
         db.execSQL(CREATE_BENEFICIARY_REGISTRAION);
+        db.execSQL(CREATE_TABLE_DEVICE_INFORMATION);
     }
 
     @Override
@@ -1313,6 +1330,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_OFFLINE_CONTROLLER_IMAGE_DATA);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_DEVICE_MAPPING_DATA);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_BENEFICIARY_REGISTRATION);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_DEVICE_INFORMATION);
             // create newworkorder tables
             onCreate(db);
         }
@@ -2623,64 +2641,74 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void insertSurveyData(String enqdoc, SurveyBean surveyBean) {
-        // Open the database for writing
+
+
+    public void insertDeviceInformation( DeviceInformationModel deviceInformationModel) {
         SQLiteDatabase db = this.getWritableDatabase();
-        // Start the transaction.
         db.beginTransaction();
         ContentValues values;
-
         try {
             values = new ContentValues();
-            values.put(KEY_BILL_NO, surveyBean.getSurvy_bill_no());
-            values.put(KEY_PERNR, surveyBean.getPernr());
-            values.put(KEY_PROJ_NO, surveyBean.getProject_no());
-            values.put(KEY_LOGIN_NO, surveyBean.getLogin_no());
-            values.put(KEY_LATITUDE, surveyBean.getInst_latitude());
-            values.put(KEY_LONGITUDE, surveyBean.getInst_longitude());
-            values.put(KEY_WATER_RES, surveyBean.getSpinner_water_resource());
-            values.put(KEY_BORWELL_SIZE, surveyBean.getBorewell_size());
-            values.put(KEY_BORWELL_DEPTH, surveyBean.getBorwell_depth());
-            values.put(KEY_CBL_LEN, surveyBean.getCbl_length());
-            values.put(KEY_SURF_HEAD, surveyBean.getSurf_head());
-            values.put(KEY_LEN_DIA_PIP, surveyBean.getLen_dia_dis_pip());
-            long i = db.insert(TABLE_SURVEY_PUMP_DATA, null, values);
+            values.put(KEY_DEVICE_NO, deviceInformationModel.getDeviceNo());
+            values.put(KEY_DONGLE_FIRM_VER, deviceInformationModel.getDongleFirmVersion());
+            values.put(KEY_DEVICE_FIRM_VER, deviceInformationModel.getDeviceFirmVersion());
+            values.put(KEY_DONGLE_APN, deviceInformationModel.getDongleAPN());
+            values.put(KEY_DONGLE_MODE,deviceInformationModel.getDongleMode());
+            values.put(KEY_DONGLE_CONNECTIVITY,deviceInformationModel.getDongleConnectivity());
+            values.put(KEY_DONGLE_MQTT1_IP,deviceInformationModel.getDongleMqttIp1());
+            values.put(KEY_DONGLE_MQTT2_IP,deviceInformationModel.getDongleMqttIp2());
+            values.put(KEY_DONGLE_D_FOTA,deviceInformationModel.getdFota());
+            values.put(KEY_TCP_IP,deviceInformationModel.getTcpIP());
+            values.put(KEY_BILL_NO,deviceInformationModel.getBillNo());
+            values.put(KEY_REMARK1,deviceInformationModel.getRemarkTxt());
+
+            // Insert Row
+            long i = db.insert(TABLE_DEVICE_INFORMATION, null, values);
+            // Insert into database successfully.
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
             e.printStackTrace();
         } finally {
+            // End the transaction.
             db.endTransaction();
+            // Close database
             db.close();
         }
     }
 
-    public void updateSurveyData(String billno, SurveyBean surveyBean) {
-        long i = 0;
+    public void updateDeviceInformation(DeviceInformationModel deviceInformationModel) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
         ContentValues values;
         String where = " ";
         try {
             values = new ContentValues();
-            values.put(KEY_BILL_NO, surveyBean.getSurvy_bill_no());
-            values.put(KEY_PERNR, surveyBean.getPernr());
-            values.put(KEY_PROJ_NO, surveyBean.getProject_no());
-            values.put(KEY_LOGIN_NO, surveyBean.getLogin_no());
-            values.put(KEY_LATITUDE, surveyBean.getInst_latitude());
-            values.put(KEY_LONGITUDE, surveyBean.getInst_longitude());
-            values.put(KEY_WATER_RES, surveyBean.getSpinner_water_resource());
-            values.put(KEY_BORWELL_SIZE, surveyBean.getBorewell_size());
-            values.put(KEY_BORWELL_DEPTH, surveyBean.getBorwell_depth());
-            values.put(KEY_CBL_LEN, surveyBean.getCbl_length());
-            values.put(KEY_SURF_HEAD, surveyBean.getSurf_head());
-            values.put(KEY_LEN_DIA_PIP, surveyBean.getLen_dia_dis_pip());
-            where = KEY_BILL_NO + "='" + billno + "'";
-            i = db.update(TABLE_SURVEY_PUMP_DATA, values, where, null);
+
+            values.put(KEY_DEVICE_NO, deviceInformationModel.getDeviceNo());
+            values.put(KEY_DONGLE_FIRM_VER, deviceInformationModel.getDongleFirmVersion());
+            values.put(KEY_DEVICE_FIRM_VER, deviceInformationModel.getDeviceFirmVersion());
+            values.put(KEY_DONGLE_APN, deviceInformationModel.getDongleAPN());
+            values.put(KEY_DONGLE_MODE,deviceInformationModel.getDongleMode());
+            values.put(KEY_DONGLE_CONNECTIVITY,deviceInformationModel.getDongleConnectivity());
+            values.put(KEY_DONGLE_MQTT1_IP,deviceInformationModel.getDongleMqttIp1());
+            values.put(KEY_DONGLE_MQTT2_IP,deviceInformationModel.getDongleMqttIp2());
+            values.put(KEY_DONGLE_D_FOTA,deviceInformationModel.getdFota());
+            values.put(KEY_TCP_IP,deviceInformationModel.getTcpIP());
+            values.put(KEY_BILL_NO,deviceInformationModel.getBillNo());
+            values.put(KEY_REMARK1,deviceInformationModel.getRemarkTxt());
+            // Insert Row
+            where =  KEY_DEVICE_NO + " = '" + deviceInformationModel.getDeviceNo() + "'" + " AND " + KEY_BILL_NO + " = '" + deviceInformationModel.getBillNo() + "'";
+
+
+            long i = db.update(TABLE_KUSUMCSURVEYFORM, values, where, null);
+            // Insert into database successfully.
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
             e.printStackTrace();
         } finally {
+            // End the transaction.
             db.endTransaction();
+            // Close database
             db.close();
         }
     }
@@ -3458,110 +3486,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return list_document;
     }
 
-    @SuppressLint("Range")
-    public ArrayList<RejectListBean> getRejectionListData() {
-        RejectListBean installationBean = new RejectListBean();
-        ArrayList<RejectListBean> list_document = new ArrayList<>();
-        list_document.clear();
-        SQLiteDatabase db = this.getReadableDatabase();
-        db.beginTransaction();
-        try {
-            String selectQuery = "SELECT  *  FROM " + TABLE_REJECTION_LIST;
-            Cursor cursor = db.rawQuery(selectQuery, null);
-            Log.e("CURSORCOUNT", "&&&&123" + cursor.getCount() + " " + selectQuery);
-            if (cursor.getCount() > 0) {
-                if (cursor.moveToFirst()) {
-                    while (!cursor.isAfterLast()) {
-                        installationBean = new RejectListBean();
-                        installationBean.setBillno(cursor.getString(cursor.getColumnIndex(KEY_BILL_NO)));
-                        installationBean.setBenno(cursor.getString(cursor.getColumnIndex(KEY_BEN_NO)));
-                        installationBean.setRegno(cursor.getString(cursor.getColumnIndex(KEY_REG_NO)));
-                        installationBean.setCustnm(cursor.getString(cursor.getColumnIndex(KEY_CUST_NAME)));
-                        installationBean.setPhoto1(cursor.getString(cursor.getColumnIndex(KEY_PHOTO1)));
-                        installationBean.setPhoto2(cursor.getString(cursor.getColumnIndex(KEY_PHOTO2)));
-                        installationBean.setPhoto3(cursor.getString(cursor.getColumnIndex(KEY_PHOTO3)));
-                        installationBean.setPhoto4(cursor.getString(cursor.getColumnIndex(KEY_PHOTO4)));
-                        installationBean.setPhoto5(cursor.getString(cursor.getColumnIndex(KEY_PHOTO5)));
-                        installationBean.setPhoto6(cursor.getString(cursor.getColumnIndex(KEY_PHOTO6)));
-                        installationBean.setPhoto7(cursor.getString(cursor.getColumnIndex(KEY_PHOTO7)));
-                        installationBean.setPhoto8(cursor.getString(cursor.getColumnIndex(KEY_PHOTO8)));
-                        installationBean.setPhoto9(cursor.getString(cursor.getColumnIndex(KEY_PHOTO9)));
-                        installationBean.setPhoto10(cursor.getString(cursor.getColumnIndex(KEY_PHOTO10)));
-                        installationBean.setPhoto11(cursor.getString(cursor.getColumnIndex(KEY_PHOTO11)));
-                        installationBean.setPhoto12(cursor.getString(cursor.getColumnIndex(KEY_PHOTO12)));
-                        installationBean.setRemark1(cursor.getString(cursor.getColumnIndex(KEY_REMARK1)));
-                        installationBean.setRemark2(cursor.getString(cursor.getColumnIndex(KEY_REMARK2)));
-                        installationBean.setRemark3(cursor.getString(cursor.getColumnIndex(KEY_REMARK3)));
-                        installationBean.setRemark4(cursor.getString(cursor.getColumnIndex(KEY_REMARK4)));
-                        installationBean.setRemark5(cursor.getString(cursor.getColumnIndex(KEY_REMARK5)));
-                        installationBean.setRemark6(cursor.getString(cursor.getColumnIndex(KEY_REMARK6)));
-                        installationBean.setRemark7(cursor.getString(cursor.getColumnIndex(KEY_REMARK7)));
-                        installationBean.setRemark8(cursor.getString(cursor.getColumnIndex(KEY_REMARK8)));
-                        installationBean.setRemark9(cursor.getString(cursor.getColumnIndex(KEY_REMARK9)));
-                        installationBean.setRemark10(cursor.getString(cursor.getColumnIndex(KEY_REMARK10)));
-                        installationBean.setRemark11(cursor.getString(cursor.getColumnIndex(KEY_REMARK11)));
-                        installationBean.setRemark12(cursor.getString(cursor.getColumnIndex(KEY_REMARK12)));
-
-
-                        list_document.add(installationBean);
-
-                        cursor.moveToNext();
-
-                    }
-                }
-                db.setTransactionSuccessful();
-            }
-
-        } catch (SQLiteException e) {
-            e.printStackTrace();
-
-        } finally {
-            db.endTransaction();
-            // End the transaction.
-            db.close();
-            // Close database
-        }
-
-        return list_document;
-    }
-
-    @SuppressLint("Range")
-    public ArrayList<SurveyListBean> getSurveyListData(String userid) {
-        SurveyListBean installationBean = new SurveyListBean();
-        ArrayList<SurveyListBean> list_document = new ArrayList<>();
-        list_document.clear();
-        SQLiteDatabase db = this.getReadableDatabase();
-        db.beginTransaction();
-        try {
-            String selectQuery = "SELECT  *  FROM " + TABLE_SURVEY_LIST + " WHERE " + KEY_PERNR + " = '" + userid + "'";
-            Cursor cursor = db.rawQuery(selectQuery, null);
-            Log.e("CURSORCOUNT", "&&&&123" + cursor.getCount() + " " + selectQuery);
-            if (cursor.getCount() > 0) {
-                if (cursor.moveToFirst()) {
-                    while (!cursor.isAfterLast()) {
-                        installationBean = new SurveyListBean();
-                        installationBean.setBen_id(cursor.getString(cursor.getColumnIndex(KEY_ENQ_DOC)));
-                        installationBean.setPernr(cursor.getString(cursor.getColumnIndex(KEY_PERNR)));
-                        installationBean.setCustnam(cursor.getString(cursor.getColumnIndex(KEY_CUST_NAME)));
-                        installationBean.setContctno(cursor.getString(cursor.getColumnIndex(KEY_CONTACT_NO)));
-                        installationBean.setState(cursor.getString(cursor.getColumnIndex(KEY_STATE)));
-                        installationBean.setDistrict(cursor.getString(cursor.getColumnIndex(KEY_DISTRICT)));
-                        installationBean.setAddress(cursor.getString(cursor.getColumnIndex(KEY_ADDRESS)));
-                        installationBean.setRegino(cursor.getString(cursor.getColumnIndex(KEY_ADD2)));
-                        list_document.add(installationBean);
-                        cursor.moveToNext();
-                    }
-                }
-                db.setTransactionSuccessful();
-            }
-        } catch (SQLiteException e) {
-            e.printStackTrace();
-        } finally {
-            db.endTransaction();
-            db.close();
-        }
-        return list_document;
-    }
 
     @SuppressLint("Range")
     public ArrayList<RegistrationBean> getRegistrationData() {
@@ -3770,6 +3694,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.delete(TABLE_BENEFICIARY_IMAGE_DATA, null, null);
         }
     }
+
+
 
     public void deleteAuditData() {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -4027,6 +3953,50 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.close();
         }
         return kusumCSurveyBean;
+    }
+
+
+    @SuppressLint("Range")
+    public DeviceInformationModel getDeviceInformation(String bill_no,String controllerSerialNo) {
+        DeviceInformationModel deviceInformationModel = new DeviceInformationModel();
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.beginTransaction();
+        try {
+            String selectQuery = "SELECT  *  FROM " + TABLE_DEVICE_INFORMATION + " WHERE " + KEY_DEVICE_NO + " = '" + controllerSerialNo + "'" + " AND " + KEY_BILL_NO + " = '" + bill_no + "'";
+
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            Log.e("CURSORCOUNT", "&&&&123" + cursor.getCount() + " " + selectQuery);
+            if (cursor.getCount() > 0) {
+                if (cursor.moveToFirst()) {
+                    while (!cursor.isAfterLast()) {
+                        deviceInformationModel = new DeviceInformationModel();
+
+                        deviceInformationModel.setDeviceNo(cursor.getString(cursor.getColumnIndex(KEY_DEVICE_NO)));
+                        deviceInformationModel.setDeviceFirmVersion(cursor.getString(cursor.getColumnIndex(KEY_DEVICE_FIRM_VER)));
+                        deviceInformationModel.setDongleFirmVersion(cursor.getString(cursor.getColumnIndex(KEY_DONGLE_FIRM_VER)));
+                        deviceInformationModel.setDongleAPN(cursor.getString(cursor.getColumnIndex(KEY_DONGLE_APN)));
+                        deviceInformationModel.setDongleMode(cursor.getString(cursor.getColumnIndex(KEY_DONGLE_MODE)));
+                        deviceInformationModel.setDongleConnectivity(cursor.getString(cursor.getColumnIndex(KEY_DONGLE_CONNECTIVITY)));
+                        deviceInformationModel.setDongleMqttIp1(cursor.getString(cursor.getColumnIndex(KEY_DONGLE_MQTT1_IP)));
+                        deviceInformationModel.setDongleMqttIp2(cursor.getString(cursor.getColumnIndex(KEY_DONGLE_MQTT2_IP)));
+                        deviceInformationModel.setdFota(cursor.getString(cursor.getColumnIndex(KEY_DONGLE_D_FOTA)));
+                        deviceInformationModel.setTcpIP(cursor.getString(cursor.getColumnIndex(KEY_TCP_IP)));
+                        deviceInformationModel.setBillNo(cursor.getString(cursor.getColumnIndex(KEY_BILL_NO)));
+                        deviceInformationModel.setRemarkTxt(cursor.getString(cursor.getColumnIndex(KEY_REMARK1)));
+
+                        cursor.moveToNext();
+                    }
+                }
+                db.setTransactionSuccessful();
+            }
+
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+        return deviceInformationModel;
     }
 
 
@@ -4579,6 +4549,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void deleteDeviceInformationData(String controllerSerialNo,String bill_no) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if (CustomUtility.doesTableExist(db, TABLE_DEVICE_INFORMATION)) {
+
+            String where = "";
+            where =  KEY_DEVICE_NO + " = '" + controllerSerialNo + "'" + " AND " + KEY_BILL_NO + " = '" + bill_no + "'";
+
+            db.delete(TABLE_DEVICE_INFORMATION, where, null);
+        }
+    }
+
 
     public void deleteOfflineControllerData() {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -4592,6 +4573,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             if (CustomUtility.doesTableExist(db, TABLE_DEVICE_MAPPING_DATA)) {
                 db.delete(TABLE_DEVICE_MAPPING_DATA, null, null);
             }
+    }
+
+    public void deleteDeviceInformationData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        if (CustomUtility.doesTableExist(db, TABLE_DEVICE_INFORMATION)) {
+            db.delete(TABLE_DEVICE_INFORMATION, null, null);
+        }
     }
 
     public ArrayList<ImageModel> getAllInstallationImages() {

@@ -156,7 +156,6 @@
     <string name="BeneficiaryRegistration">BeneficiaryRegistration</string>
 
 
-
     <string name="size" translatable="false">Size :  %1$d</string>
     <string name="mime" translatable="false">Mime: %1$s</string>
     <string name="type" translatable="false">Type : %1$d</string>
@@ -564,6 +563,11 @@
     <string name="online_and_shifted">ONLINE AND SHIFTED</string>
     <string name="I_base_update">I Base Updating…</string>
     <string name="please_wait">Please Wait…</string>
+    <string name="deviceInformation">Device Information</string>
+    <string name="pairControllerRetrieveDeviceInformation">Device Shifting Successfully now pair the controller and retrieve device information</string>
+    <string name="retriveDeviceInfo">Please Pair the device and retrieve device information first!</string>
+    <string name="retriveDeviceInfoTxt">Retrieve Device Information</string>
+    <string name="selectPairedDevice">Please Select Paired Device for Retrieve Device Information</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

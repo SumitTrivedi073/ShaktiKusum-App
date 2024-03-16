@@ -457,7 +457,7 @@ public class Login extends AppCompatActivity {
                     CustomUtility.setSharedPreference(context, "username", username);
                     CustomUtility.setSharedPreference(context, "usertype", usertype);
                     if(rmsBaseUrl!=null && !rmsBaseUrl.isEmpty()) {
-                        CustomUtility.setSharedPreference(context, Constant.RmsBaseUrl, rmsBaseUrl);
+                        CustomUtility.setSharedPreference(context, Constant.RmsBaseUrl, "https://quality.shaktirms.com/");
                     }else {
                         CustomUtility.setSharedPreference(context, Constant.RmsBaseUrl, WebURL.RMSAPPURL);
                     }

@@ -291,6 +291,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 dataHelper.deletekusumCImages();
                 dataHelper.deleteKusumCSurveyFrom();
                 dataHelper.deleteDeviceMappingData();
+                dataHelper.deleteDeviceInformationData();
                 dataHelper.deleteOfflineControllerData();
                 dataHelper.deleteBeneficiaryregistration();
                 CustomUtility.clearSharedPrefrences(context);

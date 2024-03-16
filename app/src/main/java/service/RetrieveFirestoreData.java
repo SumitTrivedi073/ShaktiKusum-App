@@ -58,7 +58,7 @@ public class RetrieveFirestoreData extends Service {
                 new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).setContentTitle(getResources().getString(R.string.app_name)).setContentText(
                         "App Running Background").setSmallIcon(R.mipmap.ic_notification).build();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startForeground(111, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+            startForeground(111, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
         }else {
             startForeground(111, notification);
 
@@ -91,6 +91,7 @@ public class RetrieveFirestoreData extends Service {
                 if (snapshot != null && snapshot.exists()) {
                     AppConfig appConfig = snapshot.toObject(AppConfig.class);
 
+                    Log.e("appConfig=====>",appConfig.toString());
                     if (appConfig != null) {
                         try {
                             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);

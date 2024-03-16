@@ -76,36 +76,16 @@ public class PairedDeviceActivity extends BaseActivity {
                 finish();
             } else if (!bAdapter.isEnabled()) {
                 Intent turnBTon = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                if (ActivityCompat.checkSelfPermission(PairedDeviceActivity.this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
                 startActivityForResult(turnBTon, 1);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        txtPairedDeviceListID.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pairedDeviceList();
-            }
-        });
+        txtPairedDeviceListID.setOnClickListener(v -> pairedDeviceList());
 
 
-        rlvBackViewID.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        rlvBackViewID.setOnClickListener(v -> finish());
 
         pairedDeviceList();
 

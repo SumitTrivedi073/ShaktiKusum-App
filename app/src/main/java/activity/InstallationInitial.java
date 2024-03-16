@@ -982,9 +982,9 @@ public class InstallationInitial extends BaseActivity {
 
             } else {
                CustomUtility.ShowToast(getResources().getString(R.string.savedInLocalDatabase), mContext);
-                Intent intent = new Intent(mContext, InstallationList.class);
+               /* Intent intent = new Intent(mContext, InstallationList.class);
                 startActivity(intent);
-                finish();
+                finish();*/
            }
 
         } else {
