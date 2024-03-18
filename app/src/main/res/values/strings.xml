@@ -565,6 +565,8 @@
     <string name="please_wait">Please Wait…</string>
     <string name="deviceInformation">Device Information</string>
     <string name="pairControllerRetrieveDeviceInformation">Device Shifting Successfully now pair the controller and retrieve device information</string>
+    <string name="dataSaveOfflinePairControllerRetrieveDeviceInfo">Data saved in local database now pair the controller and retrieve device information</string>
+
     <string name="retriveDeviceInfo">Please Pair the device and retrieve device information first!</string>
     <string name="retriveDeviceInfoTxt">Retrieve Device Information</string>
     <string name="selectPairedDevice">Please Select Paired Device for Retrieve Device Information</string>

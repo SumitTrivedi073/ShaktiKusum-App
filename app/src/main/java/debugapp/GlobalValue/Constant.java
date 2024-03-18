@@ -49,8 +49,6 @@ public class Constant {
 
     public static String debugDataExtract = "debugDataExtract";
 
-    public static String retrieveDeviceInfo = "retrieveDeviceInfo";
-
     public static String JointInspection = "JointInspection";
 
     public static String RejectInstallation = "RejectInstallation";
@@ -62,6 +60,11 @@ public class Constant {
     public static String deviceStatus = "DeviceStatus";
 
     public static String deviceMappingData = "deviceMappingData";
+    public static String retrieveDeviceInfo = "retrieveDeviceInfo";
+
+    public static String dongleType = "dongleType";
+    public static String latlng = "latlng";
+
 
     public static String billNo = "billNo";
 

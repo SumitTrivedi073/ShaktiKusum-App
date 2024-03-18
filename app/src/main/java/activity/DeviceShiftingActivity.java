@@ -219,6 +219,7 @@ public class DeviceShiftingActivity extends BaseActivity implements DeviceShifti
 
         Intent intent = new Intent(DeviceShiftingActivity.this, DeviceMappingActivity.class);
         intent.putExtra(Constant.deviceMappingData, deviceShiftingModel.get(position));
+        intent.putExtra(Constant.retrieveDeviceInfo,"0");
         startActivity(intent);
 
     }

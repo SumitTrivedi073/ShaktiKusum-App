@@ -87,6 +87,7 @@ import bean.DeviceInformationModel;
 import bean.DeviceMappingModel;
 import bean.DeviceShiftingModel;
 import bean.ImageModel;
+import bean.InstallationBean;
 import bean.PairDeviceModel;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.AllPopupUtil;
@@ -118,6 +119,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
     DatabaseHelper databaseHelper;
     DeviceShiftingModel.Response deviceShiftingData;
+    InstallationBean installationBean;
 
     BluetoothSocket bluetoothSocket;
     private InputStream iStream = null;
@@ -213,20 +215,37 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     }
 
     private void retrieveValue() {
+        String dongleType = "", latLng = "";
         if (getIntent().getExtras() != null) {
-            deviceShiftingData = (DeviceShiftingModel.Response) getIntent().getSerializableExtra(Constant.deviceMappingData);
+            if (getIntent().getStringExtra(Constant.retrieveDeviceInfo).equals("0")) {
+                deviceShiftingData = (DeviceShiftingModel.Response) getIntent().getSerializableExtra(Constant.deviceMappingData);
+                billNo = deviceShiftingData.getVbeln();
+                beneficiaryNo = deviceShiftingData.getBeneficiary();
+                contactNo = deviceShiftingData.getContactNo();
+                hp = deviceShiftingData.getHp();
+                regisNo = deviceShiftingData.getRegisno();
+                // controllerSerialNo = deviceShiftingData.getControllerSernr() + "-0";
+                customerName = deviceShiftingData.getCustomerName();
 
-            billNo = deviceShiftingData.getVbeln();
-            beneficiaryNo = deviceShiftingData.getBeneficiary();
-            contactNo = deviceShiftingData.getContactNo();
-            hp = deviceShiftingData.getHp();
-            regisNo = deviceShiftingData.getRegisno();
-            // controllerSerialNo = deviceShiftingData.getControllerSernr() + "-0";
-            customerName = deviceShiftingData.getCustomerName();
-            customerMobile = deviceShiftingData.getContactNo();
+                dongleType = deviceShiftingData.getDongle().charAt(0) + deviceShiftingData.getDongle().substring(1, 2);
+                latLng = deviceShiftingData.getLatlng();
+            }else {
+
+                installationBean = (InstallationBean) getIntent().getSerializableExtra(Constant.deviceMappingData);
+
+                billNo = installationBean.getInst_bill_no();
+                beneficiaryNo = installationBean.getBeneficiaryNo();
+                contactNo = installationBean.getMobile_no();
+                hp = installationBean.getInst_hp();
+                regisNo = installationBean.getRegis_no();
+                // controllerSerialNo = deviceShiftingData.getControllerSernr() + "-0";
+                customerName = installationBean.getCustomer_name();
+
+                dongleType = getIntent().getStringExtra(Constant.dongleType).charAt(0) + getIntent().getStringExtra(Constant.dongleType).substring(1, 2);
+                latLng = getIntent().getStringExtra(Constant.latlng);
+            }
 
 
-            String dongleType = deviceShiftingData.getDongle().charAt(0) + deviceShiftingData.getDongle().substring(1, 2);
             Log.e("dongleType=====>", dongleType);
 
             if (dongleType.equals("99") || dongleType.equals("28")) {
@@ -235,8 +254,8 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 retrieveDeviceInfoCardOffline.setVisibility(View.GONE);
             } else {
                 is2Gdevice = false;
-                if (!deviceShiftingData.getLatlng().isEmpty()) {
-                    String[] latlong = deviceShiftingData.getLatlng().split(",");
+                if (!latLng.isEmpty()) {
+                    String[] latlong = latLng.split(",");
                     latitude = String.valueOf(Double.parseDouble(latlong[0]));
                     longitude = String.valueOf(Double.parseDouble(latlong[1]));
                 }
@@ -245,7 +264,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
 
             if (CustomUtility.isInternetOn(DeviceMappingActivity.this)) {
-                getDeviceOnlineStatus();
+                checkDeviceShiftingStatusAPI(false);
             } else {
                 SetAdapter();
                 CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.check_internet_connection));
@@ -442,12 +461,40 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.btnSave4G:
-                if (CustomUtility.isInternetOn(DeviceMappingActivity.this)) {
-                    saveShiftingStatusToSap(getResources().getString(R.string.online_and_shifted));
-                } else {
-                    CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.check_internet_connection));
-                }
 
+                if (DEVICE_NO.isEmpty()) {
+                    getResources().getString(R.string.retriveDeviceInfo);
+                } else if (DONGLE_FIRM_VER.isEmpty()) {
+                    getResources().getString(R.string.retriveDeviceInfo);
+                } else {
+                    DeviceInformationModel deviceInformationModel = new DeviceInformationModel();
+                    deviceInformationModel.setDeviceNo(DEVICE_NO);
+                    deviceInformationModel.setDeviceFirmVersion(DEVICE_FIRM_VER);
+                    deviceInformationModel.setDongleFirmVersion(DONGLE_FIRM_VER);
+                    deviceInformationModel.setDongleAPN(DONGLE_APN);
+                    deviceInformationModel.setDongleMode(DONGLE_MODE);
+                    deviceInformationModel.setDongleConnectivity(DONGLE_CONNECTIVITY);
+                    deviceInformationModel.setDongleMqttIp1(DONGLE_MQTT1_IP);
+                    deviceInformationModel.setDongleMqttIp2(DONGLE_MQTT2_IP);
+                    deviceInformationModel.setdFota(DONGLE_D_FOTA);
+                    deviceInformationModel.setTcpIP(TCP_IP);
+                    deviceInformationModel.setBillNo(billNo);
+                    deviceInformationModel.setRemarkTxt(remarkExt.getText().toString().trim());
+                    if (!isDeviceInformationAvailable) {
+                        databaseHelper.insertDeviceInformation(deviceInformationModel);
+                    } else {
+                        databaseHelper.updateDeviceInformation(deviceInformationModel);
+                    }
+
+
+                    if (CustomUtility.isInternetOn(DeviceMappingActivity.this)) {
+                        saveShiftingStatusToSap(getResources().getString(R.string.online_and_shifted));
+                    } else {
+                        CustomUtility.showToast(this, getResources().getString(R.string.data_save_in_local));
+                        onBackPressed();
+                        // CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.check_internet_connection));
+                    }
+                }
                 break;
 
         }
@@ -912,7 +959,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
                         if (deviceDetailModel.getResponse().getIsLogin()) {
                             isDeviceOnline = true;
-                            checkDeviceShiftingStatusAPI(false);
+                            setDeviceData();
 
                         } else {
                             SetAdapter();
@@ -1210,9 +1257,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                             }
                         } else {
                             if (!isButtonClick) {
-                                setDeviceData();
-                            } else {
-                                CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.latest_version_insta));
+                                getDeviceOnlineStatus();
                             }
 
                         }
@@ -1268,7 +1313,6 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
         Log.e("DeviceShiftingAPI=====>",WebURL.saveShiftedDeviceToServer + jsonArray);
 
-        CustomUtility.showProgressDialogue(DeviceMappingActivity.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.saveShiftedDeviceToServer + jsonArray, null, new Response.Listener<JSONObject>() {

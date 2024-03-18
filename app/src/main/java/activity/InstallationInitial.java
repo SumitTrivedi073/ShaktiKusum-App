@@ -981,11 +981,13 @@ public class InstallationInitial extends BaseActivity {
                 }
 
             } else {
-               CustomUtility.ShowToast(getResources().getString(R.string.savedInLocalDatabase), mContext);
+                saveDataLocallyPopup(getResources().getString(R.string.dataSaveOfflinePairControllerRetrieveDeviceInfo));
+                //  CustomUtility.ShowToast(getResources().getString(R.string.savedInLocalDatabase), mContext);
                /* Intent intent = new Intent(mContext, InstallationList.class);
                 startActivity(intent);
                 finish();*/
-           }
+
+            }
 
         } else {
             CustomUtility.ShowToast("Installation Not Submitted,Remove duplicate module Number", this);
@@ -994,10 +996,44 @@ public class InstallationInitial extends BaseActivity {
 
     }
 
+    private void saveDataLocallyPopup(String message) {
+        LayoutInflater inflater = (LayoutInflater) InstallationInitial.this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.send_successfully_layout,
+                null);
+        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(InstallationInitial.this, R.style.MyDialogTheme);
+
+        builder.setView(layout);
+        builder.setCancelable(false);
+        android.app.AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        alertDialog.show();
+
+
+        TextView OK_txt = layout.findViewById(R.id.OK_txt);
+        TextView title_txt = layout.findViewById(R.id.title_txt);
+
+        title_txt.setText(message);
+
+        OK_txt.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            Intent intent = new Intent(InstallationInitial.this, DeviceMappingActivity.class);
+            intent.putExtra(Constant.retrieveDeviceInfo, "1");
+            intent.putExtra(Constant.deviceMappingData, installationBean);
+            intent.putExtra(Constant.dongleType, DONGAL_ID);
+            intent.putExtra(Constant.latlng, imageList.get(3).getLatitude()+","+imageList.get(3).getLongitude());
+            startActivity(intent);
+            finish();
+
+        });
+
+    }
+
     private void SubmitData() {
-        if(mobileOnlineStatus.equals(getResources().getString(R.string.offline))&& controllerOnlineStatus.equals(getResources().getString(R.string.offline))){
+        if (mobileOnlineStatus.equals(getResources().getString(R.string.offline)) && controllerOnlineStatus.equals(getResources().getString(R.string.offline))) {
             sendFileToRMSServer();
-        }else {
+        } else {
             SubmitDebugData();
         }
     }
@@ -1554,8 +1590,7 @@ public class InstallationInitial extends BaseActivity {
             public void run() {
 
                 try {
-                    okhttp3.Response response = client.newCall(request)
-                            .execute();
+                    okhttp3.Response response = client.newCall(request).execute();
                     String jsonData = response.body().string();
                     JSONObject Jobject = new JSONObject(jsonData);
 

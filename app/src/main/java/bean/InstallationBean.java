@@ -1,58 +1,14 @@
 package bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 12/30/2016.
  */
-public class InstallationBean {
+public class InstallationBean implements Serializable {
 
 
-    public String pernr = "";
-    public String latitude = "";
-    public String longitude = "";
-    public String project_no = "";
-    public String login_no = "";
-    public String inst_bill_no = "";
-    public String inst_date = "";
-    public String bill_date = "";
-    public String delay_reason = "";
-    public String rms_data_status = "";
-    public String customer_name = "";
-    public String fathers_name = "";
-    public String mobile_no = "";
-    public String state_ins_id = "";
-    public String state_ins_txt = "";
-    public String district_ins_id = "";
-    public String district_ins_txt = "";
-    public String tehsil_ins = "";
-    public String village_ins = "";
-    public String address_ins = "";
-    public String make_ins = "";
-
-    public String solarpanel_wattage = "";
-    public String solarpanel_stand_ins_quantity = "";
-    public String total_watt = "";
-    public String inst_hp = "";
-
-    public String no_of_module_qty = "";
-    public String no_of_module_value = "";
-
-    public String module_total_plate_watt = "";
-
-    public String solar_motor_model_details = "";
-    public String smmd_sno = "";
-
-    public String splar_pump_model_details = "";
-    public String spmd_sno = "";
-
-    public String solar_controller_model = "";
-    public String scm_sno = "";
-
-    public String simoprator = "";
-    public String conntype = "";
-    public String simcard_num = "";
-    public String regis_no = "";
-    public String BeneficiaryNo = "";
-    public String pumpLoad = "";
+    public String pernr = "", latitude = "", longitude = "", project_no = "", login_no = "", inst_bill_no = "", inst_date = "", bill_date = "", delay_reason = "", rms_data_status = "", customer_name = "", fathers_name = "", mobile_no = "", state_ins_id = "", state_ins_txt = "", district_ins_id = "", district_ins_txt = "", tehsil_ins = "", village_ins = "", address_ins = "", make_ins = "", solarpanel_wattage = "", solarpanel_stand_ins_quantity = "", total_watt = "", inst_hp = "", no_of_module_qty = "", no_of_module_value = "", module_total_plate_watt = "", solar_motor_model_details = "", smmd_sno = "", splar_pump_model_details = "", spmd_sno = "", solar_controller_model = "", scm_sno = "", simoprator = "", conntype = "", simcard_num = "", regis_no = "", BeneficiaryNo = "", pumpLoad = "";
 
     public InstallationBean() {
 
@@ -114,6 +70,8 @@ public class InstallationBean {
 
     }
 
+
+
     public String getPernr() {
         return pernr;
     }
@@ -121,6 +79,8 @@ public class InstallationBean {
     public void setPernr(String pernr) {
         this.pernr = pernr;
     }
+
+
 
     public String getLatitude() {
         return latitude;
@@ -130,6 +90,8 @@ public class InstallationBean {
         this.latitude = latitude;
     }
 
+
+
     public String getLongitude() {
         return longitude;
     }
@@ -137,6 +99,8 @@ public class InstallationBean {
     public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
+
+
 
     public String getInst_bill_no() {
         return inst_bill_no;
@@ -146,6 +110,8 @@ public class InstallationBean {
         this.inst_bill_no = inst_bill_no;
     }
 
+
+
     public String getInst_date() {
         return inst_date;
     }
@@ -153,6 +119,8 @@ public class InstallationBean {
     public void setInst_date(String inst_date) {
         this.inst_date = inst_date;
     }
+
+
 
     public String getBill_date() {
         return bill_date;
@@ -162,13 +130,17 @@ public class InstallationBean {
         this.bill_date = bill_date;
     }
 
-    public String getDelay_reason() {
+
+
+    public String  getDelay_reason() {
         return delay_reason;
     }
 
     public void setDelay_reason(String delay_reason) {
         this.delay_reason = delay_reason;
     }
+
+
 
     public String getRms_data_status() {
         return rms_data_status;
@@ -178,13 +150,17 @@ public class InstallationBean {
         this.rms_data_status = rms_data_status;
     }
 
-    public String getCustomer_name() {
+
+
+    public String  getCustomer_name() {
         return customer_name;
     }
 
     public void setCustomer_name(String customer_name) {
         this.customer_name = customer_name;
     }
+
+
 
     public String getFathers_name() {
         return fathers_name;
@@ -194,6 +170,8 @@ public class InstallationBean {
         this.fathers_name = fathers_name;
     }
 
+
+
     public String getMobile_no() {
         return mobile_no;
     }
@@ -201,6 +179,8 @@ public class InstallationBean {
     public void setMobile_no(String mobile_no) {
         this.mobile_no = mobile_no;
     }
+
+
 
     public String getProject_no() {
         return project_no;
@@ -210,6 +190,8 @@ public class InstallationBean {
         this.project_no = project_no;
     }
 
+
+
     public String getLogin_no() {
         return login_no;
     }
@@ -217,6 +199,8 @@ public class InstallationBean {
     public void setLogin_no(String login_no) {
         this.login_no = login_no;
     }
+
+
 
     public String getState_ins_id() {
         return state_ins_id;
@@ -226,6 +210,8 @@ public class InstallationBean {
         this.state_ins_id = state_ins_id;
     }
 
+
+
     public String getState_ins_txt() {
         return state_ins_txt;
     }
@@ -233,6 +219,8 @@ public class InstallationBean {
     public void setState_ins_txt(String state_ins_txt) {
         this.state_ins_txt = state_ins_txt;
     }
+
+
 
     public String getDistrict_ins_id() {
         return district_ins_id;
@@ -242,13 +230,17 @@ public class InstallationBean {
         this.district_ins_id = district_ins_id;
     }
 
-    public String getDistrict_ins_txt() {
+
+
+    public String  getDistrict_ins_txt() {
         return district_ins_txt;
     }
 
     public void setDistrict_ins_txt(String district_ins_txt) {
         this.district_ins_txt = district_ins_txt;
     }
+
+
 
     public String getMake_ins() {
         return make_ins;
@@ -258,6 +250,7 @@ public class InstallationBean {
         this.make_ins = make_ins;
     }
 
+
     public String getTehsil_ins() {
         return tehsil_ins;
     }
@@ -265,6 +258,8 @@ public class InstallationBean {
     public void setTehsil_ins(String tehsil_ins) {
         this.tehsil_ins = tehsil_ins;
     }
+
+
 
     public String getVillage_ins() {
         return village_ins;
@@ -274,6 +269,8 @@ public class InstallationBean {
         this.village_ins = village_ins;
     }
 
+
+
     public String getAddress_ins() {
         return address_ins;
     }
@@ -281,6 +278,8 @@ public class InstallationBean {
     public void setAddress_ins(String address_ins) {
         this.address_ins = address_ins;
     }
+
+
 
     public String getSolarpanel_wattage() {
         return solarpanel_wattage;
@@ -290,6 +289,8 @@ public class InstallationBean {
         this.solarpanel_wattage = solarpanel_wattage;
     }
 
+
+
     public String getSolarpanel_stand_ins_quantity() {
         return solarpanel_stand_ins_quantity;
     }
@@ -297,6 +298,8 @@ public class InstallationBean {
     public void setSolarpanel_stand_ins_quantity(String solarpanel_stand_ins_quantity) {
         this.solarpanel_stand_ins_quantity = solarpanel_stand_ins_quantity;
     }
+
+
 
     public String getTotal_watt() {
         return total_watt;
@@ -306,13 +309,17 @@ public class InstallationBean {
         this.total_watt = total_watt;
     }
 
-    public String getInst_hp() {
+
+
+    public String  getInst_hp() {
         return inst_hp;
     }
 
     public void setInst_hp(String inst_hp) {
         this.inst_hp = inst_hp;
     }
+
+
 
     public String getNo_of_module_qty() {
         return no_of_module_qty;
@@ -322,13 +329,17 @@ public class InstallationBean {
         this.no_of_module_qty = no_of_module_qty;
     }
 
-    public String getNo_of_module_value() {
+
+
+    public String  getNo_of_module_value() {
         return no_of_module_value;
     }
 
     public void setNo_of_module_value(String no_of_module_value) {
         this.no_of_module_value = no_of_module_value;
     }
+
+
 
     public String getModule_total_plate_watt() {
         return module_total_plate_watt;
@@ -338,13 +349,17 @@ public class InstallationBean {
         this.module_total_plate_watt = module_total_plate_watt;
     }
 
-    public String getSolar_motor_model_details() {
+
+
+    public String  getSolar_motor_model_details() {
         return solar_motor_model_details;
     }
 
     public void setSolar_motor_model_details(String solar_motor_model_details) {
         this.solar_motor_model_details = solar_motor_model_details;
     }
+
+
 
     public String getSmmd_sno() {
         return smmd_sno;
@@ -354,6 +369,8 @@ public class InstallationBean {
         this.smmd_sno = smmd_sno;
     }
 
+
+
     public String getSplar_pump_model_details() {
         return splar_pump_model_details;
     }
@@ -362,13 +379,17 @@ public class InstallationBean {
         this.splar_pump_model_details = splar_pump_model_details;
     }
 
-    public String getSpmd_sno() {
+
+
+    public String  getSpmd_sno() {
         return spmd_sno;
     }
 
     public void setSpmd_sno(String spmd_sno) {
         this.spmd_sno = spmd_sno;
     }
+
+
 
     public String getSolar_controller_model() {
         return solar_controller_model;
@@ -378,13 +399,17 @@ public class InstallationBean {
         this.solar_controller_model = solar_controller_model;
     }
 
-    public String getScm_sno() {
+
+
+    public String  getScm_sno() {
         return scm_sno;
     }
 
     public void setScm_sno(String scm_sno) {
         this.scm_sno = scm_sno;
     }
+
+
 
     public String getSimoprator() {
         return simoprator;
@@ -394,13 +419,17 @@ public class InstallationBean {
         this.simoprator = simoprator;
     }
 
-    public String getConntype() {
+
+
+    public String  getConntype() {
         return conntype;
     }
 
     public void setConntype(String conntype) {
         this.conntype = conntype;
     }
+
+
 
     public String getSimcard_num() {
         return simcard_num;
@@ -410,6 +439,8 @@ public class InstallationBean {
         this.simcard_num = simcard_num;
     }
 
+
+
     public String getRegis_no() {
         return regis_no;
     }
@@ -418,7 +449,9 @@ public class InstallationBean {
         this.regis_no = regis_no;
     }
 
-    public String getBeneficiaryNo() {
+
+
+    public String  getBeneficiaryNo() {
         return BeneficiaryNo;
     }
 
@@ -426,7 +459,9 @@ public class InstallationBean {
         BeneficiaryNo = beneficiaryNo;
     }
 
-    public String getPumpLoad() {
+
+
+    public String  getPumpLoad() {
         return pumpLoad;
     }
 
@@ -435,7 +470,9 @@ public class InstallationBean {
     }
 
     @Override
-    public String toString() {
+
+
+    public String  toString() {
         return "InstallationBean{" +
                 "pernr='" + pernr + '\'' +
                 ", latitude='" + latitude + '\'' +
