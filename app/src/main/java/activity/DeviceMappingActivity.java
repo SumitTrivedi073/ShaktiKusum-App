@@ -126,7 +126,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     String DeviceInfo = "", DEVICE_NO = "", DONGLE_FIRM_VER = "", DEVICE_FIRM_VER = "", DONGLE_APN = "",
             DONGLE_MODE = "", DONGLE_CONNECTIVITY = "", DONGLE_MQTT1_IP = "", DONGLE_MQTT2_IP = "", DONGLE_D_FOTA = "", TCP_IP = "",
             kkkkkk1 = "", bluetoothDeviceAddress = "", billNo = "", beneficiaryNo = "", contactNo = "", hp = "", regisNo = "",
-            controllerSerialNo = "7F-0135-0-13-06-23-0", customerName = "", customerMobile = "", latitude = "", longitude = "";
+            controllerSerialNo = "", customerName = "", customerMobile = "", latitude = "", longitude = "";
 
     int selectedIndex, countDownTimer2G = 900000, countDownTimer4G = 10000;
     boolean isImageUpdate = false, isDeviceOnline = false, is2Gdevice, is4Gupdate = false, isDeviceInformationAvailable = false;
@@ -224,7 +224,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 contactNo = deviceShiftingData.getContactNo();
                 hp = deviceShiftingData.getHp();
                 regisNo = deviceShiftingData.getRegisno();
-                // controllerSerialNo = deviceShiftingData.getControllerSernr() + "-0";
+                 controllerSerialNo = deviceShiftingData.getControllerSernr() + "-0";
                 customerName = deviceShiftingData.getCustomerName();
 
                 dongleType = deviceShiftingData.getDongle().charAt(0) + deviceShiftingData.getDongle().substring(1, 2);
@@ -238,7 +238,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 contactNo = installationBean.getMobile_no();
                 hp = installationBean.getInst_hp();
                 regisNo = installationBean.getRegis_no();
-                // controllerSerialNo = deviceShiftingData.getControllerSernr() + "-0";
+                controllerSerialNo = installationBean.getScm_sno() + "-0";
                 customerName = installationBean.getCustomer_name();
 
                 dongleType = getIntent().getStringExtra(Constant.dongleType).charAt(0) + getIntent().getStringExtra(Constant.dongleType).substring(1, 2);
@@ -246,7 +246,15 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
             }
 
 
-            Log.e("dongleType=====>", dongleType);
+            Log.e("billNo=====>", billNo
+                    +"beneficiaryNo=====>"+beneficiaryNo
+                    +"contactNo=====>"+contactNo
+                    +"hp=====>"+hp
+                    +"regisNo=====>"+regisNo
+                    +"controllerSerialNo=====>"+controllerSerialNo
+                    +"customerName=====>"+customerName
+                    +"dongleType=====>"+dongleType
+                    +"latLng=====>"+latLng);
 
             if (dongleType.equals("99") || dongleType.equals("28")) {
                 is2Gdevice = true;
@@ -277,7 +285,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     private void retrieveDeviceInformation() {
         String deviceInfo = "";
         Log.e("billNo=====>", billNo + "=======>controllerSerialNo========>" + controllerSerialNo);
-        deviceInformationModel = databaseHelper.getDeviceInformation(billNo, "7F-0135-0-13-06-23-0");
+        deviceInformationModel = databaseHelper.getDeviceInformation(billNo, controllerSerialNo);
         Log.e("deviceInformationModel======>", deviceInformationModel.toString());
         if (deviceInformationModel.getDongleFirmVersion() != null && !deviceInformationModel.getDongleFirmVersion().isEmpty()) {
             isDeviceInformationAvailable = true;

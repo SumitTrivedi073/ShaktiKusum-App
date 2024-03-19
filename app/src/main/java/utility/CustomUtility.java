@@ -442,6 +442,7 @@ public class CustomUtility {
         else{
             firstName = fullNameArray[0];
         }
+        firstName = firstName.replaceAll(":","");
         return firstName;
     }
 }

@@ -235,7 +235,6 @@ import webservice.WebURL;
                         CONTACT_NO = jo.getString("contact_no");
                         inst_no_of_module_value = jo.getString("inst_no_of_module_value");
                         pump_load = jo.getString("pump_load");
-                        Log.e("pumpLoad======>",pump_load);
 
                         installationBean = new InstallationListBean(bill_no,
                                 CustomUtility.getSharedPreferences(context, "userid"),

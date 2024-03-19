@@ -73,4 +73,6 @@ public class Constant {
     public static String longitude = "longitude";
 
     public static String beneficiaryData ="beneficiaryData";
+
+    public static String RMS_SHIFTING = "rms_shifting";
 }

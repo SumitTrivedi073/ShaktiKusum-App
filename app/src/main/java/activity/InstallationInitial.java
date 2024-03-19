@@ -981,12 +981,18 @@ public class InstallationInitial extends BaseActivity {
                 }
 
             } else {
-                saveDataLocallyPopup(getResources().getString(R.string.dataSaveOfflinePairControllerRetrieveDeviceInfo));
-                //  CustomUtility.ShowToast(getResources().getString(R.string.savedInLocalDatabase), mContext);
-               /* Intent intent = new Intent(mContext, InstallationList.class);
-                startActivity(intent);
-                finish();*/
+                if (CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RMS_SHIFTING) != null &&
+                        !CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RMS_SHIFTING).isEmpty()
+                && CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RMS_SHIFTING).equals("true")) {
+                    Log.e("IsRMSShifting", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RMS_SHIFTING));
+                    saveDataLocallyPopup(getResources().getString(R.string.dataSaveOfflinePairControllerRetrieveDeviceInfo));
 
+                } else {
+                    CustomUtility.ShowToast(getResources().getString(R.string.savedInLocalDatabase), mContext);
+                    Intent intent = new Intent(mContext, InstallationList.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
 
         } else {
@@ -1022,7 +1028,7 @@ public class InstallationInitial extends BaseActivity {
             intent.putExtra(Constant.retrieveDeviceInfo, "1");
             intent.putExtra(Constant.deviceMappingData, installationBean);
             intent.putExtra(Constant.dongleType, DONGAL_ID);
-            intent.putExtra(Constant.latlng, imageList.get(3).getLatitude()+","+imageList.get(3).getLongitude());
+            intent.putExtra(Constant.latlng, imageList.get(2).getLatitude() + "," + imageList.get(2).getLongitude());
             startActivity(intent);
             finish();
 
@@ -1272,7 +1278,7 @@ public class InstallationInitial extends BaseActivity {
 
         inst_pump_ser.setText(pump);
 
-       inst_controller_ser.setText(controller);
+        inst_controller_ser.setText("7F-0135-0-13-06-23");
        //inst_controller_ser.setText(controller);
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {

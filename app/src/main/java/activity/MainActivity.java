@@ -13,7 +13,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.StrictMode;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -386,6 +385,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @SuppressLint("StaticFieldLeak")
     private class Dashboard extends AsyncTask<String, String, String> {
+        String login_selec = null, project_no, process_no, process_nm;
 
         @Override
         protected void onPreExecute() {
@@ -400,27 +400,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             param.add(new BasicNameValuePair("USERID", CustomUtility.getSharedPreferences(context, "userid")));
             param.add(new BasicNameValuePair("PROJECT_NO", CustomUtility.getSharedPreferences(context, "projectid")));
             param.add(new BasicNameValuePair("PROJECT_LOGIN_NO", CustomUtility.getSharedPreferences(context, "loginid")));
-            String login_selec = null, project_no, process_no, process_nm;
+
             Log.e("DashboardURL========>", WebURL.DASHBOARD_DATA + param.toString());
             try {
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
-                StrictMode.setThreadPolicy(policy);
                 login_selec = CustomHttpClient.executeHttpPost1(WebURL.DASHBOARD_DATA, param);
-                JSONObject object = new JSONObject(login_selec);
-                String obj1 = object.getString("mapp_dashboard");
-                JSONArray ja = new JSONArray(obj1);
-                for (int i = 0; i < ja.length(); i++) {
-                    JSONObject jo = ja.getJSONObject(i);
-                    project_no = jo.optString("project_no");
-                    process_no = jo.optString("process_no");
-                    process_nm = jo.optString("process_nm");
-                    if (dataHelper.isRecordExist(DatabaseHelper.TABLE_DASHBOARD, DatabaseHelper.KEY_PROCESS_NO, process_no)) {
-                        dataHelper.updateDashboard(project_no, process_no, process_nm);
-                    } else {
-                        dataHelper.insertDashboardData(project_no, process_no, process_nm);
-                    }
-                   stopProgressDialogue();
-                }
+
             } catch (Exception e) {
                 e.printStackTrace();
                 stopProgressDialogue();
@@ -430,9 +414,32 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         @Override
         protected void onPostExecute(String result) {
-            // write display tracks logic here
-            getListData();
-            stopProgressDialogue();  // dismiss dialog
+            stopProgressDialogue();
+            try {
+                JSONObject object = new JSONObject(result);
+                String obj1 = object.getString("mapp_dashboard");
+                JSONArray ja = new JSONArray(obj1);
+                for (int i = 0; i < ja.length(); i++) {
+                    JSONObject jo = ja.getJSONObject(i);
+                    project_no = jo.optString("project_no");
+                    process_no = jo.optString("process_no");
+                    process_nm = jo.optString("process_nm");
+                    if(process_no.equals("026")){
+                        CustomUtility.setSharedPreference(getApplicationContext(),Constant.RMS_SHIFTING,"true");
+                    }
+                    if (dataHelper.isRecordExist(DatabaseHelper.TABLE_DASHBOARD, DatabaseHelper.KEY_PROCESS_NO, process_no)) {
+                        dataHelper.updateDashboard(project_no, process_no, process_nm);
+                    } else {
+                        dataHelper.insertDashboardData(project_no, process_no, process_nm);
+                    }
+                }
+
+                // write display tracks logic here
+                getListData();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
