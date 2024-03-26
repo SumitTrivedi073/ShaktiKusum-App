@@ -290,7 +290,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String KEY_DEVICE_INFO_ID = "DeviceInfoID",KEY_DEVICE_NO = "device_no", KEY_DONGLE_FIRM_VER = "DongleFirmVer", KEY_DEVICE_FIRM_VER = "DeviceFirmVer",
             KEY_DONGLE_APN = "DongleAPN", KEY_DONGLE_MODE = "DongleMode", KEY_DONGLE_CONNECTIVITY = "DongleConnectivity",
-            KEY_DONGLE_MQTT1_IP = "DongleMQTTIP1", KEY_DONGLE_MQTT2_IP = "DongleMQTTIP2",KEY_DONGLE_D_FOTA ="DongleDFota",KEY_TCP_IP ="TCPIP";
+            KEY_DONGLE_MQTT1_IP = "DongleMQTTIP1", KEY_DONGLE_MQTT2_IP = "DongleMQTTIP2",KEY_DONGLE_D_FOTA ="DongleDFota",KEY_TCP_IP ="TCPIP",
+            KEY_MOBILE_ONLINE ="MobileOnline";
 
 
     public static final String KEY_UNLOADING_ID = "unloadingId", KEY_UNLOADING_NAME = "unloadingImageName", KEY_UNLOADING_PATH = "unloadingPath", KEY_UNLOADING_IMAGE_SELECTED = "unloadingImageSelected", KEY_UNLOADING_BILL_NO = "unloadingBillNo";
@@ -1258,7 +1259,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_DONGLE_D_FOTA + " TEXT,"
             + KEY_TCP_IP + " TEXT,"
             + KEY_BILL_NO + " TEXT,"
-            + KEY_REMARK1 + " TEXT)";
+            + KEY_REMARK1 + " TEXT,"
+            + KEY_MOBILE_ONLINE + " TEXT)";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -2661,6 +2663,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_TCP_IP,deviceInformationModel.getTcpIP());
             values.put(KEY_BILL_NO,deviceInformationModel.getBillNo());
             values.put(KEY_REMARK1,deviceInformationModel.getRemarkTxt());
+            values.put(KEY_MOBILE_ONLINE,deviceInformationModel.getIsMobileOnline());
 
             // Insert Row
             long i = db.insert(TABLE_DEVICE_INFORMATION, null, values);
@@ -2696,6 +2699,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_TCP_IP,deviceInformationModel.getTcpIP());
             values.put(KEY_BILL_NO,deviceInformationModel.getBillNo());
             values.put(KEY_REMARK1,deviceInformationModel.getRemarkTxt());
+            values.put(KEY_MOBILE_ONLINE,deviceInformationModel.getIsMobileOnline());
             // Insert Row
             where =  KEY_DEVICE_NO + " = '" + deviceInformationModel.getDeviceNo() + "'" + " AND " + KEY_BILL_NO + " = '" + deviceInformationModel.getBillNo() + "'";
 
@@ -3983,6 +3987,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         deviceInformationModel.setTcpIP(cursor.getString(cursor.getColumnIndex(KEY_TCP_IP)));
                         deviceInformationModel.setBillNo(cursor.getString(cursor.getColumnIndex(KEY_BILL_NO)));
                         deviceInformationModel.setRemarkTxt(cursor.getString(cursor.getColumnIndex(KEY_REMARK1)));
+                        deviceInformationModel.setIsMobileOnline(cursor.getString(cursor.getColumnIndex(KEY_MOBILE_ONLINE)));
 
                         cursor.moveToNext();
                     }

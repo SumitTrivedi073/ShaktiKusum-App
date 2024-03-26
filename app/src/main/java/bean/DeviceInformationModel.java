@@ -2,7 +2,7 @@ package bean;
 
 public class DeviceInformationModel {
     private  String deviceNo,dongleFirmVersion,deviceFirmVersion,dongleAPN,dongleMode,dongleConnectivity,
-            dongleMqttIp1,dongleMqttIp2,dFota,tcpIP,billNo,remarkTxt;
+            dongleMqttIp1,dongleMqttIp2,dFota,tcpIP,billNo,remarkTxt,isMobileOnline;
 
 
     public String getDeviceNo() {
@@ -97,7 +97,17 @@ public class DeviceInformationModel {
         return remarkTxt;
     }
 
+
     public void setRemarkTxt(String remarkTxt) {
         this.remarkTxt = remarkTxt;
+    }
+
+
+    public String getIsMobileOnline() {
+        return isMobileOnline;
+    }
+
+    public void setIsMobileOnline(String isMobileOnline) {
+        this.isMobileOnline = isMobileOnline;
     }
 }

@@ -1278,7 +1278,7 @@ public class InstallationInitial extends BaseActivity {
 
         inst_pump_ser.setText(pump);
 
-        inst_controller_ser.setText("7F-0135-0-13-06-23");
+        inst_controller_ser.setText(controller);
        //inst_controller_ser.setText(controller);
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {
@@ -1981,7 +1981,10 @@ public class InstallationInitial extends BaseActivity {
         showProgressDialogue(getResources().getString(R.string.sendingOtpToCustomer));
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+        Log.e("PendingInstalltionURL====>",WebURL.SendOTP + "&mobiles=" + ContactNo +
+                        "&message=" + beneficiaryNo + " के तहत " + Hp + "HP पंप सेट का इंस्टॉलेशन किया गया है यदि आप संतुष्ट हैं तो इंस्टॉलेशन टीम को OTP-" + generatedVerificationCode + " शेयर करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169744934483345");
+
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.SendOTP + "&mobiles=" + ContactNo +
                         "&message=" + beneficiaryNo + " के तहत " + Hp + "HP पंप सेट का इंस्टॉलेशन किया गया है यदि आप संतुष्ट हैं तो इंस्टॉलेशन टीम को OTP-" + generatedVerificationCode + " शेयर करे। शक्ति पम्पस&sender=SHAKTl&unicode=1&route=2&country=91&DLT_TE_ID=1707169744934483345",
                 null, new Response.Listener<JSONObject>() {

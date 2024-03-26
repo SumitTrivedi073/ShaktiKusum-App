@@ -126,9 +126,9 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     String DeviceInfo = "", DEVICE_NO = "", DONGLE_FIRM_VER = "", DEVICE_FIRM_VER = "", DONGLE_APN = "",
             DONGLE_MODE = "", DONGLE_CONNECTIVITY = "", DONGLE_MQTT1_IP = "", DONGLE_MQTT2_IP = "", DONGLE_D_FOTA = "", TCP_IP = "",
             kkkkkk1 = "", bluetoothDeviceAddress = "", billNo = "", beneficiaryNo = "", contactNo = "", hp = "", regisNo = "",
-            controllerSerialNo = "", customerName = "", customerMobile = "", latitude = "", longitude = "";
+            controllerSerialNo = "", customerName = "", latitude = "", longitude = "", IS_MOBILE_ONLINE = "";
 
-    int selectedIndex, countDownTimer2G = 900000, countDownTimer4G = 10000;
+    int selectedIndex, countDownTimer2G = 900000, countDownTimer4G = 60000;
     boolean isImageUpdate = false, isDeviceOnline = false, is2Gdevice, is4Gupdate = false, isDeviceInformationAvailable = false;
     AlertDialog alertDialog;
 
@@ -224,11 +224,11 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 contactNo = deviceShiftingData.getContactNo();
                 hp = deviceShiftingData.getHp();
                 regisNo = deviceShiftingData.getRegisno();
-                 controllerSerialNo = deviceShiftingData.getControllerSernr() + "-0";
+                controllerSerialNo = deviceShiftingData.getControllerSernr() + "-0";
                 customerName = deviceShiftingData.getCustomerName();
-
                 dongleType = deviceShiftingData.getDongle().charAt(0) + deviceShiftingData.getDongle().substring(1, 2);
                 latLng = deviceShiftingData.getLatlng();
+
             }else {
 
                 installationBean = (InstallationBean) getIntent().getSerializableExtra(Constant.deviceMappingData);
@@ -243,6 +243,12 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
                 dongleType = getIntent().getStringExtra(Constant.dongleType).charAt(0) + getIntent().getStringExtra(Constant.dongleType).substring(1, 2);
                 latLng = getIntent().getStringExtra(Constant.latlng);
+
+
+
+                /*  String DOngle = "6B-0001-0-29-01-19";
+                dongleType = DOngle.charAt(0) + DOngle.substring(1, 2);
+                latLng = "29.0231902,76.1796418";*/
             }
 
 
@@ -325,13 +331,13 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
             DONGLE_CONNECTIVITY = deviceInformationModel.getDongleConnectivity();
             DONGLE_MQTT1_IP = deviceInformationModel.getDongleMqttIp1();
             DONGLE_MQTT2_IP = deviceInformationModel.getDongleMqttIp2();
+            IS_MOBILE_ONLINE = deviceInformationModel.getIsMobileOnline();
             if (deviceInformationModel.getdFota() != null) {
                 DONGLE_D_FOTA = deviceInformationModel.getdFota();
             }
             if (deviceInformationModel.getTcpIP() != null) {
                 TCP_IP = deviceInformationModel.getTcpIP();
             }
-            Log.e("deviceInfo=====>", deviceInfo);
             if (isDeviceOnline) {
                 retrieveDeviceInfoTxtOnline.setText(deviceInfo);
                 btnSave4G.setEnabled(true);
@@ -433,27 +439,12 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                     } else if (DONGLE_FIRM_VER.isEmpty()) {
                         getResources().getString(R.string.retriveDeviceInfo);
                     } else {
-                        DeviceInformationModel deviceInformationModel = new DeviceInformationModel();
-                        deviceInformationModel.setDeviceNo(DEVICE_NO);
-                        deviceInformationModel.setDeviceFirmVersion(DEVICE_FIRM_VER);
-                        deviceInformationModel.setDongleFirmVersion(DONGLE_FIRM_VER);
-                        deviceInformationModel.setDongleAPN(DONGLE_APN);
-                        deviceInformationModel.setDongleMode(DONGLE_MODE);
-                        deviceInformationModel.setDongleConnectivity(DONGLE_CONNECTIVITY);
-                        deviceInformationModel.setDongleMqttIp1(DONGLE_MQTT1_IP);
-                        deviceInformationModel.setDongleMqttIp2(DONGLE_MQTT2_IP);
-                        deviceInformationModel.setdFota(DONGLE_D_FOTA);
-                        deviceInformationModel.setTcpIP(TCP_IP);
-                        deviceInformationModel.setBillNo(billNo);
-                        deviceInformationModel.setRemarkTxt(remarkExt.getText().toString().trim());
-                        if (!isDeviceInformationAvailable) {
-                            databaseHelper.insertDeviceInformation(deviceInformationModel);
-                        } else {
-                            databaseHelper.updateDeviceInformation(deviceInformationModel);
-                        }
+
                         if (CustomUtility.isInternetOn(DeviceMappingActivity.this)) {
                             submitOfflineDeviceData();
+                            saveDeviceInformation();
                         } else {
+                            saveDeviceInformation();
                             CustomUtility.showToast(this, getResources().getString(R.string.data_save_in_local));
                             onBackPressed();
                           //  CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.check_internet_connection));
@@ -475,29 +466,11 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 } else if (DONGLE_FIRM_VER.isEmpty()) {
                     getResources().getString(R.string.retriveDeviceInfo);
                 } else {
-                    DeviceInformationModel deviceInformationModel = new DeviceInformationModel();
-                    deviceInformationModel.setDeviceNo(DEVICE_NO);
-                    deviceInformationModel.setDeviceFirmVersion(DEVICE_FIRM_VER);
-                    deviceInformationModel.setDongleFirmVersion(DONGLE_FIRM_VER);
-                    deviceInformationModel.setDongleAPN(DONGLE_APN);
-                    deviceInformationModel.setDongleMode(DONGLE_MODE);
-                    deviceInformationModel.setDongleConnectivity(DONGLE_CONNECTIVITY);
-                    deviceInformationModel.setDongleMqttIp1(DONGLE_MQTT1_IP);
-                    deviceInformationModel.setDongleMqttIp2(DONGLE_MQTT2_IP);
-                    deviceInformationModel.setdFota(DONGLE_D_FOTA);
-                    deviceInformationModel.setTcpIP(TCP_IP);
-                    deviceInformationModel.setBillNo(billNo);
-                    deviceInformationModel.setRemarkTxt(remarkExt.getText().toString().trim());
-                    if (!isDeviceInformationAvailable) {
-                        databaseHelper.insertDeviceInformation(deviceInformationModel);
-                    } else {
-                        databaseHelper.updateDeviceInformation(deviceInformationModel);
-                    }
-
-
                     if (CustomUtility.isInternetOn(DeviceMappingActivity.this)) {
+                        saveDeviceInformation();
                         saveShiftingStatusToSap(getResources().getString(R.string.online_and_shifted));
                     } else {
+                        saveDeviceInformation();
                         CustomUtility.showToast(this, getResources().getString(R.string.data_save_in_local));
                         onBackPressed();
                         // CustomUtility.showToast(DeviceMappingActivity.this, getResources().getString(R.string.check_internet_connection));
@@ -506,6 +479,29 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 break;
 
         }
+    }
+
+    private void saveDeviceInformation() {
+
+        DeviceInformationModel deviceInformationModel = new DeviceInformationModel();
+        deviceInformationModel.setDeviceNo(DEVICE_NO);
+        deviceInformationModel.setDeviceFirmVersion(DEVICE_FIRM_VER);
+        deviceInformationModel.setDongleFirmVersion(DONGLE_FIRM_VER);
+        deviceInformationModel.setDongleAPN(DONGLE_APN);
+        deviceInformationModel.setDongleMode(DONGLE_MODE);
+        deviceInformationModel.setDongleConnectivity(DONGLE_CONNECTIVITY);
+        deviceInformationModel.setDongleMqttIp1(DONGLE_MQTT1_IP);
+        deviceInformationModel.setDongleMqttIp2(DONGLE_MQTT2_IP);
+        deviceInformationModel.setdFota(DONGLE_D_FOTA);
+        deviceInformationModel.setTcpIP(TCP_IP);
+        deviceInformationModel.setBillNo(billNo);
+        deviceInformationModel.setIsMobileOnline(IS_MOBILE_ONLINE);
+        deviceInformationModel.setRemarkTxt(remarkExt.getText().toString().trim());
+        if (!isDeviceInformationAvailable) {
+            databaseHelper.insertDeviceInformation(deviceInformationModel);
+        }/* else {
+            databaseHelper.updateDeviceInformation(deviceInformationModel);
+        }*/
     }
 
     private void changeButtonVisibility(String buttonId) {
@@ -1252,14 +1248,14 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                     Log.e("response======>", res.toString());
                     try {
                         if (res.getString("status").equals("true")) {
-                            showingMessage(getResources().getString(R.string.device_shifting_successfully));
+                            //   showingMessage(getResources().getString(R.string.device_shifting_successfully));
                             if (is2Gdevice) {
                                 runOnUiThread(() -> {
                                     saveShiftingStatusToSap(getResources().getString(R.string.online_and_shifted));
 
                                 });
                             } else {
-                                ShowAlertResponse(getResources().getString(R.string.pairControllerRetrieveDeviceInformation), true);
+                                ShowAlertResponse(getResources().getString(R.string.pairControllerRetrieveDeviceInformation), false);
                                 changeButtonVisibility("7");
 
                             }
@@ -1311,6 +1307,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 mainObject.put("DONGLE_MQTT2_IP", DONGLE_MQTT2_IP);
                 mainObject.put("DONGLE_D_FOTA", DONGLE_D_FOTA);
                 mainObject.put("TCP_IP", TCP_IP);
+                mainObject.put("IS_MOBILE_ONLINE", TCP_IP);
             }
 
         } catch (JSONException e) {
@@ -1333,7 +1330,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                     databaseHelper.deleteOfflineControllerImages(billNo);
                     databaseHelper.deleteDeviceMappingRecords(billNo);
                     databaseHelper.deleteDeviceInformationData(controllerSerialNo, billNo);
-                    ShowAlertResponse(getResources().getString(R.string.device_shifting_successfully), false);
+                    ShowAlertResponse(getResources().getString(R.string.device_shifting_successfully), true);
 
                 }else {
                     CustomUtility.showToast(DeviceMappingActivity.this,getResources().getString(R.string.device_shifting_unsuccessfully));
@@ -1378,7 +1375,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
         OK_txt.setOnClickListener(v -> {
             alertDialog.dismiss();
-            if (!isScreenOpen) {
+            if (isScreenOpen) {
                 Intent intent = new Intent(DeviceMappingActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -1394,9 +1391,9 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
         BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter.isEnabled()) {
             if (AllPopupUtil.pairedDeviceListGloable(getApplicationContext())) {
-                if (WebURL.BT_DEVICE_NAME.isEmpty() || WebURL.BT_DEVICE_MAC_ADDRESS.isEmpty()) {
-                    showPairedDeviceListPopup();
-                }
+
+                showPairedDeviceListPopup();
+
             } else {
                 startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
             }
@@ -1704,42 +1701,48 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
             CustomUtility.hideProgressDialog(getApplicationContext());
             String deviceInfo = "";
             Log.e("DONGLE_FIRM_VER=====>", DONGLE_FIRM_VER);
-            if (DONGLE_FIRM_VER.equals("4.05") || DONGLE_FIRM_VER.equals("4.06") || DONGLE_FIRM_VER.equals("4.07")) {
+            if (!DONGLE_FIRM_VER.isEmpty()) {
+                if (DONGLE_FIRM_VER.equals("4.05") || DONGLE_FIRM_VER.equals("4.06") || DONGLE_FIRM_VER.equals("4.07")) {
 
-                deviceInfo = "DEVICE_NO:-" + DEVICE_NO + "\nDONGLE_FIRM_VER:-" + DONGLE_FIRM_VER +
-                        "\nDEVICE_FIRM_VER:-" + DEVICE_FIRM_VER +
-                        "\nDONGLE_APN:-" + DONGLE_APN +
-                        "\nDONGLE_MODE:-" + DONGLE_MODE +
-                        "\nDONGLE_MQTT1_IP:-" + DONGLE_MQTT1_IP +
-                        "\nDONGLE_MQTT2_IP:-" + DONGLE_MQTT2_IP
-                        + "\nTCP_IP:-" + TCP_IP;
+                    deviceInfo = "DEVICE_NO:-" + DEVICE_NO + "\nDONGLE_FIRM_VER:-" + DONGLE_FIRM_VER +
+                            "\nDEVICE_FIRM_VER:-" + DEVICE_FIRM_VER +
+                            "\nDONGLE_APN:-" + DONGLE_APN +
+                            "\nDONGLE_MODE:-" + DONGLE_MODE +
+                            "\nDONGLE_MQTT1_IP:-" + DONGLE_MQTT1_IP +
+                            "\nDONGLE_MQTT2_IP:-" + DONGLE_MQTT2_IP
+                            + "\nTCP_IP:-" + TCP_IP;
 
-                Log.e("deviceInfo=====>", deviceInfo);
-            } else if (DONGLE_FIRM_VER.equals("4.08")) {
-                deviceInfo = "DEVICE_NO:-" + DEVICE_NO + "\nDONGLE_FIRM_VER:-" + DONGLE_FIRM_VER +
-                        "\nDEVICE_FIRM_VER:-" + DEVICE_FIRM_VER +
-                        "\nDONGLE_APN:-" + DONGLE_APN +
-                        "\nDONGLE_MODE:-" + DONGLE_MODE +
-                        "\nDONGLE_CONNECTIVITY:-" + DONGLE_CONNECTIVITY +
-                        "\nDONGLE_MQTT1_IP:-" + DONGLE_MQTT1_IP +
-                        "\nDONGLE_MQTT2_IP:-" + DONGLE_MQTT2_IP
-                        + "\nDONGLE_D_FOTA:-" + DONGLE_D_FOTA;
+                    Log.e("deviceInfo=====>", deviceInfo);
+                } else if (DONGLE_FIRM_VER.equals("4.08")) {
+                    deviceInfo = "DEVICE_NO:-" + DEVICE_NO + "\nDONGLE_FIRM_VER:-" + DONGLE_FIRM_VER +
+                            "\nDEVICE_FIRM_VER:-" + DEVICE_FIRM_VER +
+                            "\nDONGLE_APN:-" + DONGLE_APN +
+                            "\nDONGLE_MODE:-" + DONGLE_MODE +
+                            "\nDONGLE_CONNECTIVITY:-" + DONGLE_CONNECTIVITY +
+                            "\nDONGLE_MQTT1_IP:-" + DONGLE_MQTT1_IP +
+                            "\nDONGLE_MQTT2_IP:-" + DONGLE_MQTT2_IP
+                            + "\nDONGLE_D_FOTA:-" + DONGLE_D_FOTA;
 
-                // Log.e("deviceInfo=====>",deviceInfo);
+                    // Log.e("deviceInfo=====>",deviceInfo);
+                }
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
+                    IS_MOBILE_ONLINE = getResources().getString(R.string.online);
+                } else {
+                    IS_MOBILE_ONLINE = getResources().getString(R.string.offline);
+                }
+
+                if (isDeviceOnline) {
+                    retrieveDeviceInfoTxtOnline.setText(deviceInfo);
+                    btnSave4G.setEnabled(true);
+                    btnSave4G.setAlpha(1f);
+                } else {
+                    retrieveDeviceInfoTxtOffline.setText(deviceInfo);
+                    btnSave.setEnabled(true);
+                    btnSave.setAlpha(1f);
+                }
+
             }
-
-            if (isDeviceOnline) {
-                retrieveDeviceInfoTxtOnline.setText(deviceInfo);
-                btnSave4G.setEnabled(true);
-                btnSave4G.setAlpha(1f);
-            } else {
-                retrieveDeviceInfoTxtOffline.setText(deviceInfo);
-                btnSave.setEnabled(true);
-                btnSave.setAlpha(1f);
-            }
-
         }
-
     }
 
 
