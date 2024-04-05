@@ -54,9 +54,6 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu">
         <activity
-            android:name="activity.DeviceInformationActivity"
-            android:exported="false" />
-        <activity
             android:name="activity.DeviceShiftingActivity"
             android:exported="false" />
         <activity

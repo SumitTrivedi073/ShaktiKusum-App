@@ -126,7 +126,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
     String DeviceInfo = "", DEVICE_NO = "", DONGLE_FIRM_VER = "", DEVICE_FIRM_VER = "", DONGLE_APN = "",
             DONGLE_MODE = "", DONGLE_CONNECTIVITY = "", DONGLE_MQTT1_IP = "", DONGLE_MQTT2_IP = "", DONGLE_D_FOTA = "", TCP_IP = "",
             kkkkkk1 = "", bluetoothDeviceAddress = "", billNo = "", beneficiaryNo = "", contactNo = "", hp = "", regisNo = "",
-            controllerSerialNo = "", customerName = "", latitude = "", longitude = "", IS_MOBILE_ONLINE = "";
+            controllerSerialNo = "", customerName = "", latitude = "", longitude = "", IS_MOBILE_ONLINE = "", invc_done = "";;
 
     int selectedIndex, countDownTimer2G = 900000, countDownTimer4G = 60000;
     boolean isImageUpdate = false, isDeviceOnline = false, is2Gdevice, is4Gupdate = false, isDeviceInformationAvailable = false;
@@ -1318,6 +1318,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
         Log.e("DeviceShiftingAPI=====>",WebURL.saveShiftedDeviceToServer + jsonArray);
 
+
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.saveShiftedDeviceToServer + jsonArray, null, new Response.Listener<JSONObject>() {
@@ -1327,10 +1328,32 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 Log.e("Response=====>",res.toString());
                 if (!res.toString().isEmpty()) {
 
-                    databaseHelper.deleteOfflineControllerImages(billNo);
-                    databaseHelper.deleteDeviceMappingRecords(billNo);
-                    databaseHelper.deleteDeviceInformationData(controllerSerialNo, billNo);
-                    ShowAlertResponse(getResources().getString(R.string.device_shifting_successfully), true);
+                    try {
+                        String obj1 = res.getString("data_return");
+
+                        JSONArray ja = new JSONArray(obj1);
+                        for (int i = 0; i < ja.length(); i++) {
+
+                            JSONObject jo = ja.getJSONObject(i);
+
+                            invc_done = jo.getString("return");
+
+                            if (invc_done.equals("Y")) {
+                                databaseHelper.deleteOfflineControllerImages(billNo);
+                                databaseHelper.deleteDeviceMappingRecords(billNo);
+                                databaseHelper.deleteDeviceInformationData(controllerSerialNo, billNo);
+                                ShowAlertResponse(getResources().getString(R.string.device_shifting_successfully), true);
+                            } else {
+                                CustomUtility.showToast(DeviceMappingActivity.this,getResources().getString(R.string.device_shifting_unsuccessfully));
+
+                            }
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
 
                 }else {
                     CustomUtility.showToast(DeviceMappingActivity.this,getResources().getString(R.string.device_shifting_unsuccessfully));

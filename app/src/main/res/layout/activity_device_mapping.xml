@@ -300,6 +300,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:text="10 Min 16 Sec Remaining "
                 android:layout_gravity="center"
                 android:textColor="@color/black"
                 android:layout_marginEnd="@dimen/_20sdp"

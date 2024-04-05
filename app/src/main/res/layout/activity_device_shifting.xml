@@ -46,17 +46,15 @@
     </LinearLayout>
 
 
-
-
-
     <TextView
         android:id="@+id/noDataFound"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No Data Found"
         android:layout_centerInParent="true"
         android:fontFamily="sans-serif-condensed-medium"
-        android:textSize="@dimen/_14sdp"
-        android:textColor="@android:color/black"/>
+        android:text="No Data Found"
+        android:visibility="gone"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/_14sdp" />
 
 </RelativeLayout>

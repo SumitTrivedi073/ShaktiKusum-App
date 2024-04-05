@@ -189,8 +189,8 @@
     <string name="otpVerification">Installation Verification</string>
     <string name="Loading">loading…</string>
     <string name="verify">Verify</string>
-    <string name="verificationCodeSend">Verification Code Send</string>
-    <string name="otp_send_successfully">verification code sent to your registerd number successfully</string>
+    <string name="verificationCodeSend">Verification Code Sent</string>
+    <string name="otp_send_successfully">verification code sent to your registered number successfully</string>
     <string name="verificationCodeMatched">verification code verify successfully</string>
     <string name="check_internet_connection">Please Check your Internet Connection</string>
     <string name="photoGallery">Photo Gallery</string>
@@ -564,8 +564,8 @@
     <string name="I_base_update">I Base Updating…</string>
     <string name="please_wait">Please Wait…</string>
     <string name="deviceInformation">Device Information</string>
-    <string name="pairControllerRetrieveDeviceInformation">Device Shifting Successfully now pair the controller and retrieve device information</string>
-    <string name="dataSaveOfflinePairControllerRetrieveDeviceInfo">Data saved in local database now pair the controller and retrieve device information</string>
+    <string name="pairControllerRetrieveDeviceInformation">Device shifted successfully. Now pair the controller and retrieve device information</string>
+    <string name="dataSaveOfflinePairControllerRetrieveDeviceInfo">Data saved in local database. Now pair the controller and retrieve device information</string>
 
     <string name="retriveDeviceInfo">Please Pair the device and retrieve device information first!</string>
     <string name="retriveDeviceInfoTxt">Retrieve Device Information</string>
