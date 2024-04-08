@@ -1704,8 +1704,6 @@ public class InstallationInitial extends BaseActivity {
                 mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
             }
 
-            try {
-
                 for (int i = 0; i < mSimDetailsInfoResponse.size(); i++) {
 
                     if (i == 0)
@@ -1722,9 +1720,7 @@ public class InstallationInitial extends BaseActivity {
                     Constant.DBUG_MOB_3 = mMOBNUM_3;
                 }
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
 
             String date_s = param_invc.getInst_date();
 
