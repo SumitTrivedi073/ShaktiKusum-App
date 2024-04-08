@@ -99,10 +99,10 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
     DatabaseHelper databaseHelper;
     DeviceShiftingModel.Response deviceShiftingData;
-    InstallationBean installationBean;
+
 
     String billNo = "", beneficiaryNo = "", contactNo = "", hp = "", regisNo = "",
-            controllerSerialNo = "", customerName = "", customerMobile = "", latitude = "", longitude = "";
+            controllerSerialNo = "", customerName = "", customerMobile = "", latitude = "", longitude = "", invc_done = "";
 
     int selectedIndex;
     boolean isUpdate = false;
@@ -1100,7 +1100,31 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                 Log.e("Response=====>",res.toString());
                 if (!res.toString().isEmpty()) {
 
-                    ShowAlertResponse();
+                    try {
+                        String obj1 = res.getString("data_return");
+
+                        JSONArray ja = new JSONArray(obj1);
+                        for (int i = 0; i < ja.length(); i++) {
+
+                            JSONObject jo = ja.getJSONObject(i);
+
+                            invc_done = jo.getString("return");
+
+                            if (invc_done.equals("Y")) {
+                                databaseHelper.deleteOfflineControllerImages(billNo);
+                                databaseHelper.deleteDeviceMappingRecords(billNo);
+                                 ShowAlertResponse();
+                            } else {
+                                CustomUtility.showToast(DeviceMappingActivity.this,getResources().getString(R.string.device_shifting_unsuccessfully));
+
+                            }
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
 
                 }else {
                     CustomUtility.showToast(DeviceMappingActivity.this,getResources().getString(R.string.device_shifting_unsuccessfully));
