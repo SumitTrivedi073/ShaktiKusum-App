@@ -89,7 +89,7 @@ public class Adapter_Installation_list extends RecyclerView.Adapter<Adapter_Inst
             }
 
 
-            holder.status.setImageResource(R.drawable.red_icn);
+
 
             holder.cardView.setOnClickListener(view -> {
                     if (WebURL.CHECK_DATA_UNOLAD == 0) {
@@ -132,48 +132,22 @@ public class Adapter_Installation_list extends RecyclerView.Adapter<Adapter_Inst
                             in.putExtras(extras);
                             context.startActivity(in);
                         }
-                    } else {
-                        String custname = "";
-                        String fathname = "";
-                        String project_no = "", regisno = "", beneficiary = "";
-                        try {
-                            regisno = responseList.get(position).getRegisno();
-                            beneficiary = responseList.get(position).getBeneficiary();
-                            project_no = responseList.get(position).getProjectno();
-                            WebURL.ProjectNo_Con = project_no;
-                            WebURL.BenificiaryNo_Con = beneficiary;
-                            WebURL.RegNo_Con = regisno;
-
-                            System.out.println("unload List =>" + WebURL.RegNo_Con + "/n WebURL.BenificiaryNo_Con=" + WebURL.BenificiaryNo_Con + "/n WebURL.ProjectNo_Con=" + WebURL.ProjectNo_Con);
-                            String[] custnmStr = responseList.get(position).getCustomer_name().split("S/O", 2);
-                            if (custnmStr.length == 2) {
-                                custname = custnmStr[0];
-                                String Custfathname = custnmStr[1];
-                                String[] custfathStr = Custfathname.split("-", 2);
-                                fathname = custfathStr[0];
-                                Log.e("fath", "&&&&" + fathname);
-                            } else {
-                                custname = custnmStr[0];
-                                String Custfathname = "";
-                                fathname = "";
-                                Log.e("fath", "&&&&" + fathname);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        Intent intent = new Intent(context, UnloadInstReportImageActivity.class);
-                       intent.putExtra(Constant.unloadingData,responseList.get(position));
-                        context.startActivity(intent);
                     }
             });
 
             InstallationBean param_invc = new InstallationBean();
             param_invc = db.getInstallationData(pernr, billno);
 
-            if ((!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude())) && (!TextUtils.isEmpty(param_invc.getSolarpanel_wattage())) && (!TextUtils.isEmpty(param_invc.getNo_of_module_value()))) {
+            if ((!TextUtils.isEmpty(param_invc.getLatitude())
+                    && !TextUtils.isEmpty(param_invc.getLongitude()))
+                    && (!TextUtils.isEmpty(param_invc.getSolarpanel_wattage()))
+                    && (!TextUtils.isEmpty(param_invc.getNo_of_module_value()))) {
                 holder.status.setImageResource(R.drawable.icn_yellow);
             }
-            if ( !TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude()) && CustomUtility.getSharedPreferences(context, "INSTSYNC" + billno).equalsIgnoreCase("1") && !TextUtils.isEmpty(param_invc.getSolarpanel_wattage()) && !TextUtils.isEmpty(param_invc.getNo_of_module_value())) {
+            if ( !TextUtils.isEmpty(param_invc.getLatitude())
+                    && !TextUtils.isEmpty(param_invc.getLongitude())
+                    && CustomUtility.getSharedPreferences(context, "INSTSYNC" + billno).equalsIgnoreCase("1")
+                    && !TextUtils.isEmpty(param_invc.getSolarpanel_wattage()) && !TextUtils.isEmpty(param_invc.getNo_of_module_value())) {
                 holder.status.setImageResource(R.drawable.right_mark_icn_green);
             }
         } catch (Exception e) {

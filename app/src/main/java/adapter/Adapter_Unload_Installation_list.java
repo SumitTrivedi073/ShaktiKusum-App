@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +24,12 @@ import java.util.List;
 import java.util.Locale;
 
 import activity.InstallationInitial;
+import activity.UnloadInstReportImageActivity;
 import bean.InstallationBean;
 import bean.InstallationListBean;
+import bean.unloadingDataBean;
 import database.DatabaseHelper;
+import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;
 import webservice.WebURL;
 
@@ -36,6 +40,7 @@ public class Adapter_Unload_Installation_list extends RecyclerView.Adapter<Adapt
     private final Context context;
     private final ArrayList<InstallationListBean> responseList;
     private List<InstallationListBean> SearchesList = null;
+    List<unloadingDataBean> unloadingDataBeans;
     String pernr,billno;
 
 
@@ -45,6 +50,7 @@ public class Adapter_Unload_Installation_list extends RecyclerView.Adapter<Adapt
         db = new DatabaseHelper(context);
         this.SearchesList = new ArrayList<>();
         this.SearchesList.addAll(responseList);
+        this.unloadingDataBeans = new ArrayList<>();
 
     }
 
@@ -108,79 +114,56 @@ public class Adapter_Unload_Installation_list extends RecyclerView.Adapter<Adapt
 
             }
 
-
-          /*  installationBean = new InstallationBean();
-            installationBean = db.getInstallationData(CustomUtility.getSharedPreferences(context,"userid"),responseList.get(position).getBillno());*/
-
-              /*  if(TextUtils.isEmpty(installationBean.getLatitude()) && TextUtils.isEmpty(installationBean.getLatitude()) && TextUtils.isEmpty(installationBean.getRms_data_status())&& TextUtils.isEmpty(installationBean.getInst_date()))
-                {
-                    if(installationBean.getLatitude().equalsIgnoreCase("") && installationBean.getLatitude().equalsIgnoreCase("") && installationBean.getRms_data_status().equalsIgnoreCase("")&& installationBean.getInst_date().equalsIgnoreCase("")) {
-                        holder.status.setImageDrawable(ActivityCompat.getDrawable(context,
-                                R.drawable.red_icn));
-                    }
-                }
-                else if(!TextUtils.isEmpty(installationBean.getLatitude()) && !TextUtils.isEmpty(installationBean.getLatitude()) && !TextUtils.isEmpty(installationBean.getRms_data_status())&& !TextUtils.isEmpty(installationBean.getInst_date())){
-
-                    if(installationBean.getLatitude().equalsIgnoreCase("") && installationBean.getLatitude().equalsIgnoreCase("") && installationBean.getRms_data_status().equalsIgnoreCase("")&& installationBean.getInst_date().equalsIgnoreCase("")) {
-                        holder.status.setImageDrawable(ActivityCompat.getDrawable(context,
-                                R.drawable.icn_yellow));
-                    }
-                }
-*/
-
-            holder.status.setImageResource(R.drawable.red_icn);
             holder.cardView.setOnClickListener(view -> {
 
                 WebURL.mSettingCheckValue = "0";
 
-                if (responseList.get(position).getSync().equalsIgnoreCase("X")) {
-                    Toast.makeText(context, "Installation Already Completed...", Toast.LENGTH_SHORT).show();
-                } else {
+                String custname = "";
+                String fathname = "";
+                String project_no = "", regisno = "", beneficiary = "";
+                try {
+                    regisno = responseList.get(position).getRegisno();
+                    beneficiary = responseList.get(position).getBeneficiary();
+                    project_no = responseList.get(position).getProjectno();
+                    WebURL.ProjectNo_Con = project_no;
+                    WebURL.BenificiaryNo_Con = beneficiary;
+                    WebURL.RegNo_Con = regisno;
 
-                    @SuppressLint("UnsafeOptInUsageError") Intent in = new Intent(context, InstallationInitial.class);
-
-                    Bundle extras = new Bundle();
-
-                    extras.putString("bill_no", responseList.get(position).getBillno());
-                    extras.putString("set_matno", responseList.get(position).getSet_matno());
-                    extras.putString("simha2", responseList.get(position).getSimha2());
-                    extras.putString("kunnr", responseList.get(position).getKunnr());
-                    extras.putString("gst_bill_no", responseList.get(position).getGstbillno());
-                    extras.putString("tehvillage", responseList.get(position).getTehsil());
-                    extras.putString("bill_date", responseList.get(position).getBilldate());
-                    extras.putString("disp_date", responseList.get(position).getDispdate());
-                    extras.putString("name", responseList.get(position).getCustomer_name());
-                    extras.putString("state", responseList.get(position).getState());
-                    extras.putString("city", responseList.get(position).getCity());
-                    extras.putString("state_txt", responseList.get(position).getStatetxt());
-                    extras.putString("city_txt", responseList.get(position).getCitytxt());
-                    extras.putString("address", responseList.get(position).getAddress());
-                    extras.putString("mobile", responseList.get(position).getContact_no());
-                    extras.putString("controller", responseList.get(position).getController());
-                    extras.putString("motor", responseList.get(position).getMotor());
-                    extras.putString("pump", responseList.get(position).getPump());
-                    extras.putString("simno", responseList.get(position).getSimno());
-                    extras.putString("regisno", responseList.get(position).getRegisno());
-                    extras.putString("projectno", responseList.get(position).getProjectno());
-                    extras.putString("loginno", responseList.get(position).getLoginno());
-                    extras.putString("moduleqty", responseList.get(position).getModuleqty());
-                    in.putExtras(extras);
-                    context.startActivity(in);
+                    System.out.println("unload List =>" + WebURL.RegNo_Con + "/n WebURL.BenificiaryNo_Con=" + WebURL.BenificiaryNo_Con + "/n WebURL.ProjectNo_Con=" + WebURL.ProjectNo_Con);
+                    String[] custnmStr = responseList.get(position).getCustomer_name().split("S/O", 2);
+                    if (custnmStr.length == 2) {
+                        custname = custnmStr[0];
+                        String Custfathname = custnmStr[1];
+                        String[] custfathStr = Custfathname.split("-", 2);
+                        fathname = custfathStr[0];
+                        Log.e("fath", "&&&&" + fathname);
+                    } else {
+                        custname = custnmStr[0];
+                        String Custfathname = "";
+                        fathname = "";
+                        Log.e("fath", "&&&&" + fathname);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
+                Intent intent = new Intent(context, UnloadInstReportImageActivity.class);
+                intent.putExtra(Constant.unloadingData,responseList.get(position));
+                context.startActivity(intent);
             });
 
-            InstallationBean param_invc = new InstallationBean();
 
-            param_invc = db.getInstallationData(pernr, billno);
+            unloadingDataBeans = db.getUnloadingData(billno);
 
+            if(unloadingDataBeans.size()>0){
+                if ((!TextUtils.isEmpty(unloadingDataBeans.get(0).getPump_serial_no()) && !TextUtils.isEmpty(unloadingDataBeans.get(0).getMotor_serial_no())) && (!TextUtils.isEmpty(unloadingDataBeans.get(0).getController_serial_no())) && (!TextUtils.isEmpty(unloadingDataBeans.get(0).getPanel_module_qty()))) {
+                    holder.status.setImageResource(R.drawable.icn_yellow);
+                }
 
-            if ((!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude())) && (!TextUtils.isEmpty(param_invc.getSolarpanel_wattage())) && (!TextUtils.isEmpty(param_invc.getNo_of_module_value()))) {
-                holder.status.setImageResource(R.drawable.icn_yellow);
-            }
-
-            if (!TextUtils.isEmpty(param_invc.getLatitude()) && !TextUtils.isEmpty(param_invc.getLongitude()) && CustomUtility.getSharedPreferences(context, "INSTSYNC" + billno).equalsIgnoreCase("1") && !TextUtils.isEmpty(param_invc.getSolarpanel_wattage()) && !TextUtils.isEmpty(param_invc.getNo_of_module_value())) {
+                if (!TextUtils.isEmpty(unloadingDataBeans.get(0).getPump_serial_no()) && !TextUtils.isEmpty(unloadingDataBeans.get(0).getMotor_serial_no())  && (!TextUtils.isEmpty(unloadingDataBeans.get(0).getController_serial_no()))  && (!TextUtils.isEmpty(unloadingDataBeans.get(0).getPanel_module_qty())) && !TextUtils.isEmpty(unloadingDataBeans.get(0).getMaterial_status())) {
                     holder.status.setImageResource(R.drawable.right_mark_icn_green);
+                }
+            }else {
+                holder.status.setImageResource(R.drawable.red_icn);
             }
 
 

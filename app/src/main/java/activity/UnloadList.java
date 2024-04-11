@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import adapter.Adapter_Installation_list;
+import adapter.Adapter_Unload_Installation_list;
 import bean.InstallationListBean;
 import database.DatabaseHelper;
 import utility.CustomUtility;
@@ -48,7 +49,7 @@ public class UnloadList extends BaseActivity {
     DatabaseHelper db;
     LinearLayout lin1, lin2;
     RecyclerView recyclerView;
-    Adapter_Installation_list adapterInstallationList;
+    Adapter_Unload_Installation_list adapterInstallationList;
     EditText editsearch;
     ArrayList<InstallationListBean> installationBeans;
     InstallationListBean installationBean;
@@ -91,7 +92,7 @@ public class UnloadList extends BaseActivity {
                 recyclerView.setAdapter(null);
                 Log.e("SIZE", "&&&&" + installationBeans.size());
                 Log.e("pumpserno====>",installationBeans.get(3).getPump());
-                adapterInstallationList = new Adapter_Installation_list(context, installationBeans);
+                adapterInstallationList = new Adapter_Unload_Installation_list(context, installationBeans);
                 recyclerView.setAdapter(adapterInstallationList);
                 adapterInstallationList.notifyDataSetChanged();
                 WebURL.CHECK_DATA_UNOLAD = 1;
@@ -265,57 +266,14 @@ public class UnloadList extends BaseActivity {
                         } else {
                             db.insertUnloadInstallationListData(bill_no, installationBean);
                         }
-
-         /*               InstallationListBean installationBean = new InstallationListBean();
-                        installationBean.setPernr(CustomUtility.getSharedPreferences(context, "userid"));
-                        installationBean.setEnqdoc(bill_no);
-                        installationBean.setBillno(bill_no);
-                        installationBean.setKunnr(kunnr);
-                        installationBean.setGstbillno(gst_bill_no);
-                        installationBean.setBilldate(bill_date);
-                        installationBean.setCustomer_name(name);
-                        installationBean.setFather_name(fathname);
-                        installationBean.setState(state);
-                        installationBean.setStatetxt(state_txt);
-                        installationBean.setCity(district);
-                        installationBean.setCitytxt(district_txt);
-                        installationBean.setTehsil(tehsil);
-                        installationBean.setVillage(village);
-                        installationBean.setContact_no(contactno);
-                        installationBean.setController(controller);
-                        installationBean.setPump(pump);
-                        installationBean.setSimno(simno);
-                        installationBean.setRegisno(regisno);
-                        installationBean.setProjectno(projectno);
-                        installationBean.setLoginno(loginno);
-                        installationBean.setModuleqty(module_qty);
-                        installationBean.setBeneficiary(beneficiary);
-                        installationBean.setMotor(motor);
-                        installationBean.setAddress(address);
-                        installationBean.setDispdate(disp_date);
-                        installationBean.setSync(sync);
-                        installationBean.setSet_matno(set_matno);
-                        installationBean.setSimha2(simha2);
-                        installationBean.setCUS_CONTACT_NO(CONTACT_NO);
-                        installationBean.setNoOfModule(inst_no_of_module_value);
-                        installationBean.setHP(HP);
-                        installationBean.setPump_ser(pump_ser);
-                        installationBean.setMotor_ser(motor_ser);
-                        installationBean.setController_ser(controller_ser);
-                        installationBean.setPump_load(pumpLoad);
-                        installationBeans.add(installationBean);
-                    }
-
-
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
+            } }catch (Exception e){
+                    e.printStackTrace();
+                }
                 if ((progressDialog != null) && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                     progressDialog = null;
                 }
-            }
+
             if ((progressDialog != null) && progressDialog.isShowing()) {
                 progressDialog.dismiss();
                 progressDialog = null;
@@ -335,7 +293,7 @@ public class UnloadList extends BaseActivity {
                 lin1.setVisibility(View.VISIBLE);
                 lin2.setVisibility(View.GONE);
                 recyclerView.setAdapter(null);
-                adapterInstallationList = new Adapter_Installation_list(context, installationBeans);
+                adapterInstallationList = new Adapter_Unload_Installation_list(context, installationBeans);
                 recyclerView.setAdapter(adapterInstallationList);
                 adapterInstallationList.notifyDataSetChanged();
                 WebURL.CHECK_DATA_UNOLAD = 1;

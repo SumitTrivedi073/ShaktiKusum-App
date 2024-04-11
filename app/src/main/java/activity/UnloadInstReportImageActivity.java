@@ -134,6 +134,11 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     private void CheakPermissions() {
         if (!checkPermission()) {
             requestPermission();
+        }else {
+            retriveValue();
+            SetAdapter();
+            setUnloadData();
+            listner();
         }
 
     }
@@ -240,12 +245,11 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         mToolbar.setTitle(getResources().getString(R.string.material_unloading_img));
 
 
-        retriveValue();
-        SetAdapter();
-        setUnloadData();
-        listner();
+
 
     }
+
+
 
     private void setUnloadData() {
         String panel_Value;
