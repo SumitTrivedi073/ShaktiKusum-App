@@ -52,7 +52,7 @@ public class InstallationBean {
     public String simcard_num = "";
     public String regis_no = "";
     public String BeneficiaryNo = "";
-
+    public String pumpLoad = "";
 
     public InstallationBean() {
 
@@ -65,7 +65,7 @@ public class InstallationBean {
                             String address_ins_txt, String make_ins_txt, String solarpanel_wattage_txt, String solarpanel_stand_ins_quantity_txt, String total_watt_txt,
                             String inst_hp_txt, String no_of_module_qty_txt, String no_of_module_value_txt, String module_total_plate_watt_txt, String solar_motor_model_details_txt,
                             String smmd_sno_txt, String splar_pump_model_details_txt, String spmd_sno_txt, String solar_controller_model_txt, String scm_sno_txt, String simoprator_txt,
-                            String conntype_txt, String simcard_num_txt, String regis_no_txt, String BeneficiaryNo
+                            String conntype_txt, String simcard_num_txt, String regis_no_txt, String BeneficiaryNo,String pumpLoad
 
     ) {
 
@@ -109,7 +109,8 @@ public class InstallationBean {
         conntype = conntype_txt;
         simcard_num = simcard_num_txt;
         regis_no = regis_no_txt;
-        BeneficiaryNo = BeneficiaryNo;
+        this.BeneficiaryNo = BeneficiaryNo;
+        this.pumpLoad = pumpLoad;
 
     }
 
@@ -425,6 +426,14 @@ public class InstallationBean {
         BeneficiaryNo = beneficiaryNo;
     }
 
+    public String getPumpLoad() {
+        return pumpLoad;
+    }
+
+    public void setPumpLoad(String pumpLoad) {
+        this.pumpLoad = pumpLoad;
+    }
+
     @Override
     public String toString() {
         return "InstallationBean{" +
@@ -467,6 +476,7 @@ public class InstallationBean {
                 ", simcard_num='" + simcard_num + '\'' +
                 ", regis_no='" + regis_no + '\'' +
                 ", BeneficiaryNo='" + BeneficiaryNo + '\'' +
+                ", pumpLoad='" + pumpLoad + '\'' +
                 '}';
     }
 }

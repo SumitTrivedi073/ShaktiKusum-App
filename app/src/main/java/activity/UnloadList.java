@@ -40,7 +40,7 @@ public class UnloadList extends BaseActivity {
     public String bill_no = "", gst_bill_no = "", bill_date = "", disp_date = "", kunnr = "", name = ""
             , fathname = "", state = "", state_txt = "", district = "", district_txt = "", address = ""
             , contactno = "", controller = "", motor = "", simno = "", pump = "", regisno = "", projectno = ""
-            , loginno = "", module_qty = "", sync = "", CONTACT_NO = "",inst_no_of_module_value="",HP, simha2 = ""
+            , loginno = "", module_qty = "", sync = "", CONTACT_NO = "",inst_no_of_module_value="",HP="", simha2 = "",pumpLoad =""
             , set_matno = "", village = "", tehsil = "",beneficiary = "",pump_ser,motor_ser,controller_ser,
             version ,user_id;
 
@@ -258,7 +258,7 @@ public class UnloadList extends BaseActivity {
                         installationBean = new InstallationListBean(bill_no, CustomUtility.getSharedPreferences(context, "userid"),
                                 name, fathname, bill_no, kunnr, gst_bill_no, bill_date, disp_date, state, state_txt, district, district_txt, tehsil, village,
                                 contactno, controller, motor, pump, regisno, projectno, loginno, module_qty, address, simno, beneficiary, set_matno,
-                                simha2, sync, CONTACT_NO,"",HP,pump_ser,motor_ser,controller_ser);
+                                simha2, sync, CONTACT_NO,"",HP,pump_ser,motor_ser,controller_ser,pumpLoad);
 
                         if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_UNLOAD_LIST, DatabaseHelper.KEY_ENQ_DOC, bill_no)) {
                             db.updateUnloadInstallationListData(bill_no, installationBean);
@@ -302,7 +302,8 @@ public class UnloadList extends BaseActivity {
                         installationBean.setPump_ser(pump_ser);
                         installationBean.setMotor_ser(motor_ser);
                         installationBean.setController_ser(controller_ser);
-                        installationBeans.add(installationBean);*/
+                        installationBean.setPump_load(pumpLoad);
+                        installationBeans.add(installationBean);
                     }
 
 

@@ -41,7 +41,7 @@ import webservice.WebURL;
      public String bill_no = "", gst_bill_no = "", bill_date = "", disp_date = "", kunnr = "", name = ""
     , fathname = "", state = "", state_txt = "", district = "", district_txt = "", address = ""
     , contactno = "", controller = "", motor = "", simno = "", pump = "", regisno = "", projectno = ""
-    , loginno = "", module_qty = "", sync = "", CONTACT_NO = "",inst_no_of_module_value="", simha2 = ""
+    , loginno = "", module_qty = "", sync = "", CONTACT_NO = "",inst_no_of_module_value="", simha2 = "",pump_load =""
     , set_matno = "", village = "", tehsil = "",beneficiary = "",
              version,  user_id;
     Context context;
@@ -65,9 +65,10 @@ import webservice.WebURL;
         setContentView(R.layout.activity_installation_list);
 
         Init();
-        getValueFromDatatbase();
         listner();
     }
+
+
      private void Init() {
          context = this;
          progressDialog = new ProgressDialog(context);
@@ -143,11 +144,11 @@ import webservice.WebURL;
          });
      }
 
-     @SuppressLint("WrongConstant")
     @Override
     protected void onResume() {
         super.onResume();
         CustomUtility.removeValueFromSharedPref(context, Constant.isDebugDevice);
+         getValueFromDatatbase();
     }
 
     @Override
@@ -235,13 +236,15 @@ import webservice.WebURL;
                         set_matno = jo.getString("set_matno");
                         CONTACT_NO = jo.getString("contact_no");
                         inst_no_of_module_value = jo.getString("inst_no_of_module_value");
+                        pump_load = jo.getString("pump_load");
+                        Log.e("pumpLoad======>",pump_load);
 
                         installationBean = new InstallationListBean(bill_no,
                                 CustomUtility.getSharedPreferences(context, "userid"),
                                 name, fathname, bill_no, kunnr, gst_bill_no, bill_date, disp_date, state, state_txt,
                                 district, district_txt, tehsil, village, contactno, controller, motor, pump, regisno, projectno,
                                 loginno, module_qty, address, simno, beneficiary, set_matno, simha2, sync, CONTACT_NO, inst_no_of_module_value,""
-                                ,"","",controller);
+                                ,"","",controller,pump_load);
                         if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_LIST, DatabaseHelper.KEY_ENQ_DOC, bill_no)) {
                             db.updateInstallationListData(bill_no, installationBean);
                         } else {

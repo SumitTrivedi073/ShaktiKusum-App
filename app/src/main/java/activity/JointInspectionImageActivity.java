@@ -241,7 +241,7 @@ public class JointInspectionImageActivity extends BaseActivity implements ImageS
             imageModel.setLongitude("");
             imageArrayList.add(imageModel);
         }
-        customAdapter = new ImageSelectionAdapter(JointInspectionImageActivity.this, imageArrayList);
+        customAdapter = new ImageSelectionAdapter(JointInspectionImageActivity.this, imageArrayList, false);
         recyclerview.setHasFixedSize(true);
         recyclerview.setAdapter(customAdapter);
         customAdapter.ImageSelection(this);

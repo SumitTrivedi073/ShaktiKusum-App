@@ -39,7 +39,6 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.shaktipumplimited.shaktikusum.R;
@@ -65,24 +64,19 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     private static final String TAG = "LocationService";
     private SurfaceHolder surfaceHolder;
     private android.hardware.Camera camera;
-    private boolean safeToTakePicture = false;
-
     public static final int REQUEST_CODE = 100;
     private final static int RESULT_CODE = 100;
     private SurfaceView surfaceView;
     LinearLayout layoutpreview;
     TextView display;
-    // FusedLocationProviderClient location;
-    String latitudetxt, longitudetxt, addresstxt, state, country, postalcode, customer_name, canvasText;
+    String latitudetxt, longitudetxt, addresstxt, state,
+            country, postalcode, customer_name, pumpSrNo, beneficiaryNo,PumpLoad;
     SimpleDateFormat getDate, getTime;
     Bitmap bitmap;
     File save;
-    public int TIME_INTERVAL =  1000;
+    public int TIME_INTERVAL = 1000;
     private LocationRequest locationRequest;
-
-
     private GoogleApiClient mGoogleApiClient;
-    private FusedLocationProviderClient fusedLocationClient;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -93,17 +87,33 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
 
         layoutpreview = findViewById(R.id.layoutPreview);
         display = findViewById(R.id.display);
-        Bundle bundle = getIntent().getExtras();
-        customer_name = bundle.getString("cust_name");
+
 
         locationRequest = new LocationRequest();
         locationRequest.setInterval(TIME_INTERVAL);
         locationRequest.setFastestInterval(TIME_INTERVAL);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
+        retrieveValue();
         buildApiCLient();
         setupSurfaceHolder();
 
+    }
+
+    private void retrieveValue() {
+        if (getIntent().getExtras() != null) {
+            customer_name = getIntent().getStringExtra("cust_name");
+
+            if (getIntent().getStringExtra("pump_sernr") != null) {
+                pumpSrNo = getIntent().getStringExtra("pump_sernr");
+            }
+            if (getIntent().getStringExtra("BeneficiaryNo") != null) {
+                beneficiaryNo = getIntent().getStringExtra("BeneficiaryNo");
+            }
+            if (getIntent().getStringExtra("PumpLoad") != null) {
+                PumpLoad = getIntent().getStringExtra("PumpLoad");
+            }
+        }
     }
 
     private void buildApiCLient() {
@@ -206,7 +216,6 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
             camera.setPreviewDisplay(surfaceHolder);
             camera.startPreview();
             setCamFocusMode();
-            safeToTakePicture = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -284,7 +293,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     public void onPictureTaken(byte[] bytes, android.hardware.Camera camera) {
 
         bitmap = saveImageWithTimeStamp(bytes);
-        save = saveFile(bitmap,customer_name.trim(),customer_name.trim());
+        save = saveFile(bitmap,customer_name.trim());
         onBackPressed();
     }
 
@@ -298,19 +307,21 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
 
         bmp = rotateBitmap(bmp);
         Canvas canvas = new Canvas(bmp);
-        TextPaint mTextPaint=new TextPaint();
+        TextPaint mTextPaint = new TextPaint();
         int color = ContextCompat.getColor(CameraActivity2.this, R.color.black);
         mTextPaint.setColor(color);
         mTextPaint.setFakeBoldText(true);
         mTextPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mTextPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 
-        mTextPaint.setTextSize(70);
+        Log.e("displaytext===>", display.getText().toString());
+        float scaledTextSize = 35 * getResources().getDisplayMetrics().scaledDensity;
+        mTextPaint.setTextSize(scaledTextSize);
         StaticLayout mTextLayout = new StaticLayout(display.getText().toString().trim(), mTextPaint, canvas.getWidth(),
                 Layout.Alignment.ALIGN_NORMAL, 1.0f, 1.0f, true);
 
         canvas.save();
-        canvas.translate(0f,bmp.getHeight() - mTextLayout.getHeight() - 0.0f);
+        canvas.translate(0f, bmp.getHeight() - mTextLayout.getHeight() - 0.0f);
         mTextLayout.draw(canvas);
         canvas.restore();
 
@@ -318,8 +329,12 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         return bmp;
     }
 
-    public static File saveFile(Bitmap bitmap, String type, String name) {
-        File file = new File(getMediaFilePath(type,name));
+    public static File saveFile(Bitmap bitmap,  String name) {
+
+        String firstname = CustomUtility.getUserFirstName(name);
+        Log.e("fname=====>",firstname);
+
+        File file = new File(getMediaFilePath(firstname));
         try {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(file));
         } catch (FileNotFoundException e) {
@@ -340,11 +355,11 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         super.onPointerCaptureChanged(hasCapture);
     }
 
-    public static String getMediaFilePath(String type, String name) {
+    public static String getMediaFilePath( String fname) {
 
         File root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), GALLERY_DIRECTORY_NAME_COMMON);
 
-        File dir = new File(root.getAbsolutePath() + "/Images/" + type); //it is my root directory
+        File dir = new File(root.getAbsolutePath() + "/Images/" + fname.trim()); //it is my root directory
 
         try {
             if (!dir.exists()) {
@@ -382,11 +397,15 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
                         getDate = new SimpleDateFormat(TIME_STAMP_FORMAT_DATE, Locale.getDefault());
                         getTime = new SimpleDateFormat(TIME_STAMP_FORMAT_TIME, Locale.getDefault());
 
-
-                        display.setText("Latitude : " + latitudetxt + "\n" + "Longitude : " + longitudetxt + "\n" + "Address : " + addresstxt + ","
-                                + state + " " + postalcode + "," + country + "\n" + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
-                                + "\n" + "Customer: " + customer_name);
-
+                        if (beneficiaryNo != null && !beneficiaryNo.isEmpty()) {
+                            display.setText("Latitude : " + latitudetxt + "\n" + "Longitude : " + longitudetxt + "\n" + "Address : " + addresstxt + ","
+                                    + state + " " + postalcode + "," + country + "\n" + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
+                                    + "\n" + "Customer: " + customer_name + "\n" + "Beneficiary No: " + beneficiaryNo+ "\n" + "Pump SrNo: " + pumpSrNo+ "\n" + "Pump Load: " + PumpLoad);
+                        }else {
+                            display.setText("Latitude : " + latitudetxt + "\n" + "Longitude : " + longitudetxt + "\n" + "Address : " + addresstxt + ","
+                                    + state + " " + postalcode + "," + country + "\n" + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
+                                    + "\n" + "Customer: " + customer_name);
+                        }
                     }
                 } else {
 
@@ -395,10 +414,16 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
                     getDate = new SimpleDateFormat(TIME_STAMP_FORMAT_DATE, Locale.getDefault());
                     getTime = new SimpleDateFormat(TIME_STAMP_FORMAT_TIME, Locale.getDefault());
 
+                    if (beneficiaryNo != null && !beneficiaryNo.isEmpty()) {
 
-                    display.setText(" Latitude : " + latitudetxt + "\n" +
-                            "Longitude : " + longitudetxt + "\n" + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
-                            + "\n" + "Customer: " + customer_name);
+                        display.setText(" Latitude : " + latitudetxt + "\n" +
+                                "Longitude : " + longitudetxt + "\n" + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
+                                + "\n" + "Customer: " + customer_name+ "\n" + "Beneficiary No: " + beneficiaryNo+ "\n" + "Pump SrNo: " + pumpSrNo+ "\n" + "Pump Load: " + PumpLoad);
+                    }else {
+                        display.setText(" Latitude : " + latitudetxt + "\n" +
+                                "Longitude : " + longitudetxt + "\n" + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
+                                + "\n" + "Customer: " + customer_name);
+                    }
 
 
                 }
@@ -482,4 +507,8 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         }
         releaseCamera();
     }
+
+
+
+
 }

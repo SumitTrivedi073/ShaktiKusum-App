@@ -16,9 +16,7 @@ import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import debugapp.PendingFeedback;
 import debugapp.RoutePlanModel;
 
 public class RoutePlanAdapter extends RecyclerView.Adapter<RoutePlanAdapter.ViewHolder> implements Filterable {

@@ -24,10 +24,14 @@ public class WebURL {
     public static String ProjectNo_Con, RegNo_Con, BenificiaryNo_Con;
 
     /************* production server **************/
+
+
     public static final String RMSAPPURL = "https://shaktirms.com/";
 //   public static final String BASEURL = "https://spprdsrvr1.shaktipumps.com:8423";
 //   public static final String BASE_URL_VK= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/";
 // public static final String BASE_URL_OPTION_VK= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
+
+
 
     /************* development server **************/
     public static final String BASEURL = "https://spquasrvr1.shaktipumps.com:8423";
@@ -36,7 +40,9 @@ public class WebURL {
 
    public static final String BASE_URL_OPTION_VK= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
 
+   public static final String BASE_URL_OPTION_VK= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
 
+*/
 
 
     /************* APIS **************/
@@ -60,7 +66,6 @@ public class WebURL {
     public static final String INST_CMP = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/installation_cmp.htm";
     public static final String AUDIT_SITES = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_site_audit.htm";
     public static final String SERIAL_NUMBER = BASEURL + "/sap/bc/bsp/sap/zmapp_solar/get_serial_no.htm";
-    public static final String DEVICE_DETAILS = "Home/SAPOnlineDeviceDetails";
     public static final String INSTALLATION_DATA_OFFLINE = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/installation_offline_done.htm";
     public static final String INSTALLATION_OFFLINE_DATA_SUBMIT = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/image_save_for_offline_done.htm";
 
@@ -98,11 +103,28 @@ public class WebURL {
     public static final String saveDebugData = BASE_URL_VK +"save.htm";
 
     public static final String DemoRoadURL = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/demo_road_show.htm";
-    public static String updateLatLngToRms = "https://quality.shaktirms.com/NewShakti/RMSApp/LatLongUpdate";
 
+    public static final String BeneficiaryRegistrationURL = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/beneficary_registration_har.htm";
 
     public static final String ComplaintBeforeInstallationAPI = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/complaint_before_inst.htm";
 
     public static final String SavecomplianbeforeURL = BASEURL +   "/sap/bc/bsp/sap/zmapp_solar_pro/save_complaint_before_inst.htm";
     public static final String ComplainRequestListURL = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/complaint_status_list.htm?userid=";
+
+
+    public static final String SyncOfflineDeviceData = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/shifting_remark_save.htm";
+
+    public static final String DeviceShiftingList = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/pending_shifting_list.htm";
+
+    public static final String saveShiftedDeviceToServer = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_shifting_data.htm?shift=";
+
+
+    /*--------------------------------------------------RMS APIS-------------------------------------------------------------------*/
+    public static final String DEVICE_DETAILS = "Home/SAPOnlineDeviceDetails";
+
+    public static String deviceMappingAPIS ="Home/DeviceSettingParam";
+
+    public static String deviceShiftingStatusCheck ="NewShakti/RMSApp/shiftingCheck";
+
+    public static String updateLatLngToRms = "Home/LatLongUpdate";
 }

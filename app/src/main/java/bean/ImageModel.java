@@ -69,5 +69,19 @@ public class ImageModel {
     public void setPoistion(int poistion) {
         this.position = poistion;
     }
+
+    @Override
+    public String toString() {
+        return "ImageModel{" +
+                "ID='" + ID + '\'' +
+                ", name='" + name + '\'' +
+                ", ImagePath='" + ImagePath + '\'' +
+                ", billNo='" + billNo + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", position=" + position +
+                ", isImageSelected=" + isImageSelected +
+                '}';
+    }
 }
 

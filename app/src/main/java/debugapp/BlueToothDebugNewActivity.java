@@ -41,6 +41,7 @@ import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -84,6 +85,7 @@ import java.util.concurrent.TimeUnit;
 
 import activity.BaseActivity;
 import activity.GPSTracker;
+import activity.InstallationInitial;
 import bean.BTResonseData;
 import bean.DeviceDetailModel;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -353,7 +355,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             }
         });
 
-        imgBTSyncFILEID.setOnClickListener(new View.OnClickListener() {
+        /*imgBTSyncFILEID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mBTResonseDataList.size() > 0)
@@ -367,7 +369,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                     Toast.makeText(mContext, "Local database is  empty!", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
 
         rlvBackViewID.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -908,7 +910,6 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         OK_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CustomUtility.setSharedPreference(getApplicationContext(), Constant.deviceStatus, getResources().getString(R.string.offline));
                 alertDialog.dismiss();
                 finish();
             }
@@ -3498,7 +3499,6 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                             if (vkFinalcheck) {
                                 System.out.println("Nothing do it ...");
                                 CustomUtility.hideProgressDialog(BlueToothDebugNewActivity.this);
-                                sendDataToServer();
                                 break;
                             } else {
                                 if (mPostionFinal == 0) {
@@ -3831,6 +3831,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     }
 
     private void SubmitData() {
+        showProgressDialogue(getResources().getString(R.string.submittingDebugData));
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObj = new JSONObject();
 
@@ -3879,13 +3880,10 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             e.printStackTrace();
         }
         Log.e("URL=====>", WebURL.saveDebugData + "?action=" + jsonArray);
-        final ArrayList<NameValuePair> param1 = new ArrayList<NameValuePair>();
+        /*final ArrayList<NameValuePair> param1 = new ArrayList<NameValuePair>();
         param1.add(new BasicNameValuePair("action", String.valueOf(jsonArray)));
         showProgressDialogue(getResources().getString(R.string.sendingDataServer));
         try {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
-            StrictMode.setThreadPolicy(policy);
-
             String obj2 = CustomHttpClient.executeHttpPost1(WebURL.saveDebugData, param1);
 
             if (!obj2.isEmpty()) {
@@ -3918,7 +3916,62 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         } catch (Exception e) {
             stopProgressDialogue();
             e.printStackTrace();
-        }
+        }*/
+
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                WebURL.saveDebugData + "?action=" + jsonArray,
+
+                null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                try {
+
+                    if (jsonObject.toString() != null && !jsonObject.toString().isEmpty()) {
+
+                        String mStatus = jsonObject.getString("status");
+                        if (mStatus.equals("true")) {
+                            stopProgressDialogue();
+                            mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
+                            mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
+
+                            CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice, "true");
+
+                            Constant.BT_DEVICE_NAME = "";
+                            Constant.BT_DEVICE_MAC_ADDRESS = "";
+                            CustomUtility.ShowToast(getResources().getString(R.string.dataSubmittedSuccessfully), getApplicationContext());
+
+                            onBackPressed();
+                        } else {
+                            stopProgressDialogue();
+                            CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
+                        }
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    stopProgressDialogue();
+                    CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                stopProgressDialogue();
+                Log.e("error", String.valueOf(error));
+                Toast.makeText(BlueToothDebugNewActivity.this, error.toString(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                60000,
+                5,  /// maxNumRetries = 0 means no retry
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(jsonObjectRequest);
     }
 
 
