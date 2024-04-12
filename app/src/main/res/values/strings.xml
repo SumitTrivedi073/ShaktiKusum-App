@@ -380,6 +380,7 @@
     <string name="pleasetryAgain">Please try again</string>
     <string name="pairedDevice">Please make sure device is paired or connected via bluetooth!</string>
     <string name="unloading_material">Unloading Material List</string>
+    <string name="unloading_list">Unloading List</string>
     <string name="routeplan">Route Plan List</string>
     <string name="no_data_found">No Data Found</string>
     <string name="correctPumpSr">Please enter correct pump serial number</string>
