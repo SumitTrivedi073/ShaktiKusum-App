@@ -1559,13 +1559,13 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber) && debugDataExtract.equals("false")) {
                 ShowAlertResponse();
             } else {
-                if (CustomUtility.isInternetOn(getApplicationContext())) {
+                /*if (CustomUtility.isInternetOn(getApplicationContext())) {
                     Log.e("NetworkAvailable=========>", "true");
                     callCheckSimDataPackAPI(mCheckSignelValue, mCheckNetworkValue, mCheckServerConnectivityValue);
 
                 } else {
                     Log.e("NetworkAvailable=========>", "false");
-                }
+                }*/
 
             }
         }
@@ -1895,13 +1895,13 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber) && debugDataExtract.equals("false")) {
                 ShowAlertResponse();
             } else {
-                if (CustomUtility.isInternetOn(getApplicationContext())) {
+               /* if (CustomUtility.isInternetOn(getApplicationContext())) {
                     Log.e("NetworkAvailable3333========>", "true");
                     callCheckSimDataPackAPI(mCheckSignelValue, mCheckNetworkValue, mCheckServerConnectivityValue);
                 } else {
                     Log.e("NetworkAvailable3333=========>", "false");
                     Toast.makeText(mContext, "Please check internet connections.", Toast.LENGTH_SHORT).show();
-                }
+                }*/
 
             }
         }
@@ -2414,14 +2414,14 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             if (DEVICE_NO != null && !DEVICE_NO.isEmpty() && !DEVICE_NO.equals(ControllerSerialNumber) && debugDataExtract.equals("false")) {
                 ShowAlertResponse();
             } else {
-                if (CustomUtility.isInternetOn(getApplicationContext())) {
+               /* if (CustomUtility.isInternetOn(getApplicationContext())) {
                     Log.e("NetworkAvailable5555=========>", "true");
                     callCheckSimDataPackAPI(mCheckSignelValue, mCheckNetworkValue, mCheckServerConnectivityValue);
                 } else {
                     Log.e("NetworkAvailable5555=========>", "false");
                     Toast.makeText(mContext, "Please check internet connections.", Toast.LENGTH_SHORT).show();
 
-                }
+                }*/
 
             }
 
@@ -3880,46 +3880,12 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             e.printStackTrace();
         }
         Log.e("URL=====>", WebURL.saveDebugData + "?action=" + jsonArray);
-        /*final ArrayList<NameValuePair> param1 = new ArrayList<NameValuePair>();
-        param1.add(new BasicNameValuePair("action", String.valueOf(jsonArray)));
-        showProgressDialogue(getResources().getString(R.string.sendingDataServer));
-        try {
-            String obj2 = CustomHttpClient.executeHttpPost1(WebURL.saveDebugData, param1);
-
-            if (!obj2.isEmpty()) {
+      new syncDebugData(jsonArray).execute();
 
 
-                JSONObject jsonObject = new JSONObject(obj2);
-                Log.e("Response=====>", jsonObject.toString());
 
 
-                String mStatus = jsonObject.getString("status");
-                if (mStatus.equals("true")) {
-                    stopProgressDialogue();
-                    mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
-                    mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
-
-                    CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice, "true");
-
-                    Constant.BT_DEVICE_NAME = "";
-                    Constant.BT_DEVICE_MAC_ADDRESS = "";
-                    CustomUtility.ShowToast(getResources().getString(R.string.dataSubmittedSuccessfully), getApplicationContext());
-
-                    onBackPressed();
-                } else {
-                    stopProgressDialogue();
-                    CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
-                }
-
-
-            }
-        } catch (Exception e) {
-            stopProgressDialogue();
-            e.printStackTrace();
-        }*/
-
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
+      /*  RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.saveDebugData + "?action=" + jsonArray,
@@ -3971,7 +3937,91 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                 60000,
                 5,  /// maxNumRetries = 0 means no retry
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        requestQueue.add(jsonObjectRequest);
+        requestQueue.add(jsonObjectRequest);*/
+    }
+
+    private class syncDebugData extends AsyncTask<String, String, String> {
+
+        JSONArray jsonArray;
+        long startTime;
+        public syncDebugData(JSONArray jaInvcData) {
+            jsonArray = jaInvcData;
+            startTime = System.currentTimeMillis();
+        }
+
+        @Override
+        protected void onPreExecute() {
+             startTime = System.currentTimeMillis();
+            stopProgressDialogue();
+            showProgressDialogue(getResources().getString(R.string.submittingDebugData));
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String obj2 = null;
+            final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
+            param1_invc.add(new BasicNameValuePair("action", String.valueOf(jsonArray)));
+            Log.e("DATA", "$$$$" + param1_invc);
+            System.out.println("param1_invc_vihu==>>" + param1_invc);
+            try {
+                obj2 = webservice.CustomHttpClient.executeHttpPost1(WebURL.saveDebugData, param1_invc);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                stopProgressDialogue();
+            }
+
+            return obj2;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            try {
+
+                Log.e("OUTPUT1", "&&&&" + result);
+
+                if (!result.isEmpty()) {
+
+                    JSONObject jsonObject = new JSONObject(result);
+                    if (jsonObject.toString() != null && !jsonObject.toString().isEmpty()) {
+
+                        String mStatus = jsonObject.getString("status");
+                        if (mStatus.equals("true")) {
+                            stopProgressDialogue();
+                            mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
+                            mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
+
+                            CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice, "true");
+
+                            Constant.BT_DEVICE_NAME = "";
+                            Constant.BT_DEVICE_MAC_ADDRESS = "";
+                            CustomUtility.ShowToast(getResources().getString(R.string.dataSubmittedSuccessfully), getApplicationContext());
+
+                            long elapsedTime = System.currentTimeMillis() - startTime;
+                            System.out.println("Total elapsed http request/response time in milliseconds: " + elapsedTime);
+
+                            onBackPressed();
+                        } else {
+                            stopProgressDialogue();
+                            CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
+                        }
+
+
+                } else {
+                    stopProgressDialogue();
+                    CustomUtility.showToast(BlueToothDebugNewActivity.this, "Data Not Submitted, Please try After Sometime.");
+
+                }
+
+            }
+
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
 

@@ -565,6 +565,10 @@
     <string name="online_and_shifted">ONLINE AND SHIFTED</string>
     <string name="I_base_update">I Base Updating…</string>
     <string name="please_wait">Please Wait…</string>
+    <string name="file_upload_successfully">File Upload Successfully</string>
+    <string name="file_upload_failed_please_try_again">File Upload Failed, please try again!</string>
+    <string name="file_upload_successfully_now_uploading_imei_file_to_server">File Upload Successfully now Uploading IMEI File To Server</string>
+    <string name="installation_form">Installation Form</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

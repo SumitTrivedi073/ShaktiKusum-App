@@ -35,11 +35,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.angads25.toggle.widget.LabeledSwitch;
@@ -62,6 +60,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -92,7 +91,6 @@ import webservice.WebURL;
 
 
 public class InstallationInitial extends BaseActivity {
-
 
     public static final String GALLERY_DIRECTORY_NAME = "ShaktiKusum";
     private DatabaseHelperTeacher mDatabaseHelperTeacher;
@@ -183,7 +181,6 @@ public class InstallationInitial extends BaseActivity {
             PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
             version = info.versionName;
         } catch (PackageManager.NameNotFoundException e) {
-            Log.e("versionErrpr====>", e.getMessage());
             throw new RuntimeException(e);
 
         }
@@ -222,12 +219,14 @@ public class InstallationInitial extends BaseActivity {
         try {
             Constant.BILL_NUMBER_UNIC = billno;
             String[] custnmStr = name.split("S/O", 2);
-            custname = custnmStr[0];
-            String Custfathname = custnmStr[1];
-            String[] custfathStr = Custfathname.split("-", 2);
-            fathname = custfathStr[0];
-            Log.e("fath", "&&&&" + fathname);
-
+            if(custnmStr.length>1) {
+                custname = custnmStr[0];
+                String Custfathname = custnmStr[1];
+                String[] custfathStr = Custfathname.split("-", 2);
+                fathname = custfathStr[0];
+            }else {
+                custname = custnmStr[0];
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -239,7 +238,7 @@ public class InstallationInitial extends BaseActivity {
         setSupportActionBar(mToolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Installation Form");
+        getSupportActionBar().setTitle(R.string.installation_form);
 
         getLayout();
 
@@ -543,24 +542,25 @@ public class InstallationInitial extends BaseActivity {
                     alreadySet = true;
                     break;
             }
-            if (!alreadySet) {
-                if (scannedDeviceNo.size() > 0) {
+             /* if(!isControllerIDScan) {
+                  if (!alreadySet) {
+                      if (scannedDeviceNo.size() > 0) {
 
-                    if (!scannedDeviceNo.contains(scanContent)) {
-                        EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
-                        edit_O.setText(scanContent);
-                        scannedDeviceNo.add(scanContent);
-                    } else {
-                        CustomUtility.ShowToast("Already done", getApplicationContext());
-                    }
-                } else {
-                    EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
+                          if (!scannedDeviceNo.contains(scanContent)) {
+                              EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
+                              edit_O.setText(scanContent);
+                              scannedDeviceNo.add(scanContent);
+                          } else {
+                              CustomUtility.ShowToast("Already done", getApplicationContext());
+                          }
+                      } else {
+                          EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
+                          edit_O.setText(scanContent);
+                          scannedDeviceNo.add(scanContent);
+                      }
 
-                    edit_O.setText(scanContent);
-                    scannedDeviceNo.add(scanContent);
-                }
-
-            }
+                  }
+              }*/
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -680,29 +680,36 @@ public class InstallationInitial extends BaseActivity {
 
     }
 
-    private void ViewInflate(int value, int new_value) {
+    private void ViewInflate() {
 
         String[] arr = no_of_module_value.split(",");
+        Log.e("no_of_module_value=======>", no_of_module_value);
+        Log.e("arr=======>", String.valueOf(arr.length));
+        Log.e("arr=======>", Arrays.toString(arr));
+
         moduleOneLL.removeAllViews();
+        if (arr.length > 0) {
+            for (int i = 0; i < arr.length; i++) {
+                View child_grid = LayoutInflater.from(mContext).inflate(R.layout.view_for_normal, null);
+                LinearLayout layout_s = child_grid.findViewById(R.id.sublayout_second);
+                LinearLayout layout_f = child_grid.findViewById(R.id.sublayout_first);
+                LinearLayout layout_f_inner = layout_f.findViewById(R.id.sublayout_first_inner);
+                EditText edit = layout_f_inner.findViewById(R.id.view_edit_one);
+                final ImageView scan = layout_f_inner.findViewById(R.id.view_img_one);
+                scan.setId(i);
 
-        for (int i = 0; i < new_value; i++) {
-            View child_grid = LayoutInflater.from(mContext).inflate(R.layout.view_for_normal, null);
-            LinearLayout layout_s = child_grid.findViewById(R.id.sublayout_second);
-            LinearLayout layout_f = child_grid.findViewById(R.id.sublayout_first);
-            LinearLayout layout_f_inner = layout_f.findViewById(R.id.sublayout_first_inner);
-            EditText edit = layout_f_inner.findViewById(R.id.view_edit_one);
-            final ImageView scan = layout_f_inner.findViewById(R.id.view_img_one);
-            scan.setId(i);
+                Log.e("array_value=======>", arr[i]+"===============>"+i);
+                edit.setText(arr[i]);
 
-            scan.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int id = v.getId();
-                    startScanner(id);
-                }
-            });
+                scan.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int id = v.getId();
+                        startScanner(id);
+                    }
+                });
 
-            try {
+           /* try {
                 if (arr.length > 0) {
                     if (i < arr.length) {
                         edit.setText(arr[i]);
@@ -710,12 +717,13 @@ public class InstallationInitial extends BaseActivity {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
+            }*/
+
+                layout_s.setVisibility(View.GONE);
+                moduleOneLL.setVisibility(View.VISIBLE);
+                moduleOneLL.addView(child_grid);
+
             }
-
-            layout_s.setVisibility(View.GONE);
-            moduleOneLL.setVisibility(View.VISIBLE);
-            moduleOneLL.addView(child_grid);
-
         }
     }
 
@@ -1213,11 +1221,11 @@ public class InstallationInitial extends BaseActivity {
 
         inst_make.setText(installationBean.getMake_ins());
 
-        if (!TextUtils.isEmpty(installationBean.getNo_of_module_qty())) {
+       /* if (!TextUtils.isEmpty(installationBean.getNo_of_module_qty())) {
             no_of_module_value = installationBean.getNo_of_module_value();
             if (this.installationBean.getNo_of_module_qty().length() != 0 && !this.installationBean.getNo_of_module_qty().equals("0")) {
                 value = Integer.parseInt(installationBean.getNo_of_module_qty());
-                ViewInflate(value, value);
+                ViewInflate();
             }
         } else {
 
@@ -1226,9 +1234,9 @@ public class InstallationInitial extends BaseActivity {
             module_ser_no = inst_module_ser_no.getText().toString().trim();
             if (module_ser_no.length() != 0 && !module_ser_no.equals("0")) {
                 value = Integer.parseInt(module_ser_no);
-                ViewInflate(value, value);
+                ViewInflate();
             }
-        }
+        }*/
 
         inst_module_total_plate_watt.setText(installationBean.getModule_total_plate_watt());
 
@@ -1236,7 +1244,7 @@ public class InstallationInitial extends BaseActivity {
 
         inst_pump_ser.setText(pump);
 
-       inst_controller_ser.setText(controller);
+        inst_controller_ser.setText(controller);
        //inst_controller_ser.setText(controller);
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {
@@ -1405,6 +1413,24 @@ public class InstallationInitial extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
+        if (installationBean != null && !installationBean.toString().isEmpty()) {
+            if (!TextUtils.isEmpty(installationBean.getNo_of_module_qty())) {
+                no_of_module_value = installationBean.getNo_of_module_value();
+                if (this.installationBean.getNo_of_module_qty().length() != 0 && !this.installationBean.getNo_of_module_qty().equals("0")) {
+                    value = Integer.parseInt(installationBean.getNo_of_module_qty());
+                    ViewInflate();
+                }
+            } else {
+
+                no_of_module_value = GetDataModule();
+
+                module_ser_no = inst_module_ser_no.getText().toString().trim();
+                if (module_ser_no.length() != 0 && !module_ser_no.equals("0")) {
+                    value = Integer.parseInt(module_ser_no);
+                    ViewInflate();
+                }
+            }
+        }
         retriveArrayList();
 
         if (CustomUtility.getSharedPreferences(mContext, Constant.deviceStatus) != null &&
@@ -1496,17 +1522,17 @@ public class InstallationInitial extends BaseActivity {
                             uploadIEMIFile();
 
 
-                            ShowToast("File Upload Successfully now Uploading IMEI File To Server");
+                            ShowToast(getResources().getString(R.string.file_upload_successfully_now_uploading_imei_file_to_server));
 
                         } else {
                             stopProgressDialogue();
-                            ShowToast("File Upload Successfully");
+                            ShowToast(getResources().getString(R.string.file_upload_successfully));
 
                         }
 
                     } else {
                         stopProgressDialogue();
-                        ShowToast("File Upload Failed, please try again!");
+                        ShowToast(getResources().getString(R.string.file_upload_failed_please_try_again));
                     }
 
                 } catch (IOException e) {
@@ -1561,10 +1587,10 @@ public class InstallationInitial extends BaseActivity {
 
                     if (Jobject.getString("status").equals("true")) {
                         stopProgressDialogue();
-                        ShowToast("File Upload Successfully");
+                        ShowToast(getResources().getString(R.string.file_upload_successfully));
                         SubmitDebugData();
                     } else {
-                        ShowToast("File Upload Failed, please try again!");
+                        ShowToast(getResources().getString(R.string.file_upload_failed_please_try_again));
                         stopProgressDialogue();
                     }
                 } catch (IOException | JSONException e) {
@@ -1628,8 +1654,9 @@ public class InstallationInitial extends BaseActivity {
         }
         Log.e("URL=====>", WebURL.saveDebugData + "?action=" + jsonArray);
 
+        new syncDebugData(jsonArray).execute();
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        /*RequestQueue requestQueue = Volley.newRequestQueue(this);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 WebURL.saveDebugData + "?action=" + jsonArray,
@@ -1643,20 +1670,17 @@ public class InstallationInitial extends BaseActivity {
 
                         String mStatus = jsonObject.getString("status");
                         if (mStatus.equals("true")) {
+                            stopProgressDialogue();
                             mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
                             mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
 
                             CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice, "true");
-                            if (mSimDetailsInfoResponse.size() > 0)
-                                mSimDetailsInfoResponse.clear();
 
-                            mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
                             Constant.BT_DEVICE_NAME = "";
                             Constant.BT_DEVICE_MAC_ADDRESS = "";
+                            CustomUtility.ShowToast(getResources().getString(R.string.dataSubmittedSuccessfully), getApplicationContext());
 
-
-                            submitInstalltion();
-
+                            onBackPressed();
                         } else {
                             stopProgressDialogue();
                             CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
@@ -1684,13 +1708,97 @@ public class InstallationInitial extends BaseActivity {
                 60000,
                 5,  /// maxNumRetries = 0 means no retry
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        requestQueue.add(jsonObjectRequest);
+        requestQueue.add(jsonObjectRequest);*/
     }
+
+    private class syncDebugData extends AsyncTask<String, String, String> {
+
+        JSONArray jsonArray;
+        long startTime;
+
+        public syncDebugData(JSONArray jaInvcData) {
+            jsonArray = jaInvcData;
+            startTime = System.currentTimeMillis();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            stopProgressDialogue();
+            showProgressDialogue(getResources().getString(R.string.submittingDebugData));
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String obj2 = null;
+            final ArrayList<NameValuePair> param1_invc = new ArrayList<NameValuePair>();
+            param1_invc.add(new BasicNameValuePair("action", String.valueOf(jsonArray)));
+            Log.e("DATA", "$$$$" + param1_invc);
+            System.out.println("param1_invc_vihu==>>" + param1_invc);
+            try {
+                obj2 = webservice.CustomHttpClient.executeHttpPost1(WebURL.saveDebugData, param1_invc);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                stopProgressDialogue();
+            }
+
+            return obj2;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            try {
+                Log.e("OUTPUT1", "&&&&" + result);
+
+                if (!result.isEmpty()) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    if (jsonObject.toString() != null && !jsonObject.toString().isEmpty()) {
+
+                        String mStatus = jsonObject.getString("status");
+                        if (mStatus.equals("true")) {
+                           // stopProgressDialogue();
+                            mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
+                            mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
+
+                            CustomUtility.setSharedPreference(mContext, Constant.isDebugDevice, "true");
+
+                            Constant.BT_DEVICE_NAME = "";
+                            Constant.BT_DEVICE_MAC_ADDRESS = "";
+                         //   CustomUtility.ShowToast(getResources().getString(R.string.dataSubmittedSuccessfully), getApplicationContext());
+
+                            long elapsedTime = System.currentTimeMillis() - startTime;
+                            System.out.println("Total elapsed http request/response time in milliseconds for debug: " + elapsedTime);
+
+
+                            submitInstalltion();
+                        } else {
+                            stopProgressDialogue();
+                            CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
+                        }
+
+
+                    } else {
+                        stopProgressDialogue();
+                        CustomUtility.showToast(InstallationInitial.this, "Data Not Submitted, Please try After Sometime.");
+
+                    }
+
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
 
     /*-------------------------------------------------------------Submit Installation-----------------------------------------------------------------------------*/
 
     private void submitInstalltion() {
-
+        showProgressDialogue(getResources().getString(R.string.submittingInatallation));
         JSONArray ja_invc_data = new JSONArray();
         JSONObject jsonObj = new JSONObject();
         InstallationBean param_invc = new InstallationBean();
@@ -1779,7 +1887,7 @@ public class InstallationInitial extends BaseActivity {
             jsonObj.put("LOGIN_CONT", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonNumber));
 
 
-            if (imageList.size() > 0) {
+           if (imageList.size() > 0) {
                 for (int i = 0; i < imageList.size(); i++) {
                     if (imageList.get(i).isImageSelected()) {
                         try {
@@ -1808,9 +1916,11 @@ public class InstallationInitial extends BaseActivity {
     private class syncInstallationData extends AsyncTask<String, String, String> {
 
         JSONArray jsonArray;
+        long startTime;
 
         public syncInstallationData(JSONArray jaInvcData) {
             jsonArray = jaInvcData;
+            startTime = System.currentTimeMillis();
         }
 
         @Override
@@ -1850,7 +1960,9 @@ public class InstallationInitial extends BaseActivity {
 
                     JSONArray ja = new JSONArray(obj1);
 
-//                    Log.e("OUTPUT2", "&&&&" + ja);
+                    long elapsedTime = System.currentTimeMillis() - startTime;
+                    System.out.println("Total elapsed http request/response time in milliseconds for installation: " + elapsedTime);
+
 
                     for (int i = 0; i < ja.length(); i++) {
 

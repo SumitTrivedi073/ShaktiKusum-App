@@ -74,7 +74,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     SimpleDateFormat getDate, getTime;
     Bitmap bitmap;
     File save;
-    public int TIME_INTERVAL = 1000;
+    public int TIME_INTERVAL = 10000;
     private LocationRequest locationRequest;
     private GoogleApiClient mGoogleApiClient;
 
@@ -93,6 +93,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         locationRequest.setInterval(TIME_INTERVAL);
         locationRequest.setFastestInterval(TIME_INTERVAL);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
 
         retrieveValue();
         buildApiCLient();
@@ -479,8 +480,8 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     @Override
     public void onLocationChanged(@NonNull Location location) {
 
-        Log.i("currentLocation====>", "lat " + location.getLatitude());
-        Log.i("currentLocation===>", "lng " + location.getLongitude());
+        /*Log.i("currentLocation====>", "lat " + location.getLatitude());
+        Log.i("currentLocation===>", "lng " + location.getLongitude());*/
         getLastLocation(location);
     }
 
