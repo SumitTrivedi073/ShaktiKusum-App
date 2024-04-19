@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.shaktipumplimited.shaktikusum.R;
@@ -29,7 +28,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import adapter.Adapter_Installation_list;
 import adapter.Adapter_Unload_Installation_list;
 import bean.InstallationListBean;
 import database.DatabaseHelper;
@@ -176,10 +174,8 @@ public class UnloadList extends BaseActivity {
             public void afterTextChanged(Editable arg0) {
                 // TODO Auto-generated method stub
                 String text = editsearch.getText().toString().toLowerCase(Locale.getDefault());
-                try {
+                if (adapterInstallationList != null ) {
                     adapterInstallationList.filter(text);
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
 

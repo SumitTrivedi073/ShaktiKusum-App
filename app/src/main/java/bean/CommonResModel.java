@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 
 @SuppressWarnings("unused")
-public class DebugModel {
+public class CommonResModel {
 
     @SerializedName("message")
     private String mMessage;

@@ -3946,7 +3946,6 @@ public class BlueToothDebugNewActivity extends BaseActivity {
         long startTime;
         public syncDebugData(JSONArray jaInvcData) {
             jsonArray = jaInvcData;
-            startTime = System.currentTimeMillis();
         }
 
         @Override

@@ -117,6 +117,8 @@ public class WebURL {
 
     public static final String saveShiftedDeviceToServer = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_shifting_data.htm?shift=";
 
+    public static final String responseTIme = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/kusum_response_time.htm?";
+
 
     /*--------------------------------------------------RMS APIS-------------------------------------------------------------------*/
     public static final String DEVICE_DETAILS = "Home/SAPOnlineDeviceDetails";

@@ -64,12 +64,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
 
@@ -108,8 +105,8 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     boolean isSubmit = false;
     List<String> itemNameList = new ArrayList<>();
     String customerName, beneficiary, regNO, projectNo, userID, billNo, moduleqty, custMobile, regisno,
-            no_of_module_value, noOfModules = "", Hp,unloadingMaterialStatus="";
-    int value, currentScannerFor = -1;
+            no_of_module_value, noOfModules = "", Hp, unloadingMaterialStatus = "";
+    int value, currentScannerFor = 0;
     Toolbar mToolbar;
     boolean isUpdate = false, isPumpMotorController = false;
     InstallationListBean installationListBean;
@@ -123,6 +120,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         Init();
     }
 
+
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onResume() {
@@ -130,15 +128,9 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         CheakPermissions();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private void CheakPermissions() {
         if (!checkPermission()) {
             requestPermission();
-        }else {
-            retriveValue();
-            SetAdapter();
-            setUnloadData();
-            listner();
         }
 
     }
@@ -237,29 +229,25 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         materialStatusOk = findViewById(R.id.materialStatusOk);
         materialStatusNotOk = findViewById(R.id.materialStatusNotOk);
         materialStatusDamage = findViewById(R.id.materialStatusDamage);
-        db=new DatabaseHelper(getApplicationContext());
+        db = new DatabaseHelper(getApplicationContext());
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setTitle(getResources().getString(R.string.material_unloading_img));
 
-
+        retriveValue();
+        SetAdapter();
+        setUnloadData();
+        listner();
 
 
     }
 
-
-
     private void setUnloadData() {
-        String panel_Value;
-        List<String> PanelList=new ArrayList<>();
-
         unloadingListdata = db.getUnloadingData(billNo);
-        Log.e("Hellooo==>", String.valueOf(unloadingListdata.size()));
 
         if(unloadingListdata.size()>0){
-        Log.e("module_qty===>", unloadingListdata.toString());
         if (db.isRecordExist(db.TABLE_UNLOADING_FORM_DATA,db.KEY_BILL_NO,billNo)) {
             unloadingListdata = db.getUnloadingData(billNo);
             inst_module_ser_no.setText(unloadingListdata.get(0).getPanel_module_qty());
@@ -267,7 +255,6 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             motorSerNo.setText(unloadingListdata.get(0).getMotor_serial_no());
             controllerSerNo.setText(unloadingListdata.get(0).getController_serial_no());
             remarkEdt.setText(unloadingListdata.get(0).getRemark());
-            Log.e("materialStatus==>",unloadingListdata.get(0).getMaterial_status());
             if(unloadingListdata.get(0).getMaterial_status().equals(Constant.partialDamage)) {
                 materialStatusDamage.setChecked(true);
             } else if (unloadingListdata.get(0).getMaterial_status().equals(Constant.ok)) {
@@ -322,13 +309,19 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                     CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectInvoicePhoto));
                 } else if (!imageArrayList.get(2).isImageSelected()) {
                     CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectCustomerPhoto));
-                }   else {
+                } else if (pumpSerNo.getText().toString().trim().isEmpty() || !pumpSerNo.getText().toString().trim().equals(installationListBean.getPump().trim())) {
+                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctPumpSr) + " " + installationListBean.getPump().trim());
+                } else if (motorSerNo.getText().toString().trim().isEmpty() || !motorSerNo.getText().toString().trim().equals(installationListBean.getMotor().trim())) {
+                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctMotorSr) + " " + installationListBean.getMotor().trim());
+                } else if (controllerSerNo.getText().toString().trim().isEmpty() || !controllerSerNo.getText().toString().trim().equals(installationListBean.getController().trim())) {
+                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctControllerSr) + " " + installationListBean.getController().trim());
+                } else if (remarkEdt.getText().toString().trim().isEmpty()) {
+                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
+                } else {
                     Set<String> set = new HashSet<>();
                     if (!inst_module_ser_no.getText().toString().trim().equals("0")) {
-
                         for (int i = 0; i < moduleOneLL.getChildCount(); i++) {
                             EditText edit_O = moduleOneLL.getChildAt(i).findViewById(R.id.view_edit_one);
-
                             if (edit_O.getText().toString().isEmpty()) {
                                 CustomUtility.ShowToast(getResources().getString(R.string.enter_allModuleSrno), getApplicationContext());
                                 isSubmit = false;
@@ -356,33 +349,19 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                         if (set.size() == moduleOneLL.getChildCount()) {
                             isSubmit = true;
                         }
-
-
                     }
-
-
                         if (isSubmit) {
-                            Log.e("pumprSERNO==>",pumpSerNo.getText().toString().trim());
-                        Log.e("installationListBean==>",installationListBean.getPump());
-                            if (pumpSerNo.getText().toString().trim().isEmpty() || !pumpSerNo.getText().toString().trim().equals(installationListBean.getPump().trim())) {
-                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctPumpSr) +" "+ installationListBean.getPump().trim());
-                            } else if (motorSerNo.getText().toString().trim().isEmpty() || !motorSerNo.getText().toString().trim().equals(installationListBean.getMotor().trim())) {
-                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctMotorSr)+" "+ installationListBean.getMotor().trim());
-                            } else if (controllerSerNo.getText().toString().trim().isEmpty() || !controllerSerNo.getText().toString().trim().equals(installationListBean.getController().trim())) {
-                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctControllerSr)+" "+ installationListBean.getController().trim());
-                            }else if (remarkEdt.getText().toString().trim().isEmpty()) {
-                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
-                            }else
-                            {
-                                if(materialStatusOk.isChecked()){
-                                    unloadingMaterialStatus = materialStatusOk.getText().toString();
-                                }
-                                if(materialStatusNotOk.isChecked()){
-                                    unloadingMaterialStatus = materialStatusNotOk.getText().toString();
-                                }
-                                if(materialStatusDamage.isChecked()){
-                                    unloadingMaterialStatus = materialStatusDamage.getText().toString();
-                                }
+                            if (materialStatusOk.isChecked()) {
+                                unloadingMaterialStatus = materialStatusOk.getText().toString();
+                            }
+                            if (materialStatusNotOk.isChecked()) {
+                                unloadingMaterialStatus = materialStatusNotOk.getText().toString();
+                            }
+                            if (materialStatusDamage.isChecked()) {
+                                unloadingMaterialStatus = materialStatusDamage.getText().toString();
+                            }
+
+                            if (CustomUtility.isInternetOn(getApplicationContext())) {
                                 InstallationBean param_invc = new InstallationBean();
                                 JSONArray ja_invc_data = new JSONArray();
                                 JSONObject jsonObj = new JSONObject();
@@ -410,12 +389,12 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                                         }
                                     }
                                     ja_invc_data.put(jsonObj);
-                                    Log.e("ja_invc_data=====>",ja_invc_data.toString());
+                                    Log.e("ja_invc_data=====>", ja_invc_data.toString());
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
 
-                                if (CustomUtility.isInternetOn(getApplicationContext())) {
+
                                     saveDataLocally();
                                     new SyncInstallationData(ja_invc_data).execute();
 
@@ -426,7 +405,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                                     finish();
                                 }
 
-                            }
+
                         }
 
 
@@ -472,15 +451,6 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                 remarkEdt.getText().toString(),
                 billNo
         );
-        Log.e("Billno==>",billNo);
-        Log.e("noOfModules",noOfModules);
-        Log.e("unloadingMaterialStatus",unloadingMaterialStatus);
-        Log.e("unloadingBean==>", unloadingBean.getPanel_module_qty());
-        Log.e("unloadingBean==>", unloadingBean.getPanel_values());
-        Log.e("unloadingBean==>", unloadingBean.getPump_serial_no());
-        Log.e("unloadingBean==>", unloadingBean.getMotor_serial_no());
-        Log.e("unloadingBean==>", unloadingBean.getMaterial_status());
-
 
         if(db.isRecordExist(db.TABLE_UNLOADING_FORM_DATA, db.KEY_BILL_NO, unloadingBean.getBill_no())){
             db.updateUnloadingForm(unloadingBean);
@@ -863,8 +833,9 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             scan.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    isPumpMotorController = false;
                     int id = v.getId();
-                    startScanner(id);
+                    startScanner(scan.getId());
                 }
             });
 
@@ -886,6 +857,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
     void startScanner(int scanID) {
         currentScannerFor = scanID;
+        Log.e("currentScannerFor======>", String.valueOf(currentScannerFor));
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
         integrator.setPrompt("Scan a QRCode");
@@ -901,14 +873,81 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
             String scanContent = scanningResult.getContents();
             String scanFormat = scanningResult.getFormatName();
 
-            Toast.makeText(getApplicationContext(), scanFormat + scanContent, Toast.LENGTH_SHORT);
-            if (!isPumpMotorController) {
+            if (String.valueOf(currentScannerFor) != null && !String.valueOf(currentScannerFor).isEmpty()) {
+                if (currentScannerFor == 1000) {
+                    pumpSerNo.setText(scanContent);
+                } else if (currentScannerFor == 2000) {
+                    motorSerNo.setText(scanContent);
+                } else if (currentScannerFor == 3000) {
+                    controllerSerNo.setText(scanContent);
+                } else {
+                    if (!isPumpMotorController) {
+                        boolean alreadySet = false;
+                        if (!alreadySet) {
+                            Log.e("scannedDeviceNo=====>", String.valueOf(scannedDeviceNo));
+
+                            for (int i = 0; i < moduleOneLL.getChildCount(); i++) {
+
+                                Log.e("position=====>", String.valueOf(i) + "========>" + currentScannerFor);
+                                if (i == currentScannerFor) {
+
+                                    EditText edit_O = moduleOneLL.getChildAt(i).findViewById(R.id.view_edit_one);
+                                    if (scannedDeviceNo.size() > 0) {
+                                        if (!scannedDeviceNo.contains(scanContent)) {
+                                            Log.e("currentScannerFor1111======>", String.valueOf(currentScannerFor));
+                                            edit_O.setText(scanContent);
+                                            scannedDeviceNo.add(scanContent);
+                                            break;
+                                        } else {
+                                            CustomUtility.ShowToast("Already done", getApplicationContext());
+                                        }
+                                    } else {
+                                        edit_O.setText(scanContent);
+                                        scannedDeviceNo.add(scanContent);
+                                        break;
+                                    }
+                                }
+                            }
+
+                            /*if (scannedDeviceNo.size() > 0) {
+
+                                if (!scannedDeviceNo.contains(scanContent)) {
+
+                                    Log.e("currentScannerFor1111======>", String.valueOf(currentScannerFor));
+                                        edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
+
+
+                                        edit_O.setText(scanContent);
+                                        scannedDeviceNo.add(scanContent);
+
+                                } else {
+                                    CustomUtility.ShowToast("Already done", getApplicationContext());
+                                }
+                            }else {
+                                Log.e("currentScannerFor2222======>", String.valueOf(currentScannerFor));
+                                    edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
+
+                                    edit_O.setText(scanContent);
+                                    scannedDeviceNo.add(scanContent);
+
+                            }*/
+
+                        }
+                    }
+                }
+            }
+           /*  if (!isPumpMotorController) {
+                EditText edit_O;
                 boolean alreadySet = false;
                 if (!alreadySet) {
                     if (scannedDeviceNo.size() > 0) {
 
                         if (!scannedDeviceNo.contains(scanContent)) {
-                            EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
+                            if(String.valueOf(currentScannerFor)!=null && !String.valueOf(currentScannerFor).isEmpty()) {
+                                edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
+                            }else {
+                                edit_O = moduleOneLL.getChildAt(0).findViewById(R.id.view_edit_one);
+                            }
 
                             edit_O.setText(scanContent);
                             scannedDeviceNo.add(scanContent);
@@ -916,7 +955,11 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                             CustomUtility.ShowToast("Already done",getApplicationContext());
                         }
                     } else {
-                        EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
+                        if(String.valueOf(currentScannerFor)!=null && !String.valueOf(currentScannerFor).isEmpty()) {
+                            edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
+                        }else {
+                            edit_O =   moduleOneLL.getChildAt(0).findViewById(R.id.view_edit_one);
+                        }
 
                         edit_O.setText(scanContent);
                         scannedDeviceNo.add(scanContent);
@@ -937,9 +980,10 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
                         break;
                 }
-            }
+            }*/
         } catch (Exception e) {
             e.printStackTrace();
+            Log.e("Error==========>", e.toString());
         }
     }
 

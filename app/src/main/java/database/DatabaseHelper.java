@@ -3411,7 +3411,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             String selectQuery = "SELECT * FROM " + TABLE_INSTALLATION_UNLOAD_LIST + " WHERE " + KEY_PERNR + " = '" + userid + "'" + " AND " + KEY_SYNC + " = '" + "" + "'";
             Cursor cursor = db.rawQuery(selectQuery, null);
-            Log.e("CURSORCOUNT", "&&&&123" + cursor.getCount() + " " + selectQuery);
+       //     Log.e("CURSORCOUNT", "&&&&123" + cursor.getCount() + " " + selectQuery);
             if (cursor.getCount() > 0) {
                 if (cursor.moveToFirst()) {
                     while (!cursor.isAfterLast()) {

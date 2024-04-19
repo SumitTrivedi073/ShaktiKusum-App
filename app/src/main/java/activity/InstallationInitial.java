@@ -107,7 +107,7 @@ public class InstallationInitial extends BaseActivity {
     TextView save, txtDebugAppID, txtLatIDD, txtLongIDD, txtIBaseUpdateID, inst_controller_ser;
     InstallationBean installationBean;
     LabeledSwitch labeledSwitch;
-    int index_simoprator, index_conntype, id = 0, vkp = 0, currentScannerFor = -1, value;
+    int index_simoprator, index_conntype, id = 0, vkp = 0, currentScannerFor = 0, value;
     Spinner spinner_simoprator, spinner_conntype;
 
     String pernr = "", project_no = "", project_no1 = "", MUserId = "", login_no = "", customer_name = "", installation_date = "", address_ins = "", make_ins = "", tehsil_ins = "",
@@ -139,6 +139,7 @@ public class InstallationInitial extends BaseActivity {
 
     ProgressDialog progressDialog;
 
+    long uplRmsFileTime,uplImeiFileTime,uplDebugDataTime,uploadInstalltionTime;
 
 
     @SuppressLint("HandlerLeak")
@@ -542,25 +543,33 @@ public class InstallationInitial extends BaseActivity {
                     alreadySet = true;
                     break;
             }
-             /* if(!isControllerIDScan) {
+              if(!isControllerIDScan) {
                   if (!alreadySet) {
-                      if (scannedDeviceNo.size() > 0) {
 
-                          if (!scannedDeviceNo.contains(scanContent)) {
-                              EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
-                              edit_O.setText(scanContent);
-                              scannedDeviceNo.add(scanContent);
-                          } else {
-                              CustomUtility.ShowToast("Already done", getApplicationContext());
+                      for (int i = 0; i < moduleOneLL.getChildCount(); i++) {
+                          Log.e("position=====>", String.valueOf(i) + "========>" + currentScannerFor);
+                          if (i == currentScannerFor) {
+
+                              EditText edit_O = moduleOneLL.getChildAt(i).findViewById(R.id.view_edit_one);
+                              if (scannedDeviceNo.size() > 0) {
+                                  if (!scannedDeviceNo.contains(scanContent)) {
+                                      Log.e("currentScannerFor1111======>", String.valueOf(currentScannerFor));
+                                      edit_O.setText(scanContent);
+                                      scannedDeviceNo.add(scanContent);
+                                      break;
+                                  } else {
+                                      CustomUtility.ShowToast("Already done", getApplicationContext());
+                                  }
+                              } else {
+                                  edit_O.setText(scanContent);
+                                  scannedDeviceNo.add(scanContent);
+                                  break;
+                              }
                           }
-                      } else {
-                          EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
-                          edit_O.setText(scanContent);
-                          scannedDeviceNo.add(scanContent);
                       }
 
                   }
-              }*/
+              }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -683,9 +692,9 @@ public class InstallationInitial extends BaseActivity {
     private void ViewInflate() {
 
         String[] arr = no_of_module_value.split(",");
-        Log.e("no_of_module_value=======>", no_of_module_value);
+       /* Log.e("no_of_module_value=======>", no_of_module_value);
         Log.e("arr=======>", String.valueOf(arr.length));
-        Log.e("arr=======>", Arrays.toString(arr));
+        Log.e("arr=======>", Arrays.toString(arr));*/
 
         moduleOneLL.removeAllViews();
         if (arr.length > 0) {
@@ -698,26 +707,16 @@ public class InstallationInitial extends BaseActivity {
                 final ImageView scan = layout_f_inner.findViewById(R.id.view_img_one);
                 scan.setId(i);
 
-                Log.e("array_value=======>", arr[i]+"===============>"+i);
+              //  Log.e("array_value=======>", arr[i]+"===============>"+i);
                 edit.setText(arr[i]);
 
                 scan.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         int id = v.getId();
-                        startScanner(id);
+                        startScanner(scan.getId());
                     }
                 });
-
-           /* try {
-                if (arr.length > 0) {
-                    if (i < arr.length) {
-                        edit.setText(arr[i]);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }*/
 
                 layout_s.setVisibility(View.GONE);
                 moduleOneLL.setVisibility(View.VISIBLE);
@@ -1221,7 +1220,7 @@ public class InstallationInitial extends BaseActivity {
 
         inst_make.setText(installationBean.getMake_ins());
 
-       /* if (!TextUtils.isEmpty(installationBean.getNo_of_module_qty())) {
+       if (!TextUtils.isEmpty(installationBean.getNo_of_module_qty())) {
             no_of_module_value = installationBean.getNo_of_module_value();
             if (this.installationBean.getNo_of_module_qty().length() != 0 && !this.installationBean.getNo_of_module_qty().equals("0")) {
                 value = Integer.parseInt(installationBean.getNo_of_module_qty());
@@ -1236,7 +1235,7 @@ public class InstallationInitial extends BaseActivity {
                 value = Integer.parseInt(module_ser_no);
                 ViewInflate();
             }
-        }*/
+        }
 
         inst_module_total_plate_watt.setText(installationBean.getModule_total_plate_watt());
 
@@ -1413,24 +1412,7 @@ public class InstallationInitial extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-        if (installationBean != null && !installationBean.toString().isEmpty()) {
-            if (!TextUtils.isEmpty(installationBean.getNo_of_module_qty())) {
-                no_of_module_value = installationBean.getNo_of_module_value();
-                if (this.installationBean.getNo_of_module_qty().length() != 0 && !this.installationBean.getNo_of_module_qty().equals("0")) {
-                    value = Integer.parseInt(installationBean.getNo_of_module_qty());
-                    ViewInflate();
-                }
-            } else {
 
-                no_of_module_value = GetDataModule();
-
-                module_ser_no = inst_module_ser_no.getText().toString().trim();
-                if (module_ser_no.length() != 0 && !module_ser_no.equals("0")) {
-                    value = Integer.parseInt(module_ser_no);
-                    ViewInflate();
-                }
-            }
-        }
         retriveArrayList();
 
         if (CustomUtility.getSharedPreferences(mContext, Constant.deviceStatus) != null &&
@@ -1475,6 +1457,7 @@ public class InstallationInitial extends BaseActivity {
     /*-------------------------------------------------------------Upload Excel Sheet TO RMS Server-----------------------------------------------------------------------------*/
 
     public void uploadFile() {
+      long  startTime = System.currentTimeMillis();
 
         showProgressDialogue(getResources().getString(R.string.dataExtractFileToServer));
 
@@ -1515,7 +1498,7 @@ public class InstallationInitial extends BaseActivity {
                     String jsonData = response.body().string();
                     JSONObject Jobject = new JSONObject(jsonData);
                     Log.e("Jobject========>", Jobject.toString());
-
+                    uplRmsFileTime = System.currentTimeMillis() - startTime;
                     if (Jobject.getString("status").equals("true")) {
 
                         if (isDongleExtract) {
@@ -1553,6 +1536,7 @@ public class InstallationInitial extends BaseActivity {
 
 
     public void uploadIEMIFile() {
+        long  startTime = System.currentTimeMillis();
         stopProgressDialogue();
         showProgressDialogue(getResources().getString(R.string.ImeiFileToServer));
 
@@ -1584,7 +1568,7 @@ public class InstallationInitial extends BaseActivity {
                             .execute();
                     String jsonData = response.body().string();
                     JSONObject Jobject = new JSONObject(jsonData);
-
+                    uplImeiFileTime = System.currentTimeMillis() - startTime;
                     if (Jobject.getString("status").equals("true")) {
                         stopProgressDialogue();
                         ShowToast(getResources().getString(R.string.file_upload_successfully));
@@ -1768,8 +1752,8 @@ public class InstallationInitial extends BaseActivity {
                             Constant.BT_DEVICE_MAC_ADDRESS = "";
                          //   CustomUtility.ShowToast(getResources().getString(R.string.dataSubmittedSuccessfully), getApplicationContext());
 
-                            long elapsedTime = System.currentTimeMillis() - startTime;
-                            System.out.println("Total elapsed http request/response time in milliseconds for debug: " + elapsedTime);
+                            uplDebugDataTime = System.currentTimeMillis() - startTime;
+                            System.out.println("Total elapsed http request/response time in milliseconds for debug: " + uplDebugDataTime);
 
 
                             submitInstalltion();
@@ -1960,8 +1944,8 @@ public class InstallationInitial extends BaseActivity {
 
                     JSONArray ja = new JSONArray(obj1);
 
-                    long elapsedTime = System.currentTimeMillis() - startTime;
-                    System.out.println("Total elapsed http request/response time in milliseconds for installation: " + elapsedTime);
+                    uploadInstalltionTime = System.currentTimeMillis() - startTime;
+                    System.out.println("Total elapsed http request/response time in milliseconds for installation: " + uploadInstalltionTime);
 
 
                     for (int i = 0; i < ja.length(); i++) {
@@ -1974,6 +1958,7 @@ public class InstallationInitial extends BaseActivity {
                         if (invc_done.equals("Y")) {
                             CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.dataSubmittedSuccessfully));
                             Log.e("DOCNO", "&&&&" + billno);
+
                             InstallationDoneSuccessfully();
                         } else {
                             stopProgressDialogue();
@@ -2019,12 +2004,12 @@ public class InstallationInitial extends BaseActivity {
         CustomUtility.setSharedPreference(mContext, "INSTSYNC" + billno, "");
         CustomUtility.setSharedPreference(mContext, "borewellstatus" + billno, "");
         CustomUtility.setSharedPreference(mContext, "borewellstatus", "");
-
         CustomUtility.setSharedPreference(mContext, "SYNCLIST", "1");
 
         mDatabaseHelperTeacher.deleteSimInfoData(billno);
 
-        Random random = new Random();
+//        sendResponseTimeAPI();
+       Random random = new Random();
         String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
 
         if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
@@ -2036,10 +2021,52 @@ public class InstallationInitial extends BaseActivity {
             startActivity(intent);
             finish();
         }
-
         mDatabaseHelperTeacher.deleteAllDataFromTable(inst_controller_ser.getText().toString().trim() + "-0");
     }
 
+    /*-------------------------------------------------------------Send OTP to customer-----------------------------------------------------------------------------*/
+
+    private void sendResponseTimeAPI() {
+        stopProgressDialogue();
+        showProgressDialogue(getResources().getString(R.string.sendingOtpToCustomer));
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        Log.e("responseTimeAPI======>",WebURL.responseTIme + "VBELN=" + billno + "&URFA=" + uplRmsFileTime +"&UIFA=" + uplImeiFileTime
+                +"&DDA=" + uplDebugDataTime +"&SIA=" + uploadInstalltionTime);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                WebURL.responseTIme + "VBELN=" + billno + "&URFA=" + uplRmsFileTime +"&UIFA=" + uplImeiFileTime
+                        +"&DDA=" + uplDebugDataTime +"&SIA=" + uploadInstalltionTime ,
+                null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject res) {
+                stopProgressDialogue();
+
+
+                if (!res.toString().isEmpty()) {
+                    Random random = new Random();
+                    String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
+
+                    if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
+
+                        sendVerificationCodeAPI(generatedVerificationCode, inst_mob_no.getText().toString().trim(), inst_hp.getText().toString().trim(), BeneficiaryNo, bill_no.getText().toString());
+                        CustomUtility.removeValueFromSharedPref(mContext, Constant.isDebugDevice);
+                    } else {
+                        Intent intent = new Intent(InstallationInitial.this, PendingInstallationActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+
+                }
+
+            }
+        }, error -> {
+            stopProgressDialogue();
+            Log.e("error", String.valueOf(error));
+            Toast.makeText(InstallationInitial.this, error.toString(),
+                    Toast.LENGTH_LONG).show();
+        });
+        requestQueue.add(jsonObjectRequest);
+    }
 
     /*-------------------------------------------------------------Send OTP to customer-----------------------------------------------------------------------------*/
 

@@ -121,11 +121,9 @@ import webservice.WebURL;
              @Override
              public void afterTextChanged(Editable arg0) {
                  // TODO Auto-generated method stub
-                 String text = editsearch.getText().toString().toLowerCase(Locale.getDefault());
-                 try {
-                     adapterInstallationList.filter(text);
-                 } catch (Exception e) {
-                     e.printStackTrace();
+
+                 if(!arg0.toString().isEmpty()) {
+                     adapterInstallationList.filter(arg0.toString());
                  }
              }
 

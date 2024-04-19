@@ -417,7 +417,7 @@ android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:gravity="center"
-                    android:text="Submite"
+                    android:text="@string/submit"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12ssp" />
 
