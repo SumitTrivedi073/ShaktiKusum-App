@@ -103,67 +103,33 @@ import utility.FileUtils;
 import webservice.WebURL;
 
 public class BlueToothDebugNewActivity extends BaseActivity {
-    private static final CellStyle cs = null;
-    private static boolean success = false;
     private static Workbook wb = null;
     private static Sheet sheet1 = null;
     private static Row row;
     boolean vkFinalcheck = false;
-    int latLenght;
-    int longLenght;
+    int latLenght,longLenght,pp = 1,mIntCheckDeviceType,mIntCheckDeviceTypeFirst = 0,jk = 0,
+            checkFirstTimeOlineStstus = 0,mSimSValue = 0,mCheckSignelValue = 0,
+            mCheckNetworkValue = 0,mCheckServerConnectivityValue = 0,mCheckCableOKValue = 0;
+    int[] mTotalTime;
     BluetoothSocket btSocket;
-    BluetoothAdapter myBluetooth;
+    BluetoothAdapter myBluetooth,bluetoothAdapter;
     SharedPreferences.Editor editor;
     SharedPreferences pref;
-    int vkp = 0;
-    RelativeLayout rlvBT_7_ID, rlvBT_7_ID_save, rlvBT_8_ID, rlvBT_9_ID, rlvBT_8_ID_SimUpdated;
-    RelativeLayout rlvBT_S1_ID, rlvBT_S2_ID;
+    RelativeLayout rlvBT_7_ID, rlvBT_7_ID_save, rlvBT_8_ID, rlvBT_9_ID, rlvBT_8_ID_SimUpdated,rlvBT_S1_ID, rlvBT_S2_ID,rlvBackViewID;
     ProgressDialog progressDialog;
     LinearLayout lvlMainTextContainerID;
     EditText edtPutCommandID;
-    String AllCommomSTRContainer = "";
-
-    int[] mTotalTime;
-    int pp = 1;
-    String RMS_ORG_D_F = "", SS = "";
-    String mCheckExtraction = "No";
-    String AllTextSTR = "";
-    int mIntCheckDeviceType;
-    int mIntCheckDeviceTypeFirst = 0;
-    int jk = 0;
-    RelativeLayout rlvBackViewID;
-    int kkkkkk;
-    String kkkkkk1;
-    int clientid = 0;
-    String ssssss;
-    String mvFault;
-    String mvInvTemp;
-    float fvFrequency = 0;
-    float fvRMSVoltage = 0;
-    float fvOutputCurrent = 0;
-    float fvLPM = 0;
-    float fvPVVoltage = 0;
-    float fvPVCurrent = 0;
-    float fvInvTemp = 0;
-    String mvRPM;
-    String mInstallerMOB = "";
-    String mInstallerName = "";
-    String RMS_SERVER_DOWN = "";
-    String RMS_DEBUG_EXTRN = "";
-    int checkFirstTimeOlineStstus = 0;
-    String DEVICE_NO, SIGNL_STREN, INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "",
-            SIM_SR_NO = "", FAULT_CODE = "", SIM = "", RMS_STATUS = "", RMS_LAST_ONLINE_DATE = "", RMS_CURRENT_ONLINE_STATUS = "";
-    //private String []  AllCommandArray ={"AT+CPIN?","AT+GSN","AT+CIMI","AT+QINISTAT","AT+CSQ","AT+CREG?","AT+CGREG?","AT+CGDCONT?","AT+QICSGP?"};
-    List<BTResonseData> mBTResonseDataList;
-    String mSimStatus;
-    String mSimStatusActive;
-    int mSimSValue = 0;
-    int mCheckSignelValue = 0;
-    int mCheckNetworkValue = 0;
-    int mCheckServerConnectivityValue = 0;
-    int mCheckCableOKValue = 0;
-    String inst_latitude_double,
+    String AllCommomSTRContainer = "",RMS_ORG_D_F = "", SS = "",mCheckExtraction = "No",AllTextSTR = "",kkkkkk1,mvFault,mvInvTemp,mvRPM,
+            mInstallerMOB = "",mInstallerName = "",RMS_SERVER_DOWN = "",RMS_DEBUG_EXTRN = "",
+            DEVICE_NO, SIGNL_STREN, INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "",
+            SIM_SR_NO = "", FAULT_CODE = "", SIM = "", RMS_STATUS = "", RMS_LAST_ONLINE_DATE = "", RMS_CURRENT_ONLINE_STATUS = "",
+            mSimStatus,mSimStatusActive,inst_latitude_double,
             inst_longitude_double;
+
+    float fvFrequency = 0,fvRMSVoltage = 0,fvOutputCurrent = 0,fvLPM = 0,fvPVVoltage = 0,fvPVCurrent = 0,fvInvTemp = 0;
+
+    List<BTResonseData> mBTResonseDataList;
+
     int mPostionFinal = 0;
     int kk = 0;
     int mvDay = 0;
@@ -214,7 +180,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     private String ControllerSerialNumber, debugDataExtract;
     private static Cell cell = null;
     CardView submitBtnCard;
-    BluetoothAdapter bluetoothAdapter;
+    long uplRmsFileTime,uplImeiFileTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -4067,11 +4033,11 @@ public class BlueToothDebugNewActivity extends BaseActivity {
     /*-------------------------------------------------------------Upload Excel Sheet TO RMS Server-----------------------------------------------------------------------------*/
 
     public void uploadFile() {
-
+        long  startTime = System.currentTimeMillis();
         showProgressDialogue(getResources().getString(R.string.dataExtractFileToServer));
 
         OkHttpClient client = new OkHttpClient().newBuilder()
-                .connectTimeout(10, TimeUnit.SECONDS)
+                .connectTimeout(1, TimeUnit.MINUTES)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
                 .build();
@@ -4107,7 +4073,8 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                     String jsonData = response.body().string();
                     JSONObject Jobject = new JSONObject(jsonData);
                     Log.e("Jobject========>", Jobject.toString());
-
+                    uplRmsFileTime = System.currentTimeMillis() - startTime;
+                    Log.e("uplRmsFileTime======>", String.valueOf(uplRmsFileTime));
                     if (Jobject.getString("status").equals("true")) {
 
                         if (isDongleExtract) {
@@ -4145,10 +4112,11 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
 
     public void uploadIEMIFile() {
+        long  startTime = System.currentTimeMillis();
         stopProgressDialogue();
         showProgressDialogue(getResources().getString(R.string.ImeiFileToServer));
 
-        OkHttpClient client = new OkHttpClient().newBuilder().connectTimeout(10, TimeUnit.SECONDS)
+        OkHttpClient client = new OkHttpClient().newBuilder().connectTimeout(1, TimeUnit.MINUTES)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .writeTimeout(10, TimeUnit.SECONDS)
                 .build();
@@ -4176,7 +4144,8 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                             .execute();
                     String jsonData = response.body().string();
                     JSONObject Jobject = new JSONObject(jsonData);
-
+                    uplImeiFileTime = System.currentTimeMillis() - startTime;
+                    Log.e("uplImeiFileTime======>", String.valueOf(uplImeiFileTime));
                     if (Jobject.getString("status").equals("true")) {
                         stopProgressDialogue();
                         ShowToast("File Upload Successfully");

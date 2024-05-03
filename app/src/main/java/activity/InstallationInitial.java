@@ -1014,9 +1014,9 @@ public class InstallationInitial extends BaseActivity {
         String[] fileName = FileUtils.getPath(InstallationInitial.this, uri).split("/");
         finalFileName = fileName[fileName.length - 1];
         filePath = FileUtils.getPath(InstallationInitial.this, uri);
-        Log.e("uri=========>", uri.toString());
+       /* Log.e("uri=========>", uri.toString());
         Log.e("finalFileName=========>", finalFileName);
-        Log.e("filePath=========>", filePath);
+        Log.e("filePath=========>", filePath);*/
 
         if (finalFileName.contains(".xls")) {
             selectedFile = new File(filePath);
@@ -2008,8 +2008,8 @@ public class InstallationInitial extends BaseActivity {
 
         mDatabaseHelperTeacher.deleteSimInfoData(billno);
 
-//        sendResponseTimeAPI();
-       Random random = new Random();
+       sendResponseTimeAPI();
+       /*Random random = new Random();
         String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
 
         if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
@@ -2020,7 +2020,7 @@ public class InstallationInitial extends BaseActivity {
             Intent intent = new Intent(InstallationInitial.this, PendingInstallationActivity.class);
             startActivity(intent);
             finish();
-        }
+        }*/
         mDatabaseHelperTeacher.deleteAllDataFromTable(inst_controller_ser.getText().toString().trim() + "-0");
     }
 
