@@ -383,24 +383,21 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
     }
 
     ActivityResultLauncher<Intent> camraLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
+            result -> {
 
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        if (result.getData() != null && result.getData().getExtras() != null) {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    if (result.getData() != null && result.getData().getExtras() != null) {
 
-                            Bundle bundle = result.getData().getExtras();
-                           // Log.e("bundle====>", bundle.get("data").toString()+"latitude=====>"+latitude+"longitude========>"+longitude);
-                            if(!bundle.get("latitude").toString().isEmpty() && !bundle.get("longitude").toString().isEmpty()) {
-                                UpdateArrayList(bundle.get("data").toString(), "0", bundle.get("latitude").toString(), bundle.get("longitude").toString());
-                            }else {
-                                CustomUtility.showToast(InstReportImageActivity.this, "Please Add Image Again!");
-                            }
-
+                        Bundle bundle = result.getData().getExtras();
+                       // Log.e("bundle====>", bundle.get("data").toString()+"latitude=====>"+latitude+"longitude========>"+longitude);
+                        if(!bundle.get("latitude").toString().isEmpty() && !bundle.get("longitude").toString().isEmpty()) {
+                            UpdateArrayList(bundle.get("data").toString(), "0", bundle.get("latitude").toString(), bundle.get("longitude").toString());
+                        }else {
+                            CustomUtility.showToast(InstReportImageActivity.this, "Please Add Image Again!");
                         }
 
                     }
+
                 }
             });
 

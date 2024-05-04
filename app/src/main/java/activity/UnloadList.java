@@ -200,6 +200,7 @@ public class UnloadList extends BaseActivity {
         protected void onPreExecute() {
             installationBeans = new ArrayList<InstallationListBean>();
             progressDialog = ProgressDialog.show(context, "", "Please Wait...");
+
         }
 
         @Override
@@ -209,7 +210,7 @@ public class UnloadList extends BaseActivity {
             param.add(new BasicNameValuePair("PROJECT_NO", CustomUtility.getSharedPreferences(context, "projectid")));
             param.add(new BasicNameValuePair("PROJECT_LOGIN_NO", CustomUtility.getSharedPreferences(context, "loginid")));
             String login_selec = null;
-            Log.e("param====>",param.toString());
+       //     Log.e("param====>",param.toString());
             try {
                 login_selec = CustomHttpClient.executeHttpPost1(WebURL.INSTALLATION_UNLOAD1, param);
                 JSONObject object = new JSONObject(login_selec);
