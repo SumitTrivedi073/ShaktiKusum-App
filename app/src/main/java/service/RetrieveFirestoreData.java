@@ -91,6 +91,7 @@ public class RetrieveFirestoreData extends Service {
                 if (snapshot != null && snapshot.exists()) {
                     AppConfig appConfig = snapshot.toObject(AppConfig.class);
 
+                    Log.e("AppConfig=====>",appConfig.getMinKusumAppVersion());
                     if (appConfig != null) {
                         try {
                             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);

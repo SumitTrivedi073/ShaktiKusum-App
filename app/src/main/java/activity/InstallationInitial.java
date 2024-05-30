@@ -808,7 +808,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
             }
 
-            if (!reasontxt.getText().toString().isEmpty()) {
+          //  if (!reasontxt.getText().toString().isEmpty()) {
 
                     SaveInLocalDataBase();
                     if (CustomUtility.isInternetOn(getApplicationContext())) {
@@ -819,10 +819,10 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                         startActivity(intent);
                         finish();
                     }
-                } else {
+            /*    } else {
                     CustomUtility.ShowToast("Please Enter Installation Delay Reason.", getApplicationContext());
                 }
-
+*/
 
 
         } else {
@@ -1057,7 +1057,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
         inst_pump_ser.setText(pump);
 
-        inst_controller_ser.setText("7F-0135-0-13-06-23");
+        inst_controller_ser.setText(controller);
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {
             spinner_simoprator.setSelection(db.getPosition(spinner_simoprator, installationBean.getSimoprator()));
@@ -1102,11 +1102,14 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
     private void updateBarcodeList(String moduleValue) {
         no_of_module_value = moduleValue;
 
-        //  Log.e("no_of_module_value========>", no_of_module_value);
+          Log.e("no_of_module_value========>", String.valueOf(no_of_module_value));
 
         String strArray[] = no_of_module_value.split(",");
+        Log.e("strArray========>",String.valueOf(strArray.length));
         for (int i = 0; i < strArray.length; i++) {
-            barcodenameList.set(i, strArray[i]);
+            if(barcodenameList.size()<=strArray.length) {
+                barcodenameList.set(i, strArray[i]);
+            }
         }
 
         barCodeSelectionAdapter.notifyDataSetChanged();
