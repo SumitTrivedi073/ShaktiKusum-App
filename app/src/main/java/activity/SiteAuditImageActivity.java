@@ -204,7 +204,6 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
             db.insertSiteAuditImage(imageArrayList.get(selectedIndex).getName(), path,true, enq_docno);
         }
         siteAuditAdapter.notifyDataSetChanged();
-
     }
 
     public void openGallery() {
