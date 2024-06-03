@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -40,8 +41,10 @@ import utility.CustomUtility;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class SiteAuditImageActivity extends BaseActivity implements ImageSelectionAdapter.ImageSelectionListener {
 
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    private static final int GALLERY_IMAGE_REQUEST_CODE = 101;
+    final String[] ACCEPT_MIME_TYPES = {
+            "application/pdf",
+            "image/*"
+    };
     private static final int PICK_FROM_FILE = 102;
     boolean isBackPressed = false,isUpdate = false;
     int selectedIndex;
@@ -121,10 +124,12 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
     private void SetAdapter() {
         imageArrayList = new ArrayList<>();
         itemNameList = new ArrayList<>();
+
         itemNameList.add(getResources().getString(R.string.foundation_photo));
         itemNameList.add(getResources().getString(R.string.Structure_Assembly_photo));
         itemNameList.add(getResources().getString(R.string.LA_and_Earthing_Photo));
         itemNameList.add(getResources().getString(R.string.MISC_Photo));
+        itemNameList.add(getResources().getString(R.string.attachPdf));
 
         for (int i = 0; i < itemNameList.size(); i++) {
             ImageModel imageModel = new ImageModel();
@@ -205,8 +210,9 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
     public void openGallery() {
 
         Intent intent = new Intent();
-        intent.setType("image/*");
+        intent.setType("image/*,application/pdf");
         intent.setAction(Intent.ACTION_GET_CONTENT);//
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, ACCEPT_MIME_TYPES);
         startActivityForResult(Intent.createChooser(intent, "Select File"), PICK_FROM_FILE);
     }
 
@@ -233,6 +239,9 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
                 try {
                     Uri mImageCaptureUri = data.getData();
                     String path = getPath(SiteAuditImageActivity.this, mImageCaptureUri); // From Gallery
+
+                    Log.e("path===>", path);
+
                     if (path == null) {
                         path = mImageCaptureUri.getPath(); // From File Manager
                     }

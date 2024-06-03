@@ -262,6 +262,7 @@
     <string name="Structure_Assembly_photo">Structure Assembly Photo</string>
     <string name="LA_and_Earthing_Photo">LA and Earthing Photo</string>
     <string name="MISC_Photo">MISC Photo</string>
+    <string name="attachPdf">Attach Pdf</string>
     <string name="Please_foundation_photo">Please select Foundation Photo</string>
     <string name="Please_Structure_Assembly_photo">Please select Structure Assembly Photo</string>
     <string name="Please_LA_and_Earthing_Photo">Please select LA and Earthing Photo</string>
