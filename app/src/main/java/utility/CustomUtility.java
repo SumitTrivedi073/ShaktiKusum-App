@@ -35,8 +35,10 @@ import androidx.core.content.ContextCompat;
 import com.google.gson.Gson;
 import com.shaktipumplimited.shaktikusum.R;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -401,8 +403,6 @@ public class CustomUtility {
 
     public static String getMediaFilePath(String folder, String name) {
 
-
-
         File root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Shakti Kusum App");
 
         File dir = new File(root.getAbsolutePath() + "/"+folder+"/" + name); //it is my root directory
@@ -418,6 +418,26 @@ public class CustomUtility {
 
         // Create a media file name
         return dir.getPath() + File.separator + "IMG_"+ Calendar.getInstance().getTimeInMillis() +".jpg";
+    }
+
+
+    public static String encodeFileToBase64Binary(File yourFile) {
+        int size = (int) yourFile.length();
+        byte[] bytes = new byte[size];
+        try {
+            BufferedInputStream buf = new BufferedInputStream(new FileInputStream(yourFile));
+            buf.read(bytes, 0, bytes.length);
+            buf.close();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        String encoded = Base64.encodeToString(bytes,Base64.NO_WRAP);
+        return encoded;
     }
 
 

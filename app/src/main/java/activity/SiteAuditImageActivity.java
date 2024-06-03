@@ -46,7 +46,7 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
             "image/*"
     };
     private static final int PICK_FROM_FILE = 102;
-    boolean isBackPressed = false,isUpdate = false;
+    boolean isBackPressed = false,isUpdate = false, isPdf = false;
     int selectedIndex;
     AlertDialog alertDialog;
     Context mContext;
@@ -250,6 +250,7 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
                     if (filename.indexOf(".") > 0) {
                         file = filename.substring(0, filename.lastIndexOf("."));
                     } else {
+                        isPdf = true;
                         file = filename;
                     }
 
@@ -259,9 +260,15 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
                     if (TextUtils.isEmpty(file)) {
                         Toast.makeText(SiteAuditImageActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
                     } else {
-                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver() , mImageCaptureUri);
-                        File file1 = CustomUtility.saveFile(bitmap,cust_nm.trim(),"Images");
-                        UpdateArrayList(file1.getPath());
+
+                        if(!isPdf){
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mImageCaptureUri);
+                            File file1 = CustomUtility.saveFile(bitmap,cust_nm.trim(),"Images");
+                            UpdateArrayList(file1.getPath());
+
+                        }else {
+                            Log.e("PDFBase64=====>",CustomUtility.encodeFileToBase64Binary(new File(path)));
+                        }
 
                     }
                 } catch (Exception e) {
