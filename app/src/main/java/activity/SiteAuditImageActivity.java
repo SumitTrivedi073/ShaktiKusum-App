@@ -246,12 +246,17 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
                         path = mImageCaptureUri.getPath(); // From File Manager
                     }
                     String filename = path.substring(path.lastIndexOf("/") + 1);
+                    Log.e("filename===>", filename);
                     String file;
                     if (filename.indexOf(".") > 0) {
                         file = filename.substring(0, filename.lastIndexOf("."));
                     } else {
-                        file = "";
+                        file = filename;
                     }
+
+                    Log.e("file===>", file);
+
+
                     if (TextUtils.isEmpty(file)) {
                         Toast.makeText(SiteAuditImageActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
                     } else {

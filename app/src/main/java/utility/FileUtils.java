@@ -28,7 +28,6 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.Comparator;
 
-
 public class FileUtils {
     public static final String DOCUMENTS_DIR = "documents";
     // configured android:authorities in AndroidManifest (https://developer.android.com/reference/android/support/v4/content/FileProvider)
