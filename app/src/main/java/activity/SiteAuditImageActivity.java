@@ -20,6 +20,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
@@ -67,7 +69,7 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
     File selectedFile;
     BufferedReader reader = null;
 
-
+    ActivityResultLauncher<Intent> resultLauncher;
     public static final String GALLERY_DIRECTORY_NAME = "ShaktiKusum";
 
     String enq_docno, cust_nm;
@@ -96,7 +98,37 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
 
          SetAdapter();
         listner();
+
+
+        resultLauncher = registerForActivityResult(
+                new ActivityResultContracts
+                        .StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(
+                            ActivityResult result)
+                    {
+                        // Initialize result data
+                        Intent data = result.getData();
+                        // check condition
+                        if (data != null) {
+                            // When data is not equal to empty
+                            // Get PDf uri
+                            Uri sUri = data.getData();
+                            // set Uri on text view
+
+                            // Get PDF path
+                            String sPath = sUri.getPath();
+                            // Set path on text view
+                            Log.e("PDFPATH====>",sPath);
+
+
+                            Log.e("ImagePath====>",CustomUtility.getBase64FromPdfPath(getApplicationContext(),sPath));
+                        }
+                    }
+                });
     }
+
 
     private void listner() {
         mToolbar.setNavigationOnClickListener(view -> {
@@ -266,11 +298,6 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
                 }
                 break;
 
-            case ATTACHMENT_REQUEST:
-            // Select PDF Code.
-
-                break;
-
         }
 
     }
@@ -428,10 +455,13 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
     }
 
     public void openPDF() {
-        File file = new File(Environment.getRootDirectory() + File.separator + Environment.DIRECTORY_DOWNLOADS);
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, ACCEPT_MIME_TYPES);
-        intent.setDataAndType(Uri.parse(file.getAbsolutePath()), "*/*");
-        startActivityForResult(Intent.createChooser(intent, "Select PDF"), ATTACHMENT_REQUEST);
+        Intent intent
+                = new Intent(Intent.ACTION_GET_CONTENT);
+        // set type
+        intent.setType("application/pdf");
+        // Launch intent
+        resultLauncher.launch(intent);
     }
+
+
 }

@@ -160,7 +160,7 @@ public class SiteAuditList extends BaseActivity {
     @Override
     protected void onResume() {
 
-        if(adapter_auditsite_list != null) {
+    /*    if(adapter_auditsite_list != null) {
             adapter_auditsite_list.notifyDataSetChanged();
         }
 
@@ -187,7 +187,7 @@ public class SiteAuditList extends BaseActivity {
                 recyclerView.setAdapter(adapter_auditsite_list);
                 adapter_auditsite_list.notifyDataSetChanged();
 
-        }
+        }*/
         super.onResume();
 
     }

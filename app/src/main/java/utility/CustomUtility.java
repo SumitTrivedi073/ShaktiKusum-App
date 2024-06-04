@@ -313,6 +313,28 @@ public class CustomUtility {
 
     }
 
+    public static String getBase64FromPdfPath(Context context,String Imagepath) {
+        File file = new File(Imagepath);
+        int size = (int) file.length();
+        byte[] bytes = new byte[size];
+        try {
+            BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
+            buf.read(bytes, 0, bytes.length);
+            buf.close();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        String encoded = Base64.encodeToString(bytes,Base64.NO_WRAP);
+        return encoded;
+
+
+    }
+
 
 
     public static void deleteArrayList(Context context,String name){
