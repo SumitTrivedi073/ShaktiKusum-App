@@ -420,6 +420,33 @@ public class CustomUtility {
         return dir.getPath() + File.separator + "IMG_"+ Calendar.getInstance().getTimeInMillis() +".jpg";
     }
 
+    public static File savePDFFile(Bitmap bitmap, String name, String folder) {
+
+        String firstname = CustomUtility.getUserFirstName(name);
+        Log.e("fname=====>",firstname);
+        File file = new File(getMediaFilePDFPath(folder,firstname));
+        return file;
+    }
+
+    public static String getMediaFilePDFPath(String folder, String name) {
+
+        File root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Shakti Kusum App");
+
+        File dir = new File(root.getAbsolutePath() + "/"+folder+"/" + name); //it is my root directory
+
+        try {
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Create a media file name
+        return dir.getPath() + File.separator + "IMG_"+ Calendar.getInstance().getTimeInMillis() +".jpg";
+    }
+
 
     public static String encodeFileToBase64Binary(File yourFile) {
         int size = (int) yourFile.length();

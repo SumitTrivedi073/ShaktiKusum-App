@@ -670,7 +670,7 @@ public class SiteAuditInitial extends BaseActivity {
 
                 if (imageList.size() > 0) {
 
-             /*       if (imageList.get(0).isImageSelected()) {
+                    if (imageList.get(0).isImageSelected()) {
                         jsonObj.put("PHOTO1", CustomUtility.getBase64FromBitmap(SiteAuditInitial.this, imageList.get(0).getImagePath()));
                     }
                     if (1 < imageList.size() && imageList.get(1).isImageSelected()) {
@@ -681,9 +681,9 @@ public class SiteAuditInitial extends BaseActivity {
                     }
                     if (3 < imageList.size() && imageList.get(3).isImageSelected()) {
                         jsonObj.put("PHOTO4", CustomUtility.getBase64FromBitmap(SiteAuditInitial.this, imageList.get(3).getImagePath()));
-                    }*/
+                    }
                     if (4 < imageList.size() && imageList.get(4).isImageSelected()) {
-                        jsonObj.put("PHOTO5", CustomUtility.getBase64FromBitmap(SiteAuditInitial.this, imageList.get(3).getImagePath()));
+                        jsonObj.put("PHOTO5", CustomUtility.getBase64FromBitmap(SiteAuditInitial.this, imageList.get(4).getImagePath()));
                     }
 
                 }
@@ -700,7 +700,7 @@ public class SiteAuditInitial extends BaseActivity {
 
             System.out.println(param1_invc);
 
-/*            try {
+          /*  try {
 
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
                 StrictMode.setThreadPolicy(policy);
@@ -738,12 +738,6 @@ public class SiteAuditInitial extends BaseActivity {
                             db.deleteAuditData(billno);
                             db.deleteAuditSiteListData1(billno);
                             db.deleteAuditImages(billno);
-                           // deleteDirectory(new File(getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + GALLERY_DIRECTORY_NAME + "/SKAPP/AUD/" + billno));
-
-                            *//*CustomUtility.setSharedPreference(context, billno + "PHOTO_1", "");
-                            CustomUtility.setSharedPreference(context, billno + "PHOTO_2", "");
-                            CustomUtility.setSharedPreference(context, billno + "PHOTO_3", "");
-                            CustomUtility.setSharedPreference(context, billno + "PHOTO_4", "");*//*
 
 
                             progressDialog.dismiss();

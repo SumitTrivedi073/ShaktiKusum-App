@@ -3,12 +3,14 @@ package activity;
 import static utility.FileUtils.getPath;
 
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -56,8 +58,7 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
     List<ImageModel> imageList = new ArrayList<>();
     ImageSelectionAdapter siteAuditAdapter;
     Toolbar mToolbar;
-    double AUD_latitude_double,
-            AUD_longitude_double;
+    double AUD_latitude_double, AUD_longitude_double;
     String type="AUD/";
 
     public static final String GALLERY_DIRECTORY_NAME = "ShaktiKusum";
@@ -238,7 +239,7 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
                 try {
                     Uri mImageCaptureUri = data.getData();
                     String path = getPath(SiteAuditImageActivity.this, mImageCaptureUri); // From Gallery
-
+                    final Uri contentUri;
                     Log.e("path===>", path);
 
                     if (path == null) {
@@ -251,10 +252,16 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
                         file = filename.substring(0, filename.lastIndexOf("."));
                     } else {
                         isPdf = true;
-                        file = filename;
-                    }
+                        file = "";
 
-                    Log.e("file===>", file);
+                        final String id = DocumentsContract.getDocumentId(mImageCaptureUri);
+                         contentUri = ContentUris.withAppendedId(
+                                Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
+
+                        Log.e("file===>", String.valueOf(contentUri));
+                  }
+
+
 
 
                     if (TextUtils.isEmpty(file)) {
@@ -267,7 +274,10 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
                             UpdateArrayList(file1.getPath());
 
                         }else {
-                            Log.e("PDFBase64=====>",CustomUtility.encodeFileToBase64Binary(new File(path)));
+                           /* Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mImageCaptureUri);
+                            File file1 = CustomUtility.savePDFFile(bitmap,cust_nm.trim(),"Images");
+                            UpdateArrayList(file1.getPath());*/
+                          //  Log.e("PDFBase64=====>",CustomUtility.encodeFileToBase64Binary(new File(path)));
                         }
 
                     }
@@ -278,6 +288,17 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
 
         }
 
+    }
+
+    public String getPDFPath(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        if (cursor == null) return null;
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String s = cursor.getString(column_index);
+        cursor.close();
+        return s;
     }
 
     public String getImagePath(Uri uri) {
