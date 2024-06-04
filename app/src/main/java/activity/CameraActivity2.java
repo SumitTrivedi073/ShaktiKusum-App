@@ -73,7 +73,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     private SurfaceView surfaceView;
     LinearLayout layoutpreview;
     TextView display;
-    String  customer_name, pumpSrNo, beneficiaryNo, PumpLoad;
+    String customer_name, pumpSrNo, beneficiaryNo, PumpLoad;
     Bitmap bitmap;
     File save;
     boolean checkGPS, checkNetwork;
@@ -371,7 +371,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     private void getLastLocation() {
 
         try {
-             locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+            locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
             // get GPS status
             checkGPS = locationManager
@@ -385,60 +385,74 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
                 Toast.makeText(getApplicationContext(), "No Service Provider is available", Toast.LENGTH_SHORT).show();
             } else {
                 // if GPS Enabled get lat/long using GPS Services
-                if (checkGPS) {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                    if (checkGPS) {
 
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
-                    }
-                    locationManager.requestLocationUpdates(
-                            LocationManager.GPS_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES,CameraActivity2.this);
-                    if (locationManager != null) {
-                        loc = locationManager
-                                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            // TODO: Consider calling
+                            //    ActivityCompat#requestPermissions
+                            // here to request the missing permissions, and then overriding
+                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                            //                                          int[] grantResults)
+                            // to handle the case where the user grants the permission. See the documentation
+                            // for ActivityCompat#requestPermissions for more details.
+                            return;
+                        }
+                        locationManager.requestLocationUpdates(
+                                LocationManager.GPS_PROVIDER,
+                                MIN_TIME_BW_UPDATES,
+                                MIN_DISTANCE_CHANGE_FOR_UPDATES, CameraActivity2.this);
+                        if (locationManager != null) {
+                            loc = locationManager
+                                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                            if (loc != null) {
+                                latitude = loc.getLatitude();
+                                longitude = loc.getLongitude();
+
+                                Log.e("latitude======>", String.valueOf(latitude));
+                                Log.e("longitude======>", String.valueOf(longitude));
+
+
+                                setAddress();
+                            }
+                        }
+
+
+                    } else if (checkNetwork) {
+                        locationManager.requestLocationUpdates(
+                                LocationManager.NETWORK_PROVIDER,
+                                MIN_TIME_BW_UPDATES,
+                                MIN_DISTANCE_CHANGE_FOR_UPDATES, CameraActivity2.this);
+
+                        if (locationManager != null) {
+                            loc = locationManager
+                                    .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+                        }
+
                         if (loc != null) {
                             latitude = loc.getLatitude();
                             longitude = loc.getLongitude();
+                            Log.e("latitude2======>", String.valueOf(latitude));
+                            Log.e("longitude2======>", String.valueOf(longitude));
 
-                            Log.e("latitude======>", String.valueOf(latitude));
-                            Log.e("longitude======>", String.valueOf(longitude));
-
-
-                           setAddress();
+                            setAddress();
                         }
                     }
-
-
-                }else if (checkNetwork) {
-                    locationManager.requestLocationUpdates(
-                            LocationManager.NETWORK_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES,CameraActivity2.this);
-
-                    if (locationManager != null) {
-                        loc = locationManager
-                                .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-                    }
-
-                    if (loc != null) {
-                        latitude = loc.getLatitude();
-                        longitude = loc.getLongitude();
-                        Log.e("latitude2======>", String.valueOf(latitude));
-                        Log.e("longitude2======>", String.valueOf(longitude));
-
-                        setAddress();
-                    }
                 }
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
 
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
             }
 
 
@@ -489,6 +503,15 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     @Override
     public void onLocationChanged(@NonNull Location location) {
 
+        if(location!=null){
+            loc = location;
+            latitude = loc.getLatitude();
+            longitude = loc.getLongitude();
+            Log.e("latitude2======>", String.valueOf(latitude));
+            Log.e("longitude2======>", String.valueOf(longitude));
+
+            setAddress();
+        }
     }
 
 

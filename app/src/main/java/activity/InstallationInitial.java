@@ -42,6 +42,8 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.angads25.toggle.widget.LabeledSwitch;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.gson.Gson;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
@@ -126,6 +128,8 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
             INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "", SIM_SR_NO = "", SIM = "", RMS_STATUS = "", RMS_LAST_ONLINE_DATE = "", FAULT_CODE = "",
             RMS_CURRENT_ONLINE_STATUS = "", version = "", invc_done = "", docno_sap = "", mDriveSerialNo = "", mMotorSerialNo = "", mPumpSerialNo = "", delay = "",mobileOnlineStatus = "",
             controllerOnlineStatus = "",dirPath = "",finalFileName="",filePath ="",type ="",columnCount ="";
+
+    int scannerCode;
     File selectedFile;
     EditText inst_date, bill_date, bill_no, cust_name, borewellstatus, reasontxt, inst_address, inst_make, inst_village,
             inst_state, inst_district, inst_tehsil, inst_mob_no, inst_panel_stand_qty, inst_panel_watt, inst_total_watt, inst_module_total_plate_watt, inst_no_of_module, inst_module_ser_no,
@@ -482,6 +486,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
         labeledSwitch.setOnToggledListener((toggleableView, isOn) -> {
             Intent intent = new Intent(mContext, DeviceStatusActivity.class);
+            intent.putExtra(Constant.ControllerSerialNumber,inst_controller_ser.getText().toString().trim()+"-0");
             startActivity(intent);
         });
 
@@ -489,7 +494,6 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == 301) {
@@ -501,6 +505,12 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                 inst_date.setText(finaldate2);
             }
         }
+
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (scanningResult != null) {
+            setScanValue(scanningResult.getContents(),scannerCode);
+        }
+
     }
 
 
@@ -1102,14 +1112,10 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
     private void updateBarcodeList(String moduleValue) {
         no_of_module_value = moduleValue;
 
-          Log.e("no_of_module_value========>", String.valueOf(no_of_module_value));
-
         String strArray[] = no_of_module_value.split(",");
-        Log.e("strArray========>",String.valueOf(strArray.length));
         for (int i = 0; i < strArray.length; i++) {
-            if(barcodenameList.size()<=strArray.length) {
-                barcodenameList.set(i, strArray[i]);
-            }
+                 barcodenameList.set(i, strArray[i]);
+
         }
 
         barCodeSelectionAdapter.notifyDataSetChanged();
@@ -1123,31 +1129,43 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
 
     private void ScanCode(int scannerCode) {
-        options = new GmsBarcodeScannerOptions.Builder()
-                .setBarcodeFormats(
-                        Barcode.FORMAT_ALL_FORMATS)
-                .build();
-        scanner = GmsBarcodeScanning.getClient(this);
-        scanner.startScan()
-                .addOnSuccessListener(
-                        barcode -> {
-                            // Task completed successfully
-                            String rawValue = barcode.getRawValue();
+        this.scannerCode = scannerCode;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 
-                            setScanValue(rawValue, scannerCode);
+            options = new GmsBarcodeScannerOptions.Builder()
+                    .setBarcodeFormats(
+                            Barcode.FORMAT_ALL_FORMATS)
+                    .build();
+            scanner = GmsBarcodeScanning.getClient(this);
+            scanner.startScan()
+                    .addOnSuccessListener(
+                            barcode -> {
+                                // Task completed successfully
+                                String rawValue = barcode.getRawValue();
+
+                                setScanValue(rawValue, scannerCode);
 
 
-                        })
-                .addOnCanceledListener(
-                        () -> {
-                            // Task canceled
-                            Toast.makeText(getApplicationContext(), "Scanning Cancelled Please try again", Toast.LENGTH_SHORT).show();
-                        })
-                .addOnFailureListener(
-                        e -> {
-                            // Task failed with an exception
-                            Toast.makeText(getApplicationContext(), "Scanning Failed Please try again", Toast.LENGTH_SHORT).show();
-                        });
+                            })
+                    .addOnCanceledListener(
+                            () -> {
+                                // Task canceled
+                                Toast.makeText(getApplicationContext(), "Scanning Cancelled Please try again", Toast.LENGTH_SHORT).show();
+                            })
+                    .addOnFailureListener(
+                            e -> {
+                                // Task failed with an exception
+                                Toast.makeText(getApplicationContext(), "Scanning Failed Please try again", Toast.LENGTH_SHORT).show();
+                            });
+        }else {
+            IntentIntegrator integrator = new IntentIntegrator(this);
+            integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+            integrator.setPrompt("Scan a QRCode");
+            integrator.setCameraId(0);
+            integrator.setBeepEnabled(true);// Use a specific camera of the device
+            integrator.setBarcodeImageEnabled(true);
+            integrator.initiateScan();
+        }
     }
 
     private void setScanValue(String rawValue, int scannerCode) {

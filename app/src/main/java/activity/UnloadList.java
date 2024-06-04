@@ -252,6 +252,7 @@ public class UnloadList extends BaseActivity {
                         motor_ser = jo.getString("motor_sernr");
                         controller_ser = jo.getString("controller_sernr");
                         HP = jo.getString("hp");
+                        pumpLoad = jo.getString("pump_load");
 
                         installationBean = new InstallationListBean(bill_no, CustomUtility.getSharedPreferences(context, "userid"),
                                 name, fathname, bill_no, kunnr, gst_bill_no, bill_date, disp_date, state, state_txt, district, district_txt, tehsil, village,

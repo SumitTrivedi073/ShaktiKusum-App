@@ -52,11 +52,15 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.gson.Gson;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
@@ -108,6 +112,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     List<String> itemNameList = new ArrayList<>();
     String customerName, beneficiary, regNO, projectNo, userID, billNo, moduleqty, custMobile, regisno,
             no_of_module_value, noOfModules = "", Hp, unloadingMaterialStatus = "";
+    int scannerCode;
     Toolbar mToolbar;
     boolean isUpdate = false, isPumpMotorController = false;
     InstallationListBean installationListBean;
@@ -249,6 +254,20 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
     }
 
+    public void InstalledGooglePlayServices(Context context) {
+        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+        int result = googleAPI.isGooglePlayServicesAvailable(this);
+
+        if (result != ConnectionResult.SUCCESS) {
+            if (googleAPI.isUserResolvableError(result)) {
+                //prompt the dialog to update google play
+                googleAPI.getErrorDialog(this, result, 1).show();
+
+            }
+        } else {
+            //google play up to date
+        }
+    }
     private void retriveValue() {
         Bundle bundle = getIntent().getExtras();
 
@@ -267,7 +286,21 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         inst_module_ser_no.setText(installationListBean.moduleqty);
 
         SetAdapter();
+        isGooglePlayServiceInstalled();
+    }
 
+    private void  isGooglePlayServiceInstalled(){
+        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+        int result = googleAPI.isGooglePlayServicesAvailable(this);
+
+        if (result != ConnectionResult.SUCCESS) {
+            if (googleAPI.isUserResolvableError(result)) {
+                //prompt the dialog to update google play
+                googleAPI.getErrorDialog(this, result, 1).show();
+
+            }
+
+        }
     }
     private void SetAdapter() {
 
@@ -628,7 +661,10 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     private void cameraIntent() {
 
         camraLauncher.launch(new Intent(UnloadInstReportImageActivity.this, CameraActivity2.class)
-                .putExtra("cust_name", customerName));
+                .putExtra("cust_name", customerName)
+                .putExtra("pump_sernr", installationListBean.getPump_ser())
+                .putExtra("BeneficiaryNo", installationListBean.getBeneficiary())
+                .putExtra("PumpLoad", installationListBean.getPump_load()));
 
     }
 
@@ -686,6 +722,12 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                 e.printStackTrace();
             }
         }
+
+        IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (scanningResult != null) {
+            setScanValue(scanningResult.getContents(),scannerCode);
+        }
+
     }
 
     private void UpdateArrayList(String path) {
@@ -724,31 +766,46 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         ScanCode(4000);
     }
     private void ScanCode(int scannerCode) {
-        options = new GmsBarcodeScannerOptions.Builder()
-                .setBarcodeFormats(
-                        Barcode.FORMAT_ALL_FORMATS)
-                .build();
-        scanner = GmsBarcodeScanning.getClient(this);
-        scanner.startScan()
-                .addOnSuccessListener(
-                        barcode -> {
-                            // Task completed successfully
-                            String rawValue = barcode.getRawValue();
-
-                            setScanValue(rawValue,scannerCode);
 
 
-                        })
-                .addOnCanceledListener(
-                        () -> {
-                            // Task canceled
-                            Toast.makeText(getApplicationContext(),"Scanning Cancelled Please try again",Toast.LENGTH_SHORT).show();
-                        })
-                .addOnFailureListener(
-                        e -> {
-                            // Task failed with an exception
-                            Toast.makeText(getApplicationContext(),"Scanning Failed Please try again",Toast.LENGTH_SHORT).show();
-                        });
+        this.scannerCode = scannerCode;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            options = new GmsBarcodeScannerOptions.Builder()
+                    .setBarcodeFormats(
+                            Barcode.FORMAT_QR_CODE,
+                            Barcode.FORMAT_AZTEC)
+                    .build();
+            scanner = GmsBarcodeScanning.getClient(this, options);
+            scanner.startScan()
+                    .addOnSuccessListener(
+                            barcode -> {
+                                // Task completed successfully
+                                String rawValue = barcode.getRawValue();
+
+                                setScanValue(rawValue, scannerCode);
+
+
+                            })
+                    .addOnCanceledListener(
+                            () -> {
+                                // Task canceled
+                                Toast.makeText(getApplicationContext(), "Scanning Cancelled Please try again", Toast.LENGTH_SHORT).show();
+                            })
+                    .addOnFailureListener(
+                            e -> {
+                                // Task failed with an exception
+                                Toast.makeText(getApplicationContext(), "Scanning Failed Please try again", Toast.LENGTH_SHORT).show();
+                            });
+        }else {
+            IntentIntegrator integrator = new IntentIntegrator(this);
+            integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+            integrator.setPrompt("Scan a QRCode");
+            integrator.setCameraId(0);
+            integrator.setBeepEnabled(true);// Use a specific camera of the device
+            integrator.setBarcodeImageEnabled(true);
+            integrator.initiateScan();
+        }
+
     }
 
     private void setScanValue(String rawValue, int scannerCode) {

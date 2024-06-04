@@ -1050,6 +1050,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_CUS_CONTACT_NO + " TEXT,"
             + KEY_PANEL_MODULE_SER_NO + " TEXT,"
             + KEY_HP + " TEXT,"
+            + KEY_PUMP_SERIAL_NO + " TEXT,"
+            + KEY_PUMPLoad + " TEXT,"
             + KEY_ADD1 + " TEXT,"
             + KEY_ADD2 + " TEXT,"
             + KEY_ADD3 + " TEXT,"
@@ -1840,6 +1842,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_CUS_CONTACT_NO, installationBean.getCUS_CONTACT_NO());
             values.put(KEY_PANEL_MODULE_SER_NO, installationBean.getNoOfModule());
             values.put(KEY_HP, installationBean.getHP());
+            values.put(KEY_PUMP_SERIAL_NO, installationBean.getPump_ser());
+            values.put(KEY_PUMPLoad, installationBean.getPump_load());
             long i = db.insert(TABLE_INSTALLATION_UNLOAD_LIST, null, values);
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
@@ -2237,6 +2241,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_CUS_CONTACT_NO, installationBean.getCUS_CONTACT_NO());
             values.put(KEY_PANEL_MODULE_SER_NO, installationBean.getNoOfModule());
             values.put(KEY_HP, installationBean.getHP());
+            values.put(KEY_PUMP_SERIAL_NO, installationBean.getPump_ser());
+            values.put(KEY_PUMPLoad, installationBean.getPump_load());
             where = KEY_ENQ_DOC + "='" + enqdoc + "'";
             i = db.update(TABLE_INSTALLATION_UNLOAD_LIST, values, where, null);
             db.setTransactionSuccessful();
@@ -3448,6 +3454,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         installationBean.setCUS_CONTACT_NO(cursor.getString(cursor.getColumnIndex(KEY_CUS_CONTACT_NO)));
                         installationBean.setNoOfModule(cursor.getString(cursor.getColumnIndex(KEY_PANEL_MODULE_SER_NO)));
                         installationBean.setHP(cursor.getString(cursor.getColumnIndex(KEY_HP)));
+                        installationBean.setPump_ser(cursor.getString(cursor.getColumnIndex(KEY_PUMP_SERIAL_NO)));
+                        installationBean.setPump_load(cursor.getString(cursor.getColumnIndex(KEY_PUMPLoad)));
                         list_document.add(installationBean);
                         cursor.moveToNext();
                     }
