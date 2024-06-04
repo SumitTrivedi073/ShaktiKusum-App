@@ -269,7 +269,6 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
             case ATTACHMENT_REQUEST:
             // Select PDF Code.
 
-
                 break;
 
         }
