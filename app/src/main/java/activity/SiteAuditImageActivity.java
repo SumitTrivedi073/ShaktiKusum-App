@@ -3,14 +3,13 @@ package activity;
 import static utility.FileUtils.getPath;
 
 import android.app.Activity;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,7 +28,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.shaktipumplimited.shaktikusum.R;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -38,17 +42,18 @@ import adapter.ImageSelectionAdapter;
 import bean.ImageModel;
 import database.DatabaseHelper;
 import utility.CustomUtility;
+import utility.FileUtils;
 
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class SiteAuditImageActivity extends BaseActivity implements ImageSelectionAdapter.ImageSelectionListener {
 
     final String[] ACCEPT_MIME_TYPES = {
-            "application/pdf",
-            "image/*"
+            "application/pdf"
     };
+    private static final int ATTACHMENT_REQUEST = 1;
     private static final int PICK_FROM_FILE = 102;
-    boolean isBackPressed = false,isUpdate = false, isPdf = false;
+    boolean isBackPressed = false,isUpdate = false;
     int selectedIndex;
     AlertDialog alertDialog;
     Context mContext;
@@ -58,18 +63,14 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
     List<ImageModel> imageList = new ArrayList<>();
     ImageSelectionAdapter siteAuditAdapter;
     Toolbar mToolbar;
-    double AUD_latitude_double, AUD_longitude_double;
-    String type="AUD/";
+    String  dirName = "";
+    File selectedFile;
+    BufferedReader reader = null;
+
 
     public static final String GALLERY_DIRECTORY_NAME = "ShaktiKusum";
 
-    String imageStoragePath, enq_docno, cust_nm, photo1_text, photo2_text, photo3_text, photo4_text;
-    TextView photo1, photo2, photo3, photo4;
-    boolean photo1_flag = false,
-            photo2_flag = false,
-            photo3_flag = false,
-            photo4_flag = false;
-
+    String enq_docno, cust_nm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,9 +211,8 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
     public void openGallery() {
 
         Intent intent = new Intent();
-        intent.setType("image/*,application/pdf");
+        intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);//
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, ACCEPT_MIME_TYPES);
         startActivityForResult(Intent.createChooser(intent, "Select File"), PICK_FROM_FILE);
     }
 
@@ -237,48 +237,28 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
 
             case PICK_FROM_FILE:
                 try {
+                    String file="";
                     Uri mImageCaptureUri = data.getData();
                     String path = getPath(SiteAuditImageActivity.this, mImageCaptureUri); // From Gallery
-                    final Uri contentUri;
-                    Log.e("path===>", path);
 
                     if (path == null) {
                         path = mImageCaptureUri.getPath(); // From File Manager
                     }
                     String filename = path.substring(path.lastIndexOf("/") + 1);
                     Log.e("filename===>", filename);
-                    String file;
                     if (filename.indexOf(".") > 0) {
                         file = filename.substring(0, filename.lastIndexOf("."));
-                    } else {
-                        isPdf = true;
+                    } else  {
                         file = "";
-
-                        final String id = DocumentsContract.getDocumentId(mImageCaptureUri);
-                         contentUri = ContentUris.withAppendedId(
-                                Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
-                        Log.e("file===>", String.valueOf(contentUri));
                   }
-
-
-
 
                     if (TextUtils.isEmpty(file)) {
                         Toast.makeText(SiteAuditImageActivity.this, "File not valid!", Toast.LENGTH_LONG).show();
                     } else {
 
-                        if(!isPdf){
-                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mImageCaptureUri);
-                            File file1 = CustomUtility.saveFile(bitmap,cust_nm.trim(),"Images");
-                            UpdateArrayList(file1.getPath());
-
-                        }else {
-                           /* Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mImageCaptureUri);
-                            File file1 = CustomUtility.savePDFFile(bitmap,cust_nm.trim(),"Images");
-                            UpdateArrayList(file1.getPath());*/
-                          //  Log.e("PDFBase64=====>",CustomUtility.encodeFileToBase64Binary(new File(path)));
-                        }
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mImageCaptureUri);
+                        File file1 = CustomUtility.saveFile(bitmap,cust_nm.trim(),"Images");
+                        UpdateArrayList(file1.getPath());
 
                     }
                 } catch (Exception e) {
@@ -286,19 +266,14 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
                 }
                 break;
 
+            case ATTACHMENT_REQUEST:
+            // Select PDF Code.
+
+
+                break;
+
         }
 
-    }
-
-    public String getPDFPath(Uri uri) {
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
-        if (cursor == null) return null;
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String s = cursor.getString(column_index);
-        cursor.close();
-        return s;
     }
 
     public String getImagePath(Uri uri) {
@@ -345,31 +320,6 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
         }
     }
 
-    public void setFlag(String key) {
-
-        photo1_flag = false;
-        photo2_flag = false;
-        photo3_flag = false;
-        photo4_flag = false;
-
-        switch (key) {
-
-            case DatabaseHelper.KEY_PHOTO1:
-                photo1_flag = true;
-                break;
-            case DatabaseHelper.KEY_PHOTO2:
-                photo2_flag = true;
-                break;
-            case DatabaseHelper.KEY_PHOTO3:
-                photo3_flag = true;
-                break;
-            case DatabaseHelper.KEY_PHOTO4:
-                photo4_flag = true;
-                break;
-
-        }
-
-    }
 
     @Override
     public void onBackPressed() {
@@ -388,10 +338,19 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
         selectedIndex = position;
         if (imageModelList.isImageSelected()) {
             isUpdate = true;
-            selectImage("1");
+
+            if(position == 4){
+                selectImage("3");
+            }else {
+                selectImage("1");
+            }
         } else {
             isUpdate = false;
-            selectImage("0");
+            if(position == 4){
+                selectImage("2");
+            }else {
+                selectImage("0");
+            }
         }
 
     }
@@ -423,10 +382,14 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
             gallery.setText(getResources().getString(R.string.gallery));
             camera.setText(getResources().getString(R.string.camera));
 
-        } else {
+        } else if (value.equals("1")) {
             title.setText(getResources().getString(R.string.want_to_perform));
             gallery.setText(getResources().getString(R.string.display));
             camera.setText(getResources().getString(R.string.change));
+        }else  {
+            title.setText(getResources().getString(R.string.want_to_perform));
+            gallery.setText(getResources().getString(R.string.sPDF));
+            camera.setVisibility(View.GONE);
         }
 
         gallery.setOnClickListener(new View.OnClickListener() {
@@ -435,10 +398,12 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
                 alertDialog.dismiss();
                 if (value.equals("0")) {
                     openGallery();
-                } else {
+                } else if(value.equals("1")){
                     Intent i_display_image = new Intent(SiteAuditImageActivity.this, PhotoViewerActivity.class);
                     i_display_image.putExtra("image_path", imageArrayList.get(selectedIndex).getImagePath());
                     startActivity(i_display_image);
+                }else{
+                    openPDF();
                 }
             }
         });
@@ -461,5 +426,13 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
                 alertDialog.dismiss();
             }
         });
+    }
+
+    public void openPDF() {
+        File file = new File(Environment.getRootDirectory() + File.separator + Environment.DIRECTORY_DOWNLOADS);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, ACCEPT_MIME_TYPES);
+        intent.setDataAndType(Uri.parse(file.getAbsolutePath()), "*/*");
+        startActivityForResult(Intent.createChooser(intent, "Select PDF"), ATTACHMENT_REQUEST);
     }
 }

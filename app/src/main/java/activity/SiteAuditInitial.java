@@ -682,9 +682,11 @@ public class SiteAuditInitial extends BaseActivity {
                     if (3 < imageList.size() && imageList.get(3).isImageSelected()) {
                         jsonObj.put("PHOTO4", CustomUtility.getBase64FromBitmap(SiteAuditInitial.this, imageList.get(3).getImagePath()));
                     }
-                    if (4 < imageList.size() && imageList.get(4).isImageSelected()) {
-                        jsonObj.put("PHOTO5", CustomUtility.getBase64FromBitmap(SiteAuditInitial.this, imageList.get(4).getImagePath()));
-                    }
+                    /*if (4 < imageList.size() && imageList.get(4).isImageSelected()) {
+                        jsonObj.put("PHOTO5", CustomUtility.encodeFileToBase64Binary(  new File(imageList.get(4).getImagePath())));
+                        Log.e("PHOTO5===>", CustomUtility.encodeFileToBase64Binary(  new File(imageList.get(4).getImagePath())));
+                    }*/
+
 
                 }
                 ja_invc_data.put(jsonObj);

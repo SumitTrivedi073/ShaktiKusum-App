@@ -202,6 +202,7 @@
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
     <string name="display">Display</string>
+    <string name="sPDF">PDF</string>
     <string name="change">Change</string>
     <string name="want_to_perform">What operation do you want to perform?</string>
     <string name="selectCustomerPhoto">Please Select Customer Photo.</string>

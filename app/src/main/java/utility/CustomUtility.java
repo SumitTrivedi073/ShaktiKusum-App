@@ -42,6 +42,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -313,6 +314,7 @@ public class CustomUtility {
     }
 
 
+
     public static void deleteArrayList(Context context,String name){
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);
         SharedPreferences.Editor editor = settings.edit();
@@ -420,51 +422,29 @@ public class CustomUtility {
         return dir.getPath() + File.separator + "IMG_"+ Calendar.getInstance().getTimeInMillis() +".jpg";
     }
 
-    public static File savePDFFile(Bitmap bitmap, String name, String folder) {
 
-        String firstname = CustomUtility.getUserFirstName(name);
-        Log.e("fname=====>",firstname);
-        File file = new File(getMediaFilePDFPath(folder,firstname));
-        return file;
-    }
 
-    public static String getMediaFilePDFPath(String folder, String name) {
-
-        File root = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Shakti Kusum App");
-
-        File dir = new File(root.getAbsolutePath() + "/"+folder+"/" + name); //it is my root directory
-
+    public static String encodeFileToBase64Binary(String filePath){
+        byte[] byteArray = null;
         try {
-            if (!dir.exists()) {
-                dir.mkdirs();
+            File file = new File( filePath );
+            InputStream inputStream = new FileInputStream(file);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            byte[] b = new byte[1024 * 11];
+            int bytesRead = 0;
+
+            while ((bytesRead = inputStream.read(b)) != -1) {
+                bos.write(b, 0, bytesRead);
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            byteArray = bos.toByteArray();
 
-        // Create a media file name
-        return dir.getPath() + File.separator + "IMG_"+ Calendar.getInstance().getTimeInMillis() +".jpg";
-    }
+            Log.e("Byte array", ">" + byteArray);
 
-
-    public static String encodeFileToBase64Binary(File yourFile) {
-        int size = (int) yourFile.length();
-        byte[] bytes = new byte[size];
-        try {
-            BufferedInputStream buf = new BufferedInputStream(new FileInputStream(yourFile));
-            buf.read(bytes, 0, bytes.length);
-            buf.close();
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-        String encoded = Base64.encodeToString(bytes,Base64.NO_WRAP);
-        return encoded;
+        return Base64.encodeToString(byteArray, Base64.NO_WRAP);
     }
 
 
