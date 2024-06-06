@@ -1154,20 +1154,24 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                             })
                     .addOnFailureListener(
                             e -> {
+                                startScanOldVersion();
                                 // Task failed with an exception
-                                Toast.makeText(getApplicationContext(), "Scanning Failed Please try again", Toast.LENGTH_SHORT).show();
+                              //  Toast.makeText(getApplicationContext(), "Scanning Failed Please try again", Toast.LENGTH_SHORT).show();
                             });
         }else {
-            IntentIntegrator integrator = new IntentIntegrator(this);
-            integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-            integrator.setPrompt("Scan a QRCode");
-            integrator.setCameraId(0);
-            integrator.setBeepEnabled(true);// Use a specific camera of the device
-            integrator.setBarcodeImageEnabled(true);
-            integrator.initiateScan();
+            startScanOldVersion();
         }
     }
 
+    private void startScanOldVersion() {
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+        integrator.setPrompt("Scan a QRCode");
+        integrator.setCameraId(0);
+        integrator.setBeepEnabled(true);// Use a specific camera of the device
+        integrator.setBarcodeImageEnabled(true);
+        integrator.initiateScan();
+    }
     private void setScanValue(String rawValue, int scannerCode) {
         if (scannerCode == 1000) {
             inst_motor_ser.setText("");
