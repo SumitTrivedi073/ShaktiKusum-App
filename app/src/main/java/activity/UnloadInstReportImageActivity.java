@@ -772,10 +772,9 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             options = new GmsBarcodeScannerOptions.Builder()
                     .setBarcodeFormats(
-                            Barcode.FORMAT_QR_CODE,
-                            Barcode.FORMAT_AZTEC)
+                            Barcode.FORMAT_ALL_FORMATS)
                     .build();
-            scanner = GmsBarcodeScanning.getClient(this, options);
+            scanner = GmsBarcodeScanning.getClient(this);
             scanner.startScan()
                     .addOnSuccessListener(
                             barcode -> {
