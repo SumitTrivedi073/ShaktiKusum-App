@@ -40,14 +40,9 @@ public class complaintInstallationActivity extends BaseActivity {
     private RecyclerView complaintInstallationList;
     private Toolbar mToolbar;
     List<ComplaintInstModel.Response> complaintInstList;
-    AlertDialog alertDialog;
-
     TextView noDataFound;
-
     SearchView searchUser;
-
     ComplaintInstAdapter complaintInstAdapter;
-
     RelativeLayout searchRelative;
 
     @Override

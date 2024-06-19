@@ -28,21 +28,19 @@ public class WebURL {
 
     public static final String RMSAPPURL = "https://shaktirms.com/";
     public static final String BASEURL = "https://spprdsrvr1.shaktipumps.com:8423";
-   public static final String BASE_URL_VK= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/";
-   public static final String BASE_URL_OPTION_VK= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
-
-
+    public static final String BASE_URL_VK = "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/";
+    public static final String BASE_URL_OPTION_VK = "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
 
     /************* development server **************/
 
-  /* public static final String RMSAPPURL = "https://quality.shaktirms.com/";
-   public static final String BASEURL = "https://spquasrvr1.shaktipumps.com:8423";
+   /* public static final String RMSAPPURL = "https://quality.shaktirms.com/";
+    public static final String BASEURL = "https://spquasrvr1.shaktipumps.com:8423";
     public static final String BASE_URL_VK= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/";
     public static final String BASE_URL_VK1= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/";
-
    public static final String BASE_URL_OPTION_VK= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
 
 */
+
 
 
     /************* APIS **************/
@@ -104,7 +102,7 @@ public class WebURL {
 
     public static final String DemoRoadURL = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/demo_road_show.htm";
 
-    public static final String BeneficiaryRegistrationURL = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/beneficary_registration_har.htm";
+    public static final String BeneficiaryRegistrationURL = BASEURL+"/sap/bc/bsp/sap/zmapp_solar_pro/ben eficary_registration_har.htm";
 
     public static final String ComplaintBeforeInstallationAPI = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/complaint_before_inst.htm";
 
@@ -117,6 +115,8 @@ public class WebURL {
     public static final String DeviceShiftingList = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/pending_shifting_list.htm";
 
     public static final String saveShiftedDeviceToServer = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_shifting_data.htm?shift=";
+
+    public static final String responseTIme = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/kusum_response_time.htm?";
 
 
     /*--------------------------------------------------RMS APIS-------------------------------------------------------------------*/

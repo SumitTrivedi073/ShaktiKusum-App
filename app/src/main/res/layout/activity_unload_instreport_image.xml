@@ -59,16 +59,13 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/layout_one"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/barcodeListView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                   android:nestedScrollingEnabled="true"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-                </LinearLayout>
 
 
                 <LinearLayout

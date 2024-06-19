@@ -20,12 +20,14 @@ public class dialog4 extends Dialog {
     private Button search, cancel;
     private EditText text;
     private final dialog4 thisDialog;
+    String controllerSerialNumber;
 
-    public dialog4(DeviceStatusActivity context) {
+    public dialog4(DeviceStatusActivity context,String controllerSerialNumber) {
         super(context);
         // TODO Auto-generated constructor stub
         this.activity = context;
         this.thisDialog = this;
+        this.controllerSerialNumber = controllerSerialNumber;
     }
 
     @Override
@@ -47,6 +49,7 @@ public class dialog4 extends Dialog {
         text.setText(WebURL.mDEvice_Number_CHECK);
         search = findViewById(R.id.search);
         cancel = findViewById(R.id.cancel);
+        text.setText(controllerSerialNumber);
         cancel.setOnClickListener(new View.OnClickListener() {
 
             @Override

@@ -8,9 +8,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,8 +28,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import adapter.Adapter_Installation_list;
+import adapter.Adapter_Unload_Installation_list;
 import bean.InstallationListBean;
+import database.DatabaseHelper;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
@@ -37,12 +41,13 @@ public class UnloadList extends BaseActivity {
             , contactno = "", controller = "", motor = "", simno = "", pump = "", regisno = "", projectno = ""
             , loginno = "", module_qty = "", sync = "", CONTACT_NO = "",inst_no_of_module_value="",HP="", simha2 = "",pumpLoad =""
             , set_matno = "", village = "", tehsil = "",beneficiary = "",pump_ser,motor_ser,controller_ser,
-            version;
-    Context context;
+            version ,user_id;
 
+    Context context;
+    DatabaseHelper db;
     LinearLayout lin1, lin2;
     RecyclerView recyclerView;
-    Adapter_Installation_list adapterInstallationList;
+    Adapter_Unload_Installation_list adapterInstallationList;
     EditText editsearch;
     ArrayList<InstallationListBean> installationBeans;
     InstallationListBean installationBean;
@@ -59,22 +64,63 @@ public class UnloadList extends BaseActivity {
 
 
         Init();
+        if (CustomUtility.isInternetOn(getApplicationContext())) {
+            recyclerView.setAdapter(null);
+            db.deleteUnloadInstallationListData();
+            WebURL.CHECK_DATA_UNOLAD = 1;
+            new GetInstallationDataList_Unload().execute();
+        } else {
+            getValueFromDatabase();
+            Toast.makeText(getApplicationContext(), "No internet Connection....", Toast.LENGTH_SHORT).show();
+        }
+
+
         listner();
     }
+
+    private void getValueFromDatabase() {
+        db = new DatabaseHelper(context);
+        if (db.getcount(DatabaseHelper.TABLE_INSTALLATION_UNLOAD_LIST)) {
+            installationBeans = new ArrayList<InstallationListBean>();
+            installationBeans = db.getUnloadInstallationListData(user_id);
+            Log.e("SIZE", "&&&&" + installationBeans.size());
+            if (installationBeans != null && installationBeans.size() > 0) {
+                lin1.setVisibility(View.VISIBLE);
+                lin2.setVisibility(View.GONE);
+                recyclerView.setAdapter(null);
+                Log.e("SIZE", "&&&&" + installationBeans.size());
+                Log.e("pumpserno====>",installationBeans.get(3).getPump());
+                adapterInstallationList = new Adapter_Unload_Installation_list(context, installationBeans);
+                recyclerView.setAdapter(adapterInstallationList);
+                adapterInstallationList.notifyDataSetChanged();
+                WebURL.CHECK_DATA_UNOLAD = 1;
+            } else {
+                lin1.setVisibility(View.GONE);
+                lin2.setVisibility(View.VISIBLE);
+            }
+        } else {
+            recyclerView.setAdapter(null);
+            db.deleteUnloadInstallationListData();
+            new GetInstallationDataList_Unload().execute();
+        }
+    }
+
     private void Init() {
         context = this;
+        db = new DatabaseHelper(context);
         progressDialog = new ProgressDialog(context);
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        mToolbar.setTitle(R.string.unloading_material);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(getResources().getString(R.string.unloading_list));
 
         recyclerView = findViewById(R.id.emp_list);
         editsearch = findViewById(R.id.search);
         lin1 = findViewById(R.id.lin1);
         lin2 = findViewById(R.id.lin2);
 
+        user_id = CustomUtility.getSharedPreferences(context, "userid");
 
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -88,13 +134,37 @@ public class UnloadList extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(CustomUtility.isInternetOn(context)){
-            new GetInstallationDataList_Unload().execute();
-        }else {
-            lin1.setVisibility(View.GONE);
-            lin2.setVisibility(View.VISIBLE);
-            CustomUtility.showToast(context,getResources().getString(R.string.check_internet_connection));
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_unsync, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.action_menu_unsync:
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
+                    recyclerView.setAdapter(null);
+                    db.deleteUnloadInstallationListData();
+                    WebURL.CHECK_DATA_UNOLAD = 1;
+                    new GetInstallationDataList_Unload().execute();
+                } else {
+                    Toast.makeText(getApplicationContext(), "No internet Connection....", Toast.LENGTH_SHORT).show();
+                }
+                return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void listner() {
@@ -104,10 +174,8 @@ public class UnloadList extends BaseActivity {
             public void afterTextChanged(Editable arg0) {
                 // TODO Auto-generated method stub
                 String text = editsearch.getText().toString().toLowerCase(Locale.getDefault());
-                try {
+                if (adapterInstallationList != null ) {
                     adapterInstallationList.filter(text);
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
 
@@ -132,6 +200,7 @@ public class UnloadList extends BaseActivity {
         protected void onPreExecute() {
             installationBeans = new ArrayList<InstallationListBean>();
             progressDialog = ProgressDialog.show(context, "", "Please Wait...");
+
         }
 
         @Override
@@ -141,7 +210,7 @@ public class UnloadList extends BaseActivity {
             param.add(new BasicNameValuePair("PROJECT_NO", CustomUtility.getSharedPreferences(context, "projectid")));
             param.add(new BasicNameValuePair("PROJECT_LOGIN_NO", CustomUtility.getSharedPreferences(context, "loginid")));
             String login_selec = null;
-            Log.e("param====>",param.toString());
+       //     Log.e("param====>",param.toString());
             try {
                 login_selec = CustomHttpClient.executeHttpPost1(WebURL.INSTALLATION_UNLOAD1, param);
                 JSONObject object = new JSONObject(login_selec);
@@ -190,56 +259,19 @@ public class UnloadList extends BaseActivity {
                                 contactno, controller, motor, pump, regisno, projectno, loginno, module_qty, address, simno, beneficiary, set_matno,
                                 simha2, sync, CONTACT_NO,"",HP,pump_ser,motor_ser,controller_ser,pumpLoad);
 
-                        InstallationListBean installationBean = new InstallationListBean();
-                        installationBean.setPernr(CustomUtility.getSharedPreferences(context, "userid"));
-                        installationBean.setEnqdoc(bill_no);
-                        installationBean.setBillno(bill_no);
-                        installationBean.setKunnr(kunnr);
-                        installationBean.setGstbillno(gst_bill_no);
-                        installationBean.setBilldate(bill_date);
-                        installationBean.setCustomer_name(name);
-                        installationBean.setFather_name(fathname);
-                        installationBean.setState(state);
-                        installationBean.setStatetxt(state_txt);
-                        installationBean.setCity(district);
-                        installationBean.setCitytxt(district_txt);
-                        installationBean.setTehsil(tehsil);
-                        installationBean.setVillage(village);
-                        installationBean.setContact_no(contactno);
-                        installationBean.setController(controller);
-                        installationBean.setPump(pump);
-                        installationBean.setSimno(simno);
-                        installationBean.setRegisno(regisno);
-                        installationBean.setProjectno(projectno);
-                        installationBean.setLoginno(loginno);
-                        installationBean.setModuleqty(module_qty);
-                        installationBean.setBeneficiary(beneficiary);
-                        installationBean.setMotor(motor);
-                        installationBean.setAddress(address);
-                        installationBean.setDispdate(disp_date);
-                        installationBean.setSync(sync);
-                        installationBean.setSet_matno(set_matno);
-                        installationBean.setSimha2(simha2);
-                        installationBean.setCUS_CONTACT_NO(CONTACT_NO);
-                        installationBean.setNoOfModule(inst_no_of_module_value);
-                        installationBean.setHP(HP);
-                        installationBean.setPump_ser(pump_ser);
-                        installationBean.setMotor_ser(motor_ser);
-                        installationBean.setController_ser(controller_ser);
-                        installationBean.setPump_load(pumpLoad);
-                        installationBeans.add(installationBean);
-                    }
-
-
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
+                        if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_UNLOAD_LIST, DatabaseHelper.KEY_ENQ_DOC, bill_no)) {
+                            db.updateUnloadInstallationListData(bill_no, installationBean);
+                        } else {
+                            db.insertUnloadInstallationListData(bill_no, installationBean);
+                        }
+            } }catch (Exception e){
+                    e.printStackTrace();
+                }
                 if ((progressDialog != null) && progressDialog.isShowing()) {
                     progressDialog.dismiss();
                     progressDialog = null;
                 }
-            }
+
             if ((progressDialog != null) && progressDialog.isShowing()) {
                 progressDialog.dismiss();
                 progressDialog = null;
@@ -250,27 +282,26 @@ public class UnloadList extends BaseActivity {
         @SuppressLint("WrongConstant")
         @Override
         protected void onPostExecute(String result) {
-            try {
-                if ((progressDialog != null) && progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                    progressDialog = null;
-                }
-                if(installationBeans.size()>0) {
-                    lin1.setVisibility(View.VISIBLE);
-                    lin2.setVisibility(View.GONE);
-                    recyclerView.setAdapter(null);
-                    adapterInstallationList = new Adapter_Installation_list(context, installationBeans);
-                    recyclerView.setHasFixedSize(true);
-                    recyclerView.setAdapter(adapterInstallationList);
-                    adapterInstallationList.notifyDataSetChanged();
-                    WebURL.CHECK_DATA_UNOLAD = 1;
-                }else {
-                    lin1.setVisibility(View.GONE);
-                    lin2.setVisibility(View.VISIBLE);
-                }
+            // write display tracks logic here
+            //onResume();
+            installationBeans = new ArrayList<InstallationListBean>();
+            installationBeans = db.getUnloadInstallationListData(user_id);
 
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (installationBeans != null && installationBeans.size() > 0) {
+                lin1.setVisibility(View.VISIBLE);
+                lin2.setVisibility(View.GONE);
+                recyclerView.setAdapter(null);
+                adapterInstallationList = new Adapter_Unload_Installation_list(context, installationBeans);
+                recyclerView.setAdapter(adapterInstallationList);
+                adapterInstallationList.notifyDataSetChanged();
+                WebURL.CHECK_DATA_UNOLAD = 1;
+            } else {
+                lin1.setVisibility(View.GONE);
+                lin2.setVisibility(View.VISIBLE);
+            }
+            if ((progressDialog != null) && progressDialog.isShowing()) {
+                progressDialog.dismiss();
+                progressDialog = null;
             }
         }
     }

@@ -41,7 +41,6 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -53,7 +52,13 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.gson.Gson;
+import com.google.mlkit.vision.barcode.common.Barcode;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.shaktipumplimited.shaktikusum.R;
@@ -64,17 +69,18 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import adapter.BarCodeSelectionAdapter;
 import adapter.ImageSelectionAdapter;
 import bean.ImageModel;
 import bean.InstallationBean;
 import bean.InstallationListBean;
+import bean.unloadingDataBean;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
 import debugapp.VerificationCodeModel;
@@ -83,48 +89,55 @@ import webservice.CustomHttpClient;
 import webservice.WebURL;
 
 
-public class UnloadInstReportImageActivity extends BaseActivity implements ImageSelectionAdapter.ImageSelectionListener {
+public class UnloadInstReportImageActivity extends BaseActivity implements ImageSelectionAdapter.ImageSelectionListener, BarCodeSelectionAdapter.BarCodeSelectionListener {
 
     private static final int REQUEST_CODE_PERMISSION = 101;
     private static final int PICK_FROM_FILE = 102;
     List<ImageModel> imageArrayList = new ArrayList<>();
     List<ImageModel> imageList = new ArrayList<>();
-    ArrayList<String> scannedDeviceNo = new ArrayList<>();
-    RecyclerView recyclerview;
+     RecyclerView recyclerview,barcodeListView;
     EditText remarkEdt;
     TextView inst_module_ser_no, pumpSerNo, motorSerNo, controllerSerNo;
 
+    ArrayList<unloadingDataBean> unloadingListdata;
+    DatabaseHelper db;
     ImageView pump_scanner, motor_scanner, controllerScanner;
     LinearLayout moduleOneLL;
     Button btnSave;
     AlertDialog alertDialog;
-    int selectedIndex;
+    int selectedIndex,barcodeSelectIndex;
     ImageSelectionAdapter customAdapter;
+    BarCodeSelectionAdapter barCodeSelectionAdapter;
     boolean isSubmit = false;
     List<String> itemNameList = new ArrayList<>();
     String customerName, beneficiary, regNO, projectNo, userID, billNo, moduleqty, custMobile, regisno,
-            no_of_module_value, noOfModules = "", Hp,unloadingMaterialStatus="";
-    int value, currentScannerFor = -1;
+            no_of_module_value, noOfModules = "", Hp, unloadingMaterialStatus = "";
+    int scannerCode;
     Toolbar mToolbar;
     boolean isUpdate = false, isPumpMotorController = false;
     InstallationListBean installationListBean;
     RadioButton materialStatusOk, materialStatusNotOk, materialStatusDamage;
 
+    List<String> barcodenameList = new ArrayList<>();
+    GmsBarcodeScannerOptions options;
+    GmsBarcodeScanner scanner;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_unload_instreport_image);
+
         Init();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+
     @Override
     protected void onResume() {
         super.onResume();
         CheakPermissions();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     private void CheakPermissions() {
         if (!checkPermission()) {
             requestPermission();
@@ -213,9 +226,9 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
     private void Init() {
         recyclerview = findViewById(R.id.recyclerview);
+        barcodeListView = findViewById(R.id.barcodeListView);
         remarkEdt = findViewById(R.id.edtRemarkVKID);
         inst_module_ser_no = findViewById(R.id.module_serial_no);
-        moduleOneLL = findViewById(R.id.layout_one);
         pumpSerNo = findViewById(R.id.pumpSerNo);
         motorSerNo = findViewById(R.id.motorSerNo);
         controllerSerNo = findViewById(R.id.controllerSerNo);
@@ -226,7 +239,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         materialStatusOk = findViewById(R.id.materialStatusOk);
         materialStatusNotOk = findViewById(R.id.materialStatusNotOk);
         materialStatusDamage = findViewById(R.id.materialStatusDamage);
-
+        db = new DatabaseHelper(getApplicationContext());
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -234,10 +247,27 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         mToolbar.setTitle(getResources().getString(R.string.material_unloading_img));
 
         retriveValue();
-        SetAdapter();
+
+        setUnloadData();
         listner();
+
+
     }
 
+    public void InstalledGooglePlayServices(Context context) {
+        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+        int result = googleAPI.isGooglePlayServicesAvailable(this);
+
+        if (result != ConnectionResult.SUCCESS) {
+            if (googleAPI.isUserResolvableError(result)) {
+                //prompt the dialog to update google play
+                googleAPI.getErrorDialog(this, result, 1).show();
+
+            }
+        } else {
+            //google play up to date
+        }
+    }
     private void retriveValue() {
         Bundle bundle = getIntent().getExtras();
 
@@ -246,7 +276,6 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         customerName = installationListBean.customer_name;
         userID = CustomUtility.getSharedPreferences(UnloadInstReportImageActivity.this, "userid");
         billNo = installationListBean.billno;
-        moduleqty = installationListBean.moduleqty;
         custMobile = installationListBean.getCUS_CONTACT_NO();
         regisno = installationListBean.regisno;
         Hp = installationListBean.getHP();
@@ -254,164 +283,41 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         regNO = WebURL.RegNo_Con;
         projectNo = WebURL.ProjectNo_Con;
 
-        inst_module_ser_no.setText(moduleqty);
-        no_of_module_value = GetDataOne();
+        inst_module_ser_no.setText(installationListBean.moduleqty);
 
-        if (!TextUtils.isEmpty(moduleqty)) {
-            if (moduleqty.length() != 0 && !moduleqty.equals("0")) {
-                value = Integer.parseInt(moduleqty);
-                ViewInflate(value);
+        SetAdapter();
+        isGooglePlayServiceInstalled();
+    }
+
+    private void  isGooglePlayServiceInstalled(){
+        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+        int result = googleAPI.isGooglePlayServicesAvailable(this);
+
+        if (result != ConnectionResult.SUCCESS) {
+            if (googleAPI.isUserResolvableError(result)) {
+                //prompt the dialog to update google play
+                googleAPI.getErrorDialog(this, result, 1).show();
+
             }
+
         }
-
-
     }
-
-    private void listner() {
-        btnSave.setOnClickListener(view -> {
-
-            if (imageArrayList != null && imageArrayList.size() > 0) {
-                if (!imageArrayList.get(0).isImageSelected()) {
-                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectLR_photo));
-                } else if (!imageArrayList.get(1).isImageSelected()) {
-                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectInvoicePhoto));
-                } else if (!imageArrayList.get(2).isImageSelected()) {
-                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectCustomerPhoto));
-                }   else {
-                    Set<String> set = new HashSet<>();
-                    if (!inst_module_ser_no.getText().toString().trim().equals("0")) {
-
-                        for (int i = 0; i < moduleOneLL.getChildCount(); i++) {
-                            EditText edit_O = moduleOneLL.getChildAt(i).findViewById(R.id.view_edit_one);
-
-                            if (edit_O.getText().toString().isEmpty()) {
-                                CustomUtility.ShowToast(getResources().getString(R.string.enter_allModuleSrno), getApplicationContext());
-                                isSubmit = false;
-                            } else {
-                                if (set.contains(edit_O.getText().toString().toUpperCase())) {
-                                    isSubmit = false;
-                                    CustomUtility.ShowToast(edit_O.getText().toString() + getResources().getString(R.string.moduleMultipleTime), this);
-                                    Log.e(edit_O.getText().toString(), " is duplicated");
-                                    break;
-                                } else {
-                                    set.add(edit_O.getText().toString().toUpperCase());
-
-                                }
-                            }
-                        }
-                        noOfModules = "";
-                        for (String ele : set) {
-                            if (noOfModules.isEmpty()) {
-                                noOfModules = ele;
-                            } else {
-                                noOfModules = noOfModules + "," + ele;
-                            }
-
-                        }
-                        if (set.size() == moduleOneLL.getChildCount()) {
-                            isSubmit = true;
-                        }
-
-
-                    }
-
-                    if (CustomUtility.isInternetOn(getApplicationContext())) {
-                        if (isSubmit) {
-                            if (pumpSerNo.getText().toString().trim().isEmpty() || !pumpSerNo.getText().toString().trim().equals(installationListBean.getPump_ser().trim())) {
-                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctPumpSr) +" "+ installationListBean.getPump_ser().trim());
-                            } else if (motorSerNo.getText().toString().trim().isEmpty() || !motorSerNo.getText().toString().trim().equals(installationListBean.getMotor_ser().trim())) {
-                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctMotorSr)+" "+ installationListBean.getMotor_ser().trim());
-                            } else if (controllerSerNo.getText().toString().trim().isEmpty() || !controllerSerNo.getText().toString().trim().equals(installationListBean.getController_ser().trim())) {
-                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctControllerSr)+" "+ installationListBean.getController_ser().trim());
-                            }else if (remarkEdt.getText().toString().trim().isEmpty()) {
-                                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
-                            }else {
-                                if(materialStatusOk.isChecked()){
-                                    unloadingMaterialStatus = materialStatusOk.getText().toString();
-                                }
-                                if(materialStatusNotOk.isChecked()){
-                                    unloadingMaterialStatus = materialStatusNotOk.getText().toString();
-                                }
-                                if(materialStatusDamage.isChecked()){
-                                    unloadingMaterialStatus = materialStatusDamage.getText().toString();
-                                }
-                                InstallationBean param_invc = new InstallationBean();
-                                JSONArray ja_invc_data = new JSONArray();
-                                JSONObject jsonObj = new JSONObject();
-                                try {
-                                    jsonObj.put("userid", userID);
-                                    jsonObj.put("vbeln", billNo);
-                                    jsonObj.put("project_no", projectNo);
-                                    jsonObj.put("beneficiary", beneficiary);
-                                    jsonObj.put("regisno", regNO);
-                                    jsonObj.put("unload_remark", remarkEdt.getText().toString().trim());
-                                    jsonObj.put("customer_name ", customerName);
-                                    jsonObj.put("project_login_no ", CustomUtility.getSharedPreferences(UnloadInstReportImageActivity.this, "loginid"));
-                                    jsonObj.put("inst_no_of_module_value ", noOfModules);
-                                    jsonObj.put("UNLOAD_MAT_STATS ", unloadingMaterialStatus);
-
-                                    if (imageArrayList.size() > 0) {
-                                        if (imageArrayList.get(0).isImageSelected()) {
-                                            jsonObj.put("unld_photo1", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(0).getImagePath()));
-                                        }
-                                        if (1 < imageArrayList.size() && imageArrayList.get(1).isImageSelected()) {
-                                            jsonObj.put("unld_photo2", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(1).getImagePath()));
-                                        }
-                                        if (2 < imageArrayList.size() && imageArrayList.get(2).isImageSelected()) {
-                                            jsonObj.put("unld_photo3", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(2).getImagePath()));
-                                        }
-                                    }
-                                    ja_invc_data.put(jsonObj);
-                                    Log.e("ja_invc_data=====>",ja_invc_data.toString());
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                               new SyncInstallationData(ja_invc_data).execute();
-                            }
-                        }
-                    } else {
-                        CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection), getApplicationContext());
-                    }
-
-
-                }
-            } else {
-                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.select_image));
-
-            }
-        });
-        mToolbar.setNavigationOnClickListener(v -> onBackPressed());
-        pump_scanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isPumpMotorController = true;
-                startScanner(1000);
-            }
-        });
-        motor_scanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isPumpMotorController = true;
-                startScanner(2000);
-            }
-        });
-
-        controllerScanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isPumpMotorController = true;
-                startScanner(3000);
-            }
-        });
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-    }
-
     private void SetAdapter() {
+
+
+
+        barcodenameList = new ArrayList<>();
+        for (int i = 0; i < Integer.parseInt(installationListBean.moduleqty); i++) {
+            barcodenameList.add("");
+        }
+        Log.e("barcodenameList======>", String.valueOf(barcodenameList.size()));
+
+        barCodeSelectionAdapter = new BarCodeSelectionAdapter(UnloadInstReportImageActivity.this, barcodenameList);
+        barcodeListView.setHasFixedSize(true);
+        barcodeListView.setAdapter(barCodeSelectionAdapter);
+        barCodeSelectionAdapter.BarCodeSelection(this);
+
+        /*----------------------------------Image Adapter----------------------------------*/
         imageArrayList = new ArrayList<>();
         itemNameList = new ArrayList<>();
         itemNameList.add(getResources().getString(R.string.selectLR_photo));
@@ -458,6 +364,212 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         customAdapter.ImageSelection(this);
 
     }
+    private void setUnloadData() {
+        unloadingListdata = db.getUnloadingData(billNo);
+
+        if(unloadingListdata.size()>0){
+        if (db.isRecordExist(db.TABLE_UNLOADING_FORM_DATA,db.KEY_BILL_NO,billNo)) {
+            unloadingListdata = db.getUnloadingData(billNo);
+            inst_module_ser_no.setText(unloadingListdata.get(0).getPanel_module_qty());
+            pumpSerNo.setText(unloadingListdata.get(0).getPump_serial_no());
+            motorSerNo.setText(unloadingListdata.get(0).getMotor_serial_no());
+            controllerSerNo.setText(unloadingListdata.get(0).getController_serial_no());
+            remarkEdt.setText(unloadingListdata.get(0).getRemark());
+            if(unloadingListdata.get(0).getMaterial_status().equals(Constant.partialDamage)) {
+                materialStatusDamage.setChecked(true);
+            } else if (unloadingListdata.get(0).getMaterial_status().equals(Constant.ok)) {
+                materialStatusOk.setChecked(true);
+            } else if (unloadingListdata.get(0).getMaterial_status().equals(Constant.not_ok)) {
+                materialStatusNotOk.setChecked(true);
+            }
+            no_of_module_value=unloadingListdata.get(0).getPanel_values();
+            String strArray[] = unloadingListdata.get(0).getPanel_values().split(",");
+            for (int i = 0; i < strArray.length; i++) {
+                barcodenameList.set(i,strArray[i]);
+            }
+
+            barCodeSelectionAdapter.notifyDataSetChanged();
+        }
+        }
+    }
+
+
+
+
+
+    private void listner() {
+        btnSave.setOnClickListener(view -> {
+
+            if (imageArrayList != null && imageArrayList.size() > 0) {
+                if (!imageArrayList.get(0).isImageSelected()) {
+                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectLR_photo));
+                } else if (!imageArrayList.get(1).isImageSelected()) {
+                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectInvoicePhoto));
+                } else if (!imageArrayList.get(2).isImageSelected()) {
+                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectCustomerPhoto));
+                } else if (pumpSerNo.getText().toString().trim().isEmpty() || !pumpSerNo.getText().toString().trim().equals(installationListBean.getPump().trim())) {
+                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctPumpSr) + " " + installationListBean.getPump().trim());
+                } else if (motorSerNo.getText().toString().trim().isEmpty() || !motorSerNo.getText().toString().trim().equals(installationListBean.getMotor().trim())) {
+                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctMotorSr) + " " + installationListBean.getMotor().trim());
+                } else if (controllerSerNo.getText().toString().trim().isEmpty() || !controllerSerNo.getText().toString().trim().equals(installationListBean.getController().trim())) {
+                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctControllerSr) + " " + installationListBean.getController().trim());
+                } else if (remarkEdt.getText().toString().trim().isEmpty()) {
+                    CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
+                } else {
+                    Set<String> set = new HashSet<>();
+                    if (!inst_module_ser_no.getText().toString().trim().equals("0")) {
+                        for (int i = 0; i < barcodenameList.size(); i++) {
+
+                            if (barcodenameList.get(i).isEmpty()) {
+                                CustomUtility.ShowToast(getResources().getString(R.string.enter_allModuleSrno), getApplicationContext());
+                                isSubmit = false;
+                            } else {
+                                if (set.contains(barcodenameList.get(i).toUpperCase())) {
+                                    isSubmit = false;
+                                    CustomUtility.ShowToast(barcodenameList.get(i) + getResources().getString(R.string.moduleMultipleTime), this);
+                                    break;
+                                } else {
+                                    set.add(barcodenameList.get(i).toUpperCase());
+
+                                }
+                            }
+                        }
+                        noOfModules = "";
+                        for (String ele : set) {
+                            if (noOfModules.isEmpty()) {
+                                noOfModules = ele;
+                            } else {
+                                noOfModules = noOfModules + "," + ele;
+                            }
+
+                        }
+                        if (set.size() == barcodenameList.size()) {
+                            isSubmit = true;
+                        }
+                    }
+                        if (isSubmit) {
+                            if (materialStatusOk.isChecked()) {
+                                unloadingMaterialStatus = materialStatusOk.getText().toString();
+                            }
+                            if (materialStatusNotOk.isChecked()) {
+                                unloadingMaterialStatus = materialStatusNotOk.getText().toString();
+                            }
+                            if (materialStatusDamage.isChecked()) {
+                                unloadingMaterialStatus = materialStatusDamage.getText().toString();
+                            }
+
+                            if (CustomUtility.isInternetOn(getApplicationContext())) {
+                                InstallationBean param_invc = new InstallationBean();
+                                JSONArray ja_invc_data = new JSONArray();
+                                JSONObject jsonObj = new JSONObject();
+                                try {
+                                    jsonObj.put("userid", userID);
+                                    jsonObj.put("vbeln", billNo);
+                                    jsonObj.put("project_no", projectNo);
+                                    jsonObj.put("beneficiary", beneficiary);
+                                    jsonObj.put("regisno", regNO);
+                                    jsonObj.put("unload_remark", remarkEdt.getText().toString().trim());
+                                    jsonObj.put("customer_name ", customerName);
+                                    jsonObj.put("project_login_no ", CustomUtility.getSharedPreferences(UnloadInstReportImageActivity.this, "loginid"));
+                                    jsonObj.put("inst_no_of_module_value ", noOfModules);
+                                    jsonObj.put("UNLOAD_MAT_STATS ", unloadingMaterialStatus);
+
+                                    if (imageArrayList.size() > 0) {
+                                        if (imageArrayList.get(0).isImageSelected()) {
+                                            jsonObj.put("unld_photo1", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(0).getImagePath()));
+                                        }
+                                        if (1 < imageArrayList.size() && imageArrayList.get(1).isImageSelected()) {
+                                            jsonObj.put("unld_photo2", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(1).getImagePath()));
+                                        }
+                                        if (2 < imageArrayList.size() && imageArrayList.get(2).isImageSelected()) {
+                                            jsonObj.put("unld_photo3", CustomUtility.getBase64FromBitmap(UnloadInstReportImageActivity.this, imageArrayList.get(2).getImagePath()));
+                                        }
+                                    }
+                                    ja_invc_data.put(jsonObj);
+                                    Log.e("ja_invc_data=====>", ja_invc_data.toString());
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+
+                                    saveDataLocally();
+                                    new SyncInstallationData(ja_invc_data).execute();
+
+                                } else {
+                                    saveDataLocally();
+                                    CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection), getApplicationContext());
+                                    CustomUtility.ShowToast(getResources().getString(R.string.savedInLocalDatabase), getApplicationContext());
+                                    finish();
+                                }
+
+
+                        }
+
+
+                }
+            } else {
+                CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.select_image));
+
+            }
+        });
+        mToolbar.setNavigationOnClickListener(v -> onBackPressed());
+        pump_scanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isPumpMotorController = true;
+                ScanCode(1000);
+            }
+        });
+        motor_scanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isPumpMotorController = true;
+                ScanCode(2000);
+            }
+        });
+
+        controllerScanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isPumpMotorController = true;
+                ScanCode(3000);
+            }
+        });
+    }
+
+    private void saveDataLocally() {
+        unloadingDataBean unloadingBean=new unloadingDataBean(
+                inst_module_ser_no.getText().toString(),
+                noOfModules,
+                pumpSerNo.getText().toString(),
+                motorSerNo.getText().toString(),
+                controllerSerNo.getText().toString(),
+                unloadingMaterialStatus,
+                remarkEdt.getText().toString(),
+                billNo
+        );
+
+        if(db.isRecordExist(db.TABLE_UNLOADING_FORM_DATA, db.KEY_BILL_NO, unloadingBean.getBill_no())){
+            db.updateUnloadingForm(unloadingBean);
+        }else{
+            db.insertUnloadingFormData(unloadingBean);
+        }
+
+
+
+
+        ArrayList<unloadingDataBean> unload= new ArrayList<>();
+        unload=db.getUnloadingData(billNo);
+        Log.e("unload==>", String.valueOf(unload.size()));
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+
 
     @Override
     public void ImageSelectionListener(ImageModel imageModelList, int position) {
@@ -549,7 +661,10 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     private void cameraIntent() {
 
         camraLauncher.launch(new Intent(UnloadInstReportImageActivity.this, CameraActivity2.class)
-                .putExtra("cust_name", customerName));
+                .putExtra("cust_name", customerName)
+                .putExtra("pump_sernr", installationListBean.getPump_ser())
+                .putExtra("BeneficiaryNo", installationListBean.getBeneficiary())
+                .putExtra("PumpLoad", installationListBean.getPump_load()));
 
     }
 
@@ -610,7 +725,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanningResult != null) {
-            setDataToViewFromScanner(scanningResult);
+            setScanValue(scanningResult.getContents(),scannerCode);
         }
 
     }
@@ -644,6 +759,77 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);
     }
+
+    @Override
+    public void BarCodeSelectionListener(int position) {
+        barcodeSelectIndex = position;
+        ScanCode(4000);
+    }
+    private void ScanCode(int scannerCode) {
+
+
+        this.scannerCode = scannerCode;
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            options = new GmsBarcodeScannerOptions.Builder()
+                    .setBarcodeFormats(
+                            Barcode.FORMAT_ALL_FORMATS)
+                    .build();
+            scanner = GmsBarcodeScanning.getClient(this);
+            scanner.startScan()
+                    .addOnSuccessListener(
+                            barcode -> {
+                                // Task completed successfully
+                                String rawValue = barcode.getRawValue();
+
+                                setScanValue(rawValue, scannerCode);
+
+
+                            })
+                    .addOnCanceledListener(
+                            () -> {
+                                // Task canceled
+                                Toast.makeText(getApplicationContext(), "Scanning Cancelled Please try again", Toast.LENGTH_SHORT).show();
+                            })
+                    .addOnFailureListener(
+                            e -> {
+                                startScanOldVersion();
+                                // Task failed with an exception
+                              //  Toast.makeText(getApplicationContext(), "Scanning Failed Please try again", Toast.LENGTH_SHORT).show();
+                            });
+        }else {
+           startScanOldVersion();
+        }
+
+    }
+
+    private void startScanOldVersion() {
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+        integrator.setPrompt("Scan a QRCode");
+        integrator.setCameraId(0);
+        integrator.setBeepEnabled(true);// Use a specific camera of the device
+        integrator.setBarcodeImageEnabled(true);
+        integrator.initiateScan();
+    }
+
+    private void setScanValue(String rawValue, int scannerCode) {
+
+        if (scannerCode == 1000) {
+            pumpSerNo.setText(rawValue);
+        } else if (scannerCode == 2000) {
+            motorSerNo.setText(rawValue);
+        } else if (scannerCode == 3000) {
+            controllerSerNo.setText(rawValue);
+        } else {
+            if(!barcodenameList.contains(rawValue)){
+                barcodenameList.set(barcodeSelectIndex,rawValue);
+                barCodeSelectionAdapter.notifyDataSetChanged();
+            }else {
+                Toast.makeText(getApplicationContext(),"Already Scanned",Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
     @SuppressLint("StaticFieldLeak")
     private class SyncInstallationData extends AsyncTask<String, String, String> {
@@ -700,13 +886,14 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                         invc_done = jo.getString("return");
                         if (invc_done.equalsIgnoreCase("Y")) {
 
-                            databaseHelper.deleteUnloadingImages(billNo);
+                            db.deleteUnloadingImages(billNo);
+                            db.deleteUnloadingForm(billNo);
+
                             showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
                             WebURL.CHECK_DATA_UNOLAD = 1;
 
                             Random random = new Random();
                             String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
-
                             runOnUiThread(() -> {
                                 if (CustomUtility.isValidMobile(custMobile)) {
 
@@ -754,124 +941,6 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         });
     }
 
-    private void ViewInflate(int new_value) {
-
-        String[] arr = no_of_module_value.split(",");
-        moduleOneLL.removeAllViews();
-
-        for (int i = 0; i < new_value; i++) {
-            View child_grid = LayoutInflater.from(getApplicationContext()).inflate(R.layout.view_for_normal, null);
-            LinearLayout layout_s = child_grid.findViewById(R.id.sublayout_second);
-            LinearLayout layout_f = child_grid.findViewById(R.id.sublayout_first);
-            LinearLayout layout_f_inner = layout_f.findViewById(R.id.sublayout_first_inner);
-            EditText edit = layout_f_inner.findViewById(R.id.view_edit_one);
-            final ImageView scan = layout_f_inner.findViewById(R.id.view_img_one);
-            scan.setId(i);
-
-            scan.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int id = v.getId();
-                    startScanner(id);
-                }
-            });
-
-            try {
-                if (arr.length > 0) {
-                    edit.setText(arr[i]);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            layout_s.setVisibility(View.GONE);
-            moduleOneLL.setVisibility(View.VISIBLE);
-            moduleOneLL.addView(child_grid);
-
-
-        }
-    }
-
-    void startScanner(int scanID) {
-        currentScannerFor = scanID;
-        IntentIntegrator integrator = new IntentIntegrator(this);
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
-        integrator.setPrompt("Scan a QRCode");
-        integrator.setCameraId(0);
-        integrator.setBeepEnabled(true);// Use a specific camera of the device
-        integrator.setBarcodeImageEnabled(true);
-        integrator.initiateScan();
-    }
-
-
-    void setDataToViewFromScanner(IntentResult scanningResult) {
-        try {
-            String scanContent = scanningResult.getContents();
-            String scanFormat = scanningResult.getFormatName();
-
-            Toast.makeText(getApplicationContext(), scanFormat + scanContent, Toast.LENGTH_SHORT);
-            if (!isPumpMotorController) {
-                boolean alreadySet = false;
-                if (!alreadySet) {
-                    if (scannedDeviceNo.size() > 0) {
-
-                        if (!scannedDeviceNo.contains(scanContent)) {
-                            EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
-
-                            edit_O.setText(scanContent);
-                            scannedDeviceNo.add(scanContent);
-                        } else {
-                            CustomUtility.ShowToast("Already done",getApplicationContext());
-                        }
-                    } else {
-                        EditText edit_O = moduleOneLL.getChildAt(currentScannerFor).findViewById(R.id.view_edit_one);
-
-                        edit_O.setText(scanContent);
-                        scannedDeviceNo.add(scanContent);
-                    }
-
-                }
-            } else {
-                switch (currentScannerFor) {
-                    case 1000:
-                        pumpSerNo.setText(scanContent);
-                        break;
-                    case 2000:
-                        motorSerNo.setText(scanContent);
-                        break;
-                    case 3000:
-                        controllerSerNo.setText(scanContent);
-
-
-                        break;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
-    public String GetDataOne() {
-        String finalValue = "";
-        if (!inst_module_ser_no.getText().toString().trim().equals("0")) {
-
-            for (int i = 0; i < Integer.parseInt(inst_module_ser_no.getText().toString()); i++) {
-                if (finalValue.isEmpty()) {
-                    finalValue = ",";
-                } else {
-                    finalValue = finalValue + ",";
-                }
-
-
-            }
-        } else {
-            finalValue = "";
-        }
-        return finalValue;
-    }
-
     private void sendVerificationCodeAPI(String generatedVerificationCode, String ContactNo, String Hp, String beneficiaryNo) {
         CustomUtility.showProgressDialogue(UnloadInstReportImageActivity.this);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -888,7 +957,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                 if (!res.toString().isEmpty()) {
                     VerificationCodeModel verificationCodeModel = new Gson().fromJson(res.toString(), VerificationCodeModel.class);
                     if (verificationCodeModel.getStatus().equals("Success")) {
-                        databaseHelper.deleteInstallationImages(billNo);
+                        db.deleteInstallationImages(billNo);
                         ShowAlertResponse(generatedVerificationCode, ContactNo, Hp, beneficiaryNo, billNo);
                     }
 

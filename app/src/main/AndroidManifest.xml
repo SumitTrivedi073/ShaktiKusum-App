@@ -28,13 +28,13 @@
     <uses-permission
         android:name="com.google.android.gms.permission.AD_ID"
         tools:node="remove" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
-    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera"
+        android:required="true"/>
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature android:name="android.hardware.camera.front" />
-    <uses-feature android:name="android.hardware.location.gps" />
 
     <application
         android:name="activity.AppApplication"
@@ -276,9 +276,7 @@
         <activity
             android:name="activity.ShowDocument2"
             android:screenOrientation="portrait" />
-        <activity
-            android:name="activity.CameraActivity"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name="activity.CameraActivitySurvey"
             android:screenOrientation="portrait" />
@@ -339,6 +337,10 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>
