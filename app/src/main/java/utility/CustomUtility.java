@@ -47,6 +47,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import activity.CameraActivity2;
@@ -471,6 +472,28 @@ public class CustomUtility {
 
         return address;
     }
+    public static boolean isAlphaNumeric(String str)
+    {
+        // Regex to check string is alphanumeric or not.
+        String regex = "^[0-9a-zA-Z]+$";
 
+        // Compile the ReGex
+        Pattern p = Pattern.compile(regex);
+
+        // If the string is empty
+        // return false
+        if (str == null) {
+            return false;
+        }
+
+        // Pattern class contains matcher() method
+        // to find matching between given string
+        // and regular expression.
+        Matcher m = p.matcher(str);
+
+        // Return if the string
+        // matched the ReGex
+        return m.matches();
+    }
 
 }

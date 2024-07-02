@@ -1198,13 +1198,14 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
             inst_simcard_num.setText("");
             inst_simcard_num.setText(rawValue);
         }
-
-        if (scannerCode == 5000) {
-            if (!barcodenameList.contains(rawValue)) {
-                barcodenameList.set(barcodeSelectIndex, rawValue);
-                barCodeSelectionAdapter.notifyDataSetChanged();
-            } else {
-                Toast.makeText(getApplicationContext(), "Already Scanned", Toast.LENGTH_SHORT).show();
+        if (CustomUtility.isAlphaNumeric(rawValue)) {
+            if (scannerCode == 5000) {
+                if (!barcodenameList.contains(rawValue)) {
+                    barcodenameList.set(barcodeSelectIndex, rawValue);
+                    barCodeSelectionAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Already Scanned", Toast.LENGTH_SHORT).show();
+                }
             }
         }
 

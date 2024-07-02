@@ -463,7 +463,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
                         CustomUtility.ShowToast(getResources().getString(R.string.insertSecondSim), getApplicationContext());
                     }
                 } else {
-                    CustomUtility.ShowToast(getResources().getString(R.string.sim_insertMsg), getApplicationContext());
+                    CustomUtility.ShowToast( getResources().getString(R.string.sim_insertMsg), getApplicationContext());
 
                 }
             }

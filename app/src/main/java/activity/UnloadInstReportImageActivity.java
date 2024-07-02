@@ -52,8 +52,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.gson.Gson;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
@@ -254,20 +252,6 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
     }
 
-    public void InstalledGooglePlayServices(Context context) {
-        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
-        int result = googleAPI.isGooglePlayServicesAvailable(this);
-
-        if (result != ConnectionResult.SUCCESS) {
-            if (googleAPI.isUserResolvableError(result)) {
-                //prompt the dialog to update google play
-                googleAPI.getErrorDialog(this, result, 1).show();
-
-            }
-        } else {
-            //google play up to date
-        }
-    }
     private void retriveValue() {
         Bundle bundle = getIntent().getExtras();
 
@@ -286,22 +270,10 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         inst_module_ser_no.setText(installationListBean.moduleqty);
 
         SetAdapter();
-        isGooglePlayServiceInstalled();
+
     }
 
-    private void  isGooglePlayServiceInstalled(){
-        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
-        int result = googleAPI.isGooglePlayServicesAvailable(this);
 
-        if (result != ConnectionResult.SUCCESS) {
-            if (googleAPI.isUserResolvableError(result)) {
-                //prompt the dialog to update google play
-                googleAPI.getErrorDialog(this, result, 1).show();
-
-            }
-
-        }
-    }
     private void SetAdapter() {
 
 
@@ -443,7 +415,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                             }
 
                         }
-                        if (set.size() == barcodenameList.size()) {
+                        if ((set.size() == Integer.parseInt(inst_module_ser_no.getText().toString()))) {
                             isSubmit = true;
                         }
                     }
@@ -493,7 +465,7 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
 
 
                                     saveDataLocally();
-                                    new SyncInstallationData(ja_invc_data).execute();
+                                  new SyncInstallationData(ja_invc_data).execute();
 
                                 } else {
                                     saveDataLocally();
@@ -813,19 +785,24 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
     }
 
     private void setScanValue(String rawValue, int scannerCode) {
-
-        if (scannerCode == 1000) {
-            pumpSerNo.setText(rawValue);
-        } else if (scannerCode == 2000) {
-            motorSerNo.setText(rawValue);
-        } else if (scannerCode == 3000) {
+        if (scannerCode == 3000) {
             controllerSerNo.setText(rawValue);
-        } else {
-            if(!barcodenameList.contains(rawValue)){
-                barcodenameList.set(barcodeSelectIndex,rawValue);
-                barCodeSelectionAdapter.notifyDataSetChanged();
-            }else {
-                Toast.makeText(getApplicationContext(),"Already Scanned",Toast.LENGTH_SHORT).show();
+        }else {
+            if (CustomUtility.isAlphaNumeric(rawValue)) {
+                if (scannerCode == 1000) {
+                    pumpSerNo.setText(rawValue);
+                } else if (scannerCode == 2000) {
+                    motorSerNo.setText(rawValue);
+                } else {
+                    if (!barcodenameList.contains(rawValue)) {
+                        barcodenameList.set(barcodeSelectIndex, rawValue);
+                        barCodeSelectionAdapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Already Scanned", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "Please Scan the correct value", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -1010,6 +987,5 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
         });
 
     }
-
 }
 

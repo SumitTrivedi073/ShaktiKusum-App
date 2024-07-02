@@ -53,12 +53,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.android.play.core.appupdate.AppUpdateInfo;
-import com.google.android.play.core.appupdate.AppUpdateManager;
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
-import com.google.android.play.core.install.model.AppUpdateType;
-import com.google.android.play.core.install.model.UpdateAvailability;
-import com.google.android.play.core.tasks.Task;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
@@ -83,7 +77,6 @@ import webservice.WebURL;
 
 public class Login extends AppCompatActivity {
 
-    private AppUpdateManager appUpdateManager;
     private static final int IMMEDIATE_APP_UPDATE_REQ_CODE = 100;
 
     private static final int REQUEST_CODE_PERMISSION = 2;
