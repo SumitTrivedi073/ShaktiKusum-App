@@ -71,18 +71,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     RecyclerView recyclerView;
     Context context;
     String versionName = "0.0", emp_type;
-
     String country, country_text, state, state_text, district, district_text, tehsil, tehsil_text;
-
     ArrayList<ItemNameBean> itemNameBeans = new ArrayList<>();
     LinearLayout lin1, lin2;
     Adapter_item_list adapter_item_list;
-
     NavigationView navigationView;
     private int progressBarStatus = 0;
     private final Handler progressBarHandler = new Handler();
     ProgressDialog progressBar,progressDialog;
-
     CardView pendingFeedback, pendingUnloadingVerification, checkRMSStatus, debugDataExtract,
             siteAuditCard, simReplacementCard;
 
@@ -345,6 +341,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 Intent mIntent4 = new Intent(context, CheckRMSActivity.class);
                 startActivity(mIntent4);
                 break;
+
 
             case R.id.debugDataExtract:
                 WebURL.BT_DEVICE_NAME = "";

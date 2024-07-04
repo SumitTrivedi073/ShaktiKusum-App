@@ -10,27 +10,29 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.shaktipumplimited.shaktikusum.R;
 
+import bean.SelfCheckImageBean;
+import debugapp.GlobalValue.Constant;
+import utility.CustomUtility;
+
 public class PhotoViewerActivity extends BaseActivity {
 
-     ImageView showImg;
-     Toolbar mToolbar;
+    ImageView showImg;
+    Toolbar mToolbar;
+    Integer flag;
+    Bitmap myBitmap;
+    SelfCheckImageBean imageList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_viewer);
 
-       Init();
-       listner();
+        Init();
+        listner();
     }
 
     private void listner() {
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        mToolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     private void Init() {
@@ -41,9 +43,16 @@ public class PhotoViewerActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToolbar.setTitle(getResources().getString(R.string.photoGallery));
 
-        Bitmap myBitmap = BitmapFactory.decodeFile(getIntent().getStringExtra("image_path"));
+        if (getIntent().getExtras() != null) {
+            flag = getIntent().getIntExtra("flag", 0);
 
-        showImg.setImageBitmap(myBitmap);
+            if (flag == 1) {
+                myBitmap = (Bitmap) getIntent().getParcelableExtra(Constant.ImageData);
+            } else {
+                myBitmap = BitmapFactory.decodeFile(getIntent().getStringExtra("image_path"));
+            }
+            showImg.setImageBitmap(myBitmap);
+        }
     }
 
     @Override

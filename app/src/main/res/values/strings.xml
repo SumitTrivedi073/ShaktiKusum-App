@@ -117,6 +117,10 @@
     <string name="fard_land_proof">Fard (Land proof)</string>
     <string name="beneficiary_id_proof">Beneficiary ID Proof (Aadhar card)</string>
     <string name="payment_receipt">Payment Receipt</string>
+    <string name="attachment1">Attachment 1</string>
+    <string name="attachment2">Attachment 2</string>
+    <string name="attachment3">Attachment 3</string>
+    <string name="attachment4">Attachment 4</string>
     <string name="attachment5">Attachment 5</string>
     <string name="attachment6">Attachment 6</string>
 
@@ -154,7 +158,6 @@
     <string name="submersible">Submersible</string>
     <string name="Normal">Normal</string>
     <string name="BeneficiaryRegistration">BeneficiaryRegistration</string>
-
 
 
     <string name="size" translatable="false">Size :  %1$d</string>
@@ -564,6 +567,13 @@
     <string name="online_and_shifted">ONLINE AND SHIFTED</string>
     <string name="I_base_update">I Base Updating…</string>
     <string name="please_wait">Please Wait…</string>
+    <string name="add_img_again">Please Add Image Again!</string>
+    <string name="vendor_check">Vendor Check</string>
+    <string name="vendor_check_list">Vendor check list</string>
+    <string name="Doc_dist_off_list">Document submission list</string>
+    <string name="Doc_dist_off">Document district office</string>
+    <string name="vendorcheck">VendorCheck</string>
+    <string name="pls_add_img">Please add atleast one image</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

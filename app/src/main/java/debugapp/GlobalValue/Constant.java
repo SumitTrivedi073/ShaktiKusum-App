@@ -68,4 +68,10 @@ public class Constant {
     public static String longitude = "longitude";
 
     public static String beneficiaryData ="beneficiaryData";
+
+    public static String ImageData = "ImageData";
+    public static String image_path = "image_path";
+    public static String cust_name = "cust_name";
+
+
 }

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="activity.DocDistOffDetails">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        <EditText
+            android:layout_margin="@dimen/_5sdp"
+            android:visibility="visible"
+            android:maxLines="5"
+            android:inputType="text"
+            android:gravity="start"
+            android:padding="@dimen/_8sdp"
+            android:background="@drawable/bg_shape_btn"
+            android:hint="@string/enter_remark"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_100sdp"
+            android:id="@+id/remark_txt"
+            />
+
+            </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/blue_btn_round"
+        android:gravity="center"
+        android:padding="@dimen/_10sdp"
+        android:text="@string/submit"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_14sdp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:layout_margin="@dimen/_10sdp"/>
+
+</RelativeLayout>

@@ -308,6 +308,11 @@ public class CustomUtility {
 
     }
 
+    public static Bitmap getBitmapFromBase64(String base64Str){
+        byte[] decodedBytes = Base64.decode(base64Str, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+    }
+
 
     public static void deleteArrayList(Context context,String name){
         SharedPreferences settings = context.getSharedPreferences(PREFERENCE, 0);

@@ -63,7 +63,6 @@ public class ImageSelectionAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             }else {
                 ((ViewHolder) holder).image.setImageResource(R.drawable.red_icn);
             }
-
             ((ViewHolder) holder).cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

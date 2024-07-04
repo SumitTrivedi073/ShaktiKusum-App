@@ -26,23 +26,22 @@ public class WebURL {
     /************* production server **************/
 
 
-    public static final String RMSAPPURL = "https://shaktirms.com/";
-    public static final String BASEURL = "https://spprdsrvr1.shaktipumps.com:8423";
-   public static final String BASE_URL_VK= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/";
-   public static final String BASE_URL_OPTION_VK= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
+//    public static final String RMSAPPURL = "https://shaktirms.com/";
+//    public static final String BASEURL = "https://spprdsrvr1.shaktipumps.com:8423";
+//   public static final String BASE_URL_VK= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/";
+//   public static final String BASE_URL_OPTION_VK= "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
 
 
 
     /************* development server **************/
 
-  /* public static final String RMSAPPURL = "https://quality.shaktirms.com/";
+   public static final String RMSAPPURL = "https://quality.shaktirms.com/";
    public static final String BASEURL = "https://spquasrvr1.shaktipumps.com:8423";
     public static final String BASE_URL_VK= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/";
     public static final String BASE_URL_VK1= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/";
 
    public static final String BASE_URL_OPTION_VK= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
 
-*/
 
 
     /************* APIS **************/
@@ -117,6 +116,11 @@ public class WebURL {
     public static final String DeviceShiftingList = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/pending_shifting_list.htm";
 
     public static final String saveShiftedDeviceToServer = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_shifting_data.htm?shift=";
+    public static final String selfCheckListAPI = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/installation_check__list.htm";
+    public static final String selfCheckImageListAPI = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/get_attachment.htm";
+    public static final String saveSelfCheckImg = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/get_attachment_image_save.htm";
+    public static final String docDistList = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/listing_process_11_to_12.htm";
+    public static final String docDistSubmit = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/get_image_save.htm";
 
 
     /*--------------------------------------------------RMS APIS-------------------------------------------------------------------*/

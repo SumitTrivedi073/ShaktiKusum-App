@@ -49,7 +49,6 @@ public class beneficiaryRegistrationList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_beneficiary_registration_list);
         Init();
-
         listner();
     }
 
