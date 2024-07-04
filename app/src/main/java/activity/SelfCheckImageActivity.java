@@ -168,7 +168,7 @@ public class SelfCheckImageActivity extends AppCompatActivity implements SelfChe
     private void ImageListAPI() {
         CustomUtility.showProgressDialogue(SelfCheckImageActivity.this);
         RequestQueue mRequestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest mStringRequest = new JsonObjectRequest(Request.Method.GET, WebURL.selfCheckImageListAPI + "?Bill=97113311", null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest mStringRequest = new JsonObjectRequest(Request.Method.GET, WebURL.selfCheckImageListAPI + "?Bill="+responseList.getVbeln(), null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.e("response====>", String.valueOf(response));
