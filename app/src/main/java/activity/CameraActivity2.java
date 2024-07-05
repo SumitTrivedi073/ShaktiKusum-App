@@ -47,6 +47,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -78,7 +79,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
     File save;
     boolean checkGPS, checkNetwork;
     Location loc;
-    double latitude, longitude;
+    String latitude, longitude;
     SimpleDateFormat getDate, getTime;
 
     LocationManager locationManager;
@@ -406,8 +407,9 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
                             loc = locationManager
                                     .getLastKnownLocation(LocationManager.GPS_PROVIDER);
                             if (loc != null) {
-                                latitude = loc.getLatitude();
-                                longitude = loc.getLongitude();
+                                DecimalFormat decimalFormat = new DecimalFormat("##.######");
+                                latitude = decimalFormat.format(loc.getLatitude());
+                                longitude = decimalFormat.format(loc.getLongitude());
 
                                 Log.e("latitude======>", String.valueOf(latitude));
                                 Log.e("longitude======>", String.valueOf(longitude));
@@ -431,8 +433,9 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
                         }
 
                         if (loc != null) {
-                            latitude = loc.getLatitude();
-                            longitude = loc.getLongitude();
+                            DecimalFormat decimalFormat = new DecimalFormat("##.######");
+                            latitude = decimalFormat.format(loc.getLatitude());
+                            longitude = decimalFormat.format(loc.getLongitude());
                             Log.e("latitude2======>", String.valueOf(latitude));
                             Log.e("longitude2======>", String.valueOf(longitude));
 
@@ -467,7 +470,7 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
         getDate = new SimpleDateFormat(TIME_STAMP_FORMAT_DATE, Locale.getDefault());
         getTime = new SimpleDateFormat(TIME_STAMP_FORMAT_TIME, Locale.getDefault());
         if (CustomUtility.isInternetOn(getApplicationContext())) {
-            String Address = CustomUtility.getAddressFromLatLng(CameraActivity2.this,latitude,longitude);
+            String Address = CustomUtility.getAddressFromLatLng(CameraActivity2.this,Double.parseDouble(latitude),Double.parseDouble(longitude));
 
             if (beneficiaryNo != null && !beneficiaryNo.isEmpty()) {
                 display.setText(Address + "\n" + "Date: " + getDate.format(new Date()) + "\n" + "Time: " + getTime.format(new Date())
@@ -505,8 +508,9 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
 
         if(location!=null){
             loc = location;
-            latitude = loc.getLatitude();
-            longitude = loc.getLongitude();
+            DecimalFormat decimalFormat = new DecimalFormat("##.######");
+            latitude = decimalFormat.format(loc.getLatitude());
+            longitude = decimalFormat.format(loc.getLongitude());
             Log.e("latitude2======>", String.valueOf(latitude));
             Log.e("longitude2======>", String.valueOf(longitude));
 
