@@ -557,7 +557,6 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
                 jsonObj.put("SURVEYOR_SAP", CustomUtility.getSharedPreferences(getApplicationContext(), "userid"));
                 jsonObj.put("APPLICANT_NAME", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonName));
                 jsonObj.put("CONTACT_NO", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonNumber));
-                jsonObj.put("APPLICANT_NO", CustomUtility.getSharedPreferences(getApplicationContext(), "userid"));
                 jsonObj.put("WATER_LVL", selectedPumpWaterLevel);
                 jsonObj.put("FARMER_SIGNATURE", surveyListResponse.getCustomerName());
                 jsonObj.put("WATER_SOURCE", selectedSourceofWater);

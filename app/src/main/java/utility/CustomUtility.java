@@ -15,6 +15,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -30,12 +32,13 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.gson.Gson;
 import com.shaktipumplimited.shaktikusum.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -44,8 +47,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import activity.CameraActivity2;
 import activity.CustomProgressDialog;
 import bean.ImageModel;
 import bean.SurveyListModel;
@@ -438,10 +443,57 @@ public class CustomUtility {
                 }
             }
             firstName = firstNameBuilder.toString();
-        }
-        else{
+        } else {
             firstName = fullNameArray[0];
         }
         return firstName;
     }
+
+    public static String getAddressFromLatLng(CameraActivity2 context, double latitude, double longitude) {
+        String address = "";
+
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+        try {
+            if (CustomUtility.isInternetOn(context)) {
+                List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+
+                if (!addresses.isEmpty()) {
+
+                    address = "Latitude : " + String.valueOf(latitude) + "\n" + "Longitude : " + String.valueOf(longitude) + "\n" + "Address : " + addresses.get(0).getAddressLine(0) + ","
+                            + addresses.get(0).getAdminArea() + " " + addresses.get(0).getPostalCode() + "," + addresses.get(0).getCountryName();
+
+                }
+            }
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return address;
+    }
+    public static boolean isAlphaNumeric(String str)
+    {
+        // Regex to check string is alphanumeric or not.
+        String regex = "^[0-9a-zA-Z]+$";
+
+        // Compile the ReGex
+        Pattern p = Pattern.compile(regex);
+
+        // If the string is empty
+        // return false
+        if (str == null) {
+            return false;
+        }
+
+        // Pattern class contains matcher() method
+        // to find matching between given string
+        // and regular expression.
+        Matcher m = p.matcher(str);
+
+        // Return if the string
+        // matched the ReGex
+        return m.matches();
+    }
+
 }

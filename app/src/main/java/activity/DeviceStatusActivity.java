@@ -49,7 +49,8 @@ public class DeviceStatusActivity extends BaseActivity  {
 
         progressDialog = new ProgressDialog(mContext);
 
-        yourDialog = new dialog4(activity);
+
+        yourDialog = new dialog4(activity,getIntent().getStringExtra(Constant.ControllerSerialNumber));
         yourDialog.show();
 
        Init();

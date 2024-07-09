@@ -113,17 +113,17 @@ import webservice.WebURL;
              new GetInstallationDataList_Task().execute();
          }
      }
+
+
      private void listner() {
          editsearch.addTextChangedListener(new TextWatcher() {
 
              @Override
              public void afterTextChanged(Editable arg0) {
                  // TODO Auto-generated method stub
-                 String text = editsearch.getText().toString().toLowerCase(Locale.getDefault());
-                 try {
-                     adapterInstallationList.filter(text);
-                 } catch (Exception e) {
-                     e.printStackTrace();
+
+                 if(!arg0.toString().isEmpty()) {
+                     adapterInstallationList.filter(arg0.toString());
                  }
              }
 
@@ -235,7 +235,7 @@ import webservice.WebURL;
                         CONTACT_NO = jo.getString("contact_no");
                         inst_no_of_module_value = jo.getString("inst_no_of_module_value");
                         pump_load = jo.getString("pump_load");
-                        Log.e("pumpLoad======>",pump_load);
+                    //    Log.e("pumpLoad======>",pump_load);
 
                         installationBean = new InstallationListBean(bill_no,
                                 CustomUtility.getSharedPreferences(context, "userid"),

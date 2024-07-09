@@ -53,12 +53,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.android.play.core.appupdate.AppUpdateInfo;
-import com.google.android.play.core.appupdate.AppUpdateManager;
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
-import com.google.android.play.core.install.model.AppUpdateType;
-import com.google.android.play.core.install.model.UpdateAvailability;
-import com.google.android.play.core.tasks.Task;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
@@ -83,7 +77,6 @@ import webservice.WebURL;
 
 public class Login extends AppCompatActivity {
 
-    private AppUpdateManager appUpdateManager;
     private static final int IMMEDIATE_APP_UPDATE_REQ_CODE = 100;
 
     private static final int REQUEST_CODE_PERMISSION = 2;
@@ -246,49 +239,11 @@ public class Login extends AppCompatActivity {
 
         });
 
-        appUpdateManager = AppUpdateManagerFactory.create(getApplicationContext());
-        checkUpdate();
 
 
-    }
-
-    private void checkUpdate() {
-
-        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
-
-        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
-                startUpdateFlow(appUpdateInfo);
-            } else if  (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS){
-                startUpdateFlow(appUpdateInfo);
-            }
-        });
-    }
-
-    private void startUpdateFlow(AppUpdateInfo appUpdateInfo) {
-        try {
-            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, Login.IMMEDIATE_APP_UPDATE_REQ_CODE);
-        } catch (IntentSender.SendIntentException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == IMMEDIATE_APP_UPDATE_REQ_CODE) {
-            if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(getApplicationContext(), "Update canceled by user! Result Code: " + resultCode, Toast.LENGTH_LONG).show();
-            } else if (resultCode == RESULT_OK) {
-                Toast.makeText(getApplicationContext(), "Update success! Result Code: " + resultCode, Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getApplicationContext(), "Update Failed! Result Code: " + resultCode, Toast.LENGTH_LONG).show();
-                checkUpdate();
-            }
-        }
 
     }
+
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
@@ -404,6 +359,7 @@ public class Login extends AppCompatActivity {
         param.add(new BasicNameValuePair("API", String.valueOf(Build.VERSION.SDK_INT)));
         param.add(new BasicNameValuePair("API_VERSION", String.valueOf(versionCode)));
 
+        Log.e("param=====>",param.toString());
 //******************************************************************************************/
 /*                   server connection
 /******************************************************************************************/

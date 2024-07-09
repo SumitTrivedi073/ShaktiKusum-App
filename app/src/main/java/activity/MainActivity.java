@@ -34,12 +34,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.play.core.appupdate.AppUpdateInfo;
-import com.google.android.play.core.appupdate.AppUpdateManager;
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
-import com.google.android.play.core.install.model.AppUpdateType;
-import com.google.android.play.core.install.model.UpdateAvailability;
-import com.google.android.play.core.tasks.Task;
 import com.shaktipumplimited.SetParameter.PairedDeviceActivity;
 import com.shaktipumplimited.SettingModel.AllPopupUtil;
 import com.shaktipumplimited.shaktikusum.R;
@@ -64,8 +58,7 @@ import webservice.WebURL;
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private static DatabaseHelper dataHelper;
-    private AppUpdateManager appUpdateManager;
-    private static final int IMMEDIATE_APP_UPDATE_REQ_CODE = 100;
+      private static final int IMMEDIATE_APP_UPDATE_REQ_CODE = 100;
     ViewFlipper flvViewFlipperID;
     View.OnClickListener onclick;
     RecyclerView recyclerView;
@@ -160,46 +153,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         debugDataExtract.setOnClickListener(this);
         siteAuditCard.setOnClickListener(this);
         simReplacementCard.setOnClickListener(this);
-        appUpdateManager = AppUpdateManagerFactory.create(getApplicationContext());
-        checkUpdate();
+
     }
 
-    private void checkUpdate() {
-
-        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
-
-        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
-                startUpdateFlow(appUpdateInfo);
-            } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
-                startUpdateFlow(appUpdateInfo);
-            }
-        });
-    }
-
-    private void startUpdateFlow(AppUpdateInfo appUpdateInfo) {
-        try {
-            appUpdateManager.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this, MainActivity.IMMEDIATE_APP_UPDATE_REQ_CODE);
-        } catch (IntentSender.SendIntentException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == IMMEDIATE_APP_UPDATE_REQ_CODE) {
-            if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(getApplicationContext(), "Update canceled by user! Result Code: " + resultCode, Toast.LENGTH_LONG).show();
-            } else if (resultCode == RESULT_OK) {
-                Toast.makeText(getApplicationContext(), "Update success! Result Code: " + resultCode, Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getApplicationContext(), "Update Failed! Result Code: " + resultCode, Toast.LENGTH_LONG).show();
-                checkUpdate();
-            }
-        }
-    }
 
     @Override
     public void onBackPressed() {
@@ -288,6 +244,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 dataHelper.deleteInstallationImages();
                 dataHelper.deleteSiteAuditImages();
                 dataHelper.deleteUnloadingImages();
+                dataHelper.deleteUnloadingFormData();
+                dataHelper.deleteUnloadInstallationListData();
                 dataHelper.deletekusumCImages();
                 dataHelper.deleteKusumCSurveyFrom();
                 dataHelper.deleteDeviceMappingData();
@@ -521,4 +479,5 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         });
     }
+
 }

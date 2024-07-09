@@ -238,7 +238,6 @@ public class RoutePlanActivity extends BaseActivity implements RoutePlanAdapter.
                     try {
                         jsonObj.put("project_no", routePlanArrayList.get(i).getProjectNo());
                         jsonObj.put("regisno", routePlanArrayList.get(i).getRegisno());
-                        jsonObj.put("process_no", routePlanArrayList.get(i).getPumpAcDc());
                         jsonObj.put("userid", routePlanArrayList.get(i).getUserid());
                         jsonObj.put("beneficiary", routePlanArrayList.get(i).getBeneficiary());
                         jsonObj.put("process_no", routePlanArrayList.get(i).getProcessNo());
