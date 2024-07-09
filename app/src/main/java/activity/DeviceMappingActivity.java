@@ -1179,6 +1179,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
 
     /*-------------------------------------------------------------Send Lat Lng to Rms Server 4G device Fota-----------------------------------------------------------------------------*/
     private void sendLatLngToRmsForFota() {
+
         stopProgressDialogue();
         showProgressDialogue(getResources().getString(R.string.device_initialization_processing));
         RequestQueue requestQueue = Volley.newRequestQueue(this);
