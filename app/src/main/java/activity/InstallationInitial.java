@@ -1887,6 +1887,10 @@ public class InstallationInitial extends BaseActivity {
 
                                 CustomUtility.showToast(InstallationInitial.this, "Please Install latest version of the app from the play store");
 
+                            } else if (invc_done.equals("D")) {
+
+                                CustomUtility.showToast(InstallationInitial.this, "The imei number is duplicate");
+
                             }
                         }
                     }
