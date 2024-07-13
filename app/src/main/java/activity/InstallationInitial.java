@@ -182,7 +182,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
         mContext = this;
         progressDialog = new ProgressDialog(InstallationInitial.this);
-
+        param_invc = new InstallationBean();
         WebURL.GALLERY_DIRECTORY_NAME_COMMON = "ShaktiKusum";
         dialog = new Dialog(mContext);
         WebURL.mSettingCheckValue = "0";
@@ -1884,7 +1884,6 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                             Log.e("DOCNO", "&&&&" + billno);
 
                             String dongleType = DONGAL_ID.charAt(0) + DONGAL_ID.substring(1, 2);
-                            Log.e("dongleType=====>", dongleType);
                             if(!dongleType.equals("99")||!dongleType.equals("28")){
                                 sendLatLngToRmsForFota();
                             }else {
