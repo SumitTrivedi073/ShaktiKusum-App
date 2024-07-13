@@ -36,9 +36,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.angads25.toggle.widget.LabeledSwitch;
@@ -155,7 +157,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
     List<String> barcodenameList = new ArrayList<>();
     GmsBarcodeScannerOptions options;
     GmsBarcodeScanner scanner;
-
+    InstallationBean param_invc;
 
     @SuppressLint("HandlerLeak")
     android.os.Handler mHandler2 = new android.os.Handler() {
@@ -180,7 +182,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
         mContext = this;
         progressDialog = new ProgressDialog(InstallationInitial.this);
-
+        param_invc = new InstallationBean();
         WebURL.GALLERY_DIRECTORY_NAME_COMMON = "ShaktiKusum";
         dialog = new Dialog(mContext);
         WebURL.mSettingCheckValue = "0";
@@ -231,6 +233,8 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         moduleqty = extras.getString("moduleqty");
         CUS_CONTACT_NO = extras.getString("CUS_CONTACT_NO");
         BeneficiaryNo = extras.getString("BeneficiaryNo");
+
+
 
         PumpLoad = extras.getString("PumpLoad");
         try {
@@ -470,8 +474,6 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                     if (mBTResonseDataList.get(vkp).getDongleDataExtract().equals("true")) {
                         isDongleExtract = true;
                     }
-
-
                     if (isControllerIDScan) {
                         saveDataValidation();
                     } else {
@@ -1094,7 +1096,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         barCodeSelectionAdapter.BarCodeSelection(this);
 
 
-        InstallationBean param_invc = new InstallationBean();
+
         param_invc = db.getInstallationData(pernr, billno);
 
         if (param_invc != null && !param_invc.getNo_of_module_value().isEmpty()) {
@@ -1707,7 +1709,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         showProgressDialogue(getResources().getString(R.string.submittingInatallation));
         JSONArray ja_invc_data = new JSONArray();
         JSONObject jsonObj = new JSONObject();
-        InstallationBean param_invc = new InstallationBean();
+
         param_invc = db.getInstallationData(pernr, billno);
 
         try {
@@ -1881,7 +1883,13 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                             CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.dataSubmittedSuccessfully));
                             Log.e("DOCNO", "&&&&" + billno);
 
-                            InstallationDoneSuccessfully();
+                            String dongleType = DONGAL_ID.charAt(0) + DONGAL_ID.substring(1, 2);
+                            if(!dongleType.equals("99")||!dongleType.equals("28")){
+                                sendLatLngToRmsForFota();
+                            }else {
+                                InstallationDoneSuccessfully();
+                            }
+
                         } else {
                             stopProgressDialogue();
 
@@ -1897,6 +1905,10 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                                 CustomUtility.setSharedPreference(mContext, "INSTSYNC" + billno, "");
 
                                 CustomUtility.showToast(InstallationInitial.this, "Please Select or Capture All Images First");
+
+                            }else if (invc_done.equals("D")) {
+
+                                CustomUtility.showToast(InstallationInitial.this, "This installation has duplicate IMEI number");
 
                             } else if (invc_done.equals("A")) {
 
@@ -1920,6 +1932,60 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         }
     }
 
+    /*-------------------------------------------------------------Send Lat Lng to Rms Server 4G device Fota-----------------------------------------------------------------------------*/
+    private void  sendLatLngToRmsForFota() {
+        stopProgressDialogue();
+        showProgressDialogue(getResources().getString(R.string.device_initialization_processing));
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        CustomUtility.ShowToast("SendFota======>"+CustomUtility.getSharedPreferences(this, Constant.RmsBaseUrl) + WebURL.updateLatLngToRms + "?deviceNo=" + inst_controller_ser.getText().toString().trim() + "-0" + "&lat=" + inst_latitude + "&lon=" + inst_longitude,getApplicationContext());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                CustomUtility.getSharedPreferences(this, Constant.RmsBaseUrl) + WebURL.updateLatLngToRms + "?deviceNo=" + inst_controller_ser.getText().toString().trim() + "-0" + "&lat=" + inst_latitude + "&lon=" + inst_longitude,
+
+                null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                CustomUtility.ShowToast("SendFota_Resp======>"+jsonObject.toString(),getApplicationContext());
+
+                try {
+                    if (jsonObject.toString() != null && !jsonObject.toString().isEmpty()) {
+
+                        String mStatus = jsonObject.getString("status");
+                        if (mStatus.equals("true")) {
+                            stopProgressDialogue();
+                            InstallationDoneSuccessfully();
+                        } else {
+                            stopProgressDialogue();
+                        }
+
+                    }
+                } catch (Exception e) {
+                    CustomUtility.ShowToast("SendFota_Exc======>"+e.getMessage(),getApplicationContext());
+                    e.printStackTrace();
+                    stopProgressDialogue();
+                    CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                stopProgressDialogue();
+                CustomUtility.ShowToast("SendFota_error======>"+error.toString(),getApplicationContext());
+
+                Log.e("error", String.valueOf(error));
+                Toast.makeText(InstallationInitial.this, error.toString(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(
+                60000,
+                5,  /// maxNumRetries = 0 means no retry
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        requestQueue.add(jsonObjectRequest);
+    }
+
+
     private void InstallationDoneSuccessfully() {
         db.deleteInstallationData(billno);
         db.deleteInstallationListData1(billno);
@@ -1930,8 +1996,8 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
         mDatabaseHelperTeacher.deleteSimInfoData(billno);
 
-       sendResponseTimeAPI();
-       /*Random random = new Random();
+      // sendResponseTimeAPI();
+       Random random = new Random();
         String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
 
         if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
@@ -1942,7 +2008,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
             Intent intent = new Intent(InstallationInitial.this, PendingInstallationActivity.class);
             startActivity(intent);
             finish();
-        }*/
+        }
         mDatabaseHelperTeacher.deleteAllDataFromTable(inst_controller_ser.getText().toString().trim() + "-0");
     }
 
