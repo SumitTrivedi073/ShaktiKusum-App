@@ -1906,6 +1906,10 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
                                 CustomUtility.showToast(InstallationInitial.this, "Please Select or Capture All Images First");
 
+                            }else if (invc_done.equals("D")) {
+
+                                CustomUtility.showToast(InstallationInitial.this, "This installation has duplicate IMEI number");
+
                             } else if (invc_done.equals("A")) {
 
                                 CustomUtility.showToast(InstallationInitial.this, "Please Install latest version of the app from the play store");
