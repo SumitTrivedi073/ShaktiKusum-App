@@ -1887,6 +1887,8 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                             Log.e("dongleType=====>", dongleType);
                             if(!dongleType.equals("99")||!dongleType.equals("28")){
                                 sendLatLngToRmsForFota();
+                            }else {
+                                InstallationDoneSuccessfully();
                             }
 
                         } else {
@@ -1928,16 +1930,19 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
     }
 
     /*-------------------------------------------------------------Send Lat Lng to Rms Server 4G device Fota-----------------------------------------------------------------------------*/
-    private void sendLatLngToRmsForFota() {
+    private void  sendLatLngToRmsForFota() {
         stopProgressDialogue();
         showProgressDialogue(getResources().getString(R.string.device_initialization_processing));
         RequestQueue requestQueue = Volley.newRequestQueue(this);
+        CustomUtility.ShowToast("SendFota======>"+CustomUtility.getSharedPreferences(this, Constant.RmsBaseUrl) + WebURL.updateLatLngToRms + "?deviceNo=" + inst_controller_ser.getText().toString().trim() + "-0" + "&lat=" + inst_latitude + "&lon=" + inst_longitude,getApplicationContext());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 CustomUtility.getSharedPreferences(this, Constant.RmsBaseUrl) + WebURL.updateLatLngToRms + "?deviceNo=" + inst_controller_ser.getText().toString().trim() + "-0" + "&lat=" + inst_latitude + "&lon=" + inst_longitude,
 
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
+                CustomUtility.ShowToast("SendFota_Resp======>"+jsonObject.toString(),getApplicationContext());
+
                 try {
                     if (jsonObject.toString() != null && !jsonObject.toString().isEmpty()) {
 
@@ -1951,6 +1956,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
                     }
                 } catch (Exception e) {
+                    CustomUtility.ShowToast("SendFota_Exc======>"+e.getMessage(),getApplicationContext());
                     e.printStackTrace();
                     stopProgressDialogue();
                     CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
@@ -1962,6 +1968,8 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
             @Override
             public void onErrorResponse(VolleyError error) {
                 stopProgressDialogue();
+                CustomUtility.ShowToast("SendFota_error======>"+error.toString(),getApplicationContext());
+
                 Log.e("error", String.valueOf(error));
                 Toast.makeText(InstallationInitial.this, error.toString(),
                         Toast.LENGTH_LONG).show();
@@ -1985,8 +1993,8 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
         mDatabaseHelperTeacher.deleteSimInfoData(billno);
 
-       sendResponseTimeAPI();
-       /*Random random = new Random();
+      // sendResponseTimeAPI();
+       Random random = new Random();
         String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
 
         if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
@@ -1997,7 +2005,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
             Intent intent = new Intent(InstallationInitial.this, PendingInstallationActivity.class);
             startActivity(intent);
             finish();
-        }*/
+        }
         mDatabaseHelperTeacher.deleteAllDataFromTable(inst_controller_ser.getText().toString().trim() + "-0");
     }
 
