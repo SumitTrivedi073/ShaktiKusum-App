@@ -225,6 +225,7 @@
     <string name="namePlate">NAME PLATE WITH FARMER</string>
 
     <string name="material_unloading_img">Material Unloading Images</string>
+    <string name="inHouse">In House Document Submit</string>
     <string name="installationImg">Installation Images</string>
     <string name="registrationImg">Registration Images</string>
     <string name="rejectedImg">Rejected Images</string>
@@ -569,6 +570,8 @@
     <string name="file_upload_failed_please_try_again">File Upload Failed, please try again!</string>
     <string name="file_upload_successfully_now_uploading_imei_file_to_server">File Upload Successfully now Uploading IMEI File To Server</string>
     <string name="installation_form">Installation Form</string>
+    <string name="enter_quantity">Enter the quantity of serial no.</string>
+    <string name="hint_quanty">Ex:- 1000</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

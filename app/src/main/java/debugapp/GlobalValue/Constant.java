@@ -4,6 +4,7 @@ import android.content.Context;
 
 public class Constant {
     private Context mContectt;
+    public static String quantity = "quantity";
     public static int Check_Signal_str = 0;
     public static String DBUG_MOB_1 = "0";
     public static String DBUG_MOB_2 = "0";

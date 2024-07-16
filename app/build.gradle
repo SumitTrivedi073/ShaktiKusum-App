@@ -9,8 +9,8 @@ android {
         minSdkVersion 26
         targetSdkVersion 34
         vectorDrawables.useSupportLibrary = true
-        versionCode 53
-        versionName "5.0.7"
+        versionCode 55
+        versionName "5.0.9"
         resourceConfigurations += ['en']
         multiDexEnabled true
         useLibrary 'org.apache.http.legacy'
@@ -88,6 +88,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx:21.5.0'
     implementation 'com.google.firebase:firebase-firestore:24.9.1'
     implementation 'com.google.firebase:firebase-messaging:23.3.1'
+    implementation 'androidx.activity:activity:1.8.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
