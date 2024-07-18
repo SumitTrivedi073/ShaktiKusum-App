@@ -124,6 +124,7 @@ public class BlueToothDebugNewActivity extends BaseActivity {
             DEVICE_NO, SIGNL_STREN, INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "",
             SIM_SR_NO = "", FAULT_CODE = "", SIM = "", RMS_STATUS = "", RMS_LAST_ONLINE_DATE = "", RMS_CURRENT_ONLINE_STATUS = "",
             mSimStatus,mSimStatusActive,inst_latitude_double,
+
             inst_longitude_double;
 
     float fvFrequency = 0,fvRMSVoltage = 0,fvOutputCurrent = 0,fvLPM = 0,fvPVVoltage = 0,fvPVCurrent = 0,fvInvTemp = 0;
