@@ -44,8 +44,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.angads25.toggle.widget.LabeledSwitch;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.gson.Gson;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
@@ -1069,7 +1067,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
         inst_pump_ser.setText(pump);
 
-        inst_controller_ser.setText(controller);
+        inst_controller_ser.setText("7F-0135-0-13-06-23");
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {
             spinner_simoprator.setSelection(db.getPosition(spinner_simoprator, installationBean.getSimoprator()));
@@ -1682,8 +1680,9 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
                             submitInstalltion();
                         } else {
+                            String message = jsonObject.getString("message");
                             stopProgressDialogue();
-                            CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
+                            CustomUtility.ShowToast(message, getApplicationContext());
                         }
 
 

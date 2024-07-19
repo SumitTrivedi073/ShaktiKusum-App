@@ -3970,8 +3970,9 @@ public class BlueToothDebugNewActivity extends BaseActivity {
 
                             onBackPressed();
                         } else {
+                            String message = jsonObject.getString("message");
                             stopProgressDialogue();
-                            CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
+                            CustomUtility.ShowToast(message, getApplicationContext());
                         }
 
 
