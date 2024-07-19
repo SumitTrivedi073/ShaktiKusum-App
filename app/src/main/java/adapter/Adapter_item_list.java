@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import activity.DeptDocSubActivity;
 import activity.DeviceShiftingActivity;
 import activity.GovtOffVisitActivity;
+import activity.InHouseDocumentSubmit;
 import activity.InstallationList;
 import activity.KusumCSurveyListActivty;
 import activity.RejectionInstallation;
@@ -78,6 +79,8 @@ public class Adapter_item_list extends RecyclerView.Adapter<Adapter_item_list.Ho
                      holder.icon_img.setImageResource(R.mipmap.rejected_installtion);
                  } else if (responseList.get(position).getItem_id().equalsIgnoreCase("026")) {
                      holder.icon_img.setImageResource(R.mipmap.solar_device);
+                 }else if (responseList.get(position).getItem_id().equalsIgnoreCase("011")) {
+                     holder.icon_img.setImageResource(R.mipmap.survey);
                  }
             }
             if (!TextUtils.isEmpty(responseList.get(position).getItem_name())) {
@@ -132,6 +135,10 @@ public class Adapter_item_list extends RecyclerView.Adapter<Adapter_item_list.Ho
                     } else if (responseList.get(position).getItem_id().equalsIgnoreCase("026")) {
                         CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
                         Intent mIntent1 = new Intent(context, DeviceShiftingActivity.class);
+                        context.startActivity(mIntent1);
+                    } else if (responseList.get(position).getItem_id().equalsIgnoreCase("011")) {
+                        CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
+                        Intent mIntent1 = new Intent(context, InHouseDocumentSubmit.class);
                         context.startActivity(mIntent1);
                     }
 

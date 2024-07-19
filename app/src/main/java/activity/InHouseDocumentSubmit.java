@@ -2,9 +2,12 @@ package activity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +33,12 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.shaktipumplimited.shaktikusum.R;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -37,8 +46,11 @@ import java.util.Objects;
 import java.util.Set;
 
 import adapter.BarCodeSelectionAdapter;
+import bean.InstallationBean;
 import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;
+import webservice.CustomHttpClient;
+import webservice.WebURL;
 
 public class InHouseDocumentSubmit extends AppCompatActivity implements BarCodeSelectionAdapter.BarCodeSelectionListener{
 
@@ -54,6 +66,7 @@ public class InHouseDocumentSubmit extends AppCompatActivity implements BarCodeS
     List<String> barcodenameList = new ArrayList<>();
     private Toolbar mToolbar;
     String serialNoLength , noOfModules = "";
+    String[] modules;
     boolean isSubmit = false;
 
 
@@ -132,10 +145,101 @@ public class InHouseDocumentSubmit extends AppCompatActivity implements BarCodeS
                Log.e("noOfModules===>",noOfModules.toString());
 
            }
+           if(isSubmit){
+               modules = noOfModules.split(",");
+               new saveData().execute();
+           }
+
        });
        
     }
-    
+    private class saveData extends AsyncTask<String, String, String> {
+        ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(InHouseDocumentSubmit.this);
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setMessage("Sending Data to server..please wait !");
+            progressDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String docno_sap = null;
+            String invc_done = null;
+            String obj2 = null;
+            JSONArray ja_invc_data = new JSONArray();
+            try {
+                for(int i=0;i<modules.length;i++){
+                    JSONObject jsonObj = new JSONObject();
+                    jsonObj.put("vblen", modules[i] );
+                    jsonObj.put("userid", CustomUtility.getSharedPreferences(getApplicationContext(), "userid"));
+                    jsonObj.put("project_no", CustomUtility.getSharedPreferences(getApplicationContext(), "projectid"));
+                    ja_invc_data.put(jsonObj);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Log.e("Param====>", ja_invc_data.toString());
+            final ArrayList<NameValuePair> param1_invc = new ArrayList<>();
+            param1_invc.add(new BasicNameValuePair("installation", String.valueOf(ja_invc_data)));
+            Log.e("url====>", WebURL.docSubCircle + param1_invc);
+            System.out.println("param1_invc_vihu==>>" + param1_invc);
+            try {
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().build();
+                StrictMode.setThreadPolicy(policy);
+                obj2 = CustomHttpClient.executeHttpPost1(WebURL.docSubCircle, param1_invc);
+                Log.e("OUTPUT1", "&&&&" + obj2);
+                System.out.println("OUTPUT1==>>" + obj2);
+                progressDialog.dismiss();
+                if (!obj2.equalsIgnoreCase("")) {
+                    JSONObject object = new JSONObject(obj2);
+                    String obj1 = object.getString("data_return");
+                    JSONArray ja = new JSONArray(obj1);
+                    Log.e("OUTPUT2", "&&&&" + ja);
+                    for (int i = 0; i < ja.length(); i++) {
+                        JSONObject jo = ja.getJSONObject(i);
+                        docno_sap = jo.getString("mdocno");
+                        invc_done = jo.getString("return");
+                        if (invc_done.equalsIgnoreCase("Y")) {
+                            progressDialog.dismiss();
+                            showingMessage(getResources().getString(R.string.dataSubmittedSuccessfully));
+                            finish();
+                        } else if (invc_done.equalsIgnoreCase("N")) {
+                            showingMessage(getResources().getString(R.string.dataNotSubmitted));
+                            progressDialog.dismiss();
+                        }
+                    }
+                } else {
+                    CustomUtility.showToast(InHouseDocumentSubmit.this, getResources().getString(R.string.somethingWentWrong));
+                    progressDialog.dismiss();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                progressDialog.dismiss();
+            }
+            return obj2;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss();
+        }
+    }
+
+    private void showingMessage(String message) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+
+                CustomUtility.showToast(InHouseDocumentSubmit.this, message);
+
+            }
+        });
+    }
+
     private void setAdapter() {
 
         barcodenameList = new ArrayList<>();
