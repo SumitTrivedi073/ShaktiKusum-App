@@ -1067,7 +1067,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
         inst_pump_ser.setText(pump);
 
-        inst_controller_ser.setText("7F-0135-0-13-06-23");
+        inst_controller_ser.setText(controller);
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {
             spinner_simoprator.setSelection(db.getPosition(spinner_simoprator, installationBean.getSimoprator()));
