@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +37,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -46,13 +44,12 @@ import java.util.Objects;
 import java.util.Set;
 
 import adapter.BarCodeSelectionAdapter;
-import bean.InstallationBean;
 import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
 
-public class InHouseDocumentSubmit extends AppCompatActivity implements BarCodeSelectionAdapter.BarCodeSelectionListener{
+public class DocSubCircle extends AppCompatActivity implements BarCodeSelectionAdapter.BarCodeSelectionListener{
 
     AlertDialog alertDialog;
     int barcodeSelectIndex, scannerCode;
@@ -85,7 +82,7 @@ public class InHouseDocumentSubmit extends AppCompatActivity implements BarCodeS
        // serialNoLength = Integer.parseInt(CustomUtility.getSharedPreferences(InHouseDocumentSubmit.this, Constant.quantity));
         Log.e("quantity", String.valueOf(serialNoLength));
 
-        if( CustomUtility.getSharedPreferences(InHouseDocumentSubmit.this, Constant.quantity).isEmpty()){
+        if( CustomUtility.getSharedPreferences(DocSubCircle.this, Constant.quantity).isEmpty()){
             ShowQuantityPopup();
         }
 
@@ -103,7 +100,7 @@ public class InHouseDocumentSubmit extends AppCompatActivity implements BarCodeS
         setSupportActionBar(mToolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getResources().getString(R.string.inHouse));
+        getSupportActionBar().setTitle(getResources().getString(R.string.docSubCircle));
 
         mToolbar.setNavigationOnClickListener(v -> onBackPressed());
 
@@ -122,7 +119,7 @@ public class InHouseDocumentSubmit extends AppCompatActivity implements BarCodeS
                    } else {
                        if (set.contains(barcodenameList.get(i).toUpperCase())) {
                            isSubmit = false;
-                           CustomUtility.ShowToast(barcodenameList.get(i) + getResources().getString(R.string.moduleMultipleTime), InHouseDocumentSubmit.this);
+                           CustomUtility.ShowToast(barcodenameList.get(i) + getResources().getString(R.string.moduleMultipleTime), DocSubCircle.this);
                            break;
                        } else {
                            set.add(barcodenameList.get(i).toUpperCase());
@@ -158,7 +155,7 @@ public class InHouseDocumentSubmit extends AppCompatActivity implements BarCodeS
 
         @Override
         protected void onPreExecute() {
-            progressDialog = new ProgressDialog(InHouseDocumentSubmit.this);
+            progressDialog = new ProgressDialog(DocSubCircle.this);
             progressDialog.setCancelable(false);
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setMessage("Sending Data to server..please wait !");
@@ -174,7 +171,7 @@ public class InHouseDocumentSubmit extends AppCompatActivity implements BarCodeS
             try {
                 for(int i=0;i<modules.length;i++){
                     JSONObject jsonObj = new JSONObject();
-                    jsonObj.put("vblen", modules[i] );
+                    jsonObj.put("vbeln", modules[i] );
                     jsonObj.put("userid", CustomUtility.getSharedPreferences(getApplicationContext(), "userid"));
                     jsonObj.put("project_no", CustomUtility.getSharedPreferences(getApplicationContext(), "projectid"));
                     ja_invc_data.put(jsonObj);
@@ -214,7 +211,7 @@ public class InHouseDocumentSubmit extends AppCompatActivity implements BarCodeS
                         }
                     }
                 } else {
-                    CustomUtility.showToast(InHouseDocumentSubmit.this, getResources().getString(R.string.somethingWentWrong));
+                    CustomUtility.showToast(DocSubCircle.this, getResources().getString(R.string.somethingWentWrong));
                     progressDialog.dismiss();
                 }
             } catch (Exception e) {
@@ -234,7 +231,7 @@ public class InHouseDocumentSubmit extends AppCompatActivity implements BarCodeS
         runOnUiThread(new Runnable() {
             public void run() {
 
-                CustomUtility.showToast(InHouseDocumentSubmit.this, message);
+                CustomUtility.showToast(DocSubCircle.this, message);
 
             }
         });
@@ -248,7 +245,7 @@ public class InHouseDocumentSubmit extends AppCompatActivity implements BarCodeS
         }
         Log.e("barcodenameList======>", String.valueOf(barcodenameList.size()));
 
-        barCodeSelectionAdapter = new BarCodeSelectionAdapter(InHouseDocumentSubmit.this, barcodenameList);
+        barCodeSelectionAdapter = new BarCodeSelectionAdapter(DocSubCircle.this, barcodenameList);
         barcodeListView.setHasFixedSize(true);
         barcodeListView.setAdapter(barCodeSelectionAdapter);
         barCodeSelectionAdapter.BarCodeSelection(this);
@@ -256,11 +253,11 @@ public class InHouseDocumentSubmit extends AppCompatActivity implements BarCodeS
 
     @SuppressLint("MissingInflatedId")
     private void ShowQuantityPopup() {
-        LayoutInflater inflater = (LayoutInflater) InHouseDocumentSubmit.this
+        LayoutInflater inflater = (LayoutInflater) DocSubCircle.this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.inhousequantiypopup,
                 null);
-        final AlertDialog.Builder builder = new AlertDialog.Builder(InHouseDocumentSubmit.this, R.style.MyDialogTheme);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(DocSubCircle.this, R.style.MyDialogTheme);
 
         builder.setView(layout);
         builder.setCancelable(false);
@@ -278,11 +275,11 @@ public class InHouseDocumentSubmit extends AppCompatActivity implements BarCodeS
 
         submit.setOnClickListener(v -> {
             if(totalQuantity.getText().toString().isEmpty()){
-                CustomUtility.showToast(InHouseDocumentSubmit.this,getResources().getString(R.string.enter_quantity));
+                CustomUtility.showToast(DocSubCircle.this,getResources().getString(R.string.enter_quantity));
             } else{
                 Log.e("totalQuantity==>",  totalQuantity.getText().toString());
                 serialNoLength = totalQuantity.getText().toString();
-                CustomUtility.setSharedPreference(InHouseDocumentSubmit.this, serialNoLength, Constant.quantity);
+                CustomUtility.setSharedPreference(DocSubCircle.this, serialNoLength, Constant.quantity);
                 inst_module_ser_no.setText(totalQuantity.getText().toString());
                 barcodeLayout.setVisibility(View.VISIBLE);
                 setAdapter();

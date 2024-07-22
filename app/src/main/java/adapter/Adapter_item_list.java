@@ -16,11 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.shaktipumplimited.shaktikusum.R;
 import java.util.ArrayList;
 
-import activity.DeptDocSubActivity;
 import activity.DeviceShiftingActivity;
-import activity.GovtOffVisitActivity;
-import activity.InHouseDocumentSubmit;
+import activity.DocSubHO;
+import activity.DocSubCircle;
 import activity.InstallationList;
+import activity.JointInspection;
 import activity.KusumCSurveyListActivty;
 import activity.RejectionInstallation;
 import activity.RoutePlanActivity;
@@ -100,11 +100,11 @@ public class Adapter_item_list extends RecyclerView.Adapter<Adapter_item_list.Ho
                         context.startActivity(mIntent1);
                     } else if (responseList.get(position).getItem_id().equalsIgnoreCase("010")) {
                         CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
-                        Intent intent = new Intent(context, GovtOffVisitActivity.class);
+                        Intent intent = new Intent(context, JointInspection.class);
                         context.startActivity(intent);
                     } else if (responseList.get(position).getItem_id().equalsIgnoreCase("012")) {
                         CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
-                        Intent intent = new Intent(context, DeptDocSubActivity.class);
+                        Intent intent = new Intent(context, DocSubHO.class);
                         context.startActivity(intent);
                     } else if (responseList.get(position).getItem_id().equalsIgnoreCase("017")) {
                         if(CustomUtility.getSharedPreferences(context, "projectid").equals("1111")){
@@ -138,7 +138,7 @@ public class Adapter_item_list extends RecyclerView.Adapter<Adapter_item_list.Ho
                         context.startActivity(mIntent1);
                     } else if (responseList.get(position).getItem_id().equalsIgnoreCase("011")) {
                         CustomUtility.setSharedPreference(context, "process_no", responseList.get(position).getItem_id());
-                        Intent mIntent1 = new Intent(context, InHouseDocumentSubmit.class);
+                        Intent mIntent1 = new Intent(context, DocSubCircle.class);
                         context.startActivity(mIntent1);
                     }
 

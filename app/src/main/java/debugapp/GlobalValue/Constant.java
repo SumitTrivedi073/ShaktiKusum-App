@@ -69,6 +69,7 @@ public class Constant {
     public static String longitude = "longitude";
 
     public static String beneficiaryData ="beneficiaryData";
+
     public static String partialDamage = "Partial Damage";
     public static String ok = "OK";
     public static String not_ok = "NOT OK";
