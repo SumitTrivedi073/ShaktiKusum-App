@@ -4,6 +4,7 @@ import android.content.Context;
 
 public class Constant {
     private Context mContectt;
+    public static String quantity = "quantity";
     public static int Check_Signal_str = 0;
     public static String DBUG_MOB_1 = "0";
     public static String DBUG_MOB_2 = "0";
@@ -68,6 +69,7 @@ public class Constant {
     public static String longitude = "longitude";
 
     public static String beneficiaryData ="beneficiaryData";
+
     public static String partialDamage = "Partial Damage";
     public static String ok = "OK";
     public static String not_ok = "NOT OK";
