@@ -22,6 +22,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -500,18 +501,20 @@ public class DemoRoadShowActivity extends BaseActivity implements ImageSelection
 
     private void ChooseDate() {
 
-        DatePickerDialog datePickerDialog =
-                new DatePickerDialog(this, R.style.DialogTheme,
-                        (view, year, month, dayOfMonth) -> {
-                            calendar.set(year, month, dayOfMonth, calendar.get(Calendar.HOUR_OF_DAY),
-                                    calendar.get(Calendar.MINUTE));
-                            MaterialReceivingDate.setText(dateFormat.format(calendar.getTime()));
-                            sendDateMaterial= sendDateFormat.format(calendar.getTime());
-                            Log.e("Date1==>",sendDateMaterial.toString());
-                        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH));
-        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-        datePickerDialog.show();
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog dialog = new DatePickerDialog(DemoRoadShowActivity.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker arg0, int year, int month, int day_of_month) {
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DAY_OF_MONTH, day_of_month);
+                MaterialReceivingDate.setText(dateFormat.format(calendar.getTime()));
+                sendDateMaterial= sendDateFormat.format(calendar.getTime());
+                Log.e("Date1==>",sendDateMaterial.toString());
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
+        dialog.show();
 
     }
 

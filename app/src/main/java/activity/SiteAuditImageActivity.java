@@ -387,6 +387,7 @@ public class SiteAuditImageActivity extends BaseActivity implements ImageSelecti
             gallery.setText(getResources().getString(R.string.display));
             camera.setText(getResources().getString(R.string.change));
         }
+        gallery.setVisibility(View.GONE);
 
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
