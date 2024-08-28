@@ -271,6 +271,7 @@ public class SiteAuditList extends BaseActivity {
 
             try {
 
+                Log.e("INST_CMP======>",WebURL.INST_CMP+"=====>"+param);
                 login_selec = CustomHttpClient.executeHttpPost1(WebURL.INST_CMP, param);
 
                 JSONObject object = new JSONObject(login_selec);

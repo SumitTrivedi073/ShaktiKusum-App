@@ -574,6 +574,8 @@
     <string name="docSubHO">Document submission at HO</string>
     <string name="docSubCircle">Document submit at circle off.</string>
     <string name="jointInsp">Joint Inspection</string>
+    <string name="applicant_aadhar_no">Applicant Aadhar no.</string>
+    <string name="valid_aadhar_no">Please enter valid aadhar no.</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

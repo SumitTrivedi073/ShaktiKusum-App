@@ -5,12 +5,12 @@ import java.io.Serializable;
 public class BeneficiaryRegistrationBean implements Serializable {
     public String serialId,familyId,beneficiaryFormApplicantName,applicantFatherName,
             applicantMobile,applicantVillage,applicantBlock,applicantTehsil,
-            applicantDistrict,pumpCapacity,applicantAccountNo,applicantIFSC,controllerType,pumpType,pumpAcDc;
+            applicantDistrict,pumpCapacity,applicantAccountNo,applicantIFSC,controllerType,pumpType,pumpAcDc,aadharNo;
 
     public BeneficiaryRegistrationBean() {
     }
 
-    public BeneficiaryRegistrationBean(String serialId, String familyId, String beneficiaryFormApplicantName, String applicantFatherName, String applicantMobile, String applicantVillage, String applicantBlock, String applicantTehsil, String applicantDistrict, String pumpCapacity, String applicantAccountNo, String applicantIFSC, String controllerType, String pumpType, String pumpAcDc) {
+    public BeneficiaryRegistrationBean(String serialId, String familyId, String beneficiaryFormApplicantName, String applicantFatherName, String applicantMobile, String applicantVillage, String applicantBlock, String applicantTehsil, String applicantDistrict, String pumpCapacity, String applicantAccountNo, String applicantIFSC, String controllerType, String pumpType, String pumpAcDc, String aadharNO) {
         this.serialId = serialId;
         this.familyId = familyId;
         this.beneficiaryFormApplicantName = beneficiaryFormApplicantName;
@@ -26,6 +26,7 @@ public class BeneficiaryRegistrationBean implements Serializable {
         this.controllerType = controllerType;
         this.pumpType = pumpType;
         this.pumpAcDc = pumpAcDc;
+        this.aadharNo = aadharNO;
     }
 
     public String getSerialId() {
@@ -146,5 +147,13 @@ public class BeneficiaryRegistrationBean implements Serializable {
 
     public void setPumpAcDc(String pumpAcDc) {
         this.pumpAcDc = pumpAcDc;
+    }
+
+    public String getAadharNo() {
+        return aadharNo;
+    }
+
+    public void setAadharNo(String aadharNo) {
+        this.aadharNo = aadharNo;
     }
 }

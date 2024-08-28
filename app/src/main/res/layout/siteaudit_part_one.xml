@@ -366,49 +366,48 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/wrkmn_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Workmanship and Work Quality"
+                    android:layout_marginTop="5dp"
                     android:drawableEnd="@drawable/ic_mendotry"
                     android:padding="5dp"
-                    android:id="@+id/wrkmn_txt"
-                    android:layout_marginTop="5dp"
+                    android:text="Workmanship and Work Quality"
                     android:textColor="@color/colorAccent"
                     android:textSize="14sp" />
 
                 <RadioGroup
+                    android:id="@+id/radioGroup5"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="1"
-                    android:orientation="horizontal"
                     android:layout_marginTop="10dp"
-                    android:id="@+id/radioGroup5">
+                    android:orientation="horizontal"
+                    android:weightSum="1">
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/wrk_ok"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:text="@string/ok"
-                        android:buttonTint="@color/colorAccent"
-                        android:textColor="@color/colorAccent"
                         android:layout_gravity="center|left"
+                        android:layout_weight="0.5"
+                        android:buttonTint="@color/colorAccent"
                         android:checked="false"
+                        android:text="@string/ok"
+                        android:textColor="@color/colorAccent"
                         android:textSize="13sp" />
 
                     <androidx.appcompat.widget.AppCompatRadioButton
                         android:id="@+id/wrk_notok"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center|right"
                         android:layout_weight="0.5"
                         android:buttonTint="@color/colorAccent"
-                        android:textColor="@color/colorAccent"
-                        android:layout_gravity="center|right"
                         android:checked="false"
                         android:text="@string/not_ok"
+                        android:textColor="@color/colorAccent"
                         android:textSize="13sp" />
-                </RadioGroup
-                    >
+                </RadioGroup>
 
                 <EditText
                     android:id="@+id/wrk_txt"
@@ -417,13 +416,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:hint="Remark"
-                    android:textColorHint="@color/colorAccent"
                     android:inputType="textMultiLine"
-                    android:paddingStart="8dp"
                     android:lines="4"
                     android:maxLines="6"
                     android:minLines="2"
+                    android:paddingStart="8dp"
                     android:scrollbars="vertical"
+                    android:textColorHint="@color/colorAccent"
                     android:textSize="13sp" />
 
             </LinearLayout>

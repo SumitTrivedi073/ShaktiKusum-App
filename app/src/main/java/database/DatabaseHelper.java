@@ -1295,7 +1295,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_PUMP_TYPE + " TEXT,"
             + KEY_CONTROLLER_TYPE + " TEXT,"
             + KEY_APPLICANT_ACCOUNT_NO + " TEXT,"
-            + KEY_APPLICANT_IFSC_CODE + " TEXT)";
+            + KEY_APPLICANT_IFSC_CODE + " TEXT,"
+            + KEY_AADHAR_NO + " TEXT)";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -3990,8 +3991,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String where = "";
         where = KEY_SITE_AUDIT_BILL_NO + "='" + billNo + "'";
-        if (CustomUtility.doesTableExist(db, CREATE_TABLE_SITE_AUDIT_IMAGES)) {
-            db.delete(CREATE_TABLE_SITE_AUDIT_IMAGES, where, null);
+        if (CustomUtility.doesTableExist(db, TABLE_SITE_AUDIT)) {
+            db.delete(TABLE_SITE_AUDIT, where, null);
         }
     }
 
@@ -5192,6 +5193,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_CONTROLLER_TYPE, beneficiaryRegistrationBean.getControllerType());
             values.put(KEY_APPLICANT_ACCOUNT_NO, beneficiaryRegistrationBean.getApplicantAccountNo());
             values.put(KEY_APPLICANT_IFSC_CODE, beneficiaryRegistrationBean.getApplicantIFSC());
+            values.put(KEY_AADHAR_NO, beneficiaryRegistrationBean.getAadharNo());
 
             // Insert Row
             long i = db.insert(TABLE_BENEFICIARY_REGISTRATION, null, values);
@@ -5225,6 +5227,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_CONTROLLER_TYPE, beneficiaryRegistrationBean.getControllerType());
             values.put(KEY_APPLICANT_ACCOUNT_NO, beneficiaryRegistrationBean.getApplicantAccountNo());
             values.put(KEY_APPLICANT_IFSC_CODE, beneficiaryRegistrationBean.getApplicantIFSC());
+            values.put(KEY_AADHAR_NO, beneficiaryRegistrationBean.getAadharNo());
 
             // Insert Row
             db.update(TABLE_BENEFICIARY_REGISTRATION, values, "serial_id = '" + beneficiaryRegistrationBean.getSerialId() + "'", null);
@@ -5274,6 +5277,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         beneficiaryRegistrationBean.setControllerType(cursor.getString(cursor.getColumnIndex(KEY_CONTROLLER_TYPE)));
                         beneficiaryRegistrationBean.setApplicantAccountNo(cursor.getString(cursor.getColumnIndex(KEY_APPLICANT_ACCOUNT_NO)));
                         beneficiaryRegistrationBean.setApplicantIFSC(cursor.getString(cursor.getColumnIndex(KEY_APPLICANT_IFSC_CODE)));
+                        beneficiaryRegistrationBean.setAadharNo(cursor.getString(cursor.getColumnIndex(KEY_AADHAR_NO)));
 
                         list_beneficiary.add(beneficiaryRegistrationBean);
                         cursor.moveToNext();

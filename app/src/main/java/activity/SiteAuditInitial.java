@@ -333,10 +333,10 @@ public class SiteAuditInitial extends BaseActivity {
                             if(selectedId5 != 0) {
 
                                 if(site_rating != 0.0) {
-                                    if(imageList.size()>0) {
+                                    if(imageList.size()>2) {
                                         new SyncAuditData().execute();
                                     } else {
-                                        Toast.makeText(context, "Please Select Images", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, "Please Select All Images", Toast.LENGTH_SHORT).show();
                                     }
 
                                 } else {

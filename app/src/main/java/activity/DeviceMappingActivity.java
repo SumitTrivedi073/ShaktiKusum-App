@@ -200,7 +200,7 @@ public class DeviceMappingActivity extends AppCompatActivity implements View.OnC
                     if (!deviceShiftingData.getLatlng().isEmpty()) {
                         String[] latlong = deviceShiftingData.getLatlng().split(",");
                        latitude = String.valueOf(Double.parseDouble(latlong[0]));
-                        longitude = String.valueOf(Double.parseDouble(latlong[1]));
+                        longitude  = String.valueOf(Double.parseDouble(latlong[1]));
                         Log.e("latitude======>", String.valueOf(latitude));
                         Log.e("longitude======>", String.valueOf(longitude));
 

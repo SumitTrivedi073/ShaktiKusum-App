@@ -2,14 +2,10 @@ package activity;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.Manifest.permission.BLUETOOTH;
-import static android.Manifest.permission.BLUETOOTH_CONNECT;
-import static android.Manifest.permission.BLUETOOTH_SCAN;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.READ_MEDIA_AUDIO;
 import static android.Manifest.permission.READ_MEDIA_IMAGES;
-import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.os.Build.VERSION.SDK_INT;
 import static utility.FileUtils.getPath;
@@ -84,7 +80,9 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     int selectedIndex;
     BeneficiaryRegistrationBean beneficiaryBeanList;
     boolean isUpdate = false;
-    EditText serialIdExt, familyIdExt, beneficiaryFormApplicantName, applicantFatherNameExt, applicantMobileExt, applicantVillageExt, applicantBlockExt, applicantTehsilExt, applicantDistrictExt, pumpCapacityExt, applicantAccountNoExt, applicantIFSCExt;
+    EditText serialIdExt, familyIdExt, beneficiaryFormApplicantName, applicantFatherNameExt, applicantMobileExt,
+            applicantVillageExt, applicantBlockExt, applicantTehsilExt, applicantDistrictExt, pumpCapacityExt,
+            applicantAccountNoExt, applicantIFSCExt, applicantAadharExt;
     Spinner controllerTypeSpinner, pumpTypeSpinner, pumpAcDcSpinner;
     TextView save;
     String selectedControllerType = "", selectedPumpType = "", selectedAcDc = "";
@@ -109,6 +107,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
 
                 serialIdExt.setText(beneficiaryBeanList.getSerialId());
                 familyIdExt.setText(beneficiaryBeanList.getFamilyId());
+                applicantAadharExt.setText(beneficiaryBeanList.getAadharNo());
                 beneficiaryFormApplicantName.setText(beneficiaryBeanList.getBeneficiaryFormApplicantName());
                 applicantFatherNameExt.setText(beneficiaryBeanList.getApplicantFatherName());
                 applicantMobileExt.setText(beneficiaryBeanList.getApplicantMobile());
@@ -156,6 +155,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
         pumpCapacityExt = findViewById(R.id.pumpCapacityExt);
         applicantAccountNoExt = findViewById(R.id.applicantAccountNoExt);
         applicantIFSCExt = findViewById(R.id.applicantIFSCExt);
+        applicantAadharExt = findViewById(R.id.applicantAadharExt);
 
         save = findViewById(R.id.save);
 
@@ -452,6 +452,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     }
 
     private void ValidationCheck() {
+        Log.e("length=====>", String.valueOf(applicantMobileExt.getText().toString().length()));
         if (serialIdExt.getText().toString().isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.enter_serial_id), getApplicationContext());
         } else if (familyIdExt.getText().toString().isEmpty()) {
@@ -464,6 +465,10 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
             CustomUtility.ShowToast(getResources().getString(R.string.enter_mobile_no), getApplicationContext());
         } else if (applicantMobileExt.getText().toString().length() != 10) {
             CustomUtility.ShowToast(getResources().getString(R.string.valid_mobile_no), getApplicationContext());
+        } else if (applicantAadharExt.getText().toString().isEmpty()) {
+            CustomUtility.ShowToast(getResources().getString(R.string.enter_mobile_no), getApplicationContext());
+        } else if (applicantAadharExt.getText().toString().length() < 11) {
+            CustomUtility.ShowToast(getResources().getString(R.string.valid_aadhar_no), getApplicationContext());
         } else if (applicantVillageExt.getText().toString().isEmpty()) {
             CustomUtility.ShowToast(getResources().getString(R.string.enter_village_name), getApplicationContext());
         } else if (applicantBlockExt.getText().toString().isEmpty()) {
@@ -489,14 +494,24 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
             if (imageArrayList.size() > 0) {
                 if (!imageArrayList.get(0).isImageSelected()) {
                     Toast.makeText(this, getResources().getString(R.string.select_acknowledgment_challan_image), Toast.LENGTH_SHORT).show();
-                } else if (!imageArrayList.get(1).isImageSelected()) {
-                    Toast.makeText(this, getResources().getString(R.string.select_land_proof), Toast.LENGTH_SHORT).show();
-                } else if (!imageArrayList.get(2).isImageSelected()) {
-                    Toast.makeText(this, getResources().getString(R.string.select_beneficiary_id_proof), Toast.LENGTH_SHORT).show();
-                } else if (!imageArrayList.get(3).isImageSelected()) {
-                    Toast.makeText(this, getResources().getString(R.string.select_payment_receipt), Toast.LENGTH_SHORT).show();
+                } else if (CustomUtility.getSharedPreferences(getApplicationContext(), "projectid").equals("3008")) {
+                    if (!imageArrayList.get(1).isImageSelected()) {
+                        Toast.makeText(this, getResources().getString(R.string.fard_land_proof), Toast.LENGTH_SHORT).show();
+                    } else if (!imageArrayList.get(2).isImageSelected()) {
+                        Toast.makeText(this, getResources().getString(R.string.select_beneficiary_id_proof), Toast.LENGTH_SHORT).show();
+                    } else if (!imageArrayList.get(3).isImageSelected()) {
+                        Toast.makeText(this, getResources().getString(R.string.select_payment_receipt), Toast.LENGTH_SHORT).show();
+                    } else {
+                        saveData();
+                    }
                 } else {
-                    saveData();
+                    if (!imageArrayList.get(2).isImageSelected()) {
+                        Toast.makeText(this, getResources().getString(R.string.select_beneficiary_id_proof), Toast.LENGTH_SHORT).show();
+                    } else if (!imageArrayList.get(3).isImageSelected()) {
+                        Toast.makeText(this, getResources().getString(R.string.select_payment_receipt), Toast.LENGTH_SHORT).show();
+                    } else {
+                        saveData();
+                    }
                 }
             }
         }
@@ -505,7 +520,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
     private void saveData() {
 
         if (CustomUtility.isInternetOn(getApplicationContext())) {
-            showprogressDialogue();
+
             saveInLocalDatabase();
 
             JSONArray ja_invc_data = new JSONArray();
@@ -516,6 +531,7 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                 jsonObj.put("APPLICANT_NAME", beneficiaryFormApplicantName.getText().toString().trim());
                 jsonObj.put("APPLICANT_FNAME", applicantFatherNameExt.getText().toString().trim());
                 jsonObj.put("APPLICANT_MOB", applicantMobileExt.getText().toString().trim());
+                jsonObj.put("aadhar_no",applicantAadharExt.getText().toString().trim());
                 jsonObj.put("APPLICANT_VILLAGE", applicantVillageExt.getText().toString().trim());
                 jsonObj.put("APPLICANT_BLOCK", applicantBlockExt.getText().toString().trim());
                 jsonObj.put("APPLICANT_TEHSIL", applicantTehsilExt.getText().toString().trim());
@@ -569,7 +585,8 @@ public class beneficiaryRegistrationForm extends BaseActivity implements ImageSe
                 applicantIFSCExt.getText().toString(),
                 selectedControllerType,
                 selectedPumpType,
-                selectedAcDc);
+                selectedAcDc,
+                applicantAadharExt.getText().toString().trim());
 
         if (db.isRecordExist(DatabaseHelper.TABLE_BENEFICIARY_REGISTRATION, DatabaseHelper.KEY_SERIAL_ID, serialIdExt.getText().toString())) {
             db.updateBeneficiaryRegistrationData(beneficiaryRegistrationBean);
