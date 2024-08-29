@@ -117,7 +117,9 @@ public class WebURL {
     public static final String saveShiftedDeviceToServer = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_shifting_data.htm?shift=";
 
     public static final String responseTIme = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/kusum_response_time.htm?";
-
+    public static final String docSubCircle = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/doc_sub_at_circle.htm";
+    public static final String docSubHO = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/doc_sub_at_ho.htm";
+    public static final String jointInsp = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/joint_insp.htm";
 
     /*--------------------------------------------------RMS APIS-------------------------------------------------------------------*/
     public static final String DEVICE_DETAILS = "Home/SAPOnlineDeviceDetails";

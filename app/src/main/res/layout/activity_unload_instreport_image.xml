@@ -59,14 +59,13 @@
 
                 </LinearLayout>
 
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/barcodeListView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                   android:nestedScrollingEnabled="true"
+                    android:nestedScrollingEnabled="true"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
