@@ -5,7 +5,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;

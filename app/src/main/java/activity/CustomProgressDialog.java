@@ -1,14 +1,9 @@
 package activity;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.TextView;
-
 import com.shaktipumplimited.shaktikusum.R;
 
 

@@ -6,9 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,16 +18,10 @@ import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-import activity.InstallationInitial;
 import activity.beneficiaryRegistrationForm;
 import bean.BeneficiaryRegistrationBean;
-import bean.InstallationListBean;
-import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
-import debugapp.PendingInstallationModel;
-import utility.CustomUtility;
 
 public class Adapter_Beneficiary_List  extends RecyclerView.Adapter<Adapter_Beneficiary_List.HomeCategoryViewHolder>implements Filterable {
     private final Context mcontext;

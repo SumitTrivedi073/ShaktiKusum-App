@@ -56,6 +56,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu">
         <activity
+            android:name="settingParameter.SettingParameterActivity"
+            android:exported="false" />
+        <activity
             android:name="activity.JointInspection"
             android:exported="false" />
         <activity
@@ -64,12 +67,7 @@
         <activity
             android:name="activity.DocSubCircle"
             android:exported="false" />
-        <activity
-            android:name="activity.InHouseDocSubmit"
-            android:exported="false" />
-        <activity
-            android:name="activity.InhouseDocSubmit"
-            android:exported="false" />
+
         <activity
             android:name="activity.DeviceShiftingActivity"
             android:exported="false" />
@@ -152,10 +150,7 @@
             android:name="activity.PendingInstallationActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity
-            android:name="activity.AddDamage_MissingActivity"
-            android:label="Add Complain"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name="activity.MainActivity"
             android:label="Shakti Kusum"
@@ -170,9 +165,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="activity.UpdateActivity"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name="debugapp.BlueToothDebugNewActivity"
             android:screenOrientation="portrait" />
@@ -207,28 +200,12 @@
             android:name="activity.UnloadInstReportImageActivity"
             android:label="Installation Unload Images"
             android:screenOrientation="portrait" />
-        <activity
-            android:name="activity.ShowDocument"
-            android:label="Show Images"
-            android:screenOrientation="portrait" />
+
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity
-            android:name="activity.OfflineData"
-            android:label="Offline Data"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="activity.OfflineDataReg"
-            android:label="Offline Registration Data"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="activity.DDSubmissionActivity"
-            android:label="DD Collection"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="activity.DeptDocSubActivity"
             android:label="Depart. Doc. Submission"
@@ -289,21 +266,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="activity.ShowDocument1"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="activity.ShowDocument2"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="activity.CameraActivitySurvey"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.shaktipumplimited.SetParameter.DeviceSettingActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.shaktipumplimited.SetParameter.PairedDeviceActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.shaktipumplimited.SetParameter.ScannedBarcodeActivity"
             android:screenOrientation="portrait" />
 
         <provider

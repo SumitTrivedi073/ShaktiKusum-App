@@ -6,6 +6,8 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,8 +34,6 @@ import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.gson.Gson;
 import com.shaktipumplimited.shaktikusum.R;
 
@@ -47,6 +47,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -494,6 +495,30 @@ public class CustomUtility {
         // Return if the string
         // matched the ReGex
         return m.matches();
+    }
+
+    public static boolean pairedDeviceListGloable(Context mContext) {
+
+        final BluetoothAdapter bAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        if(bAdapter==null){
+            Toast.makeText(mContext,"Bluetooth Not Supported",Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else{
+            Set<BluetoothDevice> pairedDevices = bAdapter.getBondedDevices();
+
+            if(pairedDevices.size()>0){
+
+                return true;
+            }
+            else
+            {
+                Toast.makeText(mContext, "No Paired Bluetooth Devices Found.", Toast.LENGTH_LONG).show();
+                return false;
+
+            }
+        }
     }
 
 }

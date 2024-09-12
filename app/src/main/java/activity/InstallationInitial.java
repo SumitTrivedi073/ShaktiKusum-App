@@ -51,8 +51,8 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.shaktipumplimited.SetParameter.PairedDeviceActivity;
-import com.shaktipumplimited.SettingModel.AllPopupUtil;
+import com.bluetoothpaireDevice.SetParameter.PairedDeviceActivity;
+
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
@@ -270,7 +270,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
             BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             if (mBluetoothAdapter.isEnabled()) {
-                if (AllPopupUtil.pairedDeviceListGloable(mContext)) {
+                if (CustomUtility.pairedDeviceListGloable(mContext)) {
                     if (WebURL.BT_DEVICE_NAME.equalsIgnoreCase("") || WebURL.BT_DEVICE_MAC_ADDRESS.equalsIgnoreCase("")) {
                         Intent intent = new Intent(mContext, PairedDeviceActivity.class);
                         intent.putExtra(Constant.ControllerSerialNumber, inst_controller_ser.getText().toString().trim());
@@ -552,20 +552,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                 }
 
                 return true;
-            case R.id.act_comp_add_damage_complain:
-                Intent mIntent = new Intent(InstallationInitial.this, AddDamage_MissingActivity.class);// original
-                Bundle extras = new Bundle();
-                extras.putString("bill_no", billno);///vbeln
-                extras.putString("state", state);//state
-                extras.putString("city", city);
-                extras.putString("name", name);
-                extras.putString("mobile", mobileno);
-                extras.putString("bill_date", billdate);
-                extras.putString("address", address);
-                extras.putString("kunnr", kunnr);
-                mIntent.putExtras(extras);
-                startActivity(mIntent);
-                return true;
+
             case R.id.act_comp_attach_image:
 
                 borewellstatus1 = CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno);

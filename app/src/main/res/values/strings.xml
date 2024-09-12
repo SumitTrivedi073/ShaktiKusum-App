@@ -576,6 +576,18 @@
     <string name="jointInsp">Joint Inspection</string>
     <string name="applicant_aadhar_no">Applicant Aadhar no.</string>
     <string name="valid_aadhar_no">Please enter valid aadhar no.</string>
+    <string name="alertTittle">Acknowledgement</string>
+    <string name="alertGetMessage">Data get successfully from drive.</string>
+    <string name="alertSetMessage">Data set successfully on drive.</string>
+    <string name="alertNotSetMessage">Data Not set on drive, Please try again.</string>
+    <string name="pleasesetdatafirst">Please Set Data First!</string>
+    <string name="addressnotfound">MOB address not found!</string>
+    <string name="getComData">Loading component list of drive....</string>
+    <string name="fetchingData">Fetching data....</string>
+    <string name="sendingData">Sending data....</string>
+    <string name="setalldata">Sending all data to drive.</string>
+    <string name="operationUnsuccessfull">Operation unsuccessful. Please connect the dongle</string>
+    <string name="plsConnectBt">Please connect bluetooth</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>
