@@ -5041,10 +5041,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
     @SuppressLint("Range")
-    public ArrayList<MotorParamListModel.Response> getRecordDetails(){
+    public ArrayList<MotorParamListModel.Response> getAllSettingParameters(String materialCode){
         ArrayList<MotorParamListModel.Response> arrayList = new ArrayList<>();
       SQLiteDatabase  database = this.getWritableDatabase();
-        Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_SETTING_PARAMETER_LIST, null);
+
+       String selectQuery = "SELECT * FROM " + TABLE_SETTING_PARAMETER_LIST
+                + " WHERE " + COLUMN_MaterialCode + " = '" + materialCode + "'";
+        Cursor mcursor = database.rawQuery(selectQuery, null);
 
         if(mcursor.getCount()>0){
             Log.e("Count====>", String.valueOf(mcursor.getCount()));

@@ -121,7 +121,7 @@ public class WebURL {
     public static final String docSubHO = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/doc_sub_at_ho.htm";
     public static final String jointInsp = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/joint_insp.htm";
 
-    public static final String paraMeterListAPI = "RMSApp/MoterParamList?id=";
+    public static final String paraMeterListAPI = "RMSApp/MoterParamList";
 
     /*--------------------------------------------------RMS APIS-------------------------------------------------------------------*/
     public static final String DEVICE_DETAILS = "Home/SAPOnlineDeviceDetails";

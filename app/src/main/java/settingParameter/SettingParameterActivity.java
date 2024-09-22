@@ -82,7 +82,7 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
         if (CustomUtility.isInternetOn(getApplicationContext())) {
             getAllParameters();
         } else {
-          //  offlineList();
+          setAdapter();
         }
     }
 
@@ -103,9 +103,8 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
                 Log.e("response===>", String.valueOf(motorParamListModel.getStatus().equals("true")));
                 if (motorParamListModel.getStatus().equals("true")) {
 
-                    parameterSettingList = motorParamListModel.getResponse();
-                    insertDataInLocal(parameterSettingList);
-                    Log.e("size", String.valueOf(parameterSettingList.size()));
+
+                    insertDataInLocal(motorParamListModel.getResponse());
 
                     setAdapter();
 
@@ -144,7 +143,7 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
     }
 
     private void setAdapter() {
-        Log.e("Setting", "List");
+        parameterSettingList = databaseHelper.getAllSettingParameters();
         if (parameterSettingList != null && parameterSettingList.size() > 0) {
              settingParameterAdapter = new SettingParameterAdapter(SettingParameterActivity.this, parameterSettingList, noDataFound);
             parametersList.setHasFixedSize(true);
@@ -152,7 +151,7 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
             settingParameterAdapter.EditItemClick(this);
             noDataFound.setVisibility(View.GONE);
             parametersList.setVisibility(View.VISIBLE);
-            Log.e("Set", "List");
+
         } else {
             noDataFound.setVisibility(View.VISIBLE);
             parametersList.setVisibility(View.GONE);

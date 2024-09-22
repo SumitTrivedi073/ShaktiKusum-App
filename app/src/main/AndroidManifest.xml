@@ -56,6 +56,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu">
         <activity
+            android:name="activity.PendingSettingParameterActivity"
+            android:exported="false" />
+        <activity
             android:name="settingParameter.SettingParameterActivity"
             android:exported="false" />
         <activity
@@ -67,7 +70,6 @@
         <activity
             android:name="activity.DocSubCircle"
             android:exported="false" />
-
         <activity
             android:name="activity.DeviceShiftingActivity"
             android:exported="false" />
@@ -150,7 +152,6 @@
             android:name="activity.PendingInstallationActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name="activity.MainActivity"
             android:label="Shakti Kusum"
@@ -165,7 +166,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="debugapp.BlueToothDebugNewActivity"
             android:screenOrientation="portrait" />
@@ -200,7 +200,6 @@
             android:name="activity.UnloadInstReportImageActivity"
             android:label="Installation Unload Images"
             android:screenOrientation="portrait" />
-
 
         <uses-library
             android:name="org.apache.http.legacy"
