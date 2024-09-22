@@ -33,7 +33,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
-import com.bluetoothpaireDevice.SetParameter.PairedDeviceActivity;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
@@ -46,6 +45,7 @@ import java.util.ArrayList;
 import adapter.Adapter_item_list;
 import bean.ItemNameBean;
 import bean.LoginBean;
+import bluetoothpaireDevice.SetParameter.PairedDeviceActivity;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;

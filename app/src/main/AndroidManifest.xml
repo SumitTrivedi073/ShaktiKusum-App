@@ -67,7 +67,9 @@
         <activity
             android:name="activity.DocSubCircle"
             android:exported="false" />
-
+        <activity
+            android:name="bluetoothpaireDevice.SetParameter.PairedDeviceActivity"
+            android:exported="false" />
         <activity
             android:name="activity.DeviceShiftingActivity"
             android:exported="false" />

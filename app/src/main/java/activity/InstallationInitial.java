@@ -51,7 +51,6 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.bluetoothpaireDevice.SetParameter.PairedDeviceActivity;
 
 import com.shaktipumplimited.shaktikusum.R;
 
@@ -81,6 +80,7 @@ import adapter.BarCodeSelectionAdapter;
 import bean.BTResonseData;
 import bean.ImageModel;
 import bean.InstallationBean;
+import bluetoothpaireDevice.SetParameter.PairedDeviceActivity;
 import database.DatabaseHelper;
 import de.hdodenhof.circleimageview.CircleImageView;
 import debugapp.Bean.SimDetailsInfoResponse;
