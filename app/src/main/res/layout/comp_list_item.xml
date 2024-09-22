@@ -51,21 +51,24 @@
                     android:padding="@dimen/_5sdp"
                     android:text="@string/Get_text"
                     android:textColor="@color/white"
+                    android:visibility="gone"
                     android:textStyle="bold"
                     android:background="@drawable/rounded_shape"
                     />
 
                 <EditText
                     android:id="@+id/editTextValue"
-                    android:layout_width="@dimen/_140sdp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_marginRight="@dimen/_5sdp"
                     android:layout_weight="2"
-                    android:background="@drawable/black_border_text"
+                    android:background="@drawable/rounded_corner"
                     android:inputType="numberDecimal"
                     android:maxLength="9"
                     android:maxLines="1"
+                    android:gravity="center"
+                    android:layout_gravity="center"
                     android:textAlignment="center"
                     android:textSize="@dimen/_14ssp" />
 
@@ -76,6 +79,7 @@
                     android:layout_height="match_parent"
                     android:padding="@dimen/_5sdp"
                     android:text="@string/Set_text"
+                    android:visibility="gone"
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     android:background="@drawable/rounded_shape"/>

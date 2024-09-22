@@ -24,6 +24,7 @@ import java.util.List;
 
 import debugapp.BlueToothDebugNewActivity;
 import debugapp.GlobalValue.Constant;
+import settingParameter.SettingParameterActivity;
 import webservice.WebURL;
 
 
@@ -75,7 +76,7 @@ public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAd
                     String BT_NAME_ORG = holder.txtDeviceNoID.getText().toString().trim();
                     Constant.BT_DEVICE_NAME = mDeviceNameList.get(position).toString();
                     Constant.BT_DEVICE_MAC_ADDRESS = mDeviceMACAddressList.get(position).toString();
-                    Intent intent = new Intent(mContext, BlueToothDebugNewActivity.class);
+                    Intent intent = new Intent(mContext, SettingParameterActivity.class);
                     intent.putExtra("BtNameHead", Constant.BT_DEVICE_NAME);
                     intent.putExtra("BtMacAddressHead", Constant.BT_DEVICE_MAC_ADDRESS);
                     if (ControllerSerialNumber.isEmpty()) {

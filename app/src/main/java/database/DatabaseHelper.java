@@ -5041,14 +5041,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
     @SuppressLint("Range")
-    public ArrayList<MotorParamListModel.Response> getAllSettingParameters(String materialCode){
+    public ArrayList<MotorParamListModel.Response> getParameterRecordDetails(String matCode){
         ArrayList<MotorParamListModel.Response> arrayList = new ArrayList<>();
       SQLiteDatabase  database = this.getWritableDatabase();
-
-       String selectQuery = "SELECT * FROM " + TABLE_SETTING_PARAMETER_LIST
-                + " WHERE " + COLUMN_MaterialCode + " = '" + materialCode + "'";
-        Cursor mcursor = database.rawQuery(selectQuery, null);
-
+        Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_SETTING_PARAMETER_LIST + " WHERE " + COLUMN_MaterialCode + " = " + matCode + "", null);
         if(mcursor.getCount()>0){
             Log.e("Count====>", String.valueOf(mcursor.getCount()));
             while (mcursor.moveToNext()) {
@@ -5072,6 +5068,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         return arrayList;
+    }
+
+    public void updateParameter(MotorParamListModel.Response response) {
+
+        SQLiteDatabase database = getWritableDatabase();
+        database.beginTransaction();
+        ContentValues values;
+
+        try {
+
+            values = new ContentValues();
+            values.put(COLUMN_pValue, response.getpValue());
+            values.put(COLUMN_ParametersName,response.getParametersName());
+            String  where = COLUMN_ParametersName + "='" + response.getParametersName() + "'" + " AND " +
+                    COLUMN_pmID + "='" + response.getPmId() + "'" ;
+
+            database.update(TABLE_SETTING_PARAMETER_LIST, values, where, null);
+
+            // Insert into database successfully.
+            database.setTransactionSuccessful();
+
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        } finally {
+            database.endTransaction();
+            database.close();
+
+
+        }
+
     }
 
     public void deleteParametersData() {

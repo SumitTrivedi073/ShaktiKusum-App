@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bluetoothpaireDevice.SetParameter.PairedDeviceActivity;
+import bluetoothpaireDevice.SetParameter.PairedDeviceActivity;
 import webservice.retrofit.BaseRequest;
 import webservice.retrofit.RequestReciever;
 import com.shaktipumplimited.shaktikusum.R;

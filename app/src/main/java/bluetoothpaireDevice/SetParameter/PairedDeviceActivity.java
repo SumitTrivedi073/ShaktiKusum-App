@@ -1,4 +1,4 @@
-package com.bluetoothpaireDevice.SetParameter;
+package bluetoothpaireDevice.SetParameter;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
