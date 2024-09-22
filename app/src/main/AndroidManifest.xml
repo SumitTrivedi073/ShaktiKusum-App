@@ -267,6 +267,10 @@
             android:name="activity.ShowDocument1"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name="bluetoothpaireDevice.SetParameter.PairedDeviceActivity"
+            android:screenOrientation="portrait" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="provider"

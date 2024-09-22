@@ -589,6 +589,8 @@
     <string name="operationUnsuccessfull">Operation unsuccessful. Please connect the dongle</string>
     <string name="plsConnectBt">Please connect bluetooth</string>
     <string name="setting_param">Setting Pramater</string>
+    <string name="pendingSettingParamters">Pending Setting Parameters</string>
+    <string name="set_parameters">Set Parameters</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

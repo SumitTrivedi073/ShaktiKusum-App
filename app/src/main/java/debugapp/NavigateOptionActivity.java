@@ -85,6 +85,7 @@ public class NavigateOptionActivity extends BaseActivity {
 
                         if (Constant.BT_DEVICE_NAME.equalsIgnoreCase("") || Constant.BT_DEVICE_MAC_ADDRESS.equalsIgnoreCase("")) {
                             Intent intent = new Intent(mContext, PairedDeviceActivity.class);
+                            intent.putExtra(Constant.isPeramterSet, "false");
                             mContext.startActivity(intent);
                         }
                         else
@@ -97,6 +98,7 @@ public class NavigateOptionActivity extends BaseActivity {
                             intent.putExtra("BtMacAddressHead",Constant.BT_DEVICE_MAC_ADDRESS );
                             mContext.startActivity(intent);*/
                             Intent intent = new Intent(mContext, PairedDeviceActivity.class);
+                            intent.putExtra(Constant.isPeramterSet, "false");
                             mContext.startActivity(intent);
                             //((Activity)mContext).finish();
                         }

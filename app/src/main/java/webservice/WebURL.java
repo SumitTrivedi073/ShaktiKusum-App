@@ -68,6 +68,8 @@ public class WebURL {
 
     public static final String PendingFeedback = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/pending_feedback_list.htm";
 
+    public static final String PendingSettingList = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/paramter_setting_list.htm";
+
     public static final String SendOTP = "http://control.yourbulksms.com/api/sendhttp.php?authkey=393770756d707334373701";
 
     public static final String SendOTPToServer = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_feedback.htm?feedaback=";

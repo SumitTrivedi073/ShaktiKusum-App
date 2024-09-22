@@ -35,6 +35,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import adapter.PendingSetParameterAdapter;
+import bean.ParameterSettingListModel;
+import bluetoothpaireDevice.SetParameter.PairedDeviceActivity;
+import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
 import debugapp.PendingInstallationModel;
 import utility.CustomUtility;
@@ -44,7 +47,7 @@ public class PendingSettingParameterActivity extends AppCompatActivity implement
 
     private RecyclerView customersList;
     private Toolbar mToolbar;
-    ArrayList<PendingInstallationModel> pendingInstallationModels;
+    ArrayList<ParameterSettingListModel.InstallationDatum> pendingInstallationModels;
     AlertDialog alertDialog;
 
     TextView noDataFound;
@@ -54,6 +57,8 @@ public class PendingSettingParameterActivity extends AppCompatActivity implement
     PendingSetParameterAdapter pendingSetParameterAdapter;
 
     RelativeLayout searchRelative;
+
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,18 +71,20 @@ public class PendingSettingParameterActivity extends AppCompatActivity implement
 
 
     private void Init() {
+        databaseHelper = new DatabaseHelper(getApplicationContext());
         mToolbar = findViewById(R.id.toolbar);
-        customersList = findViewById(R.id.pendingInstUnlList);
+        customersList = findViewById(R.id.customersList);
         noDataFound = findViewById(R.id.noDataFound);
         searchUser = findViewById(R.id.searchUser);
         searchRelative = findViewById(R.id.searchRelative);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getResources().getString(R.string.pendingInstallationVerification));
+        getSupportActionBar().setTitle(getResources().getString(R.string.pendingSettingParamters));
         if (CustomUtility.isInternetOn(getApplicationContext())) {
             getcustomersList();
         } else {
+            setAdapter();
             CustomUtility.ShowToast(getResources().getString(R.string.check_internet_connection), getApplicationContext());
         }
     }
@@ -138,7 +145,7 @@ public class PendingSettingParameterActivity extends AppCompatActivity implement
         pendingInstallationModels = new ArrayList<>();
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.PendingFeedback + "?project_no=" + CustomUtility.getSharedPreferences(getApplicationContext(), "projectid") + "&userid=" + CustomUtility.getSharedPreferences(getApplicationContext(), "userid") + "&project_login_no=01", null, new Response.Listener<JSONObject>() {
+                WebURL.PendingSettingList + "?project_no=" + CustomUtility.getSharedPreferences(getApplicationContext(), "projectid") + "&userid=" + CustomUtility.getSharedPreferences(getApplicationContext(), "userid") + "&project_login_no=01", null, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
@@ -146,15 +153,19 @@ public class PendingSettingParameterActivity extends AppCompatActivity implement
 
 
                 if (response.toString() != null && !response.toString().isEmpty()) {
-                    PendingInstallationModel pendingInstallationModel = new Gson().fromJson(response.toString(), PendingInstallationModel.class);
-                    if (pendingInstallationModel.getStatus().equals("true")) {
+                    ParameterSettingListModel parameterSettingListModel = new Gson().fromJson(response.toString(), ParameterSettingListModel.class);
+                    if (parameterSettingListModel.getInstallationData().size()>0) {
 
-                        pendingSetParameterAdapter = new PendingSetParameterAdapter(getApplicationContext(), pendingInstallationModel.getResponse(), noDataFound);
-                        customersList.setHasFixedSize(true);
-                        customersList.setAdapter(pendingSetParameterAdapter);
-                        pendingSetParameterAdapter.ItemCLick(PendingSettingParameterActivity.this);
-                        noDataFound.setVisibility(View.GONE);
-                        customersList.setVisibility(View.VISIBLE);
+                        for (int i=0; i<parameterSettingListModel.getInstallationData().size(); i++){
+
+                            if (!databaseHelper.isRecordExist(DatabaseHelper.TABLE_SETTING_PENDING_LIST, DatabaseHelper.KEY_BILL_NO, parameterSettingListModel.getInstallationData().get(i).getVbeln())) {
+                                databaseHelper.insertSettingPendingData(parameterSettingListModel.getInstallationData().get(i));
+
+                            }
+                        }
+
+
+                       setAdapter();
                     } else {
                         noDataFound.setVisibility(View.VISIBLE);
                         customersList.setVisibility(View.GONE);
@@ -183,6 +194,18 @@ public class PendingSettingParameterActivity extends AppCompatActivity implement
         requestQueue.add(jsonObjectRequest);
     }
 
+    private void setAdapter() {
+        pendingInstallationModels = databaseHelper.getPendingSettingList();
+        if(pendingInstallationModels.size()>0) {
+            pendingSetParameterAdapter = new PendingSetParameterAdapter(getApplicationContext(), pendingInstallationModels, noDataFound);
+            customersList.setHasFixedSize(true);
+            customersList.setAdapter(pendingSetParameterAdapter);
+            pendingSetParameterAdapter.ItemCLick(PendingSettingParameterActivity.this);
+            noDataFound.setVisibility(View.GONE);
+            customersList.setVisibility(View.VISIBLE);
+        }
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -191,7 +214,7 @@ public class PendingSettingParameterActivity extends AppCompatActivity implement
     }
 
     @Override
-    public void itemClickListner(List<PendingInstallationModel.Response> pendingFeedbackList, int position, String generatedVerificationCode) {
+    public void itemClickListner(ParameterSettingListModel.InstallationDatum pendingSettingList, int position) {
         WebURL.BT_DEVICE_NAME = "";
         WebURL.BT_DEVICE_MAC_ADDRESS = "";
         Constant.Bluetooth_Activity_Navigation = 1;///Debug
@@ -200,9 +223,11 @@ public class PendingSettingParameterActivity extends AppCompatActivity implement
         if (mBluetoothAdapter.isEnabled()) {
             if (CustomUtility.pairedDeviceListGloable(getApplicationContext())) {
                 if (WebURL.BT_DEVICE_NAME.equalsIgnoreCase("") || WebURL.BT_DEVICE_MAC_ADDRESS.equalsIgnoreCase("")) {
-                    Intent intent = new Intent(getApplicationContext(), com.bluetoothpaireDevice.SetParameter.PairedDeviceActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), PairedDeviceActivity.class);
+                    intent.putExtra(Constant.pendingSettingData,pendingSettingList);
                     intent.putExtra(Constant.ControllerSerialNumber, "");
                     intent.putExtra(Constant.debugDataExtract, "false");
+                    intent.putExtra(Constant.isPeramterSet, "true");
                     startActivity(intent);
                 }
             } else {

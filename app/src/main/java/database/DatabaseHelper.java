@@ -23,6 +23,7 @@ import bean.InstallationOfflineBean;
 import bean.ItemNameBean;
 import bean.KusumCSurveyBean;
 import bean.LoginBean;
+import bean.ParameterSettingListModel;
 import bean.RegistrationBean;
 import bean.RejectListBean;
 import bean.SimCardBean;
@@ -70,6 +71,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_SURVEY_PUMP_DATA = "tbl_survey_pump_data";
     public static final String TABLE_SIM_REPLACMENT_DATA = "tbl_sim_card_replacement";
     public static final String TABLE_DAMAGE_MISS_COMPLAIN = "tbl_damage_midd_complain";
+
+    public static final String TABLE_SETTING_PENDING_LIST = "tbl_setting_pending_list";
 
     public static final String TABLE_SITE_AUDIT = "tbl_site_audit";
     public static final String TABLE_KusumCImages = "tbl_kusumCImages";
@@ -185,6 +188,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_PDF = "pdf";
     public static final String KEY_SYNC = "sync";
     public static final String KEY_SET_MATNO = "set_matno";
+
+    public static final String KEY_MOTOR_MATNO = "motor_matno";
     public static final String KEY_SIMHA2 = "simha2";
     public static final String KEY_CUS_CONTACT_NO = "cus_contact_no";
     public static final String KEY_COUNTRY = "country";
@@ -287,10 +292,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_INSTALLATION_BILL_NO = "InstalltionBillNo", KEY_INSTALLATION_LATITUDE = "InstalltionLatitude",
             KEY_INSTALLATION_LONGITUDE = "InstalltionLongitude", KEY_INSTALLATION_POSITION = "InstalltionPosition";
 
-    public static final String KEY_BENEFICIARY_ID = "BENEFICIARYId", KEY_BENEFICIARY_NAME = "BENEFICIARYImageName",
-            KEY_BENEFICIARY_PATH = "BENEFICIARYPath", KEY_BENEFICIARY_IMAGE_SELECTED = "BENEFICIARYImageSelected",
-            KEY_BENEFICIARY_BILL_NO = "BENEFICIARYBillNo", KEY_BENEFICIARY_LATITUDE = "BENEFICIARYLatitude",
-            KEY_BENEFICIARY_LONGITUDE = "BENEFICIARYLongitude", KEY_BENEFICIARY_POSITION = "BENEFICIARYPosition";
 
     public static final String KEY_UNLOADING_ID = "unloadingId", KEY_UNLOADING_NAME = "unloadingImageName", KEY_UNLOADING_PATH = "unloadingPath", KEY_UNLOADING_IMAGE_SELECTED = "unloadingImageSelected", KEY_UNLOADING_BILL_NO = "unloadingBillNo";
 
@@ -1122,6 +1123,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_AADHAR_NO + " TEXT)";
 
 
+    private static final String CREATE_TABLE_SETTING_PENDING_LIST  = " CREATE TABLE " + TABLE_SETTING_PENDING_LIST + " ( "
+            + KEY_BILL_NO + " TEXT ,"
+            + KEY_CUST_NAME + " TEXT ,"
+            + KEY_CUSTOMER_CODE + " TEXT ,"
+            + KEY_PUMP_SERIAL_NO + " TEXT ,"
+            + KEY_MOTOR_SERIAL_NO + " TEXT ,"
+            + KEY_CONTROLLER_SERIAL_NO + " TEXT ,"
+            + KEY_CONTROLLER_MAT_NO + " TEXT ,"
+            + KEY_SET_MATNO + " TEXT ,"
+            + KEY_MOTOR_MATNO + " TEXT ,"
+            + KEY_BENEFICIARY + " TEXT)";
+
     private static final String CREATE_TABLE_SETTING_PARAMETER_LIST  = " CREATE TABLE " + TABLE_SETTING_PARAMETER_LIST + " ( "
             + COLUMN_pmID + " TEXT ,"
             + COLUMN_ParametersName + " TEXT ,"
@@ -1170,6 +1183,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_OFFLINE_CONTROLLER_IMAGE);
         db.execSQL(CREATE_TABLE_DEVICE_MAPPING_DATA);
         db.execSQL(CREATE_BENEFICIARY_REGISTRAION);
+        db.execSQL(CREATE_TABLE_SETTING_PENDING_LIST);
     }
 
     @Override
@@ -1206,6 +1220,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_OFFLINE_CONTROLLER_IMAGE_DATA);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_DEVICE_MAPPING_DATA);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_BENEFICIARY_REGISTRATION);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_SETTING_PENDING_LIST);
             // create newworkorder tables
             onCreate(db);
         }
@@ -5106,6 +5121,55 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             database.delete(TABLE_SETTING_PARAMETER_LIST, null, null);
         }
 
+    }
+
+
+    public void insertSettingPendingData(ParameterSettingListModel.InstallationDatum pendingSettingModel) {
+        SQLiteDatabase   database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_BILL_NO, String.valueOf(pendingSettingModel.getVbeln()));
+        contentValues.put(KEY_CUST_NAME, pendingSettingModel.getName());
+        contentValues.put(KEY_CUSTOMER_CODE, pendingSettingModel.getKunnr());
+        contentValues.put(KEY_PUMP_SERIAL_NO, pendingSettingModel.getPumpSernr());
+        contentValues.put(KEY_MOTOR_SERIAL_NO, String.valueOf(pendingSettingModel.getMotorSernr()));
+        contentValues.put(KEY_CONTROLLER_SERIAL_NO, pendingSettingModel.getControllerSernr());
+        contentValues.put(KEY_CONTROLLER_MAT_NO, pendingSettingModel.getControllerMatno());
+        contentValues.put(KEY_SET_MATNO, pendingSettingModel.getSetMatno());
+        contentValues.put(KEY_MOTOR_MATNO, String.valueOf(pendingSettingModel.getMotorMatnr()));
+        contentValues.put(KEY_BENEFICIARY, String.valueOf(pendingSettingModel.getBeneficiary()));
+        database.insert(TABLE_SETTING_PENDING_LIST, null, contentValues);
+        database.close();
+    }
+    @SuppressLint("Range")
+    public ArrayList<ParameterSettingListModel.InstallationDatum> getPendingSettingList(){
+        ArrayList<ParameterSettingListModel.InstallationDatum> arrayList = new ArrayList<>();
+        SQLiteDatabase  database = this.getWritableDatabase();
+        Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_SETTING_PENDING_LIST, null);
+        if(mcursor.getCount()>0){
+            Log.e("Count====>", String.valueOf(mcursor.getCount()));
+            while (mcursor.moveToNext()) {
+
+                ParameterSettingListModel.InstallationDatum pendingSettingModel = new ParameterSettingListModel.InstallationDatum();
+                pendingSettingModel.setVbeln(mcursor.getString(mcursor.getColumnIndex(KEY_BILL_NO)));
+                pendingSettingModel.setName(mcursor.getString(mcursor.getColumnIndex(KEY_CUST_NAME)));
+                pendingSettingModel.setKunnr(mcursor.getString(mcursor.getColumnIndex(KEY_CUSTOMER_CODE)));
+                pendingSettingModel.setPumpSernr(mcursor.getString(mcursor.getColumnIndex(KEY_PUMP_SERIAL_NO)));
+                pendingSettingModel.setMotorSernr(mcursor.getString(mcursor.getColumnIndex(KEY_MOTOR_SERIAL_NO)));
+                pendingSettingModel.setControllerSernr(mcursor.getString(mcursor.getColumnIndex(KEY_CONTROLLER_SERIAL_NO)));
+                pendingSettingModel.setControllerMatno(mcursor.getString(mcursor.getColumnIndex(KEY_CONTROLLER_MAT_NO)));
+                pendingSettingModel.setSetMatno(mcursor.getString(mcursor.getColumnIndex(KEY_SET_MATNO)));
+                pendingSettingModel.setMotorMatnr(mcursor.getString(mcursor.getColumnIndex(KEY_CONTROLLER_MAT_NO)));
+                pendingSettingModel.setBeneficiary(mcursor.getString(mcursor.getColumnIndex(KEY_BENEFICIARY)));
+                arrayList.add(pendingSettingModel);
+            }
+
+        }
+
+        mcursor.close();
+        database.close();
+
+
+        return arrayList;
     }
 
 }

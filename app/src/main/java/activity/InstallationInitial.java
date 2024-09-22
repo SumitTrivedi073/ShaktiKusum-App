@@ -111,7 +111,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
     Context mContext;
     DatabaseHelper db;
-    TextView save, txtDebugAppID, txtLatIDD, txtLongIDD, txtIBaseUpdateID, inst_controller_ser;
+    TextView save, txtDebugAppID, txtIBaseUpdateID, inst_controller_ser;
     InstallationBean installationBean;
     LabeledSwitch labeledSwitch;
     int index_simoprator, index_conntype, id = 0, vkp = 0, barcodeSelectIndex = 0, value;
@@ -275,6 +275,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                         Intent intent = new Intent(mContext, PairedDeviceActivity.class);
                         intent.putExtra(Constant.ControllerSerialNumber, inst_controller_ser.getText().toString().trim());
                         intent.putExtra(Constant.debugDataExtract, "false");
+                        intent.putExtra(Constant.isPeramterSet, "false");
                         startActivity(intent);
                     }
                 } else {
@@ -335,8 +336,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         }
         dataAdapter_simoprator = new ArrayAdapter<>(this, R.layout.spinner_item_left_optional, list_simoprator);
         dataAdapter_simoprator.setDropDownViewResource(R.layout.spinner_item_center);
-        txtLongIDD = findViewById(R.id.txtLongIDD);
-        txtLatIDD = findViewById(R.id.txtLatIDD);
+
 
         spinner_simoprator.setAdapter(dataAdapter_simoprator);
 
@@ -642,13 +642,10 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
             String mLOng = "" + gps.getLongitude();
 
 
-            txtLatIDD.setText(mLAt);
-            txtLongIDD.setText(mLOng);
+            inst_latitude_double = Double.parseDouble(mLAt);
+            inst_longitude_double = Double.parseDouble(mLOng);
 
-            inst_latitude_double = Double.parseDouble(txtLatIDD.getText().toString().trim());
-            inst_longitude_double = Double.parseDouble(txtLongIDD.getText().toString().trim());
-
-            if (txtLatIDD.getText().toString().trim().equalsIgnoreCase("")) {
+            if (mLAt.trim().equalsIgnoreCase("")) {
                 inst_latitude_double = 0.0;
             }
 

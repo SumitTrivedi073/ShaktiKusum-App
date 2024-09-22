@@ -101,7 +101,7 @@ public class SettingParameterAdapter extends RecyclerView.Adapter<SettingParamet
         LinearLayout lvlMainItemViewID;
         Button getBtn, setBtn;
         TextView title;
-        EditText editTextValue;
+        TextView editTextValue;
 
         public ViewHolder(View itemView) {
             super(itemView);

@@ -314,6 +314,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                             Intent intent = new Intent(context, PairedDeviceActivity.class);
                             intent.putExtra(Constant.ControllerSerialNumber, "");
                             intent.putExtra(Constant.debugDataExtract, "true");
+                            intent.putExtra(Constant.isPeramterSet, "false");
                             startActivity(intent);
                         }
                     } else {

@@ -19,6 +19,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/space_mid6"
             android:background="@color/white"
+
             android:orientation="vertical">
 
             <LinearLayout
@@ -27,6 +28,7 @@
                 android:layout_height="@dimen/_30sdp"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:layout_weight="2"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <RelativeLayout
@@ -50,75 +52,60 @@
 
                 </RelativeLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:visibility="visible"
-                    android:background="@drawable/blue_btn_round"
-                    android:layout_marginLeft="@dimen/_10sdp"
-                    android:layout_marginRight="@dimen/_10sdp">
-
-                    <TextView
-                        android:id="@+id/txtDebugAppID"
-                        android:layout_width="@dimen/_120sdp"
-                        android:layout_height="@dimen/_30sdp"
-                        android:layout_centerInParent="true"
-                        android:fontFamily="@font/open_sans_bold"
-                        android:gravity="center"
-                        android:text="Debug App"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/_10sdp" />
-
-                </RelativeLayout>
-
 
             </LinearLayout>
 
-
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/space_mid6"
-                android:layout_marginTop="@dimen/_2sdp"
-                android:layout_marginRight="@dimen/space_mid6">
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-
-                <TextView
-                    android:id="@+id/txtLatIDD"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLength="9"
-                    android:text="Lat"
-                    android:visibility="invisible" />
+                    android:layout_weight="1">
 
-                <TextView
-                    android:id="@+id/txtLongIDD"
-                    android:layout_width="wrap_content"
+                    <ImageView
+
+                        android:id="@+id/loaction"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/get_installation_location" />
+
+                    <ImageView
+                        android:id="@+id/geoIndigation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/loaction"
+                        android:padding="@dimen/space_mid6"
+                        android:src="@drawable/red_icn" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLength="9"
-                    android:text="Long"
-                    android:visibility="invisible" />
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center">
 
+                    <TextView
+                        android:id="@+id/txtDebugAppID"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:background="@drawable/blue_btn_round"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:gravity="center"
+                        android:padding="@dimen/_10sdp"
+                        android:text="Debug App"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_10sdp" />
+                </LinearLayout>
 
-                <ImageView
-
-                    android:id="@+id/loaction"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/get_installation_location" />
-
-                <ImageView
-                    android:id="@+id/geoIndigation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/loaction"
-                    android:padding="@dimen/space_mid6"
-                    android:src="@drawable/red_icn" />
-
-            </RelativeLayout>
+            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/rlvCheckRMSDataID"

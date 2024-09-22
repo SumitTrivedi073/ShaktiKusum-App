@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import bean.ParameterSettingListModel;
 import bluetoothpaireDevice.Settingadapter.BTPairedDeviceAdapter;
 import com.shaktipumplimited.shaktikusum.R;
 
@@ -43,7 +44,9 @@ public class PairedDeviceActivity extends BaseActivity {
 
     private BluetoothAdapter bAdapter = BluetoothAdapter.getDefaultAdapter();
 
-    String ControllerSerialNumber,debugDataExtract;
+    String ControllerSerialNumber,debugDataExtract,isPeramterSet;
+
+    ParameterSettingListModel.InstallationDatum pendingSettingModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,9 @@ public class PairedDeviceActivity extends BaseActivity {
         if (getIntent().getExtras() != null) {
             ControllerSerialNumber = getIntent().getStringExtra(Constant.ControllerSerialNumber);
             debugDataExtract = getIntent().getStringExtra(Constant.debugDataExtract);
+            isPeramterSet = getIntent().getStringExtra(Constant.isPeramterSet);
+
+            pendingSettingModel = (ParameterSettingListModel.InstallationDatum) getIntent().getSerializableExtra(Constant.pendingSettingData);
         }
 
         try {
@@ -134,7 +140,8 @@ public class PairedDeviceActivity extends BaseActivity {
                 if (recyclerViewAdapter != null)
                     recyclerViewAdapter = null;
 
-                recyclerViewAdapter = new BTPairedDeviceAdapter(mContext, mDeviceNameList,mDeviceMACAddressList,ControllerSerialNumber,debugDataExtract);
+                recyclerViewAdapter = new BTPairedDeviceAdapter(mContext, mDeviceNameList,mDeviceMACAddressList,ControllerSerialNumber,debugDataExtract,isPeramterSet,
+                        pendingSettingModel);
                 rclSettingListViewID.setHasFixedSize(true);
                 rclSettingListViewID.setAdapter(recyclerViewAdapter);
                 CustomUtility.hideProgressDialog(PairedDeviceActivity.this);

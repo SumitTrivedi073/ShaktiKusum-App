@@ -22,6 +22,7 @@ import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.List;
 
+import bean.ParameterSettingListModel;
 import debugapp.BlueToothDebugNewActivity;
 import debugapp.GlobalValue.Constant;
 import settingParameter.SettingParameterActivity;
@@ -34,15 +35,18 @@ public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAd
 
     private List mDeviceNameList;
     private List mDeviceMACAddressList;
-    String ControllerSerialNumber,debugDataExtract;
+    String ControllerSerialNumber,debugDataExtract,isPeramterSet;
     LocationManager locationManager;
+    ParameterSettingListModel.InstallationDatum pendingSettingModel;
 
-    public BTPairedDeviceAdapter(Context mContext, List mDeviceNameList, List mDeviceMACAddressList, String controllerSerialNumber,String debugDataExtract) {
+    public BTPairedDeviceAdapter(Context mContext, List mDeviceNameList, List mDeviceMACAddressList, String controllerSerialNumber, String debugDataExtract, String isPeramterSet, ParameterSettingListModel.InstallationDatum pendingSettingModel) {
 
         this.mDeviceNameList = mDeviceNameList;
         this.mDeviceMACAddressList = mDeviceMACAddressList;
          this.ControllerSerialNumber = controllerSerialNumber;
          this.debugDataExtract = debugDataExtract;
+         this.isPeramterSet = isPeramterSet;
+         this.pendingSettingModel = pendingSettingModel;
         this.mContext = mContext;
         locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
 
@@ -68,6 +72,8 @@ public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAd
         holder.cardMainViewMyNotifyID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = null;
+
                 if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                         || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
                     WebURL.BT_DEVICE_NAME = mDeviceNameList.get(position).toString();
@@ -76,17 +82,23 @@ public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAd
                     String BT_NAME_ORG = holder.txtDeviceNoID.getText().toString().trim();
                     Constant.BT_DEVICE_NAME = mDeviceNameList.get(position).toString();
                     Constant.BT_DEVICE_MAC_ADDRESS = mDeviceMACAddressList.get(position).toString();
-                    Intent intent = new Intent(mContext, SettingParameterActivity.class);
-                    intent.putExtra("BtNameHead", Constant.BT_DEVICE_NAME);
-                    intent.putExtra("BtMacAddressHead", Constant.BT_DEVICE_MAC_ADDRESS);
-                    if (ControllerSerialNumber.isEmpty()) {
-                        intent.putExtra(Constant.ControllerSerialNumber, mDeviceNameList.get(position).toString());
+
+                    if(isPeramterSet.equals("true")) {
+                        intent = new Intent(mContext, SettingParameterActivity.class);
+                        intent.putExtra(Constant.pendingSettingData,pendingSettingModel);
                     } else {
-                        intent.putExtra(Constant.ControllerSerialNumber, ControllerSerialNumber);
-                    }
-                    intent.putExtra(Constant.debugDataExtract, debugDataExtract);
-                    mContext.startActivity(intent);
-                    ((Activity) mContext).finish();
+                        intent = new Intent(mContext, BlueToothDebugNewActivity.class);
+                        }
+                        intent.putExtra("BtNameHead", Constant.BT_DEVICE_NAME);
+                        intent.putExtra("BtMacAddressHead", Constant.BT_DEVICE_MAC_ADDRESS);
+                        if (ControllerSerialNumber.isEmpty()) {
+                            intent.putExtra(Constant.ControllerSerialNumber, mDeviceNameList.get(position).toString());
+                        } else {
+                            intent.putExtra(Constant.ControllerSerialNumber, ControllerSerialNumber);
+                        }
+                        intent.putExtra(Constant.debugDataExtract, debugDataExtract);
+                        mContext.startActivity(intent);
+                        ((Activity) mContext).finish();
 
                 } else {
                     buildAlertMessageNoGps();

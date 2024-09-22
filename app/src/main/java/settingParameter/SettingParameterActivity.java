@@ -2,10 +2,6 @@ package settingParameter;
 
 import static java.lang.Thread.sleep;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -26,7 +22,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import bean.ParameterSettingListModel;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
 import settingParameter.adapter.SettingParameterAdapter;
@@ -69,7 +70,8 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
     SettingParameterAdapter settingParameterAdapter;
     String BluetoothAddress;
     Toolbar toolbar;
-    RelativeLayout rlvSetAllViewID;
+    TextView rlvSetAllViewID;
+    ParameterSettingListModel.InstallationDatum pendingSettingModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,31 +99,29 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getResources().getString(R.string.setting_param));
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
-        if (CustomUtility.isInternetOn(getApplicationContext())) {
-            getAllParameters();
-        } else {
-          setAdapter();
-        }
     }
 
-    private void offlineList() {
-        parameterSettingList = databaseHelper.getParameterRecordDetails("9500001415");
-        setAdapter();
-    }
 
     private void retrieveValue() {
-        if(getIntent().getExtras()!=null){
-        BluetoothAddress = getIntent().getStringExtra("BtMacAddressHead");
-    }
+        if (getIntent().getExtras() != null) {
+            BluetoothAddress = getIntent().getStringExtra("BtMacAddressHead");
+            pendingSettingModel = (ParameterSettingListModel.InstallationDatum) getIntent().getSerializableExtra(Constant.pendingSettingData);
+            if (CustomUtility.isInternetOn(getApplicationContext())) {
+                getAllParameters();
+            } else {
+                setAdapter();
+            }
+        }
     }
 
     private void getAllParameters() {
         parameterSettingList = new ArrayList<>();
         CustomUtility.showProgressDialogue(this);
         RequestQueue mRequestQueue = Volley.newRequestQueue(this);
-        Log.e("url===>",CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl)+WebURL.paraMeterListAPI+"9500001415");
-        StringRequest mStringRequest = new StringRequest(Request.Method.GET, CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) + WebURL.paraMeterListAPI + "9500001415", response -> {
+        Log.e("url===>", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl));
+        StringRequest mStringRequest = new StringRequest(Request.Method.GET, CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) + WebURL.paraMeterListAPI , response -> {
             Log.e("response1===>", String.valueOf(response.toString()));
             if (!response.isEmpty()) {
                 MotorParamListModel motorParamListModel = new Gson().fromJson(response, MotorParamListModel.class);
@@ -130,8 +130,6 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
 
 
                     insertDataInLocal(motorParamListModel.getResponse());
-
-                    setAdapter();
                     CustomUtility.hideProgressDialog(this);
                 } else {
                     CustomUtility.hideProgressDialog(this);
@@ -157,19 +155,24 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
 
 
     private void insertDataInLocal(List<MotorParamListModel.Response> parameterSettingList) {
+        databaseHelper.deleteParametersData();
         for (int i = 0; i < parameterSettingList.size(); i++) {
-            DatabaseRecordInsert(parameterSettingList.get(i), String.valueOf(parameterSettingList.get(i).getpValue() * parameterSettingList.get(i).getFactor()));
+                DatabaseRecordInsert(parameterSettingList.get(i), String.valueOf(parameterSettingList.get(i).getpValue() * parameterSettingList.get(i).getFactor()));
+
         }
     }
 
     private void DatabaseRecordInsert(MotorParamListModel.Response response, String pValue) {
-        databaseHelper.insertParameterRecord(response,pValue);
+        databaseHelper.insertParameterRecord(response, pValue);
+        setAdapter();
     }
 
     private void setAdapter() {
-        parameterSettingList = databaseHelper.getAllSettingParameters();
+        String materialCode = pendingSettingModel.getSetMatno().replace("00000000", "");
+        parameterSettingList = databaseHelper.getParameterRecordDetails(materialCode.trim());
+        Log.e("parameterSettingList====>", String.valueOf(parameterSettingList.size()));
         if (parameterSettingList != null && parameterSettingList.size() > 0) {
-             settingParameterAdapter = new SettingParameterAdapter(SettingParameterActivity.this, parameterSettingList, noDataFound);
+            settingParameterAdapter = new SettingParameterAdapter(SettingParameterActivity.this, parameterSettingList, noDataFound);
             parametersList.setHasFixedSize(true);
             parametersList.setAdapter(settingParameterAdapter);
             settingParameterAdapter.EditItemClick(this);
