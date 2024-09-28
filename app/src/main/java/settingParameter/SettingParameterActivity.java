@@ -160,17 +160,18 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
                 DatabaseRecordInsert(parameterSettingList.get(i), String.valueOf(parameterSettingList.get(i).getpValue() * parameterSettingList.get(i).getFactor()));
 
         }
+        setAdapter();
     }
 
     private void DatabaseRecordInsert(MotorParamListModel.Response response, String pValue) {
         databaseHelper.insertParameterRecord(response, pValue);
-        setAdapter();
     }
 
     private void setAdapter() {
+
+      //  Log.e("Matno===>",pendingSettingModel.getSetMatno());
         String materialCode = pendingSettingModel.getSetMatno().replace("00000000", "");
         parameterSettingList = databaseHelper.getParameterRecordDetails(materialCode.trim());
-        Log.e("parameterSettingList====>", String.valueOf(parameterSettingList.size()));
         if (parameterSettingList != null && parameterSettingList.size() > 0) {
             settingParameterAdapter = new SettingParameterAdapter(SettingParameterActivity.this, parameterSettingList, noDataFound);
             parametersList.setHasFixedSize(true);
