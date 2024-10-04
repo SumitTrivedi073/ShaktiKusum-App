@@ -576,6 +576,7 @@
     <string name="jointInsp">Joint Inspection</string>
     <string name="applicant_aadhar_no">Applicant Aadhar no.</string>
     <string name="valid_aadhar_no">Please enter valid aadhar no.</string>
+    <string name="aadhar_card">Aadhar Card</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

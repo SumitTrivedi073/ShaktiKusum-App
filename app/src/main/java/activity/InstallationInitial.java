@@ -133,7 +133,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
     File selectedFile;
     EditText inst_date, bill_date, bill_no, cust_name, borewellstatus, reasontxt, inst_address, inst_make, inst_village,
             inst_state, inst_district, inst_tehsil, inst_mob_no, inst_panel_stand_qty, inst_panel_watt, inst_total_watt, inst_module_total_plate_watt, inst_no_of_module, inst_module_ser_no,
-            inst_motor_model, inst_motor_ser, inst_pump_model, inst_pump_ser, inst_controller_model, inst_simcard_num, inst_hp, inst_fathers_name;
+            inst_motor_model, inst_motor_ser, inst_pump_model, inst_pump_ser, inst_controller_model, inst_simcard_num, inst_hp, inst_fathers_name,aadharNoExt;
 
     double inst_latitude_double, inst_longitude_double;
     SimpleDateFormat simpleDateFormat;
@@ -337,7 +337,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         dataAdapter_simoprator.setDropDownViewResource(R.layout.spinner_item_center);
         txtLongIDD = findViewById(R.id.txtLongIDD);
         txtLatIDD = findViewById(R.id.txtLatIDD);
-
+        aadharNoExt = findViewById(R.id.aadharNoExt);
         spinner_simoprator.setAdapter(dataAdapter_simoprator);
 
         spinner_simoprator.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -818,7 +818,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
             }
 
-          //  if (!reasontxt.getText().toString().isEmpty()) {
+            if (!aadharNoExt.getText().toString().isEmpty()) {
 
                     SaveInLocalDataBase();
                     if (CustomUtility.isInternetOn(getApplicationContext())) {
@@ -829,10 +829,10 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                         startActivity(intent);
                         finish();
                     }
-            /*    } else {
-                    CustomUtility.ShowToast("Please Enter Installation Delay Reason.", getApplicationContext());
+                } else {
+                    CustomUtility.ShowToast("Please Enter Customer Aadhar no.", getApplicationContext());
                 }
-*/
+
 
 
         } else {
