@@ -69,7 +69,7 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
     List<String> itemNameList = new ArrayList<>();
     Toolbar toolbar;
     SurveyListResponse.Response surveyListResponse;
-    EditText applicantNameExt, contactNumberExt, applicationNumberExt, addressExt, siteWaterLevelExt, releventInfoExt;
+    EditText applicantNameExt, contactNumberExt, applicationNumberExt, addressExt, siteWaterLevelExt, releventInfoExt, aadharExt;
     TextView latitudeExt, longitudeExt,submitBtn;
     RadioButton radio_DarkZone_yesID, radio_DarkZone_NoID, electricConnection_yesID, electricConnection_NoID,
             InstallSolarPump_yesID, InstallSolarPump_NoID;
@@ -78,7 +78,7 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
     RecyclerView photoListView;
 
     String selectedSourceofWater = "",selectedBorewellSize = "",selectedPumpWaterLevel = "",selectedAcDc = "", selectedInternetConnectivity = "", selectedTypesOfIrrigation = "", selectedSouthfacingShadow = "",
-            selectedTypeOfPump = "",selectedPumpSetRating = "", latitude = "", longitude = "", Photo1 = "", Photo2 = "", Photo3 = "", Photo4 = "";
+            selectedTypeOfPump = "",selectedPumpSetRating = "", latitude = "", longitude = "", Photo1 = "", Photo2 = "", Photo3 = "", Photo4 = "", Photo5 = "";
 
     boolean isdarkzone,isElectricConnectionFormer,isUniversalPump;
 
@@ -137,6 +137,7 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
         pumpSetRatingSpinner = findViewById(R.id.pumpSetRatingSpinner);
         typeOfPumpSpinner = findViewById(R.id.typeOfPumpSpinner);
         photoListView = findViewById(R.id.photoListView);
+        aadharExt = findViewById(R.id.aadharExt);
         submitBtn = findViewById(R.id.submitBtn);
 
 
@@ -173,6 +174,8 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
             CustomUtility.showToast(Add_Survey_Activity.this,getResources().getString(R.string.enter_contact_number));
         }else if(applicationNumberExt.getText().toString().isEmpty()){
             CustomUtility.showToast(Add_Survey_Activity.this,getResources().getString(R.string.enter_application_number));
+        }else if(aadharExt.getText().toString().isEmpty()){
+            CustomUtility.showToast(Add_Survey_Activity.this,getResources().getString(R.string.enter_aadhar_no));
         }else if(addressExt.getText().toString().isEmpty()){
             CustomUtility.showToast(Add_Survey_Activity.this,getResources().getString(R.string.enter_name_of_village_block_and_district));
         }else if(latitudeExt.getText().toString().isEmpty()){
@@ -219,6 +222,7 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
             Photo2 = CustomUtility.getBase64FromBitmap(getApplicationContext(), imageArrayList.get(1).getImagePath());
             Photo3 = CustomUtility.getBase64FromBitmap(getApplicationContext(), imageArrayList.get(2).getImagePath());
             Photo4 = CustomUtility.getBase64FromBitmap(getApplicationContext(), imageArrayList.get(3).getImagePath());
+            Photo5 = CustomUtility.getBase64FromBitmap(getApplicationContext(), imageArrayList.get(4).getImagePath());
 
             if (CustomUtility.isInternetOn(getApplicationContext())) {
               new submitSurveyForm().execute();
@@ -299,6 +303,7 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
         imageArrayList = new ArrayList<>();
         itemNameList = new ArrayList<>();
         itemNameList.add(getResources().getString(R.string.watersourcephotograpth));
+        itemNameList.add(getResources().getString(R.string.beneficiary_id_proof));
         itemNameList.add(getResources().getString(R.string.transformer));
         itemNameList.add(getResources().getString(R.string.attechformphoto1));
         itemNameList.add(getResources().getString(R.string.attechformphoto2));
@@ -569,11 +574,13 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
                 jsonObj.put("PUMP_AC_DC", selectedAcDc);
                 jsonObj.put("VILLAGE", surveyListResponse.getCitycTxt());//userID
                 jsonObj.put("SHADOW_FREE_LAND", selectedSouthfacingShadow);
+                jsonObj.put("aadhar_no", aadharExt.getText().toString());
                 jsonObj.put("REMARK_ANY_OTH", releventInfoExt.getText().toString());//userID
                 jsonObj.put("photo1", Photo1);
                 jsonObj.put("photo2", Photo2);
                 jsonObj.put("photo3", Photo3);
                 jsonObj.put("photo4", Photo4);
+                jsonObj.put("photo5", Photo5);
 
 
                 if(radio_DarkZone_yesID.isChecked()){

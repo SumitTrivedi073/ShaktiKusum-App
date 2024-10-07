@@ -41,7 +41,7 @@ public class UnloadList extends BaseActivity {
             , contactno = "", controller = "", motor = "", simno = "", pump = "", regisno = "", projectno = ""
             , loginno = "", module_qty = "", sync = "", CONTACT_NO = "",inst_no_of_module_value="",HP="", simha2 = "",pumpLoad =""
             , set_matno = "", village = "", tehsil = "",beneficiary = "",pump_ser,motor_ser,controller_ser,
-            version ,user_id;
+            version ,user_id, aadhar_no = "";
 
     Context context;
     DatabaseHelper db;
@@ -253,11 +253,12 @@ public class UnloadList extends BaseActivity {
                         controller_ser = jo.getString("controller_sernr");
                         HP = jo.getString("hp");
                         pumpLoad = jo.getString("pump_load");
+                        aadhar_no = jo.getString("aadhar_no");
 
                         installationBean = new InstallationListBean(bill_no, CustomUtility.getSharedPreferences(context, "userid"),
                                 name, fathname, bill_no, kunnr, gst_bill_no, bill_date, disp_date, state, state_txt, district, district_txt, tehsil, village,
                                 contactno, controller, motor, pump, regisno, projectno, loginno, module_qty, address, simno, beneficiary, set_matno,
-                                simha2, sync, CONTACT_NO,"",HP,pump_ser,motor_ser,controller_ser,pumpLoad);
+                                simha2, sync, CONTACT_NO,"",HP,pump_ser,motor_ser,controller_ser,pumpLoad,aadhar_no);
 
                         if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_UNLOAD_LIST, DatabaseHelper.KEY_ENQ_DOC, bill_no)) {
                             db.updateUnloadInstallationListData(bill_no, installationBean);

@@ -43,7 +43,7 @@ import webservice.WebURL;
     , contactno = "", controller = "", motor = "", simno = "", pump = "", regisno = "", projectno = ""
     , loginno = "", module_qty = "", sync = "", CONTACT_NO = "",inst_no_of_module_value="", simha2 = "",pump_load =""
     , set_matno = "", village = "", tehsil = "",beneficiary = "",
-             version,  user_id;
+             version,  user_id, aadhar_no = "";
     Context context;
 
     DatabaseHelper db;
@@ -235,6 +235,7 @@ import webservice.WebURL;
                         CONTACT_NO = jo.getString("contact_no");
                         inst_no_of_module_value = jo.getString("inst_no_of_module_value");
                         pump_load = jo.getString("pump_load");
+                        aadhar_no = jo.getString("aadhar_no");
                     //    Log.e("pumpLoad======>",pump_load);
 
                         installationBean = new InstallationListBean(bill_no,
@@ -242,7 +243,7 @@ import webservice.WebURL;
                                 name, fathname, bill_no, kunnr, gst_bill_no, bill_date, disp_date, state, state_txt,
                                 district, district_txt, tehsil, village, contactno, controller, motor, pump, regisno, projectno,
                                 loginno, module_qty, address, simno, beneficiary, set_matno, simha2, sync, CONTACT_NO, inst_no_of_module_value,""
-                                ,"","",controller,pump_load);
+                                ,"","",controller,pump_load,aadhar_no);
                         if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_LIST, DatabaseHelper.KEY_ENQ_DOC, bill_no)) {
                             db.updateInstallationListData(bill_no, installationBean);
                         } else {

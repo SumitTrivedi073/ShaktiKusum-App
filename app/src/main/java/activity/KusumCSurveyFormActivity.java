@@ -79,7 +79,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
             pumpMakeEXT, voltageV1Ext, voltageV2Ext, voltageV3Ext, lineVoltageV1VoltExt, lineVoltageV2VoltExt, lineVoltageV3VoltExt,
             current1AmpExt, current2AmpExt, current3AmpExt, frequencyHzExt, powerFactor1Ext, powerFactor2Ext, powerFactor3Ext, BorwellDiameterExt, BorwellDepthExt, pumpSetDepthExt, pumpSetDischargeExt,
             pumpSetDeliveryExt, distanceFromProposedSolarPlantExt, electricConnectionRatingExt, exisCableDetailsExt, deliveryPipeLineExt, totalDynamicHeadExt, transformerRatingExt,
-            serviceLineExt, threePhaseSupplyExt, ElectricityBillMonthlyExt, StructureToWaterSourceExt, feederToFarmerSiteExt, additionalInfoExt,powerInVolt,expumpSetDischargeExt,extotalDynamicHeadExt;
+            serviceLineExt, threePhaseSupplyExt, ElectricityBillMonthlyExt, StructureToWaterSourceExt, feederToFarmerSiteExt, additionalInfoExt,powerInVolt,expumpSetDischargeExt,extotalDynamicHeadExt, aadharExt;
     Spinner categorySpinner, sourceofWaterSpinner, internetConnectivitySpinner, typesOfIrrigationSpinner, southfacingShadowSpinner,
             electicConnectionTypeSpinner, typeOfPumpSpinner, pumpSetRatingSpinner, neutralAvailabilitySpinner;
 
@@ -164,6 +164,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
         feederToFarmerSiteExt = findViewById(R.id.feederToFarmerSiteExt);
         additionalInfoExt = findViewById(R.id.additionalInfoExt);
         neutralAvailabilitySpinner = findViewById(R.id.neutralAvailabilitySpinner);
+        aadharExt = findViewById(R.id.aadharExt);
         submitBtn = findViewById(R.id.submitBtn);
 
         setSupportActionBar(mToolbar);
@@ -416,6 +417,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
         imageArrayList = new ArrayList<>();
         itemNameList = new ArrayList<>();
         itemNameList.add(getResources().getString(R.string.watersourcephotograpth));
+        itemNameList.add(getResources().getString(R.string.beneficiary_id_proof));
         itemNameList.add(getResources().getString(R.string.transformer));
         itemNameList.add(getResources().getString(R.string.attechformphoto1));
         itemNameList.add(getResources().getString(R.string.attechformphoto2));
