@@ -776,6 +776,8 @@
                 android:textColorHint="@color/colorAccent"
                 android:textColorLink="@color/colorAccent"
                 android:textIsSelectable="false"
+                android:inputType="number"
+                android:maxLength="12"
                 android:textSize="@dimen/size_small15" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -799,6 +801,8 @@
                 android:textColorHint="@color/colorAccent"
                 android:textColorLink="@color/colorAccent"
                 android:textIsSelectable="false"
+                android:inputType="number"
+                android:maxLength="10"
                 android:textSize="@dimen/size_small15" />
         </com.google.android.material.textfield.TextInputLayout>
 
