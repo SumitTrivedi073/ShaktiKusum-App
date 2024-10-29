@@ -135,14 +135,46 @@
                     android:textSize="@dimen/_12sdp" />
 
                 <EditText
-                    android:id="@+id/aadharExt"
+                    android:id="@+id/aadharNumberExt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:background="@drawable/edt_bg_shape"
                     android:hint="@string/enter_aadhar_no"
                     android:imeOptions="actionNext"
-                    android:inputType="text"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:padding="@dimen/_10sdp"
+                    android:singleLine="true"
+                    android:maxLength="12"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_12sdp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:text="@string/aadharRegMob"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_12sdp" />
+
+                <EditText
+                    android:id="@+id/aadharMobileExt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@drawable/edt_bg_shape"
+                    android:hint="@string/enter_aadhar_reg_no"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
                     android:maxLines="1"
                     android:padding="@dimen/_10sdp"
                     android:singleLine="true"

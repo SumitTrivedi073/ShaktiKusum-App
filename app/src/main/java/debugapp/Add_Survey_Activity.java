@@ -69,7 +69,9 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
     List<String> itemNameList = new ArrayList<>();
     Toolbar toolbar;
     SurveyListResponse.Response surveyListResponse;
-    EditText applicantNameExt, contactNumberExt, applicationNumberExt, addressExt, siteWaterLevelExt, releventInfoExt, aadharExt;
+
+
+    EditText applicantNameExt, contactNumberExt, applicationNumberExt, addressExt, siteWaterLevelExt, releventInfoExt, aadharExt,aadharMobileExt;
     TextView latitudeExt, longitudeExt,submitBtn;
     RadioButton radio_DarkZone_yesID, radio_DarkZone_NoID, electricConnection_yesID, electricConnection_NoID,
             InstallSolarPump_yesID, InstallSolarPump_NoID;
@@ -138,6 +140,7 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
         typeOfPumpSpinner = findViewById(R.id.typeOfPumpSpinner);
         photoListView = findViewById(R.id.photoListView);
         aadharExt = findViewById(R.id.aadharExt);
+        aadharMobileExt = findViewById(R.id.aadharMobileExt);
         submitBtn = findViewById(R.id.submitBtn);
 
 
@@ -176,6 +179,8 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
             CustomUtility.showToast(Add_Survey_Activity.this,getResources().getString(R.string.enter_application_number));
         }else if(aadharExt.getText().toString().isEmpty()){
             CustomUtility.showToast(Add_Survey_Activity.this,getResources().getString(R.string.enter_aadhar_no));
+        }else if(aadharMobileExt.getText().toString().isEmpty()){
+            CustomUtility.showToast(Add_Survey_Activity.this,getResources().getString(R.string.enter_aadhar_reg_no));
         }else if(addressExt.getText().toString().isEmpty()){
             CustomUtility.showToast(Add_Survey_Activity.this,getResources().getString(R.string.enter_name_of_village_block_and_district));
         }else if(latitudeExt.getText().toString().isEmpty()){
@@ -575,6 +580,7 @@ public class Add_Survey_Activity extends BaseActivity implements AdapterView.OnI
                 jsonObj.put("VILLAGE", surveyListResponse.getCitycTxt());//userID
                 jsonObj.put("SHADOW_FREE_LAND", selectedSouthfacingShadow);
                 jsonObj.put("aadhar_no", aadharExt.getText().toString());
+                jsonObj.put("aadhar_mob", aadharMobileExt.getText().toString());
                 jsonObj.put("REMARK_ANY_OTH", releventInfoExt.getText().toString());//userID
                 jsonObj.put("photo1", Photo1);
                 jsonObj.put("photo2", Photo2);

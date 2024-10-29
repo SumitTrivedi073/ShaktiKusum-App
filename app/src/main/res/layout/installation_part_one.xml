@@ -779,6 +779,29 @@
                 android:textSize="@dimen/size_small15" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:textColorHint="@color/colorAccent">
+
+            <EditText
+                android:id="@+id/aadharMobileExt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_mendotry"
+                android:drawablePadding="5dp"
+                android:focusable="true"
+                android:hint="@string/aadharRegMob"
+                android:shadowColor="@color/colorAccent"
+                android:singleLine="true"
+                android:textColorHighlight="@color/colorAccent"
+                android:textColorHint="@color/colorAccent"
+                android:textColorLink="@color/colorAccent"
+                android:textIsSelectable="false"
+                android:textSize="@dimen/size_small15" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

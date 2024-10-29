@@ -79,7 +79,8 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
             pumpMakeEXT, voltageV1Ext, voltageV2Ext, voltageV3Ext, lineVoltageV1VoltExt, lineVoltageV2VoltExt, lineVoltageV3VoltExt,
             current1AmpExt, current2AmpExt, current3AmpExt, frequencyHzExt, powerFactor1Ext, powerFactor2Ext, powerFactor3Ext, BorwellDiameterExt, BorwellDepthExt, pumpSetDepthExt, pumpSetDischargeExt,
             pumpSetDeliveryExt, distanceFromProposedSolarPlantExt, electricConnectionRatingExt, exisCableDetailsExt, deliveryPipeLineExt, totalDynamicHeadExt, transformerRatingExt,
-            serviceLineExt, threePhaseSupplyExt, ElectricityBillMonthlyExt, StructureToWaterSourceExt, feederToFarmerSiteExt, additionalInfoExt,powerInVolt,expumpSetDischargeExt,extotalDynamicHeadExt, aadharExt;
+            serviceLineExt, threePhaseSupplyExt, ElectricityBillMonthlyExt, StructureToWaterSourceExt, feederToFarmerSiteExt, additionalInfoExt,powerInVolt,expumpSetDischargeExt,extotalDynamicHeadExt, aadharExt,
+            aadharMobileExt;
     Spinner categorySpinner, sourceofWaterSpinner, internetConnectivitySpinner, typesOfIrrigationSpinner, southfacingShadowSpinner,
             electicConnectionTypeSpinner, typeOfPumpSpinner, pumpSetRatingSpinner, neutralAvailabilitySpinner;
 
@@ -165,6 +166,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
         additionalInfoExt = findViewById(R.id.additionalInfoExt);
         neutralAvailabilitySpinner = findViewById(R.id.neutralAvailabilitySpinner);
         aadharExt = findViewById(R.id.aadharExt);
+        aadharMobileExt = findViewById(R.id.aadharMobileExt);
         submitBtn = findViewById(R.id.submitBtn);
 
         setSupportActionBar(mToolbar);
@@ -225,6 +227,8 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
             exisCableDetailsExt.setText(kusumCSurveyBean.getCABLE_DET_MAKE());
             deliveryPipeLineExt.setText(kusumCSurveyBean.getPIPE_LEN_SIZE());
             totalDynamicHeadExt.setText(kusumCSurveyBean.getDYNAMIC_HEAD());
+            aadharExt.setText(kusumCSurveyBean.getAadharNo());
+            aadharMobileExt.setText(kusumCSurveyBean.getAadharRegMob());
 
             transformerRatingExt.setText(kusumCSurveyBean.getTRANSF_RATING());
             serviceLineExt.setText(kusumCSurveyBean.getSERVICE_LINE());
@@ -794,7 +798,7 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
                 totalDynamicHeadExt.getText().toString().trim(), transformerRatingExt.getText().toString().trim(),
                 serviceLineExt.getText().toString().trim(), threePhaseSupplyExt.getText().toString().trim(), ElectricityBillMonthlyExt.getText().toString().trim(),
                 selectedNeutralAvailability, StructureToWaterSourceExt.getText().toString().trim(), feederToFarmerSiteExt.getText().toString().trim(),
-                additionalInfoExt.getText().toString().trim(),powerInVolt.getText().toString().trim(),expumpSetDischargeExt.getText().toString().trim(),extotalDynamicHeadExt.getText().toString().trim(),imageArrayList.get(0).getImagePath(), imageArrayList.get(1).getImagePath(),
+                additionalInfoExt.getText().toString().trim(),powerInVolt.getText().toString().trim(),expumpSetDischargeExt.getText().toString().trim(),extotalDynamicHeadExt.getText().toString().trim(),aadharExt.getText().toString(),aadharMobileExt.getText().toString(),imageArrayList.get(0).getImagePath(), imageArrayList.get(1).getImagePath(),
                 imageArrayList.get(2).getImagePath(), imageArrayList.get(3).getImagePath(), imageArrayList.get(4).getImagePath(), imageArrayList.get(5).getImagePath());
 
 
@@ -893,6 +897,8 @@ public class KusumCSurveyFormActivity extends AppCompatActivity implements Image
                 jsonObj.put("DIST_FARMAR", feederToFarmerSiteExt.getText().toString().trim());
                 jsonObj.put("IFNO_REMARK", additionalInfoExt.getText().toString().trim());
 
+                jsonObj.put("aadhar_no", aadharExt.getText().toString());
+                jsonObj.put("aadhar_mob", aadharMobileExt.getText().toString());
 
                 jsonObj.put("photo1", Photo1);
                 jsonObj.put("photo2", Photo2);

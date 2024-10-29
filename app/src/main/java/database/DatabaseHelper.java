@@ -144,6 +144,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_MOBILE = "mobile";
     public static final String KEY_CONTACT_NO = "contactno";
     public static final String KEY_AADHAR_NO = "aadharno";
+    public static final String KEY_AADHAR_MOBILE = "aadhar_mobile";
     public static final String KEY_BANK_NAME = "bankname";
     public static final String KEY_BANK_ACC_NO = "bankaccno";
     public static final String KEY_ACC_TYPE = "accounttype";
@@ -808,7 +809,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_DEL_PUMP_LPM + " TEXT," + KEY_DEL_PIPE_LINE + " TEXT," + KEY_TOTAL_DYNAMIC_HEAD + " TEXT," +KEY_TRANSFORMER_RATING + " TEXT,"
             +KEY_SERVICE_LINE + " TEXT,"+KEY_THREE_PHASE + " TEXT,"+KEY_ELECTRICITY_BILL + " TEXT,"+KEY_NEUTRAL_AVAILABILITY + " TEXT,"
             +KEY_STURCTURE_WATER_SOURCE + " TEXT," +KEY_FEEDER_TO_FARMER + " TEXT," +KEY_ADDITIONAL_INFO + " TEXT,"
-            + KEY_EXDISCHARGE + " TEXT,"+ KEY_POWER_IN_VOLT + " TEXT,"+  KEY_EXDYNAMIC + " TEXT,"
+            + KEY_EXDISCHARGE + " TEXT,"+ KEY_POWER_IN_VOLT + " TEXT,"+  KEY_EXDYNAMIC + " TEXT,"+  KEY_AADHAR_NO + " TEXT,"+  KEY_AADHAR_MOBILE + " TEXT,"
             + KEY_PHOTO1 + " BLOB," + KEY_PHOTO2 + " BLOB," + KEY_PHOTO3 + " BLOB," + KEY_PHOTO4 + " BLOB," + KEY_PHOTO5 + " BLOB," + KEY_PHOTO6 + " BLOB," + KEY_DISTANCE + " TEXT)";
 
 
@@ -988,6 +989,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_BILL_DATE + " TEXT,"
             + KEY_CUST_NAME + " TEXT,"
             + KEY_AADHAR_NO + " TEXT,"
+            + KEY_AADHAR_MOBILE + " TEXT,"
             + KEY_FATH_NAME + " TEXT,"
             + KEY_STATE_TEXT + " TEXT,"
             + KEY_STATE + " TEXT,"
@@ -1797,6 +1799,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_HP, installationBean.getHP());
             values.put(KEY_PUMPLoad, installationBean.getPump_load());
             values.put(KEY_AADHAR_NO, installationBean.getAadhar_no());
+            values.put(KEY_AADHAR_MOBILE, installationBean.getAadhar_mobile());
             long i = db.insert(TABLE_INSTALLATION_LIST, null, values);
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
@@ -2194,6 +2197,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_HP, installationBean.getHP());
             values.put(KEY_PUMPLoad, installationBean.getPump_load());
             values.put(KEY_AADHAR_NO, installationBean.getAadhar_no());
+            values.put(KEY_AADHAR_MOBILE, installationBean.getAadhar_mobile());
             where = KEY_ENQ_DOC + "='" + enqdoc + "'";
             i = db.update(TABLE_INSTALLATION_LIST, values, where, null);
             db.setTransactionSuccessful();
@@ -2670,6 +2674,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_POWER_IN_VOLT,kusumCSurveyBean.getpowerInVolt());
             values.put(KEY_EXDISCHARGE,kusumCSurveyBean.getExDischarge());
             values.put(KEY_EXDYNAMIC,kusumCSurveyBean.getExDynamichead());
+            values.put(KEY_AADHAR_NO,kusumCSurveyBean.getAadharNo());
+            values.put(KEY_AADHAR_MOBILE,kusumCSurveyBean.getAadharRegMob());
 
             values.put(KEY_PHOTO1, kusumCSurveyBean.getPhoto1());
             values.put(KEY_PHOTO2, kusumCSurveyBean.getPhoto2());
@@ -2764,6 +2770,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_POWER_IN_VOLT,kusumCSurveyBean.getpowerInVolt());
             values.put(KEY_EXDISCHARGE,kusumCSurveyBean.getExDischarge());
             values.put(KEY_EXDYNAMIC,kusumCSurveyBean.getExDynamichead());
+            values.put(KEY_AADHAR_NO,kusumCSurveyBean.getAadharNo());
+            values.put(KEY_AADHAR_MOBILE,kusumCSurveyBean.getAadharRegMob());
 
             values.put(KEY_PHOTO1, kusumCSurveyBean.getPhoto1());
             values.put(KEY_PHOTO2, kusumCSurveyBean.getPhoto2());
@@ -3364,6 +3372,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         installationBean.setHP(cursor.getString(cursor.getColumnIndex(KEY_HP)));
                         installationBean.setPump_load(cursor.getString(cursor.getColumnIndex(KEY_PUMPLoad)));
                         installationBean.setAadhar_no(cursor.getString(cursor.getColumnIndex(KEY_AADHAR_NO)));
+                        installationBean.setAadhar_mobile(cursor.getString(cursor.getColumnIndex(KEY_AADHAR_MOBILE)));
                         list_document.add(installationBean);
                         cursor.moveToNext();
                     }
@@ -4293,6 +4302,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         kusumCSurveyBean.setpowerInVolt(cursor.getString(cursor.getColumnIndex(KEY_POWER_IN_VOLT)));
                         kusumCSurveyBean.setExDischarge(cursor.getString(cursor.getColumnIndex(KEY_EXDISCHARGE)));
                         kusumCSurveyBean.setExDynamichead(cursor.getString(cursor.getColumnIndex(KEY_EXDYNAMIC)));
+                        kusumCSurveyBean.setAadharNo(cursor.getString(cursor.getColumnIndex(KEY_AADHAR_NO)));
+                        kusumCSurveyBean.setAadharRegMob(cursor.getString(cursor.getColumnIndex(KEY_AADHAR_MOBILE)));
 
 
                         kusumCSurveyBean.setPhoto1(cursor.getString(cursor.getColumnIndex(KEY_PHOTO1)));
