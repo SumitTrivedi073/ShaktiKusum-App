@@ -229,6 +229,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
         itemNameList.add(getResources().getString(R.string.insideCOntroller));
         itemNameList.add(getResources().getString(R.string.outsideController));
         itemNameList.add(getResources().getString(R.string.namePlate));
+        itemNameList.add(getResources().getString(R.string.beneficiary_id_proof));
 
 
         for (int i = 0; i < itemNameList.size(); i++) {
@@ -315,7 +316,7 @@ public class InstReportImageActivity extends BaseActivity implements ImageSelect
         TextView cancel = layout.findViewById(R.id.cancel);
 
         if (value.equals("0")) {
-            if(selectedIndex==0 || selectedIndex==4|| selectedIndex==3) {
+            if(selectedIndex==0 || selectedIndex==4|| selectedIndex==3 || selectedIndex == 12) {
                 gallery.setVisibility(View.VISIBLE);
             }else {
                 gallery.setVisibility(View.GONE);

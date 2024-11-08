@@ -126,6 +126,9 @@ public class Adapter_Installation_list extends RecyclerView.Adapter<Adapter_Inst
                             extras.putString("NoOfModule", responseList.get(position).getNoOfModule());
                             extras.putString("HP", responseList.get(position).getHP());
                             extras.putString("PumpLoad", responseList.get(position).getPump_load());
+                            if(responseList.get(position).getAadhar_no()!=null && !responseList.get(position).getAadhar_no().isEmpty()){
+                                extras.putString("aadhar_no", responseList.get(position).getAadhar_no());
+                            }
                             in.putExtras(extras);
                             context.startActivity(in);
                         }
