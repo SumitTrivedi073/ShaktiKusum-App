@@ -1,5 +1,8 @@
 package activity;
 
+import static database.DatabaseHelper.KEY_BILL_NO;
+import static database.DatabaseHelper.TABLE_PARAMETER_SET_DATA;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -111,7 +114,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
     Context mContext;
     DatabaseHelper db;
-    TextView save, txtDebugAppID, txtIBaseUpdateID, inst_controller_ser;
+    TextView save, txtDebugAppID, txtIBaseUpdateID, inst_controller_ser,setParameterTxt;
     InstallationBean installationBean;
     LabeledSwitch labeledSwitch;
     int index_simoprator, index_conntype, id = 0, vkp = 0, barcodeSelectIndex = 0, value;
@@ -142,7 +145,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
     LinearLayout reason, moduleOneLL;
 
-    Boolean your_date_is_outdated = false, isDongleExtract = false;
+    Boolean your_date_is_outdated = false, isDongleExtract = false,isParameterSet = false;
 
     private Dialog dialog;
 
@@ -231,10 +234,8 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         moduleqty = extras.getString("moduleqty");
         CUS_CONTACT_NO = extras.getString("CUS_CONTACT_NO");
         BeneficiaryNo = extras.getString("BeneficiaryNo");
-
-
-
         PumpLoad = extras.getString("PumpLoad");
+
         try {
             Constant.BILL_NUMBER_UNIC = billno;
             String[] custnmStr = name.split("S/O", 2);
@@ -283,6 +284,34 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                 }
             } else {
                 startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
+            }
+        });
+
+        setParameterTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WebURL.BT_DEVICE_NAME = "";
+                WebURL.BT_DEVICE_MAC_ADDRESS = "";
+                Constant.Bluetooth_Activity_Navigation = 1;///Debug
+
+                BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                if (mBluetoothAdapter.isEnabled()) {
+                    if (CustomUtility.pairedDeviceListGloable(getApplicationContext())) {
+                        if (WebURL.BT_DEVICE_NAME.equalsIgnoreCase("") || WebURL.BT_DEVICE_MAC_ADDRESS.equalsIgnoreCase("")) {
+                            Intent intent = new Intent(getApplicationContext(), PairedDeviceActivity.class);
+                            intent.putExtra(Constant.pendingSettingData,set_matno);
+                            intent.putExtra(Constant.ControllerSerialNumber, "");
+                            intent.putExtra(Constant.debugDataExtract, "false");
+                            intent.putExtra(Constant.isPeramterSet, "true");
+                            intent.putExtra(Constant.billNo, billno);
+                            startActivity(intent);
+                        }
+                    } else {
+                        startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
+                    }
+                } else {
+                    startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
+                }
             }
         });
 
@@ -490,6 +519,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
             startActivity(intent);
         });
 
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -692,8 +722,11 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                                                                         if (DeviceStatus.equals(getResources().getString(R.string.online))) {
                                                                             if (imageList.size() > 5) {
 
-
-                                                                                saveInstalltion();
+                                                                                if(isParameterSet) {
+                                                                                    saveInstalltion();
+                                                                                }else {
+                                                                                    CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.pleaseSetParametersFirst));
+                                                                                }
 
                                                                             } else {
                                                                                 CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_all_image));
@@ -709,7 +742,11 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
 
                                                                                         if (imageList.size() > 5) {
-                                                                                            saveInstalltion();
+                                                                                            if(isParameterSet) {
+                                                                                                saveInstalltion();
+                                                                                            }else {
+                                                                                                CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.pleaseSetParametersFirst));
+                                                                                            }
 
                                                                                         } else {
                                                                                             CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_all_image));
@@ -881,7 +918,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                 spmd_sno, solar_controller_model, scm_sno, simoprator_text, conntype_text, simcard_num, regisno, BeneficiaryNo,PumpLoad
         );
 
-        if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_PUMP_DATA, DatabaseHelper.KEY_BILL_NO, inst_bill_no)) {
+        if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_PUMP_DATA, KEY_BILL_NO, inst_bill_no)) {
             db.updateInstallationData(inst_bill_no, installationBean);
 
         } else {
@@ -931,6 +968,10 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         scm_sno = inst_controller_ser.getText().toString();
 
         simcard_num = inst_simcard_num.getText().toString();
+        if(db.isRecordExist(TABLE_PARAMETER_SET_DATA,KEY_BILL_NO,billno)){
+            isParameterSet = db.isParameterSet(billno);
+        }
+
 
 
     }
@@ -993,6 +1034,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         inst_module_ser_no = findViewById(R.id.module_serial_no);
 
         labeledSwitch = findViewById(R.id.switchview);
+        setParameterTxt = findViewById(R.id.setParameterTxt);
 
         spinner_simoprator.setPrompt("Select SIM Oprator");
         spinner_conntype.setPrompt("Select Connection Type");
@@ -1412,6 +1454,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
 
         }
+
     }
 
 

@@ -54,6 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_INSTALLATION_OFFLINE_LIST = "tbl_installation_offline_list";
     public static final String TABLE_OFFLINE_SUBMITTED_LIST = "tbl_offline_submitted_list";
     public static final String TABLE_SETTING_PARAMETER_LIST = "tbl_setting_parameter_list";
+    public static final String TABLE_PARAMETER_SET_DATA = "tbl_parameter_set";
     public static final String TABLE_AUDITSITE_LIST = "tbl_auditsite_list";
     public static final String TABLE_REJECTION_LIST = "tbl_rejection_list";
     public static final String TABLE_SURVEY_LIST = "tbl_survey_list";
@@ -417,6 +418,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_MaterialCode = "MaterialCode";
     public static final String COLUMN_Unit = "Unit";
     public static final String COLUMN_offset = "Offsets";
+
+    public static final String KEY_PARAMETER_ID = "parameter_id";
+
+    public static final String KEY_PARAMETER_SET = "parameter_set";
+
 
 // Table Create Statements
 
@@ -1146,6 +1152,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_Unit + " TEXT ,"
             + COLUMN_offset + " TEXT)";
 
+    private static final String CREATE_PARAMETER_SET_DATA = "CREATE TABLE "
+            + TABLE_PARAMETER_SET_DATA + "(" + KEY_PARAMETER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," +KEY_BILL_NO+ " TEXT, " + KEY_PARAMETER_SET+" TEXT)";
+
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -1184,6 +1194,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_DEVICE_MAPPING_DATA);
         db.execSQL(CREATE_BENEFICIARY_REGISTRAION);
         db.execSQL(CREATE_TABLE_SETTING_PENDING_LIST);
+        db.execSQL(CREATE_PARAMETER_SET_DATA);
     }
 
     @Override
@@ -1221,6 +1232,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_DEVICE_MAPPING_DATA);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_BENEFICIARY_REGISTRATION);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_SETTING_PENDING_LIST);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_PARAMETER_SET_DATA);
             // create newworkorder tables
             onCreate(db);
         }
@@ -5140,6 +5152,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.insert(TABLE_SETTING_PENDING_LIST, null, contentValues);
         database.close();
     }
+
+    public void updateSettingPendingData(ParameterSettingListModel.InstallationDatum pendingSettingModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        ContentValues contentValues;
+        try {
+            contentValues = new ContentValues();
+            contentValues.put(KEY_BILL_NO, String.valueOf(pendingSettingModel.getVbeln()));
+            contentValues.put(KEY_CUST_NAME, pendingSettingModel.getName());
+            contentValues.put(KEY_CUSTOMER_CODE, pendingSettingModel.getKunnr());
+            contentValues.put(KEY_PUMP_SERIAL_NO, pendingSettingModel.getPumpSernr());
+            contentValues.put(KEY_MOTOR_SERIAL_NO, String.valueOf(pendingSettingModel.getMotorSernr()));
+            contentValues.put(KEY_CONTROLLER_SERIAL_NO, pendingSettingModel.getControllerSernr());
+            contentValues.put(KEY_CONTROLLER_MAT_NO, pendingSettingModel.getControllerMatno());
+            contentValues.put(KEY_SET_MATNO, pendingSettingModel.getSetMatno());
+            contentValues.put(KEY_MOTOR_MATNO, String.valueOf(pendingSettingModel.getMotorMatnr()));
+            contentValues.put(KEY_BENEFICIARY, String.valueOf(pendingSettingModel.getBeneficiary()));
+
+            // Insert Row
+            db.update(TABLE_SETTING_PENDING_LIST, contentValues, KEY_SET_MATNO+" = '" + pendingSettingModel.getSetMatno() + "'", null);
+            db.setTransactionSuccessful();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+    }
+
+
     @SuppressLint("Range")
     public ArrayList<ParameterSettingListModel.InstallationDatum> getPendingSettingList(){
         ArrayList<ParameterSettingListModel.InstallationDatum> arrayList = new ArrayList<>();
@@ -5170,6 +5212,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
         return arrayList;
+    }
+
+
+    public void insertParameterSet(String billNo, String isParameterSet) {
+        SQLiteDatabase   database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_BILL_NO, billNo);
+        contentValues.put(KEY_PARAMETER_SET, isParameterSet);
+        database.insert(TABLE_PARAMETER_SET_DATA, null, contentValues);
+        database.close();
+    }
+
+    public void updateParameterSet(String billNo, String isParameterSet) {
+        SQLiteDatabase   database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_BILL_NO, billNo);
+        contentValues.put(KEY_PARAMETER_SET, isParameterSet);
+        database.update(TABLE_PARAMETER_SET_DATA, contentValues, KEY_BILL_NO+" = '" + billNo + "'", null);
+        database.close();
+    }
+
+    public boolean isParameterSet(String billno) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT  *  FROM " + TABLE_PARAMETER_SET_DATA + " WHERE " + KEY_BILL_NO + " = '" +
+                billno + "'" + "AND " + KEY_PARAMETER_SET + " = '" + "true" + "'";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.getCount() <= 0) {
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        return true;
     }
 
 }

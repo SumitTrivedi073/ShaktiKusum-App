@@ -55,7 +55,11 @@ public class SettingParameterAdapter extends RecyclerView.Adapter<SettingParamet
         holder.setIsRecyclable(false);
         final MotorParamListModel.Response response = cmponentList.get(position);
         holder.title.setText(response.getParametersName());
-        holder.editTextValue.setText(String.valueOf(response.getpValue() * response.getFactor()));
+        if(response.getModbusaddress().equals("2006")){
+            holder.editTextValue.setText(String.valueOf(    (double) response.getpValue() / (double) 10));
+        }else {
+            holder.editTextValue.setText(String.valueOf(response.getpValue()));
+        }
 
         holder.getBtn.setOnClickListener(v -> itemclickListner.getBtnMethod(response, holder.editTextValue.getText().toString(), position));
         holder.setBtn.setOnClickListener(v -> itemclickListner.setBtnMethod(response, holder.editTextValue.getText().toString(), position));

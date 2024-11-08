@@ -153,5 +153,30 @@ public class MotorParamListModel {
         public void setSet(Boolean set) {
             IsSet = set;
         }
+
+        @Override
+        public String toString() {
+            return "Response{" +
+                    "pmId=" + pmId +
+                    ", parametersName='" + parametersName + '\'' +
+                    ", modbusaddress='" + modbusaddress + '\'' +
+                    ", mobBTAddress='" + mobBTAddress + '\'' +
+                    ", factor=" + factor +
+                    ", pValue=" + pValue +
+                    ", materialCode='" + materialCode + '\'' +
+                    ", unit='" + unit + '\'' +
+                    ", offset=" + offset +
+                    ", IsSet=" + IsSet +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "MotorParamListModel{" +
+                "status='" + status + '\'' +
+                ", message='" + message + '\'' +
+                ", response=" + response +
+                '}';
     }
 }

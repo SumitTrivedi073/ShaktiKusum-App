@@ -586,11 +586,14 @@
     <string name="fetchingData">Fetching data....</string>
     <string name="sendingData">Sending data....</string>
     <string name="setalldata">Sending all data to drive.</string>
-    <string name="operationUnsuccessfull">Operation unsuccessful. Please connect the dongle</string>
+    <string name="operationUnsuccessfull">Operation unsuccessful. </string>
     <string name="plsConnectBt">Please connect bluetooth</string>
     <string name="setting_param">Setting Pramater</string>
     <string name="pendingSettingParamters">Pending Setting Parameters</string>
     <string name="set_parameters">Set Parameters</string>
+    <string name="retrieveParameter">Refresh Parameters</string>
+    <string name="parameterSetSuccessfully">"Parameter Set Successfully "</string>
+    <string name="pleaseSetParametersFirst">Please Set All Parameter First!</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

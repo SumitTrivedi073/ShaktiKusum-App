@@ -44,9 +44,8 @@ public class PairedDeviceActivity extends BaseActivity {
 
     private BluetoothAdapter bAdapter = BluetoothAdapter.getDefaultAdapter();
 
-    String ControllerSerialNumber,debugDataExtract,isPeramterSet;
+    String ControllerSerialNumber,debugDataExtract,isPeramterSet,set_matno,billNo;
 
-    ParameterSettingListModel.InstallationDatum pendingSettingModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +73,8 @@ public class PairedDeviceActivity extends BaseActivity {
             debugDataExtract = getIntent().getStringExtra(Constant.debugDataExtract);
             isPeramterSet = getIntent().getStringExtra(Constant.isPeramterSet);
 
-            pendingSettingModel = (ParameterSettingListModel.InstallationDatum) getIntent().getSerializableExtra(Constant.pendingSettingData);
+            set_matno = getIntent().getStringExtra(Constant.pendingSettingData);
+            billNo = getIntent().getStringExtra(Constant.billNo);
         }
 
         try {
@@ -141,7 +141,7 @@ public class PairedDeviceActivity extends BaseActivity {
                     recyclerViewAdapter = null;
 
                 recyclerViewAdapter = new BTPairedDeviceAdapter(mContext, mDeviceNameList,mDeviceMACAddressList,ControllerSerialNumber,debugDataExtract,isPeramterSet,
-                        pendingSettingModel);
+                        set_matno,billNo);
                 rclSettingListViewID.setHasFixedSize(true);
                 rclSettingListViewID.setAdapter(recyclerViewAdapter);
                 CustomUtility.hideProgressDialog(PairedDeviceActivity.this);

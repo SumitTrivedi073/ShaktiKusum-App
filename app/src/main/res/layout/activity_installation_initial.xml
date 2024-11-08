@@ -64,31 +64,31 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center">
 
-                    <ImageView
-
-                        android:id="@+id/loaction"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@drawable/get_installation_location" />
-
-                    <ImageView
-                        android:id="@+id/geoIndigation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toEndOf="@+id/loaction"
-                        android:padding="@dimen/space_mid6"
-                        android:src="@drawable/red_icn" />
+                    <TextView
+                        android:id="@+id/setParameterTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:background="@drawable/blue_btn_round"
+                        android:fontFamily="@font/open_sans_bold"
+                        android:gravity="center"
+                        android:padding="@dimen/_10sdp"
+                        android:text="Set Parameter"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_10sdp" />
                 </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:layout_marginStart="@dimen/_5sdp"
                     android:gravity="center">
 
                     <TextView
@@ -105,6 +105,29 @@
                         android:textSize="@dimen/_10sdp" />
                 </LinearLayout>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageView
+
+                    android:id="@+id/loaction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/get_installation_location" />
+
+                <ImageView
+                    android:id="@+id/geoIndigation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/space_mid6"
+                    android:layout_gravity="center"
+
+                    android:src="@drawable/red_icn" />
             </LinearLayout>
 
             <RelativeLayout

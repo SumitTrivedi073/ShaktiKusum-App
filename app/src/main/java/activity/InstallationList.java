@@ -19,6 +19,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
@@ -27,11 +33,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import adapter.Adapter_Installation_list;
 import bean.InstallationListBean;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
+import settingParameter.model.MotorParamListModel;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
@@ -169,7 +177,10 @@ import webservice.WebURL;
                     recyclerView.setAdapter(null);
                     db.deleteInstallationListData();
                     WebURL.CHECK_DATA_UNOLAD = 0;
-                    new GetInstallationDataList_Task().execute();
+
+                    new getAllParameters().execute();
+
+
                 } else {
                     Toast.makeText(getApplicationContext(), "No internet Connection....", Toast.LENGTH_SHORT).show();
                 }
@@ -290,4 +301,104 @@ import webservice.WebURL;
             }
         }
     }
-}
+
+
+     private class getAllParameters extends AsyncTask<String, String, String> {
+
+         @Override
+         protected void onPreExecute() {
+             progressDialog = ProgressDialog.show(context, "", "Please Wait...");
+         }
+
+         @Override
+         protected String doInBackground(String... params) {
+             final ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
+              String login_selec = null;
+             try {
+                 login_selec = CustomHttpClient.executeHttpGet(CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) + WebURL.paraMeterListAPI);
+
+                 Log.e("URL====>",CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) + WebURL.paraMeterListAPI);
+                 JSONObject object = new JSONObject(login_selec);
+                 MotorParamListModel motorParamListModel = new Gson().fromJson(object.toString(), MotorParamListModel.class);
+                 Log.e("response2===>", String.valueOf(motorParamListModel.getStatus().equals("true")));
+
+                 if (motorParamListModel.getStatus().equals("true")) {
+                     insertDataInLocal(motorParamListModel.getResponse());
+                     if ((progressDialog != null) && progressDialog.isShowing()) {
+                         progressDialog.dismiss();
+                         progressDialog = null;
+                     }
+                 }
+             } catch (Exception e) {
+                 e.printStackTrace();
+                 if ((progressDialog != null) && progressDialog.isShowing()) {
+                     progressDialog.dismiss();
+                     progressDialog = null;
+                 }
+
+             }
+
+             return login_selec;
+         }
+
+         @SuppressLint("WrongConstant")
+         @Override
+         protected void onPostExecute(String result) {
+             // write display tracks logic here
+
+             if ((progressDialog != null) && progressDialog.isShowing()) {
+                 progressDialog.dismiss();
+                 progressDialog = null;
+             }
+             new GetInstallationDataList_Task().execute();
+         }
+     }
+     private void getAllParameters() {
+         progressDialog = ProgressDialog.show(context, "", "Please Wait...");
+         RequestQueue mRequestQueue = Volley.newRequestQueue(this);
+         Log.e("url===>", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) + WebURL.paraMeterListAPI);
+         StringRequest mStringRequest = new StringRequest(Request.Method.GET, CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) + WebURL.paraMeterListAPI , response -> {
+             Log.e("response1===>", String.valueOf(response.toString()));
+             if (!response.isEmpty()) {
+                progressDialog.dismiss();
+                 MotorParamListModel motorParamListModel = new Gson().fromJson(response, MotorParamListModel.class);
+                 Log.e("response2===>", String.valueOf(motorParamListModel.getStatus().equals("true")));
+                 if (motorParamListModel.getStatus().equals("true")) {
+                     insertDataInLocal(motorParamListModel.getResponse());
+
+                 } else {
+                   progressDialog.dismiss();
+                 }
+
+             } else {
+                 progressDialog.dismiss();
+             }
+
+         }, error -> {
+             progressDialog.dismiss();
+         });
+
+         mStringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                 DefaultRetryPolicy.DEFAULT_TIMEOUT_MS,
+                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,  // maxNumRetries = 0 means no retry
+                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+         mRequestQueue.add(mStringRequest);
+     }
+
+
+     private void insertDataInLocal(List<MotorParamListModel.Response> parameterSettingList) {
+         databaseHelper.deleteParametersData();
+         for (int i = 0; i < parameterSettingList.size(); i++) {
+             //  if(parameterSettingList.get(i).getMaterialCode().equals("9111129696")) {
+             DatabaseRecordInsert(parameterSettingList.get(i), String.valueOf(parameterSettingList.get(i).getpValue() * parameterSettingList.get(i).getFactor()));
+             // }
+         }
+     }
+     private void DatabaseRecordInsert(MotorParamListModel.Response response, String pValue) {
+        /*if(response.getMaterialCode().equals("9111129696")) {
+            Log.e("pValue====>", pValue+"====>"+response.getParametersName());
+        }*/
+         databaseHelper.insertParameterRecord(response, pValue);
+     }
+
+ }

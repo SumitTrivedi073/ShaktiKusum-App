@@ -35,18 +35,19 @@ public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAd
 
     private List mDeviceNameList;
     private List mDeviceMACAddressList;
-    String ControllerSerialNumber,debugDataExtract,isPeramterSet;
+    String ControllerSerialNumber,debugDataExtract,isPeramterSet,set_matno,billNo;
     LocationManager locationManager;
-    ParameterSettingListModel.InstallationDatum pendingSettingModel;
 
-    public BTPairedDeviceAdapter(Context mContext, List mDeviceNameList, List mDeviceMACAddressList, String controllerSerialNumber, String debugDataExtract, String isPeramterSet, ParameterSettingListModel.InstallationDatum pendingSettingModel) {
+    public BTPairedDeviceAdapter(Context mContext, List mDeviceNameList, List mDeviceMACAddressList, String controllerSerialNumber, String debugDataExtract, String isPeramterSet, String set_matno,
+                                 String billNo) {
 
         this.mDeviceNameList = mDeviceNameList;
         this.mDeviceMACAddressList = mDeviceMACAddressList;
          this.ControllerSerialNumber = controllerSerialNumber;
          this.debugDataExtract = debugDataExtract;
          this.isPeramterSet = isPeramterSet;
-         this.pendingSettingModel = pendingSettingModel;
+         this.set_matno = set_matno;
+         this.billNo = billNo;
         this.mContext = mContext;
         locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
 
@@ -85,7 +86,8 @@ public class BTPairedDeviceAdapter extends RecyclerView.Adapter<BTPairedDeviceAd
 
                     if(isPeramterSet.equals("true")) {
                         intent = new Intent(mContext, SettingParameterActivity.class);
-                        intent.putExtra(Constant.pendingSettingData,pendingSettingModel);
+                        intent.putExtra(Constant.pendingSettingData,set_matno);
+                        intent.putExtra(Constant.billNo , billNo);
                     } else {
                         intent = new Intent(mContext, BlueToothDebugNewActivity.class);
                         }
