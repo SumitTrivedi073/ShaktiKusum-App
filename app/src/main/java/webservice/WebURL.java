@@ -26,10 +26,10 @@ public class WebURL {
     /************* production server **************/
 
 
-//    public static final String RMSAPPURL = "https://shaktirms.com/";
-//    public static final String BASEURL = "https://spprdsrvr1.shaktipumps.com:8423";
-//    public static final String BASE_URL_VK = "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/";
-//    public static final String BASE_URL_OPTION_VK = "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
+    public static final String RMSAPPURL = "https://shaktirms.com/";
+    public static final String BASEURL = "https://spprdsrvr1.shaktipumps.com:8423";
+    public static final String BASE_URL_VK = "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/";
+    public static final String BASE_URL_OPTION_VK = "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
 
     /************* development server **************/
 

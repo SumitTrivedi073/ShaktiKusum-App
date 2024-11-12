@@ -374,8 +374,6 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         }
         dataAdapter_simoprator = new ArrayAdapter<>(this, R.layout.spinner_item_left_optional, list_simoprator);
         dataAdapter_simoprator.setDropDownViewResource(R.layout.spinner_item_center);
-        txtLongIDD = findViewById(R.id.txtLongIDD);
-        txtLatIDD = findViewById(R.id.txtLatIDD);
         aadharNoExt = findViewById(R.id.aadharNoExt);
         aadharMobileExt = findViewById(R.id.aadharMobileExt);
         spinner_simoprator.setAdapter(dataAdapter_simoprator);
