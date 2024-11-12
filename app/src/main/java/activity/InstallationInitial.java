@@ -1,5 +1,8 @@
 package activity;
 
+import static database.DatabaseHelper.KEY_BILL_NO;
+import static database.DatabaseHelper.TABLE_PARAMETER_SET_DATA;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
@@ -51,8 +54,7 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions;
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.shaktipumplimited.SetParameter.PairedDeviceActivity;
-import com.shaktipumplimited.SettingModel.AllPopupUtil;
+
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
@@ -81,6 +83,7 @@ import adapter.BarCodeSelectionAdapter;
 import bean.BTResonseData;
 import bean.ImageModel;
 import bean.InstallationBean;
+import bluetoothpaireDevice.SetParameter.PairedDeviceActivity;
 import database.DatabaseHelper;
 import de.hdodenhof.circleimageview.CircleImageView;
 import debugapp.Bean.SimDetailsInfoResponse;
@@ -111,7 +114,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
     Context mContext;
     DatabaseHelper db;
-    TextView save, txtDebugAppID, txtLatIDD, txtLongIDD, txtIBaseUpdateID, inst_controller_ser;
+    TextView save, txtDebugAppID, txtIBaseUpdateID, inst_controller_ser,setParameterTxt;
     InstallationBean installationBean;
     LabeledSwitch labeledSwitch;
     int index_simoprator, index_conntype, id = 0, vkp = 0, barcodeSelectIndex = 0, value;
@@ -121,19 +124,19 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
             village_ins = "", mobile_no_ins = "", solarpanel_wattage = "", no_of_module = "", total_watt = "", solarpanel_stand_ins_quantity = "", module_total_plate_watt = "",
             smmd_sno = "", solar_motor_model_details = "", splar_pump_model_details = "", spmd_sno = "", simcard_num = "", solar_controller_model = "", scm_sno = "", inst_latitude = "",
             inst_longitude = "", module_ser_no = "", inst_bill_no = "", inst_bill_date = "", inst_delay_reason = "", hp = "", current_date = "", simoprator_text = "", conntype_text = "", billno = "",
-            set_matno = "", simha2 = "", kunnr = "", gstbillno = "", billdate = "", dispdate = "", name = "", state = "", city = "", controller = "", motor = "", pump = "", state_txt = "", PumpLoad = "",
+            set_matno = "", simha2 = "", kunnr = "", gstbillno = "", billdate = "", dispdate = "", name = "", state = "", city = "", controller = "", motor = "", pump = "", state_txt = "", PumpLoad = "", aadhar_no = "", aadhar_mobile = "",
             city_txt = "", address = "", make = "", custname = "", fathname = "", simno = "", regisno = "", projectno = "", loginno = "", moduleqty = "", mobileno = "", tehvillage = "",
             borewellstatus1 = "", DeviceStatus = "", CUS_CONTACT_NO = "", BeneficiaryNo = "", no_of_module_value = "", rmsdata_status = "", mMOBNUM_1, mMOBNUM_2, mMOBNUM_3,
             MEmpType = "null", mAppName = "KUSUM", mInstallerMOB = "", mInstallerName = "", RMS_SERVER_DOWN = "", RMS_DEBUG_EXTRN = "", DEVICE_NO, SIGNL_STREN,
             INVOICE_NO_B, NET_REG, SER_CONNECT, CAB_CONNECT, LATITUDE, LANGITUDE, MOBILE, IMEI, DONGAL_ID = "", SIM_SR_NO = "", SIM = "", RMS_STATUS = "", RMS_LAST_ONLINE_DATE = "", FAULT_CODE = "",
-            RMS_CURRENT_ONLINE_STATUS = "", version = "", invc_done = "", docno_sap = "", mDriveSerialNo = "", mMotorSerialNo = "", mPumpSerialNo = "", delay = "",mobileOnlineStatus = "",
-            controllerOnlineStatus = "",dirPath = "",finalFileName="",filePath ="",type ="",columnCount ="";
+            RMS_CURRENT_ONLINE_STATUS = "", version = "", invc_done = "", docno_sap = "", mDriveSerialNo = "", mMotorSerialNo = "", mPumpSerialNo = "", delay = "", mobileOnlineStatus = "",
+            controllerOnlineStatus = "", dirPath = "", finalFileName = "", filePath = "", type = "", columnCount = "";
 
     int scannerCode;
     File selectedFile;
     EditText inst_date, bill_date, bill_no, cust_name, borewellstatus, reasontxt, inst_address, inst_make, inst_village,
             inst_state, inst_district, inst_tehsil, inst_mob_no, inst_panel_stand_qty, inst_panel_watt, inst_total_watt, inst_module_total_plate_watt, inst_no_of_module, inst_module_ser_no,
-            inst_motor_model, inst_motor_ser, inst_pump_model, inst_pump_ser, inst_controller_model, inst_simcard_num, inst_hp, inst_fathers_name;
+            inst_motor_model, inst_motor_ser, inst_pump_model, inst_pump_ser, inst_controller_model, inst_simcard_num, inst_hp, inst_fathers_name, aadharNoExt, aadharMobileExt;
 
     double inst_latitude_double, inst_longitude_double;
     SimpleDateFormat simpleDateFormat;
@@ -142,7 +145,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
     LinearLayout reason, moduleOneLL;
 
-    Boolean your_date_is_outdated = false, isDongleExtract = false;
+    Boolean your_date_is_outdated = false, isDongleExtract = false,isParameterSet = false;
 
     private Dialog dialog;
 
@@ -175,7 +178,6 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_installation_initial);
-
 
 
         mContext = this;
@@ -231,19 +233,27 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         moduleqty = extras.getString("moduleqty");
         CUS_CONTACT_NO = extras.getString("CUS_CONTACT_NO");
         BeneficiaryNo = extras.getString("BeneficiaryNo");
-
+        if (extras.getString("aadhar_no") != null && !extras.getString("aadhar_no").isEmpty()) {
+            aadhar_no = extras.getString("aadhar_no");
+            aadharNoExt.setText(aadhar_no);
+        }
+        if (extras.getString("aadhar_mob") != null && !extras.getString("aadhar_mob").isEmpty()) {
+            aadhar_mobile = extras.getString("aadhar_mob");
+            aadharMobileExt.setText(aadhar_mobile);
+        }
 
 
         PumpLoad = extras.getString("PumpLoad");
+
         try {
             Constant.BILL_NUMBER_UNIC = billno;
             String[] custnmStr = name.split("S/O", 2);
-            if(custnmStr.length>1) {
+            if (custnmStr.length > 1) {
                 custname = custnmStr[0];
                 String Custfathname = custnmStr[1];
                 String[] custfathStr = Custfathname.split("-", 2);
                 fathname = custfathStr[0];
-            }else {
+            } else {
                 custname = custnmStr[0];
             }
         } catch (Exception e) {
@@ -270,11 +280,12 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
             BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             if (mBluetoothAdapter.isEnabled()) {
-                if (AllPopupUtil.pairedDeviceListGloable(mContext)) {
+                if (CustomUtility.pairedDeviceListGloable(mContext)) {
                     if (WebURL.BT_DEVICE_NAME.equalsIgnoreCase("") || WebURL.BT_DEVICE_MAC_ADDRESS.equalsIgnoreCase("")) {
                         Intent intent = new Intent(mContext, PairedDeviceActivity.class);
                         intent.putExtra(Constant.ControllerSerialNumber, inst_controller_ser.getText().toString().trim());
                         intent.putExtra(Constant.debugDataExtract, "false");
+                        intent.putExtra(Constant.isPeramterSet, "false");
                         startActivity(intent);
                     }
                 } else {
@@ -282,6 +293,34 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                 }
             } else {
                 startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
+            }
+        });
+
+        setParameterTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WebURL.BT_DEVICE_NAME = "";
+                WebURL.BT_DEVICE_MAC_ADDRESS = "";
+                Constant.Bluetooth_Activity_Navigation = 1;///Debug
+
+                BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                if (mBluetoothAdapter.isEnabled()) {
+                    if (CustomUtility.pairedDeviceListGloable(getApplicationContext())) {
+                        if (WebURL.BT_DEVICE_NAME.equalsIgnoreCase("") || WebURL.BT_DEVICE_MAC_ADDRESS.equalsIgnoreCase("")) {
+                            Intent intent = new Intent(getApplicationContext(), PairedDeviceActivity.class);
+                            intent.putExtra(Constant.pendingSettingData,set_matno);
+                            intent.putExtra(Constant.ControllerSerialNumber, "");
+                            intent.putExtra(Constant.debugDataExtract, "false");
+                            intent.putExtra(Constant.isPeramterSet, "true");
+                            intent.putExtra(Constant.billNo, billno);
+                            startActivity(intent);
+                        }
+                    } else {
+                        startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
+                    }
+                } else {
+                    startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
+                }
             }
         });
 
@@ -337,7 +376,8 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         dataAdapter_simoprator.setDropDownViewResource(R.layout.spinner_item_center);
         txtLongIDD = findViewById(R.id.txtLongIDD);
         txtLatIDD = findViewById(R.id.txtLatIDD);
-
+        aadharNoExt = findViewById(R.id.aadharNoExt);
+        aadharMobileExt = findViewById(R.id.aadharMobileExt);
         spinner_simoprator.setAdapter(dataAdapter_simoprator);
 
         spinner_simoprator.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -421,76 +461,78 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         save.setOnClickListener(v -> {
             DeviceStatus = CustomUtility.getSharedPreferences(mContext, Constant.deviceStatus);
 
-                if (mBTResonseDataList.size() > 0)
-                    mBTResonseDataList.clear();
-                Log.e("inst_controller_ser===>", inst_controller_ser.getText().toString().trim());
-                Log.e("mDatabaseHelperTeacher=====>", String.valueOf(mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(inst_controller_ser.getText().toString().trim() + "-0")));
-                mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(inst_controller_ser.getText().toString().trim() + "-0");
-                if (mBTResonseDataList.size() > 0) {
-                    vkp = mBTResonseDataList.size() - 1;
-                    Log.e("vkp1111====>",String.valueOf(vkp));
+            if (mBTResonseDataList.size() > 0)
+                mBTResonseDataList.clear();
+            Log.e("inst_controller_ser===>", inst_controller_ser.getText().toString().trim());
+            Log.e("mDatabaseHelperTeacher=====>", String.valueOf(mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(inst_controller_ser.getText().toString().trim() + "-0")));
+            mBTResonseDataList = mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(inst_controller_ser.getText().toString().trim() + "-0");
+            if (mBTResonseDataList.size() > 0) {
+                vkp = mBTResonseDataList.size() - 1;
+                Log.e("vkp1111====>", String.valueOf(vkp));
 
 
-                   DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
-                    SIGNL_STREN = mBTResonseDataList.get(vkp).getSIGNLSTREN();
-                    String[] mStrArry = SIGNL_STREN.split("###");
-                    if (mStrArry.length > 0) {
-                        SIGNL_STREN = mStrArry[0];
-                    }
-                    if (mStrArry.length > 1) {
-                        INVOICE_NO_B = mStrArry[1];
-                    }
-
-                    SIM = mBTResonseDataList.get(vkp).getSIM();
-                    String[] mStrArrySim = SIM.split("###");
-                    if (mStrArrySim.length > 0) {
-                        SIM = mStrArrySim[0];
-                    }
-                    if (mStrArrySim.length > 1) {
-                        SIM_SR_NO = mStrArrySim[1];
-                    }
-                    NET_REG = mBTResonseDataList.get(vkp).getNETREG();
-                    SER_CONNECT = mBTResonseDataList.get(vkp).getSERCONNECT();
-                    CAB_CONNECT = mBTResonseDataList.get(vkp).getCABCONNECT();
-                    LATITUDE = mBTResonseDataList.get(vkp).getLATITUDE();
-                    LANGITUDE = mBTResonseDataList.get(vkp).getLANGITUDE();
-                    MOBILE = mBTResonseDataList.get(vkp).getMOBILE();
-                    IMEI = mBTResonseDataList.get(vkp).getIMEI();
-                    DONGAL_ID = mBTResonseDataList.get(vkp).getDONGALID();
-                    RMS_STATUS = mBTResonseDataList.get(vkp).getRMS_STATUS();
-                    RMS_CURRENT_ONLINE_STATUS = mBTResonseDataList.get(vkp).getRMS_CURRENT_ONLINE_STATUS();
-                    RMS_LAST_ONLINE_DATE = mBTResonseDataList.get(vkp).getRMS_LAST_ONLINE_DATE();
-                    mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
-                    mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
-                    FAULT_CODE = mBTResonseDataList.get(vkp).getmRMS_FAULT_CODE();
-                    mobileOnlineStatus = mBTResonseDataList.get(vkp).getMobileOnline();
-                    controllerOnlineStatus = mBTResonseDataList.get(vkp).getControllerOnline();
-                    dirPath = mBTResonseDataList.get(vkp).getDirPath();
-                    RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
-                    RMS_SERVER_DOWN = "Working Fine";
-
-                    if (mBTResonseDataList.get(vkp).getDongleDataExtract().equals("true")) {
-                        isDongleExtract = true;
-                    }
-                    if (isControllerIDScan) {
-                        saveDataValidation();
-                    } else {
-                        CustomUtility.ShowToast("Please Scan Controller ID first!", getApplicationContext());
-                    }
-                } else {
-                    CustomUtility.ShowToast("Please Debug Data first!", getApplicationContext());
+                DEVICE_NO = mBTResonseDataList.get(vkp).getDEVICENO();
+                SIGNL_STREN = mBTResonseDataList.get(vkp).getSIGNLSTREN();
+                String[] mStrArry = SIGNL_STREN.split("###");
+                if (mStrArry.length > 0) {
+                    SIGNL_STREN = mStrArry[0];
                 }
+                if (mStrArry.length > 1) {
+                    INVOICE_NO_B = mStrArry[1];
+                }
+
+                SIM = mBTResonseDataList.get(vkp).getSIM();
+                String[] mStrArrySim = SIM.split("###");
+                if (mStrArrySim.length > 0) {
+                    SIM = mStrArrySim[0];
+                }
+                if (mStrArrySim.length > 1) {
+                    SIM_SR_NO = mStrArrySim[1];
+                }
+                NET_REG = mBTResonseDataList.get(vkp).getNETREG();
+                SER_CONNECT = mBTResonseDataList.get(vkp).getSERCONNECT();
+                CAB_CONNECT = mBTResonseDataList.get(vkp).getCABCONNECT();
+                LATITUDE = mBTResonseDataList.get(vkp).getLATITUDE();
+                LANGITUDE = mBTResonseDataList.get(vkp).getLANGITUDE();
+                MOBILE = mBTResonseDataList.get(vkp).getMOBILE();
+                IMEI = mBTResonseDataList.get(vkp).getIMEI();
+                DONGAL_ID = mBTResonseDataList.get(vkp).getDONGALID();
+                RMS_STATUS = mBTResonseDataList.get(vkp).getRMS_STATUS();
+                RMS_CURRENT_ONLINE_STATUS = mBTResonseDataList.get(vkp).getRMS_CURRENT_ONLINE_STATUS();
+                RMS_LAST_ONLINE_DATE = mBTResonseDataList.get(vkp).getRMS_LAST_ONLINE_DATE();
+                mInstallerMOB = CustomUtility.getSharedPreferences(mContext, "InstallerMOB");
+                mInstallerName = CustomUtility.getSharedPreferences(mContext, "InstallerName");
+                FAULT_CODE = mBTResonseDataList.get(vkp).getmRMS_FAULT_CODE();
+                mobileOnlineStatus = mBTResonseDataList.get(vkp).getMobileOnline();
+                controllerOnlineStatus = mBTResonseDataList.get(vkp).getControllerOnline();
+                dirPath = mBTResonseDataList.get(vkp).getDirPath();
+                RMS_DEBUG_EXTRN = "ONLINE FROM DEBUG";
+                RMS_SERVER_DOWN = "Working Fine";
+
+                if (mBTResonseDataList.get(vkp).getDongleDataExtract().equals("true")) {
+                    isDongleExtract = true;
+                }
+                if (isControllerIDScan) {
+                    saveDataValidation();
+                } else {
+                    CustomUtility.ShowToast("Please Scan Controller ID first!", getApplicationContext());
+                }
+            } else {
+                CustomUtility.ShowToast("Please Debug Data first!", getApplicationContext());
+            }
 
         });
 
 
         labeledSwitch.setOnToggledListener((toggleableView, isOn) -> {
             Intent intent = new Intent(mContext, DeviceStatusActivity.class);
-            intent.putExtra(Constant.ControllerSerialNumber,inst_controller_ser.getText().toString().trim()+"-0");
+            intent.putExtra(Constant.ControllerSerialNumber, inst_controller_ser.getText().toString().trim() + "-0");
             startActivity(intent);
         });
 
+
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -508,11 +550,10 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanningResult != null) {
-            setScanValue(scanningResult.getContents(),scannerCode);
+            setScanValue(scanningResult.getContents(), scannerCode);
         }
 
     }
-
 
 
     @Override
@@ -552,20 +593,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                 }
 
                 return true;
-            case R.id.act_comp_add_damage_complain:
-                Intent mIntent = new Intent(InstallationInitial.this, AddDamage_MissingActivity.class);// original
-                Bundle extras = new Bundle();
-                extras.putString("bill_no", billno);///vbeln
-                extras.putString("state", state);//state
-                extras.putString("city", city);
-                extras.putString("name", name);
-                extras.putString("mobile", mobileno);
-                extras.putString("bill_date", billdate);
-                extras.putString("address", address);
-                extras.putString("kunnr", kunnr);
-                mIntent.putExtras(extras);
-                startActivity(mIntent);
-                return true;
+
             case R.id.act_comp_attach_image:
 
                 borewellstatus1 = CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno);
@@ -576,8 +604,8 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                     intent.putExtra("inst_id", bill_no.getText().toString().trim());
                     intent.putExtra("cust_name", custname);
                     intent.putExtra("BeneficiaryNo", BeneficiaryNo);
-                    intent.putExtra("pump_sernr",pump);
-                    intent.putExtra("PumpLoad",PumpLoad);
+                    intent.putExtra("pump_sernr", pump);
+                    intent.putExtra("PumpLoad", PumpLoad);
                     startActivity(intent);
 
                 } else {
@@ -655,13 +683,10 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
             String mLOng = "" + gps.getLongitude();
 
 
-            txtLatIDD.setText(mLAt);
-            txtLongIDD.setText(mLOng);
+            inst_latitude_double = Double.parseDouble(mLAt);
+            inst_longitude_double = Double.parseDouble(mLOng);
 
-            inst_latitude_double = Double.parseDouble(txtLatIDD.getText().toString().trim());
-            inst_longitude_double = Double.parseDouble(txtLongIDD.getText().toString().trim());
-
-            if (txtLatIDD.getText().toString().trim().equalsIgnoreCase("")) {
+            if (mLAt.trim().equalsIgnoreCase("")) {
                 inst_latitude_double = 0.0;
             }
 
@@ -700,58 +725,65 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                                             if (smmd_sno != null && !smmd_sno.equals("")) {
                                                 if (spmd_sno != null && !spmd_sno.equals("")) {
                                                     if (scm_sno != null && !scm_sno.equals("")) {
-                                                            if (inst_make != null && !inst_make.equals("")) {
-                                                                if (!TextUtils.isEmpty(borewellstatus1)) {
+                                                        if (inst_make != null && !inst_make.equals("")) {
+                                                            if (!TextUtils.isEmpty(borewellstatus1)) {
 
-                                                                    if (!DeviceStatus.isEmpty()) {
+                                                                if (!DeviceStatus.isEmpty()) {
 
-                                                                        if (DeviceStatus.equals(getResources().getString(R.string.online))) {
-                                                                            if (imageList.size() > 5) {
+                                                                    if (DeviceStatus.equals(getResources().getString(R.string.online))) {
+                                                                        if (imageList.size() > 5) {
 
+                                                                                if(isParameterSet) {
+                                                                                    saveInstalltion();
+                                                                                }else {
+                                                                                    CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.pleaseSetParametersFirst));
+                                                                                }
 
-                                                                                saveInstalltion();
-
-                                                                            } else {
-                                                                                CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_all_image));
-                                                                            }
                                                                         } else {
+                                                                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_all_image));
+                                                                        }
+                                                                    } else {
 
-                                                                            if (mSimDetailsInfoResponse.size() > 0)
-                                                                                mSimDetailsInfoResponse.clear();
-                                                                            mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
-                                                                            if (mSimDetailsInfoResponse.size() >= 1) {
-                                                                                if (mSimDetailsInfoResponse.size() >= 2) {
-                                                                                    if (mSimDetailsInfoResponse.size() >= 3) {
+                                                                        if (mSimDetailsInfoResponse.size() > 0)
+                                                                            mSimDetailsInfoResponse.clear();
+                                                                        mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
+                                                                        if (mSimDetailsInfoResponse.size() >= 1) {
+                                                                            if (mSimDetailsInfoResponse.size() >= 2) {
+                                                                                if (mSimDetailsInfoResponse.size() >= 3) {
 
 
                                                                                         if (imageList.size() > 5) {
-                                                                                            saveInstalltion();
-
-                                                                                        } else {
-                                                                                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_all_image));
-                                                                                        }
+                                                                                            if(isParameterSet) {
+                                                                                                saveInstalltion();
+                                                                                            }else {
+                                                                                                CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.pleaseSetParametersFirst));
+                                                                                            }
 
                                                                                     } else {
-                                                                                        CustomUtility.ShowToast(getResources().getString(R.string.insertThirdSim), getApplicationContext());
+                                                                                        CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_all_image));
                                                                                     }
+
                                                                                 } else {
-                                                                                    CustomUtility.ShowToast(getResources().getString(R.string.insertSecondSim), getApplicationContext());
+                                                                                    CustomUtility.ShowToast(getResources().getString(R.string.insertThirdSim), getApplicationContext());
                                                                                 }
                                                                             } else {
-                                                                                CustomUtility.ShowToast(getResources().getString(R.string.sim_insertMsg), getApplicationContext());
-
+                                                                                CustomUtility.ShowToast(getResources().getString(R.string.insertSecondSim), getApplicationContext());
                                                                             }
-                                                                        }
-                                                                    } else {
-                                                                        Toast.makeText(mContext, "Please get RMS Device Status.", Toast.LENGTH_SHORT).show();
-                                                                    }
+                                                                        } else {
+                                                                            CustomUtility.ShowToast(getResources().getString(R.string.sim_insertMsg), getApplicationContext());
 
+                                                                        }
+                                                                    }
                                                                 } else {
-                                                                    Toast.makeText(mContext, "Please Select Borewell Status.", Toast.LENGTH_SHORT).show();
+                                                                    Toast.makeText(mContext, "Please get RMS Device Status.", Toast.LENGTH_SHORT).show();
                                                                 }
+
                                                             } else {
-                                                                Toast.makeText(mContext, "Please Enter Make", Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(mContext, "Please Select Borewell Status.", Toast.LENGTH_SHORT).show();
                                                             }
+                                                        } else {
+                                                            Toast.makeText(mContext, "Please Enter Make", Toast.LENGTH_SHORT).show();
+                                                        }
 
                                                     } else {
                                                         Toast.makeText(mContext, "Please Enter Controller Serial No.", Toast.LENGTH_SHORT).show();
@@ -818,8 +850,8 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
             }
 
-          //  if (!reasontxt.getText().toString().isEmpty()) {
-
+            if (!aadharNoExt.getText().toString().isEmpty()) {
+                if (!aadharMobileExt.getText().toString().isEmpty()) {
                     SaveInLocalDataBase();
                     if (CustomUtility.isInternetOn(getApplicationContext())) {
                         SubmitData();
@@ -829,10 +861,13 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                         startActivity(intent);
                         finish();
                     }
-            /*    } else {
-                    CustomUtility.ShowToast("Please Enter Installation Delay Reason.", getApplicationContext());
+                } else {
+                    CustomUtility.ShowToast("Please Enter aadhar registered mobile no.", getApplicationContext());
                 }
-*/
+
+            } else {
+                CustomUtility.ShowToast("Please Enter Customer Aadhar no.", getApplicationContext());
+            }
 
 
         } else {
@@ -843,9 +878,9 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
     }
 
     private void SubmitData() {
-        if(mobileOnlineStatus.equals(getResources().getString(R.string.offline))&& controllerOnlineStatus.equals(getResources().getString(R.string.offline))){
+        if (mobileOnlineStatus.equals(getResources().getString(R.string.offline)) && controllerOnlineStatus.equals(getResources().getString(R.string.offline))) {
             sendFileToRMSServer();
-        }else {
+        } else {
             SubmitDebugData();
         }
     }
@@ -894,10 +929,11 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         InstallationBean installationBean = new InstallationBean(pernr, project_no, login_no, inst_latitude, inst_longitude, inst_bill_no, installation_date, inst_bill_date,
                 inst_delay_reason, rmsdata_status, customer_name, fathname, mobileno, state, state_txt, city, city_txt, tehsil_ins, village_ins, address, make, solarpanel_wattage,
                 solarpanel_stand_ins_quantity, total_watt, hp, no_of_module, no_of_module_value, module_total_plate_watt, solar_motor_model_details, smmd_sno, splar_pump_model_details,
-                spmd_sno, solar_controller_model, scm_sno, simoprator_text, conntype_text, simcard_num, regisno, BeneficiaryNo,PumpLoad
+                spmd_sno, solar_controller_model, scm_sno, simoprator_text, conntype_text, simcard_num, regisno, BeneficiaryNo, PumpLoad, aadharNoExt.getText().toString()
+                , aadharMobileExt.getText().toString()
         );
 
-        if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_PUMP_DATA, DatabaseHelper.KEY_BILL_NO, inst_bill_no)) {
+        if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_PUMP_DATA, KEY_BILL_NO, inst_bill_no)) {
             db.updateInstallationData(inst_bill_no, installationBean);
 
         } else {
@@ -947,6 +983,10 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         scm_sno = inst_controller_ser.getText().toString();
 
         simcard_num = inst_simcard_num.getText().toString();
+        if(db.isRecordExist(TABLE_PARAMETER_SET_DATA,KEY_BILL_NO,billno)){
+            isParameterSet = db.isParameterSet(billno);
+        }
+
 
 
     }
@@ -1009,6 +1049,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         inst_module_ser_no = findViewById(R.id.module_serial_no);
 
         labeledSwitch = findViewById(R.id.switchview);
+        setParameterTxt = findViewById(R.id.setParameterTxt);
 
         spinner_simoprator.setPrompt("Select SIM Oprator");
         spinner_conntype.setPrompt("Select Connection Type");
@@ -1059,6 +1100,8 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
         inst_make.setText(installationBean.getMake_ins());
 
+        aadharNoExt.setText(installationBean.getAadhar_no());
+        aadharMobileExt.setText(installationBean.getAadhar_mobile());
 
 
         inst_module_total_plate_watt.setText(installationBean.getModule_total_plate_watt());
@@ -1094,7 +1137,6 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         barCodeSelectionAdapter.BarCodeSelection(this);
 
 
-
         param_invc = db.getInstallationData(pernr, billno);
 
         if (param_invc != null && !param_invc.getNo_of_module_value().isEmpty()) {
@@ -1114,7 +1156,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
         String strArray[] = no_of_module_value.split(",");
         for (int i = 0; i < strArray.length; i++) {
-                 barcodenameList.set(i, strArray[i]);
+            barcodenameList.set(i, strArray[i]);
 
         }
 
@@ -1130,7 +1172,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
     private void ScanCode(int scannerCode) {
         this.scannerCode = scannerCode;
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
 
             options = new GmsBarcodeScannerOptions.Builder()
                     .setBarcodeFormats(
@@ -1156,9 +1198,9 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                             e -> {
                                 startScanOldVersion();
                                 // Task failed with an exception
-                              //  Toast.makeText(getApplicationContext(), "Scanning Failed Please try again", Toast.LENGTH_SHORT).show();
+                                //  Toast.makeText(getApplicationContext(), "Scanning Failed Please try again", Toast.LENGTH_SHORT).show();
                             });
-        }else {
+        } else {
             startScanOldVersion();
         }
     }
@@ -1172,6 +1214,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         integrator.setBarcodeImageEnabled(true);
         integrator.initiateScan();
     }
+
     private void setScanValue(String rawValue, int scannerCode) {
         if (scannerCode == 1000) {
             inst_motor_ser.setText("");
@@ -1428,13 +1471,14 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
 
         }
+
     }
 
 
     /*-------------------------------------------------------------Upload Excel Sheet TO RMS Server-----------------------------------------------------------------------------*/
 
     public void uploadFile() {
-      long  startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
 
         showProgressDialogue(getResources().getString(R.string.dataExtractFileToServer));
 
@@ -1513,7 +1557,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
 
     public void uploadIEMIFile() {
-        long  startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         stopProgressDialogue();
         showProgressDialogue(getResources().getString(R.string.ImeiFileToServer));
 
@@ -1719,22 +1763,21 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                 mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
             }
 
-                for (int i = 0; i < mSimDetailsInfoResponse.size(); i++) {
+            for (int i = 0; i < mSimDetailsInfoResponse.size(); i++) {
 
-                    if (i == 0)
-                        mMOBNUM_1 = mSimDetailsInfoResponse.get(i).getDEVICENOSIMMOB();
+                if (i == 0)
+                    mMOBNUM_1 = mSimDetailsInfoResponse.get(i).getDEVICENOSIMMOB();
 
-                    if (i == 1)
-                        mMOBNUM_2 = mSimDetailsInfoResponse.get(i).getDEVICENOSIMMOB();
+                if (i == 1)
+                    mMOBNUM_2 = mSimDetailsInfoResponse.get(i).getDEVICENOSIMMOB();
 
-                    if (i == 2)
-                        mMOBNUM_3 = mSimDetailsInfoResponse.get(i).getDEVICENOSIMMOB();
+                if (i == 2)
+                    mMOBNUM_3 = mSimDetailsInfoResponse.get(i).getDEVICENOSIMMOB();
 
-                    Constant.DBUG_MOB_1 = mMOBNUM_1;
-                    Constant.DBUG_MOB_2 = mMOBNUM_2;
-                    Constant.DBUG_MOB_3 = mMOBNUM_3;
-                }
-
+                Constant.DBUG_MOB_1 = mMOBNUM_1;
+                Constant.DBUG_MOB_2 = mMOBNUM_2;
+                Constant.DBUG_MOB_3 = mMOBNUM_3;
+            }
 
 
             String date_s = param_invc.getInst_date();
@@ -1789,12 +1832,14 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
             jsonObj.put("dbug_ofline", Constant.DBUG_PER_OFLINE);
             jsonObj.put("dbug_ofline", Constant.DBUG_PER_OFLINE);
             jsonObj.put("app_version", version);
+            jsonObj.put("aadhar_no", aadharNoExt.getText().toString().trim());
+            jsonObj.put("aadhar_mob", aadharMobileExt.getText().toString().trim());
 
             jsonObj.put("LOGIN_NAME", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonName));
             jsonObj.put("LOGIN_CONT", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonNumber));
 
 
-           if (imageList.size() > 0) {
+            if (imageList.size() > 0) {
                 for (int i = 0; i < imageList.size(); i++) {
                     if (imageList.get(i).isImageSelected()) {
                         try {
@@ -1805,13 +1850,13 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                         }
                     }
                 }
-           }
+            }
 
 
             ja_invc_data.put(jsonObj);
 
             Log.e("ja_invc_data======>", ja_invc_data.toString());
-             new syncInstallationData(ja_invc_data).execute();
+            new syncInstallationData(ja_invc_data).execute();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1883,9 +1928,9 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                             Log.e("DOCNO", "&&&&" + billno);
 
                             String dongleType = DONGAL_ID.charAt(0) + DONGAL_ID.substring(1, 2);
-                            if(!dongleType.equals("99")||!dongleType.equals("28")){
+                            if (!dongleType.equals("99") || !dongleType.equals("28")) {
                                 sendLatLngToRmsForFota();
-                            }else {
+                            } else {
                                 InstallationDoneSuccessfully();
                             }
 
@@ -1905,7 +1950,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
                                 CustomUtility.showToast(InstallationInitial.this, "Please Select or Capture All Images First");
 
-                            }else if (invc_done.equals("D")) {
+                            } else if (invc_done.equals("D")) {
 
                                 CustomUtility.showToast(InstallationInitial.this, "This installation has duplicate IMEI number");
 
@@ -1932,18 +1977,18 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
     }
 
     /*-------------------------------------------------------------Send Lat Lng to Rms Server 4G device Fota-----------------------------------------------------------------------------*/
-    private void  sendLatLngToRmsForFota() {
+    private void sendLatLngToRmsForFota() {
         stopProgressDialogue();
         showProgressDialogue(getResources().getString(R.string.device_initialization_processing));
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        CustomUtility.ShowToast("SendFota======>"+CustomUtility.getSharedPreferences(this, Constant.RmsBaseUrl) + WebURL.updateLatLngToRms + "?deviceNo=" + inst_controller_ser.getText().toString().trim() + "-0" + "&lat=" + inst_latitude + "&lon=" + inst_longitude,getApplicationContext());
+        CustomUtility.ShowToast("SendFota======>" + CustomUtility.getSharedPreferences(this, Constant.RmsBaseUrl) + WebURL.updateLatLngToRms + "?deviceNo=" + inst_controller_ser.getText().toString().trim() + "-0" + "&lat=" + inst_latitude + "&lon=" + inst_longitude, getApplicationContext());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
                 CustomUtility.getSharedPreferences(this, Constant.RmsBaseUrl) + WebURL.updateLatLngToRms + "?deviceNo=" + inst_controller_ser.getText().toString().trim() + "-0" + "&lat=" + inst_latitude + "&lon=" + inst_longitude,
 
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                CustomUtility.ShowToast("SendFota_Resp======>"+jsonObject.toString(),getApplicationContext());
+                CustomUtility.ShowToast("SendFota_Resp======>" + jsonObject.toString(), getApplicationContext());
 
                 try {
                     if (jsonObject.toString() != null && !jsonObject.toString().isEmpty()) {
@@ -1958,7 +2003,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
                     }
                 } catch (Exception e) {
-                    CustomUtility.ShowToast("SendFota_Exc======>"+e.getMessage(),getApplicationContext());
+                    CustomUtility.ShowToast("SendFota_Exc======>" + e.getMessage(), getApplicationContext());
                     e.printStackTrace();
                     stopProgressDialogue();
                     CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), getApplicationContext());
@@ -1970,7 +2015,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
             @Override
             public void onErrorResponse(VolleyError error) {
                 stopProgressDialogue();
-                CustomUtility.ShowToast("SendFota_error======>"+error.toString(),getApplicationContext());
+                CustomUtility.ShowToast("SendFota_error======>" + error.toString(), getApplicationContext());
 
                 Log.e("error", String.valueOf(error));
                 Toast.makeText(InstallationInitial.this, error.toString(),
@@ -1995,8 +2040,8 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
         mDatabaseHelperTeacher.deleteSimInfoData(billno);
 
-      // sendResponseTimeAPI();
-       Random random = new Random();
+        // sendResponseTimeAPI();
+        Random random = new Random();
         String generatedVerificationCode = String.format("%04d", random.nextInt(10000));
 
         if (CustomUtility.isValidMobile(inst_mob_no.getText().toString().trim())) {
@@ -2018,11 +2063,11 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         showProgressDialogue(getResources().getString(R.string.sendingOtpToCustomer));
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        Log.e("responseTimeAPI======>",WebURL.responseTIme + "VBELN=" + billno + "&URFA=" + uplRmsFileTime +"&UIFA=" + uplImeiFileTime
-                +"&DDA=" + uplDebugDataTime +"&SIA=" + uploadInstalltionTime);
+        Log.e("responseTimeAPI======>", WebURL.responseTIme + "VBELN=" + billno + "&URFA=" + uplRmsFileTime + "&UIFA=" + uplImeiFileTime
+                + "&DDA=" + uplDebugDataTime + "&SIA=" + uploadInstalltionTime);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                WebURL.responseTIme + "VBELN=" + billno + "&URFA=" + uplRmsFileTime +"&UIFA=" + uplImeiFileTime
-                        +"&DDA=" + uplDebugDataTime +"&SIA=" + uploadInstalltionTime ,
+                WebURL.responseTIme + "VBELN=" + billno + "&URFA=" + uplRmsFileTime + "&UIFA=" + uplImeiFileTime
+                        + "&DDA=" + uplDebugDataTime + "&SIA=" + uploadInstalltionTime,
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject res) {

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +22,9 @@ import java.util.List;
 import java.util.Locale;
 
 import activity.InstallationInitial;
-import activity.UnloadInstReportImageActivity;
 import bean.InstallationBean;
 import bean.InstallationListBean;
 import database.DatabaseHelper;
-import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;
 import webservice.WebURL;
 
@@ -129,6 +126,9 @@ public class Adapter_Installation_list extends RecyclerView.Adapter<Adapter_Inst
                             extras.putString("NoOfModule", responseList.get(position).getNoOfModule());
                             extras.putString("HP", responseList.get(position).getHP());
                             extras.putString("PumpLoad", responseList.get(position).getPump_load());
+                            if(responseList.get(position).getAadhar_no()!=null && !responseList.get(position).getAadhar_no().isEmpty()){
+                                extras.putString("aadhar_no", responseList.get(position).getAadhar_no());
+                            }
                             in.putExtras(extras);
                             context.startActivity(in);
                         }

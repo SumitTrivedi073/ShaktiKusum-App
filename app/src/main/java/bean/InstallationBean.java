@@ -53,6 +53,8 @@ public class InstallationBean {
     public String regis_no = "";
     public String BeneficiaryNo = "";
     public String pumpLoad = "";
+    public String aadhar_no = "";
+    public String aadhar_mobile = "";
 
     public InstallationBean() {
 
@@ -65,7 +67,7 @@ public class InstallationBean {
                             String address_ins_txt, String make_ins_txt, String solarpanel_wattage_txt, String solarpanel_stand_ins_quantity_txt, String total_watt_txt,
                             String inst_hp_txt, String no_of_module_qty_txt, String no_of_module_value_txt, String module_total_plate_watt_txt, String solar_motor_model_details_txt,
                             String smmd_sno_txt, String splar_pump_model_details_txt, String spmd_sno_txt, String solar_controller_model_txt, String scm_sno_txt, String simoprator_txt,
-                            String conntype_txt, String simcard_num_txt, String regis_no_txt, String BeneficiaryNo,String pumpLoad
+                            String conntype_txt, String simcard_num_txt, String regis_no_txt, String BeneficiaryNo,String pumpLoad, String aadhar_no , String aadhar_mobile
 
     ) {
 
@@ -111,7 +113,25 @@ public class InstallationBean {
         regis_no = regis_no_txt;
         this.BeneficiaryNo = BeneficiaryNo;
         this.pumpLoad = pumpLoad;
+        this.aadhar_no = aadhar_no;
+        this.aadhar_mobile = aadhar_mobile;
 
+    }
+
+    public String getAadhar_mobile() {
+        return aadhar_mobile;
+    }
+
+    public void setAadhar_mobile(String aadhar_mobile) {
+        this.aadhar_mobile = aadhar_mobile;
+    }
+
+    public String getAadhar_no() {
+        return aadhar_no;
+    }
+
+    public void setAadhar_no(String aadhar_no) {
+        this.aadhar_no = aadhar_no;
     }
 
     public String getPernr() {
@@ -477,6 +497,8 @@ public class InstallationBean {
                 ", regis_no='" + regis_no + '\'' +
                 ", BeneficiaryNo='" + BeneficiaryNo + '\'' +
                 ", pumpLoad='" + pumpLoad + '\'' +
+                ", aadhar_no='" + aadhar_no + '\'' +
+                ", aadhar_mobile='" + aadhar_mobile + '\'' +
                 '}';
     }
 }
