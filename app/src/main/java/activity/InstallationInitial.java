@@ -223,9 +223,9 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         address = extras.getString("address");
         tehvillage = extras.getString("tehvillage");
         mobileno = extras.getString("mobile");
-        controller = extras.getString("controller");
+       controller = extras.getString("controller");
         motor = extras.getString("motor");
-        pump = extras.getString("pump");
+       pump = extras.getString("pump");
         simno = extras.getString("simno");
         regisno = extras.getString("regisno");
         projectno = extras.getString("projectno");
@@ -274,6 +274,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         txtIBaseUpdateID.setOnClickListener(v -> ibaseUpdateFormPopup());
 
         txtDebugAppID.setOnClickListener(v -> {
+            if(!inst_controller_ser.getText().toString().isEmpty()) {
             WebURL.BT_DEVICE_NAME = "";
             WebURL.BT_DEVICE_MAC_ADDRESS = "";
             Constant.Bluetooth_Activity_Navigation = 1;///Debug
@@ -294,32 +295,39 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
             } else {
                 startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
             }
+            }else {
+                CustomUtility.ShowToast(getResources().getString(R.string.enter_contact_number),getApplicationContext());
+            }
         });
 
         setParameterTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WebURL.BT_DEVICE_NAME = "";
-                WebURL.BT_DEVICE_MAC_ADDRESS = "";
-                Constant.Bluetooth_Activity_Navigation = 1;///Debug
+                if(!inst_controller_ser.getText().toString().isEmpty()) {
+                    WebURL.BT_DEVICE_NAME = "";
+                    WebURL.BT_DEVICE_MAC_ADDRESS = "";
+                    Constant.Bluetooth_Activity_Navigation = 1;///Debug
 
-                BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                if (mBluetoothAdapter.isEnabled()) {
-                    if (CustomUtility.pairedDeviceListGloable(getApplicationContext())) {
-                        if (WebURL.BT_DEVICE_NAME.equalsIgnoreCase("") || WebURL.BT_DEVICE_MAC_ADDRESS.equalsIgnoreCase("")) {
-                            Intent intent = new Intent(getApplicationContext(), PairedDeviceActivity.class);
-                            intent.putExtra(Constant.pendingSettingData,set_matno);
-                            intent.putExtra(Constant.ControllerSerialNumber, "");
-                            intent.putExtra(Constant.debugDataExtract, "false");
-                            intent.putExtra(Constant.isPeramterSet, "true");
-                            intent.putExtra(Constant.billNo, billno);
-                            startActivity(intent);
+                    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                    if (mBluetoothAdapter.isEnabled()) {
+                        if (CustomUtility.pairedDeviceListGloable(getApplicationContext())) {
+                            if (WebURL.BT_DEVICE_NAME.equalsIgnoreCase("") || WebURL.BT_DEVICE_MAC_ADDRESS.equalsIgnoreCase("")) {
+                                Intent intent = new Intent(getApplicationContext(), PairedDeviceActivity.class);
+                                intent.putExtra(Constant.pendingSettingData, set_matno);
+                                intent.putExtra(Constant.ControllerSerialNumber, "");
+                                intent.putExtra(Constant.debugDataExtract, "false");
+                                intent.putExtra(Constant.isPeramterSet, "true");
+                                intent.putExtra(Constant.billNo, billno);
+                                startActivity(intent);
+                            }
+                        } else {
+                            startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
                         }
                     } else {
                         startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
                     }
-                } else {
-                    startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
+                }else {
+                    CustomUtility.ShowToast(getResources().getString(R.string.enter_contact_number),getApplicationContext());
                 }
             }
         });
@@ -596,18 +604,22 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
                 borewellstatus1 = CustomUtility.getSharedPreferences(mContext, "borewellstatus" + billno);
 
-                if (!TextUtils.isEmpty(borewellstatus1)) {
+                if(!inst_pump_ser.getText().toString().trim().isEmpty()) {
+                    if (!TextUtils.isEmpty(borewellstatus1)) {
 
-                    Intent intent = new Intent(InstallationInitial.this, InstReportImageActivity.class);
-                    intent.putExtra("inst_id", bill_no.getText().toString().trim());
-                    intent.putExtra("cust_name", custname);
-                    intent.putExtra("BeneficiaryNo", BeneficiaryNo);
-                    intent.putExtra("pump_sernr", pump);
-                    intent.putExtra("PumpLoad", PumpLoad);
-                    startActivity(intent);
+                        Intent intent = new Intent(InstallationInitial.this, InstReportImageActivity.class);
+                        intent.putExtra("inst_id", bill_no.getText().toString().trim());
+                        intent.putExtra("cust_name", custname);
+                        intent.putExtra("BeneficiaryNo", BeneficiaryNo);
+                        intent.putExtra("pump_sernr", inst_pump_ser.getText().toString().trim());
+                        intent.putExtra("PumpLoad", PumpLoad);
+                        startActivity(intent);
 
-                } else {
-                    Toast.makeText(mContext, "Please Select Borewell Status", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(mContext, "Please Select Borewell Status", Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    CustomUtility.ShowToast(getResources().getString(R.string.enter_pump_serial_number),getApplicationContext());
                 }
 
                 return true;
@@ -712,108 +724,119 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         if (inst_latitude != null && !inst_latitude.equals("") && inst_longitude != null && !inst_longitude.equals("") && !inst_longitude.equals("0.0") && !inst_latitude.equals("0.0")) {
             if (inst_bill_no != null && !inst_bill_no.equals("")) {
 
-                if (solarpanel_wattage != null && !solarpanel_wattage.equals("")) {
-                    if (hp != null && !hp.equals("")) {
-                        if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
-                            if (total_watt != null && !total_watt.equals("")) {
-                                if (conntype_text != null && !conntype_text.equals("")) {
+                if(!inst_pump_ser.getText().toString().trim().isEmpty()) {
+                    if(!inst_motor_ser.getText().toString().trim().isEmpty()) {
+                        if(!inst_controller_ser.getText().toString().trim().isEmpty()) {
+                            if (solarpanel_wattage != null && !solarpanel_wattage.equals("")) {
+                                if (hp != null && !hp.equals("")) {
                                     if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
-                                        //   if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
-                                        if (module_total_plate_watt != null && !module_total_plate_watt.equals("")) {
-                                            if (smmd_sno != null && !smmd_sno.equals("")) {
-                                                if (spmd_sno != null && !spmd_sno.equals("")) {
-                                                    if (scm_sno != null && !scm_sno.equals("")) {
-                                                        if (inst_make != null && !inst_make.equals("")) {
-                                                            if (!TextUtils.isEmpty(borewellstatus1)) {
+                                        if (total_watt != null && !total_watt.equals("")) {
+                                            if (conntype_text != null && !conntype_text.equals("")) {
+                                                if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
+                                                    //   if (solarpanel_stand_ins_quantity != null && !solarpanel_stand_ins_quantity.equals("")) {
+                                                    if (module_total_plate_watt != null && !module_total_plate_watt.equals("")) {
+                                                        if (smmd_sno != null && !smmd_sno.equals("")) {
+                                                            if (spmd_sno != null && !spmd_sno.equals("")) {
+                                                                if (scm_sno != null && !scm_sno.equals("")) {
+                                                                    if (inst_make != null && !inst_make.equals("")) {
+                                                                        if (!TextUtils.isEmpty(borewellstatus1)) {
 
-                                                                if (!DeviceStatus.isEmpty()) {
+                                                                            if (!DeviceStatus.isEmpty()) {
 
-                                                                    if (DeviceStatus.equals(getResources().getString(R.string.online))) {
-                                                                        if (imageList.size() > 5) {
+                                                                                if (DeviceStatus.equals(getResources().getString(R.string.online))) {
+                                                                                    if (imageList.size() > 5) {
 
-                                                                                if(isParameterSet) {
-                                                                                    saveInstalltion();
-                                                                                }else {
-                                                                                    CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.pleaseSetParametersFirst));
-                                                                                }
-
-                                                                        } else {
-                                                                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_all_image));
-                                                                        }
-                                                                    } else {
-
-                                                                        if (mSimDetailsInfoResponse.size() > 0)
-                                                                            mSimDetailsInfoResponse.clear();
-                                                                        mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
-                                                                        if (mSimDetailsInfoResponse.size() >= 1) {
-                                                                            if (mSimDetailsInfoResponse.size() >= 2) {
-                                                                                if (mSimDetailsInfoResponse.size() >= 3) {
-
-
-                                                                                        if (imageList.size() > 5) {
-                                                                                            if(isParameterSet) {
-                                                                                                saveInstalltion();
-                                                                                            }else {
-                                                                                                CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.pleaseSetParametersFirst));
-                                                                                            }
+                                                                                        if (isParameterSet) {
+                                                                                            saveInstalltion();
+                                                                                        } else {
+                                                                                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.pleaseSetParametersFirst));
+                                                                                        }
 
                                                                                     } else {
                                                                                         CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_all_image));
                                                                                     }
-
                                                                                 } else {
-                                                                                    CustomUtility.ShowToast(getResources().getString(R.string.insertThirdSim), getApplicationContext());
+
+                                                                                    if (mSimDetailsInfoResponse.size() > 0)
+                                                                                        mSimDetailsInfoResponse.clear();
+                                                                                    mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
+                                                                                    if (mSimDetailsInfoResponse.size() >= 1) {
+                                                                                        if (mSimDetailsInfoResponse.size() >= 2) {
+                                                                                            if (mSimDetailsInfoResponse.size() >= 3) {
+
+
+                                                                                                if (imageList.size() > 5) {
+                                                                                                    if (isParameterSet) {
+                                                                                                        saveInstalltion();
+                                                                                                    } else {
+                                                                                                        CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.pleaseSetParametersFirst));
+                                                                                                    }
+
+                                                                                                } else {
+                                                                                                    CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_all_image));
+                                                                                                }
+
+                                                                                            } else {
+                                                                                                CustomUtility.ShowToast(getResources().getString(R.string.insertThirdSim), getApplicationContext());
+                                                                                            }
+                                                                                        } else {
+                                                                                            CustomUtility.ShowToast(getResources().getString(R.string.insertSecondSim), getApplicationContext());
+                                                                                        }
+                                                                                    } else {
+                                                                                        CustomUtility.ShowToast(getResources().getString(R.string.sim_insertMsg), getApplicationContext());
+
+                                                                                    }
                                                                                 }
                                                                             } else {
-                                                                                CustomUtility.ShowToast(getResources().getString(R.string.insertSecondSim), getApplicationContext());
+                                                                                Toast.makeText(mContext, "Please get RMS Device Status.", Toast.LENGTH_SHORT).show();
                                                                             }
+
                                                                         } else {
-                                                                            CustomUtility.ShowToast(getResources().getString(R.string.sim_insertMsg), getApplicationContext());
-
+                                                                            Toast.makeText(mContext, "Please Select Borewell Status.", Toast.LENGTH_SHORT).show();
                                                                         }
+                                                                    } else {
+                                                                        Toast.makeText(mContext, "Please Enter Make", Toast.LENGTH_SHORT).show();
                                                                     }
-                                                                } else {
-                                                                    Toast.makeText(mContext, "Please get RMS Device Status.", Toast.LENGTH_SHORT).show();
-                                                                }
 
+                                                                } else {
+                                                                    Toast.makeText(mContext, "Please Enter Controller Serial No.", Toast.LENGTH_SHORT).show();
+                                                                }
                                                             } else {
-                                                                Toast.makeText(mContext, "Please Select Borewell Status.", Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(mContext, "Please Enter Pump Serial No.", Toast.LENGTH_SHORT).show();
                                                             }
                                                         } else {
-                                                            Toast.makeText(mContext, "Please Enter Make", Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(mContext, "Please Enter Motor Serial No.", Toast.LENGTH_SHORT).show();
                                                         }
-
                                                     } else {
-                                                        Toast.makeText(mContext, "Please Enter Controller Serial No.", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(mContext, "Please Enter Total Module Plate Watt", Toast.LENGTH_SHORT).show();
                                                     }
                                                 } else {
-                                                    Toast.makeText(mContext, "Please Enter Pump Serial No.", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(mContext, "Please Enter Total Plate Watt", Toast.LENGTH_SHORT).show();
                                                 }
                                             } else {
-                                                Toast.makeText(mContext, "Please Enter Motor Serial No.", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(mContext, "Please Select Connection Type", Toast.LENGTH_SHORT).show();
                                             }
                                         } else {
-                                            Toast.makeText(mContext, "Please Enter Total Module Plate Watt", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(mContext, "Please Enter Total Watt.", Toast.LENGTH_SHORT).show();
                                         }
                                     } else {
-                                        Toast.makeText(mContext, "Please Enter Total Plate Watt", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(mContext, "Please Enter Solar Panel Stand Quantity.", Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
-                                    Toast.makeText(mContext, "Please Select Connection Type", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, "Please Enter HP.", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
-                                Toast.makeText(mContext, "Please Enter Total Watt.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, "Please Solar Panel Wattage.", Toast.LENGTH_SHORT).show();
                             }
-                        } else {
-                            Toast.makeText(mContext, "Please Enter Solar Panel Stand Quantity.", Toast.LENGTH_SHORT).show();
+                        }else {
+                            CustomUtility.ShowToast(getResources().getString(R.string.enter_controller_serial_number),getApplicationContext());
                         }
-                    } else {
-                        Toast.makeText(mContext, "Please Enter HP.", Toast.LENGTH_SHORT).show();
+                    }else {
+                        CustomUtility.ShowToast(getResources().getString(R.string.enter_motor_serial_number),getApplicationContext());
                     }
-                } else {
-                    Toast.makeText(mContext, "Please Solar Panel Wattage.", Toast.LENGTH_SHORT).show();
+                }else {
+                    CustomUtility.ShowToast(getResources().getString(R.string.enter_pump_serial_number),getApplicationContext());
                 }
-
             } else {
                 Toast.makeText(mContext, "Please Enter Bill No.", Toast.LENGTH_SHORT).show();
             }
@@ -928,7 +951,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                 inst_delay_reason, rmsdata_status, customer_name, fathname, mobileno, state, state_txt, city, city_txt, tehsil_ins, village_ins, address, make, solarpanel_wattage,
                 solarpanel_stand_ins_quantity, total_watt, hp, no_of_module, no_of_module_value, module_total_plate_watt, solar_motor_model_details, smmd_sno, splar_pump_model_details,
                 spmd_sno, solar_controller_model, scm_sno, simoprator_text, conntype_text, simcard_num, regisno, BeneficiaryNo, PumpLoad, aadharNoExt.getText().toString()
-                , aadharMobileExt.getText().toString()
+                , aadharMobileExt.getText().toString(),inst_motor_ser.getText().toString().trim(),inst_pump_ser.getText().toString().trim()
         );
 
         if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_PUMP_DATA, KEY_BILL_NO, inst_bill_no)) {
@@ -1068,6 +1091,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
         if (!installationBean.getScm_sno().isEmpty()) {
             controller = installationBean.getScm_sno().trim();
+            inst_controller_ser.setText(installationBean.getScm_sno().trim());
             isControllerIDScan = true;
         }
 
@@ -1104,11 +1128,11 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
         inst_module_total_plate_watt.setText(installationBean.getModule_total_plate_watt());
 
-        inst_motor_ser.setText(motor);
+        inst_motor_ser.setText(installationBean.getMotorSerNo());
 
-        inst_pump_ser.setText(pump);
+        inst_pump_ser.setText(installationBean.getPumpSerNo());
 
-        inst_controller_ser.setText(controller);
+        inst_controller_ser.setText(installationBean.getScm_sno().trim());
 
         if (!TextUtils.isEmpty(installationBean.getSimoprator())) {
             spinner_simoprator.setSelection(db.getPosition(spinner_simoprator, installationBean.getSimoprator()));
@@ -1225,13 +1249,13 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         }
 
         if (scannerCode == 3000) {
-            if (rawValue.equals(inst_controller_ser.getText().toString())) {
+        //    if (rawValue.equals(inst_controller_ser.getText().toString())) {
                 inst_controller_ser.setText("");
                 inst_controller_ser.setText(rawValue);
                 isControllerIDScan = true;
-            } else {
+           /* } else {
                 MatchControllerIDPopup();
-            }
+            }*/
         }
 
 
@@ -1344,7 +1368,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
     }
 
     private void addSimIntoDatabse(String mSimNumberData, Dialog dialog) {
-        long iiii = mDatabaseHelperTeacher.insertSimInfoData(controller, mSimNumberData, Constant.BILL_NUMBER_UNIC, Constant.BILL_NUMBER_UNIC, MUserId, true);
+        long iiii = mDatabaseHelperTeacher.insertSimInfoData(installationBean.getScm_sno().trim(), mSimNumberData, Constant.BILL_NUMBER_UNIC, Constant.BILL_NUMBER_UNIC, MUserId, true);
         Toast.makeText(mContext, "Sim number insterted successfully!", Toast.LENGTH_SHORT).show();
         dialog.dismiss();
     }
@@ -1832,6 +1856,10 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
             jsonObj.put("app_version", version);
             jsonObj.put("aadhar_no", aadharNoExt.getText().toString().trim());
             jsonObj.put("aadhar_mob", aadharMobileExt.getText().toString().trim());
+            jsonObj.put("ser1 ", inst_pump_ser.getText().toString().trim());
+            jsonObj.put("ser2 ", inst_motor_ser.getText().toString().trim());
+            jsonObj.put("ser3 ", inst_controller_ser.getText().toString().trim());
+
 
             jsonObj.put("LOGIN_NAME", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonName));
             jsonObj.put("LOGIN_CONT", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.PersonNumber));

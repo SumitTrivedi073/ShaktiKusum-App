@@ -230,11 +230,11 @@ import webservice.WebURL;
                         district_txt = jo.getString("cityc_txt");
                         address = jo.getString("address");
                         contactno = jo.getString("mobile");
-                        controller = jo.getString("controller_sernr");
-                        motor = jo.getString("motor_sernr");
+                       // controller = jo.getString("controller_sernr");
+                        //motor = jo.getString("motor_sernr");
                         simno = jo.getString("simno");
                         beneficiary = jo.getString("beneficiary");
-                        pump = jo.getString("pump_sernr");
+                      //  pump = jo.getString("pump_sernr");
                         regisno = jo.getString("regisno");
                         projectno = jo.getString("project_no");
                         loginno = jo.getString("process_no");
@@ -247,7 +247,6 @@ import webservice.WebURL;
                         pump_load = jo.getString("pump_load");
                         aadhar_no = jo.getString("aadhar_no");
                         aadhar_mobile = jo.getString("aadhar_mob");
-                    //    Log.e("pumpLoad======>",pump_load);
 
                         installationBean = new InstallationListBean(bill_no,
                                 CustomUtility.getSharedPreferences(context, "userid"),

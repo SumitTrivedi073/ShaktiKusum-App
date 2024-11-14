@@ -626,7 +626,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_PHOTO8 + " BLOB," + KEY_PHOTO9 + " BLOB," + KEY_PHOTO10 + " BLOB," + KEY_PHOTO11 + " BLOB," + KEY_PHOTO12 + " BLOB,"
             + KEY_ADD1 + " TEXT," + KEY_ADD2 + " TEXT," + KEY_ADD3 + " TEXT," + KEY_ADD4 + " TEXT," + KEY_ADD5 + " TEXT,"
             + KEY_ADD6 + " TEXT," + KEY_ADD7 + " TEXT," + KEY_ADD8 + " TEXT," + KEY_ADD9 + " TEXT," + KEY_ADD10 + " TEXT,"
-            + KEY_ADD11 + " TEXT," + KEY_ADD12 + " TEXT," + KEY_ADD13 + " TEXT," + KEY_ADD14 + " TEXT," + KEY_ADD15 + " TEXT," + KEY_ADD16 + " TEXT," + KEY_BENEFICIARY_NO + " TEXT," + KEY_AADHAR_NO + " TEXT," + KEY_PUMPLoad + " TEXT)";
+            + KEY_ADD11 + " TEXT," + KEY_ADD12 + " TEXT," + KEY_ADD13 + " TEXT," + KEY_ADD14 + " TEXT," + KEY_ADD15 + " TEXT," + KEY_ADD16 + " TEXT," + KEY_BENEFICIARY_NO + " TEXT," + KEY_AADHAR_NO + " TEXT," + KEY_AADHAR_MOBILE + " TEXT," + KEY_PUMPLoad + " TEXT," + KEY_PUMP_SERIAL_NO + " TEXT," + KEY_MOTOR_SERIAL_NO + " TEXT)";
 
 
     private static final String CREATE_TABLE_KUSUMCSURVEYFORM = "CREATE TABLE "
@@ -2260,8 +2260,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_ADD2, installationBean.getDelay_reason());
             values.put(KEY_ADD3, installationBean.getMake_ins());
             values.put(KEY_BENEFICIARY_NO, installationBean.getBeneficiaryNo());
-            values.put(KEY_PUMPLoad, installationBean.getPumpLoad());
             values.put(KEY_AADHAR_NO, installationBean.getAadhar_no());
+            values.put(KEY_AADHAR_MOBILE, installationBean.getAadhar_mobile());
+            values.put(KEY_PUMPLoad, installationBean.getPumpLoad());
+            values.put(KEY_PUMP_SERIAL_NO, installationBean.getPumpSerNo());
+            values.put(KEY_MOTOR_SERIAL_NO, installationBean.getMotorSerNo());
             // Insert Row
             long i = db.insert(TABLE_INSTALLATION_PUMP_DATA, null, values);
             // Insert into database successfully.
@@ -2326,6 +2329,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_BENEFICIARY_NO, installationBean.getBeneficiaryNo());
             values.put(KEY_PUMPLoad, installationBean.getPumpLoad());
             values.put(KEY_AADHAR_NO, installationBean.getAadhar_no());
+            values.put(KEY_AADHAR_MOBILE, installationBean.getAadhar_mobile());
+            values.put(KEY_PUMP_SERIAL_NO, installationBean.getPumpSerNo());
+            values.put(KEY_MOTOR_SERIAL_NO, installationBean.getMotorSerNo());
             where = KEY_BILL_NO + "='" + billno + "'";
 
             i = db.update(TABLE_INSTALLATION_PUMP_DATA, values, where, null);
@@ -3950,7 +3956,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         installationBean.setBeneficiaryNo(cursor.getString(cursor.getColumnIndex(KEY_BENEFICIARY_NO)));
                         installationBean.setPumpLoad(cursor.getString(cursor.getColumnIndex(KEY_PUMPLoad)));
                         installationBean.setAadhar_no(cursor.getString(cursor.getColumnIndex(KEY_AADHAR_NO)));
-                        Log.e("aadhar==>",cursor.getString(cursor.getColumnIndex(KEY_AADHAR_NO)));
+                        installationBean.setAadhar_mobile(cursor.getString(cursor.getColumnIndex(KEY_AADHAR_MOBILE)));
+                        installationBean.setPumpSerNo(cursor.getString(cursor.getColumnIndex(KEY_PUMP_SERIAL_NO)));
+                        installationBean.setMotorSerNo(cursor.getString(cursor.getColumnIndex(KEY_MOTOR_SERIAL_NO)));
+                    //    Log.e("aadhar==>",cursor.getString(cursor.getColumnIndex(KEY_AADHAR_NO)));
                         cursor.moveToNext();
                     }
                 }
