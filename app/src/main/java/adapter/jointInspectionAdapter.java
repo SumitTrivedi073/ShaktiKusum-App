@@ -19,9 +19,7 @@ import java.util.List;
 
 import activity.JointInspectionImageActivity;
 import bean.JointInspectionModel;
-import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
-import debugapp.RoutePlanModel;
 
 public class jointInspectionAdapter extends RecyclerView.Adapter<jointInspectionAdapter.ViewHolder> implements Filterable {
 

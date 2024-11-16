@@ -49,6 +49,9 @@ public class Constant {
     public static String unloadingData = "unloadingData";
 
     public static String debugDataExtract = "debugDataExtract";
+    public static String isPeramterSet = "isPeramterSet";
+
+    public static String pendingSettingData = "pendingSettingData";
 
     public static String JointInspection = "JointInspection";
 
@@ -73,4 +76,5 @@ public class Constant {
     public static String partialDamage = "Partial Damage";
     public static String ok = "OK";
     public static String not_ok = "NOT OK";
+    public static String billNo = "billNo";
 }

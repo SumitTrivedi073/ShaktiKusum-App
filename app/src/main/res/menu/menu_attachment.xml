@@ -1,15 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     tools:context="activity.PumpReport">
 
-    <item
-        android:id="@+id/act_comp_add_damage_complain"
-        android:icon="@drawable/ic_back_plus"
-        android:orderInCategory="1"
-        android:title="@string/action_complaint_add"
-        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/act_comp_setting_pera"

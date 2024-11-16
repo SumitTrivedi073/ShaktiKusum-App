@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import activity.DeptDocSubImageActivity;
-import activity.JointInspectionImageActivity;
 import bean.JointInspectionModel;
 import debugapp.GlobalValue.Constant;
 

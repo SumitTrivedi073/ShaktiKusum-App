@@ -33,11 +33,13 @@ public class WebURL {
 
     /************* development server **************/
 
-   /* public static final String RMSAPPURL = "https://quality.shaktirms.com/";
+   /*public static final String RMSAPPURL = "https://quality.shaktirms.com/";
     public static final String BASEURL = "https://spquasrvr1.shaktipumps.com:8423";
     public static final String BASE_URL_VK= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/";
     public static final String BASE_URL_VK1= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/";
    public static final String BASE_URL_OPTION_VK= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
+
+
 
     /************* APIS **************/
     public static final String GET_SURVEY_API = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/get_survey.htm";
@@ -46,8 +48,11 @@ public class WebURL {
     public static final String LOGIN_SELEC_PAGE = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/login_selection.htm";
     public static final String DASHBOARD_DATA = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/dashboard.htm";
     public static final String REGISTRATION_DATA = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_registration.htm";
-    public static final String INSTALLATION_DATA = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_installation.htm";
+    public static final String INSTALLATION_DATA = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_installation_new.htm";
+
     public static final String INSTALLATION_DATA_UNLOAD = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/unload_image_save1.htm";
+
+    public static final String PARAMETER_SET_DONE = "/sap/bc/bsp/sap/zmapp_solar_pro/save_parameter_setting_status.htm";
     public static final String DAMAGE_MISS_DATA = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/create_complaint.htm";
     public static final String SAVE_SURVEY_DATA = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_survey.htm";
     public static final String INSTALLATION = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/installation.htm";
@@ -64,6 +69,8 @@ public class WebURL {
     public static final String INSTALLATION_OFFLINE_DATA_SUBMIT = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/image_save_for_offline_done.htm";
 
     public static final String PendingFeedback = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/pending_feedback_list.htm";
+
+    public static final String PendingSettingList = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/paramter_setting_list.htm";
 
     public static final String SendOTP = "http://control.yourbulksms.com/api/sendhttp.php?authkey=393770756d707334373701";
 
@@ -116,6 +123,8 @@ public class WebURL {
     public static final String docSubCircle = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/doc_sub_at_circle.htm";
     public static final String docSubHO = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/doc_sub_at_ho.htm";
     public static final String jointInsp = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/joint_insp.htm";
+
+    public static final String paraMeterListAPI = "RMSApp/MoterParamList";
 
     /*--------------------------------------------------RMS APIS-------------------------------------------------------------------*/
     public static final String DEVICE_DETAILS = "Home/SAPOnlineDeviceDetails";

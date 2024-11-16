@@ -12,8 +12,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.shaktipumplimited.retrofit.BaseRequest;
-import com.shaktipumplimited.retrofit.RequestReciever;
+import webservice.retrofit.BaseRequest;
+import webservice.retrofit.RequestReciever;
 import com.shaktipumplimited.shaktikusum.R;
 
 import java.util.HashMap;

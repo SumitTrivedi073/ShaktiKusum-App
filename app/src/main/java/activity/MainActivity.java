@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
@@ -34,8 +33,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.navigation.NavigationView;
-import com.shaktipumplimited.SetParameter.PairedDeviceActivity;
-import com.shaktipumplimited.SettingModel.AllPopupUtil;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
@@ -48,6 +45,7 @@ import java.util.ArrayList;
 import adapter.Adapter_item_list;
 import bean.ItemNameBean;
 import bean.LoginBean;
+import bluetoothpaireDevice.SetParameter.PairedDeviceActivity;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;
@@ -311,11 +309,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
                 BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                 if (mBluetoothAdapter.isEnabled()) {
-                    if (AllPopupUtil.pairedDeviceListGloable(context)) {
+                    if (CustomUtility.pairedDeviceListGloable(context)) {
                         if (WebURL.BT_DEVICE_NAME.equalsIgnoreCase("") || WebURL.BT_DEVICE_MAC_ADDRESS.equalsIgnoreCase("")) {
                             Intent intent = new Intent(context, PairedDeviceActivity.class);
                             intent.putExtra(Constant.ControllerSerialNumber, "");
                             intent.putExtra(Constant.debugDataExtract, "true");
+                            intent.putExtra(Constant.isPeramterSet, "false");
                             startActivity(intent);
                         }
                     } else {

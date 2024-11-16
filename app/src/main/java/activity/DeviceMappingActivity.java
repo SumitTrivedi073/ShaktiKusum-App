@@ -73,7 +73,6 @@ import bean.DeviceDetailModel;
 import bean.DeviceMappingModel;
 import bean.DeviceShiftingModel;
 import bean.ImageModel;
-import bean.InstallationBean;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
 import utility.CustomUtility;

@@ -19,7 +19,6 @@ import com.shaktipumplimited.shaktikusum.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import activity.JointInspectionImageActivity;
 import activity.RejectInstallationImageActivity;
 import bean.RejectInstallationModel;
 import debugapp.GlobalValue.Constant;
