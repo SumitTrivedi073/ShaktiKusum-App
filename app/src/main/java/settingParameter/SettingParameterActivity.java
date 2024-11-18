@@ -126,7 +126,7 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
             set_matno =  getIntent().getStringExtra(Constant.pendingSettingData);
             materialCode = set_matno.replace("00000000", "");
             Log.e("materialCode===>",materialCode);
-           // materialCode = "9111129696";
+    //        materialCode = "9111129696";
             if (CustomUtility.isInternetOn(getApplicationContext())) {
                if(!databaseHelper.isRecordExist(TABLE_SETTING_PARAMETER_LIST,COLUMN_MaterialCode,materialCode)) {
                     getAllParameters();
@@ -458,7 +458,17 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
 
                                     if (mTotalTimeFloatData == -1.0) {
                                         parameterSettingList.get(mWriteAllCounterValue).setSet(false);
-                                        settingParameterAdapter.notifyDataSetChanged();
+                                        if (BluetoothCommunicationForDynamicParameterWriteAll.this.getStatus() == Status.RUNNING) {
+                                            // Cancel the AsyncTask if it's still running
+                                            BluetoothCommunicationForDynamicParameterWriteAll.this.cancel(true);
+                                            try {
+                                                onTimeout(); // Handle the timeout case
+                                            } catch (IOException e) {
+                                                throw new RuntimeException(e);
+                                            }
+                                        }
+                                        settingParameterAdapter.notifyItemChanged(mWriteAllCounterValue);
+
                                     }
                                     Log.e("name===>", String.valueOf(parameterSettingList.get(mWriteAllCounterValue).getParametersName()));
                                     Log.e("edtValueFloat===>", String.valueOf(edtValueFloat));

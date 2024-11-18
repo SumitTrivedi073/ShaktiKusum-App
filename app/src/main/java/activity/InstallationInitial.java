@@ -296,7 +296,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                 startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
             }
             }else {
-                CustomUtility.ShowToast(getResources().getString(R.string.enter_contact_number),getApplicationContext());
+                CustomUtility.ShowToast(getResources().getString(R.string.enter_controller_serial_number),getApplicationContext());
             }
         });
 
@@ -327,7 +327,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                         startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
                     }
                 }else {
-                    CustomUtility.ShowToast(getResources().getString(R.string.enter_contact_number),getApplicationContext());
+                    CustomUtility.ShowToast(getResources().getString(R.string.enter_controller_serial_number),getApplicationContext());
                 }
             }
         });
@@ -746,11 +746,11 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                                                                                 if (DeviceStatus.equals(getResources().getString(R.string.online))) {
                                                                                     if (imageList.size() > 5) {
 
-                                                                                        if (isParameterSet) {
+                                                                                       // if (isParameterSet) {
                                                                                             saveInstalltion();
-                                                                                        } else {
+                                                                                        /*} else {
                                                                                             CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.pleaseSetParametersFirst));
-                                                                                        }
+                                                                                        }*/
 
                                                                                     } else {
                                                                                         CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_all_image));
@@ -766,11 +766,11 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
 
                                                                                                 if (imageList.size() > 5) {
-                                                                                                    if (isParameterSet) {
+                                                                                                //    if (isParameterSet) {
                                                                                                         saveInstalltion();
-                                                                                                    } else {
+                                                                                                    /*} else {
                                                                                                         CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.pleaseSetParametersFirst));
-                                                                                                    }
+                                                                                                    }*/
 
                                                                                                 } else {
                                                                                                     CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_all_image));
@@ -1838,9 +1838,9 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
             jsonObj.put("TOTAL_WATT", param_invc.getTotal_watt());
             jsonObj.put("PANEL_MODULE_QTY", param_invc.getNo_of_module_qty());
             jsonObj.put("inst_no_of_module_value", param_invc.getNo_of_module_value());
-            jsonObj.put("MOTOR_SERNR", param_invc.getSmmd_sno());
-            jsonObj.put("PUMP_SERNR", param_invc.getSpmd_sno());
-            jsonObj.put("CONTROLLER_SERNR", param_invc.getScm_sno());
+            jsonObj.put("MOTOR_SERNR", inst_motor_ser.getText().toString().trim());
+            jsonObj.put("PUMP_SERNR", inst_pump_ser.getText().toString().trim());
+            jsonObj.put("CONTROLLER_SERNR",inst_controller_ser.getText().toString().trim());
             jsonObj.put("SIM_OPRETOR", param_invc.getSimoprator());
             jsonObj.put("SIMNO", param_invc.getSimcard_num());
             jsonObj.put("VBELN", param_invc.getInst_bill_no());
