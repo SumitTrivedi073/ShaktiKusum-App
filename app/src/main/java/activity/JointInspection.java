@@ -4,12 +4,17 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -101,11 +106,15 @@ public class JointInspection extends AppCompatActivity implements BarCodeSelecti
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getResources().getString(R.string.jointInsp));
-
         mToolbar.setNavigationOnClickListener(v -> onBackPressed());
 
     }
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_inst, menu);
+        return true;
+    }
     private void listner() {
         btnSave.setOnClickListener(v -> {
 
@@ -150,6 +159,20 @@ public class JointInspection extends AppCompatActivity implements BarCodeSelecti
         });
 
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.attachImage:
+
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
     private class saveData extends AsyncTask<String, String, String> {
         ProgressDialog progressDialog;
 
