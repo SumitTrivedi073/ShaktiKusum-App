@@ -746,11 +746,9 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                                                                                 if (DeviceStatus.equals(getResources().getString(R.string.online))) {
                                                                                     if (imageList.size() > 5) {
 
-                                                                                       // if (isParameterSet) {
+
                                                                                             saveInstalltion();
-                                                                                        /*} else {
-                                                                                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.pleaseSetParametersFirst));
-                                                                                        }*/
+
 
                                                                                     } else {
                                                                                         CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_all_image));
@@ -766,11 +764,9 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
 
                                                                                                 if (imageList.size() > 5) {
-                                                                                                //    if (isParameterSet) {
+
                                                                                                         saveInstalltion();
-                                                                                                    /*} else {
-                                                                                                        CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.pleaseSetParametersFirst));
-                                                                                                    }*/
+
 
                                                                                                 } else {
                                                                                                     CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_all_image));
@@ -875,7 +871,11 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                 if (!aadharMobileExt.getText().toString().isEmpty()) {
                     SaveInLocalDataBase();
                     if (CustomUtility.isInternetOn(getApplicationContext())) {
-                        SubmitData();
+                        if (isParameterSet) {
+                            SubmitData();
+                        }else {
+                            CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.pleaseSetParametersFirst));
+                        }
                     } else {
                         CustomUtility.ShowToast(getResources().getString(R.string.savedInLocalDatabase), mContext);
                         Intent intent = new Intent(mContext, InstallationList.class);

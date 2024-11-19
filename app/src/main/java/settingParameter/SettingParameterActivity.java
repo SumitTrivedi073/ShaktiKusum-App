@@ -482,6 +482,8 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
 
                                     } else {
                                             Log.e("isSetData===>", "false");
+                                            String  value = parameterSettingList.get(mWriteAllCounterValue).getParametersName()+ " Not Set"+ mTotalTimeFloatData;
+                                            CustomUtility.ShowToast(value, getApplicationContext());
 
                                     }
                                     parameterSettingList.get(mWriteAllCounterValue).setpValue((float) edtValueFloat);
@@ -524,11 +526,7 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
                 hiddeProgressDialogue();
                 handler.removeCallbacks(timeoutRunnable);
 
-                if(mCount==parameterSettingList.size()){
-                    //    Log.e("mCount===>", mCount+"====>"+parameterSettingList.size());
 
-                    ShowAlertResponse("3");
-                }
                 if (mWriteAllCounterValue < parameterSettingList.size() && ispaired) {
                     String mStringCeck = parameterSettingList.get(mWriteAllCounterValue).getpValue().toString().trim();
                     System.out.println("Vikas!@#==>>" + mStringCeck);
@@ -583,7 +581,9 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
                 } else {
                     System.out.println("222");
                 }
-
+                if(mCount==parameterSettingList.size()){
+                    ShowAlertResponse("3");
+                }
             } catch (NumberFormatException e) {
                 e.printStackTrace();
                 System.out.println("111");
