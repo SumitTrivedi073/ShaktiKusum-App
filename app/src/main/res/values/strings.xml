@@ -584,7 +584,7 @@
     <string name="addressnotfound">MOB address not found!</string>
     <string name="getComData">Loading component list of drive....</string>
     <string name="fetchingData">Fetching data....</string>
-    <string name="sendingData">Sending data....</string>
+    <string name="sendingData">Setting data....</string>
     <string name="setalldata">Sending all data to drive.</string>
     <string name="operationUnsuccessfull">Operation unsuccessful. </string>
     <string name="plsConnectBt">Please connect bluetooth</string>

@@ -23,6 +23,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -54,6 +56,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import activity.InstallationList;
 import activity.PendingInstallationActivity;
 import activity.UnloadInstReportImageActivity;
 import bean.ParameterSettingListModel;
@@ -133,7 +136,7 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
           //  materialCode = "9500002085";
             if (CustomUtility.isInternetOn(getApplicationContext())) {
                if(!databaseHelper.isRecordExist(TABLE_SETTING_PARAMETER_LIST,COLUMN_MaterialCode,materialCode)) {
-                    getAllParameters();
+                   new getAllParameters().execute();
                 }else {
                     setAdapter(materialCode);
                 }
@@ -144,7 +147,8 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
     }
 
     private void getAllParameters() {
-
+        parameterSettingList = new ArrayList<>();
+        parameterSettingList2 = new ArrayList<>();
         showProgressDialogue(getResources().getString(R.string.loading));
         RequestQueue mRequestQueue = Volley.newRequestQueue(this);
         Log.e("url===>", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) + WebURL.paraMeterListAPI);
@@ -179,6 +183,49 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
     }
 
 
+    private class getAllParameters extends AsyncTask<String, String, String> {
+
+        @Override
+        protected void onPreExecute() {
+            parameterSettingList = new ArrayList<>();
+            parameterSettingList2 = new ArrayList<>();
+            showProgressDialogue(getResources().getString(R.string.loading));
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            final ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
+            String login_selec = null;
+            try {
+                login_selec = CustomHttpClient.executeHttpGet(CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) + WebURL.paraMeterListAPI);
+
+                Log.e("URL====>",CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) + WebURL.paraMeterListAPI);
+                JSONObject object = new JSONObject(login_selec);
+                MotorParamListModel motorParamListModel = new Gson().fromJson(object.toString(), MotorParamListModel.class);
+                Log.e("response2===>", String.valueOf(motorParamListModel.getStatus().equals("true")));
+
+                if (motorParamListModel.getStatus().equals("true")) {
+                    insertDataInLocal(motorParamListModel.getResponse());
+                    hiddeProgressDialogue();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+               hiddeProgressDialogue();
+
+            }
+
+            return login_selec;
+        }
+
+        @SuppressLint("WrongConstant")
+        @Override
+        protected void onPostExecute(String result) {
+            // write display tracks logic here
+
+            hiddeProgressDialogue();
+        }
+    }
+
     private void insertDataInLocal(List<MotorParamListModel.Response> parameterSettingList) {
         databaseHelper.deleteParametersData();
         for (int i = 0; i < parameterSettingList.size(); i++) {
@@ -193,6 +240,11 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
     }
 
     private void setAdapter(String materialCode) {
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+        settingParameterAdapter = null;
         parameterSettingList2 = databaseHelper.getParameterRecordDetails(materialCode.trim());
         if (parameterSettingList2 != null && parameterSettingList2.size() > 0) {
 
@@ -225,15 +277,49 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
             settingParameterAdapter = new SettingParameterAdapter(SettingParameterActivity.this, parameterSettingList, noDataFound);
             parametersList.setHasFixedSize(true);
             parametersList.setAdapter(settingParameterAdapter);
-            settingParameterAdapter.EditItemClick(this);
+            settingParameterAdapter.EditItemClick(SettingParameterActivity.this);
             noDataFound.setVisibility(View.GONE);
             parametersList.setVisibility(View.VISIBLE);
         } else {
             noDataFound.setVisibility(View.VISIBLE);
             parametersList.setVisibility(View.GONE);
         }
+            }
+        });
+
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.rlvSetAllViewID:
+                setAllTheComParameter();
+                break;
+            case R.id.submitBtn:
+
+                if(!parameterSettingList.isEmpty()){
+                    for (int i=0; i<parameterSettingList.size(); i++){
+                        if(parameterSettingList.get(i).getSet().toString().equals("false")){
+                            isAllParameterSet = false;
+                            CustomUtility.ShowToast(getResources().getString(R.string.pleaseSetParametersFirst),getApplicationContext());
+                            break;
+                        }else {
+                            isAllParameterSet = true;
+                        }
+                    }
+                    if(isAllParameterSet){
+                        try {
+                            ShowAlertResponse("3");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+                break;
+
+
+        }
+    }
     @Override
     public void getBtnMethod(MotorParamListModel.Response response, String editvalue, int position) {
         selected_pos = position;
@@ -297,37 +383,373 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
                 }, 3000);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.rlvSetAllViewID:
-                setAllTheComParameter();
-                break;
-            case R.id.submitBtn:
+    @SuppressLint("StaticFieldLeak")
+    private class BluetoothCommunicationForDynamicParameterRead extends AsyncTask<String, Void, Boolean>  // UI thread
+    {
+        private static final long TIMEOUT = 20000; // Timeout duration in milliseconds (e.g., 10 seconds)
+        private Handler handler = new Handler(Looper.getMainLooper());
+        private Runnable timeoutRunnable;
 
-                if(!parameterSettingList.isEmpty()){
-                    for (int i=0; i<parameterSettingList.size(); i++){
-                        if(parameterSettingList.get(i).getSet().toString().equals("false")){
-                            isAllParameterSet = false;
-                            CustomUtility.ShowToast(getResources().getString(R.string.pleaseSetParametersFirst),getApplicationContext());
-                            break;
-                        }else {
-                            isAllParameterSet = true;
-                        }
-                    }
-                    if(isAllParameterSet){
-                        try {
-                            ShowAlertResponse("3");
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mMyUDID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+            timeoutRunnable = () -> {
+                if (BluetoothCommunicationForDynamicParameterRead.this.getStatus() == Status.RUNNING) {
+                    // Cancel the AsyncTask if it's still running
+                    BluetoothCommunicationForDynamicParameterRead.this.cancel(true);
+                    try {
+                        onTimeout(); // Handle the timeout case
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
                 }
-                break;
+            };
+            handler.postDelayed(timeoutRunnable, TIMEOUT);
+        }
+
+        @SuppressLint("MissingPermission")
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+        @Override
+        protected Boolean doInBackground(String... requests) //while the progress dialog is shown, the connection is done in background
+        {
+            try {
+                if (btSocket != null) {
+                    if (!btSocket.isConnected()) {
+                        connectToBluetoothSocket();
+
+                    } else {
+                        connectToBluetoothSocket();
+                    }
+                } else {
+                    connectToBluetoothSocket();
+                }
+                if (btSocket.isConnected()) {
+                    byte[] STARTRequest = requests[0].getBytes(StandardCharsets.US_ASCII);
+
+                    try {
+                        btSocket.getOutputStream().write(STARTRequest);
+                        sleep(100);
+
+                        iStream = btSocket.getInputStream();
+                        System.out.println("iStream==>>iStream  " + iStream + " ");
+
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+
+                    int[] bytesReaded = new int[4];
+
+                    int mTotalTime;
+                    int jjj = 0;
+
+                    for (int i = 0; i < 1; i++) {
+                        try {
+                            for (int j = 0; j < 6; j++) {
+
+                                int mCharOne1 = iStream.read();
+                                Log.e("istream====>", "" + (char) mCharOne1);
+                            }
+
+                            int mCharOne = iStream.read();
+                            int mCharTwo = iStream.read();
+                            bytesReaded[i] = Integer.parseInt("" + (char) mCharOne + "" + (char) mCharTwo, 16);
+                            mCharOne = iStream.read();
+                            mCharTwo = iStream.read();
+                            bytesReaded[i + 1] = Integer.parseInt("" + (char) mCharOne + "" + (char) mCharTwo, 16);
+                            mCharOne = iStream.read();
+                            mCharTwo = iStream.read();
+                            bytesReaded[i + 2] = Integer.parseInt("" + (char) mCharOne + "" + (char) mCharTwo, 16);
+                            mCharOne = iStream.read();
+                            mCharTwo = iStream.read();
+                            bytesReaded[i + 3] = Integer.parseInt("" + (char) mCharOne + "" + (char) mCharTwo, 16);
+
+                            Log.e("byteread0====>", String.valueOf(bytesReaded[i])
+                                    + "byteread1====>" + String.valueOf(bytesReaded[i + 1])
+                                    + "byteread2====>" + String.valueOf(bytesReaded[i + 2])
+                                    + "byteread3====>" + String.valueOf(bytesReaded[i + 3]));
+
+                            Log.e("bytesReaded", bytesReaded.toString());
+
+                            mTotalTime = bytesReaded[i];
+                            System.out.println("mTotalTime==>>vvv1  " + jjj + " " + mTotalTime);
+                            mTotalTime |= bytesReaded[i + 1] << 8;
+                            System.out.println("mTotalTime==>>vvv2  " + jjj + " " + mTotalTime);
+                            mTotalTime |= bytesReaded[i + 2] << 16;
+                            System.out.println("mTotalTime==>>vvv3  " + jjj + " " + mTotalTime);
+                            mTotalTime |= bytesReaded[i + 3] << 24;
+                            System.out.println("mTotalTime==>>vvv4  " + jjj + " " + mTotalTime);
 
 
+                            mTotalTimeFloatData = 0;
+                            mTotalTimeFloatData = Float.intBitsToFloat(mTotalTime);
+                            Log.e("READ=====>", String.valueOf(mTotalTimeFloatData));
+                            runOnUiThread(new Runnable() {
+                                @SuppressLint("SetTextI18n")
+                                @Override
+                                public void run() {
+                                    try {
+                                        ShowAlertResponse("0");
+
+                                        parameterSettingList.get(mWriteAllCounterValue).setpValue((float) mTotalTimeFloatData);
+                                        parameterSettingList.get(mWriteAllCounterValue).setBillNo(billNo);
+                                        settingParameterAdapter.notifyDataSetChanged();
+                                        System.out.println("mGlobalPosition==>>" + mGlobalPosition + "\nmTotalTimeFloatData==>>" + mTotalTimeFloatData);
+                                        databaseHelper.updateParameterRecord(parameterSettingList.get(mWriteAllCounterValue));
+
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+
+                            jjj++;
+                            int mCharOne11;
+                            //needed to cancel out the extra buffer
+                            for (int ii = 0; ii < 4; ii++) {
+                                mCharOne11 = iStream.read();
+                                Log.e("mCharOne11===>ii>>>>>", String.valueOf(mCharOne11) + "=====" + ii);
+                            }
+
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                hiddeProgressDialogue();
+                return false;
+            }
+
+            return false;
+        }
+
+        @SuppressLint("SetTextI18n")
+        @Override
+        protected void onPostExecute(Boolean result) //after the doInBackground, it checks if everything went fine
+        {
+
+            super.onPostExecute(result);
+            hiddeProgressDialogue();
         }
     }
+
+    @Override
+    public void setBtnMethod(MotorParamListModel.Response response, String editvalue, int position) {
+
+        try {
+            selected_pos = position;
+            int pos = position;
+            mGlobalPosition = pos;
+            String mStringCeck = editvalue.trim();
+            if (!mStringCeck.equalsIgnoreCase("")) {
+                edtValueFloat = Float.parseFloat(parameterSettingList.get(selected_pos).getpValue().toString().trim());
+            }
+
+            char[] datar = new char[4];
+            int a = Float.floatToIntBits((float) edtValueFloat);
+            datar[0] = (char) (a & 0x000000FF);
+            datar[1] = (char) ((a & 0x0000FF00) >> 8);
+            datar[2] = (char) ((a & 0x00FF0000) >> 16);
+            datar[3] = (char) ((a & 0xFF000000) >> 24);
+            int crc = CRC16_MODBUS(datar, 4);
+            char reciverbyte1 = (char) ((crc >> 8) & 0x00FF);
+            char reciverbyte2 = (char) (crc & 0x00FF);
+            mCRCFinalValue = (char) (reciverbyte1 + reciverbyte2);
+            String v1 = String.format("%02x", (0xff & datar[0]));
+            String v2 = String.format("%02x", (0xff & datar[1])); //String v2 =Integer.toHexString(datar[1]);
+            String v3 = String.format("%02x", (0xff & datar[2]));
+            String v4 = String.format("%02x", (0xff & datar[3]));
+            String v5 = Integer.toHexString(mCRCFinalValue);
+            String mMOBADDRESS = "";
+            String mMobADR = parameterSettingList.get(pos).getMobBTAddress();
+            if (!mMobADR.equalsIgnoreCase("")) {
+                int mLenth = mMobADR.length();
+                if (mLenth == 1) {
+                    mMOBADDRESS = "000" + mMobADR;
+                } else if (mLenth == 2) {
+                    mMOBADDRESS = "00" + mMobADR;
+                }
+                if (mLenth == 3) {
+                    mMOBADDRESS = "0" + mMobADR;
+                } else {
+                    mMOBADDRESS = mMobADR;
+                }
+                String modeBusCommand = "0106" + mMOBADDRESS + v1 + v2 + v3 + v4 + v5;//write
+                System.out.println("mTotalTime==>>vvvSet==>> " + modeBusCommand);
+                new BluetoothCommunicationForDynamicParameterWrite().execute(modeBusCommand, modeBusCommand, "OK");
+
+            } else {
+                Toast.makeText(this, getResources().getString(R.string.addressnotfound), Toast.LENGTH_SHORT).show();
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class BluetoothCommunicationForDynamicParameterWrite extends AsyncTask<String, Void, Boolean>  // UI thread
+    {
+        private static final long TIMEOUT = 20000; // Timeout duration in milliseconds (e.g., 10 seconds)
+        private Handler handler = new Handler(Looper.getMainLooper());
+        private Runnable timeoutRunnable;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showProgressDialogue(getResources().getString(R.string.sendingData));
+            mMyUDID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+            // Initialize and start the timeout timer
+            timeoutRunnable = () -> {
+                if (BluetoothCommunicationForDynamicParameterWrite.this.getStatus() == Status.RUNNING) {
+                    // Cancel the AsyncTask if it's still running
+                    BluetoothCommunicationForDynamicParameterWrite.this.cancel(true);
+                    try {
+                        onTimeout(); // Handle the timeout case
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            };
+            handler.postDelayed(timeoutRunnable, TIMEOUT);
+
+        }
+
+        @SuppressLint("MissingPermission")
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+        @Override
+        protected Boolean doInBackground(String... requests) //while the progress dialog is shown, the connection is done in background
+        {
+            try {
+                if (btSocket != null) {
+                    if (!btSocket.isConnected()) {
+                        connectToBluetoothSocket();
+
+                    } else {
+                        connectToBluetoothSocket();
+                    }
+                } else {
+                    connectToBluetoothSocket();
+                }
+
+                if (btSocket.isConnected()) {
+                    byte[] STARTRequest = requests[0].getBytes(StandardCharsets.US_ASCII);
+
+                    try {
+                        btSocket.getOutputStream().write(STARTRequest);
+                        sleep(1000);
+                        iStream = btSocket.getInputStream();
+
+                        // Log.e("iStream===>set", String.valueOf(iStream.read()));
+                    } catch (InterruptedException e1) {
+
+                        e1.printStackTrace();
+                    }
+
+
+                    int[] bytesReaded = new int[4];
+
+
+                    int mTotalTime;
+
+                    int jjj = 0;
+
+                    for (int i = 0; i < 1; i++) {
+                        try {
+                            for (int j = 0; j < 6; j++) {
+                                int mCharOne1 = iStream.read();
+                                Log.e("istream====>", "" + (char) mCharOne1);
+                            }
+
+
+                            int mCharOne = iStream.read();
+                            int mCharTwo = iStream.read();
+                            bytesReaded[i] = Integer.parseInt("" + (char) mCharOne + (char) mCharTwo, 16);
+                            mCharOne = iStream.read();
+                            mCharTwo = iStream.read();
+                            bytesReaded[i + 1] = Integer.parseInt("" + (char) mCharOne + (char) mCharTwo, 16);
+                            mCharOne = iStream.read();
+                            mCharTwo = iStream.read();
+                            bytesReaded[i + 2] = Integer.parseInt("" + (char) mCharOne + (char) mCharTwo, 16);
+                            mCharOne = iStream.read();
+                            mCharTwo = iStream.read();
+                            bytesReaded[i + 3] = Integer.parseInt("" + (char) mCharOne + (char) mCharTwo, 16);
+
+                            System.out.println("byte0==>  " + jjj + " " + bytesReaded[i]);
+                            System.out.println("byte1==>  " + jjj + " " + bytesReaded[i + 1]);
+                            System.out.println("byte2==>  " + jjj + " " + bytesReaded[i + 2]);
+                            System.out.println("byte3=>  " + jjj + " " + bytesReaded[i + 3]);
+
+
+                            mTotalTime = bytesReaded[i];
+                            System.out.println("mTotalTime==>>vvv1  " + jjj + " " + mTotalTime);
+                            mTotalTime |= bytesReaded[i + 1] << 8;
+                            System.out.println("mTotalTime==>>vvv2  " + jjj + " " + mTotalTime);
+                            mTotalTime |= bytesReaded[i + 2] << 16;
+                            System.out.println("mTotalTime==>>vvv3  " + jjj + " " + mTotalTime);
+                            mTotalTime |= bytesReaded[i + 3] << 24;
+
+                            mTotalTimeFloatData = 0;
+                            mTotalTimeFloatData = Float.intBitsToFloat(mTotalTime);
+                            Log.e("Write=====>", String.valueOf(mTotalTimeFloatData));
+
+                            runOnUiThread(() -> {
+
+                                if (mTotalTimeFloatData == edtValueFloat) {
+                                    try {
+                                        ShowAlertResponse("1");
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    parameterSettingList.get(selected_pos).setSet(true);
+                                } else {
+                                    try {
+                                        ShowAlertResponse("-1");
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    parameterSettingList.get(selected_pos).setSet(false);
+                                }
+
+                                parameterSettingList.get(selected_pos).setpValue((float) edtValueFloat);
+                                parameterSettingList.get(selected_pos).setBillNo(billNo);
+                                settingParameterAdapter.notifyDataSetChanged();
+                                databaseHelper.updateParameterRecord(parameterSettingList.get(selected_pos));
+
+
+                            });
+
+                            jjj++;
+
+                        } catch (IOException e) {
+                            hiddeProgressDialogue();
+                            e.printStackTrace();
+                        }
+                    }
+                    while (iStream.available() > 0) {
+                        iStream.read();
+                    }
+                }
+            } catch (Exception e) {
+                return false;
+            }
+
+            return false;
+        }
+
+        @SuppressLint("SetTextI18n")
+        @Override
+        protected void onPostExecute(Boolean result) //after the doInBackground, it checks if everything went fine
+        {
+            super.onPostExecute(result);
+            hiddeProgressDialogue();
+            handler.removeCallbacks(timeoutRunnable);
+        }
+    }
+
     private void setAllTheComParameter() {
         mCount = 0;
         mGlobalPositionSet = 0;
@@ -403,8 +825,6 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
             CustomUtility.ShowToast(getResources().getString(R.string.somethingWentWrong), SettingParameterActivity.this);
         }
     }
-
-
     @SuppressLint("StaticFieldLeak")
     private class BluetoothCommunicationForDynamicParameterWriteAll extends AsyncTask<String, Void, Boolean>  // UI thread
     {
@@ -415,7 +835,7 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            showProgressDialogue(getResources().getString(R.string.setalldata));
+            showProgressDialogue(getResources().getString(R.string.setalldata) + " for "+materialCode);
             mMyUDID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
             timeoutRunnable = () -> {
                 if (BluetoothCommunicationForDynamicParameterWriteAll.this.getStatus() == Status.RUNNING) {
@@ -658,373 +1078,8 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
 
 
 
-    @SuppressLint("StaticFieldLeak")
-    private class BluetoothCommunicationForDynamicParameterRead extends AsyncTask<String, Void, Boolean>  // UI thread
-    {
-        private static final long TIMEOUT = 20000; // Timeout duration in milliseconds (e.g., 10 seconds)
-        private Handler handler = new Handler(Looper.getMainLooper());
-        private Runnable timeoutRunnable;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mMyUDID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-            timeoutRunnable = () -> {
-                if (BluetoothCommunicationForDynamicParameterRead.this.getStatus() == Status.RUNNING) {
-                    // Cancel the AsyncTask if it's still running
-                    BluetoothCommunicationForDynamicParameterRead.this.cancel(true);
-                    try {
-                        onTimeout(); // Handle the timeout case
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            };
-            handler.postDelayed(timeoutRunnable, TIMEOUT);
-        }
-
-        @SuppressLint("MissingPermission")
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-        @Override
-        protected Boolean doInBackground(String... requests) //while the progress dialog is shown, the connection is done in background
-        {
-            try {
-                if (btSocket != null) {
-                    if (!btSocket.isConnected()) {
-                        connectToBluetoothSocket();
-
-                    } else {
-                        connectToBluetoothSocket();
-                    }
-                } else {
-                    connectToBluetoothSocket();
-                }
-                if (btSocket.isConnected()) {
-                    byte[] STARTRequest = requests[0].getBytes(StandardCharsets.US_ASCII);
-
-                    try {
-                        btSocket.getOutputStream().write(STARTRequest);
-                        sleep(100);
-
-                        iStream = btSocket.getInputStream();
-                        System.out.println("iStream==>>iStream  " + iStream + " ");
-
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
-
-                    int[] bytesReaded = new int[4];
-
-                    int mTotalTime;
-                    int jjj = 0;
-
-                    for (int i = 0; i < 1; i++) {
-                        try {
-                            for (int j = 0; j < 6; j++) {
-
-                                int mCharOne1 = iStream.read();
-                                Log.e("istream====>", "" + (char) mCharOne1);
-                            }
-
-                            int mCharOne = iStream.read();
-                            int mCharTwo = iStream.read();
-                            bytesReaded[i] = Integer.parseInt("" + (char) mCharOne + "" + (char) mCharTwo, 16);
-                            mCharOne = iStream.read();
-                            mCharTwo = iStream.read();
-                            bytesReaded[i + 1] = Integer.parseInt("" + (char) mCharOne + "" + (char) mCharTwo, 16);
-                            mCharOne = iStream.read();
-                            mCharTwo = iStream.read();
-                            bytesReaded[i + 2] = Integer.parseInt("" + (char) mCharOne + "" + (char) mCharTwo, 16);
-                            mCharOne = iStream.read();
-                            mCharTwo = iStream.read();
-                            bytesReaded[i + 3] = Integer.parseInt("" + (char) mCharOne + "" + (char) mCharTwo, 16);
-
-                            Log.e("byteread0====>", String.valueOf(bytesReaded[i])
-                                    + "byteread1====>" + String.valueOf(bytesReaded[i + 1])
-                                    + "byteread2====>" + String.valueOf(bytesReaded[i + 2])
-                                    + "byteread3====>" + String.valueOf(bytesReaded[i + 3]));
-
-                            Log.e("bytesReaded", bytesReaded.toString());
-
-                            mTotalTime = bytesReaded[i];
-                            System.out.println("mTotalTime==>>vvv1  " + jjj + " " + mTotalTime);
-                            mTotalTime |= bytesReaded[i + 1] << 8;
-                            System.out.println("mTotalTime==>>vvv2  " + jjj + " " + mTotalTime);
-                            mTotalTime |= bytesReaded[i + 2] << 16;
-                            System.out.println("mTotalTime==>>vvv3  " + jjj + " " + mTotalTime);
-                            mTotalTime |= bytesReaded[i + 3] << 24;
-                            System.out.println("mTotalTime==>>vvv4  " + jjj + " " + mTotalTime);
 
 
-                            mTotalTimeFloatData = 0;
-                            mTotalTimeFloatData = Float.intBitsToFloat(mTotalTime);
-                            Log.e("READ=====>", String.valueOf(mTotalTimeFloatData));
-                            runOnUiThread(new Runnable() {
-                                @SuppressLint("SetTextI18n")
-                                @Override
-                                public void run() {
-                                    try {
-                                        ShowAlertResponse("0");
-
-                                        parameterSettingList.get(mWriteAllCounterValue).setpValue((float) mTotalTimeFloatData);
-                                        parameterSettingList.get(mWriteAllCounterValue).setBillNo(billNo);
-                                        settingParameterAdapter.notifyDataSetChanged();
-                                        System.out.println("mGlobalPosition==>>" + mGlobalPosition + "\nmTotalTimeFloatData==>>" + mTotalTimeFloatData);
-                                        databaseHelper.updateParameterRecord(parameterSettingList.get(mWriteAllCounterValue));
-
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-
-                            jjj++;
-                            int mCharOne11;
-                            //needed to cancel out the extra buffer
-                            for (int ii = 0; ii < 4; ii++) {
-                                mCharOne11 = iStream.read();
-                                Log.e("mCharOne11===>ii>>>>>", String.valueOf(mCharOne11) + "=====" + ii);
-                            }
-
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                hiddeProgressDialogue();
-                return false;
-            }
-
-            return false;
-        }
-
-        @SuppressLint("SetTextI18n")
-        @Override
-        protected void onPostExecute(Boolean result) //after the doInBackground, it checks if everything went fine
-        {
-
-            super.onPostExecute(result);
-            hiddeProgressDialogue();
-        }
-    }
-
-
-    @Override
-    public void setBtnMethod(MotorParamListModel.Response response, String editvalue, int position) {
-
-        try {
-            selected_pos = position;
-            int pos = position;
-            mGlobalPosition = pos;
-            String mStringCeck = editvalue.trim();
-            if (!mStringCeck.equalsIgnoreCase("")) {
-                edtValueFloat = Float.parseFloat(parameterSettingList.get(selected_pos).getpValue().toString().trim());
-            }
-
-            char[] datar = new char[4];
-            int a = Float.floatToIntBits((float) edtValueFloat);
-            datar[0] = (char) (a & 0x000000FF);
-            datar[1] = (char) ((a & 0x0000FF00) >> 8);
-            datar[2] = (char) ((a & 0x00FF0000) >> 16);
-            datar[3] = (char) ((a & 0xFF000000) >> 24);
-            int crc = CRC16_MODBUS(datar, 4);
-            char reciverbyte1 = (char) ((crc >> 8) & 0x00FF);
-            char reciverbyte2 = (char) (crc & 0x00FF);
-            mCRCFinalValue = (char) (reciverbyte1 + reciverbyte2);
-            String v1 = String.format("%02x", (0xff & datar[0]));
-            String v2 = String.format("%02x", (0xff & datar[1])); //String v2 =Integer.toHexString(datar[1]);
-            String v3 = String.format("%02x", (0xff & datar[2]));
-            String v4 = String.format("%02x", (0xff & datar[3]));
-            String v5 = Integer.toHexString(mCRCFinalValue);
-            String mMOBADDRESS = "";
-            String mMobADR = parameterSettingList.get(pos).getMobBTAddress();
-            if (!mMobADR.equalsIgnoreCase("")) {
-                int mLenth = mMobADR.length();
-                if (mLenth == 1) {
-                    mMOBADDRESS = "000" + mMobADR;
-                } else if (mLenth == 2) {
-                    mMOBADDRESS = "00" + mMobADR;
-                }
-                if (mLenth == 3) {
-                    mMOBADDRESS = "0" + mMobADR;
-                } else {
-                    mMOBADDRESS = mMobADR;
-                }
-                String modeBusCommand = "0106" + mMOBADDRESS + v1 + v2 + v3 + v4 + v5;//write
-                System.out.println("mTotalTime==>>vvvSet==>> " + modeBusCommand);
-                new BluetoothCommunicationForDynamicParameterWrite().execute(modeBusCommand, modeBusCommand, "OK");
-
-            } else {
-                Toast.makeText(this, getResources().getString(R.string.addressnotfound), Toast.LENGTH_SHORT).show();
-            }
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class BluetoothCommunicationForDynamicParameterWrite extends AsyncTask<String, Void, Boolean>  // UI thread
-    {
-        private static final long TIMEOUT = 20000; // Timeout duration in milliseconds (e.g., 10 seconds)
-        private Handler handler = new Handler(Looper.getMainLooper());
-        private Runnable timeoutRunnable;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            showProgressDialogue(getResources().getString(R.string.sendingData));
-            mMyUDID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-            // Initialize and start the timeout timer
-            timeoutRunnable = () -> {
-                if (BluetoothCommunicationForDynamicParameterWrite.this.getStatus() == Status.RUNNING) {
-                    // Cancel the AsyncTask if it's still running
-                    BluetoothCommunicationForDynamicParameterWrite.this.cancel(true);
-                    try {
-                        onTimeout(); // Handle the timeout case
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            };
-            handler.postDelayed(timeoutRunnable, TIMEOUT);
-
-        }
-
-        @SuppressLint("MissingPermission")
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-        @Override
-        protected Boolean doInBackground(String... requests) //while the progress dialog is shown, the connection is done in background
-        {
-            try {
-                if (btSocket != null) {
-                    if (!btSocket.isConnected()) {
-                        connectToBluetoothSocket();
-
-                    } else {
-                        connectToBluetoothSocket();
-                    }
-                } else {
-                    connectToBluetoothSocket();
-                }
-
-                if (btSocket.isConnected()) {
-                    byte[] STARTRequest = requests[0].getBytes(StandardCharsets.US_ASCII);
-
-                    try {
-                        btSocket.getOutputStream().write(STARTRequest);
-                        sleep(1000);
-                        iStream = btSocket.getInputStream();
-
-                        // Log.e("iStream===>set", String.valueOf(iStream.read()));
-                    } catch (InterruptedException e1) {
-
-                        e1.printStackTrace();
-                    }
-
-
-                    int[] bytesReaded = new int[4];
-
-
-                    int mTotalTime;
-
-                    int jjj = 0;
-
-                    for (int i = 0; i < 1; i++) {
-                        try {
-                            for (int j = 0; j < 6; j++) {
-                                int mCharOne1 = iStream.read();
-                                Log.e("istream====>", "" + (char) mCharOne1);
-                            }
-
-
-                            int mCharOne = iStream.read();
-                            int mCharTwo = iStream.read();
-                            bytesReaded[i] = Integer.parseInt("" + (char) mCharOne + (char) mCharTwo, 16);
-                            mCharOne = iStream.read();
-                            mCharTwo = iStream.read();
-                            bytesReaded[i + 1] = Integer.parseInt("" + (char) mCharOne + (char) mCharTwo, 16);
-                            mCharOne = iStream.read();
-                            mCharTwo = iStream.read();
-                            bytesReaded[i + 2] = Integer.parseInt("" + (char) mCharOne + (char) mCharTwo, 16);
-                            mCharOne = iStream.read();
-                            mCharTwo = iStream.read();
-                            bytesReaded[i + 3] = Integer.parseInt("" + (char) mCharOne + (char) mCharTwo, 16);
-
-                            System.out.println("byte0==>  " + jjj + " " + bytesReaded[i]);
-                            System.out.println("byte1==>  " + jjj + " " + bytesReaded[i + 1]);
-                            System.out.println("byte2==>  " + jjj + " " + bytesReaded[i + 2]);
-                            System.out.println("byte3=>  " + jjj + " " + bytesReaded[i + 3]);
-
-
-                            mTotalTime = bytesReaded[i];
-                            System.out.println("mTotalTime==>>vvv1  " + jjj + " " + mTotalTime);
-                            mTotalTime |= bytesReaded[i + 1] << 8;
-                            System.out.println("mTotalTime==>>vvv2  " + jjj + " " + mTotalTime);
-                            mTotalTime |= bytesReaded[i + 2] << 16;
-                            System.out.println("mTotalTime==>>vvv3  " + jjj + " " + mTotalTime);
-                            mTotalTime |= bytesReaded[i + 3] << 24;
-
-                            mTotalTimeFloatData = 0;
-                            mTotalTimeFloatData = Float.intBitsToFloat(mTotalTime);
-                            Log.e("Write=====>", String.valueOf(mTotalTimeFloatData));
-
-                            runOnUiThread(() -> {
-
-                                if (mTotalTimeFloatData == edtValueFloat) {
-                                    try {
-                                        ShowAlertResponse("1");
-                                    } catch (IOException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                    parameterSettingList.get(selected_pos).setSet(true);
-                                } else {
-                                    try {
-                                        ShowAlertResponse("-1");
-                                    } catch (IOException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                    parameterSettingList.get(selected_pos).setSet(false);
-                                }
-
-                                parameterSettingList.get(selected_pos).setpValue((float) edtValueFloat);
-                                parameterSettingList.get(selected_pos).setBillNo(billNo);
-                                settingParameterAdapter.notifyDataSetChanged();
-                                databaseHelper.updateParameterRecord(parameterSettingList.get(selected_pos));
-
-
-                            });
-
-                            jjj++;
-
-                        } catch (IOException e) {
-                            hiddeProgressDialogue();
-                            e.printStackTrace();
-                        }
-                    }
-                    while (iStream.available() > 0) {
-                        iStream.read();
-                    }
-                }
-            } catch (Exception e) {
-                return false;
-            }
-
-            return false;
-        }
-
-        @SuppressLint("SetTextI18n")
-        @Override
-        protected void onPostExecute(Boolean result) //after the doInBackground, it checks if everything went fine
-        {
-            super.onPostExecute(result);
-            hiddeProgressDialogue();
-            handler.removeCallbacks(timeoutRunnable);
-        }
-    }
 
     private void onTimeout() throws IOException {
         // Additional handling if needed when the task times out
@@ -1162,6 +1217,34 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_unsync, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            case R.id.action_menu_unsync:
+                if (CustomUtility.isInternetOn(getApplicationContext())) {
+                    new getAllParameters().execute();
+
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "No internet Connection....", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private void showProgressDialogue(String message) {
         runOnUiThread(() -> {

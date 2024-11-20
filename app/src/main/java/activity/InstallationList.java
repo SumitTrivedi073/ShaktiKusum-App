@@ -354,37 +354,6 @@ import webservice.WebURL;
              new GetInstallationDataList_Task().execute();
          }
      }
-     private void getAllParameters() {
-         progressDialog = ProgressDialog.show(context, "", "Please Wait...");
-         RequestQueue mRequestQueue = Volley.newRequestQueue(this);
-         Log.e("url===>", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) + WebURL.paraMeterListAPI);
-         StringRequest mStringRequest = new StringRequest(Request.Method.GET, CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) + WebURL.paraMeterListAPI , response -> {
-             Log.e("response1===>", String.valueOf(response.toString()));
-             if (!response.isEmpty()) {
-                progressDialog.dismiss();
-                 MotorParamListModel motorParamListModel = new Gson().fromJson(response, MotorParamListModel.class);
-                 Log.e("response2===>", String.valueOf(motorParamListModel.getStatus().equals("true")));
-                 if (motorParamListModel.getStatus().equals("true")) {
-                     insertDataInLocal(motorParamListModel.getResponse());
-
-                 } else {
-                   progressDialog.dismiss();
-                 }
-
-             } else {
-                 progressDialog.dismiss();
-             }
-
-         }, error -> {
-             progressDialog.dismiss();
-         });
-
-         mStringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                 DefaultRetryPolicy.DEFAULT_TIMEOUT_MS,
-                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,  // maxNumRetries = 0 means no retry
-                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-         mRequestQueue.add(mStringRequest);
-     }
 
 
      private void insertDataInLocal(List<MotorParamListModel.Response> parameterSettingList) {

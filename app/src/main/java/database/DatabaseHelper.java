@@ -5175,6 +5175,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public void deleteParametersSetData() {
+        SQLiteDatabase  database = this.getWritableDatabase();
+        if(CustomUtility.doesTableExist(database,TABLE_PARAMETER_SET_DATA)) {
+            database.delete(TABLE_PARAMETER_SET_DATA, null, null);
+        }
+
+    }
+
 
     public void insertSettingPendingData(ParameterSettingListModel.InstallationDatum pendingSettingModel) {
         SQLiteDatabase   database = this.getWritableDatabase();

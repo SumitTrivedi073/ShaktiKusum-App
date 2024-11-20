@@ -66,6 +66,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -688,9 +689,9 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         GPSTracker gps = new GPSTracker(mContext);
 
         if (gps.canGetLocation()) {
-
-            String mLAt = "" + gps.getLatitude();
-            String mLOng = "" + gps.getLongitude();
+            DecimalFormat decimalFormat = new DecimalFormat("##.######");
+            String mLAt = "" + decimalFormat.format(gps.getLatitude());
+            String mLOng = "" +decimalFormat.format( gps.getLongitude());
 
 
             inst_latitude_double = Double.parseDouble(mLAt);
