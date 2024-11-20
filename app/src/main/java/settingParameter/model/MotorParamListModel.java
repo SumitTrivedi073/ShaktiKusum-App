@@ -73,6 +73,9 @@ public class MotorParamListModel {
         @SerializedName("isSet")
         @Expose
         private Boolean IsSet;
+        @SerializedName("billNo")
+        @Expose
+        private String billNo;
 
         public Integer getPmId() {
             return pmId;
@@ -154,6 +157,14 @@ public class MotorParamListModel {
             IsSet = set;
         }
 
+        public String getBillNo() {
+            return billNo;
+        }
+
+        public void setBillNo(String billNo) {
+            this.billNo = billNo;
+        }
+
         @Override
         public String toString() {
             return "Response{" +
@@ -167,6 +178,7 @@ public class MotorParamListModel {
                     ", unit='" + unit + '\'' +
                     ", offset=" + offset +
                     ", IsSet=" + IsSet +
+                    ", billNo=" + billNo +
                     '}';
         }
     }

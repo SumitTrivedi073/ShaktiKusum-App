@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import settingParameter.model.MotorParamListModel;
+import utility.CustomUtility;
 
 public class SettingParameterAdapter extends RecyclerView.Adapter<SettingParameterAdapter.ViewHolder> {
     Context mContext;
@@ -61,10 +62,19 @@ public class SettingParameterAdapter extends RecyclerView.Adapter<SettingParamet
             holder.editTextValue.setText(String.valueOf(response.getpValue()));
         }
 
-        holder.getBtn.setOnClickListener(v -> itemclickListner.getBtnMethod(response, holder.editTextValue.getText().toString(), position));
-        holder.setBtn.setOnClickListener(v -> itemclickListner.setBtnMethod(response, holder.editTextValue.getText().toString(), position));
+      //  holder.getBtn.setOnClickListener(v -> itemclickListner.getBtnMethod(response, holder.editTextValue.getText().toString(), position));
+        holder.setBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!response.getSet().toString().isEmpty() && response.getSet().toString().equals("false")) {
+                    itemclickListner.setBtnMethod(response, holder.editTextValue.getText().toString(), position);
+                }else {
+                    CustomUtility.ShowToast(mContext.getResources().getString(R.string.alreadySet),mContext);
+                }
+            }
+        });
 
-        holder.editTextValue.addTextChangedListener(new TextWatcher() {
+       holder.editTextValue.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -85,15 +95,14 @@ public class SettingParameterAdapter extends RecyclerView.Adapter<SettingParamet
             }
         });
 
-        if (cmponentList.get(position).getSet() != null && !cmponentList.get(position).getSet()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                holder.editTextValue.setTextColor(mContext.getColor(R.color.red));
-            } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    holder.editTextValue.setTextColor(mContext.getColor(R.color.black));
-                }
-            }
+        if (!String.valueOf(cmponentList.get(position).getSet()).isEmpty()&&String.valueOf(cmponentList.get(position).getSet()).equals("false")) {
+            holder.editTextValue.setTextColor(mContext.getResources().getColor(R.color.link_color));
+            holder.setBtn.setBackgroundColor(mContext.getResources().getColor(R.color.link_color));
+        }else {
+            holder.editTextValue.setTextColor(mContext.getResources().getColor(R.color.black));
+            holder.setBtn.setBackgroundColor(mContext.getResources().getColor(R.color.blue_fb));
         }
+
     }
 
     @Override
@@ -105,7 +114,7 @@ public class SettingParameterAdapter extends RecyclerView.Adapter<SettingParamet
         LinearLayout lvlMainItemViewID;
         Button getBtn, setBtn;
         TextView title;
-        TextView editTextValue;
+        EditText editTextValue;
 
         public ViewHolder(View itemView) {
             super(itemView);

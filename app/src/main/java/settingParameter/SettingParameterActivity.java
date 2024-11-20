@@ -71,7 +71,7 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
     TextView noDataFound;
     DatabaseHelper databaseHelper;
     private Activity mActivity;
-    List<MotorParamListModel.Response> parameterSettingList;
+    List<MotorParamListModel.Response> parameterSettingList,parameterSettingList2;
     int selected_pos = 0, mGlobalPosition = 0, mGlobalPositionSet = 0, mWriteAllCounterValue = 0, counterValue = 0,mCount=0;
     char mCRCFinalValue;
     private BluetoothAdapter myBluetooth;
@@ -84,7 +84,7 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
     SettingParameterAdapter settingParameterAdapter;
     String BluetoothAddress;
     Toolbar toolbar;
-    TextView rlvSetAllViewID;
+    TextView rlvSetAllViewID,submitBtn;
     String materialCode = "",set_matno,billNo;
 
     @Override
@@ -99,12 +99,14 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
 
     private void listener() {
         rlvSetAllViewID.setOnClickListener(this);
+        submitBtn.setOnClickListener(this);
     }
 
     private void Init() {
         parametersList = findViewById(R.id.parametersList);
         noDataFound = findViewById(R.id.noDataFound);
         rlvSetAllViewID = findViewById(R.id.rlvSetAllViewID);
+        submitBtn = findViewById(R.id.submitBtn);
         mActivity = this;
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -118,6 +120,8 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
 
 
     private void retrieveValue() {
+        parameterSettingList = new ArrayList<>();
+        parameterSettingList2 = new ArrayList<>();
         databaseHelper = new DatabaseHelper(this);
 
         if (getIntent().getExtras() != null) {
@@ -126,7 +130,7 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
             set_matno =  getIntent().getStringExtra(Constant.pendingSettingData);
             materialCode = set_matno.replace("00000000", "");
             Log.e("materialCode===>",materialCode);
-    //        materialCode = "9111129696";
+          //  materialCode = "9500002085";
             if (CustomUtility.isInternetOn(getApplicationContext())) {
                if(!databaseHelper.isRecordExist(TABLE_SETTING_PARAMETER_LIST,COLUMN_MaterialCode,materialCode)) {
                     getAllParameters();
@@ -140,7 +144,7 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
     }
 
     private void getAllParameters() {
-        parameterSettingList = new ArrayList<>();
+
         showProgressDialogue(getResources().getString(R.string.loading));
         RequestQueue mRequestQueue = Volley.newRequestQueue(this);
         Log.e("url===>", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) + WebURL.paraMeterListAPI);
@@ -189,15 +193,41 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
     }
 
     private void setAdapter(String materialCode) {
-        parameterSettingList = databaseHelper.getParameterRecordDetails(materialCode.trim());
-        if (parameterSettingList != null && parameterSettingList.size() > 0) {
+        parameterSettingList2 = databaseHelper.getParameterRecordDetails(materialCode.trim());
+        if (parameterSettingList2 != null && parameterSettingList2.size() > 0) {
+
+
+                for (int i = 0; i < parameterSettingList2.size(); i++) {
+                    MotorParamListModel.Response response = new MotorParamListModel.Response();
+
+                    response.setParametersName(parameterSettingList2.get(i).getParametersName());
+                    response.setMaterialCode(parameterSettingList2.get(i).getMaterialCode());
+                    response.setModbusaddress(parameterSettingList2.get(i).getModbusaddress());
+                    response.setMobBTAddress(parameterSettingList2.get(i).getMobBTAddress());
+                    response.setFactor(parameterSettingList2.get(i).getFactor());
+                    response.setOffset(parameterSettingList2.get(i).getOffset());
+                    response.setPmId(parameterSettingList2.get(i).getPmId());
+                    response.setUnit(parameterSettingList2.get(i).getUnit());
+                    response.setpValue(parameterSettingList2.get(i).getpValue());
+
+                    if(parameterSettingList2.get(i).getBillNo().equals(billNo)) {
+                        response.setBillNo(parameterSettingList2.get(i).getBillNo());
+                        response.setSet(parameterSettingList2.get(i).getSet());
+                    }else {
+                        response.setBillNo(parameterSettingList2.get(i).getBillNo());
+                        response.setSet(false);
+                    }
+                        parameterSettingList.add(response);
+
+                }
+
+
             settingParameterAdapter = new SettingParameterAdapter(SettingParameterActivity.this, parameterSettingList, noDataFound);
             parametersList.setHasFixedSize(true);
             parametersList.setAdapter(settingParameterAdapter);
             settingParameterAdapter.EditItemClick(this);
             noDataFound.setVisibility(View.GONE);
             parametersList.setVisibility(View.VISIBLE);
-
         } else {
             noDataFound.setVisibility(View.VISIBLE);
             parametersList.setVisibility(View.GONE);
@@ -273,6 +303,29 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
             case R.id.rlvSetAllViewID:
                 setAllTheComParameter();
                 break;
+            case R.id.submitBtn:
+
+                if(!parameterSettingList.isEmpty()){
+                    for (int i=0; i<parameterSettingList.size(); i++){
+                        if(parameterSettingList.get(i).getSet().toString().equals("false")){
+                            isAllParameterSet = false;
+                            CustomUtility.ShowToast(getResources().getString(R.string.pleaseSetParametersFirst),getApplicationContext());
+                            break;
+                        }else {
+                            isAllParameterSet = true;
+                        }
+                    }
+                    if(isAllParameterSet){
+                        try {
+                            ShowAlertResponse("3");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+                break;
+
+
         }
     }
     private void setAllTheComParameter() {
@@ -288,6 +341,16 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
                 System.out.println("Vikas!@#==>>" + mStringCeck);
 
                 if (!mStringCeck.equalsIgnoreCase("")) {
+                    /*if(parameterSettingList.get(mWriteAllCounterValue).getModbusaddress().equals("2006")){
+                        if(parameterSettingList.get(mWriteAllCounterValue).getpValue()<10){
+                            edtValueFloat = Float.parseFloat(String.valueOf(parameterSettingList.get(mWriteAllCounterValue).getpValue()*10));
+                       Log.e("edtValueFloat====>", String.valueOf(edtValueFloat));
+                        }else {
+                            edtValueFloat = Float.parseFloat(parameterSettingList.get(mWriteAllCounterValue).getpValue().toString().trim());
+                        }
+                    }else {
+                        edtValueFloat = Float.parseFloat(parameterSettingList.get(mWriteAllCounterValue).getpValue().toString().trim());
+                    }*/
                     edtValueFloat = Float.parseFloat(parameterSettingList.get(mWriteAllCounterValue).getpValue().toString().trim());
                 }
 
@@ -457,8 +520,8 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
                                 public void run() {
 
                                     if (mTotalTimeFloatData == -1.0) {
-                                        parameterSettingList.get(mWriteAllCounterValue).setSet(false);
-                                        if (BluetoothCommunicationForDynamicParameterWriteAll.this.getStatus() == Status.RUNNING) {
+
+                                       /* if (BluetoothCommunicationForDynamicParameterWriteAll.this.getStatus() == Status.RUNNING) {
                                             // Cancel the AsyncTask if it's still running
                                             BluetoothCommunicationForDynamicParameterWriteAll.this.cancel(true);
                                             try {
@@ -466,8 +529,8 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
                                             } catch (IOException e) {
                                                 throw new RuntimeException(e);
                                             }
-                                        }
-                                        settingParameterAdapter.notifyItemChanged(mWriteAllCounterValue);
+                                        }*/
+                                        parameterSettingList.get(mWriteAllCounterValue).setSet(false);
 
                                     }
                                     Log.e("name===>", String.valueOf(parameterSettingList.get(mWriteAllCounterValue).getParametersName()));
@@ -476,18 +539,21 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
 
 
                                     if (mTotalTimeFloatData == edtValueFloat) {
-
+                                        parameterSettingList.get(mWriteAllCounterValue).setSet(true);
                                             Log.e("isSetData===>", "true");
                                              mCount++;
 
                                     } else {
+                                        parameterSettingList.get(mWriteAllCounterValue).setSet(false);
                                             Log.e("isSetData===>", "false");
                                             String  value = parameterSettingList.get(mWriteAllCounterValue).getParametersName()+ " Not Set"+ mTotalTimeFloatData;
                                             CustomUtility.ShowToast(value, getApplicationContext());
 
                                     }
                                     parameterSettingList.get(mWriteAllCounterValue).setpValue((float) edtValueFloat);
-                                    databaseHelper.updateParameter(parameterSettingList.get(mGlobalPosition));
+                                    parameterSettingList.get(mWriteAllCounterValue).setBillNo(billNo);
+                                    settingParameterAdapter.notifyDataSetChanged();
+                                    databaseHelper.updateParameterRecord(parameterSettingList.get(mWriteAllCounterValue));
 
                                 }
                             });
@@ -581,14 +647,10 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
                 } else {
                     System.out.println("222");
                 }
-                if(mCount==parameterSettingList.size()){
-                    ShowAlertResponse("3");
-                }
+
             } catch (NumberFormatException e) {
                 e.printStackTrace();
                 System.out.println("111");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
 
         }
@@ -704,10 +766,11 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
                                     try {
                                         ShowAlertResponse("0");
 
-                                        parameterSettingList.get(mGlobalPosition).setpValue((float) mTotalTimeFloatData);
+                                        parameterSettingList.get(mWriteAllCounterValue).setpValue((float) mTotalTimeFloatData);
+                                        parameterSettingList.get(mWriteAllCounterValue).setBillNo(billNo);
                                         settingParameterAdapter.notifyDataSetChanged();
                                         System.out.println("mGlobalPosition==>>" + mGlobalPosition + "\nmTotalTimeFloatData==>>" + mTotalTimeFloatData);
-                                        databaseHelper.updateParameterRecord(parameterSettingList.get(mGlobalPosition));
+                                        databaseHelper.updateParameterRecord(parameterSettingList.get(mWriteAllCounterValue));
 
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -759,7 +822,7 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
             mGlobalPosition = pos;
             String mStringCeck = editvalue.trim();
             if (!mStringCeck.equalsIgnoreCase("")) {
-                edtValueFloat = Float.parseFloat(parameterSettingList.get(mWriteAllCounterValue).getpValue().toString().trim());
+                edtValueFloat = Float.parseFloat(parameterSettingList.get(selected_pos).getpValue().toString().trim());
             }
 
             char[] datar = new char[4];
@@ -917,17 +980,18 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
                                     }
-                                    parameterSettingList.get(mGlobalPosition).setSet(true);
+                                    parameterSettingList.get(selected_pos).setSet(true);
                                 } else {
                                     try {
                                         ShowAlertResponse("-1");
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
                                     }
-                                    parameterSettingList.get(mGlobalPosition).setSet(false);
+                                    parameterSettingList.get(selected_pos).setSet(false);
                                 }
 
-                                parameterSettingList.get(mGlobalPosition).setpValue((float) edtValueFloat);
+                                parameterSettingList.get(selected_pos).setpValue((float) edtValueFloat);
+                                parameterSettingList.get(selected_pos).setBillNo(billNo);
                                 settingParameterAdapter.notifyDataSetChanged();
                                 databaseHelper.updateParameterRecord(parameterSettingList.get(selected_pos));
 
@@ -1027,13 +1091,13 @@ public class SettingParameterActivity extends AppCompatActivity implements Setti
         } else if (value.equals("3")) {
             title_txt.setText(getResources().getString(R.string.parameterSetSuccessfully));
         } else if (value.equals("-2")) {
-            parameterSettingList.get(mGlobalPosition).setSet(false);
-            settingParameterAdapter.notifyDataSetChanged();
+            parameterSettingList.get(mWriteAllCounterValue).setSet(false);
+            settingParameterAdapter.notifyItemChanged(mWriteAllCounterValue);
             btSocket.close();
             title_txt.setText(getResources().getString(R.string.operationUnsuccessfull)+" on "+ parameterSettingList.get(mWriteAllCounterValue).getParametersName());
         } else if (value.equals("-3")) {
-            parameterSettingList.get(mGlobalPosition).setSet(false);
-            settingParameterAdapter.notifyDataSetChanged();
+            parameterSettingList.get(mWriteAllCounterValue).setSet(false);
+            settingParameterAdapter.notifyItemChanged(mWriteAllCounterValue);
             btSocket.close();
             title_txt.setText(getResources().getString(R.string.pairedDevice));
         }

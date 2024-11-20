@@ -598,6 +598,8 @@
     <string name="enter_aadhar_no">Enter aadhar no.</string>
     <string name="aadharRegMob">Aadhar registered mobile no.</string>
     <string name="enter_aadhar_reg_no">Enter aadhar reg. mobile no.</string>
+    <string name="alreadySet">This Value Already Set</string>
+    <string name="set_all_perameters">Set All Perameters</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>

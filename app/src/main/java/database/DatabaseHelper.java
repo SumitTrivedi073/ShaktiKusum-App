@@ -1153,7 +1153,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_pValue + " TEXT ,"
             + COLUMN_MaterialCode + " TEXT ,"
             + COLUMN_Unit + " TEXT ,"
-            + COLUMN_offset + " TEXT)";
+            + COLUMN_offset + " TEXT ,"
+            + KEY_PARAMETER_SET + " TEXT ,"
+            + KEY_BILL_NO + " TEXT)";
 
     private static final String CREATE_PARAMETER_SET_DATA = "CREATE TABLE "
             + TABLE_PARAMETER_SET_DATA + "(" + KEY_PARAMETER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," +KEY_BILL_NO+ " TEXT, " + KEY_PARAMETER_SET+" TEXT)";
@@ -5062,6 +5064,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_MaterialCode, response.getMaterialCode());
         contentValues.put(COLUMN_Unit, response.getUnit());
         contentValues.put(COLUMN_offset, String.valueOf(response.getOffset()));
+        contentValues.put(KEY_PARAMETER_SET, "false");
+        contentValues.put(KEY_BILL_NO, "");
         database.insert(TABLE_SETTING_PARAMETER_LIST, null, contentValues);
         database.close();
     }
@@ -5077,6 +5081,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values = new ContentValues();
             values.put(COLUMN_pValue, response.getpValue());
             values.put(COLUMN_ParametersName,response.getParametersName());
+            values.put(KEY_PARAMETER_SET,String.valueOf(response.getSet()));
+            values.put(KEY_BILL_NO,response.getBillNo());
             String  where = COLUMN_ParametersName + "='" + response.getParametersName() + "'" + " AND " +
                     COLUMN_pmID + "='" + response.getPmId() + "'" ;
 
@@ -5097,9 +5103,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     @SuppressLint("Range")
     public ArrayList<MotorParamListModel.Response> getParameterRecordDetails(String matCode){
+        String where;
         ArrayList<MotorParamListModel.Response> arrayList = new ArrayList<>();
       SQLiteDatabase  database = this.getWritableDatabase();
-        Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_SETTING_PARAMETER_LIST + " WHERE " + COLUMN_MaterialCode + " = " + matCode + "", null);
+
+        where = " SELECT * FROM " + TABLE_SETTING_PARAMETER_LIST + " WHERE " + COLUMN_MaterialCode + "='" + matCode + "'";
+
+        Cursor mcursor = database.rawQuery(where, null);
         if(mcursor.getCount()>0){
             Log.e("Count====>", String.valueOf(mcursor.getCount()));
             while (mcursor.moveToNext()) {
@@ -5113,6 +5123,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 motorPumpList.setMaterialCode(mcursor.getString(mcursor.getColumnIndex(COLUMN_MaterialCode)));
                 motorPumpList.setFactor(Integer.parseInt(mcursor.getString(mcursor.getColumnIndex(COLUMN_factor))));
                 motorPumpList.setOffset(Integer.parseInt(mcursor.getString(mcursor.getColumnIndex(COLUMN_offset))));
+                motorPumpList.setSet(Boolean.valueOf(mcursor.getString(mcursor.getColumnIndex(KEY_PARAMETER_SET))));
+                motorPumpList.setBillNo(mcursor.getString(mcursor.getColumnIndex(KEY_BILL_NO)));
                 arrayList.add(motorPumpList);
             }
 
