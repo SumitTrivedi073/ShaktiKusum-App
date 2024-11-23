@@ -468,7 +468,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         save.setOnClickListener(v -> {
             DeviceStatus = CustomUtility.getSharedPreferences(mContext, Constant.deviceStatus);
 
-            if (mBTResonseDataList.size() > 0)
+           /* if (mBTResonseDataList.size() > 0)
                 mBTResonseDataList.clear();
             Log.e("inst_controller_ser===>", inst_controller_ser.getText().toString().trim());
             Log.e("mDatabaseHelperTeacher=====>", String.valueOf(mDatabaseHelperTeacher.getDeviceInfoDATABTFindDebug(inst_controller_ser.getText().toString().trim() + "-0")));
@@ -526,6 +526,11 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                 }
             } else {
                 CustomUtility.ShowToast("Please Debug Data first!", getApplicationContext());
+            }*/
+            if (isControllerIDScan) {
+                saveDataValidation();
+            } else {
+                CustomUtility.ShowToast("Please Scan Controller ID first!", getApplicationContext());
             }
 
         });
@@ -742,7 +747,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                                                                     if (inst_make != null && !inst_make.equals("")) {
                                                                         if (!TextUtils.isEmpty(borewellstatus1)) {
 
-                                                                            if (!DeviceStatus.isEmpty()) {
+                                                                            //if (!DeviceStatus.isEmpty()) {
 
                                                                                 if (DeviceStatus.equals(getResources().getString(R.string.online))) {
                                                                                     if (imageList.size() > 5) {
@@ -784,9 +789,9 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
                                                                                     }
                                                                                 }
-                                                                            } else {
+                                                                          /*  } else {
                                                                                 Toast.makeText(mContext, "Please get RMS Device Status.", Toast.LENGTH_SHORT).show();
-                                                                            }
+                                                                            }*/
 
                                                                         } else {
                                                                             Toast.makeText(mContext, "Please Select Borewell Status.", Toast.LENGTH_SHORT).show();
@@ -872,11 +877,12 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                 if (!aadharMobileExt.getText().toString().isEmpty()) {
                     SaveInLocalDataBase();
                     if (CustomUtility.isInternetOn(getApplicationContext())) {
-                        if (isParameterSet) {
-                            SubmitData();
-                        }else {
+                      //  if (isParameterSet) {
+                         //   SubmitData();
+                        submitInstalltion();
+                        /*}else {
                             CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.pleaseSetParametersFirst));
-                        }
+                        }*/
                     } else {
                         CustomUtility.ShowToast(getResources().getString(R.string.savedInLocalDatabase), mContext);
                         Intent intent = new Intent(mContext, InstallationList.class);
@@ -940,12 +946,12 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
     private void SaveInLocalDataBase() {
         getData();
-        if (!Constant.DBUG_MOB_1.equalsIgnoreCase("")) {
+       /* if (!Constant.DBUG_MOB_1.equalsIgnoreCase("")) {
             if (mSimDetailsInfoResponse.size() > 0)
                 mSimDetailsInfoResponse.clear();
 
             mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
-        }
+        }*/
 
         borewellstatus1 = CustomUtility.getSharedPreferences(this, "borewellstatus" + billno);
         InstallationBean installationBean = new InstallationBean(pernr, project_no, login_no, inst_latitude, inst_longitude, inst_bill_no, installation_date, inst_bill_date,
@@ -1005,9 +1011,9 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
         scm_sno = inst_controller_ser.getText().toString();
 
         simcard_num = inst_simcard_num.getText().toString();
-        if(db.isRecordExist(TABLE_PARAMETER_SET_DATA,KEY_BILL_NO,billno)){
+        /*if(db.isRecordExist(TABLE_PARAMETER_SET_DATA,KEY_BILL_NO,billno)){
             isParameterSet = db.isParameterSet(billno);
-        }
+        }*/
 
 
 
