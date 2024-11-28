@@ -27,18 +27,18 @@ public class WebURL {
 
 
     public static final String RMSAPPURL = "https://shaktirms.com/";
-    public static final String BASEURL = "https://spprdsrvr1.shaktipumps.com:8423";
+   public static final String BASEURL = "https://spprdsrvr1.shaktipumps.com:8423";
     public static final String BASE_URL_VK = "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/";
     public static final String BASE_URL_OPTION_VK = "https://spprdsrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
 
     /************* development server **************/
 
-   /*public static final String RMSAPPURL = "https://quality.shaktirms.com/";
+    /*public static final String RMSAPPURL = "https://quality.shaktirms.com/";
     public static final String BASEURL = "https://spquasrvr1.shaktipumps.com:8423";
     public static final String BASE_URL_VK= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmap_debugger/";
     public static final String BASE_URL_VK1= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zmapp_solar_pro/";
    public static final String BASE_URL_OPTION_VK= "https://spquasrvr1.shaktipumps.com:8423/sap/bc/bsp/sap/zrms_validation/";
-
+*/
 
 
     /************* APIS **************/
@@ -48,9 +48,9 @@ public class WebURL {
     public static final String LOGIN_SELEC_PAGE = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/login_selection.htm";
     public static final String DASHBOARD_DATA = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/dashboard.htm";
     public static final String REGISTRATION_DATA = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_registration.htm";
-    public static final String INSTALLATION_DATA = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_installation_new.htm";
+    public static final String INSTALLATION_DATA = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/save_installation_new_clone.htm";
 
-    public static final String INSTALLATION_DATA_UNLOAD = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/unload_image_save1.htm";
+    public static final String INSTALLATION_DATA_UNLOAD = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/unload_image_save1_clone.htm";
 
     public static final String PARAMETER_SET_DONE = "/sap/bc/bsp/sap/zmapp_solar_pro/save_parameter_setting_status.htm";
     public static final String DAMAGE_MISS_DATA = BASEURL + "/sap/bc/bsp/sap/zmapp_solar_pro/create_complaint.htm";

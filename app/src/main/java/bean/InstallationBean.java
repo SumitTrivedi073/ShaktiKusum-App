@@ -55,6 +55,8 @@ public class InstallationBean {
     public String pumpLoad = "";
     public String aadhar_no = "";
     public String aadhar_mobile = "";
+    public String motorSerNo = "";
+    public String pumpSerNo = "";
 
     public InstallationBean() {
 
@@ -67,7 +69,8 @@ public class InstallationBean {
                             String address_ins_txt, String make_ins_txt, String solarpanel_wattage_txt, String solarpanel_stand_ins_quantity_txt, String total_watt_txt,
                             String inst_hp_txt, String no_of_module_qty_txt, String no_of_module_value_txt, String module_total_plate_watt_txt, String solar_motor_model_details_txt,
                             String smmd_sno_txt, String splar_pump_model_details_txt, String spmd_sno_txt, String solar_controller_model_txt, String scm_sno_txt, String simoprator_txt,
-                            String conntype_txt, String simcard_num_txt, String regis_no_txt, String BeneficiaryNo,String pumpLoad, String aadhar_no , String aadhar_mobile
+                            String conntype_txt, String simcard_num_txt, String regis_no_txt, String BeneficiaryNo,String pumpLoad, String aadhar_no , String aadhar_mobile,
+                            String motorSerNo, String pumpSerNo
 
     ) {
 
@@ -115,6 +118,8 @@ public class InstallationBean {
         this.pumpLoad = pumpLoad;
         this.aadhar_no = aadhar_no;
         this.aadhar_mobile = aadhar_mobile;
+        this.motorSerNo = motorSerNo;
+        this.pumpSerNo = pumpSerNo;
 
     }
 
@@ -454,6 +459,22 @@ public class InstallationBean {
         this.pumpLoad = pumpLoad;
     }
 
+    public String getMotorSerNo() {
+        return motorSerNo;
+    }
+
+    public void setMotorSerNo(String motorSerNo) {
+        this.motorSerNo = motorSerNo;
+    }
+
+    public String getPumpSerNo() {
+        return pumpSerNo;
+    }
+
+    public void setPumpSerNo(String pumpSerNo) {
+        this.pumpSerNo = pumpSerNo;
+    }
+
     @Override
     public String toString() {
         return "InstallationBean{" +
@@ -499,6 +520,8 @@ public class InstallationBean {
                 ", pumpLoad='" + pumpLoad + '\'' +
                 ", aadhar_no='" + aadhar_no + '\'' +
                 ", aadhar_mobile='" + aadhar_mobile + '\'' +
+                ", motorSerNo='" + motorSerNo + '\'' +
+                ", pumpSerNo='" + pumpSerNo + '\'' +
                 '}';
     }
 }

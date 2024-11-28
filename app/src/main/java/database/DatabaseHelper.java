@@ -626,7 +626,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_PHOTO8 + " BLOB," + KEY_PHOTO9 + " BLOB," + KEY_PHOTO10 + " BLOB," + KEY_PHOTO11 + " BLOB," + KEY_PHOTO12 + " BLOB,"
             + KEY_ADD1 + " TEXT," + KEY_ADD2 + " TEXT," + KEY_ADD3 + " TEXT," + KEY_ADD4 + " TEXT," + KEY_ADD5 + " TEXT,"
             + KEY_ADD6 + " TEXT," + KEY_ADD7 + " TEXT," + KEY_ADD8 + " TEXT," + KEY_ADD9 + " TEXT," + KEY_ADD10 + " TEXT,"
-            + KEY_ADD11 + " TEXT," + KEY_ADD12 + " TEXT," + KEY_ADD13 + " TEXT," + KEY_ADD14 + " TEXT," + KEY_ADD15 + " TEXT," + KEY_ADD16 + " TEXT," + KEY_BENEFICIARY_NO + " TEXT," + KEY_AADHAR_NO + " TEXT," + KEY_PUMPLoad + " TEXT)";
+            + KEY_ADD11 + " TEXT," + KEY_ADD12 + " TEXT," + KEY_ADD13 + " TEXT," + KEY_ADD14 + " TEXT," + KEY_ADD15 + " TEXT," + KEY_ADD16 + " TEXT," + KEY_BENEFICIARY_NO + " TEXT," + KEY_AADHAR_NO + " TEXT," + KEY_AADHAR_MOBILE + " TEXT," + KEY_PUMPLoad + " TEXT," + KEY_PUMP_SERIAL_NO + " TEXT," + KEY_MOTOR_SERIAL_NO + " TEXT)";
 
 
     private static final String CREATE_TABLE_KUSUMCSURVEYFORM = "CREATE TABLE "
@@ -1153,7 +1153,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + COLUMN_pValue + " TEXT ,"
             + COLUMN_MaterialCode + " TEXT ,"
             + COLUMN_Unit + " TEXT ,"
-            + COLUMN_offset + " TEXT)";
+            + COLUMN_offset + " TEXT ,"
+            + KEY_PARAMETER_SET + " TEXT ,"
+            + KEY_BILL_NO + " TEXT)";
 
     private static final String CREATE_PARAMETER_SET_DATA = "CREATE TABLE "
             + TABLE_PARAMETER_SET_DATA + "(" + KEY_PARAMETER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," +KEY_BILL_NO+ " TEXT, " + KEY_PARAMETER_SET+" TEXT)";
@@ -2260,8 +2262,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_ADD2, installationBean.getDelay_reason());
             values.put(KEY_ADD3, installationBean.getMake_ins());
             values.put(KEY_BENEFICIARY_NO, installationBean.getBeneficiaryNo());
-            values.put(KEY_PUMPLoad, installationBean.getPumpLoad());
             values.put(KEY_AADHAR_NO, installationBean.getAadhar_no());
+            values.put(KEY_AADHAR_MOBILE, installationBean.getAadhar_mobile());
+            values.put(KEY_PUMPLoad, installationBean.getPumpLoad());
+            values.put(KEY_PUMP_SERIAL_NO, installationBean.getPumpSerNo());
+            values.put(KEY_MOTOR_SERIAL_NO, installationBean.getMotorSerNo());
             // Insert Row
             long i = db.insert(TABLE_INSTALLATION_PUMP_DATA, null, values);
             // Insert into database successfully.
@@ -2326,6 +2331,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_BENEFICIARY_NO, installationBean.getBeneficiaryNo());
             values.put(KEY_PUMPLoad, installationBean.getPumpLoad());
             values.put(KEY_AADHAR_NO, installationBean.getAadhar_no());
+            values.put(KEY_AADHAR_MOBILE, installationBean.getAadhar_mobile());
+            values.put(KEY_PUMP_SERIAL_NO, installationBean.getPumpSerNo());
+            values.put(KEY_MOTOR_SERIAL_NO, installationBean.getMotorSerNo());
             where = KEY_BILL_NO + "='" + billno + "'";
 
             i = db.update(TABLE_INSTALLATION_PUMP_DATA, values, where, null);
@@ -3950,7 +3958,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         installationBean.setBeneficiaryNo(cursor.getString(cursor.getColumnIndex(KEY_BENEFICIARY_NO)));
                         installationBean.setPumpLoad(cursor.getString(cursor.getColumnIndex(KEY_PUMPLoad)));
                         installationBean.setAadhar_no(cursor.getString(cursor.getColumnIndex(KEY_AADHAR_NO)));
-                        Log.e("aadhar==>",cursor.getString(cursor.getColumnIndex(KEY_AADHAR_NO)));
+                        installationBean.setAadhar_mobile(cursor.getString(cursor.getColumnIndex(KEY_AADHAR_MOBILE)));
+                        installationBean.setPumpSerNo(cursor.getString(cursor.getColumnIndex(KEY_PUMP_SERIAL_NO)));
+                        installationBean.setMotorSerNo(cursor.getString(cursor.getColumnIndex(KEY_MOTOR_SERIAL_NO)));
+                    //    Log.e("aadhar==>",cursor.getString(cursor.getColumnIndex(KEY_AADHAR_NO)));
                         cursor.moveToNext();
                     }
                 }
@@ -5053,6 +5064,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COLUMN_MaterialCode, response.getMaterialCode());
         contentValues.put(COLUMN_Unit, response.getUnit());
         contentValues.put(COLUMN_offset, String.valueOf(response.getOffset()));
+        contentValues.put(KEY_PARAMETER_SET, "false");
+        contentValues.put(KEY_BILL_NO, "");
         database.insert(TABLE_SETTING_PARAMETER_LIST, null, contentValues);
         database.close();
     }
@@ -5068,6 +5081,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values = new ContentValues();
             values.put(COLUMN_pValue, response.getpValue());
             values.put(COLUMN_ParametersName,response.getParametersName());
+            values.put(KEY_PARAMETER_SET,String.valueOf(response.getSet()));
+            values.put(KEY_BILL_NO,response.getBillNo());
             String  where = COLUMN_ParametersName + "='" + response.getParametersName() + "'" + " AND " +
                     COLUMN_pmID + "='" + response.getPmId() + "'" ;
 
@@ -5088,9 +5103,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     @SuppressLint("Range")
     public ArrayList<MotorParamListModel.Response> getParameterRecordDetails(String matCode){
+        String where;
         ArrayList<MotorParamListModel.Response> arrayList = new ArrayList<>();
       SQLiteDatabase  database = this.getWritableDatabase();
-        Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_SETTING_PARAMETER_LIST + " WHERE " + COLUMN_MaterialCode + " = " + matCode + "", null);
+
+        where = " SELECT * FROM " + TABLE_SETTING_PARAMETER_LIST + " WHERE " + COLUMN_MaterialCode + "='" + matCode + "'";
+
+        Cursor mcursor = database.rawQuery(where, null);
         if(mcursor.getCount()>0){
             Log.e("Count====>", String.valueOf(mcursor.getCount()));
             while (mcursor.moveToNext()) {
@@ -5104,6 +5123,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 motorPumpList.setMaterialCode(mcursor.getString(mcursor.getColumnIndex(COLUMN_MaterialCode)));
                 motorPumpList.setFactor(Integer.parseInt(mcursor.getString(mcursor.getColumnIndex(COLUMN_factor))));
                 motorPumpList.setOffset(Integer.parseInt(mcursor.getString(mcursor.getColumnIndex(COLUMN_offset))));
+                motorPumpList.setSet(Boolean.valueOf(mcursor.getString(mcursor.getColumnIndex(KEY_PARAMETER_SET))));
+                motorPumpList.setBillNo(mcursor.getString(mcursor.getColumnIndex(KEY_BILL_NO)));
                 arrayList.add(motorPumpList);
             }
 
@@ -5150,6 +5171,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase  database = this.getWritableDatabase();
         if(CustomUtility.doesTableExist(database,TABLE_SETTING_PARAMETER_LIST)) {
             database.delete(TABLE_SETTING_PARAMETER_LIST, null, null);
+        }
+
+    }
+
+    public void deleteParametersSetData() {
+        SQLiteDatabase  database = this.getWritableDatabase();
+        if(CustomUtility.doesTableExist(database,TABLE_PARAMETER_SET_DATA)) {
+            database.delete(TABLE_PARAMETER_SET_DATA, null, null);
         }
 
     }

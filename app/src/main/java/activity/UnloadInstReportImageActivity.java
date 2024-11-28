@@ -379,11 +379,11 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                     CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectInvoicePhoto));
                 } else if (!imageArrayList.get(2).isImageSelected()) {
                     CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.selectCustomerPhoto));
-                } else if (pumpSerNo.getText().toString().trim().isEmpty() || !pumpSerNo.getText().toString().trim().equals(installationListBean.getPump().trim())) {
+                } else if (pumpSerNo.getText().toString().trim().isEmpty() /*|| !pumpSerNo.getText().toString().trim().equals(installationListBean.getPump().trim())*/) {
                     CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctPumpSr) + " " + installationListBean.getPump().trim());
-                } else if (motorSerNo.getText().toString().trim().isEmpty() || !motorSerNo.getText().toString().trim().equals(installationListBean.getMotor().trim())) {
+                } else if (motorSerNo.getText().toString().trim().isEmpty()/* || !motorSerNo.getText().toString().trim().equals(installationListBean.getMotor().trim())*/) {
                     CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctMotorSr) + " " + installationListBean.getMotor().trim());
-                } else if (controllerSerNo.getText().toString().trim().isEmpty() || !controllerSerNo.getText().toString().trim().equals(installationListBean.getController().trim())) {
+                } else if (controllerSerNo.getText().toString().trim().isEmpty() /*|| !controllerSerNo.getText().toString().trim().equals(installationListBean.getController().trim())*/) {
                     CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.correctControllerSr) + " " + installationListBean.getController().trim());
                 } else if (remarkEdt.getText().toString().trim().isEmpty()) {
                     CustomUtility.showToast(UnloadInstReportImageActivity.this, getResources().getString(R.string.writeRemark));
@@ -445,6 +445,9 @@ public class UnloadInstReportImageActivity extends BaseActivity implements Image
                                     jsonObj.put("project_login_no ", CustomUtility.getSharedPreferences(UnloadInstReportImageActivity.this, "loginid"));
                                     jsonObj.put("inst_no_of_module_value ", noOfModules);
                                     jsonObj.put("UNLOAD_MAT_STATS ", unloadingMaterialStatus);
+                                    jsonObj.put("ser1 ", pumpSerNo.getText().toString().trim());
+                                    jsonObj.put("ser2 ", motorSerNo.getText().toString().trim());
+                                    jsonObj.put("ser3 ", controllerSerNo.getText().toString().trim());
 
                                     if (imageArrayList.size() > 0) {
                                         if (imageArrayList.get(0).isImageSelected()) {

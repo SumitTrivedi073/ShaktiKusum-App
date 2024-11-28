@@ -230,11 +230,11 @@ import webservice.WebURL;
                         district_txt = jo.getString("cityc_txt");
                         address = jo.getString("address");
                         contactno = jo.getString("mobile");
-                        controller = jo.getString("controller_sernr");
-                        motor = jo.getString("motor_sernr");
+                       // controller = jo.getString("controller_sernr");
+                        //motor = jo.getString("motor_sernr");
                         simno = jo.getString("simno");
                         beneficiary = jo.getString("beneficiary");
-                        pump = jo.getString("pump_sernr");
+                      //  pump = jo.getString("pump_sernr");
                         regisno = jo.getString("regisno");
                         projectno = jo.getString("project_no");
                         loginno = jo.getString("process_no");
@@ -247,7 +247,6 @@ import webservice.WebURL;
                         pump_load = jo.getString("pump_load");
                         aadhar_no = jo.getString("aadhar_no");
                         aadhar_mobile = jo.getString("aadhar_mob");
-                    //    Log.e("pumpLoad======>",pump_load);
 
                         installationBean = new InstallationListBean(bill_no,
                                 CustomUtility.getSharedPreferences(context, "userid"),
@@ -354,37 +353,6 @@ import webservice.WebURL;
              }
              new GetInstallationDataList_Task().execute();
          }
-     }
-     private void getAllParameters() {
-         progressDialog = ProgressDialog.show(context, "", "Please Wait...");
-         RequestQueue mRequestQueue = Volley.newRequestQueue(this);
-         Log.e("url===>", CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) + WebURL.paraMeterListAPI);
-         StringRequest mStringRequest = new StringRequest(Request.Method.GET, CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) + WebURL.paraMeterListAPI , response -> {
-             Log.e("response1===>", String.valueOf(response.toString()));
-             if (!response.isEmpty()) {
-                progressDialog.dismiss();
-                 MotorParamListModel motorParamListModel = new Gson().fromJson(response, MotorParamListModel.class);
-                 Log.e("response2===>", String.valueOf(motorParamListModel.getStatus().equals("true")));
-                 if (motorParamListModel.getStatus().equals("true")) {
-                     insertDataInLocal(motorParamListModel.getResponse());
-
-                 } else {
-                   progressDialog.dismiss();
-                 }
-
-             } else {
-                 progressDialog.dismiss();
-             }
-
-         }, error -> {
-             progressDialog.dismiss();
-         });
-
-         mStringRequest.setRetryPolicy(new DefaultRetryPolicy(
-                 DefaultRetryPolicy.DEFAULT_TIMEOUT_MS,
-                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,  // maxNumRetries = 0 means no retry
-                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-         mRequestQueue.add(mStringRequest);
      }
 
 

@@ -429,8 +429,8 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
                             DecimalFormat decimalFormat = new DecimalFormat("##.######");
                             latitude = decimalFormat.format(loc.getLatitude());
                             longitude = decimalFormat.format(loc.getLongitude());
-                            Log.e("latitude2======>", String.valueOf(latitude));
-                            Log.e("longitude2======>", String.valueOf(longitude));
+                          //  Log.e("latitude2======>", String.valueOf(latitude));
+                            //Log.e("longitude2======>", String.valueOf(longitude));
 
                             setAddress();
                         }
@@ -504,8 +504,8 @@ public class CameraActivity2 extends BaseActivity implements SurfaceHolder.Callb
             DecimalFormat decimalFormat = new DecimalFormat("##.######");
             latitude = decimalFormat.format(loc.getLatitude());
             longitude = decimalFormat.format(loc.getLongitude());
-            Log.e("latitude2======>", String.valueOf(latitude));
-            Log.e("longitude2======>", String.valueOf(longitude));
+          //  Log.e("latitude2======>", String.valueOf(latitude));
+            //Log.e("longitude2======>", String.valueOf(longitude));
 
             setAddress();
         }

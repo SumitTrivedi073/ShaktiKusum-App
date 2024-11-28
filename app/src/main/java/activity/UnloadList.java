@@ -253,7 +253,6 @@ public class UnloadList extends BaseActivity {
                         controller_ser = jo.getString("controller_sernr");
                         HP = jo.getString("hp");
                         pumpLoad = jo.getString("pump_load");
-                        aadhar_no = jo.getString("aadhar_no");
 
                         installationBean = new InstallationListBean(bill_no, CustomUtility.getSharedPreferences(context, "userid"),
                                 name, fathname, bill_no, kunnr, gst_bill_no, bill_date, disp_date, state, state_txt, district, district_txt, tehsil, village,
