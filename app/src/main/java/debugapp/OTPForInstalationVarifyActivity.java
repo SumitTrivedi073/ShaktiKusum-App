@@ -17,8 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import com.shaktipumplimited.retrofit.BaseRequest;
-import com.shaktipumplimited.retrofit.RequestReciever;
+import webservice.retrofit.BaseRequest;
+import webservice.retrofit.RequestReciever;
 import activity.MainActivity;
 import com.shaktipumplimited.shaktikusum.R;
 import utility.CustomUtility;

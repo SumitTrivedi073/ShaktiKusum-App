@@ -19,6 +19,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
@@ -27,12 +33,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.List;
 
 import adapter.Adapter_Installation_list;
 import bean.InstallationListBean;
 import database.DatabaseHelper;
 import debugapp.GlobalValue.Constant;
+import settingParameter.model.MotorParamListModel;
 import utility.CustomUtility;
 import webservice.CustomHttpClient;
 import webservice.WebURL;
@@ -43,7 +50,7 @@ import webservice.WebURL;
     , contactno = "", controller = "", motor = "", simno = "", pump = "", regisno = "", projectno = ""
     , loginno = "", module_qty = "", sync = "", CONTACT_NO = "",inst_no_of_module_value="", simha2 = "",pump_load =""
     , set_matno = "", village = "", tehsil = "",beneficiary = "",
-             version,  user_id;
+             version,  user_id, aadhar_no = "", aadhar_mobile = "";
     Context context;
 
     DatabaseHelper db;
@@ -170,7 +177,10 @@ import webservice.WebURL;
                     recyclerView.setAdapter(null);
                     db.deleteInstallationListData();
                     WebURL.CHECK_DATA_UNOLAD = 0;
-                    new GetInstallationDataList_Task().execute();
+
+                    new getAllParameters().execute();
+
+
                 } else {
                     Toast.makeText(getApplicationContext(), "No internet Connection....", Toast.LENGTH_SHORT).show();
                 }
@@ -220,11 +230,11 @@ import webservice.WebURL;
                         district_txt = jo.getString("cityc_txt");
                         address = jo.getString("address");
                         contactno = jo.getString("mobile");
-                        controller = jo.getString("controller_sernr");
-                        motor = jo.getString("motor_sernr");
+                       // controller = jo.getString("controller_sernr");
+                        //motor = jo.getString("motor_sernr");
                         simno = jo.getString("simno");
                         beneficiary = jo.getString("beneficiary");
-                        pump = jo.getString("pump_sernr");
+                      //  pump = jo.getString("pump_sernr");
                         regisno = jo.getString("regisno");
                         projectno = jo.getString("project_no");
                         loginno = jo.getString("process_no");
@@ -235,14 +245,15 @@ import webservice.WebURL;
                         CONTACT_NO = jo.getString("contact_no");
                         inst_no_of_module_value = jo.getString("inst_no_of_module_value");
                         pump_load = jo.getString("pump_load");
-                    //    Log.e("pumpLoad======>",pump_load);
+                        aadhar_no = jo.getString("aadhar_no");
+                        aadhar_mobile = jo.getString("aadhar_mob");
 
                         installationBean = new InstallationListBean(bill_no,
                                 CustomUtility.getSharedPreferences(context, "userid"),
                                 name, fathname, bill_no, kunnr, gst_bill_no, bill_date, disp_date, state, state_txt,
                                 district, district_txt, tehsil, village, contactno, controller, motor, pump, regisno, projectno,
                                 loginno, module_qty, address, simno, beneficiary, set_matno, simha2, sync, CONTACT_NO, inst_no_of_module_value,""
-                                ,"","",controller,pump_load);
+                                ,"","",controller,pump_load,aadhar_no , aadhar_mobile);
                         if (db.isRecordExist(DatabaseHelper.TABLE_INSTALLATION_LIST, DatabaseHelper.KEY_ENQ_DOC, bill_no)) {
                             db.updateInstallationListData(bill_no, installationBean);
                         } else {
@@ -291,4 +302,73 @@ import webservice.WebURL;
             }
         }
     }
-}
+
+
+     private class getAllParameters extends AsyncTask<String, String, String> {
+
+         @Override
+         protected void onPreExecute() {
+             progressDialog = ProgressDialog.show(context, "", "Please Wait...");
+         }
+
+         @Override
+         protected String doInBackground(String... params) {
+             final ArrayList<NameValuePair> param = new ArrayList<NameValuePair>();
+              String login_selec = null;
+             try {
+                 login_selec = CustomHttpClient.executeHttpGet(CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) + WebURL.paraMeterListAPI);
+
+                 Log.e("URL====>",CustomUtility.getSharedPreferences(getApplicationContext(), Constant.RmsBaseUrl) + WebURL.paraMeterListAPI);
+                 JSONObject object = new JSONObject(login_selec);
+                 MotorParamListModel motorParamListModel = new Gson().fromJson(object.toString(), MotorParamListModel.class);
+                 Log.e("response2===>", String.valueOf(motorParamListModel.getStatus().equals("true")));
+
+                 if (motorParamListModel.getStatus().equals("true")) {
+                     insertDataInLocal(motorParamListModel.getResponse());
+                     if ((progressDialog != null) && progressDialog.isShowing()) {
+                         progressDialog.dismiss();
+                         progressDialog = null;
+                     }
+                 }
+             } catch (Exception e) {
+                 e.printStackTrace();
+                 if ((progressDialog != null) && progressDialog.isShowing()) {
+                     progressDialog.dismiss();
+                     progressDialog = null;
+                 }
+
+             }
+
+             return login_selec;
+         }
+
+         @SuppressLint("WrongConstant")
+         @Override
+         protected void onPostExecute(String result) {
+             // write display tracks logic here
+
+             if ((progressDialog != null) && progressDialog.isShowing()) {
+                 progressDialog.dismiss();
+                 progressDialog = null;
+             }
+             new GetInstallationDataList_Task().execute();
+         }
+     }
+
+
+     private void insertDataInLocal(List<MotorParamListModel.Response> parameterSettingList) {
+         databaseHelper.deleteParametersData();
+         for (int i = 0; i < parameterSettingList.size(); i++) {
+             //  if(parameterSettingList.get(i).getMaterialCode().equals("9111129696")) {
+             DatabaseRecordInsert(parameterSettingList.get(i), String.valueOf(parameterSettingList.get(i).getpValue() * parameterSettingList.get(i).getFactor()));
+             // }
+         }
+     }
+     private void DatabaseRecordInsert(MotorParamListModel.Response response, String pValue) {
+        /*if(response.getMaterialCode().equals("9111129696")) {
+            Log.e("pValue====>", pValue+"====>"+response.getParametersName());
+        }*/
+         databaseHelper.insertParameterRecord(response, pValue);
+     }
+
+ }

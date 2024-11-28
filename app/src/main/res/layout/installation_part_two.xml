@@ -84,7 +84,7 @@
                         android:layout_height="wrap_content"
                         android:padding="@dimen/space_tinny2"
                         android:src="@drawable/scan"
-                        android:visibility="gone"/>
+                        android:visibility="visible"/>
 
 
                 </LinearLayout>

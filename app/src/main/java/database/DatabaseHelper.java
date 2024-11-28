@@ -10,14 +10,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Spinner;
 
-import com.shaktipumplimited.DamageMissBean.DamageMissResponse;
-import com.shaktipumplimited.SettingModel.SettingParameterResponse;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import bean.AuditSiteBean;
-import bean.BTResonseData;
 import bean.DeviceMappingModel;
 import bean.BeneficiaryRegistrationBean;
 import bean.ImageModel;
@@ -27,6 +23,7 @@ import bean.InstallationOfflineBean;
 import bean.ItemNameBean;
 import bean.KusumCSurveyBean;
 import bean.LoginBean;
+import bean.ParameterSettingListModel;
 import bean.RegistrationBean;
 import bean.RejectListBean;
 import bean.SimCardBean;
@@ -35,6 +32,7 @@ import bean.SubmitOfflineDataInput;
 import bean.SurveyBean;
 import bean.SurveyListBean;
 import bean.unloadingDataBean;
+import settingParameter.model.MotorParamListModel;
 import utility.CustomUtility;
 
 
@@ -56,6 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_INSTALLATION_OFFLINE_LIST = "tbl_installation_offline_list";
     public static final String TABLE_OFFLINE_SUBMITTED_LIST = "tbl_offline_submitted_list";
     public static final String TABLE_SETTING_PARAMETER_LIST = "tbl_setting_parameter_list";
+    public static final String TABLE_PARAMETER_SET_DATA = "tbl_parameter_set";
     public static final String TABLE_AUDITSITE_LIST = "tbl_auditsite_list";
     public static final String TABLE_REJECTION_LIST = "tbl_rejection_list";
     public static final String TABLE_SURVEY_LIST = "tbl_survey_list";
@@ -74,12 +73,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_SIM_REPLACMENT_DATA = "tbl_sim_card_replacement";
     public static final String TABLE_DAMAGE_MISS_COMPLAIN = "tbl_damage_midd_complain";
 
+    public static final String TABLE_SETTING_PENDING_LIST = "tbl_setting_pending_list";
+
     public static final String TABLE_SITE_AUDIT = "tbl_site_audit";
     public static final String TABLE_KusumCImages = "tbl_kusumCImages";
 
     public static final String TABLE_DEVICE_MAPPING_DATA = "tbl_device_mapping_data";
 
     public static final String TABLE_BENEFICIARY_REGISTRATION = "tbl_Beneficiary_Registration";
+
+    public static final String TABLE_PARAMERSLIST_NAME = "ParameterList";
 
     //TABLE_OFFLINE_SUBMITTED_LIST field name
     public static final String KEY_OFFLINE_BILL_NO = "bill_no";
@@ -144,6 +147,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_MOBILE = "mobile";
     public static final String KEY_CONTACT_NO = "contactno";
     public static final String KEY_AADHAR_NO = "aadharno";
+    public static final String KEY_AADHAR_MOBILE = "aadhar_mobile";
     public static final String KEY_BANK_NAME = "bankname";
     public static final String KEY_BANK_ACC_NO = "bankaccno";
     public static final String KEY_ACC_TYPE = "accounttype";
@@ -186,6 +190,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_PDF = "pdf";
     public static final String KEY_SYNC = "sync";
     public static final String KEY_SET_MATNO = "set_matno";
+
+    public static final String KEY_MOTOR_MATNO = "motor_matno";
     public static final String KEY_SIMHA2 = "simha2";
     public static final String KEY_CUS_CONTACT_NO = "cus_contact_no";
     public static final String KEY_COUNTRY = "country";
@@ -288,10 +294,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_INSTALLATION_BILL_NO = "InstalltionBillNo", KEY_INSTALLATION_LATITUDE = "InstalltionLatitude",
             KEY_INSTALLATION_LONGITUDE = "InstalltionLongitude", KEY_INSTALLATION_POSITION = "InstalltionPosition";
 
-    public static final String KEY_BENEFICIARY_ID = "BENEFICIARYId", KEY_BENEFICIARY_NAME = "BENEFICIARYImageName",
-            KEY_BENEFICIARY_PATH = "BENEFICIARYPath", KEY_BENEFICIARY_IMAGE_SELECTED = "BENEFICIARYImageSelected",
-            KEY_BENEFICIARY_BILL_NO = "BENEFICIARYBillNo", KEY_BENEFICIARY_LATITUDE = "BENEFICIARYLatitude",
-            KEY_BENEFICIARY_LONGITUDE = "BENEFICIARYLongitude", KEY_BENEFICIARY_POSITION = "BENEFICIARYPosition";
 
     public static final String KEY_UNLOADING_ID = "unloadingId", KEY_UNLOADING_NAME = "unloadingImageName", KEY_UNLOADING_PATH = "unloadingPath", KEY_UNLOADING_IMAGE_SELECTED = "unloadingImageSelected", KEY_UNLOADING_BILL_NO = "unloadingBillNo";
 
@@ -408,6 +410,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_KUSUMC_ID = "Id", KEY_KUSUMC_NAME = "ImageName", KEY_KUSUMC_PATH = "Path", KEY_KUSUMC_IMAGE_SELECTED = "ImageSelected", KEY_KUSUMC_BILL_NO = "BillNo";
 
 
+    public static final String COLUMN_pmID = "PmId";
+    public static final String COLUMN_ParametersName = "ParametersName";
+    public static final String COLUMN_ModBusAddress = "ModBusAddress";
+    public static final String COLUMN_MobBTAddress = "MobBTAddress";
+    public static final String COLUMN_factor = "Factor";
+    public static final String COLUMN_pValue = "PValue";
+    public static final String COLUMN_MaterialCode = "MaterialCode";
+    public static final String COLUMN_Unit = "Unit";
+    public static final String COLUMN_offset = "Offsets";
+
+    public static final String KEY_PARAMETER_ID = "parameter_id";
+
+    public static final String KEY_PARAMETER_SET = "parameter_set";
+
+
 // Table Create Statements
 
     private static final String CREATE_TABLE_DAMAGE_MISS = "CREATE TABLE IF NOT EXISTS "
@@ -443,181 +460,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_PHOTO4 + " BLOB,"
             + KEY_PHOTO5 + " BLOB)";
 
-    public void insertDamageMissData(DamageMissResponse mDamageMissResponse) {
-        // Open the database for writing
-        SQLiteDatabase db = this.getWritableDatabase();
-        // Start the transaction.
-        db.beginTransaction();
-        ContentValues values;
-
-        try {
-            values = new ContentValues();
-            values.put(KEY_BILL_NO, mDamageMissResponse.getMBillNo());
-
-            values.put(KEY_DAMAGE_MISS1, mDamageMissResponse.getMDropdownValue1());
-            values.put(KEY_DAMAGE_MISS2, mDamageMissResponse.getMDropdownValue2());
-            values.put(KEY_DAMAGE_MISS3, mDamageMissResponse.getMDropdownValue3());
-            values.put(KEY_DAMAGE_MISS4, mDamageMissResponse.getMDropdownValue4());
-            values.put(KEY_DAMAGE_MISS5, mDamageMissResponse.getMDropdownValue5());
-
-            values.put(KEY_RADIO1, mDamageMissResponse.getMRodioValue1());
-            values.put(KEY_RADIO2, mDamageMissResponse.getMRodioValue2());
-            values.put(KEY_RADIO3, mDamageMissResponse.getMRodioValue3());
-            values.put(KEY_RADIO4, mDamageMissResponse.getMRodioValue4());
-            values.put(KEY_RADIO5, mDamageMissResponse.getMRodioValue5());
-
-            values.put(KEY_QUNTITY1, mDamageMissResponse.getMQuentityValue1());
-            values.put(KEY_QUNTITY2, mDamageMissResponse.getMQuentityValue2());
-            values.put(KEY_QUNTITY3, mDamageMissResponse.getMQuentityValue3());
-            values.put(KEY_QUNTITY4, mDamageMissResponse.getMQuentityValue4());
-            values.put(KEY_QUNTITY5, mDamageMissResponse.getMQuentityValue5());
-
-            values.put(KEY_REMARKD1, mDamageMissResponse.getMRemarkValue1());
-            values.put(KEY_REMARKD2, mDamageMissResponse.getMRemarkValue2());
-            values.put(KEY_REMARKD3, mDamageMissResponse.getMRemarkValue3());
-            values.put(KEY_REMARKD4, mDamageMissResponse.getMRemarkValue4());
-            values.put(KEY_REMARKD5, mDamageMissResponse.getMRemarkValue5());
-
-            values.put(KEY_PHOTO1, mDamageMissResponse.getMPhotoValue1());
-            values.put(KEY_PHOTO1_2, mDamageMissResponse.getMPhotoValue1_2());
-            values.put(KEY_PHOTO1_3, mDamageMissResponse.getMPhotoValue1_3());
-            values.put(KEY_PHOTO1_4, mDamageMissResponse.getMPhotoValue1_4());
-            values.put(KEY_PHOTO1_5, mDamageMissResponse.getMPhotoValue1_5());
-
-            values.put(KEY_PHOTO2, mDamageMissResponse.getMPhotoValue2());
-            values.put(KEY_PHOTO3, mDamageMissResponse.getMPhotoValue3());
-            values.put(KEY_PHOTO4, mDamageMissResponse.getMPhotoValue4());
-            values.put(KEY_PHOTO5, mDamageMissResponse.getMPhotoValue5());
-            db.insert(TABLE_DAMAGE_MISS_COMPLAIN, null, values);
-            db.setTransactionSuccessful();
-        } catch (SQLiteException e) {
-            e.printStackTrace();
-        } finally {
-            db.endTransaction();
-            db.close();
-        }
-    }
-
-    //Updated Damage record
-    public void updatedDamageMissData(DamageMissResponse mDamageMissResponse) {
-        long i = 0;
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.beginTransaction();
-        ContentValues values;
-        String where;
-        try {
-            values = new ContentValues();
-            values.put(KEY_BILL_NO, mDamageMissResponse.getMBillNo());
-            values.put(KEY_DAMAGE_MISS1, mDamageMissResponse.getMDropdownValue1());
-            values.put(KEY_DAMAGE_MISS2, mDamageMissResponse.getMDropdownValue2());
-            values.put(KEY_DAMAGE_MISS3, mDamageMissResponse.getMDropdownValue3());
-            values.put(KEY_DAMAGE_MISS4, mDamageMissResponse.getMDropdownValue4());
-            values.put(KEY_DAMAGE_MISS5, mDamageMissResponse.getMDropdownValue5());
-
-            values.put(KEY_RADIO1, mDamageMissResponse.getMRodioValue1());
-            values.put(KEY_RADIO2, mDamageMissResponse.getMRodioValue2());
-            values.put(KEY_RADIO3, mDamageMissResponse.getMRodioValue3());
-            values.put(KEY_RADIO4, mDamageMissResponse.getMRodioValue4());
-            values.put(KEY_RADIO5, mDamageMissResponse.getMRodioValue5());
-
-            values.put(KEY_QUNTITY1, mDamageMissResponse.getMQuentityValue1());
-            values.put(KEY_QUNTITY2, mDamageMissResponse.getMQuentityValue2());
-            values.put(KEY_QUNTITY3, mDamageMissResponse.getMQuentityValue3());
-            values.put(KEY_QUNTITY4, mDamageMissResponse.getMQuentityValue4());
-            values.put(KEY_QUNTITY5, mDamageMissResponse.getMQuentityValue5());
-
-            values.put(KEY_REMARKD1, mDamageMissResponse.getMRemarkValue1());
-            values.put(KEY_REMARKD2, mDamageMissResponse.getMRemarkValue2());
-            values.put(KEY_REMARKD3, mDamageMissResponse.getMRemarkValue3());
-            values.put(KEY_REMARKD4, mDamageMissResponse.getMRemarkValue4());
-            values.put(KEY_REMARKD5, mDamageMissResponse.getMRemarkValue5());
-
-            values.put(KEY_PHOTO1, mDamageMissResponse.getMPhotoValue1());
-            values.put(KEY_PHOTO1_2, mDamageMissResponse.getMPhotoValue1_2());
-            values.put(KEY_PHOTO1_3, mDamageMissResponse.getMPhotoValue1_3());
-            values.put(KEY_PHOTO1_4, mDamageMissResponse.getMPhotoValue1_4());
-            values.put(KEY_PHOTO1_5, mDamageMissResponse.getMPhotoValue1_5());
-
-            values.put(KEY_PHOTO2, mDamageMissResponse.getMPhotoValue2());
-            values.put(KEY_PHOTO3, mDamageMissResponse.getMPhotoValue3());
-            values.put(KEY_PHOTO4, mDamageMissResponse.getMPhotoValue4());
-            values.put(KEY_PHOTO5, mDamageMissResponse.getMPhotoValue5());
-
-            // Insert Row
-            // long i = db.insert(TABLE_DAMAGE_MISS_COMPLAIN , null, values);
-            where = KEY_BILL_NO + "='" + mDamageMissResponse.getMBillNo() + "'";
-            db.update(TABLE_DAMAGE_MISS_COMPLAIN, values, where, null);
-            db.setTransactionSuccessful();
-        } catch (SQLiteException e) {
-            e.printStackTrace();
-        } finally {
-            db.endTransaction();
-            db.close();
-        }
-    }
-
-    @SuppressLint("Range")
-    public DamageMissResponse getDamageMissData(String mBillNo) {
-        DamageMissResponse mDamageMissResponse = new DamageMissResponse();
-        SQLiteDatabase db = this.getReadableDatabase();
-        db.beginTransaction();
-        try {
-            //String selectQuery = "SELECT  *  FROM " + TABLE_REGISTRATION + " WHERE " + KEY_PERNR + " = '" + user_id + "'" + "AND " + KEY_ENQ_DOC + " = '" + enq_docno + "'";
-            String selectQuery = "SELECT  *  FROM " + TABLE_DAMAGE_MISS_COMPLAIN + " WHERE " + KEY_BILL_NO + " = '" + mBillNo + "'";
-            Cursor cursor = db.rawQuery(selectQuery, null);
-            if (cursor.getCount() > 0) {
-                if (cursor.moveToFirst()) {
-                    while (!cursor.isAfterLast()) {
-                        mDamageMissResponse = new DamageMissResponse();
-
-                        mDamageMissResponse.setMBillNo(cursor.getString(cursor.getColumnIndex(KEY_BILL_NO)));
-                        mDamageMissResponse.setMDropdownValue1(cursor.getString(cursor.getColumnIndex(KEY_DAMAGE_MISS1)));
-                        mDamageMissResponse.setMDropdownValue2(cursor.getString(cursor.getColumnIndex(KEY_DAMAGE_MISS2)));
-                        mDamageMissResponse.setMDropdownValue3(cursor.getString(cursor.getColumnIndex(KEY_DAMAGE_MISS3)));
-                        mDamageMissResponse.setMDropdownValue4(cursor.getString(cursor.getColumnIndex(KEY_DAMAGE_MISS4)));
-                        mDamageMissResponse.setMDropdownValue5(cursor.getString(cursor.getColumnIndex(KEY_DAMAGE_MISS5)));
-
-                        mDamageMissResponse.setMRodioValue1(cursor.getString(cursor.getColumnIndex(KEY_RADIO1)));
-                        mDamageMissResponse.setMRodioValue2(cursor.getString(cursor.getColumnIndex(KEY_RADIO2)));
-                        mDamageMissResponse.setMRodioValue3(cursor.getString(cursor.getColumnIndex(KEY_RADIO3)));
-                        mDamageMissResponse.setMRodioValue4(cursor.getString(cursor.getColumnIndex(KEY_RADIO4)));
-                        mDamageMissResponse.setMRodioValue5(cursor.getString(cursor.getColumnIndex(KEY_RADIO5)));
-
-                        mDamageMissResponse.setMQuentityValue1(cursor.getString(cursor.getColumnIndex(KEY_QUNTITY1)));
-                        mDamageMissResponse.setMQuentityValue2(cursor.getString(cursor.getColumnIndex(KEY_QUNTITY2)));
-                        mDamageMissResponse.setMQuentityValue3(cursor.getString(cursor.getColumnIndex(KEY_QUNTITY3)));
-                        mDamageMissResponse.setMQuentityValue4(cursor.getString(cursor.getColumnIndex(KEY_QUNTITY4)));
-                        mDamageMissResponse.setMQuentityValue5(cursor.getString(cursor.getColumnIndex(KEY_QUNTITY5)));
-
-                        mDamageMissResponse.setMRemarkValue1(cursor.getString(cursor.getColumnIndex(KEY_REMARKD1)));
-                        mDamageMissResponse.setMRemarkValue2(cursor.getString(cursor.getColumnIndex(KEY_REMARKD2)));
-                        mDamageMissResponse.setMRemarkValue3(cursor.getString(cursor.getColumnIndex(KEY_REMARKD3)));
-                        mDamageMissResponse.setMRemarkValue4(cursor.getString(cursor.getColumnIndex(KEY_REMARKD4)));
-                        mDamageMissResponse.setMRemarkValue5(cursor.getString(cursor.getColumnIndex(KEY_REMARKD5)));
-
-                        mDamageMissResponse.setMPhotoValue1(cursor.getString(cursor.getColumnIndex(KEY_PHOTO1)));
-                        mDamageMissResponse.setMPhotoValue1_2(cursor.getString(cursor.getColumnIndex(KEY_PHOTO1_2)));
-                        mDamageMissResponse.setMPhotoValue1_3(cursor.getString(cursor.getColumnIndex(KEY_PHOTO1_3)));
-                        mDamageMissResponse.setMPhotoValue1_4(cursor.getString(cursor.getColumnIndex(KEY_PHOTO1_4)));
-                        mDamageMissResponse.setMPhotoValue1_5(cursor.getString(cursor.getColumnIndex(KEY_PHOTO1_5)));
-
-                        mDamageMissResponse.setMPhotoValue2(cursor.getString(cursor.getColumnIndex(KEY_PHOTO2)));
-                        mDamageMissResponse.setMPhotoValue3(cursor.getString(cursor.getColumnIndex(KEY_PHOTO3)));
-                        mDamageMissResponse.setMPhotoValue4(cursor.getString(cursor.getColumnIndex(KEY_PHOTO4)));
-                        mDamageMissResponse.setMPhotoValue5(cursor.getString(cursor.getColumnIndex(KEY_PHOTO5)));
-                        cursor.moveToNext();
-                    }
-                }
-                db.setTransactionSuccessful();
-            }
-        } catch (SQLiteException e) {
-            e.printStackTrace();
-        } finally {
-            db.endTransaction();
-            db.close();
-        }
-        return mDamageMissResponse;
-    }
 
     private static final String CREATE_TABLE_LOGIN = "CREATE TABLE IF NOT EXISTS "
             + TABLE_LOGIN + "("
@@ -784,7 +626,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_PHOTO8 + " BLOB," + KEY_PHOTO9 + " BLOB," + KEY_PHOTO10 + " BLOB," + KEY_PHOTO11 + " BLOB," + KEY_PHOTO12 + " BLOB,"
             + KEY_ADD1 + " TEXT," + KEY_ADD2 + " TEXT," + KEY_ADD3 + " TEXT," + KEY_ADD4 + " TEXT," + KEY_ADD5 + " TEXT,"
             + KEY_ADD6 + " TEXT," + KEY_ADD7 + " TEXT," + KEY_ADD8 + " TEXT," + KEY_ADD9 + " TEXT," + KEY_ADD10 + " TEXT,"
-            + KEY_ADD11 + " TEXT," + KEY_ADD12 + " TEXT," + KEY_ADD13 + " TEXT," + KEY_ADD14 + " TEXT," + KEY_ADD15 + " TEXT," + KEY_ADD16 + " TEXT," + KEY_BENEFICIARY_NO + " TEXT," + KEY_PUMPLoad + " TEXT)";
+            + KEY_ADD11 + " TEXT," + KEY_ADD12 + " TEXT," + KEY_ADD13 + " TEXT," + KEY_ADD14 + " TEXT," + KEY_ADD15 + " TEXT," + KEY_ADD16 + " TEXT," + KEY_BENEFICIARY_NO + " TEXT," + KEY_AADHAR_NO + " TEXT," + KEY_AADHAR_MOBILE + " TEXT," + KEY_PUMPLoad + " TEXT," + KEY_PUMP_SERIAL_NO + " TEXT," + KEY_MOTOR_SERIAL_NO + " TEXT)";
 
 
     private static final String CREATE_TABLE_KUSUMCSURVEYFORM = "CREATE TABLE "
@@ -808,7 +650,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_DEL_PUMP_LPM + " TEXT," + KEY_DEL_PIPE_LINE + " TEXT," + KEY_TOTAL_DYNAMIC_HEAD + " TEXT," +KEY_TRANSFORMER_RATING + " TEXT,"
             +KEY_SERVICE_LINE + " TEXT,"+KEY_THREE_PHASE + " TEXT,"+KEY_ELECTRICITY_BILL + " TEXT,"+KEY_NEUTRAL_AVAILABILITY + " TEXT,"
             +KEY_STURCTURE_WATER_SOURCE + " TEXT," +KEY_FEEDER_TO_FARMER + " TEXT," +KEY_ADDITIONAL_INFO + " TEXT,"
-            + KEY_EXDISCHARGE + " TEXT,"+ KEY_POWER_IN_VOLT + " TEXT,"+  KEY_EXDYNAMIC + " TEXT,"
+            + KEY_EXDISCHARGE + " TEXT,"+ KEY_POWER_IN_VOLT + " TEXT,"+  KEY_EXDYNAMIC + " TEXT,"+  KEY_AADHAR_NO + " TEXT,"+  KEY_AADHAR_MOBILE + " TEXT,"
             + KEY_PHOTO1 + " BLOB," + KEY_PHOTO2 + " BLOB," + KEY_PHOTO3 + " BLOB," + KEY_PHOTO4 + " BLOB," + KEY_PHOTO5 + " BLOB," + KEY_PHOTO6 + " BLOB," + KEY_DISTANCE + " TEXT)";
 
 
@@ -987,6 +829,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_KUNNR + " TEXT,"
             + KEY_BILL_DATE + " TEXT,"
             + KEY_CUST_NAME + " TEXT,"
+            + KEY_AADHAR_NO + " TEXT,"
+            + KEY_AADHAR_MOBILE + " TEXT,"
             + KEY_FATH_NAME + " TEXT,"
             + KEY_STATE_TEXT + " TEXT,"
             + KEY_STATE + " TEXT,"
@@ -1113,17 +957,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_OFFLINE_REGISNO + " TEXT,"
             + KEY_OFFLINE_OFFPHOTO + " BLOB)";
 
-    private static final String CREATE_TABLE_SETTING_PARAMETER_LIST = "CREATE TABLE "
-            + TABLE_SETTING_PARAMETER_LIST + "("
-            + KEY_PMID + " VARCHAR,"
-            + KEY_PARAMETERS_NAME + " VARCHAR,"
-            + KEY_MODBUS_ADDRESS + " VARCHAR,"
-            + KEY_MOB_BT_ADDRESS + " VARCHAR,"
-            + KEY_FACTOR + " VARCHAR,"
-            + KEY_PVALUE + " VARCHAR,"
-            + KEY_MATERIAL_CODE + " VARCHAR,"
-            + KEY_UNIT + " VARCHAR,"
-            + KEY_OFFSET + " VARCHAR)";
 
     private static final String CREATE_TABLE_AUDITSITE_LIST = "CREATE TABLE "
             + TABLE_AUDITSITE_LIST + "("
@@ -1298,6 +1131,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_APPLICANT_IFSC_CODE + " TEXT,"
             + KEY_AADHAR_NO + " TEXT)";
 
+
+    private static final String CREATE_TABLE_SETTING_PENDING_LIST  = " CREATE TABLE " + TABLE_SETTING_PENDING_LIST + " ( "
+            + KEY_BILL_NO + " TEXT ,"
+            + KEY_CUST_NAME + " TEXT ,"
+            + KEY_CUSTOMER_CODE + " TEXT ,"
+            + KEY_PUMP_SERIAL_NO + " TEXT ,"
+            + KEY_MOTOR_SERIAL_NO + " TEXT ,"
+            + KEY_CONTROLLER_SERIAL_NO + " TEXT ,"
+            + KEY_CONTROLLER_MAT_NO + " TEXT ,"
+            + KEY_SET_MATNO + " TEXT ,"
+            + KEY_MOTOR_MATNO + " TEXT ,"
+            + KEY_BENEFICIARY + " TEXT)";
+
+    private static final String CREATE_TABLE_SETTING_PARAMETER_LIST  = " CREATE TABLE " + TABLE_SETTING_PARAMETER_LIST + " ( "
+            + COLUMN_pmID + " TEXT ,"
+            + COLUMN_ParametersName + " TEXT ,"
+            + COLUMN_ModBusAddress + " TEXT ,"
+            + COLUMN_MobBTAddress + " TEXT ,"
+            + COLUMN_factor + " TEXT ,"
+            + COLUMN_pValue + " TEXT ,"
+            + COLUMN_MaterialCode + " TEXT ,"
+            + COLUMN_Unit + " TEXT ,"
+            + COLUMN_offset + " TEXT ,"
+            + KEY_PARAMETER_SET + " TEXT ,"
+            + KEY_BILL_NO + " TEXT)";
+
+    private static final String CREATE_PARAMETER_SET_DATA = "CREATE TABLE "
+            + TABLE_PARAMETER_SET_DATA + "(" + KEY_PARAMETER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," +KEY_BILL_NO+ " TEXT, " + KEY_PARAMETER_SET+" TEXT)";
+
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -1335,6 +1198,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_OFFLINE_CONTROLLER_IMAGE);
         db.execSQL(CREATE_TABLE_DEVICE_MAPPING_DATA);
         db.execSQL(CREATE_BENEFICIARY_REGISTRAION);
+        db.execSQL(CREATE_TABLE_SETTING_PENDING_LIST);
+        db.execSQL(CREATE_PARAMETER_SET_DATA);
     }
 
     @Override
@@ -1371,6 +1236,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_OFFLINE_CONTROLLER_IMAGE_DATA);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_DEVICE_MAPPING_DATA);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_BENEFICIARY_REGISTRATION);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_SETTING_PENDING_LIST);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_PARAMETER_SET_DATA);
             // create newworkorder tables
             onCreate(db);
         }
@@ -1621,140 +1488,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    //Insert Setting perameter data
-
-    @SuppressLint("Range")
-    public List<SettingParameterResponse> getSettingPerameterList(String userid) {
-
-        SettingParameterResponse mSettingParameterResponse = new SettingParameterResponse();
-        ArrayList<SettingParameterResponse> mSettingParameterResponseList = new ArrayList<>();
-        mSettingParameterResponseList.clear();
-
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        db.beginTransaction();
-        try {
-
-            String selectQuery = "SELECT  *  FROM " + TABLE_SETTING_PARAMETER_LIST + " WHERE " + KEY_MATERIAL_CODE + " = '" + userid + "'";
-
-            Cursor cursor = db.rawQuery(selectQuery, null);
-
-            if (cursor.getCount() > 0) {
-                if (cursor.moveToFirst()) {
-                    while (!cursor.isAfterLast()) {
-                        mSettingParameterResponse = new SettingParameterResponse();
-
-                        mSettingParameterResponse.setPmId(cursor.getString(cursor.getColumnIndex(KEY_PMID)));
-                        mSettingParameterResponse.setParametersName(cursor.getString(cursor.getColumnIndex(KEY_PARAMETERS_NAME)));
-                        mSettingParameterResponse.setModbusaddress(cursor.getString(cursor.getColumnIndex(KEY_MODBUS_ADDRESS)));
-                        mSettingParameterResponse.setMobBTAddress(cursor.getString(cursor.getColumnIndex(KEY_MOB_BT_ADDRESS)));
-
-                        try {
-                            mSettingParameterResponse.setFactor(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_FACTOR))));
-                            mSettingParameterResponse.setPValue(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_PVALUE))));
-                            mSettingParameterResponse.setOffset(Integer.parseInt(cursor.getString(cursor.getColumnIndex(KEY_OFFSET))));
-                        } catch (NumberFormatException e) {
-                            e.printStackTrace();
-                        }
-
-                      /*  mSettingParameterResponse.setFactor(cursor.getInt(cursor.getColumnIndex(KEY_FACTOR)));
-                        mSettingParameterResponse.setPValue(cursor.getInt(cursor.getColumnIndex(KEY_PVALUE)));
-                        mSettingParameterResponse.setOffset(cursor.getInt(cursor.getColumnIndex(KEY_OFFSET)));
-*/
-                        mSettingParameterResponse.setMaterialCode(cursor.getString(cursor.getColumnIndex(KEY_MATERIAL_CODE)));
-                        mSettingParameterResponse.setUnit(cursor.getString(cursor.getColumnIndex(KEY_UNIT)));
-
-
-                        mSettingParameterResponseList.add(mSettingParameterResponse);
-
-                        cursor.moveToNext();
-
-                    }
-                }
-                db.setTransactionSuccessful();
-            } else {
-
-            }
-
-        } catch (SQLiteException e) {
-            e.printStackTrace();
-
-        } finally {
-            db.endTransaction();
-            // End the transaction.
-            db.close();
-            // Close database
-        }
-
-        return mSettingParameterResponseList;
-    }
-
-
-    public void insertSettingPerameterList(Context mContext, SettingParameterResponse mSettingParameterResponse, String mMaterialCode) {
-        // Open the database for writing
-        SQLiteDatabase db = this.getWritableDatabase();
-        SQLiteDatabase db1 = this.getReadableDatabase();
-        // Start the transaction.
-        db.beginTransaction();
-        ContentValues values;
-        Cursor cursor = null;
-
-        int mmVkCheck = 0;
-
-
-        // KEY_PMID = pmId, KEY_PARAMETERS_NAME = parametersName,  KEY_MODBUS_ADDRESS = modbusaddress, KEY_MOB_BT_ADDRESS= mobBTAddress, KEY_FACTOR= factor, KEY_PVALUE= pValue, KEY_MATERIAL_CODE=materialCode, KEY_UNIT= unit, KEY_OFFSET= offset;
-
-        try {
-
-            // if(checkFirstInsert == 0)
-            {
-                // String selectQuery = "SELECT  *  FROM " + TABLE_SETTING_PARAMETER_LIST + " WHERE " + KEY_MATERIAL_CODE + " = '" + mMaterialCode + "'";
-                String selectQuery = "SELECT  *  FROM " + TABLE_SETTING_PARAMETER_LIST + " WHERE " + KEY_MATERIAL_CODE + " = '" + mMaterialCode + "'and pmId=" + mSettingParameterResponse.getPmId();
-
-                cursor = db1.rawQuery(selectQuery, null);
-
-                mmVkCheck = cursor.getCount();
-            }
-
-
-            values = new ContentValues();
-
-            System.out.println("IN_iii==>>pp==" + mSettingParameterResponse.getPmId());
-            values.put(KEY_PMID, mSettingParameterResponse.getPmId());
-            values.put(KEY_PARAMETERS_NAME, mSettingParameterResponse.getParametersName());
-            values.put(KEY_MODBUS_ADDRESS, mSettingParameterResponse.getModbusaddress());
-            values.put(KEY_MOB_BT_ADDRESS, mSettingParameterResponse.getMobBTAddress());
-            values.put(KEY_FACTOR, mSettingParameterResponse.getFactor());
-            values.put(KEY_PVALUE, mSettingParameterResponse.getPValue());
-            values.put(KEY_MATERIAL_CODE, mMaterialCode);
-            values.put(KEY_UNIT, mSettingParameterResponse.getUnit());
-            values.put(KEY_OFFSET, mSettingParameterResponse.getOffset());
-
-            if (mmVkCheck > 0) {
-                checkFirstInsert = 0;
-
-                // String  where = KEY_MATERIAL_CODE + "='" + mMaterialCode + "'";
-                String where = KEY_MATERIAL_CODE + "='" + mMaterialCode + "' and pmId=" + mSettingParameterResponse.getPmId();
-
-                long i = db.update(TABLE_SETTING_PARAMETER_LIST, values, where, null);
-
-                System.out.println("UP_iii==>>" + i);
-                // Toast.makeText(mContext, "value Update==>>"+ i, Toast.LENGTH_SHORT).show();
-            } else {
-                checkFirstInsert = 1;
-                long iii = db.insert(TABLE_SETTING_PARAMETER_LIST, null, values);
-                System.out.println("IN_iii==>>" + iii);
-            }
-            db.setTransactionSuccessful();
-        } catch (SQLiteException e) {
-            e.printStackTrace();
-        } finally {
-            // End the transaction.
-            db.endTransaction();
-            // Close database
-            db.close();
-        }
-    }
 
     public void insertInstallationListData(String enqdoc, InstallationListBean installationBean) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -1795,6 +1528,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_PANEL_MODULE_SER_NO, installationBean.getNoOfModule());
             values.put(KEY_HP, installationBean.getHP());
             values.put(KEY_PUMPLoad, installationBean.getPump_load());
+            values.put(KEY_AADHAR_NO, installationBean.getAadhar_no());
+            values.put(KEY_AADHAR_MOBILE, installationBean.getAadhar_mobile());
             long i = db.insert(TABLE_INSTALLATION_LIST, null, values);
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {
@@ -2191,6 +1926,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_PANEL_MODULE_SER_NO, installationBean.getNoOfModule());
             values.put(KEY_HP, installationBean.getHP());
             values.put(KEY_PUMPLoad, installationBean.getPump_load());
+            values.put(KEY_AADHAR_NO, installationBean.getAadhar_no());
+            values.put(KEY_AADHAR_MOBILE, installationBean.getAadhar_mobile());
             where = KEY_ENQ_DOC + "='" + enqdoc + "'";
             i = db.update(TABLE_INSTALLATION_LIST, values, where, null);
             db.setTransactionSuccessful();
@@ -2525,7 +2262,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_ADD2, installationBean.getDelay_reason());
             values.put(KEY_ADD3, installationBean.getMake_ins());
             values.put(KEY_BENEFICIARY_NO, installationBean.getBeneficiaryNo());
+            values.put(KEY_AADHAR_NO, installationBean.getAadhar_no());
+            values.put(KEY_AADHAR_MOBILE, installationBean.getAadhar_mobile());
             values.put(KEY_PUMPLoad, installationBean.getPumpLoad());
+            values.put(KEY_PUMP_SERIAL_NO, installationBean.getPumpSerNo());
+            values.put(KEY_MOTOR_SERIAL_NO, installationBean.getMotorSerNo());
             // Insert Row
             long i = db.insert(TABLE_INSTALLATION_PUMP_DATA, null, values);
             // Insert into database successfully.
@@ -2589,6 +2330,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_ADD3, installationBean.getMake_ins());
             values.put(KEY_BENEFICIARY_NO, installationBean.getBeneficiaryNo());
             values.put(KEY_PUMPLoad, installationBean.getPumpLoad());
+            values.put(KEY_AADHAR_NO, installationBean.getAadhar_no());
+            values.put(KEY_AADHAR_MOBILE, installationBean.getAadhar_mobile());
+            values.put(KEY_PUMP_SERIAL_NO, installationBean.getPumpSerNo());
+            values.put(KEY_MOTOR_SERIAL_NO, installationBean.getMotorSerNo());
             where = KEY_BILL_NO + "='" + billno + "'";
 
             i = db.update(TABLE_INSTALLATION_PUMP_DATA, values, where, null);
@@ -2665,6 +2410,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_POWER_IN_VOLT,kusumCSurveyBean.getpowerInVolt());
             values.put(KEY_EXDISCHARGE,kusumCSurveyBean.getExDischarge());
             values.put(KEY_EXDYNAMIC,kusumCSurveyBean.getExDynamichead());
+            values.put(KEY_AADHAR_NO,kusumCSurveyBean.getAadharNo());
+            values.put(KEY_AADHAR_MOBILE,kusumCSurveyBean.getAadharRegMob());
 
             values.put(KEY_PHOTO1, kusumCSurveyBean.getPhoto1());
             values.put(KEY_PHOTO2, kusumCSurveyBean.getPhoto2());
@@ -2759,6 +2506,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(KEY_POWER_IN_VOLT,kusumCSurveyBean.getpowerInVolt());
             values.put(KEY_EXDISCHARGE,kusumCSurveyBean.getExDischarge());
             values.put(KEY_EXDYNAMIC,kusumCSurveyBean.getExDynamichead());
+            values.put(KEY_AADHAR_NO,kusumCSurveyBean.getAadharNo());
+            values.put(KEY_AADHAR_MOBILE,kusumCSurveyBean.getAadharRegMob());
 
             values.put(KEY_PHOTO1, kusumCSurveyBean.getPhoto1());
             values.put(KEY_PHOTO2, kusumCSurveyBean.getPhoto2());
@@ -3358,6 +3107,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         installationBean.setNoOfModule(cursor.getString(cursor.getColumnIndex(KEY_PANEL_MODULE_SER_NO)));
                         installationBean.setHP(cursor.getString(cursor.getColumnIndex(KEY_HP)));
                         installationBean.setPump_load(cursor.getString(cursor.getColumnIndex(KEY_PUMPLoad)));
+                        installationBean.setAadhar_no(cursor.getString(cursor.getColumnIndex(KEY_AADHAR_NO)));
+                        installationBean.setAadhar_mobile(cursor.getString(cursor.getColumnIndex(KEY_AADHAR_MOBILE)));
                         list_document.add(installationBean);
                         cursor.moveToNext();
                     }
@@ -4206,6 +3957,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         installationBean.setMake_ins(cursor.getString(cursor.getColumnIndex(KEY_ADD3)));
                         installationBean.setBeneficiaryNo(cursor.getString(cursor.getColumnIndex(KEY_BENEFICIARY_NO)));
                         installationBean.setPumpLoad(cursor.getString(cursor.getColumnIndex(KEY_PUMPLoad)));
+                        installationBean.setAadhar_no(cursor.getString(cursor.getColumnIndex(KEY_AADHAR_NO)));
+                        installationBean.setAadhar_mobile(cursor.getString(cursor.getColumnIndex(KEY_AADHAR_MOBILE)));
+                        installationBean.setPumpSerNo(cursor.getString(cursor.getColumnIndex(KEY_PUMP_SERIAL_NO)));
+                        installationBean.setMotorSerNo(cursor.getString(cursor.getColumnIndex(KEY_MOTOR_SERIAL_NO)));
+                    //    Log.e("aadhar==>",cursor.getString(cursor.getColumnIndex(KEY_AADHAR_NO)));
                         cursor.moveToNext();
                     }
                 }
@@ -4285,6 +4041,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         kusumCSurveyBean.setpowerInVolt(cursor.getString(cursor.getColumnIndex(KEY_POWER_IN_VOLT)));
                         kusumCSurveyBean.setExDischarge(cursor.getString(cursor.getColumnIndex(KEY_EXDISCHARGE)));
                         kusumCSurveyBean.setExDynamichead(cursor.getString(cursor.getColumnIndex(KEY_EXDYNAMIC)));
+                        kusumCSurveyBean.setAadharNo(cursor.getString(cursor.getColumnIndex(KEY_AADHAR_NO)));
+                        kusumCSurveyBean.setAadharRegMob(cursor.getString(cursor.getColumnIndex(KEY_AADHAR_MOBILE)));
 
 
                         kusumCSurveyBean.setPhoto1(cursor.getString(cursor.getColumnIndex(KEY_PHOTO1)));
@@ -5292,4 +5050,248 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return list_beneficiary;
     }
+
+
+    public void insertParameterRecord(MotorParamListModel.Response response, String pValue) {
+        SQLiteDatabase   database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_pmID, String.valueOf(response.getPmId()));
+        contentValues.put(COLUMN_ParametersName, response.getParametersName());
+        contentValues.put(COLUMN_ModBusAddress, response.getModbusaddress());
+        contentValues.put(COLUMN_MobBTAddress, response.getMobBTAddress());
+        contentValues.put(COLUMN_factor, String.valueOf(response.getFactor()));
+        contentValues.put(COLUMN_pValue, pValue.toString());
+        contentValues.put(COLUMN_MaterialCode, response.getMaterialCode());
+        contentValues.put(COLUMN_Unit, response.getUnit());
+        contentValues.put(COLUMN_offset, String.valueOf(response.getOffset()));
+        contentValues.put(KEY_PARAMETER_SET, "false");
+        contentValues.put(KEY_BILL_NO, "");
+        database.insert(TABLE_SETTING_PARAMETER_LIST, null, contentValues);
+        database.close();
+    }
+
+    public void updateParameterRecord(MotorParamListModel.Response response) {
+
+        SQLiteDatabase database = getWritableDatabase();
+        database.beginTransaction();
+        ContentValues values;
+
+        try {
+
+            values = new ContentValues();
+            values.put(COLUMN_pValue, response.getpValue());
+            values.put(COLUMN_ParametersName,response.getParametersName());
+            values.put(KEY_PARAMETER_SET,String.valueOf(response.getSet()));
+            values.put(KEY_BILL_NO,response.getBillNo());
+            String  where = COLUMN_ParametersName + "='" + response.getParametersName() + "'" + " AND " +
+                    COLUMN_pmID + "='" + response.getPmId() + "'" ;
+
+            database.update(TABLE_SETTING_PARAMETER_LIST, values, where, null);
+
+            // Insert into database successfully.
+            database.setTransactionSuccessful();
+
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        } finally {
+            database.endTransaction();
+            database.close();
+
+
+        }
+
+    }
+    @SuppressLint("Range")
+    public ArrayList<MotorParamListModel.Response> getParameterRecordDetails(String matCode){
+        String where;
+        ArrayList<MotorParamListModel.Response> arrayList = new ArrayList<>();
+      SQLiteDatabase  database = this.getWritableDatabase();
+
+        where = " SELECT * FROM " + TABLE_SETTING_PARAMETER_LIST + " WHERE " + COLUMN_MaterialCode + "='" + matCode + "'";
+
+        Cursor mcursor = database.rawQuery(where, null);
+        if(mcursor.getCount()>0){
+            Log.e("Count====>", String.valueOf(mcursor.getCount()));
+            while (mcursor.moveToNext()) {
+
+                MotorParamListModel.Response motorPumpList = new MotorParamListModel.Response();
+                motorPumpList.setPmId(Integer.parseInt(mcursor.getString(mcursor.getColumnIndex(COLUMN_pmID))));
+                motorPumpList.setParametersName(mcursor.getString(mcursor.getColumnIndex(COLUMN_ParametersName)));
+                motorPumpList.setModbusaddress(mcursor.getString(mcursor.getColumnIndex(COLUMN_ModBusAddress)));
+                motorPumpList.setMobBTAddress(mcursor.getString(mcursor.getColumnIndex(COLUMN_MobBTAddress)));
+                motorPumpList.setpValue(Float.parseFloat(mcursor.getString(mcursor.getColumnIndex(COLUMN_pValue))));
+                motorPumpList.setMaterialCode(mcursor.getString(mcursor.getColumnIndex(COLUMN_MaterialCode)));
+                motorPumpList.setFactor(Integer.parseInt(mcursor.getString(mcursor.getColumnIndex(COLUMN_factor))));
+                motorPumpList.setOffset(Integer.parseInt(mcursor.getString(mcursor.getColumnIndex(COLUMN_offset))));
+                motorPumpList.setSet(Boolean.valueOf(mcursor.getString(mcursor.getColumnIndex(KEY_PARAMETER_SET))));
+                motorPumpList.setBillNo(mcursor.getString(mcursor.getColumnIndex(KEY_BILL_NO)));
+                arrayList.add(motorPumpList);
+            }
+
+        }
+
+        mcursor.close();
+        database.close();
+
+
+        return arrayList;
+    }
+
+    public void updateParameter(MotorParamListModel.Response response) {
+
+        SQLiteDatabase database = getWritableDatabase();
+        database.beginTransaction();
+        ContentValues values;
+
+        try {
+
+            values = new ContentValues();
+            values.put(COLUMN_pValue, response.getpValue());
+            values.put(COLUMN_ParametersName,response.getParametersName());
+            String  where = COLUMN_ParametersName + "='" + response.getParametersName() + "'" + " AND " +
+                    COLUMN_pmID + "='" + response.getPmId() + "'" ;
+
+            database.update(TABLE_SETTING_PARAMETER_LIST, values, where, null);
+
+            // Insert into database successfully.
+            database.setTransactionSuccessful();
+
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        } finally {
+            database.endTransaction();
+            database.close();
+
+
+        }
+
+    }
+
+    public void deleteParametersData() {
+        SQLiteDatabase  database = this.getWritableDatabase();
+        if(CustomUtility.doesTableExist(database,TABLE_SETTING_PARAMETER_LIST)) {
+            database.delete(TABLE_SETTING_PARAMETER_LIST, null, null);
+        }
+
+    }
+
+    public void deleteParametersSetData() {
+        SQLiteDatabase  database = this.getWritableDatabase();
+        if(CustomUtility.doesTableExist(database,TABLE_PARAMETER_SET_DATA)) {
+            database.delete(TABLE_PARAMETER_SET_DATA, null, null);
+        }
+
+    }
+
+
+    public void insertSettingPendingData(ParameterSettingListModel.InstallationDatum pendingSettingModel) {
+        SQLiteDatabase   database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_BILL_NO, String.valueOf(pendingSettingModel.getVbeln()));
+        contentValues.put(KEY_CUST_NAME, pendingSettingModel.getName());
+        contentValues.put(KEY_CUSTOMER_CODE, pendingSettingModel.getKunnr());
+        contentValues.put(KEY_PUMP_SERIAL_NO, pendingSettingModel.getPumpSernr());
+        contentValues.put(KEY_MOTOR_SERIAL_NO, String.valueOf(pendingSettingModel.getMotorSernr()));
+        contentValues.put(KEY_CONTROLLER_SERIAL_NO, pendingSettingModel.getControllerSernr());
+        contentValues.put(KEY_CONTROLLER_MAT_NO, pendingSettingModel.getControllerMatno());
+        contentValues.put(KEY_SET_MATNO, pendingSettingModel.getSetMatno());
+        contentValues.put(KEY_MOTOR_MATNO, String.valueOf(pendingSettingModel.getMotorMatnr()));
+        contentValues.put(KEY_BENEFICIARY, String.valueOf(pendingSettingModel.getBeneficiary()));
+        database.insert(TABLE_SETTING_PENDING_LIST, null, contentValues);
+        database.close();
+    }
+
+    public void updateSettingPendingData(ParameterSettingListModel.InstallationDatum pendingSettingModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.beginTransaction();
+        ContentValues contentValues;
+        try {
+            contentValues = new ContentValues();
+            contentValues.put(KEY_BILL_NO, String.valueOf(pendingSettingModel.getVbeln()));
+            contentValues.put(KEY_CUST_NAME, pendingSettingModel.getName());
+            contentValues.put(KEY_CUSTOMER_CODE, pendingSettingModel.getKunnr());
+            contentValues.put(KEY_PUMP_SERIAL_NO, pendingSettingModel.getPumpSernr());
+            contentValues.put(KEY_MOTOR_SERIAL_NO, String.valueOf(pendingSettingModel.getMotorSernr()));
+            contentValues.put(KEY_CONTROLLER_SERIAL_NO, pendingSettingModel.getControllerSernr());
+            contentValues.put(KEY_CONTROLLER_MAT_NO, pendingSettingModel.getControllerMatno());
+            contentValues.put(KEY_SET_MATNO, pendingSettingModel.getSetMatno());
+            contentValues.put(KEY_MOTOR_MATNO, String.valueOf(pendingSettingModel.getMotorMatnr()));
+            contentValues.put(KEY_BENEFICIARY, String.valueOf(pendingSettingModel.getBeneficiary()));
+
+            // Insert Row
+            db.update(TABLE_SETTING_PENDING_LIST, contentValues, KEY_SET_MATNO+" = '" + pendingSettingModel.getSetMatno() + "'", null);
+            db.setTransactionSuccessful();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
+            db.close();
+        }
+    }
+
+
+    @SuppressLint("Range")
+    public ArrayList<ParameterSettingListModel.InstallationDatum> getPendingSettingList(){
+        ArrayList<ParameterSettingListModel.InstallationDatum> arrayList = new ArrayList<>();
+        SQLiteDatabase  database = this.getWritableDatabase();
+        Cursor mcursor = database.rawQuery(" SELECT * FROM " + TABLE_SETTING_PENDING_LIST, null);
+        if(mcursor.getCount()>0){
+            Log.e("Count====>", String.valueOf(mcursor.getCount()));
+            while (mcursor.moveToNext()) {
+
+                ParameterSettingListModel.InstallationDatum pendingSettingModel = new ParameterSettingListModel.InstallationDatum();
+                pendingSettingModel.setVbeln(mcursor.getString(mcursor.getColumnIndex(KEY_BILL_NO)));
+                pendingSettingModel.setName(mcursor.getString(mcursor.getColumnIndex(KEY_CUST_NAME)));
+                pendingSettingModel.setKunnr(mcursor.getString(mcursor.getColumnIndex(KEY_CUSTOMER_CODE)));
+                pendingSettingModel.setPumpSernr(mcursor.getString(mcursor.getColumnIndex(KEY_PUMP_SERIAL_NO)));
+                pendingSettingModel.setMotorSernr(mcursor.getString(mcursor.getColumnIndex(KEY_MOTOR_SERIAL_NO)));
+                pendingSettingModel.setControllerSernr(mcursor.getString(mcursor.getColumnIndex(KEY_CONTROLLER_SERIAL_NO)));
+                pendingSettingModel.setControllerMatno(mcursor.getString(mcursor.getColumnIndex(KEY_CONTROLLER_MAT_NO)));
+                pendingSettingModel.setSetMatno(mcursor.getString(mcursor.getColumnIndex(KEY_SET_MATNO)));
+                pendingSettingModel.setMotorMatnr(mcursor.getString(mcursor.getColumnIndex(KEY_CONTROLLER_MAT_NO)));
+                pendingSettingModel.setBeneficiary(mcursor.getString(mcursor.getColumnIndex(KEY_BENEFICIARY)));
+                arrayList.add(pendingSettingModel);
+            }
+
+        }
+
+        mcursor.close();
+        database.close();
+
+
+        return arrayList;
+    }
+
+
+    public void insertParameterSet(String billNo, String isParameterSet) {
+        SQLiteDatabase   database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_BILL_NO, billNo);
+        contentValues.put(KEY_PARAMETER_SET, isParameterSet);
+        database.insert(TABLE_PARAMETER_SET_DATA, null, contentValues);
+        database.close();
+    }
+
+    public void updateParameterSet(String billNo, String isParameterSet) {
+        SQLiteDatabase   database = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KEY_BILL_NO, billNo);
+        contentValues.put(KEY_PARAMETER_SET, isParameterSet);
+        database.update(TABLE_PARAMETER_SET_DATA, contentValues, KEY_BILL_NO+" = '" + billNo + "'", null);
+        database.close();
+    }
+
+    public boolean isParameterSet(String billno) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT  *  FROM " + TABLE_PARAMETER_SET_DATA + " WHERE " + KEY_BILL_NO + " = '" +
+                billno + "'" + "AND " + KEY_PARAMETER_SET + " = '" + "true" + "'";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.getCount() <= 0) {
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        return true;
+    }
+
 }

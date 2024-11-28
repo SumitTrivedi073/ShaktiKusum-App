@@ -3,15 +3,11 @@ package activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -20,7 +16,6 @@ import com.shaktipumplimited.shaktikusum.R;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.checkerframework.checker.units.qual.C;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

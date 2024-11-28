@@ -576,6 +576,30 @@
     <string name="jointInsp">Joint Inspection</string>
     <string name="applicant_aadhar_no">Applicant Aadhar no.</string>
     <string name="valid_aadhar_no">Please enter valid aadhar no.</string>
+    <string name="alertTittle">Acknowledgement</string>
+    <string name="alertGetMessage">Data get successfully from drive.</string>
+    <string name="alertSetMessage">Data set successfully on drive.</string>
+    <string name="alertNotSetMessage">Data Not set on drive, Please try again.</string>
+    <string name="pleasesetdatafirst">Please Set Data First!</string>
+    <string name="addressnotfound">MOB address not found!</string>
+    <string name="getComData">Loading component list of drive....</string>
+    <string name="fetchingData">Fetching data....</string>
+    <string name="sendingData">Setting data....</string>
+    <string name="setalldata">Sending all data to drive.</string>
+    <string name="operationUnsuccessfull">Operation unsuccessful. </string>
+    <string name="plsConnectBt">Please connect bluetooth</string>
+    <string name="setting_param">Setting Pramater</string>
+    <string name="pendingSettingParamters">Pending Setting Parameters</string>
+    <string name="set_parameters">Set Parameters</string>
+    <string name="retrieveParameter">Refresh Parameters</string>
+    <string name="parameterSetSuccessfully">"Parameter Set Successfully "</string>
+    <string name="pleaseSetParametersFirst">Please Set All Parameter First!</string>
+    <string name="aadhar_card">Aadhar Card</string>
+    <string name="enter_aadhar_no">Enter aadhar no.</string>
+    <string name="aadharRegMob">Aadhar registered mobile no.</string>
+    <string name="enter_aadhar_reg_no">Enter aadhar reg. mobile no.</string>
+    <string name="alreadySet">This Value Already Set</string>
+    <string name="set_all_perameters">Set All Perameters</string>
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_home</item>
