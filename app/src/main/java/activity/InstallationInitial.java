@@ -749,7 +749,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
                                                                             //if (!DeviceStatus.isEmpty()) {
 
-                                                                                if (DeviceStatus.equals(getResources().getString(R.string.online))) {
+                                                                              /*  if (DeviceStatus.equals(getResources().getString(R.string.online))) {
                                                                                     if (imageList.size() > 5) {
 
 
@@ -766,7 +766,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                                                                                     mSimDetailsInfoResponse = mDatabaseHelperTeacher.getSimInfoDATABT(Constant.BILL_NUMBER_UNIC);
                                                                                     if (mSimDetailsInfoResponse.size() >= 1) {
                                                                                         if (mSimDetailsInfoResponse.size() >= 2) {
-                                                                                            if (mSimDetailsInfoResponse.size() >= 3) {
+                                                                                            if (mSimDetailsInfoResponse.size() >= 3) {*/
 
 
                                                                                                 if (imageList.size() > 5) {
@@ -778,7 +778,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                                                                                                     CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.select_all_image));
                                                                                                 }
 
-                                                                                            } else {
+                                                                                           /* } else {
                                                                                                 CustomUtility.ShowToast(getResources().getString(R.string.insertThirdSim), getApplicationContext());
                                                                                             }
                                                                                         } else {
@@ -789,7 +789,7 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
 
                                                                                     }
                                                                                 }
-                                                                          /*  } else {
+                                                                           } else {
                                                                                 Toast.makeText(mContext, "Please get RMS Device Status.", Toast.LENGTH_SHORT).show();
                                                                             }*/
 
@@ -1959,13 +1959,13 @@ public class InstallationInitial extends BaseActivity implements BarCodeSelectio
                         if (invc_done.equals("Y")) {
                             CustomUtility.showToast(InstallationInitial.this, getResources().getString(R.string.dataSubmittedSuccessfully));
                             Log.e("DOCNO", "&&&&" + billno);
-
-                            String dongleType = DONGAL_ID.charAt(0) + DONGAL_ID.substring(1, 2);
+                            InstallationDoneSuccessfully();
+                           /* String dongleType = DONGAL_ID.charAt(0) + DONGAL_ID.substring(1, 2);
                             if (!dongleType.equals("99") || !dongleType.equals("28")) {
                                 sendLatLngToRmsForFota();
                             } else {
                                 InstallationDoneSuccessfully();
-                            }
+                            }*/
 
                         } else {
                             stopProgressDialogue();
